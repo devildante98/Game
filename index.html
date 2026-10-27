@@ -318,7 +318,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 #amsg{min-height:1.3em;color:var(--red);font-size:.9rem;text-align:center;margin:0}
 #acct{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:8px;z-index:50;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 6px 4px 12px;font-size:.8rem;display:flex;gap:8px;align-items:center}
 #acct button{padding:4px 10px;font-size:.8rem}
-#pvpP,#clNow,#clLoad,#clDel{display:none!important}
+#clNow,#clLoad,#clDel{display:none!important}
 </style>
 </head>
 <body>
@@ -495,7 +495,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 </section>
 <section class="panel" aria-label="PVP online" id="pvpP">
   <div class="hhead"><h2>⚔️ PVP online</h2><span class="hcost" id="pvSt">Conectando…</span></div>
-  <p class="rates">Reta a otros jugadores que tengan abierto <b>este mismo enlace</b> ahora mismo. Os enfrentáis por turnos con vuestros equipos de combate (hasta 6 Pokémon, a vuestro nivel y con los PS al máximo: no gastas PS, objetos ni experiencia). Gana quien debilita a todos los Pokémon del rival, y el ganador recibe entre 200.000 y 500.000 🎟️ al azar. Solo pueden participar personas con sesión iniciada en claude.ai y acceso a la página; los visitantes anónimos con enlace público no pueden conectarse.</p>
+  <p class="rates">Reta a otros jugadores que tengan abierto <b>este mismo enlace</b> ahora mismo. Os enfrentáis por turnos con vuestros equipos de combate (hasta 6 Pokémon, a vuestro nivel y con los PS al máximo: no gastas PS, objetos ni experiencia). Gana quien debilita a todos los Pokémon del rival, y el ganador recibe entre 200.000 y 500.000 🎟️ al azar. Para jugar tienes que haber iniciado sesión con tu cuenta (no vale «Jugar sin cuenta»).</p>
   <div id="pvLobby">
     <div class="sets-row"><label>Tu apodo <input id="pvNick" maxlength="16" style="width:170px"></label><small id="pvTeam" class="mut"></small><small id="pvRec" class="mut"></small></div>
     <div id="pvIn"></div>
@@ -1715,7 +1715,8 @@ const pvOthers=()=>PR?PR.peers().filter(p=>!p.isMe&&p.kind==="viewer"&&p.presenc
 function pvPub(){if(!PR)return;PR.presence({pvp:{v:1,n:pvClean(pvNick()),tm:pvTeamData().map(x=>({n:x.n,l:x.l})),st:PV.st,ch:PV.ch,ok:PV.ok,no:PV.no}}).catch(()=>{})}
 function pvMsg(t){$("pvIn").innerHTML='<small class="mut">'+esc(t)+'</small>'}
 function pvRender(){
-  if(!PR){$("pvSt").textContent="No disponible";$("pvList").innerHTML='<small class="mut">El PVP online solo funciona en el enlace publicado, con sesión iniciada en claude.ai y acceso a la página.</small>';return}
+  if(!PR){$("pvSt").textContent="No disponible";$("pvList").innerHTML='<small class="mut">El PVP online necesita iniciar sesión con una cuenta; no funciona en «Jugar sin cuenta».</small>';return}
+  if(window.__pvErr){$("pvSt").textContent="Sin permisos";$("pvList").innerHTML='<small class="mut">Firestore ha rechazado el acceso al PVP. Actualiza las reglas de Firestore con las del README (colecciones lobby y duels).</small>';return}
   const me=pvMe(),others=pvOthers();
   $("pvSt").textContent=(others.length+1)+" jugador"+(others.length?"es":"")+" aquí";
   const tm=pvTeamData();
@@ -2187,7 +2188,40 @@ async function main(){
     [A,F,S]=await Promise.all([import(u+"/firebase-app.js"),import(u+"/firebase-auth.js"),import(u+"/firebase-firestore.js")]);
   }catch(e){msg("No se pudo cargar Firebase (¿sin conexión?). Puedes jugar sin cuenta.");return}
   const app=A.initializeApp(cfg),auth=F.getAuth(app),db=S.getFirestore(app);
-  let uid=null,started=false,timer=0,pending=null;
+  let uid=null,started=false,timer=0,pending=null,lobby=null;
+  class FsRoom{
+    constructor(db,uid,path){
+      this.db=db;this.uid=uid;this.path=path;this.map={};this.hs=[];this.mine={};this.lastJ="";this.lastW=0;this.closed=false;
+      this.unsub=S.onSnapshot(S.collection(db,...path),snap=>{
+        const m={};snap.forEach(d=>{const v=d.data();if(v&&typeof v==="object")m[d.id]={presence:(v.p&&typeof v.p==="object")?v.p:{},seen:+v.seen||0}});
+        this.map=m;this._n();
+      },e=>{if(e&&e.code==="permission-denied"){window.__pvErr=1;window.pvRender&&window.pvRender()}});
+      this.hb=setInterval(()=>{if(!this.closed&&Object.keys(this.mine).length)this._w(true).catch(()=>{})},20000);
+    }
+    _n(){setTimeout(()=>this.hs.slice().forEach(h=>{try{h({peers:this.peers()})}catch(e){}}),0)}
+    peers(){
+      const now=Date.now(),a=[{peer:this.uid,by:null,isMe:true,sameTab:true,kind:"viewer",guest:false,presence:this.mine,updatedAt:now}];
+      for(const id in this.map){
+        if(id===this.uid)continue;const e=this.map[id];
+        if(this.path[0]==="lobby"&&now-e.seen>60000)continue;
+        a.push({peer:id,by:null,isMe:false,sameTab:false,kind:"viewer",guest:false,presence:e.presence,updatedAt:e.seen});
+      }
+      return a;
+    }
+    presence(patch){for(const k in patch){if(patch[k]===null)delete this.mine[k];else this.mine[k]=JSON.parse(JSON.stringify(patch[k]))}return this._w(false)}
+    async _w(force){
+      const j=JSON.stringify(this.mine);
+      if(!force&&j===this.lastJ&&Date.now()-this.lastW<20000)return;
+      this.lastJ=j;this.lastW=Date.now();
+      try{await S.setDoc(S.doc(this.db,...this.path,this.uid),{p:JSON.parse(j),seen:Date.now()})}
+      catch(e){this.lastJ="";if(e&&e.code==="permission-denied"){window.__pvErr=1;window.pvRender&&window.pvRender()}throw e}
+    }
+    onPeers(h){this.hs.push(h);this._n();return()=>{this.hs=this.hs.filter(x=>x!==h)}}
+    connected(){return true}
+    onConnection(h){setTimeout(()=>h(true),0);return()=>{}}
+    async join(name){return new FsRoom(this.db,this.uid,["duels",name,"p"])}
+    async leave(){this.closed=true;clearInterval(this.hb);try{this.unsub()}catch(e){}try{await S.deleteDoc(S.doc(this.db,...this.path,this.uid))}catch(e){}}
+  }
   async function flush(){
     if(!uid||pending===null)return;
     const d=pending;pending=null;
@@ -2201,13 +2235,14 @@ async function main(){
   g("areg").onclick=async()=>{msg("");try{await F.createUserWithEmailAndPassword(auth,g("aemail").value.trim(),g("apass").value)}catch(x){msg(errT(x))}};
   g("agoogle").onclick=async()=>{msg("");try{await F.signInWithPopup(auth,new F.GoogleAuthProvider())}catch(x){msg(errT(x))}};
   g("areset").onclick=async()=>{const m=g("aemail").value.trim();if(!m){msg("Escribe tu correo arriba y vuelve a pulsar.");return}try{await F.sendPasswordResetEmail(auth,m);msg("Te hemos enviado un correo para cambiar la contraseña.")}catch(x){msg(errT(x))}};
-  g("aout").onclick=async()=>{await flush();await F.signOut(auth)};
+  g("aout").onclick=async()=>{await flush();try{if(lobby)await lobby.leave()}catch(e){}await F.signOut(auth)};
   F.onAuthStateChanged(auth,async u=>{
     if(window.__gs&&!started)return;
     if(!u){uid=null;if(started){location.reload();return}g("auth").hidden=false;g("acct").hidden=true;msg("");return}
     uid=u.uid;const key="gacha-pkmn-v3-"+uid;
     try{const sn=await S.getDoc(S.doc(db,"users",uid));if(sn.exists()&&typeof sn.data().data==="string")localStorage.setItem(key,sn.data().data)}
     catch(x){g("auth").hidden=false;msg("No se pudo cargar tu progreso: "+(x.code||x.message));return}
+    lobby=new FsRoom(db,uid,["lobby"]);window.claude={use:async n=>n==="room"?lobby:null};
     window.__KEY=key;started=true;
     g("auth").hidden=true;g("acct").hidden=false;g("aname").textContent="👤 "+(u.displayName||u.email||"Entrenador");
     window.startGameOnce();

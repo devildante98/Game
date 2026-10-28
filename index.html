@@ -401,7 +401,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
     <li>🎟️ <b>Tickets</b>: son la moneda del juego. Consíguelos tocando la <b>Pokéball grande</b> (o con la tecla <b>U</b>), con el regalo diario, el ticket automático, los combates, las misiones y los logros.</li>
     <li>🛍️ <b>Tienda de mejoras</b>: compra Guantes (más tickets por toque) y ayudantes que generan tickets por segundo.</li>
     <li>🎰 <b>Tiradas</b>: gasta tickets para conseguir Pokémon (Común, Raro, Épico y Legendario). Cada 30 tiradas tienes un Épico o mejor garantizado. Cada 10 tiradas el precio sube.</li>
-    <li>📚 <b>Colección</b>: mira los Pokémon que tienes y los que te faltan.</li>
+    <li>📚 <b>Pokedex</b>: mira los Pokémon que tienes y los que te faltan.</li>
     <li>⚔️ <b>Combate</b>: forma un equipo de hasta 6 Pokémon. Ganando suben de nivel, aprenden habilidades y consigues tickets y objetos. ¡También puedes capturar Pokémon salvajes! Cada movimiento tiene <b>PP</b> (usos limitados): recupéralos con Éter, Elixir o en el Centro Pokémon.</li>
     <li>🏥 <b>Centro Pokémon</b> y 🎒 <b>Mochila</b>: los PS no se recuperan solos; cura a tu equipo o usa pociones.</li>
     <li>🏆 <b>Liga Pokémon</b> y 🌐 <b>PVP online</b>: reta al Alto Mando o a otros jugadores conectados, en duelos 1 contra 1 o en salas 2 vs 2 con código.</li>
@@ -454,7 +454,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
   <small id="tkmsg" style="color:var(--mute)">Pulsa «Añadir tecla» y luego la tecla que quieras usar para entrenar. Puedes tener hasta 4.</small>
   <b>👁️ Mostrar paneles</b>
   <label><input type="checkbox" data-o="pShop"> Tienda de mejoras</label>
-  <label><input type="checkbox" data-o="pColl"> Colección</label>
+  <label><input type="checkbox" data-o="pColl"> Pokedex</label>
   <label><input type="checkbox" data-o="pBat"> Combate</label>
   <label><input type="checkbox" data-o="pBag"> Mochila y objetos</label>
   <label><input type="checkbox" data-o="pHeal"> Centro Pokémon</label>
@@ -505,7 +505,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 </section>
 
 <section class="panel" id="collP">
-  <h2>Colección <span id="prog" style="color:var(--mute);font-weight:400"></span></h2>
+  <h2>Pokedex <span id="prog" style="color:var(--mute);font-weight:400"></span></h2>
   <div class="actions" onchange="render()" style="justify-content:flex-start;margin-bottom:10px">
     <select id="fr" aria-label="Rareza"><option value="">Todas las rarezas</option><option value="C">Común</option><option value="R">Raro</option><option value="E">Épico</option><option value="L">Legendario</option></select>
     <select id="ft" aria-label="Tipo"></select>
@@ -1438,7 +1438,7 @@ async function ball(id,it){
     const isNew=!S.owned[o[0]];
     if(isNew){(S.balls=S.balls||{})[o[0]]=id;(S.when=S.when||{})[o[0]]=Date.now()}
     S.owned[o[0]]=(S.owned[o[0]]||0)+1;qEv("cap");if(isNew)qEv("new");
-    snd("capok");await say("¡Has capturado a "+o[0]+"!"+(isNew?" ¡Nuevo en tu colección!":""));
+    snd("capok");await say("¡Has capturado a "+o[0]+"!"+(isNew?" ¡Nuevo en tu pokedex!":""));
     return finish("cap");
   }
   sp.style.transform="";snd("capfail");await say("¡"+o[0]+" se ha escapado de la bola!");
@@ -3005,7 +3005,7 @@ function welcShow(){$("welc").hidden=false;try{$("welcOk").focus({preventScroll:
 $("welcOk").onclick=()=>{$("welc").hidden=true};
 function welcInit(){if(S.welc)return;if(clFresh())welcShow();S.welc=1;save()}
 // ================= accesos directos =================
-const NAV=[["🎯","Entrenar","farm"],["🎟️","Tickets gratis","earnP"],["🎰","Tiradas","stage"],["🛍️","Tienda de mejoras","shopP"],["📚","Colección","collP"],["⚔️","Combate","batP"],["🏆","Liga Pokémon","lgP"],["🌐","PVP online","pvpP"],["🏥","Centro Pokémon","healP"],["🎒","Mochila","bagU"],["🛒","Tienda de objetos","bagP"],["📅","Misiones","qP"],["🏅","Logros","achP"],["🌟","Prestigio","prsP"],["📰","Novedades","#news"],["💡","Sugerencias","sugP"],["❓","Cómo se juega","#welc"],["⚙️","Ajustes","#opt"]];
+const NAV=[["🎯","Entrenar","farm"],["🎟️","Tickets gratis","earnP"],["🎰","Tiradas","stage"],["🛍️","Tienda de mejoras","shopP"],["📚","Pokedex","collP"],["⚔️","Combate","batP"],["🏆","Liga Pokémon","lgP"],["🌐","PVP online","pvpP"],["🏥","Centro Pokémon","healP"],["🎒","Mochila","bagU"],["🛒","Tienda de objetos","bagP"],["📅","Misiones","qP"],["🏅","Logros","achP"],["🌟","Prestigio","prsP"],["📰","Novedades","#news"],["💡","Sugerencias","sugP"],["❓","Cómo se juega","#welc"],["⚙️","Ajustes","#opt"]];
 function navUI(){
   const dm=dmEnsure(),rq=dm.l.filter(m=>!m.c&&m.p>=MISM[m.id][2]).length,ra=ACHS().filter(achReady).length;
   $("navg").innerHTML=NAV.map(n=>{const el=n[2][0]==="#"?null:$(n[2]),off=el&&!el.offsetParent&&getComputedStyle(el).display==="none",c=n[2]==="qP"?rq:n[2]==="achP"?ra:0;return '<button data-go="'+n[2]+'"'+(off?' disabled title="Panel oculto en Ajustes"':'')+'><span>'+n[0]+'</span>'+n[1]+(c?'<i>'+c+'</i>':'')+'</button>'}).join("");

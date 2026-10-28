@@ -319,14 +319,48 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 #acct{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:8px;z-index:50;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px 6px 4px 12px;font-size:.8rem;display:flex;gap:8px;align-items:center}
 #acct button{padding:4px 10px;font-size:.8rem}
 #clNow,#clLoad,#clDel{display:none!important}
+#welc{position:fixed;inset:0;z-index:100;background:rgba(10,12,30,.72);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+#welc .jbox{max-height:calc(100vh - 32px);overflow:auto;text-align:left;padding:22px 20px}
+#welc .jbox h2{text-align:center}
+#welc ul{margin:6px 0;padding-left:20px;position:relative;z-index:2}
+#welc li{margin:5px 0}
+#welc .jrow{margin-top:6px}
+#navb{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:55;width:58px;height:58px;border-radius:50%;padding:0;font-size:1.6rem;background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+#navb .nbadge{position:absolute;top:-4px;right:-4px;background:var(--yel);color:#2a2200;border-radius:99px;font-size:.75rem;padding:1px 7px;font-weight:700}
+#navp{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:55;width:min(390px,calc(100vw - 28px));max-height:calc(100vh - 110px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:12px;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#navp b{display:block;margin:0 0 8px}
+.navg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.navg button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;background:var(--bg);color:var(--ink);border:1px solid var(--line);font-size:.78rem;line-height:1.15;position:relative}
+.navg button span{font-size:1.5rem}
+.navg button i{position:absolute;top:4px;right:6px;font-style:normal;background:var(--red);color:#fff;border-radius:99px;font-size:.65rem;padding:0 6px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:120;background:var(--panel);color:var(--ink);border:2px solid var(--teal);border-radius:14px;padding:10px 16px;box-shadow:0 6px 20px rgba(0,0,0,.35);max-width:calc(100vw - 32px);font-weight:600;text-align:center}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:10px}
+.qc{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.qc.ready{border:2px solid var(--teal)}
+.qc.claimed{opacity:.6}
+.qc .bar{margin-top:0}
+.qc small{color:var(--mute)}
+.qbtn{display:flex;gap:6px;flex-wrap:wrap}
+.qbtn button{padding:6px 14px}
+.qbtn .alt{background:var(--line);color:var(--ink)}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.qstar{color:var(--yel);letter-spacing:1px}
+.news{border-top:1px solid var(--line);padding:10px 0}
+.news:first-of-type{border-top:0}
+.news ul{margin:6px 0 0;padding-left:20px}
+.news li{margin:3px 0}
+#sugT{width:100%;font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical;margin-bottom:8px}
+.sugi{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}
+.sugi p{margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.sugi .alt{background:var(--line);color:var(--ink);padding:4px 10px;font-size:.8rem;float:right}
 </style>
 </head>
 <body>
 <div id="auth">
   <form id="aform">
     <h1>🔴 Cápsula Pokémon</h1>
-    <p style="margin:0;text-align:center;color:var(--mute)">Inicia sesión para guardar tu progreso en la nube y jugar desde cualquier dispositivo.</p>
-    <input id="aemail" type="email" placeholder="Correo electrónico" autocomplete="email" required>
+    <p style="margin:0;text-align:center;color:var(--mute)">Inicia sesión para guardar tu progreso en la nube y jugar desde cualquier dispositivo. Puedes registrarte con un <b>nombre de usuario</b> o con tu correo.</p>
+    <input id="aemail" type="text" placeholder="Usuario o correo electrónico" autocomplete="username" autocapitalize="none" spellcheck="false" required>
     <input id="apass" type="password" placeholder="Contraseña (mín. 6 caracteres)" autocomplete="current-password" required>
     <button type="submit" id="alogin">Entrar</button>
     <button type="button" class="alt" id="areg">Crear cuenta</button>
@@ -341,6 +375,26 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 <div id="jack" hidden role="dialog" aria-modal="true" aria-label="Premio gordo"><div class="jbox"><div class="jconf" id="jconf"></div><h2>🎉 ¡ENHORABUENA! 🎉</h2><p class="jbig">¡Has conseguido el <b>PREMIO GORDO</b>!</p><p class="jamt" id="jamt"></p><p>Era una probabilidad de 1 entre 10 millones. ¡Una suerte increíble!</p><p id="jcount" style="color:var(--mute)"></p><button class="red" id="jok">¡Genial!</button></div></div>
 <div id="jlv" hidden role="dialog" aria-modal="true" aria-label="Bonus del premio gordo"><div class="jbox"><h2>🌟 ¡Bonus del premio gordo! 🌟</h2><p>Elige a uno de tus Pokémon para subirlo <b>directamente al nivel 100</b>, con todas las elecciones de habilidades.</p><input id="jlq" placeholder="Buscar Pokémon..." aria-label="Buscar Pokémon"><select id="jls" size="8" aria-label="Pokémon que subirá al nivel 100"></select><div class="jrow"><button class="red" id="jlok">⬆️ Subir al nivel 100</button><button id="jlno" class="alt">No, gracias</button></div></div></div>
 <div id="clm" hidden role="dialog" aria-modal="true" aria-label="Elegir partida"><div class="jbox"><h2>☁️ Dos partidas distintas</h2><p>Hay una partida guardada en tu cuenta y otra en este navegador. ¿Cuál quieres usar? La otra se sobrescribirá.</p><p id="clmCloud"></p><p id="clmLocal"></p><div class="jrow"><button class="red" id="clmUseCloud">Usar la de la nube</button><button id="clmUseLocal" class="alt">Usar la de este navegador</button></div></div></div>
+<div id="welc" hidden role="dialog" aria-modal="true" aria-label="Bienvenida"><div class="jbox">
+  <h2>👋 ¡Bienvenido a PokeGacha!</h2>
+  <p>Colecciona más de 1.200 Pokémon, entrénalos y combate. Esto es lo más importante que debes saber:</p>
+  <ul>
+    <li>🎟️ <b>Tickets</b>: son la moneda del juego. Consíguelos tocando la <b>Pokéball grande</b> (o con la tecla <b>U</b>), con el regalo diario, el ticket automático, los combates, las misiones y los logros.</li>
+    <li>🛍️ <b>Tienda de mejoras</b>: compra Guantes (más tickets por toque) y ayudantes que generan tickets por segundo.</li>
+    <li>🎰 <b>Tiradas</b>: gasta tickets para conseguir Pokémon (Común, Raro, Épico y Legendario). Cada 30 tiradas tienes un Épico o mejor garantizado. Cada 10 tiradas el precio sube.</li>
+    <li>📚 <b>Colección</b>: mira los Pokémon que tienes y los que te faltan.</li>
+    <li>⚔️ <b>Combate</b>: forma un equipo de hasta 6 Pokémon. Ganando suben de nivel, aprenden habilidades y consigues tickets y objetos. ¡También puedes capturar Pokémon salvajes!</li>
+    <li>🏥 <b>Centro Pokémon</b> y 🎒 <b>Mochila</b>: los PS no se recuperan solos; cura a tu equipo o usa pociones.</li>
+    <li>🏆 <b>Liga Pokémon</b> y 🌐 <b>PVP online</b>: reta al Alto Mando o a otros jugadores conectados.</li>
+    <li>📅 <b>Misiones diarias</b> y 🏅 <b>Logros</b>: complétalos para ganar grandes recompensas.</li>
+    <li>🧭 Usa el botón de <b>accesos directos</b> (abajo a la derecha) para ir a cualquier parte sin hacer scroll, y ⚙️ (arriba a la derecha) para la música y las opciones.</li>
+  </ul>
+  <p>Si has iniciado sesión, tu progreso se guarda solo en la nube. ¡Mucha suerte, entrenador!</p>
+  <div class="jrow"><button class="red" id="welcOk">¡A jugar!</button></div>
+</div></div>
+<button id="navb" aria-label="Accesos directos" title="Accesos directos" hidden>🧭<span class="nbadge" id="navn" hidden></span></button>
+<div id="navp" hidden role="dialog" aria-label="Accesos directos"><b>🧭 Ir directamente a…</b><div class="navg" id="navg"></div></div>
+<div id="toast" hidden role="status" aria-live="polite"></div>
 <div id="bgw"></div>
 <button id="optb" aria-label="Ajustes y música">⚙️</button>
 <div id="optp" hidden>
@@ -398,7 +452,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
   </div>
 </section>
 
-<section class="panel" aria-label="Conseguir tickets">
+<section class="panel" aria-label="Conseguir tickets" id="earnP">
   <h2>Consigue tickets gratis</h2>
   <div class="earn">
     
@@ -425,7 +479,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
   </div>
   <button id="skip" hidden style="background:var(--line);color:var(--ink)">Saltar animación ⏭</button>
   <p class="msg" id="msg"></p>
-  <p class="rates">Común 75% · Raro 20% · Épico 4% · Legendario 1%. Garantizado Épico o mejor cada 30 tiradas: <span id="pity"></span>/30. Súper tirada: Común 45% · Raro 33% · Épico 17% · Legendario 5%. Cada 10 tiradas que haces, el precio de las siguientes sube bastante. Los Pokémon que ya tienes salen algo más a menudo.</p>
+  <p class="rates">Común 75% · Raro 20% · Épico 4% · Legendario 1%. Garantizado Épico o mejor cada 30 tiradas: <span id="pity"></span>/30. Súper tirada: Común 45% · Raro 33% · Épico 17% · Legendario 5%. Cada 10 tiradas que haces, el precio de las siguientes sube muchísimo (y cada vez más rápido). Los Pokémon que ya tienes salen algo más a menudo.</p>
 </section>
 
 <section class="panel" id="collP">
@@ -495,21 +549,15 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 </section>
 <section class="panel" aria-label="PVP online" id="pvpP">
   <div class="hhead"><h2>⚔️ PVP online</h2><span class="hcost" id="pvSt">Conectando…</span></div>
-  <p class="rates">Reta a otros jugadores que tengan abierto <b>este mismo enlace</b> ahora mismo. Os enfrentáis por turnos con vuestros equipos de combate (hasta 6 Pokémon, a vuestro nivel y con los PS al máximo: no gastas PS, objetos ni experiencia). Gana quien debilita a todos los Pokémon del rival, y el ganador recibe entre 200.000 y 500.000 🎟️ al azar. Para jugar tienes que haber iniciado sesión con tu cuenta (no vale «Jugar sin cuenta»).</p>
+  <p class="rates">Reta a otros jugadores que tengan abierto <b>este mismo enlace</b> ahora mismo. Os enfrentáis por turnos con vuestros equipos de combate (hasta 6 Pokémon, a vuestro nivel y con los PS al máximo: no gastas PS, objetos ni experiencia). Gana quien debilita a todos los Pokémon del rival, y el ganador recibe entre 200.000 y 500.000 🎟️ al azar (máximo <b>5.000.000 🎟️ al día</b> ganados en PVP). Para jugar tienes que haber iniciado sesión con tu cuenta (no vale «Jugar sin cuenta»).</p>
   <div id="pvLobby">
     <div class="sets-row"><label>Tu apodo <input id="pvNick" maxlength="16" style="width:170px"></label><small id="pvTeam" class="mut"></small><small id="pvRec" class="mut"></small></div>
+    <small id="pvNickMsg" class="mut" style="display:block;margin-top:4px">Puedes usar letras, números, espacios, emojis y caracteres especiales. Cada apodo es único: no puede repetirse entre jugadores.</small>
     <div id="pvIn"></div>
     <div id="pvList" class="pvlist"></div>
   </div>
   <div id="pvDuel" hidden>
     <div class="bspd" style="justify-content:space-between"><b id="pvVs"></b><button class="alt" id="pvFf">🏳️ Abandonar</button></div>
-    <div class="bt"><div class="scene" id="pvScene"></div><div class="plat opp"></div><div class="plat me"></div>
-      <div class="info i-opp" id="pvOi"><b id="pvOn"></b> <small id="pvOl"></small><div class="hp"><i id="pvOh"></i></div><small id="pvOt"></small></div>
-      <div class="spr s-opp" id="pvOs"></div><div class="spr s-me" id="pvMs"></div>
-      <div class="info i-me" id="pvMi"><b id="pvMn"></b> <small id="pvMl"></small><div class="hp"><i id="pvMh"></i></div><small id="pvMt"></small></div>
-    </div>
-    <div class="box" id="pvBox"></div>
-    <div class="menu" id="pvMenu"></div>
   </div>
 </section>
 <section class="panel" aria-label="Centro Pokémon" id="healP">
@@ -540,6 +588,30 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
   <h2>🛒 Tienda de objetos</h2>
   <p class="rates">Los objetos también caen al ganar combates. Aquí puedes comprarlos con tickets: escribe la cantidad que quieras y pulsa Enter o el botón para comprar. Se usan desde la Bolsa durante el combate.</p>
   <div id="bag"></div>
+</section>
+<section class="panel" aria-label="Misiones diarias" id="qP">
+  <div class="hhead"><h2>📅 Misiones diarias</h2><span class="hcost" id="qRr"></span></div>
+  <p class="rates">Cada día tienes 3 misiones nuevas. Complétalas y pulsa «Reclamar» para recibir el premio. Si una no te gusta, puedes cambiarla por otra distinta hasta 2 veces al día.</p>
+  <div class="qgrid" id="qList"></div>
+</section>
+<section class="panel" aria-label="Logros" id="achP">
+  <div class="hhead"><h2>🏅 Logros</h2><span class="hcost" id="achSum"></span></div>
+  <p class="rates">Objetivos a largo plazo con varios niveles. Cuanto más difícil es el logro (más ★), mejor es la recompensa.</p>
+  <div class="qgrid" id="achList"></div>
+</section>
+<section class="panel" aria-label="Novedades" id="newsP">
+  <h2>📰 Novedades</h2>
+  <div id="newsList"></div>
+</section>
+<section class="panel" aria-label="Sugerencias" id="sugP">
+  <h2>💡 Sugerencias</h2>
+  <p class="rates">¿Tienes alguna idea para mejorar el juego o has encontrado un fallo? Escríbelo aquí. Las sugerencias solo las puede leer el creador del juego.</p>
+  <textarea id="sugT" maxlength="1000" rows="4" placeholder="Escribe tu sugerencia..." aria-label="Tu sugerencia"></textarea>
+  <div class="sets-row"><button id="sugGo">Enviar sugerencia</button><small id="sugMsg" class="mut"></small></div>
+  <div id="sugAdm" hidden>
+    <div class="hhead" style="margin-top:16px"><h2>📬 Sugerencias recibidas (solo las ves tú)</h2><button class="alt" id="sugRe" style="background:var(--line);color:var(--ink)">🔄 Actualizar</button></div>
+    <div id="sugList"></div>
+  </div>
 </section>
 </main>
 
@@ -634,7 +706,7 @@ const cpc=()=>.1*Math.pow(2,S.cl),clc=()=>Math.round(25*Math.pow(3,S.cl));
 const gc=i=>Math.ceil(G[i][1]*Math.pow(1.15,S.g[i]));
 const tps=()=>G.reduce((a,g,i)=>a+g[2]*S.g[i],0);
 const gift=()=>{const n=Math.min(60,S.dg||0);return 500+150*n+15*n*n};
-const cost=(n,sup)=>{const b=sup?100:1,st=sup?60:6,c=(sup?S.sp:S.np)||0;let t=0;for(let k=0;k<n;k++)t+=b+st*Math.floor((c+k)/10);return Math.round(t*10)/10};
+const cost=(n,sup)=>{const b=sup?100:1,st=sup?300:30,q=sup?30:3,c=(sup?S.sp:S.np)||0;let t=0;for(let k=0;k<n;k++){const s=Math.floor((c+k)/10);t+=b+st*s+q*s*s}return Math.round(t*10)/10};
 const GI=["🧢","🐄","🏥","🥚","🏆"];
 function buildShop(){
   const tile=(id,ic,nm,sub,k)=>'<button class="tile" id="'+id+'"><span class="ti">'+ic+'</span><span class="tn"><b>'+nm+' <kbd>'+k+'</kbd></b><small>'+sub+'</small><em id="'+id+'c"></em></span><span class="tq" id="'+id+'q"></span></button>';
@@ -691,7 +763,7 @@ function tick(){
   render();
 }
 function render(){
-  $("tk").textContent=fmt(S.t)+(tps()>0?" ("+fmt(tps())+"/s)":"");$("tcap").textContent="+"+fmt(cpc())+" 🎟️ por toque · tecla "+(O.tkeys||["u"]).map(tkLabel).join(" / ");$("tps").textContent=tps()>0?"Tus ayudantes producen "+fmt(tps())+" 🎟️ por segundo":"Compra ayudantes en la tienda";updShop();updBag();rows();fists();healUI();bagUI();leagueUI();
+  $("tk").textContent=fmt(S.t)+(tps()>0?" ("+fmt(tps())+"/s)":"");$("tcap").textContent="+"+fmt(cpc())+" 🎟️ por toque · tecla "+(O.tkeys||["u"]).map(tkLabel).join(" / ");$("tps").textContent=tps()>0?"Tus ayudantes producen "+fmt(tps())+" 🎟️ por segundo":"Compra ayudantes en la tienda";updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();
   $("p1").disabled=S.t<cost(1);$("p10").disabled=S.t<cost(10);$("ps").disabled=S.t<cost(1,true);$("ps10").disabled=S.t<cost(10,true);$("p1").textContent="Tirar ×1 ("+fmt(cost(1))+" 🎟️)";$("p10").textContent="Tirar ×10 ("+fmt(cost(10))+" 🎟️)";$("ps").textContent="✨ Súper ×1 ("+fmt(cost(1,true))+" 🎟️)";$("ps10").textContent="✨ Súper ×10 ("+fmt(cost(10,true))+" 🎟️)";
   $("daily").disabled=S.daily===today();
   $("daily").textContent=S.daily===today()?"Vuelve mañana (+"+gift()+")":"Reclamar +"+gift()+" 🎟️";
@@ -731,6 +803,7 @@ function pull(n,sup){
     S.owned[p[0]]=(S.owned[p[0]]||0)+1;S.pulls++;
     const r=isNew?0:REF[p[2]];back+=r;res.push([p,isNew,r]);
   }
+  qEv("pull",n);if(sup)qEv("spull",n);const nn=res.filter(x=>x[1]).length;if(nn)qEv("new",nn);
   S.t+=back;save();render();
   const RC={C:"#fff",R:"#7fb6ff",E:"#d3a2ff",L:"#ffd15c"};
   const best=res.reduce((a,x)=>"CREL".indexOf(x[0][2])>"CREL".indexOf(a)?x[0][2]:a,"C");
@@ -754,9 +827,9 @@ $("p10").onclick=()=>pull(10);
 $("ps").onclick=()=>pull(1,true);
 $("ps10").onclick=()=>pull(10,true);
 let cd=false;
-$("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;if(S.clicks%10===0)save();render()};
-$("daily").onclick=()=>{if(S.daily===today())return;S.daily=today();const gf=gift();S.t+=gf;S.dg=(S.dg||0)+1;save();render();$("msg").textContent="¡+"+gf+" 🎟️ de regalo diario! Mañana será mayor."};
-$("reset").onclick=()=>{if(confirm("¿Borrar toda tu colección y empezar de cero?")){S={g:[0,0,0,0,0],cl:0,lt:Date.now(),lv:{},ab:{},balls:{},mv:{},hp:{},ofd:{},when:{},team:["","","","","",""],sets:[],lg:null,lgDone:{},bag:{pot:3,spot:0,hpot:0,mpot:0,rev:1,mrev:0,pb:5,sb:0,ub:0,mb:0},t:3,last:Date.now(),owned:{},pity:0,daily:"",pulls:0};save();$("out").innerHTML="";$("msg").textContent="";render()}};
+$("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");if(S.clicks%10===0)save();render()};
+$("daily").onclick=()=>{if(S.daily===today())return;S.daily=today();const gf=gift();S.t+=gf;S.dg=(S.dg||0)+1;qEv("daily");save();render();$("msg").textContent="¡+"+gf+" 🎟️ de regalo diario! Mañana será mayor."};
+$("reset").onclick=()=>{if(confirm("¿Borrar toda tu colección y empezar de cero?")){const nk=S.nick;S={nick:nk,g:[0,0,0,0,0],cl:0,lt:Date.now(),lv:{},ab:{},balls:{},mv:{},hp:{},ofd:{},when:{},team:["","","","","",""],sets:[],lg:null,lgDone:{},bag:{pot:3,spot:0,hpot:0,mpot:0,rev:1,mrev:0,pb:5,sb:0,ub:0,mb:0},t:3,last:Date.now(),owned:{},pity:0,daily:"",pulls:0};save();$("out").innerHTML="";$("msg").textContent="";render()}};
 const nrm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 function srch(){
   const q=nrm($("sq").value.trim()),r=$("sres");
@@ -798,7 +871,7 @@ function buildBag(){
   ITEMS.forEach((it,i)=>{
     $("bq"+i).oninput=updBag;
     $("bq"+i).onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();const b=$("bb"+i);if(b.disabled)$("bq"+i).animate([{transform:"translateX(-4px)"},{transform:"translateX(4px)"},{transform:"none"}],200);else b.click()}};
-    $("bb"+i).onclick=()=>{const n=qtyOf(i),c=it[2]*n;if(S.t>=c){S.t-=c;S.bag[it[0]]=(S.bag[it[0]]||0)+n;const qi=$("bq"+i);qi.value=1;if(document.activeElement===qi)qi.select();save();render()}};
+    $("bb"+i).onclick=()=>{const n=qtyOf(i),c=it[2]*n;if(S.t>=c){S.t-=c;S.bag[it[0]]=(S.bag[it[0]]||0)+n;qEv("buy",n);const qi=$("bq"+i);qi.value=1;if(document.activeElement===qi)qi.select();save();render()}};
   });
 }
 function updBag(){ITEMS.forEach((it,i)=>{const c=it[2]*qtyOf(i);$("bc"+i).textContent="×"+(S.bag[it[0]]||0);$("bb"+i).textContent="🎟️ "+fmt(c);$("bb"+i).disabled=S.t<c})}
@@ -1089,7 +1162,7 @@ function partyUI(){
   $("pty").innerHTML=" "+B.team.map((t,i)=>ball((alive(i)?"":" ko")+(i===B.ai?" cur":""),t.p[0])).join("");
   const op=$("oparty");
   if(!B.trainer||!B.eteam){op.innerHTML="";return}
-  const ko=B.eteam.map((e,i)=>i<B.ei||(i===B.ei&&B.oh<=0));
+  const ko=B.eteam.map((e,i)=>B.pv?e.mh<=0:(i<B.ei||(i===B.ei&&B.oh<=0)));
   op.innerHTML=B.eteam.map((e,i)=>ball((ko[i]?" ko":"")+(i===B.ei?" cur":""),e.p[0])).join("")+'<small> '+ko.filter(x=>!x).length+'/'+B.eteam.length+' restantes</small>';
 }
 
@@ -1193,7 +1266,7 @@ async function gainXp(p,amt){
   snd("xp");await say(p[0]+" gana "+fmt(amt)+" puntos de experiencia.");
   if(act){xpBar();await sleep(700)}
   while(d.l<100&&d.x>=need(d.l)){
-    d.x-=need(d.l);d.l++;snd("lvl");
+    d.x-=need(d.l);d.l++;snd("lvl");qEv("lvl");
     if(act){B.lv=d.l;const xb=$("xb");xb.style.transition="none";xb.style.width="0%";void xb.offsetWidth;xb.style.transition="";burst("⭐",pos("msp"),8,60,26);$("ml").textContent=STAR[p[2]]+" "+TIPO[p[1]]+" Nv"+d.l}
     await say("¡"+p[0]+" sube al nivel "+d.l+"!");
     if(act){xpBar();await sleep(500)}
@@ -1216,7 +1289,7 @@ async function finish(res){
   if(res==="flee")await say("¡"+o[0]+" salvaje huyó!");
   else if(res==="lose"){if(B.trainer){await trainerEnter("win");await say("¡"+B.trainer+" ha ganado el combate!")}snd("lose");await say("¡Todo tu equipo se debilitó! Has perdido...");if(B.league){S.lg=null;await say("Has sido eliminado de la "+LEAGUES[B.league.li].n+". Puedes volver a intentarlo cuando quieras.")}}
   else{
-    if(res==="win"){if(B.trainer)await trainerDefeat();else await say("¡"+o[0]+" salvaje se debilitó!")}
+    if(res==="win"){qEv("win");if(B.trainer)qEv("tr");if(B.trainer)await trainerDefeat();else await say("¡"+o[0]+" salvaje se debilitó!")}
     const rw=Math.random()<1e-7?33550336:100+Math.floor(Math.random()*99901);S.t+=rw;
     snd("win");await say("¡Recompensa: +"+fmt(rw)+" 🎟️!"+(rw===33550336?" ¡¡PREMIO GORDO!!":""));
     if(rw===33550336)await jackpot(rw);
@@ -1274,7 +1347,7 @@ async function ball(id,it){
   if(Math.random()<ch){
     const isNew=!S.owned[o[0]];
     if(isNew){(S.balls=S.balls||{})[o[0]]=id;(S.when=S.when||{})[o[0]]=Date.now()}
-    S.owned[o[0]]=(S.owned[o[0]]||0)+1;
+    S.owned[o[0]]=(S.owned[o[0]]||0)+1;qEv("cap");if(isNew)qEv("new");
     snd("capok");await say("¡Has capturado a "+o[0]+"!"+(isNew?" ¡Nuevo en tu colección!":""));
     return finish("cap");
   }
@@ -1382,7 +1455,7 @@ $("buse").addEventListener("click",e=>{
     const n=$("bcS").value;if(!n){useUI("Elige un Pokémon de la lista.");return}
     const d=lvd(n);ofd(n);
     const q=Math.max(1,Math.min(Math.floor(+$("bcN").value)||1,S.bag.cand,100-d.l)),l0=d.l;
-    d.l+=q;d.x=0;S.bag.cand-=q;
+    d.l+=q;d.x=0;S.bag.cand-=q;qEv("lvl",q);
     if(S.hp[n]!==undefined)S.hp[n]=Math.min(mxOf(n),S.hp[n]+8*q);
     save();snd("lvl");render();
     const pend=Math.floor(d.l/3)-ofd(n);
@@ -1512,7 +1585,7 @@ async function jackpotLevel(){
 }
 // ================= inicio de combate (salvaje, entrenador o Liga) =================
 async function startBattle(cfg){
-  const names=(S.team||[]).filter(n=>n&&S.owned[n]);if(!names.length||fcd)return;
+  const names=(S.team||[]).filter(n=>n&&S.owned[n]);if(!names.length||fcd||D||PV.st!=="idle")return;
   const ok=names.some(n=>S.hp[n]!==0);if(!ok){updTeam();return}
   fcd=true;$("fgo").disabled=true;names.forEach(n=>ofd(n));
   try{$("batP").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}
@@ -1587,7 +1660,7 @@ async function healTeam(){
   const need=names.some(n=>S.hp[n]!==undefined&&S.hp[n]<stH(PM[n],lvd(n).l));
   if(!need){$("hmsg").textContent="Tu equipo ya está en perfecto estado. ¡No hace falta curarlo!";return}
   if(S.t<HEAL_COST)return;
-  healing=true;hsk=!!O.askip;$("hskip").hidden=!O.skip||!!O.askip;S.t-=HEAL_COST;save();render();
+  healing=true;hsk=!!O.askip;$("hskip").hidden=!O.skip||!!O.askip;S.t-=HEAL_COST;qEv("heal");save();render();
   const m=$("hmach"),tray=$("htray"),f=O.fx?1:.3;
   tray.innerHTML=trayHTML(names,"balls");
   m.classList.remove("glow");m.classList.add("run");$("hmsg").textContent="Dejando tus Pokéballs en la bandeja...";
@@ -1654,8 +1727,10 @@ $("hlp").onclick=()=>{const q=$("hlpp");q.hidden=!q.hidden;if(!q.hidden){q.inner
 $("hlpp").addEventListener("click",e=>{if(e.target&&e.target.id==="hlpx")$("hlpp").hidden=true});
 // ================= PVP online (salas en tiempo real de la plataforma) =================
 let PR=null,PV={st:"idle",ch:null,ok:null,no:null,t0:0},D=null;
-const pvNick=()=>{if(!O.nick){O.nick="Entrenador"+Math.floor(1000+Math.random()*9000);saveO()}return O.nick};
-const pvClean=t=>String(t==null?"":t).replace(/[^\p{L}\p{N} _.\-]/gu,"").slice(0,16).trim()||"Jugador";
+const pvNick=()=>{if(!S.nick){S.nick=O.nick?pvClean(O.nick):"Entrenador"+Math.floor(1000+Math.random()*9000);save()}return S.nick};
+const pvClean=t=>Array.from(String(t==null?"":t).replace(/[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g,"").replace(/\s+/g," ").trim()).slice(0,16).join("").trim()||"Jugador";
+const PVP_CAP=5000000;
+const pvDay=()=>{const d=today();if(!S.pvd||S.pvd.d!==d)S.pvd={d:d,t:0};return S.pvd};
 const pvHash=str=>{let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
 const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,m:moves(PM[n]).map(m=>m[0])}));
 function pvOkTeam(t){return Array.isArray(t)&&t.length>=1&&t.length<=6&&t.every(x=>x&&typeof x.n==="string"&&PM[x.n]&&Number.isInteger(x.l)&&x.l>=1&&x.l<=100&&Array.isArray(x.m)&&x.m.length>=1&&x.m.length<=4&&x.m.every(id=>typeof id==="string"&&MVI(id))&&new Set(x.m).size===x.m.length)&&new Set(t.map(x=>x.n)).size===t.length}
@@ -1676,7 +1751,7 @@ function pvTurnRes(st,aA,aB){
     if(pm.hp<=0)return;
     if(ac==="d"){me.g=true;push({k:"guard",s:k,n:pm.p[0]});return}
     const mv=pm.m[+ac.slice(1)];if(!mv)return;
-    push({k:"use",s:k,n:pm.p[0],mv:mname(mv,pm.p)});
+    push({k:"use",s:k,n:pm.p[0],mv:mname(mv,pm.p),id:mv[0]});
     const kd=mv[2];
     if(kd==="h"){const b=pm.hp;pm.hp=Math.min(pm.mx,pm.hp+Math.round(pm.mx*mv[3]/100));push({k:"heal",s:k,n:pm.p[0],h:pm.hp-b});return}
     if(kd==="g"){me.g=true;push({k:"guard",s:k,n:pm.p[0]});return}
@@ -1721,13 +1796,13 @@ function pvRender(){
   $("pvSt").textContent=(others.length+1)+" jugador"+(others.length?"es":"")+" aquí";
   const tm=pvTeamData();
   $("pvTeam").textContent=tm.length?"Tu equipo: "+tm.length+" Pokémon":"Elige un equipo de combate arriba para poder jugar.";
-  $("pvRec").textContent=S.pvp?"Récord: "+(S.pvp.w||0)+" V · "+(S.pvp.l||0)+" D":"";
+  $("pvRec").textContent=(S.pvp?"Récord: "+(S.pvp.w||0)+" V · "+(S.pvp.l||0)+" D · ":"")+"Hoy: "+fmt(pvDay().t)+" / "+fmt(PVP_CAP)+" 🎟️";
   if(D)return;
   let inc="";
-  if(PV.st==="idle"&&me)others.forEach(p=>{const c=p.presence.pvp.ch;if(p.presence.pvp.st==="wait"&&c&&c.to===me.peer&&Date.now()-(c.t||0)<35000)inc+='<div class="lgnow"><b>⚔️ '+esc(pvClean(p.presence.pvp.n))+' te reta a un duelo</b><div class="lgbtn"><button class="red" data-pvacc="'+esc(p.peer)+'">Aceptar</button><button class="alt" data-pvno="'+esc(p.peer)+'">Rechazar</button></div></div>'});
+  if(PV.st==="idle"&&me)others.forEach(p=>{const c=p.presence.pvp.ch;if(p.presence.pvp.st==="wait"&&c&&c.to===me.peer&&Date.now()-(c.t||0)<35000)inc+='<div class="lgnow"><b>⚔️ '+esc(pvClean(p.presence.pvp.n))+' te reta a un duelo</b>'+(fcd?'<small class="mut">Termina tu combate actual (pulsa «Volver») para poder aceptar.</small>':'')+'<div class="lgbtn"><button class="red" data-pvacc="'+esc(p.peer)+'"'+(fcd?' disabled':'')+'>Aceptar</button><button class="alt" data-pvno="'+esc(p.peer)+'">Rechazar</button></div></div>'});
   if(PV.st==="wait"){const o=PV.ch&&others.find(p=>p.peer===PV.ch.to);inc+='<div class="lgnow"><b>Reto enviado a '+esc(o?pvClean(o.presence.pvp.n):"otro jugador")+'…</b><small class="mut">Esperando respuesta (30 s).</small><div class="lgbtn"><button class="alt" data-pvcancel="1">Cancelar</button></div></div>'}
   $("pvIn").innerHTML=inc;
-  $("pvList").innerHTML=others.length?others.map(p=>{const v=p.presence.pvp,busy=v.st==="duel";return '<div class="pvrow"><b>'+esc(pvClean(v.n))+'</b><span class="pvtm">'+(Array.isArray(v.tm)?v.tm.filter(x=>x&&PM[x.n]).slice(0,6).map(x=>'<span title="'+esc(x.n)+' Nv'+(+x.l||1)+'">'+ico(PM[x.n],26)+'</span>').join(""):"")+'</span><small class="mut">'+(busy?"En duelo":v.st==="wait"?"Retando…":"Libre")+'</small><button data-pvch="'+esc(p.peer)+'"'+((PV.st!=="idle"||busy||v.st!=="idle"||!tm.length)?' disabled':'')+'>⚔️ Retar</button></div>'}).join(""):'<small class="mut">Ahora mismo no hay otros jugadores. Comparte el enlace de la página para que alguien se conecte.</small>';
+  $("pvList").innerHTML=others.length?others.map(p=>{const v=p.presence.pvp,busy=v.st==="duel";return '<div class="pvrow"><b>'+esc(pvClean(v.n))+'</b><span class="pvtm">'+(Array.isArray(v.tm)?v.tm.filter(x=>x&&PM[x.n]).slice(0,6).map(x=>'<span title="'+esc(x.n)+' Nv'+(+x.l||1)+'">'+ico(PM[x.n],26)+'</span>').join(""):"")+'</span><small class="mut">'+(busy?"En duelo":v.st==="wait"?"Retando…":"Libre")+'</small><button data-pvch="'+esc(p.peer)+'"'+((PV.st!=="idle"||busy||v.st!=="idle"||!tm.length||fcd)?' disabled':'')+'>⚔️ Retar</button></div>'}).join(""):'<small class="mut">Ahora mismo no hay otros jugadores. Comparte el enlace de la página para que alguien se conecte.</small>';
   // reto aceptado / rechazado (jugador que reta)
   if(PV.st==="wait"&&PV.ch&&me){
     const acc=others.find(p=>{const o=p.presence.pvp.ok;return o&&o.from===me.peer&&o.room===PV.ch.room});
@@ -1738,26 +1813,51 @@ function pvRender(){
   }
 }
 function pvChallenge(peer){
-  const me=pvMe();if(!me||PV.st!=="idle"||!pvTeamData().length)return;
+  const me=pvMe();if(!me||PV.st!=="idle"||!pvTeamData().length||fcd)return;
   PV.st="wait";PV.t0=Date.now();PV.ch={to:peer,room:"d"+Math.floor(Math.random()*1e9).toString(36)+Date.now().toString(36),seed:Math.floor(Math.random()*2147483647),t:Date.now()};PV.ok=null;pvPub();pvRender();
 }
 function pvAccept(peer){
-  const o=pvOthers().find(p=>p.peer===peer);if(!o||PV.st!=="idle")return;
+  const o=pvOthers().find(p=>p.peer===peer);if(!o||PV.st!=="idle"||fcd)return;
   const c=o.presence.pvp.ch;if(!c||typeof c.room!=="string"||!/^[a-z0-9][a-z0-9_.-]{0,47}$/.test(c.room))return;
   PV.st="duel";PV.ok={from:peer,room:c.room};PV.no=null;pvPub();pvStart("B",c.room,c.seed|0);
 }
 function pvDecline(peer){const o0=pvOthers().find(p=>p.peer===peer),rm=o0&&o0.presence.pvp.ch?o0.presence.pvp.ch.room:"";PV.no={from:peer,room:rm,t:Date.now()};pvPub();setTimeout(()=>{PV.no=null;pvPub()},8000);pvRender()}
-// ---- duelo ----
+// ---- duelo (usa la misma arena, interfaz y animaciones que los combates normales) ----
 const pvOpp=()=>{if(!D)return null;const p=D.DR.peers().find(x=>!x.isMe&&x.kind==="viewer"&&x.presence&&x.presence.pv&&x.presence.pv.v===1);return p?p.presence.pv:null};
 function pvDPub(){const h={};Object.keys(D.hist).slice(-8).forEach(k=>{h[k]=D.hist[k]});D.DR.presence({pv:Object.assign({},D.base,{h:h})}).catch(()=>{})}
 async function pvStart(role,room,seed){
   PV.st="duel";pvPub();
   let DR;try{DR=await PR.join(room)}catch(e){PV.st="idle";PV.ch=null;PV.ok=null;pvPub();pvMsg("No se pudo entrar en la sala del duelo.");return}
-  D={role:role,room:room,DR:DR,seed:seed,hist:{},st:null,playing:false,over:false,t0:Date.now(),lastSeen:Date.now(),sw:false,waitSince:0,base:{v:1,n:pvClean(pvNick()),r:role,team:pvTeamData()},shown:{}};
+  D={role:role,room:room,DR:DR,seed:seed,hist:{},st:null,playing:false,ready:false,over:false,t0:Date.now(),lastSeen:Date.now(),sw:false,waitSince:0,base:{v:1,n:pvClean(pvNick()),r:role,team:pvTeamData()}};
+  fcd=true;updTeam();
+  const a=$("arena");$("pvDuel").appendChild(a);a.hidden=false;
+  $("pvLobby").hidden=true;$("pvDuel").hidden=false;$("pvVs").textContent="Duelo online";
+  $("tsp").style.opacity=0;$("tsp").innerHTML="";$("hlpp").hidden=true;setScene($("bscene"),"grass");
+  ["osp","msp","oi","mi"].forEach(id=>{$(id).style.opacity=0});
+  $("fmsg").textContent="Preparando el duelo… Esperando a que el rival entre en la sala.";$("menu").innerHTML="";
+  if(O.bigmode&&!bigMode)bigSet(O.bigmode);
+  try{$("pvpP").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}
   D.unsub=DR.onPeers(()=>pvTick());D.iv=setInterval(pvTick,400);
-  $("pvLobby").hidden=true;$("pvDuel").hidden=false;$("pvVs").textContent="Duelo online";setScene($("pvScene"),"grass");
-  $("pvBox").textContent="Preparando el duelo…";$("pvMenu").innerHTML="";
   pvDPub();pvTick();
+}
+// copia el estado del motor PVP en B para poder usar las mismas funciones de la arena
+function pvSync(sn,act){
+  const me=D.role,op=me==="A"?"B":"A";
+  B.team.forEach((t,i)=>{t.mh=Math.max(0,sn.hp[me][i])});
+  B.eteam.forEach((t,i)=>{t.mh=Math.max(0,sn.hp[op][i])});
+  if(act){B.ai=sn.ai[me];B.ei=sn.ai[op]}
+  const a=B.team[B.ai],o=B.eteam[B.ei];
+  B.me=a.p;B.lv=a.l;B.mx=a.mx;B.mh=a.mh;B.op=o.p;B.ol=o.l;B.ox=o.mx;B.oh=o.mh;
+}
+function pvBegin(){
+  const me=D.role,op=me==="A"?"B":"A",mk=t=>({p:t.p,l:t.l,mx:t.mx,mh:t.hp});
+  B={pv:true,team:D.st[me].t.map(mk),ai:D.st[me].ai,eteam:D.st[op].t.map(mk),ei:D.st[op].ai,trainer:D.oppNick,tlook:trainerLook(D.oppNick),busy:true,choose:null,item:null,up:0,guard:false};
+  pvSync(pvSnap(D.st),true);
+  $("tsp").style.opacity=0;$("tsp").innerHTML="";$("hlpp").hidden=true;
+  paintEnemy();setScene($("bscene"),envOf(B.op[1]));paintMe();upd();xpBar();$("menu").innerHTML="";
+  ["osp","msp","oi","mi"].forEach(id=>{$(id).style.opacity=0});
+  D.playing=true;const d=D;
+  (async()=>{try{await intro(B.op,B.me)}catch(e){}if(D!==d||d.over)return;d.playing=false;d.ready=true;pvMenu();pvTick()})();
 }
 const pvKey=()=>D.st.turn+":"+((D.st.need.A||D.st.need.B)?"swap":"act");
 function pvTick(){
@@ -1769,14 +1869,13 @@ function pvTick(){
       const mine=D.base.team,theirs=op.team;
       D.st=pvInit(D.role==="A"?mine:theirs,D.role==="A"?theirs:mine,D.seed);
       D.oppNick=pvClean(op.n);$("pvVs").textContent=pvClean(D.base.n)+" ⚔️ "+D.oppNick;
-      pvPaintSnap(pvSnap(D.st));$("pvBox").textContent="¡Duelo contra "+D.oppNick+"!";
-      pvMenu();
+      pvBegin();
     }else if(Date.now()-D.t0>25000)pvEnd("timeout");
     return;
   }
+  if(D.playing)return;
   if(op&&op.ff){pvEnd("ff");return}
   if(!op&&Date.now()-D.lastSeen>7000){pvEnd("left");return}
-  if(D.playing)return;
   const key=pvKey(),need=D.st.need,swap=need.A||need.B;
   const mineReq=swap?need[D.role]:true,theirReq=swap?need[other]:true;
   const mine=mineReq?D.hist[key]:"-",theirs=theirReq?(op&&op.h&&op.h[key]):"-";
@@ -1785,72 +1884,89 @@ function pvTick(){
   pvPlayTurn(key,D.role==="A"?mine:theirs,D.role==="A"?theirs:mine);
 }
 function pvAct(a){
-  if(!D||!D.st||D.playing||D.over)return;
+  if(!D||!D.st||D.playing||D.over||!D.ready)return;
   const key=pvKey();if(D.hist[key]!=null)return;
   D.hist[key]=a;D.sw=false;D.waitSince=Date.now();pvDPub();pvMenu();snd("ui");pvTick();
 }
 async function pvPlayTurn(key,aA,aB){
-  D.playing=true;pvMenu();
-  const ev=(D.st.need.A||D.st.need.B)?pvSwap(D.st,aA,aB):pvTurnRes(D.st,aA,aB);
-  await pvPlay(ev);
-  D.playing=false;
-  if(D.st.over){pvEnd("done");return}
-  D.waitSince=0;pvMenu();pvTick();
-}
-function pvTxt(e){
-  const m=e.s===D.role,n=e.n;
-  switch(e.k){
-    case "use":return m?"¡"+n+" usa "+e.mv+"!":"¡"+n+" rival usa "+e.mv+"!";
-    case "miss":return "¡Pero ha fallado!";
-    case "hit":return e.e>1?"¡Es súper eficaz!":e.e<1?"No es muy eficaz...":"";
-    case "heal":return n+" recupera "+e.h+" PS.";
-    case "guard":return "¡"+n+" se protege!";
-    case "up":return "¡"+n+" sube su ataque!";
-    case "send":return m?"¡Adelante, "+n+"!":"El rival envía a "+n+".";
-    case "faint":return m?"¡"+n+" se debilitó!":"¡"+n+" rival se debilitó!";
-    case "drain":return n+" drena "+e.hl+" PS.";
-    case "recoil":return n+" sufre daño de retroceso.";
-    case "multi":return "¡Golpeó "+e.c+" veces!";
-    case "win":return e.s===D.role?"¡Has ganado el duelo!":"Has perdido el duelo...";
+  const d=D;d.playing=true;$("menu").innerHTML="";
+  const ev=(d.st.need.A||d.st.need.B)?pvSwap(d.st,aA,aB):pvTurnRes(d.st,aA,aB);
+  try{await pvPlay(ev)}catch(e){}
+  if(D!==d||d.over)return;
+  if(d.st.over){
+    try{
+      if(d.st.over===d.role){$("osp").style.opacity=0;await trainerEnter("defeat");await say("¡Has derrotado a "+B.trainer+"!");await say("«"+TQ_WIN[Math.floor(Math.random()*TQ_WIN.length)]+"»")}
+      else{await trainerEnter("win");await say("¡"+B.trainer+" ha ganado el combate!");await say("¡Todo tu equipo se debilitó! Has perdido...")}
+    }catch(e){}
+    d.playing=false;if(D===d)pvEnd("done");return;
   }
-  return "";
+  d.playing=false;d.waitSince=0;pvMenu();pvTick();
 }
-function pvPaintSnap(sn){
-  const me=D.role,op=me==="A"?"B":"A";
-  [["M",me],["O",op]].forEach(a=>{
-    const w=a[0],sd=a[1],i=sn.ai[sd],t=D.st[sd].t[i],hp=Math.max(0,sn.hp[sd][i]),sp=$("pv"+w+"s"),tag=sd+i+t.p[0];
-    if(D.shown[w]!==tag){D.shown[w]=tag;sp.innerHTML=ico(t.p,92);sp.className="spr "+(w==="M"?"s-me":"s-opp");sp.style.filter="drop-shadow(0 0 12px "+GLW[t.p[2]]+")"}
-    $("pv"+w+"n").textContent=t.p[0];$("pv"+w+"l").textContent=STAR[t.p[2]]+" "+TIPO[t.p[1]]+" Nv"+t.l;
-    const pc=hp/t.mx,bar=$("pv"+w+"h");bar.style.width=pc*100+"%";bar.style.background=pc>.5?"#3ecf5a":pc>.2?"#f5c400":"#e63950";
-    $("pv"+w+"t").textContent="PS "+hp+" / "+t.mx+" · "+D.st[sd].t.map((x,j)=>sn.hp[sd][j]>0?"●":"○").join("");
-  });
+async function pvSend(e){
+  const mine=e.s===D.role;
+  if(mine){
+    const old=B.team[B.ai],forced=old.mh<=0;
+    if(!forced)await say("¡Vuelve "+old.p[0]+"!");
+    $("msp").style.opacity=0;
+    pvSync(e.snap,true);paintMe();if(!$("hlpp").hidden)$("hlpp").innerHTML=helpHTML();$("msp").style.opacity=0;upd();xpBar();
+    const sp=say("¡Adelante, "+B.me[0]+"!");await sendOut(B.me);await sp;
+  }else{
+    const old=B.eteam[B.ei],forced=old.mh<=0;
+    if(!forced)await say("¡"+B.trainer+" retira a "+old.p[0]+"!");
+    $("osp").style.opacity=0;
+    pvSync(e.snap,true);paintEnemy();if(!$("hlpp").hidden)$("hlpp").innerHTML=helpHTML();upd();$("osp").style.opacity=0;
+    await trainerSendOut(false);
+  }
 }
-async function pvSay(t){const b=$("pvBox");b.textContent="";for(const c of t){b.textContent+=c;await sleep(10)}}
 async function pvPlay(ev){
-  for(const e of ev){
-    pvPaintSnap(e.snap);
-    const tw=e.s==="A"?"B":"A",w=(e.k==="hit")?(tw===D.role?"M":"O"):(e.s===D.role?"M":"O"),sp=$("pv"+w+"s");
-    if(e.k==="hit"){sp.classList.remove("hit");void sp.offsetWidth;sp.classList.add("hit");snd("atk",{ty:e.t,big:e.big});snd("hit",e.e)}
-    if(e.k==="faint"){sp.classList.add("faint");snd("faint")}
-    if(e.k==="heal"||e.k==="up"||e.k==="guard")snd(e.k==="heal"?"heal":e.k==="guard"?"guard":"buff");
-    if(e.k==="send")snd("pop");
-    const t=pvTxt(e);if(t){await pvSay(t);await sleep(520)}else await sleep(350);
+  const d=D;
+  for(let i=0;i<ev.length;i++){
+    if(D!==d||d.over)return;
+    const e=ev[i],mine=e.s===d.role,who=mine?e.n:e.n+" rival";
+    if(e.k==="use"){
+      pvSync(e.snap);upd();
+      const nx=ev[i+1]||{},same=nx.s===e.s;
+      if(same&&nx.k==="heal"){i++;snd("heal");await fxSelf("💚",mine);pvSync(nx.snap);upd();await say("¡"+who+" usa "+e.mv+" y recupera "+nx.h+" PS!");continue}
+      if(same&&nx.k==="guard"){i++;snd("guard");await fxSelf("🛡️",mine);await say("¡"+who+" usa "+e.mv+" y se protege!");continue}
+      if(same&&nx.k==="up"){i++;snd("buff");await fxSelf("⬆️",mine);await say("¡"+who+" usa "+e.mv+"! Su ataque sube.");continue}
+      await say("¡"+who+" usa "+e.mv+"!");
+      if(same&&nx.k==="miss"){i++;snd("miss");await say("¡Pero ha fallado!");continue}
+      const mv=MVI(e.id),att=PM[e.n];
+      if(mv&&att){snd("atk",{ty:mv[2]==="n"?"normal":att[1],big:mv[3]>=100});await fxAtk(mv,att,mine)}
+      let j=i+1,ef=1,dr=null,rc=null,mu=null;
+      while(ev[j]&&ev[j].k==="hit"&&ev[j].s===e.s){
+        const h=ev[j];ef=h.e;pvSync(h.snap);
+        const sp=$(mine?"osp":"msp");sp.classList.remove("hit");void sp.offsetWidth;sp.classList.add("hit");snd("hit",h.e);
+        upd();j++;if(ev[j]&&ev[j].k==="hit"&&ev[j].s===e.s)await sleep(260);
+      }
+      while(ev[j]&&ev[j].s===e.s&&(ev[j].k==="drain"||ev[j].k==="recoil")||ev[j]&&ev[j].k==="multi"){const x=ev[j];if(x.k==="drain")dr=x;else if(x.k==="recoil")rc=x;else mu=x;if(x.snap)pvSync(x.snap);j++}
+      upd();await sleep(550);
+      if(ef>1)await say("¡Es súper eficaz!");else if(ef<1)await say("No es muy eficaz...");
+      if(mu)await say("¡Golpeó "+mu.c+" veces!");
+      if(dr)await say("¡"+who+" drena "+dr.hl+" PS!");
+      if(rc)await say("¡"+who+" sufre daño de retroceso!");
+      i=j-1;continue;
+    }
+    if(e.k==="guard"){pvSync(e.snap);snd("guard");await fxSelf("🛡️",mine);await say("¡"+who+" se protege!");continue}
+    if(e.k==="send"){await pvSend(e);continue}
+    if(e.k==="faint"){pvSync(e.snap);upd();$(mine?"msp":"osp").classList.add("faint");snd("faint");await say(mine?"¡"+e.n+" se debilitó!":"¡"+e.n+" de "+B.trainer+" se debilitó!");continue}
   }
 }
 function pvMenu(){
-  const m=$("pvMenu");if(!D||!D.st||D.over){m.innerHTML="";return}
+  const m=$("menu");if(!D||!D.st||D.over||!D.ready)return;
   if(D.playing){m.innerHTML="";return}
-  const st=D.st,me=D.role,key=pvKey(),mine=D.hist[key],swap=st.need.A||st.need.B,side=st[me];
+  const st=D.st,me=D.role,key=pvKey(),mine=D.hist[key],swap=st.need.A||st.need.B,side=st[me],box=$("fmsg");
   const alive=side.t.map((t,i)=>({t:t,i:i})).filter(x=>x.t.hp>0&&x.i!==side.ai);
+  const claim=D.waitSince&&Date.now()-D.waitSince>90000?'<button data-pv="claim">Reclamar victoria (rival inactivo)</button>':"";
   if(swap){
-    if(st.need[me]&&mine==null){$("pvBox").textContent="Elige tu siguiente Pokémon:";m.innerHTML=side.t.map((t,i)=>t.hp>0?'<button data-pv="s'+i+'">'+esc(t.p[0])+' Nv'+t.l+' · PS '+t.hp+'/'+t.mx+'</button>':"").join("");return}
-    $("pvBox").textContent="Esperando a que el rival elija su siguiente Pokémon…";m.innerHTML=(D.waitSince&&Date.now()-D.waitSince>90000)?'<button data-pv="claim">Reclamar victoria (rival inactivo)</button>':"";return;
+    if(st.need[me]&&mine==null){box.textContent="Elige tu siguiente Pokémon:";m.innerHTML=side.t.map((t,i)=>t.hp>0?'<button data-pv="s'+i+'">'+esc(t.p[0])+' Nv'+t.l+' · PS '+t.hp+'/'+t.mx+'</button>':"").join("");return}
+    box.textContent="Esperando a que "+D.oppNick+" elija su siguiente Pokémon…";m.innerHTML=claim;return;
   }
-  if(mine!=null){$("pvBox").textContent="Esperando la elección del rival…";m.innerHTML=(Date.now()-D.waitSince>90000)?'<button data-pv="claim">Reclamar victoria (rival inactivo)</button>':"";return}
+  if(mine!=null){box.textContent="Esperando la elección de "+D.oppNick+"…";m.innerHTML=claim;return}
   const pm=side.t[side.ai];
-  if(D.sw){m.innerHTML=alive.map(x=>'<button data-pv="s'+x.i+'">'+esc(x.t.p[0])+' Nv'+x.t.l+' · PS '+x.t.hp+'/'+x.t.mx+'</button>').join("")+'<button data-pv="back" class="alt">Atrás</button>';return}
-  $("pvBox").textContent="¿Qué hará "+pm.p[0]+"?";
-  m.innerHTML=pm.m.map((mv,i)=>'<button data-pv="m'+i+'">'+esc(mname(mv,pm.p))+'</button>').join("")+'<button data-pv="d">Defensa</button>'+(alive.length?'<button data-pv="sw">Cambiar</button>':"");
+  if(D.sw){m.innerHTML=side.t.map((t,i)=>'<button data-pv="s'+i+'"'+(i===side.ai||t.hp<=0?" disabled":"")+'>'+esc(t.p[0])+' Nv'+t.l+' · PS '+Math.max(0,t.hp)+'/'+t.mx+(i===side.ai?" (activo)":t.hp<=0?" (debilitado)":"")+'</button>').join("")+'<button data-pv="back">Atrás</button>';return}
+  box.textContent="¿Qué hará "+pm.p[0]+"?";
+  m.innerHTML=pm.m.map((mv,i)=>'<button data-pv="m'+i+'">'+esc(mname(mv,pm.p))+'</button>').join("")+'<button data-pv="d">Defensa</button><button disabled title="En PVP no se pueden usar objetos">Bolsa</button><button data-pv="sw"'+(alive.length?'':' disabled')+'>Equipo</button><button data-pv="ff">Huir</button>';
 }
 function pvEnd(r){
   if(!D||D.over)return;
@@ -1859,32 +1975,66 @@ function pvEnd(r){
   if(r==="done")win=D.st.over===D.role;else if(r==="ff"||r==="left")win=true;else if(r==="self")win=false;
   S.pvp=S.pvp||{w:0,l:0};
   let txt;
-  if(win===true){const rw=200000+Math.floor(Math.random()*300001);S.t+=rw;S.pvp.w++;snd("win");txt=(r==="done"?"¡Victoria!":(r==="ff"?"El rival ha abandonado. ¡Victoria!":"El rival se ha desconectado. ¡Victoria!"))+" +"+fmt(rw)+" 🎟️"}
+  if(win===true){
+    const rw0=200000+Math.floor(Math.random()*300001),pd=pvDay(),rw=Math.min(rw0,Math.max(0,PVP_CAP-pd.t));
+    S.t+=rw;pd.t+=rw;S.pvp.w++;snd("win");
+    txt=(r==="done"?"¡Victoria!":(r==="ff"?"El rival ha abandonado. ¡Victoria!":"El rival se ha desconectado. ¡Victoria!"))+(rw?" +"+fmt(rw)+" 🎟️":"")+(rw<rw0?(rw?" (has llegado al límite diario de "+fmt(PVP_CAP)+" 🎟️ en PVP)":" Ya has llegado al límite diario de "+fmt(PVP_CAP)+" 🎟️ ganados en PVP: hoy no recibes más tickets por duelos."):"");
+  }
   else if(win===false){S.pvp.l++;snd("lose");txt=r==="self"?"Has abandonado el duelo.":"Derrota. ¡Suerte en la próxima!"}
   else txt="El rival no ha llegado a conectarse al duelo.";
+  if(win!==null){qEv("pvp");if(win)qEv("pvpwin")}
   save();
-  $("pvBox").textContent=txt;
-  $("pvMenu").innerHTML='<button data-pv="exit">Volver al lobby</button>';
+  $("fmsg").textContent=txt;
+  $("menu").innerHTML='<button data-pv="exit">Volver al lobby</button>';
   try{D.DR.leave()}catch(e){}
   PV.st="idle";PV.ch=null;PV.ok=null;pvPub();
 }
-function pvExit(){D=null;$("pvDuel").hidden=true;$("pvLobby").hidden=false;pvRender()}
-$("pvMenu").addEventListener("click",e=>{
+function pvExit(){
+  if(bigMode)bigSet("");
+  const a=$("arena");a.hidden=true;$("batP").appendChild(a);
+  D=null;B=null;fcd=false;
+  $("pvDuel").hidden=true;$("pvLobby").hidden=false;$("fsel").hidden=false;
+  updTeam();render();pvRender();
+}
+$("menu").addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b||!b.dataset.pv)return;const v=b.dataset.pv;
-  if(v==="exit"){pvExit();return}
+  if(v==="exit"){snd("ui");pvExit();return}
   if(!D)return;
-  if(v==="sw"){D.sw=true;pvMenu();return}
-  if(v==="back"){D.sw=false;pvMenu();return}
+  if(v==="sw"){snd("ui");D.sw=true;pvMenu();return}
+  if(v==="back"){snd("ui");D.sw=false;pvMenu();return}
   if(v==="claim"){pvEnd("left");return}
+  if(v==="ff"){if(confirm("¿Seguro que quieres huir del duelo? Contará como derrota."))$("pvFf").click();return}
   if(/^(m[0-3]|d|s[0-5])$/.test(v))pvAct(v);
 });
 $("pvFf").onclick=()=>{if(!D||D.over)return;D.base.ff=1;pvDPub();setTimeout(()=>pvEnd("self"),250)};
 $("pvList").addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.dataset.pvch)pvChallenge(b.dataset.pvch)});
 $("pvIn").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.pvacc)pvAccept(b.dataset.pvacc);else if(b.dataset.pvno)pvDecline(b.dataset.pvno);else if(b.dataset.pvcancel){PV.st="idle";PV.ch=null;pvPub();pvRender()}});
-$("pvNick").onchange=()=>{O.nick=pvClean($("pvNick").value);$("pvNick").value=O.nick;saveO();pvPub()};
+// ---- apodos unicos (registro en la nube) ----
+const nickMsg=t=>{$("pvNickMsg").textContent=t};
+async function nickInit(){
+  if(!window.nickClaim)return;
+  let n=pvNick(),r=await window.nickClaim(n,null);
+  if(r==="taken"){
+    const old=n;
+    for(let k=0;k<6&&r==="taken";k++){n="Entrenador"+Math.floor(10000+Math.random()*90000);r=await window.nickClaim(n,null)}
+    if(r==="ok"){S.nick=n;save();$("pvNick").value=n;pvPub();nickMsg("Tu apodo «"+old+"» ya está siendo usado por otro jugador, así que te hemos puesto «"+n+"». Puedes cambiarlo cuando quieras.")}
+  }
+}
+$("pvNick").onchange=async()=>{
+  const old=pvNick(),nn=pvClean($("pvNick").value);
+  if(nn===old){$("pvNick").value=old;return}
+  if(window.nickClaim){
+    $("pvNick").disabled=true;nickMsg("Comprobando si el apodo está libre…");
+    let r;try{r=await window.nickClaim(nn,old)}catch(e){r="error:"+((e&&e.message)||"")}
+    $("pvNick").disabled=false;
+    if(r==="taken"){$("pvNick").value=old;nickMsg("❌ El apodo «"+nn+"» ya está siendo usado por otro jugador. Elige otro.");return}
+    if(r!=="ok"&&r!=="local"){$("pvNick").value=old;nickMsg("No se pudo comprobar el apodo ("+String(r).replace(/^error:/,"")+"). Inténtalo de nuevo.");return}
+  }
+  S.nick=nn;save();$("pvNick").value=nn;nickMsg("✅ Tu apodo ahora es «"+nn+"».");pvPub();
+};
 async function pvInit0(){
   $("pvNick").value=pvNick();
-  pvRender();
+  pvRender();nickInit();
   try{
     if(!window.claude||!window.claude.use)return;
     PR=await window.claude.use("room");
@@ -2160,7 +2310,172 @@ function buildOpts(){
   }
 }
 
-pvInit0();buildBag();buildTeam();setsUI();buildShop();buildOpts();clBind();clInit();S.last=Date.now();S.lt=Date.now();_lt=Date.now();bgBuild();addEventListener("resize",()=>{clearTimeout(window._rz);window._rz=setTimeout(bgBuild,300)});tick();setInterval(tick,500);setInterval(fxTick,1000);setInterval(cpsUpd,250);
+// ================= misiones diarias y logros =================
+const stt=()=>S.st||(S.st={});
+const IN=id=>(ITEMS.find(i=>i[0]===id)||[id,id])[1];
+const rwTxt=r=>[r.t?fmt(r.t)+" 🎟️":""].concat(Object.keys(r.it||{}).map(k=>r.it[k]+" "+IN(k))).filter(x=>x).join(" + ");
+function grant(r){S.t+=r.t||0;Object.keys(r.it||{}).forEach(k=>{S.bag[k]=(S.bag[k]||0)+r.it[k]})}
+let _toT=0;
+function toast(t){const e=$("toast");e.textContent=t;e.hidden=false;clearTimeout(_toT);_toT=setTimeout(()=>{e.hidden=true},4000)}
+// [id, evento, objetivo, texto, recompensa]
+const MIS=[
+["m_pull","pull",20,"Haz 20 tiradas (normales o súper)",{t:100000}],
+["m_spull","spull",5,"Haz 5 súper tiradas",{t:150000,it:{sb:2}}],
+["m_click","click",500,"Toca la Pokéball 500 veces",{t:80000}],
+["m_win","win",5,"Gana 5 combates",{t:150000,it:{pb:3}}],
+["m_cap","cap",2,"Captura 2 Pokémon en combate",{t:120000,it:{sb:2}}],
+["m_tr","tr",2,"Derrota a 2 entrenadores",{t:200000,it:{pot:3}}],
+["m_pvp","pvp",1,"Juega 1 duelo PVP",{t:150000}],
+["m_pvpw","pvpwin",1,"Gana 1 duelo PVP",{t:250000}],
+["m_heal","heal",1,"Cura a tu equipo en el Centro Pokémon",{t:300000}],
+["m_buy","buy",5,"Compra 5 objetos en la Tienda de objetos",{t:100000}],
+["m_lvl","lvl",10,"Sube 10 niveles a tus Pokémon",{t:200000,it:{spot:2}}],
+["m_new","new",2,"Consigue 2 Pokémon nuevos",{t:150000}],
+["m_daily","daily",1,"Reclama el regalo diario",{t:50000}]];
+const MISM={};MIS.forEach(m=>{MISM[m[0]]=m});
+const MIS_N=3,MIS_RR=2;
+function dmEnsure(){
+  const d=today();
+  if(!S.dm||S.dm.d!==d||!Array.isArray(S.dm.l)||S.dm.l.some(m=>!MISM[m.id])){
+    const ids=MIS.map(m=>m[0]).sort(()=>Math.random()-.5).slice(0,MIS_N);
+    S.dm={d:d,rr:0,l:ids.map(id=>({id:id,p:0,c:false}))};
+  }
+  return S.dm;
+}
+function qEv(ev,n){
+  n=n||1;const st=stt();st[ev]=(st[ev]||0)+n;
+  dmEnsure().l.forEach(m=>{const d=MISM[m.id];if(d[1]!==ev||m.c||m.p>=d[2])return;m.p=Math.min(d[2],m.p+n);if(m.p>=d[2])toast("✅ Misión completada: "+d[3]+". ¡Reclama tu premio!")});
+}
+// dificultad 0..5 -> recompensa (cuanto más difícil, mejor)
+const AR=[
+{t:100000,it:{pb:5,pot:3}},
+{t:1000000,it:{sb:5,spot:3}},
+{t:10000000,it:{ub:5,hpot:5,cand:1}},
+{t:50000000,it:{ub:10,mpot:5,cand:3,mb:1}},
+{t:250000000,it:{mrev:5,cand:10,mb:3}},
+{t:1000000000,it:{mrev:10,cand:25,mb:10}}];
+const LEGN=P.filter(p=>p[2]==="L").length;
+const maxLv=()=>Object.keys(S.lv||{}).reduce((a,n)=>S.owned[n]?Math.max(a,(S.lv[n]&&S.lv[n].l)||1):a,Object.keys(S.owned).length?1:0);
+// [id, icono, nombre, texto ({g} = objetivo), progreso, niveles [objetivo, dificultad]]
+const ACH=[
+["col","📚","Coleccionista","Consigue {g} Pokémon distintos",()=>P.filter(p=>S.owned[p[0]]).length,[[10,0],[50,1],[150,2],[400,3],[800,4],[P.length,5]]],
+["pull","🎰","Adicto a las cápsulas","Haz {g} tiradas",()=>S.pulls||0,[[100,0],[1000,1],[5000,2],[25000,3],[100000,4]]],
+["clk","👆","Dedo de acero","Toca la Pokéball {g} veces",()=>S.clicks||0,[[1000,0],[10000,1],[100000,2],[1000000,4]]],
+["win","⚔️","Combatiente","Gana {g} combates",()=>stt().win||0,[[10,0],[100,1],[500,2],[2500,3],[10000,4]]],
+["tr","👤","Rival temido","Derrota a {g} entrenadores",()=>stt().tr||0,[[5,0],[50,1],[250,2],[1000,3]]],
+["cap","🔴","Atrapalotodo","Captura {g} Pokémon en combate",()=>stt().cap||0,[[5,0],[50,1],[250,2],[1000,3]]],
+["lvl","⭐","Entrenador experto","Sube un Pokémon al nivel {g}",maxLv,[[10,0],[25,1],[50,2],[75,3],[100,4]]],
+["l100","💯","Equipo de élite","Ten {g} Pokémon al nivel 100",()=>Object.keys(S.lv||{}).filter(n=>S.owned[n]&&S.lv[n]&&S.lv[n].l>=100).length,[[1,3],[6,4],[25,5]]],
+["leg","🌟","Cazador de leyendas","Consigue {g} Pokémon legendarios distintos",()=>P.filter(p=>p[2]==="L"&&S.owned[p[0]]).length,[[1,1],[10,2],[50,3],[100,4],[LEGN,5]]],
+["lg","🏆","Campeón regional","Gana {g} Ligas distintas",()=>Object.keys(S.lgDone||{}).filter(k=>S.lgDone[k]>0).length,[[1,2],[3,3],[6,4],[9,5]]],
+["pvp","🌐","Rey del PVP","Gana {g} duelos PVP",()=>(S.pvp&&S.pvp.w)||0,[[1,0],[10,2],[50,3],[200,4],[1000,5]]],
+["heal","🏥","Cliente habitual","Cura a tu equipo {g} veces en el Centro Pokémon",()=>stt().heal||0,[[5,0],[50,1],[250,2]]],
+["dm","📅","Constancia","Completa {g} misiones diarias",()=>stt().dm||0,[[5,0],[30,1],[100,2],[365,4]]],
+["rich","💰","Millonario","Ten {g} 🎟️ a la vez",()=>Math.max(stt().mt||0,S.t),[[1e6,0],[1e8,2],[1e10,4],[1e12,5]]],
+["jp","🎉","¡Qué suerte!","Consigue el premio gordo ({g} vez)",()=>S.jp||0,[[1,5]]]];
+const achLv=a=>(S.ach&&S.ach[a[0]])||0;
+const achReady=a=>{const k=achLv(a);return k<a[5].length&&a[4]()>=a[5][k][0]};
+let _qk="",_qn=null;
+function qUI(){
+  const dm=dmEnsure(),st=stt();if(S.t>(st.mt||0))st.mt=S.t;
+  const prog=ACH.map(a=>{const k=achLv(a);return k+":"+(k<a[5].length?Math.min(a[4](),a[5][k][0]):0)});
+  const rq=dm.l.filter(m=>!m.c&&m.p>=MISM[m.id][2]).length,ra=ACH.filter(achReady);
+  if(_qn===null)_qn=new Set(ra.map(a=>a[0]+achLv(a)));
+  ra.forEach(a=>{const id=a[0]+achLv(a);if(!_qn.has(id)){_qn.add(id);toast("🏅 ¡Logro conseguido: "+a[2]+"! Reclama tu recompensa.")}});
+  const nb=rq+ra.length;$("navn").hidden=!nb;$("navn").textContent=nb;
+  const key=JSON.stringify(dm)+prog.join(",")+JSON.stringify(S.ach||{});
+  if(key===_qk)return;_qk=key;
+  $("qRr").textContent="Cambios hoy: "+(MIS_RR-dm.rr)+" / "+MIS_RR;
+  $("qList").innerHTML=dm.l.map((m,i)=>{
+    const d=MISM[m.id],done=m.p>=d[2];
+    return '<div class="qc'+(m.c?' claimed':done?' ready':'')+'"><b>'+d[3]+'</b><div class="bar"><i style="width:'+Math.min(100,m.p/d[2]*100)+'%"></i></div><small>'+fmt(m.p)+' / '+fmt(d[2])+'</small><small>🎁 '+rwTxt(d[4])+'</small><div class="qbtn">'+(m.c?'<small>✅ Premio reclamado</small>':'<button data-qc="'+i+'"'+(done?'':' disabled')+'>Reclamar</button><button class="alt" data-qr="'+i+'"'+(done||dm.rr>=MIS_RR?' disabled':'')+'>🔄 Cambiar</button>')+'</div></div>';
+  }).join("");
+  let tot=0,got=0;
+  $("achList").innerHTML=ACH.map(a=>{
+    const k=achLv(a),n=a[5].length;tot+=n;got+=k;
+    if(k>=n)return '<div class="qc claimed"><div class="qhead"><b>'+a[1]+' '+a[2]+'</b><small>Nivel '+n+'/'+n+'</small></div><small>✅ ¡Logro completado del todo!</small></div>';
+    const g=a[5][k][0],df=a[5][k][1],v=a[4](),ok=v>=g;
+    return '<div class="qc'+(ok?' ready':'')+'"><div class="qhead"><b>'+a[1]+' '+a[2]+'</b><small>Nivel '+(k+1)+'/'+n+'</small></div><small>'+a[3].replace("{g}",fmt(g))+'</small><div class="bar"><i style="width:'+Math.min(100,v/g*100)+'%"></i></div><small>'+fmt(Math.min(v,g))+' / '+fmt(g)+' · Dificultad <span class="qstar">'+"★".repeat(df+1)+'</span></small><small>🎁 '+rwTxt(AR[df])+'</small><div class="qbtn"><button data-ac="'+a[0]+'"'+(ok?'':' disabled')+'>Reclamar</button></div></div>';
+  }).join("");
+  $("achSum").textContent=got+" / "+tot+" conseguidos";
+}
+$("qList").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;const dm=dmEnsure();
+  if(b.dataset.qc!==undefined){
+    const m=dm.l[+b.dataset.qc],d=m&&MISM[m.id];if(!d||m.c||m.p<d[2])return;
+    m.c=true;grant(d[4]);qEv("dm");snd("win");toast("🎁 Has recibido "+rwTxt(d[4]));save();render();
+  }else if(b.dataset.qr!==undefined){
+    const i=+b.dataset.qr,m=dm.l[i];if(!m||m.c||dm.rr>=MIS_RR||m.p>=MISM[m.id][2])return;
+    const pool=MIS.filter(x=>!dm.l.some(y=>y.id===x[0]));if(!pool.length)return;
+    dm.l[i]={id:pool[Math.floor(Math.random()*pool.length)][0],p:0,c:false};dm.rr++;snd("ui");save();render();
+  }
+});
+$("achList").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b||!b.dataset.ac)return;
+  const a=ACH.find(x=>x[0]===b.dataset.ac);if(!a||!achReady(a))return;
+  const r=AR[a[5][achLv(a)][1]];S.ach=S.ach||{};S.ach[a[0]]=achLv(a)+1;grant(r);snd("lvl");toast("🏅 "+a[2]+": has recibido "+rwTxt(r));save();render();
+});
+// ================= novedades =================
+const NEWS=[
+{d:"28/10/2026",t:"Gran actualización",l:[
+"⚔️ Los duelos PVP usan ahora la misma pantalla y animaciones que los combates normales: entrada del rival, lanzamiento de Pokéballs, efectos de los ataques, velocidad ×1/×2/×3, ventana grande y pantalla completa.",
+"🏷️ Los apodos del PVP son únicos: no se puede usar un apodo que ya tenga otro jugador.",
+"🔣 Ya puedes usar caracteres especiales y emojis en tu apodo.",
+"🧭 Nuevo botón de accesos directos (abajo a la derecha) para ir a cualquier parte del juego sin hacer scroll.",
+"👤 Ahora puedes registrarte e iniciar sesión con un nombre de usuario y contraseña.",
+"💡 Nuevo apartado de sugerencias al final de la página.",
+"🎟️ Límite de 5.000.000 🎟️ ganados al día en duelos PVP.",
+"📰 Nuevo apartado de novedades (¡este!).",
+"👋 Guía de bienvenida para los nuevos jugadores.",
+"💸 El precio de las tiradas sube muchísimo más cada 10 tiradas.",
+"📅 Misiones diarias (con 2 cambios al día) y 🏅 logros con grandes recompensas."]}];
+function newsUI(){$("newsList").innerHTML=NEWS.map(n=>'<div class="news"><b>'+esc(n.d)+' · '+esc(n.t)+'</b><ul>'+n.l.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>').join("")}
+// ================= bienvenida para nuevos jugadores =================
+function welcShow(){$("welc").hidden=false;try{$("welcOk").focus({preventScroll:true})}catch(e){}$("welc").querySelector(".jbox").scrollTop=0}
+$("welcOk").onclick=()=>{$("welc").hidden=true};
+function welcInit(){if(S.welc)return;if(clFresh())welcShow();S.welc=1;save()}
+// ================= accesos directos =================
+const NAV=[["🎯","Entrenar","farm"],["🎟️","Tickets gratis","earnP"],["🎰","Tiradas","stage"],["🛍️","Tienda de mejoras","shopP"],["📚","Colección","collP"],["⚔️","Combate","batP"],["🏆","Liga Pokémon","lgP"],["🌐","PVP online","pvpP"],["🏥","Centro Pokémon","healP"],["🎒","Mochila","bagU"],["🛒","Tienda de objetos","bagP"],["📅","Misiones","qP"],["🏅","Logros","achP"],["📰","Novedades","newsP"],["💡","Sugerencias","sugP"],["❓","Cómo se juega","#welc"],["⚙️","Ajustes","#opt"]];
+function navUI(){
+  const dm=dmEnsure(),rq=dm.l.filter(m=>!m.c&&m.p>=MISM[m.id][2]).length,ra=ACH.filter(achReady).length;
+  $("navg").innerHTML=NAV.map(n=>{const el=n[2][0]==="#"?null:$(n[2]),off=el&&!el.offsetParent&&getComputedStyle(el).display==="none",c=n[2]==="qP"?rq:n[2]==="achP"?ra:0;return '<button data-go="'+n[2]+'"'+(off?' disabled title="Panel oculto en Ajustes"':'')+'><span>'+n[0]+'</span>'+n[1]+(c?'<i>'+c+'</i>':'')+'</button>'}).join("");
+}
+$("navb").onclick=()=>{const p=$("navp");p.hidden=!p.hidden;if(!p.hidden){navUI();$("optp").hidden=true}};
+$("navg").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b||!b.dataset.go)return;const g=b.dataset.go;$("navp").hidden=true;snd("ui");
+  if(g==="#welc"){welcShow();return}
+  if(g==="#opt"){$("optp").hidden=false;return}
+  try{$(g).scrollIntoView({behavior:"smooth",block:"start"})}catch(x){}
+});
+document.addEventListener("pointerdown",e=>{if(!$("navp").hidden&&!(e.target.closest&&e.target.closest("#navp,#navb")))$("navp").hidden=true});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("navp").hidden=true;if(!$("welc").hidden)$("welc").hidden=true}});
+// ================= sugerencias (solo las lee el creador del juego) =================
+const sugMsg=t=>{$("sugMsg").textContent=t};
+async function sugLoad(){
+  if(!window.sugList)return;
+  let l;try{l=await window.sugList()}catch(e){$("sugAdm").hidden=true;return}
+  $("sugAdm").hidden=false;
+  $("sugList").innerHTML=l.length?l.map(s=>'<div class="sugi"><button class="alt" data-sd="'+esc(s.id)+'">🗑️ Borrar</button><b>'+esc(s.name||"Anónimo")+'</b>'+(s.nick?' <small class="mut">('+esc(s.nick)+')</small>':'')+' <small class="mut">· '+(s.at?new Date(s.at).toLocaleString("es"):"")+'</small><p>'+esc(s.text||"")+'</p></div>').join(""):'<small class="mut">Aún no hay sugerencias.</small>';
+}
+$("sugGo").onclick=async()=>{
+  const t=$("sugT").value.trim();
+  if(!window.sugSend){sugMsg("Para enviar sugerencias tienes que haber iniciado sesión con tu cuenta.");return}
+  if(t.length<5){sugMsg("Escribe un poco más (mínimo 5 caracteres).");return}
+  let last=0;try{last=+localStorage.getItem("gacha-sug-at")||0}catch(e){}
+  if(Date.now()-last<60000){sugMsg("Espera un minuto antes de enviar otra sugerencia.");return}
+  $("sugGo").disabled=true;sugMsg("Enviando…");
+  try{await window.sugSend(t.slice(0,1000),pvNick());try{localStorage.setItem("gacha-sug-at",String(Date.now()))}catch(e){}$("sugT").value="";sugMsg("✅ ¡Gracias! Tu sugerencia se ha enviado.");if(!$("sugAdm").hidden)sugLoad()}
+  catch(e){sugMsg("No se pudo enviar la sugerencia ("+((e&&e.code)||"error")+"). Inténtalo más tarde.")}
+  $("sugGo").disabled=false;
+};
+$("sugRe").onclick=sugLoad;
+$("sugList").addEventListener("click",async e=>{
+  const b=e.target.closest("button");if(!b||!b.dataset.sd||!window.sugDel)return;
+  if(!confirm("¿Borrar esta sugerencia?"))return;
+  try{await window.sugDel(b.dataset.sd)}catch(x){}
+  sugLoad();
+});
+pvInit0();buildBag();buildTeam();setsUI();buildShop();buildOpts();clBind();clInit();newsUI();welcInit();$("navb").hidden=false;sugLoad();S.last=Date.now();S.lt=Date.now();_lt=Date.now();bgBuild();addEventListener("resize",()=>{clearTimeout(window._rz);window._rz=setTimeout(bgBuild,300)});tick();setInterval(tick,500);setInterval(fxTick,1000);setInterval(cpsUpd,250);
 document.addEventListener("keydown",e=>{
   if(window._cap){e.preventDefault();e.stopPropagation();tkCapture(e);return}
   if(e.key==="Escape"&&bigMode==="win"){bigSet("");return}
@@ -2179,7 +2494,10 @@ document.getElementById("alocal").onclick=function(){document.getElementById("au
 <script type="module">
 const g=id=>document.getElementById(id),msg=t=>{g("amsg").textContent=t};
 const cfg={apiKey:"AIzaSyB6cHeH3JK-Mx9-TSOritkzoI09U_BMrwE",authDomain:"pokegacha-fdef9.firebaseapp.com",projectId:"pokegacha-fdef9",storageBucket:"pokegacha-fdef9.firebasestorage.app",messagingSenderId:"661559220582",appId:"1:661559220582:web:7ec97ca67e48e4186d10a7"};
-const ERR={"auth/invalid-credential":"Correo o contraseña incorrectos.","auth/email-already-in-use":"Ese correo ya tiene una cuenta.","auth/weak-password":"La contraseña debe tener al menos 6 caracteres.","auth/invalid-email":"El correo no es válido.","auth/popup-closed-by-user":"Cerraste la ventana de Google.","auth/operation-not-allowed":"Ese método de acceso no está activado en Firebase (Authentication > Método de acceso).","auth/unauthorized-domain":"Este dominio no está autorizado en Firebase (Authentication > Configuración > Dominios autorizados).","auth/network-request-failed":"Sin conexión con Firebase."};
+const UDOM="pokegacha-fdef9.firebaseapp.com";
+const toEmail=v=>{v=String(v||"").trim();if(v.includes("@"))return v;const u=v.toLowerCase();if(u.length<3||u.length>20||!/^[a-z0-9_-]+(\.[a-z0-9_-]+)*$/.test(u))throw {code:"bad-user"};return u+"@"+UDOM};
+const label=u=>u.displayName||(u.email&&u.email.endsWith("@"+UDOM)?u.email.slice(0,-UDOM.length-1):u.email)||"Entrenador";
+const ERR={"bad-user":"El nombre de usuario debe tener entre 3 y 20 caracteres: letras sin tildes ni ñ, números, punto, guion o guion bajo.","auth/invalid-credential":"Usuario/correo o contraseña incorrectos.","auth/email-already-in-use":"Ese correo ya tiene una cuenta.","auth/missing-password":"Escribe una contraseña.","auth/weak-password":"La contraseña debe tener al menos 6 caracteres.","auth/invalid-email":"El correo no es válido.","auth/popup-closed-by-user":"Cerraste la ventana de Google.","auth/operation-not-allowed":"Ese método de acceso no está activado en Firebase (Authentication > Método de acceso).","auth/unauthorized-domain":"Este dominio no está autorizado en Firebase (Authentication > Configuración > Dominios autorizados).","auth/network-request-failed":"Sin conexión con Firebase."};
 const errT=e=>ERR[e.code]||("Error: "+(e.code||e.message));
 async function main(){
   let A,F,S;
@@ -2188,7 +2506,27 @@ async function main(){
     [A,F,S]=await Promise.all([import(u+"/firebase-app.js"),import(u+"/firebase-auth.js"),import(u+"/firebase-firestore.js")]);
   }catch(e){msg("No se pudo cargar Firebase (¿sin conexión?). Puedes jugar sin cuenta.");return}
   const app=A.initializeApp(cfg),auth=F.getAuth(app),db=S.getFirestore(app);
-  let uid=null,started=false,timer=0,pending=null,lobby=null;
+  let uid=null,started=false,timer=0,pending=null,lobby=null,cu=null;
+  // apodos unicos: nicks/{clave} guarda el uid del dueño
+  const nkey=n=>"n_"+encodeURIComponent(String(n).trim().replace(/\s+/g," ").toLowerCase());
+  window.nickClaim=async(nick,old)=>{
+    if(!uid)return "local";
+    const k=nkey(nick),ko=old?nkey(old):null;
+    try{
+      await S.runTransaction(db,async tx=>{
+        const r=S.doc(db,"nicks",k),s=await tx.get(r);
+        let ro=null,so=null;if(ko&&ko!==k){ro=S.doc(db,"nicks",ko);so=await tx.get(ro)}
+        if(s.exists()&&s.data().uid!==uid)throw {code:"taken"};
+        if(!s.exists())tx.set(r,{uid:uid,nick:String(nick),at:Date.now()});
+        if(so&&so.exists()&&so.data().uid===uid)tx.delete(ro);
+      });
+      return "ok";
+    }catch(e){return e&&e.code==="taken"?"taken":"error:"+((e&&e.code)||"desconocido")}
+  };
+  // sugerencias: cualquiera con cuenta puede enviar; solo el administrador (reglas de Firestore) puede leerlas
+  window.sugSend=async(text,nick)=>{if(!uid)throw {code:"sin-cuenta"};await S.addDoc(S.collection(db,"suggestions"),{uid:uid,name:cu?label(cu):"",nick:String(nick||"").slice(0,40),text:String(text).slice(0,1000),at:Date.now()})};
+  window.sugList=async()=>{if(!uid)throw {code:"sin-cuenta"};const sn=await S.getDocs(S.query(S.collection(db,"suggestions"),S.orderBy("at","desc"),S.limit(300)));return sn.docs.map(d=>Object.assign({},d.data(),{id:d.id}))};
+  window.sugDel=async id=>{await S.deleteDoc(S.doc(db,"suggestions",id))};
   class FsRoom{
     constructor(db,uid,path){
       this.db=db;this.uid=uid;this.path=path;this.map={};this.hs=[];this.mine={};this.lastJ="";this.lastW=0;this.closed=false;
@@ -2231,20 +2569,25 @@ async function main(){
   window.cloudSave=j=>{pending=j;g("sync").textContent="☁️ Guardando…";if(!timer)timer=setTimeout(()=>{timer=0;flush()},4000)};
   addEventListener("beforeunload",flush);
   document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});
-  g("aform").addEventListener("submit",async e=>{e.preventDefault();msg("");try{await F.signInWithEmailAndPassword(auth,g("aemail").value.trim(),g("apass").value)}catch(x){msg(errT(x))}});
-  g("areg").onclick=async()=>{msg("");try{await F.createUserWithEmailAndPassword(auth,g("aemail").value.trim(),g("apass").value)}catch(x){msg(errT(x))}};
+  g("aform").addEventListener("submit",async e=>{e.preventDefault();msg("");try{await F.signInWithEmailAndPassword(auth,toEmail(g("aemail").value),g("apass").value)}catch(x){msg(errT(x))}});
+  g("areg").onclick=async()=>{
+    msg("");const v=g("aemail").value.trim(),isU=v&&!v.includes("@");
+    if(!v){msg("Escribe un nombre de usuario (o un correo) y una contraseña.");return}
+    try{const c=await F.createUserWithEmailAndPassword(auth,toEmail(v),g("apass").value);if(isU){try{await F.updateProfile(c.user,{displayName:v})}catch(e){}g("aname").textContent="👤 "+v}}
+    catch(x){msg(x.code==="auth/email-already-in-use"&&isU?"Ese nombre de usuario ya está registrado. Elige otro.":errT(x))}
+  };
   g("agoogle").onclick=async()=>{msg("");try{await F.signInWithPopup(auth,new F.GoogleAuthProvider())}catch(x){msg(errT(x))}};
-  g("areset").onclick=async()=>{const m=g("aemail").value.trim();if(!m){msg("Escribe tu correo arriba y vuelve a pulsar.");return}try{await F.sendPasswordResetEmail(auth,m);msg("Te hemos enviado un correo para cambiar la contraseña.")}catch(x){msg(errT(x))}};
+  g("areset").onclick=async()=>{const m=g("aemail").value.trim();if(!m){msg("Escribe tu correo arriba y vuelve a pulsar.");return}if(!m.includes("@")){msg("Las cuentas creadas con nombre de usuario no tienen correo, así que no se puede recuperar la contraseña. ¡Guárdala bien!");return}try{await F.sendPasswordResetEmail(auth,m);msg("Te hemos enviado un correo para cambiar la contraseña.")}catch(x){msg(errT(x))}};
   g("aout").onclick=async()=>{await flush();try{if(lobby)await lobby.leave()}catch(e){}await F.signOut(auth)};
   F.onAuthStateChanged(auth,async u=>{
     if(window.__gs&&!started)return;
     if(!u){uid=null;if(started){location.reload();return}g("auth").hidden=false;g("acct").hidden=true;msg("");return}
-    uid=u.uid;const key="gacha-pkmn-v3-"+uid;
+    uid=u.uid;cu=u;const key="gacha-pkmn-v3-"+uid;
     try{const sn=await S.getDoc(S.doc(db,"users",uid));if(sn.exists()&&typeof sn.data().data==="string")localStorage.setItem(key,sn.data().data)}
     catch(x){g("auth").hidden=false;msg("No se pudo cargar tu progreso: "+(x.code||x.message));return}
     lobby=new FsRoom(db,uid,["lobby"]);window.claude={use:async n=>n==="room"?lobby:null};
     window.__KEY=key;started=true;
-    g("auth").hidden=true;g("acct").hidden=false;g("aname").textContent="👤 "+(u.displayName||u.email||"Entrenador");
+    g("auth").hidden=true;g("acct").hidden=false;g("aname").textContent="👤 "+label(u);
     window.startGameOnce();
   });
 }

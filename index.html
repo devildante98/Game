@@ -641,6 +641,24 @@ body.hubon{overflow:hidden}
 body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 body.hc{--mute:color-mix(in srgb,var(--ink) 88%,transparent);--line:color-mix(in srgb,var(--ink) 50%,transparent)}
 body.hc .panel{border-width:2px}
+#out .card[data-pn]{cursor:zoom-in;transition:transform .15s}#out .card[data-pn]:hover{transform:translateY(-3px) scale(1.04)}
+#pkv{position:fixed;inset:0;z-index:72;background:rgba(8,10,34,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+#pkv[hidden]{display:none}
+.pkvw{position:relative;width:min(380px,100%);background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--tc) 30%,var(--panel)),var(--panel) 70%);border:4px solid var(--C);border-radius:26px;padding:22px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 26px 60px rgba(0,0,0,.5);color:var(--ink);text-align:center}
+.pkvw.R{border-color:var(--R)}.pkvw.E{border-color:var(--E);box-shadow:0 0 30px var(--E),0 26px 60px rgba(0,0,0,.5)}.pkvw.M{border-color:var(--M);box-shadow:0 0 34px var(--M),0 26px 60px rgba(0,0,0,.5)}.pkvw.L{border-color:var(--L);box-shadow:0 0 40px var(--L),0 26px 60px rgba(0,0,0,.5)}
+.pkvw.shiny{border-color:#ffd35c;box-shadow:0 0 40px #ffe58a,0 26px 60px rgba(0,0,0,.5)}
+.pkvx{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:12px;padding:0;background:var(--bg);color:var(--ink);border:1px solid var(--line);font-size:1.1rem}
+.pkvdex{position:absolute;top:16px;left:18px;font-weight:800;color:var(--mute)}
+.pkvspr{width:240px;height:240px;display:grid;place-items:center;margin-top:8px;filter:drop-shadow(0 12px 10px rgba(0,0,0,.25))}
+.pkvspr img,.pkvspr svg{max-width:240px!important;max-height:240px!important;image-rendering:pixelated;object-fit:contain}
+.pkvw h3{margin:0;font-size:1.6rem}
+.pkvtags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.pkvtags span{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-weight:700;font-size:.9rem}
+.pkvty{border-color:var(--tc)!important}
+.pkvinfo{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;color:var(--mute);font-size:.9rem}.pkvinfo b{color:var(--ink)}
+.pkvcry{margin-top:4px}
+#fsb{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:58px;z-index:60;width:42px;height:42px;border-radius:50%;padding:0;display:grid;place-items:center;background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer;transition:transform .15s}
+#fsb:hover{transform:scale(1.08)}#fsb.on{background:var(--teal);color:#0d2a24;border-color:var(--teal)}
+body.hubon #fsb{display:none}
 :root[data-theme="dark"]{color-scheme:dark}:root[data-theme="light"]{color-scheme:light}
 .tasum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:6px 0 16px}
 .tasum>div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;display:flex;flex-direction:column}
@@ -1257,7 +1275,7 @@ function roll(){
   return pickR(r);
 }
 function cardHTML(p,isNew,back,big,sh){
-  return `<div class="card ${p[2]} ${big?"big":""} ${sh?"shiny":""}"><span class="tag ${isNew?"":"dup"}">${isNew?"¡NUEVO!":"+"+back+" 🎟️"}</span>${sh?'<span class="shtag">✨ VARIOCOLOR</span>':""}<div class="em">${ico(p,big?76:46,false,sh)}</div><b>${sh?"✨ ":""}${p[0]}</b><small>${TIPO[p[1]]} · ${STAR[p[2]]}</small></div>`;
+  return `<div class="card ${p[2]} ${big?"big":""} ${sh?"shiny":""}" data-pn="${String(p[0]).replace(/"/g,"&quot;")}" data-sh="${sh?1:0}" title="Toca para verlo en grande"><span class="tag ${isNew?"":"dup"}">${isNew?"¡NUEVO!":"+"+back+" 🎟️"}</span>${sh?'<span class="shtag">✨ VARIOCOLOR</span>':""}<div class="em">${ico(p,big?76:46,false,sh)}</div><b>${sh?"✨ ":""}${p[0]}</b><small>${TIPO[p[1]]} · ${STAR[p[2]]}</small></div>`;
 }
 let busy=false,PT=[],SK=null;
 const tm=(f,ms)=>{PT.push(setTimeout(f,ms))};
@@ -4771,7 +4789,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T19:25",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T19:33",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -5408,6 +5426,35 @@ function setInit(){
 const _applyOBase=applyO;
 applyO=function(){_applyOBase();const b=document.body;if(!b)return;b.classList.toggle("calm",!!O.calm);b.classList.toggle("hc",!!O.hc);const z=+O.txt||1;document.documentElement.style.zoom=z===1?"":String(z);const r=document.documentElement;if(O.theme==="dark"||O.theme==="light")r.dataset.theme=O.theme;else delete r.dataset.theme};
 setInit();
+// ================= botón de pantalla completa en la pantalla principal =================
+(function(){
+  const d=document,el=d.documentElement,can=!!(el.requestFullscreen||el.webkitRequestFullscreen);if(!can||$("fsb"))return;
+  const IC_ON='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>',
+        IC_OFF='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg>';
+  const fsEl=()=>d.fullscreenElement||d.webkitFullscreenElement;
+  const b=d.createElement("button");b.id="fsb";b.type="button";d.body.appendChild(b);
+  const upd=()=>{const on=fsEl()===el;b.innerHTML=on?IC_OFF:IC_ON;b.title=on?"Salir de pantalla completa":"Pantalla completa";b.setAttribute("aria-label",b.title);b.classList.toggle("on",on)};
+  b.onclick=()=>{snd("ui");try{if(fsEl()){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const r=(el.requestFullscreen||el.webkitRequestFullscreen).call(el);if(r&&r.catch)r.catch(()=>{})}}catch(e){}};
+  d.addEventListener("fullscreenchange",upd);d.addEventListener("webkitfullscreenchange",upd);upd();
+})();
+// ================= ver en grande los Pokémon que salen en el gacha =================
+function pkView(n,sh){
+  const p=PM[n];if(!p)return;let m=$("pkv");
+  if(!m){m=document.createElement("div");m.id="pkv";m.hidden=true;m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m);
+    m.addEventListener("click",e=>{if(e.target===m||e.target.closest(".pkvx"))pkClose();const c=e.target.closest(".pkvcry");if(c)cry(c.dataset.n)})}
+  const own=S.owned[n]||0,shn=(S.shiny&&S.shiny[n])||0,RN={C:"Común",R:"Raro",E:"Épico",M:"Forma especial",L:"Legendario"}[p[2]]||"";
+  m.innerHTML='<div class="pkvw '+p[2]+(sh?' shiny':'')+'" style="--tc:'+(TC[p[1]]||"#999")+'"><button class="pkvx" aria-label="Cerrar">✕</button>'+
+    '<div class="pkvdex">#'+String(p[4]||0).padStart(4,"0")+'</div><div class="pkvspr">'+ico(p,210,false,!!sh)+'</div>'+
+    '<h3>'+(sh?"✨ ":"")+esc(n)+'</h3><div class="pkvtags"><span class="pkvty">'+EM[p[1]]+' '+TIPO[p[1]]+'</span><span class="pkvr">'+STAR[p[2]]+' '+RN+'</span></div>'+
+    '<div class="pkvinfo"><span>Tienes <b>×'+own+'</b></span>'+(shn?'<span>✨ Variocolor <b>×'+shn+'</b></span>':'')+(S.lv&&S.lv[n]?'<span>Nivel <b>'+S.lv[n].l+'</b></span>':'')+'</div>'+
+    '<button class="pkvcry" data-n="'+esc(n)+'">🔊 Escuchar su grito</button></div>';
+  m.hidden=false;const w=m.querySelector(".pkvw");w.animate([{transform:"scale(.6) rotate(-4deg)",opacity:0},{transform:"scale(1.04)",opacity:1,offset:.7},{transform:"none"}],{duration:380,easing:"cubic-bezier(.2,.9,.3,1.2)"});
+  m.animate([{opacity:0},{opacity:1}],{duration:200});
+  if(O.cry!==0)setTimeout(()=>{try{cry(n)}catch(e){}},200);
+}
+function pkClose(){const m=$("pkv");if(m)m.hidden=true}
+document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest("#out .card[data-pn]");if(c){snd("ui");pkView(c.dataset.pn,c.dataset.sh==="1")}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("pkv");if(m&&!m.hidden)pkClose()}});
 
 </script>
 <script>

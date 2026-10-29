@@ -429,6 +429,22 @@ button.mini{padding:0 6px;font-size:.7rem}
 .shb{position:absolute;bottom:2px;right:5px;font-size:.72rem;font-weight:700;color:#d4a000}
 img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
 .dly{display:flex;flex-direction:column;gap:6px}
+.strkb{background:linear-gradient(90deg,#ff7a3c,#e63950);color:#fff}
+#strkM{position:fixed;inset:0;z-index:104;background:rgba(10,12,30,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+#strkM .jbox{max-width:720px;max-height:calc(100vh - 32px);overflow:auto;text-align:left;padding:20px}
+.bph{display:flex;align-items:center;justify-content:space-between;gap:10px}.bph h2{margin:0;text-align:left}
+.bpn{display:flex;flex-direction:column;align-items:center;background:linear-gradient(135deg,#ff7a3c,#e63950);color:#fff;border-radius:14px;padding:4px 14px}.bpn b{font-size:1.6rem;line-height:1.1}.bpn small{font-size:.7rem}
+.bpbar{height:10px;margin:10px 0 6px}.bpbar i{background:linear-gradient(90deg,#ff7a3c,#ffd35c)}
+.bpgrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;margin:12px 0}
+@media (max-width:520px){.bpgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.bpd{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:5px 2px;min-height:70px}
+.bpd small{font-size:.65rem;color:var(--mute)}.bpd span{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:1px}.bpd span b{font-size:.62rem}
+.bpd.bpk{border-color:var(--yel);background:color-mix(in srgb,var(--yel) 14%,var(--bg))}
+.bpd.fin{border:2px solid #c57bff;background:color-mix(in srgb,#c57bff 18%,var(--bg))}
+.bpd.got{opacity:.55}.bpd.got i{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-size:1.6rem;color:var(--teal);text-shadow:0 0 4px var(--panel)}
+.bpd.now{border:2px solid var(--teal);box-shadow:0 0 14px color-mix(in srgb,var(--teal) 60%,transparent);animation:bpglow 1.2s ease-in-out infinite alternate}
+.bpd.now em{font-style:normal;font-size:.6rem;font-weight:800;color:var(--teal)}
+@keyframes bpglow{to{box-shadow:0 0 22px color-mix(in srgb,var(--teal) 90%,transparent)}}
 #strk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px}
 .skh{display:flex;flex-direction:column;gap:2px;margin-bottom:6px}
 .skrow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
@@ -472,6 +488,7 @@ img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
 .profst b{font-size:1.1rem}.profst small{color:var(--mute);font-size:.7rem}
 .proftm{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}.proftm div{display:flex;flex-direction:column;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:4px 6px;min-width:80px}
 .trsel2{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);flex:1;min-width:200px}
+img.pk.item{object-fit:contain;image-rendering:pixelated}
 .dexn{position:absolute;top:2px;left:6px;font-size:.62rem;color:var(--mute)}
 .shh{font-size:.95rem;margin:14px 0 4px}
 .news small.ago{color:var(--mute);font-weight:400}
@@ -553,6 +570,7 @@ img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
     <li>🎰 <b>Tiradas</b>: gasta tickets para conseguir Pokémon (Común, Raro, Épico y Legendario). Cada 30 tiradas tienes un Épico o mejor garantizado. Cada 10 tiradas el precio sube.</li>
     <li>📚 <b>Pokedex</b>: mira los Pokémon que tienes y los que te faltan.</li>
     <li>🏅 <b>Gimnasios y zonas</b>: gana las 8 medallas para desbloquear zonas de exploración y la Liga.</li>
+    <li>🔥 <b>Pase diario</b>: reclama el regalo cada día seguido para avanzar en tu racha (botón 🔥 junto al regalo diario).</li>
     <li>⚔️ <b>Combate</b>: forma un equipo de hasta 6 Pokémon. Ganando suben de nivel, aprenden habilidades y consigues tickets y objetos. ¡También puedes capturar Pokémon salvajes! Cada movimiento tiene <b>PP</b> (usos limitados): recupéralos con Éter, Elixir o en el Centro Pokémon.</li>
     <li>🏥 <b>Centro Pokémon</b> y 🎒 <b>Mochila</b>: los PS no se recuperan solos; cura a tu equipo o usa pociones.</li>
     <li>🏆 <b>Liga Pokémon</b> y 🌐 <b>PVP online</b>: reta al Alto Mando o a otros jugadores conectados, en duelos 1 contra 1 o en salas 2 vs 2 con código.</li>
@@ -570,6 +588,7 @@ img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
 <div id="navp" hidden role="dialog" aria-label="Accesos directos"><b>🧭 Ir directamente a…</b><div class="navg" id="navg"></div></div>
 <div id="toast" hidden role="status" aria-live="polite"></div>
 <div id="newsM" hidden role="dialog" aria-modal="true" aria-label="Novedades"><div class="jbox"><h2>📰 ¡Novedades en PokeGacha!</h2><div id="newsMl"></div><div class="jrow"><button class="red" id="newsOk">¡Genial!</button></div></div></div>
+<div id="strkM" hidden role="dialog" aria-modal="true" aria-label="Racha diaria"><div class="jbox"><div id="strk"></div></div></div>
 <div id="prof" hidden role="dialog" aria-modal="true" aria-label="Perfil de jugador"><div class="jbox"><div id="profB"></div></div></div>
 <div id="evo" hidden role="dialog" aria-modal="true" aria-label="Evolución"><div class="jbox"><h2>🧬 Evolución</h2><div class="evost"><div id="evoA"></div><div id="evoB"></div></div><p id="evoT"></p><div id="evoBtns"></div></div></div>
 <div id="updB" hidden role="status"><span>🆕 Hay una versión nueva del juego.</span><button id="updGo">Actualizar</button></div>
@@ -635,7 +654,7 @@ img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
   <h2>Consigue tickets gratis</h2>
   <div class="earn">
     
-    <div class="dly"><small>Regalo diario (sube cada día) · ¡Reclámalo cada día para mantener tu racha!</small><button id="daily">Reclamar +5.000 🎟️</button><div id="strk"></div></div>
+    <div class="dly"><small>Regalo diario (sube cada día) · ¡Reclámalo cada día para mantener tu racha!</small><button id="daily">Reclamar +5.000 🎟️</button><button id="strkB" class="strkb">🔥 Racha</button></div>
     <div><small>Ticket automático cada 30 s: cada vez recibes más que el anterior. Solo se genera mientras la página está abierta y visible</small><b id="auto">…</b><div class="bar"><i id="bar"></i></div></div>
   </div>
   <p class="rates" style="margin-top:10px">Si te sale un repetido, te devolvemos tickets: Común 0, Raro +1, Épico +2, Legendario +4.</p>
@@ -1110,10 +1129,23 @@ const strkRw=d=>{const c=((d-1)%30)+1;return c===30?{mb:1,cand:2}:c===28?{cand:2
 const strkNow=()=>S.sk&&(S.sk.last===today()||S.sk.last===yday())?S.sk.n:0;
 let _sk="";
 function strkUI(){
-  const n=strkNow(),claimed=S.daily===today(),nx=n+(claimed?1:1),key=n+":"+claimed+":"+(S.sk&&S.sk.best);if(key===_sk)return;_sk=key;
-  const cell=d=>{const r=strkRw(d),big=d%7===0||((d-1)%30)+1===30;return '<div class="skd'+(d===nx&&!claimed?' now':'')+(big?' big':'')+'"><small>Día '+d+'</small><span>'+Object.keys(r).map(k=>itemIco(k==="evo"?"fire-stone":k,22)+(r[k]>1?'<b>×'+r[k]+'</b>':'')).join("")+'</span></div>'};
-  $("strk").innerHTML='<div class="skh"><b>🔥 Racha: '+n+' día'+(n===1?"":"s")+'</b><small class="mut">'+(claimed?"¡Hecho por hoy! Vuelve mañana para el día "+(n+1)+".":n>0?"¡Reclama hoy para no perder tu racha!":"Empieza tu racha reclamando el regalo.")+(S.sk&&S.sk.best?" · Mejor racha: "+S.sk.best:"")+'</small></div><div class="skrow">'+[0,1,2,3,4,5,6].map(i=>cell(nx+i)).join("")+'</div>';
+  const n=strkNow(),claimed=S.daily===today();$("strkB").textContent="🔥 Racha: "+n+" día"+(n===1?"":"s");
+  if($("strkM").hidden)return;
+  const cyc=Math.floor(Math.max(0,(claimed?n:n)-1)/30),start=cyc*30+1,key=n+":"+claimed+":"+(S.sk&&S.sk.best)+":"+start;if(key===_sk)return;_sk=key;
+  const nx=claimed?n+1:n+1;
+  const cell=d=>{const r=strkRw(d),c=((d-1)%30)+1,big=c%7===0||c===30,got=d<=n&&(d<n||claimed),cur=d===nx&&!claimed;
+    return '<div class="bpd'+(got?' got':'')+(cur?' now':'')+(big?' bpk':'')+(c===30?' fin':'')+'"><small>Día '+d+'</small><span>'+Object.keys(r).map(k=>itemIco(k==="evo"?"fire-stone":k,c===30?30:24)+(r[k]>1?'<b>×'+r[k]+'</b>':'')).join("")+'</span>'+(got?'<i>✔</i>':cur?'<em>¡HOY!</em>':'')+'</div>'};
+  $("strk").innerHTML='<div class="bph"><h2>🔥 Pase diario</h2><div class="bpn"><b>'+n+'</b><small>día'+(n===1?"":"s")+' seguidos</small></div></div>'+
+    '<div class="bar bpbar"><i style="width:'+Math.min(100,((n-cyc*30)-(claimed?0:0))/30*100)+'%"></i></div>'+
+    '<small class="mut">Reclama el regalo cada día sin fallar para avanzar. Cada 7 días cae un Caramelo Raro y el día 30 una Master Ball; después el pase vuelve a empezar. Si te saltas un día, la racha vuelve a 1.'+(S.sk&&S.sk.best?' Tu mejor racha: '+S.sk.best+' días.':'')+'</small>'+
+    '<div class="bpgrid">'+Array.from({length:30},(_,i)=>cell(start+i)).join("")+'</div>'+
+    '<div class="jrow">'+(claimed?'<button class="alt" data-bpc="1">✔ Ya has reclamado hoy · vuelve mañana</button>':'<button class="red" data-bpg="1">🎁 Reclamar día '+nx+' (+'+fmt(gift())+' 🎟️)</button>')+'<button class="alt" data-bpc="1">Cerrar</button></div>';
 }
+function strkOpen(){$("strkM").hidden=false;_sk="";strkUI()}
+$("strkB").onclick=strkOpen;
+$("strkM").addEventListener("click",e=>{if(e.target.id==="strkM"){$("strkM").hidden=true;return}const b=e.target.closest("button");if(!b)return;if(b.dataset.bpc){$("strkM").hidden=true;return}if(b.dataset.bpg){$("daily").click();_sk="";strkUI();if(O.fx){const g=$("strkM").querySelector(".bpd.got:last-of-type")}}});
+// al entrar, si toca reclamar, se abre sola (despues de la bienvenida y las novedades)
+setTimeout(()=>{if(S.daily!==today()&&$("welc").hidden&&$("newsM").hidden)strkOpen();else if(S.daily!==today()){const iv=setInterval(()=>{if($("welc").hidden&&$("newsM").hidden){clearInterval(iv);if(S.daily!==today())strkOpen()}},800)}},1200);
 $("daily").onclick=()=>{
   if(S.daily===today())return;
   S.sk=S.sk||{n:0};S.sk.n=S.sk.last===yday()?S.sk.n+1:1;S.sk.last=today();S.sk.best=Math.max(S.sk.best||0,S.sk.n);
@@ -2130,8 +2162,12 @@ async function evoPrompt(n,list){
   return ok;
 }
 // ================= imagenes de objetos (SVG creado con codigo) =================
-function itemIco(id,s){
-  if(GD.EI[id])return '<img class="pk" src="https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/items/'+id+'.png" width="'+s+'" height="'+s+'" alt="" loading="lazy" onerror="this.outerHTML=\'<span style=&quot;font-size:'+Math.round(s*.6)+'px&quot;>💎</span>\'">';
+const ITEM_IMG={pot:"potion",spot:"super-potion",hpot:"hyper-potion",mpot:"max-potion",rev:"revive",mrev:"max-revive",pb:"poke-ball",sb:"great-ball",ub:"ultra-ball",mb:"master-ball",cand:"rare-candy",eter:"ether",meter:"max-ether",elix:"elixir",melix:"max-elixir",ppup:"pp-up",ppmax:"pp-max"};
+// si la imagen original no carga se usa el dibujo propio (o 💎 para los objetos evolutivos)
+function itemErr(el){const id=el.dataset.id,s=+el.dataset.s;if(el.src.indexOf("raw.githubusercontent")<0&&!el.dataset.r){el.dataset.r=1;el.src=el.src.replace("https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/","https://raw.githubusercontent.com/PokeAPI/sprites/master/");return}const d=document.createElement("span");d.innerHTML=GD.EI[id]?'<span style="font-size:'+Math.round(s*.6)+'px">💎</span>':itemIco(id,s,1);el.replaceWith(d.firstChild)}
+function itemIco(id,s,noImg){
+  const k=GD.EI[id]?id:ITEM_IMG[id];
+  if(k&&!noImg)return '<img class="pk item" src="https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/items/'+k+'.png" width="'+s+'" height="'+s+'" alt="" loading="lazy" data-id="'+id+'" data-s="'+s+'" onerror="itemErr(this)">';
   const svg=b=>'<svg viewBox="0 0 64 64" width="'+s+'" height="'+s+'" aria-hidden="true">'+b+'</svg>';
   const pot=c=>'<rect x="26" y="5" width="12" height="9" rx="2" fill="#6b4a2b" stroke="#3a2614" stroke-width="1.5"/><rect x="28" y="13" width="8" height="9" fill="#e8f1ff" stroke="#3b4260" stroke-width="2"/><path d="M19 30Q19 22 28 23H36Q45 22 45 30V50Q45 60 35 60H29Q19 60 19 50Z" fill="#f2f7ff" stroke="#3b4260" stroke-width="2.4"/><path d="M21.5 37H42.5V50Q42.5 57.5 35 57.5H29Q21.5 57.5 21.5 50Z" fill="'+c+'"/><path d="M32 40v11M26.5 45.5h11" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><path d="M24 30v10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>';
   const ball=(top,extra)=>'<circle cx="32" cy="32" r="26" fill="#fff" stroke="#222" stroke-width="3"/><path d="M6 32A26 26 0 0 1 58 32Z" fill="'+top+'"/>'+(extra||"")+'<rect x="6" y="29.5" width="52" height="5" fill="#222"/><circle cx="32" cy="32" r="8" fill="#fff" stroke="#222" stroke-width="3"/><circle cx="32" cy="32" r="3" fill="#ddd"/>';
@@ -3805,7 +3841,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T14:35",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T14:40",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PokeGacha Online · Gacha</title>
+<title>Cápsula Pokémon · Gacha</title>
 <style>
 :root{--bg:#f3f1fb;--panel:#fff;--ink:#1c1f3a;--mute:#6b6f90;--red:#e63950;--yel:#f5b82e;--teal:#0fa97d;--line:#d9d6ee;
 --C:#8d93b5;--R:#2f7de1;--E:#9b4de0;--L:#f5a300;
@@ -377,7 +377,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 <body>
 <div id="auth">
   <form id="aform">
-    <h1>🔴 Poke Gacha Online</h1>
+    <h1>🔴 Cápsula Pokémon</h1>
     <p style="margin:0;text-align:center;color:var(--mute)">Inicia sesión para guardar tu progreso en la nube y jugar desde cualquier dispositivo. Puedes registrarte con un <b>nombre de usuario</b> o con tu correo.</p>
     <input id="aemail" type="text" placeholder="Usuario o correo electrónico" autocomplete="username" autocapitalize="none" spellcheck="false" required>
     <input id="apass" type="password" placeholder="Contraseña (mín. 6 caracteres)" autocomplete="current-password" required>
@@ -401,7 +401,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
     <li>🎟️ <b>Tickets</b>: son la moneda del juego. Consíguelos tocando la <b>Pokéball grande</b> (o con la tecla <b>U</b>), con el regalo diario, el ticket automático, los combates, las misiones y los logros.</li>
     <li>🛍️ <b>Tienda de mejoras</b>: compra Guantes (más tickets por toque) y ayudantes que generan tickets por segundo.</li>
     <li>🎰 <b>Tiradas</b>: gasta tickets para conseguir Pokémon (Común, Raro, Épico y Legendario). Cada 30 tiradas tienes un Épico o mejor garantizado. Cada 10 tiradas el precio sube.</li>
-    <li>📚 <b>Pokedex</b>: mira los Pokémon que tienes y los que te faltan.</li>
+    <li>📚 <b>Colección</b>: mira los Pokémon que tienes y los que te faltan.</li>
     <li>⚔️ <b>Combate</b>: forma un equipo de hasta 6 Pokémon. Ganando suben de nivel, aprenden habilidades y consigues tickets y objetos. ¡También puedes capturar Pokémon salvajes! Cada movimiento tiene <b>PP</b> (usos limitados): recupéralos con Éter, Elixir o en el Centro Pokémon.</li>
     <li>🏥 <b>Centro Pokémon</b> y 🎒 <b>Mochila</b>: los PS no se recuperan solos; cura a tu equipo o usa pociones.</li>
     <li>🏆 <b>Liga Pokémon</b> y 🌐 <b>PVP online</b>: reta al Alto Mando o a otros jugadores conectados, en duelos 1 contra 1 o en salas 2 vs 2 con código.</li>
@@ -454,7 +454,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
   <small id="tkmsg" style="color:var(--mute)">Pulsa «Añadir tecla» y luego la tecla que quieras usar para entrenar. Puedes tener hasta 4.</small>
   <b>👁️ Mostrar paneles</b>
   <label><input type="checkbox" data-o="pShop"> Tienda de mejoras</label>
-  <label><input type="checkbox" data-o="pColl"> Pokedex</label>
+  <label><input type="checkbox" data-o="pColl"> Colección</label>
   <label><input type="checkbox" data-o="pBat"> Combate</label>
   <label><input type="checkbox" data-o="pBag"> Mochila y objetos</label>
   <label><input type="checkbox" data-o="pHeal"> Centro Pokémon</label>
@@ -462,7 +462,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 </div>
 <main>
 <header>
-  <h1>🔴 Poke Gacha Online</h1><small id="clSt" class="mut"></small>
+  <h1>🔴 Cápsula Pokémon</h1><small id="clSt" class="mut"></small>
   <div class="tk" aria-live="polite"><span id="prsB" title="Nivel de prestigio" hidden></span> 🎟️ <span id="tk">0</span></div>
 </header>
 
@@ -505,7 +505,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 </section>
 
 <section class="panel" id="collP">
-  <h2>Pokedex <span id="prog" style="color:var(--mute);font-weight:400"></span></h2>
+  <h2>Colección <span id="prog" style="color:var(--mute);font-weight:400"></span></h2>
   <div class="actions" onchange="render()" style="justify-content:flex-start;margin-bottom:10px">
     <select id="fr" aria-label="Rareza"><option value="">Todas las rarezas</option><option value="C">Común</option><option value="R">Raro</option><option value="E">Épico</option><option value="L">Legendario</option></select>
     <select id="ft" aria-label="Tipo"></select>
@@ -733,7 +733,7 @@ const REF={C:0,R:1,E:2,L:4},STAR={C:"★",R:"★★",E:"★★★",L:"★★★�
 let S={g:[0,0,0,0,0],cl:0,lt:Date.now(),lv:{},ab:{},balls:{},mv:{},hp:{},ofd:{},when:{},team:["","","","","",""],sets:[],lg:null,lgDone:{},bag:{pot:3,spot:0,hpot:0,mpot:0,rev:1,mrev:0,pb:5,sb:0,ub:0,mb:0},t:3,last:Date.now(),owned:{},pity:0,daily:"",pulls:0};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
 const $=id=>document.getElementById(id);
-const OD={skip:1,bg:1,rain:1,flt:1,fists:1,intro:1,fx:1,pColl:1,pBat:1,pBag:1,pShop:1,pHeal:1,pPvp:1,bgprod:0,vol:.5,song:6,sfx:1,svol:.7,auto:1,askip:0,bigmode:"",tkeys:["u"]};
+const OD={skip:1,bg:1,rain:1,flt:1,fists:1,intro:1,fx:1,pColl:1,pBat:1,pBag:1,pShop:1,pHeal:1,pPvp:1,bgprod:0,vol:.5,song:9,sfx:1,svol:.7,auto:1,askip:0,bigmode:"",tkeys:["u"]};
 let O=Object.assign({},OD);try{Object.assign(O,JSON.parse(localStorage.getItem("gacha-opts")||"{}"))}catch(e){}
 const saveO=()=>{try{localStorage.setItem("gacha-opts",JSON.stringify(O))}catch(e){}};
 const save=()=>{const j=JSON.stringify(S);try{localStorage.setItem(KEY,j)}catch(e){}if(window.cloudSave)window.cloudSave(j)};
@@ -1438,7 +1438,7 @@ async function ball(id,it){
     const isNew=!S.owned[o[0]];
     if(isNew){(S.balls=S.balls||{})[o[0]]=id;(S.when=S.when||{})[o[0]]=Date.now()}
     S.owned[o[0]]=(S.owned[o[0]]||0)+1;qEv("cap");if(isNew)qEv("new");
-    snd("capok");await say("¡Has capturado a "+o[0]+"!"+(isNew?" ¡Nuevo en tu pokedex!":""));
+    snd("capok");await say("¡Has capturado a "+o[0]+"!"+(isNew?" ¡Nuevo en tu colección!":""));
     return finish("cap");
   }
   sp.style.transform="";snd("capfail");await say("¡"+o[0]+" se ha escapado de la bola!");
@@ -2635,27 +2635,86 @@ function fok(p){const r=$("fr").value,t=$("ft").value,s=$("fs").value,c=S.owned[
 $("ft").innerHTML='<option value="">Todos los tipos</option>'+Object.keys(TIPO).map(k=>'<option value="'+k+'">'+TIPO[k]+'</option>').join("");
 $("ft2").innerHTML=$("ft").innerHTML;
 const GN=["Kanto","Johto","Hoenn","Sinnoh","Teselia","Kalos","Alola","Galar","Paldea","Formas especiales"],GO='<option value="">Todas las generaciones</option>'+GN.map((n,i)=>'<option value="'+(i+1)+'">'+(i<9?'Gen '+(i+1)+' · ':'')+n+'</option>').join("");$("fg").innerHTML=GO;$("fg2").innerHTML=GO;
-// ---------- musica (compuesta con codigo, estilo chiptune) ----------
+// ---------- musica (canciones originales compuestas para el juego, estilo Game Boy) ----------
+// lead: melodia (nota:duracion en semicorcheas, "-" = silencio) · prog: un acorde por compas ("F,G" = dos en el compas)
+// bass: pump / walk / gallop / long · drum: patron de 16 pasos (k bombo, s caja, h charles) · duty: ancho de pulso de la melodia
 const SG=[
-{n:"Camino de hierba",bpm:128,root:62,sc:[0,2,4,5,7,9,11],pr:[0,4,5,3],seed:3,w:"square"},
-{n:"Duelo salvaje",bpm:158,root:57,sc:[0,2,3,5,7,8,10],pr:[0,5,3,4],seed:11,w:"sawtooth"},
-{n:"Puerto y brisa",bpm:112,root:65,sc:[0,2,4,7,9],pr:[0,3,4,0],seed:7,w:"triangle"},
-{n:"Cueva de cristal",bpm:96,root:60,sc:[0,2,3,5,7,8,11],pr:[0,5,2,4],seed:19,w:"square"},
-{n:"Liga campeona",bpm:140,root:60,sc:[0,2,4,5,7,9,11],pr:[0,3,4,5],seed:29,w:"square"},
-{n:"Centro de descanso",bpm:84,root:64,sc:[0,2,4,5,7,9,11],pr:[0,5,3,4],seed:41,w:"triangle"},
-{n:"Brisa suave (relax)",bpm:70,root:60,sc:[0,2,4,7,9],pr:[0,3,4,0],seed:53,w:"sine",soft:1,rest:.35}];
+{n:"Pueblo natal",bpm:108,duty:.5,bass:"walk",drum:"k.......s.......",prog:"C Am F G C Em F,G C",
+lead:"E5:4 G5:2 E5:2 D5:4 C5:4 A4:6 C5:2 E5:8 F5:4 E5:2 D5:2 C5:4 A4:4 B4:4 D5:4 G5:8 E5:4 G5:2 A5:2 G5:4 E5:4 B4:4 E5:4 G5:4 E5:4 A5:4 G5:4 F5:2 E5:2 D5:4 C5:12 -:4"},
+{n:"Ruta 1: hierba alta",bpm:144,duty:.25,bass:"pump",drum:"k.h.s.h.k.k.s.h.",prog:"G C D G Em C D D7",
+lead:"D5:2 G5:2 B5:4 A5:2 G5:2 D5:4 E5:2 G5:2 C6:4 B5:2 A5:2 G5:4 F#5:2 A5:2 D6:4 C6:2 B5:2 A5:4 B5:6 G5:2 D5:8 E5:2 G5:2 B5:2 E6:2 D6:4 B5:4 C6:4 B5:2 A5:2 G5:4 E5:4 F#5:2 G5:2 A5:2 B5:2 C6:4 A5:4 D6:8 C6:4 A5:4"},
+{n:"¡Un Pokémon salvaje!",bpm:168,duty:.5,bass:"pump",drum:"k.h.s.hkk.h.s.hh",prog:"Am Am F G Am Am E E",
+lead:"A5:2 A5:1 A5:1 G5:2 A5:2 C6:4 B5:2 A5:2 E5:2 E5:1 E5:1 D5:2 E5:2 G5:4 E5:4 F5:2 A5:2 C6:2 F6:2 E6:4 C6:4 D6:2 B5:2 G5:2 D5:2 G5:4 B5:4 A5:2 C6:2 E6:4 D6:2 C6:2 B5:4 C6:2 B5:2 A5:2 E5:2 A5:8 G#5:2 B5:2 E6:4 D6:2 B5:2 G#5:4 E5:2 F5:2 G#5:2 B5:2 E6:8"},
+{n:"Combate contra entrenador",bpm:176,duty:.25,bass:"gallop",drum:"k.hsk.hsk.hsk.ss",prog:"Dm Bb C A Dm Bb Gm A",
+lead:"D6:2 A5:2 F5:2 D5:2 E5:2 F5:2 A5:4 Bb5:4 A5:2 G5:2 F5:4 D5:4 C6:2 G5:2 E5:2 C5:2 D5:2 E5:2 G5:4 A5:4 C#6:4 E6:4 C#6:4 F6:2 E6:2 D6:2 A5:2 Bb5:2 A5:2 F5:4 D6:4 Bb5:2 F5:2 D5:4 F5:4 G5:2 Bb5:2 D6:2 G6:2 F6:4 D6:4 E6:4 C#6:4 A5:8"},
+{n:"Centro Pokémon",bpm:100,duty:.5,bass:"walk",drum:"k...s...k.k.s...",prog:"F Dm Bb C F Dm Gm,C F",
+lead:"C5:2 F5:2 A5:2 F5:2 C6:4 A5:4 D5:2 F5:2 A5:2 D6:2 C6:4 A5:4 Bb5:4 A5:2 G5:2 F5:4 D5:4 E5:2 G5:2 C6:4 Bb5:4 G5:4 A5:2 C6:2 F6:4 E6:2 D6:2 C6:4 D6:4 C6:2 A5:2 F5:4 A5:4 G5:2 Bb5:2 D6:4 C6:2 E5:2 G5:4 F5:8 -:8"},
+{n:"Cueva oscura",bpm:90,duty:.125,bass:"long",drum:"k.......h.......",prog:"Em C Em B Em C Am B",
+lead:"E5:6 G5:2 F#5:8 E5:4 C5:4 -:8 B4:6 E5:2 G5:4 B5:4 A#5:8 F#5:8 E5:6 G5:2 B5:8 C6:4 B5:4 G5:8 A5:4 E5:4 C5:4 A4:4 B4:8 D#5:8"},
+{n:"Gimnasio Pokémon",bpm:132,duty:.25,bass:"pump",drum:"k...s.k.k...s.ss",prog:"C C F G C Am F,G C",
+lead:"G5:4 G5:2 G5:2 C6:4 G5:4 E5:4 G5:2 E5:2 C5:8 A5:4 A5:2 A5:2 C6:4 A5:4 G5:4 F5:2 E5:2 D5:8 G5:4 G5:2 G5:2 E6:4 D6:4 C6:4 A5:4 E5:4 A5:4 F5:2 A5:2 C6:4 B5:2 D6:2 G6:4 E6:4 D6:2 B5:2 C6:8"},
+{n:"Liga Pokémon: el Alto Mando",bpm:152,duty:.5,bass:"pump",drum:"k.hsk.hsk.hskshs",prog:"Gm Eb F D Gm Eb Cm D",
+lead:"G5:4 D6:4 Bb5:2 A5:2 G5:4 Eb6:4 D6:2 C6:2 Bb5:4 G5:4 F5:2 A5:2 C6:2 F6:2 Eb6:4 C6:4 D6:6 F#5:2 A5:8 Bb5:2 D6:2 G6:4 F6:2 Eb6:2 D6:4 Eb6:4 G5:2 Bb5:2 Eb6:4 D6:4 C6:4 Eb6:2 G6:2 F6:2 Eb6:2 C6:4 D6:4 F#6:4 A6:8"},
+{n:"Fanfarria de victoria",bpm:132,duty:.25,bass:"walk",drum:"k.h.s.h.k.h.s.h.",prog:"C C F G Am F G C",
+lead:"C5:2 E5:2 G5:2 C6:6 -:2 G5:2 C6:4 D6:2 E6:2 C6:8 A5:2 C6:2 F6:4 E6:2 D6:2 C6:4 B5:4 D6:4 G6:8 A5:4 C6:4 E6:4 C6:4 F6:4 E6:2 D6:2 C6:4 A5:4 G5:2 B5:2 D6:2 F6:2 E6:4 D6:4 C6:12 -:4"},
+{n:"Brisa del pueblo (relax)",bpm:72,soft:1,bass:"long",drum:"",prog:"C Am Dm G C Em F G",
+lead:"E5:8 G5:8 A5:8 E5:8 F5:8 D5:4 A4:4 B4:8 D5:8 C5:4 E5:4 G5:8 G5:8 B4:8 A4:4 C5:4 F5:8 D5:16"}];
 const AUD=window.AudioContext||window.webkitAudioContext;
 let actx=null,mgain=null,mtimer=null,mplaying=false,mstep=0,mnext=0,mtrack=null;
 function rngS(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const NTE={C:0,D:2,E:4,F:5,G:7,A:9,B:11},CHQ={"":[0,4,7],m:[0,3,7],"7":[0,4,7,10],m7:[0,3,7,10],dim:[0,3,6]};
+const pitch=s=>{const m=s.match(/^([A-G])([#b]?)(\d)$/);return 12*(+m[3]+1)+NTE[m[1]]+(m[2]==="#"?1:m[2]==="b"?-1:0)};
 function buildTrack(sg){
-  const r=rngS(sg.seed),L=sg.sc.length,lead=[],bass=[];let d=L;
-  for(let b=0;b<16;b++){const cd=sg.pr[b%4];
-    for(let s=0;s<8;s++){
-      d+=[-2,-1,-1,0,1,1,2][Math.floor(r()*7)];d=Math.max(0,Math.min(2*L-1,d));
-      lead.push(r()<(sg.rest||.18)&&s%4!==0?null:sg.root+12*Math.floor(d/L)+sg.sc[d%L]);
-      bass.push(s%4===0?sg.root-12+sg.sc[cd%L]:s%4===2?sg.root-12+sg.sc[(cd+4)%L]:null);
-    }}
-  return{lead:lead,bass:bass};
+  const bars=sg.prog.trim().split(/\s+/),L=bars.length*16,ch={lead:[],arp:[],bass:[],dr:[]},at=(c,t,n,l)=>{(ch[c][t]=ch[c][t]||[]).push([n,l])};
+  let t=0;sg.lead.trim().split(/\s+/).forEach(tok=>{const p=tok.split(":"),l=+p[1]||2;if(p[0]!=="-")at("lead",t%L,pitch(p[0]),l);t+=l});
+  bars.forEach((b,i)=>{const parts=b.split(",");parts.forEach((c,j)=>{
+    const m=c.match(/^([A-G][#b]?)(.*)$/),r=(NTE[m[1][0]]+(m[1][1]==="#"?1:m[1][1]==="b"?-1:0)+12)%12,q=CHQ[m[2]]||CHQ[""],len=16/parts.length,s0=i*16+j*len,root=36+r+(r<5?12:0);
+    for(let k=0;k<len;k++){
+      const s=s0+k;
+      if(sg.bass==="pump"&&k%2===0)at("bass",s,root+(k%4?12:0),2);
+      if(sg.bass==="walk"&&k%4===0)at("bass",s,root+[0,q[2],12,q[2]][(k/4)%4],4);
+      if(sg.bass==="gallop"&&[0,3,4,7,8,11,12,15].includes(k))at("bass",s,root+(k%8>3?12:0),k%4===0?3:1);
+      if(sg.bass==="long"&&k===0)at("bass",s,root,len);
+      if(!sg.soft||k%2===0)at("arp",s,60+r+q[(sg.soft?k/2:k)%q.length]-(r>7?12:0),sg.soft?2:1);
+    }
+  })});
+  if(sg.drum)for(let s=0;s<L;s++){const d=sg.drum[s%sg.drum.length];if(d!==".")at("dr",s,d,1)}
+  return{L:L,ch:ch};
+}
+let _pw={};
+function pwave(d){
+  if(_pw[d])return _pw[d];
+  const n=48,re=new Float32Array(n),im=new Float32Array(n);
+  for(let k=1;k<n;k++)re[k]=2*Math.sin(Math.PI*k*d)/(Math.PI*k);
+  return _pw[d]=actx.createPeriodicWave(re,im);
+}
+function mnote(type,midi,t,dur,vol,att){
+  const o=actx.createOscillator(),g=actx.createGain();
+  if(typeof type==="number")o.setPeriodicWave(pwave(type));else o.type=type;
+  o.frequency.value=440*Math.pow(2,(midi-69)/12);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+(att||.005));g.gain.setValueAtTime(vol,t+dur*.7);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g);g.connect(mgain);o.start(t);o.stop(t+dur+.05);
+}
+function mnoise(t,dur,vol,ftype,f){
+  const n=Math.floor(actx.sampleRate*dur),b=actx.createBuffer(1,n,actx.sampleRate),d=b.getChannelData(0);
+  for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
+  const s=actx.createBufferSource(),fl=actx.createBiquadFilter(),g=actx.createGain();s.buffer=b;fl.type=ftype;fl.frequency.value=f;g.gain.value=vol;s.connect(fl);fl.connect(g);g.connect(mgain);s.start(t);
+}
+function mdrum(k,t){
+  if(k==="k"){const o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.0001,t+.14);o.connect(g);g.connect(mgain);o.start(t);o.stop(t+.16);mnoise(t,.03,.06,"lowpass",800)}
+  else if(k==="s")mnoise(t,.11,.13,"bandpass",2200);
+  else if(k==="h")mnoise(t,.035,.05,"highpass",7000);
+}
+function msched(){
+  const sg=SG[O.song]||SG[0],sd=60/sg.bpm/4,c=mtrack.ch;
+  while(mnext<actx.currentTime+.3){
+    const i=mstep%mtrack.L;
+    (c.lead[i]||[]).forEach(e=>mnote(sg.soft?"sine":sg.duty||.5,e[0],mnext,sd*e[1]*.95,sg.soft?.14:.1,sg.soft?.06:.005));
+    (c.arp[i]||[]).forEach(e=>mnote(sg.soft?"triangle":.125,e[0],mnext,sd*e[1]*.9,sg.soft?.035:.028));
+    (c.bass[i]||[]).forEach(e=>mnote(sg.soft?"sine":"triangle",e[0],mnext,sd*e[1]*.9,sg.soft?.18:.24,sg.soft?.05:.005));
+    (c.dr[i]||[]).forEach(e=>mdrum(e[0],mnext));
+    mstep++;mnext+=sd;
+  }
 }
 // ---------- efectos de sonido de combate (retro, creados con codigo) ----------
 let sctx=null,sgain=null;
@@ -2722,26 +2781,6 @@ function snd(name,a){
     case "flee":N(.5,.25,0,400,3500,"bandpass");break;
   }
 }
-function mnote(type,midi,t,dur,vol,att){
-  const o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.value=440*Math.pow(2,(midi-69)/12);
-  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+(att||.01));g.gain.exponentialRampToValueAtTime(.0001,t+dur);
-  o.connect(g);g.connect(mgain);o.start(t);o.stop(t+dur+.05);
-}
-function mhat(t,vol){
-  const n=Math.floor(actx.sampleRate*.04),b=actx.createBuffer(1,n,actx.sampleRate),d=b.getChannelData(0);
-  for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);
-  const s=actx.createBufferSource(),g=actx.createGain();s.buffer=b;g.gain.value=vol;s.connect(g);g.connect(mgain);s.start(t);
-}
-function msched(){
-  const sg=SG[O.song]||SG[0],sd=60/sg.bpm/2;
-  while(mnext<actx.currentTime+.3){
-    const i=mstep%128;
-    if(mtrack.lead[i]!=null)mnote(sg.w,mtrack.lead[i],mnext,sd*(sg.soft?3.6:1.8),sg.soft?.13:.15,sg.soft?.08:.01);
-    if(mtrack.bass[i]!=null)mnote(sg.soft?"sine":"triangle",mtrack.bass[i],mnext,sd*(sg.soft?6:3.2),sg.soft?.2:.22,sg.soft?.08:.01);
-    if(mstep%2===1&&sg.w!=="triangle"&&!sg.soft)mhat(mnext,.035);
-    mstep++;mnext+=sd;
-  }
-}
 function mstart(){
   if(!AUD){$("mnow").textContent="Tu navegador no admite audio.";return}
   if(!actx){actx=new AUD();mgain=actx.createGain();mgain.gain.value=O.vol;mgain.connect(actx.destination)}
@@ -2758,6 +2797,7 @@ function applyO(){
   document.querySelectorAll("[data-o]").forEach(c=>{c.checked=!!O[c.dataset.o]});
 }
 function buildOpts(){
+  if(!SG[O.song])O.song=SG.length-1;
   $("song").innerHTML=SG.map((s,i)=>'<option value="'+i+'">'+s.n+'</option>').join("");
   $("vol").value=O.vol;
   $("optb").onclick=()=>{$("optp").hidden=!$("optp").hidden};
@@ -2963,6 +3003,8 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto.
 // Cada jugador la verá en pantalla automáticamente la próxima vez que entre (o se le avisará si tiene el juego abierto).
 const NEWS=[
+{v:"2026-10-29a",d:"29/10/2026",t:"Nueva banda sonora",l:[
+"🎵 10 canciones nuevas compuestas para el juego al estilo de la Game Boy: Pueblo natal, Ruta 1, ¡Un Pokémon salvaje!, Combate contra entrenador, Centro Pokémon, Cueva oscura, Gimnasio, Liga Pokémon, Fanfarria de victoria y Brisa del pueblo (relax). Elígelas en ⚙️ → Música."]},
 {v:"2026-10-28b",d:"28/10/2026",t:"Actualización: 2vs2, prestigio y PP",l:[
 "👥 Salas PVP con código para combates 2 vs 2: crea una sala, comparte el código y luchad por parejas.",
 "🏷️ Los apodos ahora son totalmente únicos y tienen un botón «Guardar apodo». Sin un apodo registrado no se puede jugar al PVP.",
@@ -3005,7 +3047,7 @@ function welcShow(){$("welc").hidden=false;try{$("welcOk").focus({preventScroll:
 $("welcOk").onclick=()=>{$("welc").hidden=true};
 function welcInit(){if(S.welc)return;if(clFresh())welcShow();S.welc=1;save()}
 // ================= accesos directos =================
-const NAV=[["🎯","Entrenar","farm"],["🎟️","Tickets gratis","earnP"],["🎰","Tiradas","stage"],["🛍️","Tienda de mejoras","shopP"],["📚","Pokedex","collP"],["⚔️","Combate","batP"],["🏆","Liga Pokémon","lgP"],["🌐","PVP online","pvpP"],["🏥","Centro Pokémon","healP"],["🎒","Mochila","bagU"],["🛒","Tienda de objetos","bagP"],["📅","Misiones","qP"],["🏅","Logros","achP"],["🌟","Prestigio","prsP"],["📰","Novedades","#news"],["💡","Sugerencias","sugP"],["❓","Cómo se juega","#welc"],["⚙️","Ajustes","#opt"]];
+const NAV=[["🎯","Entrenar","farm"],["🎟️","Tickets gratis","earnP"],["🎰","Tiradas","stage"],["🛍️","Tienda de mejoras","shopP"],["📚","Colección","collP"],["⚔️","Combate","batP"],["🏆","Liga Pokémon","lgP"],["🌐","PVP online","pvpP"],["🏥","Centro Pokémon","healP"],["🎒","Mochila","bagU"],["🛒","Tienda de objetos","bagP"],["📅","Misiones","qP"],["🏅","Logros","achP"],["🌟","Prestigio","prsP"],["📰","Novedades","#news"],["💡","Sugerencias","sugP"],["❓","Cómo se juega","#welc"],["⚙️","Ajustes","#opt"]];
 function navUI(){
   const dm=dmEnsure(),rq=dm.l.filter(m=>!m.c&&m.p>=MISM[m.id][2]).length,ra=ACHS().filter(achReady).length;
   $("navg").innerHTML=NAV.map(n=>{const el=n[2][0]==="#"?null:$(n[2]),off=el&&!el.offsetParent&&getComputedStyle(el).display==="none",c=n[2]==="qP"?rq:n[2]==="achP"?ra:0;return '<button data-go="'+n[2]+'"'+(off?' disabled title="Panel oculto en Ajustes"':'')+'><span>'+n[0]+'</span>'+n[1]+(c?'<i>'+c+'</i>':'')+'</button>'}).join("");

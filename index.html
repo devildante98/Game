@@ -647,7 +647,9 @@ body.hubon{overflow:hidden}
 body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 body.hc{--mute:color-mix(in srgb,var(--ink) 88%,transparent);--line:color-mix(in srgb,var(--ink) 50%,transparent)}
 body.hc .panel{border-width:2px}
-.hubgl{grid-template-columns:repeat(3,150px)}
+.hubgl{grid-template-columns:repeat(5,150px)}
+@media (max-width:980px){.hubgl{grid-template-columns:repeat(3,150px)}}
+#hubG{overflow-y:auto}
 @media (max-width:700px){.hubgl{grid-template-columns:repeat(2,minmax(0,1fr))}.hubtile:nth-last-child(2):nth-child(odd){grid-column:span 2}}
 .nxp input:not([type=checkbox]){font:inherit;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:100%;box-sizing:border-box}.nxp .sets-row{display:flex;gap:8px;align-items:center}.nxp .sets-row button{flex:none}
 .nxi{margin:-4px 0 14px;font-size:.92rem;line-height:1.4}
@@ -763,6 +765,67 @@ body.hc .panel{border-width:2px}
 .chci{font-size:1.8rem;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);flex:none}
 .chcn{display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:9px;background:#e63950;color:#fff;font-style:normal;font-size:.68rem;font-weight:900;padding:0 4px;vertical-align:middle}
 .chcl{color:var(--ink);opacity:.8;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+/* minijuegos */
+#mgBan{display:flex;align-items:center;gap:12px;width:100%;margin:0 0 12px;padding:12px 14px;border:none;border-radius:18px;text-align:left;color:#fff;background:linear-gradient(120deg,#e0447a,#7a4ae0 55%,#2f6fd8);background-size:200% 100%;animation:mgban 4s ease-in-out infinite;box-shadow:0 8px 20px rgba(122,74,224,.35);cursor:pointer}
+@keyframes mgban{50%{background-position:100% 0}}#mgBan:hover{transform:translateY(-2px)}
+.mgbi{font-size:2rem;animation:mgwig 1.6s ease-in-out infinite}@keyframes mgwig{0%,60%,100%{transform:none}70%{transform:rotate(-14deg) scale(1.1)}85%{transform:rotate(12deg) scale(1.1)}}
+.mgbt{flex:1;display:flex;flex-direction:column;min-width:0}.mgbt b{font-size:1.1rem}.mgbt small{opacity:.92}.mgbg{background:#fff;color:#7a4ae0;font-weight:900;border-radius:99px;padding:6px 14px;font-size:.85rem;white-space:nowrap}
+.mggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.mgcard{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:16px;border-radius:20px;text-align:left;color:#fff;border:none;background:linear-gradient(150deg,color-mix(in srgb,var(--mc) 85%,#fff),var(--mc) 60%,color-mix(in srgb,var(--mc) 70%,#000));box-shadow:0 8px 18px color-mix(in srgb,var(--mc) 40%,transparent);overflow:hidden;transition:transform .15s;cursor:pointer;min-height:190px}
+.mgcard:hover{transform:translateY(-3px) rotate(-.5deg)}.mgcard b{font-size:1.1rem}.mgcard small{opacity:.92;line-height:1.3;flex:1}
+.mgcic{font-size:2.4rem;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25))}
+.mgcf{display:flex;gap:6px;flex-wrap:wrap}.mgcf span{background:rgba(0,0,0,.22);border-radius:99px;padding:2px 9px;font-size:.78rem;font-weight:800}.mgcf span.on{background:#ffd35c;color:#3a2a00}
+.mgplay{position:absolute;right:12px;top:14px;background:#fff;color:var(--mc);font-weight:900;border-radius:99px;padding:4px 12px;font-size:.8rem}
+#mgM{position:fixed;inset:0;z-index:97;background:rgba(10,12,32,.72);display:grid;place-items:center;padding:12px}#mgM[hidden]{display:none}
+.mgw{width:min(620px,100%);max-height:calc(100vh - 24px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border-radius:24px;overflow:hidden;border:3px solid var(--mc);box-shadow:0 24px 60px rgba(0,0,0,.45)}
+.mgh{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 16px;background:var(--mc);color:#fff}.mgh b{flex:1;font-size:1.05rem}.mgic{font-size:1.4rem}
+.mgsc{background:rgba(0,0,0,.25);border-radius:99px;padding:4px 12px;font-weight:800}.mgx{width:36px;height:36px;padding:0;border-radius:10px;background:rgba(255,255,255,.2);color:#fff;border:none}
+.mgb{position:relative;flex:1;overflow:auto;padding:14px;min-height:360px}
+.mgintro{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:10px 6px}.mgintro h3{margin:0;font-size:1.5rem}.mgintro p{margin:0;max-width:440px}
+.mgbig{font-size:4rem;animation:mgwig 2s ease-in-out infinite}.mginf{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.mginf span{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:.88rem}
+button.big{font-size:1.15rem;padding:12px 30px;border-radius:16px}.mgbtns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.mgfinal{font-size:3rem;font-weight:900;color:var(--mc);line-height:1;display:flex;flex-direction:column;align-items:center}.mgfinal small{font-size:.9rem;color:var(--mute)}
+.mgget{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:4px 12px 4px 4px}.mgnew{color:#e63950}
+.mgpop{position:absolute;z-index:5;font-weight:900;font-size:1.3rem;pointer-events:none;text-shadow:0 2px 0 rgba(0,0,0,.35),0 0 8px rgba(0,0,0,.25);white-space:nowrap}
+.mgconf{position:absolute;top:0;z-index:6;font-size:1.4rem;pointer-events:none}
+.whohd{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;font-size:.92rem;min-height:24px}.whost{color:#e0782a;font-weight:800}
+.mgtime{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin:8px 0}.mgtime i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#e63950,#ffd35c,#3ecf8e)}
+.whobg{position:relative;height:250px;border-radius:20px;overflow:hidden;background:repeating-conic-gradient(from 0deg at 50% 50%,#3d7ff0 0 10deg,#5f97f5 10deg 20deg);display:grid;place-items:center}
+.whosil{width:200px;height:200px;display:grid;place-items:center}.whosil img{max-width:200px;max-height:200px;object-fit:contain;filter:brightness(0) drop-shadow(0 0 2px rgba(255,255,255,.6));transition:filter .5s}.whosil.rev img{filter:none}
+.whoq{position:absolute;left:12px;bottom:10px;background:#ffd35c;color:#1c1f3a;border:3px solid #1c1f3a;border-radius:12px;padding:4px 12px;font-weight:900;font-size:1rem;transform:rotate(-3deg)}
+.whoopt{display:grid;grid-template-columns:1fr 1fr;gap:8px}.whoopt button{padding:12px 6px;font-size:1rem;background:var(--bg);color:var(--ink);border:2px solid var(--line)}.whoopt button.ok{background:#3ecf8e;color:#fff;border-color:#3ecf8e}.whoopt button.bad{background:#e63950;color:#fff;border-color:#e63950}
+.memg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;perspective:800px}
+.memc{position:relative;aspect-ratio:1;padding:0;border:none;background:none;transform-style:preserve-3d;transition:transform .35s}.memc.up{transform:rotateY(180deg)}
+.memf{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;display:grid;place-items:center}
+.memb{background:radial-gradient(circle at 50% 50%,#fff 0 12%,#1c1f3a 12% 17%,transparent 17%),linear-gradient(#e3263a 0 46%,#1c1f3a 46% 54%,#f2f0fa 54%);border:3px solid #1c1f3a;box-shadow:0 3px 6px rgba(0,0,0,.2)}
+.memp{transform:rotateY(180deg);background:var(--bg);border:3px solid var(--line)}.memp img{max-width:90%;max-height:90%}
+.memc.done .memp{border-color:#3ecf8e;box-shadow:0 0 0 3px rgba(62,207,142,.35)}
+.digg{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;border-radius:20px;background:linear-gradient(#9bd36a,#6aa63e);touch-action:manipulation;user-select:none}
+.digh{position:relative;aspect-ratio:1.1;cursor:pointer}
+.digback{position:absolute;left:8%;right:8%;bottom:6%;height:26%;border-radius:50%;background:radial-gradient(#2a180c 0 55%,#4a2e16 70%,#6b4423 100%)}
+.digclip{position:absolute;left:0;right:0;top:0;bottom:19%;overflow:hidden}
+.digm{position:absolute;left:0;right:0;bottom:0;height:100%;display:grid;place-items:end center;transform:translateY(105%);transition:transform .14s ease-out}.digm.up{transform:translateY(8%)}.digm.hit{filter:brightness(1.7) saturate(.4);transform:translateY(35%) scale(.92)}
+.digm img{width:92%!important;height:auto!important;max-height:none;margin-bottom:-14%;pointer-events:none}
+.diglip{position:absolute;left:8%;right:8%;bottom:6%;height:13%;border-radius:0 0 50% 50%/0 0 100% 100%;background:linear-gradient(#7a4f29,#5a3a1c);box-shadow:0 4px 0 rgba(0,0,0,.15)}
+.fiw{position:relative;height:280px;border-radius:20px;overflow:hidden;cursor:pointer;user-select:none;touch-action:manipulation}
+.fisky{position:absolute;inset:0 0 55% 0;background:linear-gradient(#ffd9a8,#ffb98a 60%,#ff9d8a)}.fiwater{position:absolute;inset:45% 0 0 0;background:linear-gradient(#3a9ad9,#1c5f9e)}
+.fiwave{position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 30px,transparent 30px 70px);animation:fiw 3s linear infinite;opacity:.6;height:8px}@keyframes fiw{to{background-position:70px 0}}
+.filine{position:absolute;left:78%;top:0;width:2px;height:58%;background:rgba(255,255,255,.75);transform-origin:top;transform:rotate(14deg)}
+.fibob{position:absolute;left:62%;top:-30px;width:22px;height:22px;border-radius:50%;background:linear-gradient(#e63950 0 50%,#fff 50%);border:2px solid #222;transition:top .5s cubic-bezier(.3,1.4,.5,1)}
+.fibob.in,.fibob.nib,.fibob.bite{top:52%}.fibob.nib{animation:fnib .35s}.fibob.bite{animation:fbite .25s infinite}@keyframes fnib{50%{transform:translateY(5px)}}@keyframes fbite{50%{transform:translateY(12px) scale(.9)}}
+.fiex{position:absolute;left:calc(62% + 18px);top:28%;font-size:2.4rem;font-weight:900;color:#ffd35c;text-shadow:0 3px 0 #b33,0 0 10px #fff;animation:fex .3s infinite alternate}@keyframes fex{to{transform:scale(1.25)}}
+.fimsg{position:absolute;left:12px;right:12px;bottom:10px;text-align:center;color:#fff;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,.5)}
+.ficatch{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);opacity:0;pointer-events:none}.ficatch.jump{animation:fjump 1.4s ease-out}@keyframes fjump{0%{opacity:0;transform:translate(-50%,20%) scale(.4)}25%{opacity:1;transform:translate(-50%,-80%) scale(1.2)}70%{opacity:1;transform:translate(-50%,-70%) scale(1)}100%{opacity:0;transform:translate(-50%,-70%) scale(1)}}
+.fibtns{display:flex;justify-content:center;margin:10px 0}.fibag{display:flex;flex-wrap:wrap;gap:4px;justify-content:center}.fibag span{background:var(--bg);border:1px solid var(--line);border-radius:10px}
+.thw{position:relative;height:330px;border-radius:20px;overflow:hidden;background:linear-gradient(#bfe6ff,#e6f6ff 55%,#a8dc7a 56%,#79bf4c);cursor:pointer;user-select:none;touch-action:manipulation}
+.thgr{position:absolute;left:50%;top:44%;width:180px;height:40px;margin-left:-90px;border-radius:50%;background:rgba(0,0,0,.12)}
+.thmon{position:absolute;left:50%;top:22%;width:0;height:0}.thspr{position:absolute;left:0;top:0;transform:translate(-50%,-30%);transition:opacity .2s}
+.thring{position:absolute;left:0;top:28px;width:130px;height:130px;border-radius:50%;border:5px solid #3ecf8e;box-sizing:border-box;transform:translate(-50%,-50%)}
+.thball{position:absolute;left:50%;top:100%;width:34px;height:34px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff 0 13%,#222 13% 20%,transparent 20%),linear-gradient(#e3263a 0 46%,#222 46% 54%,#f2f0e4 54%);border:2px solid #222;box-sizing:border-box;opacity:0}
+.thball.in,.thball.ok,.thball.miss{opacity:1}.thball.in{animation:thsh .5s ease-in-out}.thball.ok{box-shadow:0 0 18px #ffd35c}.thball.miss{opacity:0;transition:opacity .6s}
+@keyframes thsh{25%{transform:translate(-50%,-50%) rotate(-20deg)}75%{transform:translate(-50%,-50%) rotate(18deg)}}
+.thmsg{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-weight:900;color:#1c1f3a;text-shadow:0 1px 0 #fff}
+body.calm #mgBan,body.calm .mgbi,body.calm .mgbig{animation:none!important}
 body.calm .dcheart,body.calm .egg.wob,body.calm .gfb span,body.calm .gfbox,body.calm .hofb,body.calm .twnext.boss,body.calm .safspr{animation:none!important}
 img.pk.hd{image-rendering:auto!important;object-fit:contain}
 .spr img.hd,.pkvspr img.hd,.tspr2 img.hd,.evost img.hd{animation:hdidle 3.2s ease-in-out infinite;transform-origin:50% 90%}
@@ -5000,7 +5063,9 @@ const NEWS=[
 "🎒 Objetos para equipar: Restos, Vidasfera, Banda Focus, Baya Zidra, Garra Rápida, Huevo Suerte y más.",
 "📋 Toca un Pokémon de tu Pokédex para ver su ficha: ponle un mote, márcalo como favorito y elige su naturaleza y su objeto.",
 "🏛️ Salón de la Fama: tu equipo campeón queda registrado al ganar una Liga y se ve en tu perfil.",
-"🎁 Regalos entre amigos: envía un regalo diario a cada amigo desde la lista de amigos."]},
+"🎁 Regalos entre amigos: envía un regalo diario a cada amigo desde la lista de amigos.",
+"💬 Chat dentro del juego: global, de gremio y privado con tus amigos (botón 💬 arriba o en Social → Chat).",
+"🎮 Minijuegos: ¿Quién es ese Pokémon?, Memoria, ¡Golpea al Diglett!, Pesca y Lanzamiento perfecto. ¡Ganas premios en tus 3 primeras partidas de cada uno al día!"]},
 {v:"2026-10-29b",at:"2026-10-29T20:25",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
@@ -6224,6 +6289,193 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
   if(b.dataset.cho)chOpenAt(b.dataset.cho);else chOpenAt("dm",b.dataset.chodm||b.dataset.frmsg)});
 {const _hb=hubBadges;hubBadges=function(){const o=_hb();try{const n=chUnreadAll();if(n)o.soc=(o.soc|0)+n}catch(e){}return o}}
 setInterval(()=>{try{if(nxOpen("chatP"))chHubUI()}catch(e){}},3000);
+
+// =====================================================================================
+// MINIJUEGOS: ¿Quién es ese Pokémon?, Memoria, Golpea al Diglett, Pesca y Lanzamiento perfecto
+// Las 3 primeras partidas de cada minijuego al día dan premio; después se puede seguir jugando por el récord.
+// =====================================================================================
+var MG={g:null,t:[],raf:0,score:0,busy:false};
+const MG_DAY=3;
+function mgState(){const d=today();S.mg=S.mg||{};if(S.mg.d!==d){S.mg.d=d;S.mg.n={}}S.mg.n=S.mg.n||{};S.mg.best=S.mg.best||{};return S.mg}
+const mgLeft=id=>Math.max(0,MG_DAY-(mgState().n[id]|0));
+const mgT=(f,ms)=>{const h=setTimeout(f,ms);MG.t.push(h);return h};
+const mgI=(f,ms)=>{const h=setInterval(f,ms);MG.t.push(h);return h};
+function mgStop(){MG.t.forEach(h=>{clearTimeout(h);clearInterval(h)});MG.t=[];if(MG.raf)cancelAnimationFrame(MG.raf);MG.raf=0}
+const mgPick=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(Math.random()*c.length),1)[0]);return o};
+const mgSet=s=>{MG.score=Math.max(0,Math.round(s));const e=$("mgSc");if(e)e.textContent=fmt(MG.score)};
+function mgPop(x,y,txt,col){const b=$("mgB");if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement("span");s.className="mgpop";s.textContent=txt;s.style.left=(x-r.left)+"px";s.style.top=(y-r.top)+"px";if(col)s.style.color=col;b.appendChild(s);s.animate([{transform:"translate(-50%,-50%) scale(.6)",opacity:1},{transform:"translate(-50%,-160%) scale(1.15)",opacity:0}],{duration:800,easing:"ease-out"}).onfinish=()=>s.remove()}
+function mgConfetti(){if(hubCalm())return;const b=$("mgB");if(!b)return;for(let i=0;i<40;i++){const s=document.createElement("span");s.className="mgconf";s.textContent=["🎉","✨","⭐","🎊","💥"][i%5];s.style.left=Math.random()*100+"%";b.appendChild(s);s.animate([{transform:"translateY(-20px) rotate(0)",opacity:1},{transform:"translateY("+(250+Math.random()*250)+"px) rotate("+(Math.random()*720-360)+"deg)",opacity:0}],{duration:1400+Math.random()*900,delay:Math.random()*300,easing:"ease-in"}).onfinish=()=>s.remove()}}
+
+// ---------------- ¿QUIÉN ES ESE POKÉMON? ----------------
+const G_WHO={id:"who",n:"¿Quién es ese Pokémon?",ic:"❓",c:"#2f6fd8",d:"Adivina el Pokémon por su silueta antes de que acabe el tiempo. 10 rondas.",
+  rw:s=>s*60,
+  start(B,end){
+    let r=0,streak=0;const R=10;
+    const round=()=>{
+      if(r>=R){end(MG.score);return}r++;
+      const pool=P.filter(p=>p[2]!=="M"),ans=pool[Math.floor(Math.random()*pool.length)],same=pool.filter(p=>p!==ans&&p[3]===ans[3]),opts=mgPick(same.length>=3?same:pool.filter(p=>p!==ans),3).concat([ans]).sort(()=>Math.random()-.5);
+      B.innerHTML='<div class="whohd"><span>Ronda <b>'+r+'</b>/'+R+'</span>'+(streak>1?'<span class="whost">🔥 Racha ×'+streak+'</span>':'')+'</div><div class="whobg"><div class="whosil">'+icoHD(ans,190,false,false)+'</div><div class="whoq">¿Quién es ese Pokémon?</div></div><div class="mgtime"><i id="whoT"></i></div><div class="whoopt">'+opts.map(o=>'<button data-who="'+esc(o[0])+'">'+esc(o[0])+'</button>').join("")+'</div>';
+      const T=8000,t0=performance.now(),bar=$("whoT");let done=false;
+      const tick=()=>{if(done)return;const k=1-(performance.now()-t0)/T;if(bar)bar.style.width=Math.max(0,k*100)+"%";if(k<=0){pick(null);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
+      const pick=name=>{
+        if(done)return;done=true;cancelAnimationFrame(MG.raf);const ok=name===ans[0],left=Math.max(0,1-(performance.now()-t0)/T);
+        B.querySelectorAll("[data-who]").forEach(b=>{b.disabled=true;if(b.dataset.who===ans[0])b.classList.add("ok");else if(b.dataset.who===name)b.classList.add("bad")});
+        B.querySelector(".whosil").classList.add("rev");B.querySelector(".whoq").innerHTML=ok?'¡Es <b>'+esc(ans[0])+'</b>!':'Era <b>'+esc(ans[0])+'</b>';
+        if(ok){streak++;const pts=100+Math.round(left*100)+(streak>2?25*(streak-2):0);mgSet(MG.score+pts);snd("lvl");const s=B.querySelector(".whosil").getBoundingClientRect();mgPop(s.left+s.width/2,s.top+s.height/2,"+"+pts,"#ffd35c");try{cry(ans[0])}catch(e){}}
+        else{streak=0;snd("miss")}
+        mgT(round,ok?1300:1700);
+      };
+      B.querySelectorAll("[data-who]").forEach(b=>b.onclick=()=>pick(b.dataset.who));
+    };
+    mgSet(0);round();
+  }};
+
+// ---------------- MEMORIA ----------------
+const G_MEM={id:"mem",n:"Memoria Pokémon",ic:"🃏",c:"#7a4ae0",d:"Encuentra las 8 parejas con el menor número de intentos y lo más rápido posible.",
+  rw:s=>s*90,
+  start(B,end){
+    const pk=mgPick(P.filter(p=>p[2]!=="M"),8),cards=pk.concat(pk).sort(()=>Math.random()-.5);let open=[],moves=0,pairs=0,lock=false;const t0=Date.now();
+    B.innerHTML='<div class="whohd"><span>Intentos: <b id="memM">0</b></span><span>Parejas: <b id="memP">0</b>/8</span><span>⏱️ <b id="memT">0</b> s</span></div><div class="memg">'+cards.map((p,i)=>'<button class="memc" data-mi="'+i+'" aria-label="Carta"><span class="memf memb"></span><span class="memf memp '+p[2]+'">'+ico(p,64)+'</span></button>').join("")+'</div>';
+    mgI(()=>{const e=$("memT");if(e)e.textContent=Math.floor((Date.now()-t0)/1000)},250);mgSet(0);
+    B.querySelectorAll(".memc").forEach(c=>c.onclick=()=>{
+      if(lock||c.classList.contains("up"))return;c.classList.add("up");snd("click");open.push(c);
+      if(open.length<2)return;moves++;$("memM").textContent=moves;const [a,b]=open;open=[];
+      if(cards[+a.dataset.mi]===cards[+b.dataset.mi]){pairs++;$("memP").textContent=pairs;snd("buff");mgT(()=>{a.classList.add("done");b.classList.add("done")},250);const r=b.getBoundingClientRect();mgPop(r.left+r.width/2,r.top,"¡Pareja!","#3ecf8e");
+        if(pairs===8){const sec=(Date.now()-t0)/1000;mgSet(Math.max(100,1600-moves*40-sec*8));mgT(()=>end(MG.score),900)}}
+      else{lock=true;mgT(()=>{a.classList.remove("up");b.classList.remove("up");lock=false},800)}
+    });
+  }};
+
+// ---------------- GOLPEA AL DIGLETT ----------------
+const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a los Diglett (+1) y a los Dugtrio (+3) antes de que se escondan. ¡Cuidado con Voltorb (−3)! 30 segundos.",
+  rw:s=>s*2500,
+  start(B,end){
+    const D=PM.Diglett||P[0],T=PM.Dugtrio||D,V=PM.Voltorb||D,dur=30000,t0=Date.now();let hits=0,combo=0;
+    B.innerHTML='<div class="whohd"><span>⏱️ <b id="digT">30</b> s</span><span id="digC"></span></div><div class="digg">'+[...Array(9)].map((_,i)=>'<div class="digh" data-h="'+i+'"><div class="digback"></div><div class="digclip"><div class="digm"></div></div><div class="diglip"></div></div>').join("")+'</div>';
+    mgSet(0);const holes=[...B.querySelectorAll(".digh")];
+    const spawn=()=>{
+      const el=Date.now()-t0;if(el>=dur){holes.forEach(h=>h.querySelector(".digm").classList.remove("up"));mgT(()=>end(MG.score),600);return}
+      $("digT").textContent=Math.ceil((dur-el)/1000);
+      const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
+      if(free.length){const h=free[Math.floor(Math.random()*free.length)],m=h.querySelector(".digm"),r=Math.random(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
+        m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-el/45);
+        mgT(()=>{if(m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;$("digC").textContent=""}},up)}
+      mgT(spawn,Math.max(330,780-el/60));
+    };
+    holes.forEach(h=>h.addEventListener("pointerdown",e=>{const m=h.querySelector(".digm");if(!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
+      const k=m.dataset.k;let pts=k==="t"?3:k==="v"?-3:1;
+      if(k==="v"){combo=0;snd("hit",1);h.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:180,iterations:2})}else{combo++;hits++;snd("pop");if(combo>=5)pts+=1}
+      mgSet(MG.score+pts);mgPop(e.clientX,e.clientY,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";
+      mgT(()=>m.classList.remove("up"),180)}));
+    spawn();
+  }};
+
+// ---------------- PESCA ----------------
+const FISH=[["Magikarp",40],["Goldeen",18],["Poliwag",14],["Tentacool",12],["Horsea",9],["Staryu",8],["Chinchou",7],["Remoraid",6],["Feebas",4],["Lapras",2],["Gyarados",1.4],["Dratini",1.2]].filter(f=>PM[f[0]]);
+const G_FISH={id:"fish",n:"Pesca",ic:"🎣",c:"#1e88c8",d:"Lanza la caña y pulsa en cuanto pique (¡!). Cuanto más raro el Pokémon, menos tiempo tienes. Los raros pueden quedarse contigo.",
+  rw:s=>s*700,
+  start(B,end){
+    let cast=0,st="idle";const N=8,caught=[];
+    B.innerHTML='<div class="whohd"><span>Lanzamientos: <b id="fiN">0</b>/'+N+'</span><span id="fiC"></span></div><div class="fiw" id="fiW"><div class="fisky"></div><div class="fiwater"><div class="fiwave"></div></div><div class="filine" id="fiL"></div><div class="fibob" id="fiB"></div><div class="fiex" id="fiE" hidden>¡!</div><div class="fimsg" id="fiM">Pulsa «Lanzar» para empezar</div><div class="ficatch" id="fiK"></div></div><div class="fibtns"><button class="red big" id="fiGo">🎣 Lanzar</button></div><div class="fibag" id="fiG"></div>';
+    mgSet(0);const W=$("fiW"),bob=$("fiB"),ex=$("fiE"),msg=$("fiM"),go=$("fiGo");let bite=0,win=0,fish=null;
+    const pickFish=()=>{const t=FISH.reduce((a,f)=>a+f[1],0);let x=Math.random()*t;for(const f of FISH){x-=f[1];if(x<=0)return PM[f[0]]}return PM[FISH[0][0]]};
+    const reset=()=>{st="idle";ex.hidden=true;bob.className="fibob";go.textContent=cast>=N?"🏁 Ver resultado":"🎣 Lanzar";go.disabled=false};
+    const doCast=()=>{
+      if(cast>=N){end(MG.score);return}
+      cast++;$("fiN").textContent=cast;st="wait";go.textContent="✋ ¡Tirar!";msg.textContent="Esperando a que pique…";snd("throw");bob.className="fibob in";fish=pickFish();
+      // amagos antes de picar de verdad
+      const wait=1600+Math.random()*3800;let t=600;while(t<wait-500){const q=t;mgT(()=>{if(st==="wait"){bob.classList.remove("nib");void bob.offsetWidth;bob.classList.add("nib");snd("click")}},q);t+=500+Math.random()*900}
+      mgT(()=>{if(st!=="wait")return;st="bite";bite=performance.now();win=fish[2]==="C"?900:fish[2]==="R"?620:430;ex.hidden=false;bob.className="fibob bite";snd("flash");msg.textContent="¡Ha picado!";
+        mgT(()=>{if(st==="bite"){st="miss";ex.hidden=true;msg.textContent="Se ha escapado… ¡Has tardado demasiado!";snd("miss");mgT(reset,1100)}},win)},wait);
+    };
+    const pull=()=>{
+      if(st==="idle"){doCast();return}
+      if(st==="wait"){st="miss";msg.textContent="¡Demasiado pronto! Has asustado a los peces.";snd("miss");bob.className="fibob";mgT(reset,1100);return}
+      if(st==="bite"){st="got";const rt=performance.now()-bite,p=fish,base={C:10,R:30,E:90,L:150}[p[2]]||10,bonus=Math.max(0,Math.round((1-rt/win)*base*.5)),pts=base+bonus;
+        ex.hidden=true;bob.className="fibob";mgSet(MG.score+pts);snd("capok");caught.push(p);
+        const k=$("fiK");k.innerHTML=ico(p,96);k.classList.remove("jump");void k.offsetWidth;k.classList.add("jump");
+        msg.innerHTML='¡Has pescado un <b>'+esc(p[0])+'</b>! '+STAR[p[2]]+' <b>+'+pts+'</b>'+(rt<200?' ⚡ ¡Reflejos de campeón!':'');
+        $("fiG").innerHTML=caught.map(c=>'<span class="'+c[2]+'">'+ico(c,40)+'</span>').join("");mgT(reset,1500)}
+    };
+    go.onclick=pull;W.addEventListener("pointerdown",e=>{if(st==="bite"||st==="wait")pull()});
+    MG.fish=caught;
+  },
+  after(score){// los Pokémon raros que pesques se quedan contigo (uno por partida)
+    const best=(MG.fish||[]).filter(p=>p[2]!=="C").sort((a,b)=>"CREML".indexOf(b[2])-"CREML".indexOf(a[2]))[0];
+    if(!best)return "";const lv=clampL(Math.min(lvCap(),leadLevel())-3),isNew=giveMon(best[0],lv,Math.random()<SHINY_W*2);save();render();
+    return '<div class="mgget">'+ico(best,56)+'<span>¡<b>'+esc(best[0])+'</b> se queda contigo!'+(isNew?' <b class="mgnew">¡NUEVO!</b>':'')+'</span></div>';
+  }};
+
+// ---------------- LANZAMIENTO PERFECTO ----------------
+const G_THR={id:"thr",n:"Lanzamiento perfecto",ic:"🎯",c:"#e63950",d:"Lanza la Poké Ball cuando el círculo sea pequeño y el Pokémon esté en el centro. ¡Excelente, Genial o Bien! 10 lanzamientos.",
+  rw:s=>s*90,
+  start(B,end){
+    let n=0,combo=0,busy=false;const N=10;
+    B.innerHTML='<div class="whohd"><span>Lanzamiento <b id="thN">1</b>/'+N+'</span><span id="thC"></span></div><div class="thw" id="thW"><div class="thgr"></div><div class="thmon" id="thMon"><div class="thring" id="thR"></div><div class="thspr" id="thS"></div></div><div class="thball" id="thB"></div><div class="thmsg" id="thM">¡Toca para lanzar!</div></div>';
+    mgSet(0);const W=$("thW"),mon=$("thMon"),ring=$("thR"),spr=$("thS"),ball=$("thB"),msg=$("thM");let p=null,t0=0,amp=0,per=1500,spd=1;
+    const next=()=>{if(n>=N){end(MG.score);return}n++;$("thN").textContent=n;const pool=P.filter(x=>x[2]!=="M");p=pool[Math.floor(Math.random()*pool.length)];spr.innerHTML=ico(p,96);spr.style.opacity=1;amp=n<=3?0:Math.min(110,(n-3)*18);per=Math.max(700,1500-n*70);spd=.6+n*.08;t0=performance.now();busy=false;ball.className="thball";msg.textContent=amp?"¡Se mueve! Espera a que pase por el centro…":"¡Toca para lanzar!";loop()};
+    const st=()=>{const t=performance.now()-t0,k=(t%per)/per,sc=1-.78*k,x=amp*Math.sin(t/1000*spd*3.2);return{sc:sc,x:x}};
+    const loop=()=>{const s=st();ring.style.transform="translate(-50%,-50%) scale("+s.sc.toFixed(3)+")";ring.style.borderColor=s.sc<.45?"#3ecf8e":s.sc<.7?"#ffd35c":"#ff8a3c";mon.style.transform="translateX("+s.x.toFixed(1)+"px)";MG.raf=requestAnimationFrame(loop)};
+    const throwB=async()=>{
+      if(busy||!p)return;busy=true;const s=st();cancelAnimationFrame(MG.raf);snd("throw");
+      const hit=Math.abs(s.x)<34,q=s.sc<.45?["¡Excelente!",100,"#3ecf8e"]:s.sc<.7?["¡Genial!",60,"#ffd35c"]:["¡Bien!",30,"#ff8a3c"];
+      const wr=W.getBoundingClientRect(),mr=mon.getBoundingClientRect(),tx=hit?mr.left+mr.width/2-wr.left:wr.width/2+(s.x>0?-60:60),ty=mr.top+mr.height/2-wr.top;
+      ball.style.left=tx+"px";ball.style.top=ty+"px";
+      if(!hubCalm())await ball.animate([{transform:"translate(calc(-50% + "+(wr.width/2-tx)+"px),"+(wr.height-ty-40)+"px) scale(1.4) rotate(0)"},{transform:"translate(-50%,-140%) scale(.9) rotate(540deg)",offset:.6},{transform:"translate(-50%,-50%) scale(.7) rotate(720deg)"}],{duration:520,easing:"cubic-bezier(.3,.6,.4,1)"}).finished;
+      if(!hit){ball.className="thball miss";combo=0;$("thC").textContent="";msg.textContent="¡Fallaste! El Pokémon se movió.";snd("miss");mgT(next,1100);return}
+      ball.className="thball in";spr.style.opacity=0;snd("open");combo++;const pts=q[1]+(combo>=3?(combo-2)*10:0);mgSet(MG.score+pts);
+      mgPop(mr.left+mr.width/2,mr.top,q[0]+" +"+pts,q[2]);$("thC").textContent=combo>=3?"🔥 Combo ×"+combo:"";msg.textContent=q[0];
+      await new Promise(r=>mgT(r,500));snd("capok");ball.className="thball ok";mgT(next,800);
+    };
+    W.addEventListener("pointerdown",throwB);next();
+  }};
+
+const MGS=[G_WHO,G_MEM,G_DIG,G_FISH,G_THR];
+
+// ---------------- ventana del minijuego ----------------
+function mgOpen(id){
+  const g=MGS.find(x=>x.id===id);if(!g)return;if(fcd){toast("Termina el combate primero.");return}
+  hubClose();mgStop();MG.g=g;MG.score=0;MG.fish=null;
+  let m=$("mgM");if(!m){m=document.createElement("div");m.id="mgM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m)}
+  m.style.setProperty("--mc",g.c);
+  m.innerHTML='<div class="mgw"><div class="mgh"><span class="mgic">'+g.ic+'</span><b>'+g.n+'</b><span class="mgsc">⭐ <b id="mgSc">0</b></span><button class="mgx" aria-label="Salir del minijuego">✕</button></div><div class="mgb" id="mgB"></div></div>';
+  m.hidden=false;m.querySelector(".mgx").onclick=mgClose;
+  const left=mgLeft(id),best=mgState().best[id]|0;
+  $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+g.ic+'</div><h3>'+g.n+'</h3><p>'+g.d+'</p><div class="mginf"><span>🏆 Récord: <b>'+fmt(best)+'</b></span><span>🎁 Partidas con premio hoy: <b>'+left+'/'+MG_DAY+'</b></span></div><button class="red big" id="mgGo">▶ ¡Jugar!</button>'+(left?'':'<small class="mut">Hoy ya has ganado todos los premios de este minijuego, pero puedes seguir jugando para batir tu récord.</small>')+'</div>';
+  $("mgGo").onclick=()=>{snd("ui");g.start($("mgB"),mgEnd)};
+  m.querySelector(".mgw").animate([{transform:"scale(.85)",opacity:0},{transform:"none",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.9,.3,1.2)"});
+}
+function mgClose(){mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
+function mgEnd(score){
+  const g=MG.g;if(!g)return;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
+  if(rec)st.best[g.id]=score;let rw=null,extra="";
+  if(left>0&&score>0){st.n[g.id]=(st.n[g.id]|0)+1;rw={t:Math.min(400000,Math.round(g.rw(score))),it:{}};
+    const q=Math.random();if(q<.12)rw.it.ub=1;else if(q<.35)rw.it.sb=2;else if(q<.5)rw.it.pot=2;
+    if(rec&&old>0&&Math.random()<.25)rw.it.cand=1;grant(rw)}
+  if(g.after)extra=g.after(score)||"";
+  qEv("mg");save();render();
+  if(rec){snd("lvl");setTimeout(()=>snd("win"),400);mgConfetti()}else snd("win");
+  $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+(rec?"🏆":g.ic)+'</div><h3>'+(rec?"¡Nuevo récord!":"¡Partida terminada!")+'</h3><div class="mgfinal">'+fmt(score)+'<small>puntos</small></div>'+
+    (rw?'<p>Premio: <b>'+rwTxt(rw)+'</b></p>':'<p class="mut">'+(score>0?'Hoy ya no quedan premios en este minijuego.':'¡Sin puntos esta vez!')+'</p>')+extra+
+    '<div class="mginf"><span>🏆 Récord: <b>'+fmt(st.best[g.id]|0)+'</b></span><span>🎁 Premios hoy: <b>'+mgLeft(g.id)+'/'+MG_DAY+'</b></span></div><div class="mgbtns"><button class="red big" id="mgAg">🔁 Otra vez</button><button class="alt" id="mgBk">Volver a los minijuegos</button></div></div>';
+  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("mgM");if(m&&!m.hidden)mgClose()}});
+
+// ---------------- panel y accesos ----------------
+nxPanel("mgP","🎮 Minijuegos","¡Juega, bate tus récords y gana tickets y objetos! Cada minijuego da premio en sus 3 primeras partidas del día.");
+if(!HUB.some(x=>x.k==="mg"))HUB.splice(HUB.findIndex(x=>x.k==="act")+1,0,{k:"mg",n:"Minijuegos",ic:"🎮",c:"#e0447a",d:"¡Juega y gana premios!",tabs:[["mgP","Minijuegos"]]});
+HUBP.mgP="mg";HUBR.mgP=()=>mgUI();
+function mgUI(){
+  const box=$("mgPB");if(!box)return;const st=mgState();
+  box.innerHTML='<div class="mggrid">'+MGS.map(g=>{const l=mgLeft(g.id);return '<button class="mgcard" data-mgo="'+g.id+'" style="--mc:'+g.c+'"><span class="mgcic">'+g.ic+'</span><b>'+g.n+'</b><small>'+g.d+'</small><span class="mgcf"><span>🏆 '+fmt(st.best[g.id]|0)+'</span><span class="'+(l?'on':'')+'">🎁 '+l+'/'+MG_DAY+'</span></span><span class="mgplay">▶ Jugar</span></button>'}).join("")+'</div>';
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-mgo]");if(b){snd("ui");mgOpen(b.dataset.mgo)}});
+{const _hb=hubBadges;hubBadges=function(){const o=_hb();try{const n=MGS.filter(g=>mgLeft(g.id)>0).length;if(n)o.mg=n}catch(e){}return o}}
+// anuncio llamativo en la página principal
+(function(){const ep=$("earnP");if(!ep||$("mgBan"))return;const d=document.createElement("button");d.id="mgBan";d.type="button";
+  d.innerHTML='<span class="mgbi">🎮</span><span class="mgbt"><b>¡Minijuegos!</b><small>¿Quién es ese Pokémon?, Pesca, Diglett… ¡gana tickets jugando!</small></span><span class="mgbg">JUGAR ▶</span>';
+  d.onclick=()=>{snd("ui");hubOpen("mg")};const h=ep.querySelector("h2");if(h)h.after(d);else ep.prepend(d)})();
 
 </script>
 <script>

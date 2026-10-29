@@ -422,6 +422,56 @@ button.mini{padding:0 6px;font-size:.7rem}
 .gico{display:flex;flex-wrap:wrap;gap:4px}.gico button{padding:4px 6px;background:var(--panel);border:1px solid var(--line);font-size:1.1rem}.gico button.on{border-color:var(--teal);outline:2px solid var(--teal)}
 .supb{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:700;background:var(--yel);color:#2a2200;border-radius:12px;padding:10px 18px;margin:4px 6px 4px 0}
 .supnote{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0}
+.card.shiny{border-color:transparent!important;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(120deg,#ff5f9e,#ffd35c,#5fe0c0,#6aa8ff,#c57bff,#ff5f9e) border-box!important;background-size:100% 100%,300% 300%!important;animation:shgrad 3s linear infinite,pop .8s cubic-bezier(.2,.9,.3,1.15) backwards!important;box-shadow:0 0 22px rgba(255,220,120,.8)!important}
+@keyframes shgrad{to{background-position:0 0,300% 0}}
+.dex .card.shiny,.nox .card.shiny{animation:shgrad 3s linear infinite!important}
+.shtag{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);white-space:nowrap;z-index:2;background:linear-gradient(90deg,#ff5f9e,#ffd35c,#5fe0c0);color:#2a1a00;border-radius:99px;padding:1px 8px;font-size:.66rem;font-weight:800}
+.shb{position:absolute;bottom:2px;right:5px;font-size:.72rem;font-weight:700;color:#d4a000}
+img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
+.dly{display:flex;flex-direction:column;gap:6px}
+#strk{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px}
+.skh{display:flex;flex-direction:column;gap:2px;margin-bottom:6px}
+.skrow{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.skd{display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:4px 2px;min-width:0}
+.skd small{font-size:.6rem;color:var(--mute);white-space:nowrap}
+.skd span{display:flex;align-items:center;flex-wrap:wrap;justify-content:center;gap:1px;min-height:24px}
+.skd span b{font-size:.6rem}
+.skd.big{border-color:var(--yel);background:color-mix(in srgb,var(--yel) 15%,var(--bg))}
+.skd.now{border:2px solid var(--teal);box-shadow:0 0 10px color-mix(in srgb,var(--teal) 50%,transparent)}
+.rktabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px}
+.rktabs button{padding:6px 12px;font-size:.85rem}
+.rktabs button.alt{background:var(--line);color:var(--ink)}
+.rkme{background:var(--bg);border:2px solid var(--teal);border-radius:12px;padding:8px 12px;margin-top:8px}
+.rkpos{min-width:38px;text-align:center;font-size:1.05rem}
+.rkv{font-weight:800;color:var(--teal);white-space:nowrap}.rkv small{font-weight:400;color:var(--mute)}
+.rkmine{border-color:var(--teal)!important;background:color-mix(in srgb,var(--teal) 12%,var(--bg))!important}
+#evBan{width:100%;display:flex;flex-direction:column;gap:6px}
+.evb{display:flex;align-items:center;gap:10px;border-radius:12px;padding:6px 12px;font-size:.85rem;text-align:left}
+.evb.ev{display:block;background:linear-gradient(90deg,#3a1c5c,#7a3b12);color:#ffe7b0}
+.evb.ft{background:color-mix(in srgb,var(--yel) 18%,var(--bg));border:1px solid var(--yel)}
+.evb.ft .pk{flex:none}
+#zoneSel{max-width:260px}
+.medal{--ms:30px;display:inline-grid;place-items:center;width:var(--ms);height:var(--ms);border-radius:50%;font-size:calc(var(--ms)*.5);background:var(--line);border:3px solid var(--line);filter:grayscale(1);opacity:.45}
+.medal.on{background:radial-gradient(circle at 35% 30%,#fff,var(--mc) 55%);border-color:#d4a000;filter:none;opacity:1;box-shadow:0 0 10px var(--mc)}
+.medrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0}
+.ssn{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0}
+.tier{display:inline-block;font-weight:800;border-radius:10px;padding:4px 10px;color:#fff;background:#b07a4a}
+.tier.t1{background:#8c97a8}.tier.t2{background:#d4a000}.tier.t3{background:#2fb0c0}.tier.t4{background:#3f86f0}.tier.t5{background:linear-gradient(90deg,#8a3fd0,#e86aa8)}
+.gboss{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:linear-gradient(135deg,color-mix(in srgb,var(--red) 14%,var(--bg)),var(--bg));border:2px solid var(--red);border-radius:14px;padding:12px;margin:10px 0}
+.gboss>div{display:flex;flex-direction:column;gap:4px}
+.gbimg{width:110px;height:110px;display:grid;place-items:center}
+.gbhp{height:12px}.gbhp i{background:linear-gradient(90deg,#e63950,#f57c20)!important}
+.plink{cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}
+#prof{position:fixed;inset:0;z-index:105;background:rgba(10,12,30,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+#prof .jbox{text-align:left;max-height:calc(100vh - 32px);overflow:auto}
+.profh{display:flex;gap:14px;align-items:center}.profh h2{margin:0 0 4px;color:var(--ink);font-size:1.4rem}
+.profav{width:96px;flex:none;background:linear-gradient(#8fd0ff,#dff3ff 60%,#9ad260 61%);border-radius:14px;padding:6px;display:grid;place-items:center}.profav img{width:84px}
+.profst{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:12px 0}
+@media (max-width:520px){.profst{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.profst div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:6px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.profst b{font-size:1.1rem}.profst small{color:var(--mute);font-size:.7rem}
+.proftm{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}.proftm div{display:flex;flex-direction:column;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:4px 6px;min-width:80px}
+.trsel2{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);flex:1;min-width:200px}
 .dexn{position:absolute;top:2px;left:6px;font-size:.62rem;color:var(--mute)}
 .shh{font-size:.95rem;margin:14px 0 4px}
 .news small.ago{color:var(--mute);font-weight:400}
@@ -502,6 +552,7 @@ button.mini{padding:0 6px;font-size:.7rem}
     <li>🛍️ <b>Tienda de mejoras</b>: compra Guantes (más tickets por toque) y ayudantes que generan tickets por segundo.</li>
     <li>🎰 <b>Tiradas</b>: gasta tickets para conseguir Pokémon (Común, Raro, Épico y Legendario). Cada 30 tiradas tienes un Épico o mejor garantizado. Cada 10 tiradas el precio sube.</li>
     <li>📚 <b>Pokedex</b>: mira los Pokémon que tienes y los que te faltan.</li>
+    <li>🏅 <b>Gimnasios y zonas</b>: gana las 8 medallas para desbloquear zonas de exploración y la Liga.</li>
     <li>⚔️ <b>Combate</b>: forma un equipo de hasta 6 Pokémon. Ganando suben de nivel, aprenden habilidades y consigues tickets y objetos. ¡También puedes capturar Pokémon salvajes! Cada movimiento tiene <b>PP</b> (usos limitados): recupéralos con Éter, Elixir o en el Centro Pokémon.</li>
     <li>🏥 <b>Centro Pokémon</b> y 🎒 <b>Mochila</b>: los PS no se recuperan solos; cura a tu equipo o usa pociones.</li>
     <li>🏆 <b>Liga Pokémon</b> y 🌐 <b>PVP online</b>: reta al Alto Mando o a otros jugadores conectados, en duelos 1 contra 1 o en salas 2 vs 2 con código.</li>
@@ -519,6 +570,7 @@ button.mini{padding:0 6px;font-size:.7rem}
 <div id="navp" hidden role="dialog" aria-label="Accesos directos"><b>🧭 Ir directamente a…</b><div class="navg" id="navg"></div></div>
 <div id="toast" hidden role="status" aria-live="polite"></div>
 <div id="newsM" hidden role="dialog" aria-modal="true" aria-label="Novedades"><div class="jbox"><h2>📰 ¡Novedades en PokeGacha!</h2><div id="newsMl"></div><div class="jrow"><button class="red" id="newsOk">¡Genial!</button></div></div></div>
+<div id="prof" hidden role="dialog" aria-modal="true" aria-label="Perfil de jugador"><div class="jbox"><div id="profB"></div></div></div>
 <div id="evo" hidden role="dialog" aria-modal="true" aria-label="Evolución"><div class="jbox"><h2>🧬 Evolución</h2><div class="evost"><div id="evoA"></div><div id="evoB"></div></div><p id="evoT"></p><div id="evoBtns"></div></div></div>
 <div id="updB" hidden role="status"><span>🆕 Hay una versión nueva del juego.</span><button id="updGo">Actualizar</button></div>
 <div id="bgw"></div>
@@ -537,8 +589,9 @@ button.mini{padding:0 6px;font-size:.7rem}
   <label><input type="checkbox" data-o="askip"> Saltar automáticamente las animaciones de las tiradas y del Centro Pokémon</label>
   <label>🖥️ Combates en <select id="bigopt" style="flex:1"><option value="">Normal</option><option value="win">Ventana grande</option><option value="full">Pantalla completa</option></select></label>
   <label><input type="checkbox" data-o="sfx"> Sonidos de combate</label>
+  <label><input type="checkbox" data-o="cry"> Gritos de los Pokémon</label>
   <label><input type="checkbox" data-o="skip"> Botón «Saltar animación» (tiradas y Centro Pokémon)</label>
-  <label><input type="checkbox" data-o="bg"> Fondo decorativo de Pokémons</label>
+  <label><input type="checkbox" data-o="bg"> Fondo decorativo de Pokéballs</label>
   <label><input type="checkbox" data-o="rain"> Lluvia de tickets</label>
   <label><input type="checkbox" data-o="flt"> Números flotantes</label>
   <label><input type="checkbox" data-o="fists"> Puños alrededor de la Pokéball</label>
@@ -582,7 +635,7 @@ button.mini{padding:0 6px;font-size:.7rem}
   <h2>Consigue tickets gratis</h2>
   <div class="earn">
     
-    <div><small>Regalo diario (sube cada día)</small><button id="daily">Reclamar +5.000 🎟️</button></div>
+    <div class="dly"><small>Regalo diario (sube cada día) · ¡Reclámalo cada día para mantener tu racha!</small><button id="daily">Reclamar +5.000 🎟️</button><div id="strk"></div></div>
     <div><small>Ticket automático cada 30 s: cada vez recibes más que el anterior. Solo se genera mientras la página está abierta y visible</small><b id="auto">…</b><div class="bar"><i id="bar"></i></div></div>
   </div>
   <p class="rates" style="margin-top:10px">Si te sale un repetido, te devolvemos tickets: Común 0, Raro +1, Épico +2, Legendario +4.</p>
@@ -595,6 +648,7 @@ button.mini{padding:0 6px;font-size:.7rem}
 
 <section class="panel stage" id="stage" aria-live="polite">
   <div class="flash" id="flash"></div>
+  <div id="evBan"></div>
   <div class="gbtn">
     <button class="red" id="p1">Tirar ×1<small>1 🎟️</small></button>
     <button class="red" id="p10">Tirar ×10<small>10 🎟️</small></button>
@@ -613,7 +667,7 @@ button.mini{padding:0 6px;font-size:.7rem}
     <select id="fr" aria-label="Rareza"><option value="">Todas las rarezas</option><option value="C">Común</option><option value="R">Raro</option><option value="E">Épico</option><option value="L">Legendario</option></select>
     <select id="ft" aria-label="Tipo"></select>
     <select id="fg" aria-label="Generación"></select>
-    <select id="fs" aria-label="Estado"><option value="">Todos</option><option value="1">Obtenidos</option><option value="0">Me faltan</option><option value="2">Repetidos</option></select>
+    <select id="fs" aria-label="Estado"><option value="">Todos</option><option value="1">Obtenidos</option><option value="0">Me faltan</option><option value="2">Repetidos</option><option value="3">✨ Variocolor</option></select>
     <select id="fd" aria-label="Fecha de obtención"><option value="">Cualquier fecha</option><option value="0">Obtenidos hoy</option><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option></select>
     <select id="fc" aria-label="Cantidad de repetidos"><option value="">Cualquier cantidad</option><option value="2">×2 o más</option><option value="3">×3 o más</option><option value="5">×5 o más</option><option value="10">×10 o más</option><option value="25">×25 o más</option></select>
     <select id="fo" aria-label="Ordenar"><option value="">Orden Pokédex</option><option value="new">Más recientes primero</option><option value="old">Más antiguos primero</option><option value="dup">Más repetidos primero</option><option value="few">Menos repetidos primero</option></select>
@@ -648,7 +702,7 @@ button.mini{padding:0 6px;font-size:.7rem}
       <small id="setMsg" style="color:var(--mute)"></small>
     </div>
     <div class="team" id="team"></div>
-    <div class="actions" style="margin-top:10px;justify-content:flex-start"><button class="red" id="fgo">¡Combatir!</button><small id="tinfo" style="color:var(--mute)"></small></div>
+    <div class="actions" style="margin-top:10px;justify-content:flex-start"><select id="zoneSel" aria-label="Zona de exploración"></select><button class="red" id="fgo">¡Combatir!</button><small id="tinfo" style="color:var(--mute)"></small></div>
   </div>
   <div id="arena" hidden>
     <div class="bspd" id="bspd"><small>Velocidad del combate:</small><button data-s="1">×1</button><button data-s="2">×2</button><button data-s="3">×3</button><button id="bigW" class="alt">🗖 Ventana</button><button id="bigF" class="alt">⛶ Pantalla completa</button></div>
@@ -670,6 +724,11 @@ button.mini{padding:0 6px;font-size:.7rem}
     <div class="menu" id="menu"></div>
   </div>
 </section>
+<section class="panel" aria-label="Gimnasios" id="gymP">
+  <div class="hhead"><h2>🏅 Gimnasios</h2><span class="hcost">8 medallas</span></div>
+  <p class="rates">Derrota a los 8 Líderes de Gimnasio en orden para conseguir sus medallas. Cada medalla da un buen premio y desbloquea nuevas zonas de exploración, y con las 8 podrás desafiar a la Liga Pokémon. Puedes repetir los combates (revancha) con rivales a tu nivel.</p>
+  <div id="gymBox"></div>
+</section>
 <section class="panel" aria-label="Liga Pokémon" id="lgP">
   <div class="hhead"><h2>🏆 Liga Pokémon</h2><span class="hcost">9 Ligas · 5 rondas</span></div>
   <p class="rates">Elige una Liga y enfréntate seguidos a sus 4 miembros del Alto Mando y a su Campeón con tu equipo de combate. Los PS no se curan entre rondas (usa la Mochila o el Centro Pokémon) y si caes el torneo termina. Cada victoria da la recompensa normal de combate; al ganar la Liga recibes tickets extra y 1 Caramelo Raro. A los entrenadores no se les puede capturar ni se puede huir de ellos.</p>
@@ -678,6 +737,7 @@ button.mini{padding:0 6px;font-size:.7rem}
 <section class="panel" aria-label="PVP online" id="pvpP">
   <div class="hhead"><h2>⚔️ PVP online</h2><span class="hcost" id="pvSt">Conectando…</span></div>
   <p class="rates">Reta a otros jugadores que tengan abierto <b>este mismo enlace</b> ahora mismo. Os enfrentáis por turnos con vuestros equipos de combate (hasta 6 Pokémon, a vuestro nivel y con los PS al máximo: no gastas PS, objetos ni experiencia). Gana quien debilita a todos los Pokémon del rival, y el ganador recibe entre 200.000 y 500.000 🎟️ al azar (máximo <b>5.000.000 🎟️ al día</b> ganados en PVP). Para jugar tienes que haber iniciado sesión con tu cuenta (no vale «Jugar sin cuenta»).</p>
+  <div id="ssnBox"></div>
   <div id="pvLobby">
     <div class="sets-row"><label>Tu apodo <input id="pvNick" maxlength="16" style="width:170px"></label><button id="pvNickGo">💾 Guardar apodo</button><small id="pvTeam" class="mut"></small><small id="pvRec" class="mut"></small></div>
     <small id="pvNickMsg" class="mut" style="display:block;margin-top:4px">Puedes usar letras, números, espacios, emojis y caracteres especiales. Cada apodo es único: no puede repetirse entre jugadores.</small>
@@ -696,6 +756,7 @@ button.mini{padding:0 6px;font-size:.7rem}
   <div class="sets-row"><input id="frNick" maxlength="16" placeholder="Apodo de tu amigo" aria-label="Apodo de tu amigo" style="flex:1;min-width:180px;font:inherit;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)"><button id="frGo">📨 Enviar solicitud</button></div>
   <small id="frMsg" class="mut"></small>
   <div id="frBox"></div>
+  <div id="trdBox" style="margin-top:12px"></div>
 </section>
 <section class="panel" aria-label="Gremios" id="gdP">
   <div class="hhead"><h2>🛡️ Gremios</h2><span class="hcost">Fundar: 50.000.000 🎟️</span></div>
@@ -751,6 +812,12 @@ button.mini{padding:0 6px;font-size:.7rem}
   <p class="rates">Cuando consigas <b>todos los logros</b> (los marcados como «extra», como ¡Qué suerte! o Rey del PVP, no hacen falta), podrás reiniciar la partida desde cero para subir un nivel de prestigio. Cada nivel te da ventajas permanentes y unos logros nuevos, distintos y al azar, para que el juego nunca sea igual. Si reinicias sin tener todos los logros, lo pierdes todo sin ganar prestigio.</p>
   <div class="qgrid"><div class="qc"><b>Tus ventajas actuales</b><ul id="prsNow" style="margin:0;padding-left:18px"></ul></div><div class="qc"><b id="prsNextT">Próximo nivel</b><ul id="prsNext" style="margin:0;padding-left:18px"></ul></div></div>
   <div class="sets-row" style="margin-top:10px"><button class="red" id="prsGo">🌟 Reiniciar con prestigio</button><small id="prsMsg" class="mut"></small></div>
+</section>
+<section class="panel" aria-label="Clasificación" id="rkP">
+  <div class="hhead"><h2>📊 Clasificación</h2><button id="rkRe" style="background:var(--line);color:var(--ink)">🔄 Actualizar</button></div>
+  <p class="rates">Los mejores entrenadores entre todos los jugadores con cuenta. Tu puntuación se actualiza cuando la partida se guarda en la nube (cada 5 minutos o al pulsar 💾).</p>
+  <div class="rktabs" id="rkTabs"></div>
+  <div id="rkBox"></div>
 </section>
 <section class="panel" aria-label="Novedades" id="newsP">
   <h2>📰 Novedades</h2>
@@ -836,19 +903,19 @@ const SPRU="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pok
 const SDNF=new Set([990, 991, 992, 993, 994, 995, 1006, 1008, 1010, 1017, 1022, 1023, 1024, 1025, 10257, 10273, 10274, 10275, 10276, 10277]),SDNB=new Set([990, 991, 992, 993, 994, 995, 1006, 1008, 1010, 1017, 1022, 1023, 1024, 1025, 10195, 10197, 10209, 10210, 10211, 10226, 10257, 10273, 10274, 10275, 10276, 10277]);
 let SPRB=(()=>{try{return localStorage.getItem("gacha-spr")==="2"}catch(e){return false}})();
 const sprHost=()=>SPRB?SPRU2:SPRU;
-function ico(p,s,back){
+function ico(p,s,back,sh){
   const id=window._spr&&window._spr[p[0]];if(!id)return icoSVG(p,s);
-  const dn='data-n="'+String(p[0]).replace(/"/g,"&quot;")+'" data-s="'+s+'" data-i="'+id+'"'+(back?' data-b="1"':'');
-  if(!(back?SDNB:SDNF).has(id))return '<img class="pk gif" src="'+sprHost()+'other/showdown/'+(back?"back/":"")+id+'.gif" style="width:'+s+'px;height:'+s+'px" alt="" loading="lazy" decoding="async" '+dn+' onload="icoLoad(this)" onerror="icoErr(this)">';
+  const dn='data-n="'+String(p[0]).replace(/"/g,"&quot;")+'" data-s="'+s+'" data-i="'+id+'"'+(back?' data-b="1"':'')+(sh?' data-sh="1"':''),shp=sh?"shiny/":"";
+  if(!(back?SDNB:SDNF).has(id))return '<img class="pk gif'+(sh?' shy':'')+'" src="'+sprHost()+'other/showdown/'+(back?"back/":"")+shp+id+'.gif" style="width:'+s+'px;height:'+s+'px" alt="" loading="lazy" decoding="async" '+dn+' onload="icoLoad(this)" onerror="icoErr(this)">';
   const w=Math.round(s*1.4),mm=Math.round(s*.2);
-  return '<img class="pk" src="'+sprHost()+(back?"back/":"")+id+'.png" width="'+w+'" height="'+w+'" style="margin:-'+mm+'px" alt="" loading="lazy" decoding="async" '+dn+' onerror="icoErr(this)">';
+  return '<img class="pk'+(sh?' shy':'')+'" src="'+sprHost()+(back?"back/":"")+shp+id+'.png" width="'+w+'" height="'+w+'" style="margin:-'+mm+'px" alt="" loading="lazy" decoding="async" '+dn+' onerror="icoErr(this)">';
 }
 // los animados vienen recortados: en tamaño grande se escalan segun su tamaño real (asi conservan la proporcion entre Pokémon)
 function icoLoad(el){
   if(!el.classList.contains("gif"))return;const s=+el.dataset.s||48,nw=el.naturalWidth,nh=el.naturalHeight;if(!nw)return;
   if(s>=70){const k=Math.min(1.6*s/92,s*1.55/Math.max(nw,nh));el.style.width=Math.round(nw*k)+"px";el.style.height=Math.round(nh*k)+"px"}
 }
-function icoPng(el,host){const s=+el.dataset.s||48,w=Math.round(s*1.4),mm=Math.round(s*.2);el.classList.remove("gif");el.removeAttribute("onload");el.style.width=w+"px";el.style.height=w+"px";el.style.margin="-"+mm+"px";el.src=host+(el.dataset.b?"back/":"")+el.dataset.i+".png"}
+function icoPng(el,host){const s=+el.dataset.s||48,w=Math.round(s*1.4),mm=Math.round(s*.2);el.classList.remove("gif");el.removeAttribute("onload");el.style.width=w+"px";el.style.height=w+"px";el.style.margin="-"+mm+"px";el.src=host+(el.dataset.b?"back/":"")+(el.dataset.sh?"shiny/":"")+el.dataset.i+".png"}
 function icoErr(el){
   const src=el.src;
   if(src.indexOf("/other/showdown/")>=0){
@@ -856,6 +923,7 @@ function icoErr(el){
     icoPng(el,SPRU2);return;
   }
   if(src.indexOf(SPRU)===0){if(!SPRB){SPRB=true;try{localStorage.setItem("gacha-spr","2")}catch(e){}}el.src=SPRU2+src.slice(SPRU.length);return}
+  if(src.indexOf("/shiny/")>=0){el.src=src.replace("shiny/","");return}
   if(src.indexOf("/back/")>=0){el.src=src.replace("/back/","/");return}
   el.onerror=null;const p=PM[el.dataset.n];if(p)el.src="data:image/svg+xml,"+encodeURIComponent(icoSVG(p,+el.dataset.s||48).replace("<svg ",'<svg xmlns="http://www.w3.org/2000/svg" '));
 }
@@ -879,11 +947,12 @@ function icoSVG(p,s){
   }
   return '<svg viewBox="0 0 12 12" width="'+s+'" height="'+s+'" shape-rendering="crispEdges" aria-hidden="true"><path d="'+E+'" fill="#1c1f3a"/><path d="'+B+'" fill="'+c+'"/><path d="'+L+'" fill="#fff" opacity=".4"/><path d="'+W+'" fill="#fff"/><path d="'+D+'" fill="#1c1f3a"/></svg>';
 }
+const SHINY_G=1/500,SHINY_S=1/250,SHINY_W=1/400,shinyTotal=()=>Object.values(S.shiny||{}).reduce((a,b)=>a+b,0);
 const REF={C:0,R:1,E:2,L:4},STAR={C:"★",R:"★★",E:"★★★",L:"★★★★"},KEY=(window.__KEY||"gacha-pkmn-v3"),TICK=30000;
 let S={g:[0,0,0,0,0],cl:0,lt:Date.now(),lv:{},ab:{},balls:{},mv:{},hp:{},ofd:{},when:{},team:["","","","","",""],sets:[],lg:null,lgDone:{},bag:{pot:3,spot:0,hpot:0,mpot:0,rev:1,mrev:0,pb:5,sb:0,ub:0,mb:0},t:3,last:Date.now(),owned:{},pity:0,daily:"",pulls:0};
 try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
 const $=id=>document.getElementById(id);
-const OD={skip:1,bg:1,rain:1,flt:1,fists:1,intro:1,fx:1,pColl:1,pBat:1,pBag:1,pShop:1,pHeal:1,pPvp:1,bgprod:1,vol:.5,song:9,sfx:1,svol:.7,auto:1,askip:0,bigmode:"",tkeys:["u"]};
+const OD={skip:1,bg:1,rain:1,flt:1,fists:1,intro:1,fx:1,pColl:1,pBat:1,pBag:1,pShop:1,pHeal:1,pPvp:1,bgprod:1,vol:.5,song:9,sfx:1,cry:1,svol:.7,auto:1,askip:0,bigmode:"",tkeys:["u"]};
 let O=Object.assign({},OD);try{Object.assign(O,JSON.parse(localStorage.getItem("gacha-opts")||"{}"))}catch(e){}
 if(!O.m2){O.bgprod=1;O.m2=1;try{localStorage.setItem("gacha-opts",JSON.stringify(O))}catch(e){}}
 const saveO=()=>{try{localStorage.setItem("gacha-opts",JSON.stringify(O))}catch(e){}};
@@ -963,19 +1032,21 @@ function tick(){
 }
 function gBtn(id,t,c){const h=t+"<small>"+fmt(c)+" 🎟️</small>",e=$(id);if(e._h!==h){e._h=h;e.innerHTML=h}}
 function render(){
-  $("tk").textContent=fmt(S.t)+(tps()>0?" ("+fmt(tps())+"/s)":"");$("tcap").textContent="+"+fmt(cpc())+" 🎟️ por toque · tecla "+(O.tkeys||["u"]).map(tkLabel).join(" / ");$("tps").textContent=tps()>0?"Tus ayudantes producen "+fmt(tps())+" 🎟️ por segundo":"Compra ayudantes en la tienda";updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();gUI();
+  $("tk").textContent=fmt(S.t)+(tps()>0?" ("+fmt(tps())+"/s)":"");$("tcap").textContent="+"+fmt(cpc())+" 🎟️ por toque · tecla "+(O.tkeys||["u"]).map(tkLabel).join(" / ");$("tps").textContent=tps()>0?"Tus ayudantes producen "+fmt(tps())+" 🎟️ por segundo":"Compra ayudantes en la tienda";updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();gUI();strkUI();gymUI();zoneUI();seasonUI();evBanUI();trdUI();
   $("p1").disabled=S.t<cost(1);$("p10").disabled=S.t<cost(10);$("ps").disabled=S.t<cost(1,true);$("ps10").disabled=S.t<cost(10,true);gBtn("p1","Tirar ×1",cost(1));gBtn("p10","Tirar ×10",cost(10));gBtn("ps","✨ Súper ×1",cost(1,true));gBtn("ps10","✨ Súper ×10",cost(10,true));
   $("daily").disabled=S.daily===today();
   $("daily").textContent=S.daily===today()?"Vuelve mañana (+"+gift()+")":"Reclamar +"+gift()+" 🎟️";
   $("auto").textContent="+"+fmt(((S.ak||0)+11)*PMUL())+" 🎟️ en "+Math.max(0,Math.ceil((TICK-(Date.now()-S.last))/1000))+" s";
   $("pity").textContent=S.pity;$("pityN").textContent=$("pityM").textContent=PITY();
   const got=P.filter(p=>hasP(p[0])).length;
-  $("prog").textContent=got+" / "+P.length;
-  const dk=JSON.stringify(S.owned)+JSON.stringify(S.reg||{})+$("fr").value+$("ft").value+$("fs").value+$("fg").value+$("fd").value+$("fc").value+$("fo").value;if(dk!==window._dk){window._dk=dk;updFight();srch();$("dex").innerHTML=sortDex(P.filter(fok)).map(p=>{const c=S.owned[p[0]]||0,r=c||hasP(p[0]);
-    return `<div class="card ${p[2]} ${r?"":"lock"}" title="${r?p[0]+" · ×"+c+(c?"":" (registrado: lo evolucionaste)")+(S.when&&S.when[p[0]]?" · "+new Date(S.when[p[0]]).toLocaleDateString("es"):""):"Sin conseguir"}"><span class="dexn">#${String(p[4]).padStart(4,"0")}</span><span class="cnt">${r?"×"+c:""}</span><div class="em">${r?ico(p,36):"❔"}</div><b>${r?p[0]:"???"}</b><small>${STAR[p[2]]}</small></div>`}).join("")||'<p class="rates">Ningún Pokémon coincide con los filtros.</p>'};
+  $("prog").textContent=got+" / "+P.length+(shinyTotal()?" · ✨ "+shinyTotal()+" variocolor":"");
+  const dk=JSON.stringify(S.owned)+JSON.stringify(S.reg||{})+JSON.stringify(S.shiny||{})+$("fr").value+$("ft").value+$("fs").value+$("fg").value+$("fd").value+$("fc").value+$("fo").value;if(dk!==window._dk){window._dk=dk;updFight();srch();$("dex").innerHTML=sortDex(P.filter(fok)).map(p=>{const c=S.owned[p[0]]||0,r=c||hasP(p[0]);
+    return `<div class="card ${p[2]} ${r?"":"lock"}" title="${r?p[0]+" · ×"+c+(c?"":" (registrado: lo evolucionaste)")+(S.when&&S.when[p[0]]?" · "+new Date(S.when[p[0]]).toLocaleDateString("es"):""):"Sin conseguir"}"><span class="dexn">#${String(p[4]).padStart(4,"0")}</span><span class="cnt">${r?"×"+c:""}</span>${S.shiny&&S.shiny[p[0]]?'<span class="shb" title="Variocolor ×'+S.shiny[p[0]]+'">✨'+(S.shiny[p[0]]>1?S.shiny[p[0]]:"")+'</span>':""}<div class="em">${r?ico(p,36,false,!!(S.shiny&&S.shiny[p[0]])):"❔"}</div><b>${r?p[0]:"???"}</b><small>${STAR[p[2]]}</small></div>`}).join("")||'<p class="rates">Ningún Pokémon coincide con los filtros.</p>'};
 }
 function pickR(r){
   const pool=P.filter(p=>p[2]===r);
+  {const f=featured();if(f&&f[2]===r&&Math.random()<.15)return f}
+  {const ev=evNow();if(ev&&Math.random()<.35){const ep=pool.filter(p=>ev.t.includes(p[1]));if(ep.length)return ep[Math.floor(Math.random()*ep.length)]}}
   if(Math.random()<.2){const own=pool.filter(p=>S.owned[p[0]]);if(own.length)return own[Math.floor(Math.random()*own.length)]}
   return pool[Math.floor(Math.random()*pool.length)];
 }
@@ -987,8 +1058,8 @@ function roll(){
   S.pity=(r==="E"||r==="L")?0:S.pity+1;
   return pickR(r);
 }
-function cardHTML(p,isNew,back,big){
-  return `<div class="card ${p[2]} ${big?"big":""}"><span class="tag ${isNew?"":"dup"}">${isNew?"¡NUEVO!":"+"+back+" 🎟️"}</span><div class="em">${ico(p,big?76:46)}</div><b>${p[0]}</b><small>${TIPO[p[1]]} · ${STAR[p[2]]}</small></div>`;
+function cardHTML(p,isNew,back,big,sh){
+  return `<div class="card ${p[2]} ${big?"big":""} ${sh?"shiny":""}"><span class="tag ${isNew?"":"dup"}">${isNew?"¡NUEVO!":"+"+back+" 🎟️"}</span>${sh?'<span class="shtag">✨ VARIOCOLOR</span>':""}<div class="em">${ico(p,big?76:46,false,sh)}</div><b>${sh?"✨ ":""}${p[0]}</b><small>${TIPO[p[1]]} · ${STAR[p[2]]}</small></div>`;
 }
 let busy=false,PT=[],SK=null;
 const tm=(f,ms)=>{PT.push(setTimeout(f,ms))};
@@ -1001,25 +1072,29 @@ function pull(n,sup){
     const p=sup?rollS():roll(),isNew=!hasP(p[0]);
     if(!S.owned[p[0]]){S.balls[p[0]]=BALLR[p[2]];(S.when=S.when||{})[p[0]]=Date.now()}
     S.owned[p[0]]=(S.owned[p[0]]||0)+1;S.pulls++;
-    const r=isNew?0:REF[p[2]];back+=r;res.push([p,isNew,r]);
+    const sh=Math.random()<(sup?SHINY_S:SHINY_G);if(sh){S.shiny=S.shiny||{};S.shiny[p[0]]=(S.shiny[p[0]]||0)+1;qEv("shiny")}
+    const r=isNew?0:REF[p[2]];back+=r;res.push([p,isNew,r,sh]);
   }
   qEv("pull",n);if(sup)qEv("spull",n);const nn=res.filter(x=>x[1]).length;if(nn)qEv("new",nn);
   S.t+=back;save();render();
   const RC={C:"#fff",R:"#7fb6ff",E:"#d3a2ff",L:"#ffd15c"};
   const best=res.reduce((a,x)=>"CREL".indexOf(x[0][2])>"CREL".indexOf(a)?x[0][2]:a,"C");
-  const b=$("ball");b.style.opacity=1;b.className="ball "+best;void b.offsetWidth;b.classList.add("shake");
-  if(n>1){b.style.display="none";$("out").innerHTML=res.map(x=>'<div class="slot"><div class="ball mini '+x[0][2]+' shake"></div></div>').join("")}else b.style.display="";
-  const cards=res.map(x=>cardHTML(x[0],x[1],x[2],n===1));
-  const end=()=>{PT.forEach(clearTimeout);PT=[];SK=null;$("skip").hidden=true;$("msg").textContent=(best==="L"?"¡LEGENDARIO! ":best==="E"?"¡Épico! ":"")+(back?"Repetidos devueltos: +"+back+" 🎟️":"");busy=false;render()};
+  const b=$("ball");b.style.opacity=1;b.className="ball C";void b.offsetWidth;b.classList.add("shake");
+  if(n>1){b.style.display="none";$("out").innerHTML=res.map(x=>'<div class="slot"><div class="ball mini C shake"></div></div>').join("")}else b.style.display="";
+  const cards=res.map(x=>cardHTML(x[0],x[1],x[2],n===1,x[3])),anySh=res.some(x=>x[3]);
+  const end=()=>{PT.forEach(clearTimeout);PT=[];SK=null;$("skip").hidden=true;$("msg").textContent=(anySh?"✨ ¡VARIOCOLOR! ":"")+(best==="L"?"¡LEGENDARIO! ":best==="E"?"¡Épico! ":"")+(back?"Repetidos devueltos: +"+back+" 🎟️":"");busy=false;render()};
   SK=()=>{b.style.opacity=.35;$("out").classList.add("nox");if(n===1)$("out").innerHTML=cards[0];else document.querySelectorAll(".slot").forEach((e,i)=>{e.innerHTML=cards[i]});end()};
   $("skip").hidden=!O.skip||!!O.askip;
   if(O.askip){SK();return}
   const flash=c=>{const f=$("flash");f.style.background="radial-gradient(circle,"+c+",transparent 70%)";f.classList.remove("go");void f.offsetWidth;f.classList.add("go")};
+  const lvl="CREL".indexOf(best),up=k=>{const L=n===1?[b]:[...document.querySelectorAll(".slot .ball")];L.forEach((e,i)=>{if(n===1||"CREL".indexOf(res[i][0][2])>="CREL".indexOf(k)){e.className="ball "+(n===1?"":"mini ")+k;void e.offsetWidth;e.classList.add("shake")}})};
+  [["R",480],["E",900],["L",1320]].forEach((q,j)=>{if(lvl>=j+1)tm(()=>{up(q[0]);snd(j?"buff":"ui");if(j){flash(RC[q[0]])}if(q[0]==="L"){snd("lvl");$("stage").animate([{transform:"translate(0,0)"},{transform:"translate(-6px,2px)"},{transform:"translate(6px,-2px)"},{transform:"translate(0,0)"}],{duration:420})}},q[1])});
+  const rev=(n===1?700:900)+[0,380,800,1220][lvl];
   tm(()=>{
-    flash(RC[best]);b.style.opacity=.35;
-    if(n===1){$("out").innerHTML=cards[0];tm(end,300)}
-    else{const sl=document.querySelectorAll(".slot");res.forEach((x,i)=>tm(()=>{sl[i].innerHTML=cards[i];if("CREL".indexOf(x[0][2])>1)flash(RC[x[0][2]])},i*350));tm(end,n*350+200)}
-  },n===1?700:900);
+    flash(RC[best]);b.style.opacity=.35;if(n===1&&lvl>=2)cry(res[0][0][0]);
+    if(n===1){$("out").innerHTML=cards[0];if(anySh){snd("lvl");flash("#fff6a0")}tm(end,300)}
+    else{const sl=document.querySelectorAll(".slot");res.forEach((x,i)=>tm(()=>{sl[i].innerHTML=cards[i];if(x[3]){snd("lvl");flash("#fff6a0")}else if("CREL".indexOf(x[0][2])>1)flash(RC[x[0][2]])},i*350));tm(end,n*350+200)}
+  },rev);
 }
 $("skip").onclick=()=>{if(SK)SK()};
 $("p1").onclick=()=>pull(1);
@@ -1028,7 +1103,27 @@ $("ps").onclick=()=>pull(1,true);
 $("ps10").onclick=()=>pull(10,true);
 let cd=false;
 $("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");if(S.clicks%10===0)save();render()};
-$("daily").onclick=()=>{if(S.daily===today())return;S.daily=today();const gf=gift();S.t+=gf;S.dg=(S.dg||0)+1;qEv("daily");save();render();$("msg").textContent="¡+"+gf+" 🎟️ de regalo diario! Mañana será mayor."};
+// racha de dias seguidos: premios extra que crecen (cada 7 dias un Caramelo Raro, el dia 30 una Master Ball) y el ciclo vuelve a empezar
+const yday=()=>new Date(Date.now()-864e5).toISOString().slice(0,10);
+const STRK_W=[{pb:3},{pot:2},{sb:5},{eter:2},{ub:2},{hpot:2},{cand:1}];
+const strkRw=d=>{const c=((d-1)%30)+1;return c===30?{mb:1,cand:2}:c===28?{cand:2,evo:1}:c===21?{cand:2,ub:3}:c===14?{cand:1,ub:3,evo:1}:STRK_W[(c-1)%7]};
+const strkNow=()=>S.sk&&(S.sk.last===today()||S.sk.last===yday())?S.sk.n:0;
+let _sk="";
+function strkUI(){
+  const n=strkNow(),claimed=S.daily===today(),nx=n+(claimed?1:1),key=n+":"+claimed+":"+(S.sk&&S.sk.best);if(key===_sk)return;_sk=key;
+  const cell=d=>{const r=strkRw(d),big=d%7===0||((d-1)%30)+1===30;return '<div class="skd'+(d===nx&&!claimed?' now':'')+(big?' big':'')+'"><small>Día '+d+'</small><span>'+Object.keys(r).map(k=>itemIco(k==="evo"?"fire-stone":k,22)+(r[k]>1?'<b>×'+r[k]+'</b>':'')).join("")+'</span></div>'};
+  $("strk").innerHTML='<div class="skh"><b>🔥 Racha: '+n+' día'+(n===1?"":"s")+'</b><small class="mut">'+(claimed?"¡Hecho por hoy! Vuelve mañana para el día "+(n+1)+".":n>0?"¡Reclama hoy para no perder tu racha!":"Empieza tu racha reclamando el regalo.")+(S.sk&&S.sk.best?" · Mejor racha: "+S.sk.best:"")+'</small></div><div class="skrow">'+[0,1,2,3,4,5,6].map(i=>cell(nx+i)).join("")+'</div>';
+}
+$("daily").onclick=()=>{
+  if(S.daily===today())return;
+  S.sk=S.sk||{n:0};S.sk.n=S.sk.last===yday()?S.sk.n+1:1;S.sk.last=today();S.sk.best=Math.max(S.sk.best||0,S.sk.n);
+  S.daily=today();const gf=gift();S.t+=gf;S.dg=(S.dg||0)+1;qEv("daily");
+  const rw=strkRw(S.sk.n),got=[];
+  Object.keys(rw).forEach(k=>{let id=k;if(k==="evo"){const ev=ITEMS.filter(i=>i[7]==="evo"&&/stone/.test(i[0]));id=ev[Math.floor(Math.random()*ev.length)][0]}S.bag[id]=(S.bag[id]||0)+rw[k];got.push(rw[k]+" "+IN(id))});
+  save();render();snd("win");
+  $("msg").textContent="¡+"+fmt(gf)+" 🎟️ de regalo diario! Mañana será mayor.";
+  toast("🔥 ¡Racha de "+S.sk.n+" día"+(S.sk.n===1?"":"s")+"! +"+fmt(gf)+" 🎟️ y "+got.join(", "));
+};
 function newGame(prs,seed){
   const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp,tr:S.tr,gid:S.gid};
   S={g:[0,0,0,0,0],cl:0,lt:Date.now(),lv:{},ab:{},balls:{},mv:{},hp:{},ofd:{},when:{},team:["","","","","",""],sets:[],lg:null,lgDone:{},bag:{pot:3,spot:0,hpot:0,mpot:0,rev:1,mrev:0,pb:5,sb:0,ub:0,mb:0},t:3+100000*prs,last:Date.now(),owned:{},pity:0,daily:"",pulls:0};
@@ -1623,7 +1718,7 @@ const beWho=(i,n)=>B&&B.who?B.who(i,n):n;
 const snapMon=(sn,i)=>B.E.sd[i].t[sn.ai[i]];
 function setSpr(i,sn){
   const sl=B.SL[i];if(!sl)return;const m=snapMon(sn||beSnap(B.E),i),e=$(sl.sp);
-  e.innerHTML=ico(m.p,92,sl.back);e.className="spr";e.style.transform="";e.style.filter="drop-shadow(0 0 12px "+GLW[m.p[2]]+")";
+  e.innerHTML=ico(m.p,92,sl.back,m.sh);e.className="spr";e.style.transform="";e.style.filter="drop-shadow(0 0 12px "+GLW[m.p[2]]+")";
 }
 function bePaint(sn){
   if(!B||!B.SL)return;sn=sn||beSnap(B.E);B.snap=sn;
@@ -1743,6 +1838,8 @@ async function popIn(sid,iid,fromRight){
   snd("open");const s=$(sid);s.style.opacity=1;
   if(O.intro){const p=pos(sid),w=mkfx("",p.x,p.y,10);w.style.cssText+=";width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:radial-gradient(circle,#fff,transparent 70%)";w.animate([{transform:"scale(.2)",opacity:1},{transform:"scale(1.6)",opacity:0}],{duration:450}).onfinish=()=>w.remove();s.animate([{scale:".1",filter:"brightness(5)"},{scale:"1",filter:"brightness(1)"}],{duration:450,easing:"ease-out"})}
   burst("✨",pos(sid),8,50,24);
+  {const im=$(sid).querySelector("img[data-n]");if(im)cry(im.dataset.n)}
+  if($(sid).querySelector(".shy")){snd("lvl");for(let k=0;k<3;k++)setTimeout(()=>{burst("✨",pos(sid),10,70,26);burst("⭐",pos(sid),6,45,18)},k*260)}
   if(iid){const i=$(iid);i.style.opacity=1;if(O.intro)i.animate([{translate:(fromRight?"260px":"-260px")+" 0"},{translate:"0 0"}],{duration:600,easing:"ease-out"})}
 }
 async function trainerSendOut(first,sid,iid,name,bid){
@@ -1798,9 +1895,10 @@ async function sIntro(){
   const op=beAct(B.E.sd[1]).p,me=beAct(B.E.sd[0]);
   if(B.trainer){await trainerEnter("i");snd("wild");await say("¡"+B.trainer+" te desafía!");await trainerSendOut(true)}
   else{
-    const os=$("osp"),oi=$("oi");os.style.opacity=1;oi.style.opacity=1;snd("wild");
+    const os=$("osp"),oi=$("oi");os.style.opacity=1;oi.style.opacity=1;snd("wild");cry(op[0]);
     if(O.intro){os.animate([{translate:"260px 0",filter:"brightness(0)"},{translate:"0 0",filter:"brightness(0)",offset:.8},{translate:"0 0",filter:"brightness(1)"}],{duration:900,easing:"ease-out"});oi.animate([{translate:"-260px 0"},{translate:"0 0"}],{duration:800,easing:"ease-out"})}
     await say("¡Un "+op[0]+" salvaje apareció!");
+    if(beAct(B.E.sd[1]).sh){snd("lvl");burst("✨",pos("osp"),12,80,28);await say("✨ ¡Es un Pokémon VARIOCOLOR! ¡No lo dejes escapar!")}
   }
   await playerThrow(me,"msp","mi");
 }
@@ -1868,6 +1966,8 @@ async function finish(res){
     for(const t of E.sd[0].t)if(t.played&&t.mh>0){if(await gainXp(t.p,amt))ups.push(t.p[0])}
     for(const n of ups){if(S.owned[n]&&evoLvReady(n).length)await evoPrompt(n,evoLvReady(n))}
     if(B.league&&res==="win")await leagueWin();
+    if(B.gym!=null&&res==="win")await gymWin(B.gym);
+    if(res==="win"||res==="cap"){const dm=E.sd[1].t.reduce((a,t)=>a+Math.max(0,t.mx-Math.max(0,t.mh)),0);gAccAdd("dmg",dm)}
   }
   save();render();updTeam();
   $("menu").innerHTML='<button data-k="9">Volver</button>';B.busy=false;
@@ -1932,7 +2032,8 @@ async function ball(id,it){
     const isNew=!hasP(o[0]);
     if(!S.owned[o[0]]){(S.balls=S.balls||{})[o[0]]=id;(S.when=S.when||{})[o[0]]=Date.now()}
     S.owned[o[0]]=(S.owned[o[0]]||0)+1;qEv("cap");if(isNew)qEv("new");
-    snd("capok");await say("¡Has capturado a "+o[0]+"!"+(isNew?" ¡Nuevo en tu Pokédex!":""));
+    if(m.sh){S.shiny=S.shiny||{};S.shiny[o[0]]=(S.shiny[o[0]]||0)+1;qEv("shiny")}
+    snd("capok");await say("¡Has capturado a "+(m.sh?"un "+o[0]+" ✨ variocolor":o[0])+"!"+(isNew?" ¡Nuevo en tu Pokédex!":""));
     return finish("cap");
   }
   sp.style.transform="";sp.style.filter="drop-shadow(0 0 12px "+GLW[o[2]]+")";snd("capfail");await say("¡"+o[0]+" se ha escapado de la bola!");
@@ -2001,6 +2102,7 @@ function evoApply(a,b){
   const isNew=!hasP(b);
   if(!S.owned[b]){(S.balls=S.balls||{})[b]=(S.balls&&S.balls[a])||BALLR[PM[b][2]];(S.when=S.when||{})[b]=Date.now()}
   S.owned[b]=(S.owned[b]||0)+1;if(isNew)qEv("new");
+  if(S.shiny&&S.shiny[a]>0){S.shiny[a]--;if(!S.shiny[a])delete S.shiny[a];S.shiny[b]=(S.shiny[b]||0)+1}
   if(!lb||lb.l<=la.l){
     S.lv[b]={l:la.l,x:la.x};S.mv[b]=(S.mv[a]||[]).slice();S.ml=S.ml||{};S.ml[b]=la.l-1;
     if(S.pp&&S.pp[a])S.pp[b]=Object.assign({},S.pp[a]);else if(S.pp)delete S.pp[b];
@@ -2207,6 +2309,7 @@ function leagueUI(){
     const L=LEAGUES[S.lg.li],k=S.lg.k;
     h+='<div class="lgnow"><b>🏟️ Torneo en curso: '+L.n+'</b><div>Ronda '+(k+1)+' de 5 · Rival: <b>'+(k===4?L.c[0]:L.e[k][0])+'</b></div><div class="lgdots">'+[0,1,2,3,4].map(i=>'<i class="'+(i<k?'ok':i===k?'cur':'')+'"></i>').join("")+'</div><div class="lgbtn"><button class="red" id="lgGo"'+(fcd?' disabled':'')+'>▶ Empezar combate</button><button class="alt" id="lgQuit"'+(fcd?' disabled':'')+'>Abandonar torneo</button></div><small class="mut">Los PS no se curan entre rondas: usa la Mochila o el Centro Pokémon antes de empezar.</small></div>';
   }
+  if(!lgUnlocked())h+='<div class="lgnow"><b>🔒 Liga bloqueada</b><small class="mut">Consigue las 8 medallas en los Gimnasios para poder desafiar a la Liga. Llevas '+medCount()+' de 8.</small></div>';
   h+='<div class="lggrid">'+LEAGUES.map((L,i)=>'<div class="lgc"><b>🏆 '+L.n+'</b><small class="mut">'+((S.lgDone&&S.lgDone[i])?'Campeón ×'+S.lgDone[i]:'Sin completar')+'</small><button data-lg="'+i+'"'+((S.lg||fcd)?' disabled':'')+'>Desafiar</button></div>').join("")+'</div><small id="lgMsg" class="mut"></small>';
   $("lgBox").innerHTML=h;
 }
@@ -2214,6 +2317,7 @@ $("lgBox").addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
   if(b.dataset.lg!==undefined){
     if(!(S.team||[]).some(n=>n&&S.owned[n]&&S.hp[n]!==0)){$("lgMsg").textContent="Necesitas un equipo con al menos un Pokémon con PS.";return}
+    if(!lgUnlocked()){$("lgMsg").textContent="🔒 Necesitas las 8 medallas de los Gimnasios para entrar en la Liga Pokémon.";return}
     S.lg={li:+b.dataset.lg,k:0};save();_lk="";leagueUI();return;
   }
   if(b.id==="lgQuit"){S.lg=null;save();_lk="";leagueUI();return}
@@ -2256,7 +2360,7 @@ async function startBattle(cfg){
   const ok=names.some(n=>S.hp[n]!==0);if(!ok){updTeam();return}
   fcd=true;$("fgo").disabled=true;
   try{$("batP").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}
-  const team=names.map(n=>{const ids=moveIds(n);return beMon(PM[n],lvd(n).l,S.hp[n],ids,ids.map(id=>ppCur(n,id)))});
+  const team=names.map(n=>{const ids=moveIds(n),m=beMon(PM[n],lvd(n).l,S.hp[n],ids,ids.map(id=>ppCur(n,id)));m.sh=S.shiny&&S.shiny[n]>0?1:0;return m});
   const lead=team.find(t=>t.mh>0).l;
   let eteam,trainer=null,league=null,tsrc=null;
   if(cfg&&cfg.eteam){eteam=cfg.eteam;trainer=cfg.trainer;league=cfg.league||null;tsrc=cfg.tsrc}
@@ -2264,16 +2368,16 @@ async function startBattle(cfg){
     const tr=TRAINERS[Math.floor(Math.random()*TRAINERS.length)];trainer=tr[0];tsrc={k:tr[3],n:tr[0]};
     eteam=tr[1].filter(n=>PM[n]).map((n,i)=>mkEnemy(PM[n],clampL(lead+Math.floor(Math.random()*6)-3+tr[2]+i)));
   }else{
-    const x=Math.random()*100,r=x<2?"L":x<8?"E":x<30?"R":"C",pool=P.filter(p=>p[2]===r),op=pool[Math.floor(Math.random()*pool.length)];
-    eteam=[mkEnemy(op,clampL(lead+Math.floor(Math.random()*5)-2+WW[r]-1))];
+    const x=Math.random()*100,r=x<2?"L":x<8?"E":x<30?"R":"C",op=wildPick(r);
+    eteam=[mkEnemy(op,clampL(lead+Math.floor(Math.random()*5)-2+WW[r]-1))];if(Math.random()<SHINY_W)eteam[0].sh=1;
   }
   const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);
-  B={mode:"s",E:E,me:0,SL:[SL_ME,SL_OP],trainer:trainer,tsrc:tsrc,league:league,xpPool:0,busy:true,choose:null,item:null,showOpp:!!trainer,
+  B={mode:"s",E:E,me:0,SL:[SL_ME,SL_OP],trainer:trainer,tsrc:tsrc,league:league,gym:cfg&&cfg.gym!=null?cfg.gym:null,zone:cfg&&cfg.eteam?null:zoneCur(),xpPool:0,busy:true,choose:null,item:null,showOpp:!!trainer,
     who:(i,n)=>i===0?n:(trainer?n+" de "+trainer:n+" salvaje"),mine:i=>i===0,onSend:sSend};
   $("fsel").hidden=true;$("arena").hidden=false;arenaReset();
   $("hlpp").hidden=true;$("otn").textContent=trainer?"👤 "+trainer:"";
   if(O.bigmode&&!bigMode)bigSet(O.bigmode);
-  const sn=beSnap(E);setSpr(0,sn);setSpr(1,sn);bePaint(sn);setScene($("bscene"),envOf(beAct(E.sd[1]).p[1]));xpBar();$("menu").innerHTML="";$("fmsg").textContent="";
+  const sn=beSnap(E);setSpr(0,sn);setSpr(1,sn);bePaint(sn);setScene($("bscene"),B.zone&&!trainer?ZONES[B.zone].env:envOf(beAct(E.sd[1]).p[1]));xpBar();$("menu").innerHTML="";$("fmsg").textContent="";
   $("osp").style.opacity=0;$("msp").style.opacity=0;$("oi").style.opacity=0;$("mi").style.opacity=0;
   await sIntro();
   for(const t of E.sd[0].t){await offer(t.p);const ids=moveIds(t.p[0]);t.m=ids.map(MVI);t.pp=ids.map(id=>ppCur(t.p[0],id))}
@@ -2570,9 +2674,9 @@ const pvClean=t=>Array.from(String(t==null?"":t).replace(/[\u0000-\u001F\u007F-\
 const PVP_CAP=5000000;
 const pvDay=()=>{const d=today();if(!S.pvd||S.pvd.d!==d)S.pvd={d:d,t:0};return S.pvd};
 const pvHash=str=>{let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
-const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,m:moveIds(n).slice()}));
+const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,m:moveIds(n).slice(),sh:S.shiny&&S.shiny[n]>0?1:0}));
 function pvOkTeam(t){return Array.isArray(t)&&t.length>=1&&t.length<=6&&t.every(x=>x&&typeof x.n==="string"&&PM[x.n]&&Number.isInteger(x.l)&&x.l>=1&&x.l<=100&&Array.isArray(x.m)&&x.m.length>=1&&x.m.length<=4&&x.m.every(id=>typeof id==="string"&&MVD[id])&&new Set(x.m).size===x.m.length)&&new Set(t.map(x=>x.n)).size===t.length}
-const pvMk=team=>team.map(x=>beMon(PM[x.n],x.l,null,x.m));
+const pvMk=team=>team.map(x=>{const m=beMon(PM[x.n],x.l,null,x.m);m.sh=x.sh?1:0;return m});
 const gdBadge=g=>g&&typeof g==="object"&&g.t?'<span class="gtag" title="Gremio '+esc(g.t)+'">'+esc(String(g.i||"🛡️").slice(0,4))+' '+esc(String(g.t).slice(0,4))+'</span>':"";
 // ---- lobby ----
 const pvMe=()=>PR&&PR.peers().find(p=>p.sameTab);
@@ -2606,7 +2710,7 @@ function pvRender(){
   if(PV.st==="idle")inc.inv.forEach(p=>{h+='<div class="lgnow"><b>👥 '+esc(pvClean(p.presence.pvp.n))+' te invita a su sala 2 vs 2</b><div class="lgbtn"><button class="red" data-r2inv="'+esc(p.presence.pvp.inv.code)+'"'+(fcd?' disabled':'')+'>Unirse a la sala '+esc(p.presence.pvp.inv.code)+'</button></div></div>'});
   if(PV.st==="wait"){const o=PV.ch&&others.find(p=>p.peer===PV.ch.to);h+='<div class="lgnow"><b>Reto enviado a '+esc(o?pvClean(o.presence.pvp.n):"otro jugador")+'…</b><small class="mut">Esperando respuesta (30 s).</small><div class="lgbtn"><button class="alt" data-pvcancel="1">Cancelar</button></div></div>'}
   $("pvIn").innerHTML=h;
-  $("pvList").innerHTML=others.length?others.map(p=>{const v=p.presence.pvp,busy=v.st==="duel",fr=isFriend(p.peer);return '<div class="pvrow"><span class="pvav">'+trImg(trDec(v.tr),"f","i")+'</span><b>'+esc(pvClean(v.n))+(v.prs?' 🌟'+(v.prs|0):'')+(fr?' <small title="Amigo">👥</small>':'')+' '+gdBadge(v.gd)+'</b><span class="pvtm">'+(Array.isArray(v.tm)?v.tm.filter(x=>x&&PM[x.n]).slice(0,6).map(x=>'<span title="'+esc(x.n)+' Nv'+(+x.l||1)+'">'+ico(PM[x.n],26)+'</span>').join(""):"")+'</span><small class="mut">'+(busy?"En duelo":v.st==="wait"?"Retando…":v.st==="room"?"En sala 2 vs 2":"Libre")+'</small>'+(fr||!window.FB?'':'<button class="alt" data-fradd="'+esc(pvClean(v.n))+'" title="Enviar solicitud de amistad">+👥</button>')+'<button data-pvch="'+esc(p.peer)+'"'+((PV.st!=="idle"||busy||v.st!=="idle"||!tm.length||fcd)?' disabled':'')+'>⚔️ Retar</button></div>'}).join(""):'<small class="mut">Ahora mismo no hay otros jugadores. Comparte el enlace de la página para que alguien se conecte.</small>';
+  $("pvList").innerHTML=others.length?others.map(p=>{const v=p.presence.pvp,busy=v.st==="duel",fr=isFriend(p.peer);return '<div class="pvrow"><span class="pvav">'+trImg(trDec(v.tr),"f","i")+'</span><b class="plink" data-prof="'+esc(p.peer)+'">'+esc(pvClean(v.n))+(v.prs?' 🌟'+(v.prs|0):'')+(fr?' <small title="Amigo">👥</small>':'')+' '+gdBadge(v.gd)+'</b><span class="pvtm">'+(Array.isArray(v.tm)?v.tm.filter(x=>x&&PM[x.n]).slice(0,6).map(x=>'<span title="'+esc(x.n)+' Nv'+(+x.l||1)+'">'+ico(PM[x.n],26)+'</span>').join(""):"")+'</span><small class="mut">'+(busy?"En duelo":v.st==="wait"?"Retando…":v.st==="room"?"En sala 2 vs 2":"Libre")+'</small>'+(fr||!window.FB?'':'<button class="alt" data-fradd="'+esc(pvClean(v.n))+'" title="Enviar solicitud de amistad">+👥</button>')+'<button data-pvch="'+esc(p.peer)+'"'+((PV.st!=="idle"||busy||v.st!=="idle"||!tm.length||fcd)?' disabled':'')+'>⚔️ Retar</button></div>'}).join(""):'<small class="mut">Ahora mismo no hay otros jugadores. Comparte el enlace de la página para que alguien se conecte.</small>';
   if(PV.st==="wait"&&PV.ch&&me){
     const acc=others.find(p=>{const o=p.presence.pvp.ok;return o&&o.from===me.peer&&o.room===PV.ch.room});
     const rej=others.find(p=>{const n=p.presence.pvp.no;return n&&n.from===me.peer&&n.room===PV.ch.room&&Date.now()-(n.t||0)<10000});
@@ -2734,10 +2838,10 @@ function pvEnd(r){
   let txt;
   if(win===true){
     const rw0=200000+Math.floor(Math.random()*300001),pd=pvDay(),rw=Math.min(rw0,Math.max(0,PVP_CAP-pd.t));
-    S.t+=rw;pd.t+=rw;S.pvp.w++;snd("win");
+    S.t+=rw;pd.t+=rw;S.pvp.w++;snd("win");seasonRes(true);
     txt=(r==="done"?"¡Victoria!":(r==="ff"?"El rival ha abandonado. ¡Victoria!":"El rival se ha desconectado. ¡Victoria!"))+(rw?" +"+fmt(rw)+" 🎟️":"")+(rw<rw0?(rw?" (has llegado al límite diario de "+fmt(PVP_CAP)+" 🎟️ en PVP)":" Ya has llegado al límite diario de "+fmt(PVP_CAP)+" 🎟️ ganados en PVP: hoy no recibes más tickets por duelos."):"");
   }
-  else if(win===false){S.pvp.l++;snd("lose");txt=r==="self"?"Has abandonado el duelo.":"Derrota. ¡Suerte en la próxima!"}
+  else if(win===false){S.pvp.l++;seasonRes(false);snd("lose");txt=r==="self"?"Has abandonado el duelo.":"Derrota. ¡Suerte en la próxima!"}
   else txt="El rival no ha llegado a conectarse al duelo.";
   if(win!==null){qEv("pvp");if(win)qEv("pvpwin")}
   save();
@@ -2999,9 +3103,9 @@ function dvEnd(w){
   if(w==="D"){txt="¡Empate! Los dos equipos se han quedado sin Pokémon a la vez."}
   else if(w===mySide){
     const rw0=200000+Math.floor(Math.random()*300001),pd=pvDay(),rw=Math.min(rw0,Math.max(0,PVP_CAP-pd.t));
-    S.t+=rw;pd.t+=rw;S.pvp.w++;snd("win");qEv("pvp");qEv("pvpwin");
+    S.t+=rw;pd.t+=rw;S.pvp.w++;seasonRes(true);snd("win");qEv("pvp");qEv("pvpwin");
     txt="¡Vuestro equipo ha ganado el combate 2 vs 2!"+(rw?" +"+fmt(rw)+" 🎟️":"")+(rw<rw0?(rw?" (has llegado al límite diario de "+fmt(PVP_CAP)+" 🎟️ en PVP)":" Ya has llegado al límite diario de "+fmt(PVP_CAP)+" 🎟️ en PVP."):"");
-  }else{S.pvp.l++;snd("lose");qEv("pvp");txt="Vuestro equipo ha perdido el combate 2 vs 2. ¡Suerte en la próxima!"}
+  }else{S.pvp.l++;seasonRes(false);snd("lose");qEv("pvp");txt="Vuestro equipo ha perdido el combate 2 vs 2. ¡Suerte en la próxima!"}
   save();
   $("fmsg").textContent=txt;r._m="";$("menu").innerHTML='<button data-dv="exit">Volver al lobby</button>';
   clearInterval(r.iv);
@@ -3057,11 +3161,11 @@ function frUI(){
   h+=ids.length?'<div class="frl">'+ids.map(u=>{const f=FR.l[u],o=on[u],n=o?pvClean(o.n):pvClean(f.n);
     const st=o?(o.st==="duel"?"🟠 En un duelo":o.st==="room"?"🟠 En una sala 2vs2":o.st==="wait"?"🟠 Retando":"🟢 Conectado"):"⚫ Desconectado";
     const canDuel=o&&o.st==="idle"&&PV.st==="idle"&&!fcd&&!R2&&pvTeamData().length,canInv=o&&R2&&R2.ph==="lobby";
-    return '<div class="pvrow">'+(o?'<span class="pvav">'+trImg(trDec(o.tr),"f","i")+'</span>':'<span class="pvav off">👤</span>')+'<b>'+esc(n)+' '+gdBadge(o&&o.gd)+'</b><small class="mut" style="flex:1">'+st+'</small>'+
+    return '<div class="pvrow">'+(o?'<span class="pvav">'+trImg(trDec(o.tr),"f","i")+'</span>':'<span class="pvav off">👤</span>')+'<b class="plink" data-prof="'+esc(u)+'">'+esc(n)+' '+gdBadge(o&&o.gd)+'</b><small class="mut" style="flex:1">'+st+'</small>'+
       (canInv?'<button data-frinv="'+esc(u)+'">'+(PV.inv&&PV.inv.to.includes(u)?'✅ Invitado':'📨 Invitar a la sala')+'</button>':'')+
       '<button data-frch="'+esc(u)+'"'+(canDuel?'':' disabled')+' title="Retar a un duelo 1 vs 1">⚔️ Retar</button>'+
       '<button data-fr2="'+esc(u)+'"'+(o&&!R2&&!fcd&&PV.st==="idle"?'':' disabled')+' title="Crear una sala 2 vs 2 e invitarle">👥 2vs2</button>'+
-      '<button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
+      '<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Proponer un intercambio">🔄</button><button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
   box.innerHTML=h;$("frCnt").textContent=ids.length+" amigo"+(ids.length===1?"":"s")+" · "+ids.filter(u=>on[u]).length+" conectados";
   const n=FR.inc.length;if($("navfr"))$("navfr").hidden=!n,$("navfr").textContent=n;
 }
@@ -3119,8 +3223,9 @@ function gUI(force){
   if(g){
     const lead=g.owner===me,mem=Object.keys(g.members||{}).sort((a,b)=>(g.owner===b)-(g.owner===a)||(on[b]?1:0)-(on[a]?1:0));
     h+='<div class="ghead">'+gFlag(g.fl,g.icon,110)+'<div><b class="gname">'+esc(g.name)+' <span class="gtag">['+esc(g.tag)+']</span></b><small class="mut">'+esc(g.desc||"")+'</small><small>'+mem.length+' / '+GUILD_MAX+' miembros · '+(g.open?"Abierto":"Con solicitud")+'</small></div></div>';
+    h+=gBossHTML(g);
     if(GS.editing)h+=gEditor(true);
-    h+='<div class="frl">'+mem.map(u=>{const m=g.members[u];return '<div class="pvrow"><b>'+(g.owner===u?"👑 ":"")+esc(pvClean(m.n))+(u===me?" (tú)":"")+'</b><small class="mut" style="flex:1">'+(on[u]||u===me?"🟢 Conectado":"⚫ Desconectado")+'</small>'+(lead&&u!==me?'<button class="alt" data-gk="'+esc(u)+'">Expulsar</button><button class="alt" data-gt="'+esc(u)+'">👑 Hacer líder</button>':'')+(u!==me&&!isFriend(u)?'<button class="alt" data-gfr="'+esc(pvClean(m.n))+'">+👥</button>':'')+'</div>'}).join("")+'</div>';
+    h+='<div class="frl">'+mem.map(u=>{const m=g.members[u];return '<div class="pvrow"><b class="plink" data-prof="'+esc(u)+'">'+(g.owner===u?"👑 ":"")+esc(pvClean(m.n))+(u===me?" (tú)":"")+'</b><small class="mut" style="flex:1">'+(on[u]||u===me?"🟢 Conectado":"⚫ Desconectado")+'</small>'+(lead&&u!==me?'<button class="alt" data-gk="'+esc(u)+'">Expulsar</button><button class="alt" data-gt="'+esc(u)+'">👑 Hacer líder</button>':'')+(u!==me&&!isFriend(u)?'<button class="alt" data-gfr="'+esc(pvClean(m.n))+'">+👥</button>':'')+'</div>'}).join("")+'</div>';
     const rq=Object.keys(g.req||{});
     if(lead&&rq.length)h+='<div class="lgnow"><b>📩 Solicitudes para unirse</b>'+rq.map(u=>'<div class="pvrow"><b>'+esc(pvClean(g.req[u].n))+'</b><span style="flex:1"></span><button data-gacc="'+esc(u)+'"'+(mem.length>=GUILD_MAX?" disabled":"")+'>Aceptar</button><button class="alt" data-grej="'+esc(u)+'">Rechazar</button></div>').join("")+'</div>';
     h+='<div class="sets-row" style="margin-top:10px">'+(lead?'<button id="gdEdit" class="alt">🎨 Personalizar</button><button id="gdDis" class="alt">💥 Disolver gremio</button>':'<button id="gdLeave" class="alt">🚪 Salir del gremio</button>')+'</div>';
@@ -3191,7 +3296,7 @@ function supUI(){
 }
 async function pvInit0(){
   $("pvNick").value=pvNick();
-  if(window.FB){try{window.FB.frInit(frState)}catch(e){}if(S.gid)gWatch(S.gid);gRefresh()}
+  if(window.FB){try{window.FB.frInit(frState);window.FB.trInit(trState)}catch(e){}if(S.gid)gWatch(S.gid);gRefresh()}
   pvRender();nickInit();
   try{
     if(!window.claude||!window.claude.use)return;
@@ -3319,7 +3424,7 @@ function sortDex(a){
 }
 function fok(p){const r=$("fr").value,t=$("ft").value,s=$("fs").value,c=S.owned[p[0]]||0;if($("fd").value!==""){const w=S.when&&S.when[p[0]],dv=$("fd").value,lim=dv==="0"?new Date().setHours(0,0,0,0):Date.now()-dv*864e5;if(!(w&&w>=lim))return false}
   if($("fc").value&&c<+$("fc").value)return false;
-  return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?hasP(p[0]):s==="0"?!hasP(p[0]):c>1))}
+  return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?hasP(p[0]):s==="0"?!hasP(p[0]):s==="3"?!!(S.shiny&&S.shiny[p[0]]):c>1))}
 $("ft").innerHTML='<option value="">Todos los tipos</option>'+Object.keys(TIPO).map(k=>'<option value="'+k+'">'+TIPO[k]+'</option>').join("");
 $("ft2").innerHTML=$("ft").innerHTML;
 const GN=["Kanto","Johto","Hoenn","Sinnoh","Teselia","Kalos","Alola","Galar","Paldea","Formas especiales"],GO='<option value="">Todas las generaciones</option>'+GN.map((n,i)=>'<option value="'+(i+1)+'">'+(i<9?'Gen '+(i+1)+' · ':'')+n+'</option>').join("");$("fg").innerHTML=GO;$("fg2").innerHTML=GO;
@@ -3543,7 +3648,7 @@ function dmEnsure(){
   return S.dm;
 }
 function qEv(ev,n){
-  n=n||1;const st=stt();st[ev]=(st[ev]||0)+n;
+  n=n||1;if(window.gAccEv)window.gAccEv(ev,n);const st=stt();st[ev]=(st[ev]||0)+n;
   dmEnsure().l.forEach(m=>{const d=MISM[m.id];if(d[1]!==ev||m.c||m.p>=d[2])return;m.p=Math.min(d[2],m.p+n);if(m.p>=d[2])toast("✅ Misión completada: "+d[3]+". ¡Reclama tu premio!")});
 }
 // dificultad 0..5 -> recompensa (cuanto más difícil, mejor)
@@ -3574,6 +3679,12 @@ const ACH0=[
 ["dm","📅","Constancia","Completa {g} misiones diarias",()=>stt().dm||0,[[5,0],[30,1],[100,2],[365,4]]],
 ["rich","💰","Millonario","Ten {g} 🎟️ a la vez",()=>Math.max(stt().mt||0,S.t),[[1e6,0],[1e8,2],[1e10,4]]],
 ["evo","🧬","Evolucionista","Evoluciona {g} Pokémon",()=>stt().evo||0,[[1,0],[10,1],[50,2],[200,3]]],
+["med","🏅","Medallista","Consigue {g} medallas de gimnasio",()=>medCount(),[[1,0],[4,1],[8,2]]],
+["trd","🔄","Comerciante","Haz {g} intercambios con amigos",()=>stt().trade||0,[[1,1],[10,3]],"x"],
+["gboss","🐲","Cazagigantes","Derrota {g} jefes de gremio",()=>stt().gboss||0,[[1,2],[10,4]],"x"],
+["ssnp","🏅","Gladiador","Consigue {g} puntos en una temporada PVP",()=>stt().ssnb||0,[[300,2],[1000,3],[2000,5]],"x"],
+["shy","✨","Cazador de variocolor","Consigue {g} Pokémon variocolor",()=>stt().shiny||0,[[1,3],[5,4],[20,5]],"x"],
+["strk","🔥","Racha imparable","Reclama el regalo diario {g} días seguidos",()=>(S.sk&&S.sk.best)||0,[[7,1],[30,3],[100,5]],"x"],
 ["jp","🎉","¡Qué suerte!","Consigue el premio gordo ({g} vez)",()=>S.jp||0,[[1,5]],"x"]];
 // A partir del prestigio 1 los logros se generan al azar (distintos en cada nivel de prestigio)
 const EPN=P.filter(p=>p[2]==="E").length,GNAME=["Kanto","Johto","Hoenn","Sinnoh","Teselia","Kalos","Alola","Galar","Paldea"];
@@ -3694,8 +3805,20 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T13:51",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T14:35",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
+"✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
+"🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
+"🏅 Gimnasios: consigue las 8 medallas para desbloquear zonas de exploración (Cueva, Mar, Volcán, Torre Fantasma...) y la Liga.",
+"🌍 Zonas de exploración: elige dónde combatir y encontrarás Pokémon de los tipos de esa zona.",
+"🏅 Temporadas PVP mensuales con rangos (de Bronce a Maestro) y premio al acabar el mes.",
+"🐲 Gremios: jefe semanal que derrotáis entre todos y misiones de gremio con premios.",
+"👤 Perfiles públicos: toca el nombre de un jugador para ver su entrenador, su equipo y sus estadísticas.",
+"🔄 Intercambios entre amigos (y los Pokémon que evolucionan por intercambio, ¡evolucionan!).",
+"🎃 Eventos de temporada (ahora: Halloween, con más Pokémon Fantasma y Siniestro) y Pokémon de la semana.",
+"🎰 Las cápsulas cambian de color antes de abrirse según la rareza: ¡suspense!",
+"🔊 Gritos originales de los Pokémon al salir a combate y al tocar su carta en la Pokédex.",
+"📊 Clasificación de los mejores entrenadores: Pokédex, PVP, combates, variocolor, prestigio y gremios.",
 "🎞️ Los Pokémon ahora tienen sprites originales ANIMADOS de la saga, de frente y de espaldas en combate (con reserva automática si alguno no carga).",
 "⚔️ Todos los Pokémon usan sus movimientos originales y los aprenden al subir de nivel. Hay estados (parálisis, sueño, veneno, quemaduras, congelación, confusión), cambios de características, golpes críticos y prioridad.",
 "✨ Efectos de los ataques mucho mejores, distintos para cada tipo y movimiento.",
@@ -3738,7 +3861,7 @@ function welcShow(){$("welc").hidden=false;try{$("welcOk").focus({preventScroll:
 $("welcOk").onclick=()=>{$("welc").hidden=true};
 function welcInit(){if(S.welc)return;if(clFresh())welcShow();S.welc=1;save()}
 // ================= accesos directos =================
-const NAV=[["🎯","Entrenar","farm"],["🎟️","Tickets gratis","earnP"],["🎰","Tiradas","stage"],["🛍️","Tienda de mejoras","shopP"],["📚","Pokedex","collP"],["⚔️","Combate","batP"],["🏆","Liga Pokémon","lgP"],["🌐","PVP online","pvpP"],["👥","Amigos","frP"],["🛡️","Gremios","gdP"],["🧑","Tu entrenador","trP"],["🏥","Centro Pokémon","healP"],["🎒","Mochila","bagU"],["🛒","Tienda de objetos","bagP"],["📅","Misiones","qP"],["🏅","Logros","achP"],["🌟","Prestigio","prsP"],["📰","Novedades","#news"],["💝","Apoyar","supP"],["💡","Sugerencias","sugP"],["❓","Cómo se juega","#welc"],["⚙️","Ajustes","#opt"]];
+const NAV=[["🎯","Entrenar","farm"],["🎟️","Tickets gratis","earnP"],["🎰","Tiradas","stage"],["🛍️","Tienda de mejoras","shopP"],["📚","Pokedex","collP"],["⚔️","Combate","batP"],["🏅","Gimnasios","gymP"],["🏆","Liga Pokémon","lgP"],["🌐","PVP online","pvpP"],["👥","Amigos","frP"],["🛡️","Gremios","gdP"],["🧑","Tu entrenador","trP"],["🏥","Centro Pokémon","healP"],["🎒","Mochila","bagU"],["🛒","Tienda de objetos","bagP"],["📅","Misiones","qP"],["🏅","Logros","achP"],["🌟","Prestigio","prsP"],["📊","Clasificación","rkP"],["📰","Novedades","#news"],["💝","Apoyar","supP"],["💡","Sugerencias","sugP"],["❓","Cómo se juega","#welc"],["⚙️","Ajustes","#opt"]];
 function navUI(){
   const dm=dmEnsure(),rq=dm.l.filter(m=>!m.c&&m.p>=MISM[m.id][2]).length,ra=ACHS().filter(achReady).length,cnt={qP:rq,achP:ra,frP:FR.inc.length,bagU:evoReadyList().length};
   $("navg").innerHTML=NAV.map(n=>{const el=n[2][0]==="#"?null:$(n[2]),off=el&&!el.offsetParent&&getComputedStyle(el).display==="none",c=cnt[n[2]]||0;return '<button data-go="'+n[2]+'"'+(off?' disabled title="Panel oculto en Ajustes"':'')+'><span>'+n[0]+'</span>'+n[1]+(c?'<i>'+c+'</i>':'')+'</button>'}).join("");
@@ -3759,6 +3882,231 @@ $("trOpts").addEventListener("click",e=>{const b=e.target.closest("button");if(!
 $("trRnd").onclick=()=>{S.tr=trRandom();save();trUI();pvPub();snd("ui")};
 $("trRst").onclick=()=>{S.tr=Object.assign({},TRDEF);save();trUI();pvPub()};
 $("trDemo").onclick=trDemo;
+// ================= clasificacion =================
+const RKC=[["dex","📚 Pokédex","registrados"],["pw","⚔️ PVP","victorias PVP"],["win","🎯 Combates","combates ganados"],["sh","✨ Variocolor","variocolor"],["ssn","🏅 Temporada PVP","puntos de temporada"],["prs","🌟 Prestigio","prestigio"],["guild","🛡️ Gremios","miembros"]];
+let RK={tab:"dex",cache:{},busy:false,err:""};
+window.rankData=()=>{if(typeof nickOk!=="function"||!nickOk()||!window.FB)return null;return{n:pvClean(pvNick()),tr:trEnc(myLook()),g:GS.doc?String(GS.doc.tag):"",gi:GS.doc?GS.doc.icon|0:0,dex:P.filter(p=>hasP(p[0])).length,pw:(S.pvp&&S.pvp.w)||0,win:stt().win||0,sh:shinyTotal(),prs:PRS(),med:medCount(),bs:(S.sk&&S.sk.best)||0,ach:Object.values(S.ach||{}).reduce((a,b)=>a+b,0),tm:(S.team||[]).filter(n=>n&&S.owned[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0})),...(seasonCheck(),S.ssn.w+S.ssn.l>0?{[ssnField()]:S.ssn.p}:{})}};
+async function rkLoad(force){
+  if(!window.FB||!window.FB.rankTop){rkUI();return}
+  const t=RK.tab,c=RK.cache[t];if(c&&!force&&Date.now()-c.at<120000){rkUI();return}
+  RK.busy=true;RK.err="";rkUI();
+  try{
+    if(t==="guild"){const l=await window.FB.gList();RK.cache[t]={at:Date.now(),rows:l.map(g=>({id:g.id,n:g.name,g:g.tag,gi:g.icon,v:g.n|0,fl:g.fl}))}}
+    else{const me=window.rankData();if(me)await window.FB.rankSave(me);const f=t==="ssn"?ssnField():t,r=await window.FB.rankTop(f,50);let pos=null;if(me&&me[f]!=null)try{pos=await window.FB.rankPos(f,me[f])}catch(e){}RK.cache[t]={at:Date.now(),rows:r.map(x=>Object.assign({},x,{v:x[f]|0})),pos:pos,mine:me?me[f]:null}}
+  }catch(e){RK.err=(e&&e.code)||"error"}
+  RK.busy=false;rkUI();
+}
+function rkUI(){
+  $("rkTabs").innerHTML=RKC.map(c=>'<button class="'+(RK.tab===c[0]?"on":"alt")+'" data-rk="'+c[0]+'">'+c[1]+'</button>').join("");
+  const box=$("rkBox");
+  if(!window.FB||!window.FB.rankTop){box.innerHTML='<small class="mut">Inicia sesión con tu cuenta para aparecer en la clasificación y verla.</small>';return}
+  if(RK.err){box.innerHTML='<small class="mut">No se pudo cargar la clasificación ('+esc(RK.err)+'). Si pone «permission-denied», añade en Firestore las reglas de «ranks».</small>';return}
+  const c=RK.cache[RK.tab];if(!c){box.innerHTML='<small class="mut">'+(RK.busy?"Cargando…":"Pulsa «Actualizar» para ver la clasificación.")+'</small>';return}
+  const lab=RKC.find(x=>x[0]===RK.tab)[2],me=window.FB.uid(),md=["🥇","🥈","🥉"];
+  box.innerHTML=(c.pos?'<div class="rkme">Tu posición: <b>#'+c.pos+'</b> · '+fmt(c.mine||0)+' '+lab+'</div>':'')+(c.rows.length?'<div class="frl">'+c.rows.map((r,i)=>'<div class="pvrow rkrow'+(r.id===me||(RK.tab==="guild"&&r.id===S.gid)?' rkmine':'')+'"><b class="rkpos">'+(md[i]||"#"+(i+1))+'</b>'+(RK.tab==="guild"?gFlag(r.fl,r.gi,40):'<span class="pvav">'+trImg(trDec(r.tr),"f","i")+'</span>')+'<b style="flex:1"'+(RK.tab==="guild"?'':' class="plink" data-prof="'+esc(r.id)+'"')+'>'+esc(RK.tab==="guild"?r.n:pvClean(r.n))+' '+(r.g?'<span class="gtag">'+esc(String(r.g).slice(0,4))+'</span>':'')+'</b><span class="rkv">'+fmt(r.v)+' <small>'+lab+'</small></span></div>').join("")+'</div>':'<small class="mut">Todavía no hay nadie en esta clasificación.</small>')+(RK.busy?'<small class="mut">Actualizando…</small>':'');
+}
+$("rkTabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!b.dataset.rk)return;RK.tab=b.dataset.rk;snd("ui");rkLoad(false)});
+$("rkRe").onclick=()=>rkLoad(true);
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(x=>x.isIntersecting)){io.disconnect();rkLoad(false)}});setTimeout(()=>io.observe($("rkP")),2000)}
+// ================= eventos de temporada y Pokémon de la semana =================
+const EVENTS=[{n:"🎃 Halloween",t:["ghost","dark"],a:[10,24],b:[11,2]},{n:"🎄 Navidad",t:["ice","fairy"],a:[12,20],b:[1,6]},{n:"💘 San Valentín",t:["fairy","psychic"],a:[2,10],b:[2,16]},{n:"🌸 Primavera",t:["grass","bug"],a:[3,20],b:[4,10]},{n:"☀️ Verano",t:["water","fire"],a:[7,15],b:[8,31]}];
+const MESES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+function evNow(){const d=new Date(),v=(d.getMonth()+1)*100+d.getDate();return EVENTS.find(e=>{const a=e.a[0]*100+e.a[1],b=e.b[0]*100+e.b[1];return a<=b?v>=a&&v<=b:(v>=a||v<=b)})||null}
+const weekKey=()=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+let _ft=null,_ftk="";
+function featured(){const k=weekKey();if(_ftk===k)return _ft;_ftk=k;const r=rngS(pvHash("feat"+k)),pool=P.filter(p=>(p[2]==="E"||p[2]==="R")&&p[3]<10);_ft=pool[Math.floor(r()*pool.length)];return _ft}
+function evBanUI(){
+  const ev=evNow(),f=featured(),b=$("evBan");if(!b)return;const key=(ev?ev.n:"")+f[0];if(b._k===key)return;b._k=key;
+  b.innerHTML=(ev?'<div class="evb ev"><b>'+ev.n+'</b> · Evento activo hasta el '+ev.b[1]+' '+MESES[ev.b[0]-1]+': más Pokémon de tipo '+ev.t.map(t=>EM[t]+" "+TIPO[t]).join(" y ")+' en tiradas y combates.</div>':'')+
+    '<div class="evb ft">'+ico(f,40)+'<span><b>⭐ Pokémon de la semana: '+esc(f[0])+'</b> '+STAR[f[2]]+'<br><small>Sale mucho más a menudo en las tiradas hasta el lunes.</small></span></div>';
+}
+// ================= zonas de exploración =================
+const ZONES={pra:{n:"🌾 Pradera",t:["normal","grass","bug","flying"],env:"grass",m:0},bos:{n:"🌲 Bosque",t:["grass","bug","poison","fairy"],env:"grass",m:0},cue:{n:"🪨 Cueva",t:["rock","ground","fighting","steel","dark"],env:"canyon",m:1},mar:{n:"🌊 Mar",t:["water","ice"],env:"water",m:2},ciu:{n:"🏙️ Ciudad",t:["electric","normal","psychic","steel"],env:"grass",m:3},vol:{n:"🌋 Volcán",t:["fire","rock","dragon"],env:"canyon",m:4},tor:{n:"🏚️ Torre Fantasma",t:["ghost","psychic","dark"],env:"night",m:5},nie:{n:"🏔️ Montaña Nevada",t:["ice","flying","dragon"],env:"ice",m:6}};
+const zoneCur=()=>S.zone&&ZONES[S.zone]&&medCount()>=ZONES[S.zone].m?S.zone:null;
+function wildPick(r){
+  let pool=P.filter(p=>p[2]===r);const z=zoneCur()?ZONES[zoneCur()]:null;
+  if(z&&Math.random()<.85){const zp=pool.filter(p=>z.t.includes(p[1]));if(zp.length)pool=zp}
+  const ev=evNow();if(ev&&Math.random()<.3){const ep=pool.filter(p=>ev.t.includes(p[1]));if(ep.length)pool=ep}
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function zoneUI(){
+  const s=$("zoneSel");if(!s)return;const mc=medCount(),key=mc+":"+S.zone;if(s._k===key)return;s._k=key;
+  s.innerHTML='<option value="">🎲 Zona al azar</option>'+Object.keys(ZONES).map(k=>{const z=ZONES[k],lk=mc<z.m;return '<option value="'+k+'"'+(lk?' disabled':'')+'>'+z.n+(lk?' 🔒 '+z.m+' medalla'+(z.m>1?'s':''):' · '+z.t.map(t=>TIPO[t]).join(", "))+'</option>'}).join("");
+  s.value=zoneCur()||"";
+}
+// ================= gimnasios y medallas =================
+const GYMS=[["Roca","rock",12],["Agua","water",18],["Eléctrico","electric",24],["Planta","grass",30],["Veneno","poison",36],["Psíquico","psychic",42],["Fuego","fire",48],["Tierra","ground",54]];
+const medCount=()=>Object.keys(S.med||{}).filter(k=>S.med[k]).length;
+const lgUnlocked=()=>medCount()>=8||Object.keys(S.lgDone||{}).length>0||!!S.lg;
+function gymTeam(i){
+  const g=GYMS[i],rng=rngS(1000+i*77),n=3+Math.floor(i/3),pool=P.filter(p=>p[1]===g[1]&&p[3]<10&&p[2]!=="L"),out=[];
+  for(let k=0;k<30&&out.length<n;k++){const p=pool[Math.floor(rng()*pool.length)];if(p&&!out.includes(p))out.push(p)}
+  out.sort((a,b)=>WW[a[2]]-WW[b[2]]);
+  const rm=S.med&&S.med[i]?Math.max(0,leadLevel()-g[2]):0;
+  return out.map((p,k)=>mkEnemy(p,clampL(g[2]+k*2-2+rm)));
+}
+function gymMedal(i,on,s){const g=GYMS[i];return '<span class="medal'+(on?' on':'')+'" style="--mc:'+TC[g[1]]+(s?';--ms:'+s+'px':'')+'">'+EM[g[1]]+'</span>'}
+async function gymWin(i){
+  const g=GYMS[i];S.med=S.med||{};
+  if(!S.med[i]){
+    S.med[i]=1;const rw={t:500000*(i+1),it:i%2?{cand:1}:{ub:3}};grant(rw);snd("lvl");
+    await say("¡Has conseguido la Medalla "+g[0]+"! ("+medCount()+"/8)");await say("Premio: "+rwTxt(rw)+".");
+    if(medCount()>=8)await say("¡Tienes las 8 medallas! Ya puedes desafiar a la Liga Pokémon.");
+    const nz=Object.values(ZONES).filter(z=>z.m===medCount());if(nz.length)await say("Nueva zona desbloqueada: "+nz.map(z=>z.n).join(", ")+".");
+  }else{const rw={t:150000*(i+1)};grant(rw);await say("Revancha ganada. Premio: "+rwTxt(rw)+".")}
+  save();
+}
+let _gyk="";
+function gymUI(){
+  const box=$("gymBox");if(!box)return;const key=JSON.stringify([S.med,fcd]);if(key===_gyk)return;_gyk=key;
+  box.innerHTML='<div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,S.med&&S.med[i])).join("")+'<b>'+medCount()+' / 8 medallas</b></div><div class="lggrid">'+GYMS.map((g,i)=>{const got=S.med&&S.med[i],open=i===0||(S.med&&S.med[i-1]);
+    return '<div class="lgc">'+gymMedal(i,got,34)+'<b>Gimnasio '+g[0]+'</b><small class="mut">'+EM[g[1]]+' Tipo '+TIPO[g[1]]+' · Nivel '+g[2]+'</small><button data-gym="'+i+'"'+(!open||fcd?' disabled':'')+'>'+(got?"🔁 Revancha":open?"⚔️ Desafiar":"🔒 Bloqueado")+'</button></div>'}).join("")+'</div><small id="gymMsg" class="mut"></small>';
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#gymBox button[data-gym]");if(!b)return;const i=+b.dataset.gym,g=GYMS[i];
+  if(!(S.team||[]).some(n=>n&&S.owned[n]&&S.hp[n]!==0)){$("gymMsg").textContent="Necesitas un equipo con al menos un Pokémon con PS.";return}
+  startBattle({eteam:gymTeam(i),trainer:"Líder del Gimnasio "+g[0],tsrc:{k:(LGSPR[g[1]]||LGSPR.normal)[i%2],n:"Líder "+g[0]},gym:i})});
+// ================= temporadas PVP con rangos =================
+const seasonKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
+const ssnField=()=>"s"+seasonKey().replace("-","");
+const TIERS=[[0,"🥉 Bronce"],[300,"🥈 Plata"],[600,"🥇 Oro"],[1000,"💠 Platino"],[1500,"💎 Diamante"],[2000,"👑 Maestro"]];
+const tierIdx=p=>{let t=0;TIERS.forEach((x,i)=>{if(p>=x[0])t=i});return t};
+const TIER_RW=[{t:200000},{t:500000,it:{ub:3}},{t:1000000,it:{cand:1,ub:5}},{t:2000000,it:{cand:2}},{t:4000000,it:{cand:3,mb:1}},{t:8000000,it:{cand:5,mb:2}}];
+function seasonCheck(){
+  const k=seasonKey();if(!S.ssn){S.ssn={k:k,p:0,w:0,l:0};return}
+  if(S.ssn.k!==k){const o=S.ssn,ti=tierIdx(o.p);if(o.w+o.l>0){const rw=TIER_RW[ti];grant(rw);setTimeout(()=>toast("🏁 Fin de la temporada PVP: quedaste en "+TIERS[ti][1]+". Premio: "+rwTxt(rw)),1500)}S.ssnH=(S.ssnH||[]).concat({k:o.k,p:o.p}).slice(-12);S.ssn={k:k,p:0,w:0,l:0};save()}
+}
+function seasonRes(win){seasonCheck();const s=S.ssn;if(win){s.w++;s.p+=25}else{s.l++;s.p=Math.max(0,s.p-15)}s.best=Math.max(s.best||0,s.p);stt().ssnb=Math.max(stt().ssnb||0,s.p);save()}
+let _ssk="";
+function seasonUI(){
+  const b=$("ssnBox");if(!b)return;seasonCheck();const s=S.ssn,ti=tierIdx(s.p),nx=TIERS[ti+1],d=new Date(),end=new Date(d.getFullYear(),d.getMonth()+1,1),left=Math.ceil((end-d)/864e5),key=JSON.stringify(s)+left;if(key===_ssk)return;_ssk=key;
+  b.innerHTML='<div class="ssn"><span class="tier t'+ti+'">'+TIERS[ti][1]+'</span><div style="flex:1;min-width:180px"><b>Temporada PVP '+MESES[d.getMonth()]+' '+d.getFullYear()+'</b> · '+s.p+' puntos · '+s.w+' V / '+s.l+' D<div class="bar"><i style="width:'+(nx?Math.min(100,(s.p-TIERS[ti][0])/(nx[0]-TIERS[ti][0])*100):100)+'%"></i></div><small class="mut">'+(nx?"Te faltan "+(nx[0]-s.p)+" puntos para "+nx[1]+". ":"¡Rango máximo! ")+'Victoria +25 · derrota −15 · quedan '+left+' día'+(left===1?"":"s")+'. Al acabar el mes recibes el premio de tu rango: '+esc(rwTxt(TIER_RW[ti]))+'.</small></div></div>';
+}
+// ================= jefe de gremio y misiones de gremio (semanales) =================
+const GB_HP=25000,GQ=[["cap","🔴 Capturar Pokémon",30],["win","⚔️ Ganar combates",60],["pull","🎰 Hacer tiradas",200]],GQ_RW={t:1000000,it:{cand:1}},GB_RW={t:25000000,it:{mb:3,cand:10,ppmax:2}};
+function gAccAdd(k,n){if(!S.gid||!n)return;const w=weekKey();S.gacc=S.gacc&&S.gacc.w===w?S.gacc:{w:w};S.gacc[k]=(S.gacc[k]||0)+n}
+window.gAccEv=(ev,n)=>{if(ev==="cap"||ev==="win"||ev==="pull")gAccAdd(ev,n||1)};
+function gBossFor(gid,w){const r=rngS(pvHash("boss"+gid+w)),pool=P.filter(p=>p[2]==="L"&&p[3]<10);return pool[Math.floor(r()*pool.length)][0]}
+async function gEnsureWeek(){
+  const g=GS.doc,w=weekKey();if(!g||!S.gid||g.bw===w)return;
+  const n=Math.max(1,Object.keys(g.members||{}).length);
+  await window.FB.gEdit(S.gid,{bw:w,bp:gBossFor(S.gid,w),bm:GB_HP*n,bh:GB_HP*n,bd:{},gm:{}});
+}
+window.gFlushHook=async()=>{
+  if(!S.gid||!S.gacc||!window.FB||!GS.doc)return;const w=weekKey(),a=S.gacc;if(a.w!==w){S.gacc={w:w};return}
+  const d={dmg:a.dmg||0,cap:a.cap||0,win:a.win||0,pull:a.pull||0};if(!d.dmg&&!d.cap&&!d.win&&!d.pull)return;
+  await gEnsureWeek();await window.FB.gContrib(S.gid,d);S.gacc={w:w};
+};
+function gBossHTML(g){
+  const w=weekKey(),me=window.FB.uid(),cur=g.bw===w,n=Math.max(1,Object.keys(g.members||{}).length);
+  const bp=cur?g.bp:gBossFor(S.gid,w),bm=cur?g.bm:GB_HP*n,bh=cur?Math.max(0,g.bh):bm,bd=cur?(g.bd||{}):{},gm=cur?(g.gm||{}):{},pend=S.gacc&&S.gacc.w===w?S.gacc:{};
+  const dead=cur&&g.bh<=0,mine=bd[me]||0,top=Object.keys(bd).sort((a,b)=>bd[b]-bd[a]).slice(0,5);
+  let h='<div class="gboss"><div class="gbimg">'+(PM[bp]?ico(PM[bp],96):"")+'</div><div style="flex:1;min-width:200px"><b>🐲 Jefe de la semana: '+esc(bp)+'</b><div class="hp gbhp"><i style="width:'+(bh/bm*100)+'%"></i></div><small>'+(dead?"¡DERROTADO! 🎉":fmt(bh)+" / "+fmt(bm)+" PS")+' · Tu daño: '+fmt(mine)+(pend.dmg?' (+'+fmt(pend.dmg)+' pendiente de subir)':'')+'</small>'+
+    '<small class="mut">Todo el daño que hacéis los miembros en vuestros combates se le resta. Si cae antes del lunes, cada miembro que haya participado recibe <b>'+esc(rwTxt(GB_RW))+'</b> y ¡el propio <b>'+esc(bp)+'</b> para su colección (1 de cada 10 veces, variocolor)! Quien más daño haga se lleva el doble de tickets.</small>'+
+    (top.length?'<small>'+top.map((u,i)=>(["🥇","🥈","🥉"][i]||"·")+" "+esc(pvClean((g.members[u]||{}).n||"?"))+" "+fmt(bd[u])).join("  ")+'</small>':'')+
+    (dead&&mine>0?(S.gbc===w?'<small>✅ Premio reclamado</small>':'<button data-gbc="1">🎁 Reclamar premio del jefe</button>'):'')+'</div></div>';
+  h+='<div class="qgrid">'+GQ.map(q=>{const tg=q[2]*n,v=gm[q[0]]||0,ok=v>=tg,cl=S.gqc&&S.gqc.w===w&&S.gqc[q[0]];return '<div class="qc'+(ok&&!cl?' ready':cl?' claimed':'')+'"><b>'+q[1]+' (gremio)</b><div class="bar"><i style="width:'+Math.min(100,v/tg*100)+'%"></i></div><small>'+fmt(Math.min(v,tg))+' / '+fmt(tg)+(pend[q[0]]?' · +'+pend[q[0]]+' tuyos pendientes':'')+'</small><small>🎁 '+rwTxt(GQ_RW)+'</small>'+(cl?'<small>✅ Reclamado</small>':'<div class="qbtn"><button data-gqc="'+q[0]+'"'+(ok?'':' disabled')+'>Reclamar</button></div>')+'</div>'}).join("")+'</div><small class="mut">Las aportaciones se suben al guardar la partida en la nube (cada 5 minutos o con 💾). El jefe y las misiones se renuevan cada lunes.</small>';
+  return h;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest&&e.target.closest("#gdBox button[data-gbc],#gdBox button[data-gqc]");if(!b||!GS.doc)return;const w=weekKey(),g=GS.doc;
+  if(b.dataset.gbc){const me=window.FB.uid(),bd=g.bd||{};if(S.gbc===w||!(g.bw===w&&g.bh<=0&&bd[me]>0))return;S.gbc=w;grant(GB_RW);
+    const top=Object.keys(bd).sort((a,c)=>bd[c]-bd[a])[0]===me;if(top)S.t+=Math.round(GB_RW.t*RMUL());
+    const sh=Math.random()<.1;if(PM[g.bp])pkGive({n:g.bp,l:50,s:sh?1:0},false);if(sh)qEv("shiny");
+    qEv("gboss");save();snd("lvl");setTimeout(()=>snd("win"),900);
+    toast("🐲 ¡Jefe derrotado! "+rwTxt(GB_RW)+(top?" (×2 tickets por ser quien más daño hizo)":"")+" y "+(sh?"✨ un "+g.bp+" VARIOCOLOR":"un "+g.bp)+" para tu colección");gUI(true);render();return}
+  const k=b.dataset.gqc,q=GQ.find(x=>x[0]===k),n=Math.max(1,Object.keys(g.members||{}).length);if(!q||g.bw!==w||((g.gm||{})[k]||0)<q[2]*n)return;
+  S.gqc=S.gqc&&S.gqc.w===w?S.gqc:{w:w};if(S.gqc[k])return;S.gqc[k]=1;grant(GQ_RW);save();snd("win");toast("🛡️ Misión de gremio completada: "+rwTxt(GQ_RW));gUI(true);
+});
+// ================= perfiles públicos =================
+async function openProf(uid){
+  if(!window.FB||!window.FB.rankGet){toast("Los perfiles solo se pueden ver con una cuenta iniciada.");return}
+  $("profB").innerHTML='<p class="mut">Cargando perfil…</p>';$("prof").hidden=false;
+  let d=null;try{d=await window.FB.rankGet(uid)}catch(e){}
+  if(!d){$("profB").innerHTML='<p>Este jugador todavía no tiene perfil público (aparece cuando guarda su partida en la nube con el apodo registrado).</p><div class="jrow"><button class="alt" data-pcl="1">Cerrar</button></div>';return}
+  const me=window.FB.uid(),sp=d[ssnField()]||0,on=pvOthers().find(p=>p.peer===uid);
+  const st=[["📚","Pokédex",d.dex],["✨","Variocolor",d.sh],["🎯","Combates ganados",d.win],["⚔️","Victorias PVP",d.pw],["🌟","Prestigio",d.prs],["🏅","Medallas",(d.med|0)+"/8"],["🔥","Mejor racha",d.bs|0],["🏆","Logros",d.ach|0]];
+  $("profB").innerHTML='<div class="profh"><div class="profav">'+trImg(trDec(d.tr),"f","i")+'</div><div><h2>'+esc(pvClean(d.n))+' '+(d.g?'<span class="gtag">'+esc(String(d.g).slice(0,4))+'</span>':'')+'</h2><span class="tier t'+tierIdx(sp)+'">'+TIERS[tierIdx(sp)][1]+'</span> <small class="mut">'+sp+' pts esta temporada · '+(on?"🟢 Conectado":"⚫ Desconectado")+'</small><div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,i<(d.med|0),22)).join("")+'</div></div></div>'+
+    '<div class="profst">'+st.map(x=>'<div><span>'+x[0]+'</span><b>'+(typeof x[2]==="number"?fmt(x[2]||0):x[2])+'</b><small>'+x[1]+'</small></div>').join("")+'</div>'+
+    (Array.isArray(d.tm)&&d.tm.length?'<b>Equipo</b><div class="proftm">'+d.tm.filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],56,false,!!x.s)+'<small>'+esc(x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
+    '<div class="jrow">'+(uid!==me&&!isFriend(uid)?'<button data-pfr="'+esc(pvClean(d.n))+'">+👥 Añadir amigo</button>':'')+(on&&uid!==me&&PV.st==="idle"&&!fcd?'<button class="red" data-pch="'+esc(uid)+'">⚔️ Retar</button>':'')+'<button class="alt" data-pcl="1">Cerrar</button></div>';
+}
+document.addEventListener("click",e=>{
+  const l=e.target.closest&&e.target.closest("[data-prof]");if(l&&l.dataset.prof){e.preventDefault();openProf(l.dataset.prof);return}
+  const b=e.target.closest&&e.target.closest("#prof button");if(!b)return;
+  if(b.dataset.pcl){$("prof").hidden=true;return}
+  if(b.dataset.pfr){frSend(b.dataset.pfr);toast("📨 Solicitud de amistad enviada");$("prof").hidden=true;return}
+  if(b.dataset.pch){$("prof").hidden=true;if(pvChallenge(b.dataset.pch)){toast("⚔️ Reto enviado");try{$("pvpP").scrollIntoView({behavior:"smooth"})}catch(x){}}}
+});
+$("prof").addEventListener("click",e=>{if(e.target.id==="prof")$("prof").hidden=true});
+// ================= intercambios entre amigos =================
+let TRD={inc:[],out:[]},TRC=null;
+function pkTake(n){
+  if(!(S.owned[n]>0))return null;const d=lvd(n),rec={n:n,l:d.l,s:S.shiny&&S.shiny[n]>0?1:0};
+  S.owned[n]--;if(rec.s){S.shiny[n]--;if(!S.shiny[n])delete S.shiny[n]}
+  [S.lv,S.mv,S.hp,S.pp||{},S.ppu||{},S.ml||{}].forEach(o=>{delete o[n]});
+  if(S.owned[n]<=0){delete S.owned[n];S.reg=S.reg||{};S.reg[n]=1;S.team=(S.team||[]).map(x=>x===n?"":x);(S.sets||[]).forEach(st=>{st.team=st.team.map(x=>x===n?"":x)})}
+  save();return rec;
+}
+async function pkGive(rec,tradeEvo){
+  if(!rec||!PM[rec.n])return;const n=rec.n,isNew=!hasP(n);
+  if(!S.owned[n]){(S.balls=S.balls||{})[n]=BALLR[PM[n][2]];(S.when=S.when||{})[n]=Date.now()}
+  S.owned[n]=(S.owned[n]||0)+1;if(isNew)qEv("new");
+  if(rec.s){S.shiny=S.shiny||{};S.shiny[n]=(S.shiny[n]||0)+1}
+  const lv=Math.max(1,Math.min(100,rec.l|0));if(!S.lv[n]||S.lv[n].l<lv){S.lv[n]={l:lv,x:0};delete S.mv[n];S.ml=S.ml||{};S.ml[n]=lv}
+  save();
+  if(tradeEvo){const ev=EVO(n).filter(e=>e[1]==="Ilinking-cord"&&PM[e[0]]);if(ev.length&&!fcd)await evoPrompt(n,ev)}
+}
+const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0).sort((a,b)=>lvd(b[0]).l-lvd(a[0]).l);
+function trSel(id){return '<select id="'+id+'" class="trsel2">'+trOwnList().slice(0,400).map(p=>'<option value="'+esc(p[0])+'">'+esc(p[0])+' · Nv'+lvd(p[0]).l+(S.shiny&&S.shiny[p[0]]>0?' ✨':'')+' (×'+S.owned[p[0]]+')</option>').join("")+'</select>'}
+const recTxt=r=>r?(r.s?"✨ ":"")+esc(r.n)+" Nv"+(r.l|0):"?";
+function trdUI(){
+  const box=$("trdBox");if(!box)return;if(!window.FB){box.innerHTML="";return}
+  let h='<b>🔄 Intercambios</b>';
+  if(TRC)h+='<div class="lgnow"><b>Proponer un intercambio a '+esc(TRC.n)+'</b><small class="mut">Elige el Pokémon que le ofreces. Él elegirá cuál te da a cambio y tú decidirás si aceptas. Se envía con su nivel; si te quedan copias, esas vuelven al nivel 1.</small><div class="sets-row">'+trSel("trdS")+'<button class="red" data-trgo="1">Ofrecer</button><button class="alt" data-trx="1">Cancelar</button></div></div>';
+  const P0=TRD.inc.filter(t=>["req","resp"].includes(t.st)),P1=TRD.out.filter(t=>["req","resp"].includes(t.st));
+  h+=P0.map(t=>t.st==="req"?'<div class="lgnow"><b>'+esc(pvClean(t.fn))+' te ofrece '+recTxt(t.o)+'</b><small class="mut">Elige qué Pokémon le das a cambio:</small><div class="sets-row">'+trSel("trR_"+t.id)+'<button data-trr="'+esc(t.id)+'">Ofrecer este</button><button class="alt" data-trn="'+esc(t.id)+'">Rechazar</button></div></div>':'<div class="pvrow"><small>Esperando a que '+esc(pvClean(t.fn))+' acepte: '+recTxt(t.o)+' ⇄ '+recTxt(t.b)+'</small></div>').join("");
+  h+=P1.map(t=>t.st==="resp"?'<div class="lgnow"><b>'+esc(pvClean(t.tn))+' te da '+recTxt(t.b)+' a cambio de tu '+recTxt(t.o)+'</b><div class="lgbtn"><button class="red" data-tra="'+esc(t.id)+'">✅ Aceptar</button><button class="alt" data-trj="'+esc(t.id)+'">Rechazar</button></div></div>':'<div class="pvrow"><small>Has ofrecido '+recTxt(t.o)+' a '+esc(pvClean(t.tn))+'. Esperando su respuesta…</small><button class="alt mini" data-trc="'+esc(t.id)+'">Cancelar</button></div>').join("");
+  if(!TRC&&!P0.length&&!P1.length)h+='<small class="mut">No tienes intercambios en curso. Pulsa 🔄 junto a un amigo para proponerle uno. Los Pokémon que evolucionan por intercambio (Kadabra, Machoke, Haunter...) evolucionan al recibirlos.</small>';
+  if(box._h!==h){box._h=h;box.innerHTML=h}
+}
+// procesa los cambios de estado (cada intercambio se aplica una sola vez)
+async function trProcess(){
+  S.trp=S.trp||{};
+  for(const t of TRD.out){const k=t.id+":"+t.st;if(S.trp[k])continue;
+    if(t.st==="no"){S.trp[k]=1;await pkGive(t.o,false);toast("🔄 "+pvClean(t.tn)+" ha rechazado el intercambio. Recuperas a "+t.o.n+".");window.FB.trDel(t.id).catch(()=>{})}
+    else if(t.st==="done"){S.trp[k]=1;window.FB.trDel(t.id).catch(()=>{})}}
+  for(const t of TRD.inc){const k=t.id+":"+t.st;if(S.trp[k])continue;
+    if(t.st==="acc"){S.trp[k]=1;stt().trade=(stt().trade||0)+1;toast("🔄 ¡Intercambio completado! Recibes a "+t.o.n+".");await pkGive(t.o,true);window.FB.trUpd(t.id,{st:"done"}).catch(()=>{})}
+    else if(t.st==="rej"){S.trp[k]=1;await pkGive(t.b,false);toast("🔄 "+pvClean(t.fn)+" no ha aceptado tu Pokémon. Lo recuperas.");window.FB.trDel(t.id).catch(()=>{})}
+    else if(t.st==="cx"){S.trp[k]=1;if(t.b)await pkGive(t.b,false);window.FB.trDel(t.id).catch(()=>{})}}
+  const ks=Object.keys(S.trp);if(ks.length>200)ks.slice(0,ks.length-200).forEach(k=>delete S.trp[k]);
+  save();setTimeout(()=>{try{render()}catch(e){}},0);
+}
+function trState(st){TRD=st;setTimeout(()=>{trdUI();trProcess()},0)}
+document.addEventListener("click",async e=>{
+  const b=e.target.closest&&e.target.closest("#trdBox button,#frBox button[data-frt]");if(!b||!window.FB)return;const d=b.dataset;
+  try{
+    if(d.frt){TRC={uid:d.frt,n:d.frtn};trdUI();try{$("trdBox").scrollIntoView({behavior:"smooth",block:"center"})}catch(x){}return}
+    if(d.trx){TRC=null;trdUI();return}
+    if(d.trgo){const n=$("trdS").value;if(!n||!TRC)return;if(fcd){toast("Termina el combate antes de intercambiar.");return}b.disabled=true;const rec=pkTake(n);if(!rec)return;
+      try{await window.FB.trSend(TRC.uid,TRC.n,pvClean(pvNick()),rec);if(window.cloudFlush)window.cloudFlush(true);toast("📨 Intercambio propuesto a "+TRC.n);TRC=null}catch(x){await pkGive(rec,false);throw x}trdUI();render();return}
+    if(d.trr){const n=$("trR_"+d.trr).value;if(!n||fcd)return;b.disabled=true;const rec=pkTake(n);if(!rec)return;
+      try{await window.FB.trUpd(d.trr,{st:"resp",b:rec});if(window.cloudFlush)window.cloudFlush(true)}catch(x){await pkGive(rec,false);throw x}render();return}
+    if(d.trn){await window.FB.trUpd(d.trn,{st:"no"});return}
+    if(d.trc){const t=TRD.out.find(x=>x.id===d.trc);if(!t)return;await window.FB.trUpd(t.id,{st:"cx"});S.trp=S.trp||{};S.trp[t.id+":cx"]=1;await pkGive(t.o,false);toast("Intercambio cancelado: recuperas a "+t.o.n+".");return}
+    if(d.tra){const t=TRD.out.find(x=>x.id===d.tra);if(!t||t.st!=="resp")return;b.disabled=true;await window.FB.trUpd(t.id,{st:"acc"});S.trp=S.trp||{};S.trp[t.id+":acc"]=1;stt().trade=(stt().trade||0)+1;toast("🔄 ¡Intercambio completado! Recibes a "+t.b.n+".");await pkGive(t.b,true);if(window.cloudFlush)window.cloudFlush(true);render();return}
+    if(d.trj){const t=TRD.out.find(x=>x.id===d.trj);if(!t)return;await window.FB.trUpd(t.id,{st:"rej"});S.trp=S.trp||{};S.trp[t.id+":rej"]=1;await pkGive(t.o,false);toast("Intercambio rechazado: recuperas a "+t.o.n+".");return}
+  }catch(x){toast("No se pudo completar el intercambio ("+((x&&x.code)||"error")+").")}
+});
+// ================= gritos de los Pokémon (audio original de PokeAPI) =================
+const CRY="https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/",CRY2="https://cdn.jsdelivr.net/gh/PokeAPI/cries@main/cries/pokemon/latest/";
+function cry(n){
+  if(!O.cry||!O.svol||!O.sfx)return;const p=PM[n];if(!p||!p[4]||p[4]>1025)return;
+  try{const a=new Audio((SPRB?CRY2:CRY)+p[4]+".ogg");a.volume=Math.min(1,O.svol*.5);a.onerror=()=>{if(a.src.indexOf(CRY)===0){a.src=CRY2+p[4]+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
+}
+$("dex").addEventListener("click",e=>{const c=e.target.closest(".card");if(!c)return;const im=c.querySelector("img[data-n]");if(im)cry(im.dataset.n)});
+
+$("zoneSel").onchange=()=>{S.zone=$("zoneSel").value;save()};
 // ================= sugerencias (solo las lee el creador del juego) =================
 const sugMsg=t=>{$("sugMsg").textContent=t};
 async function sugLoad(){
@@ -3785,7 +4133,7 @@ $("sugList").addEventListener("click",async e=>{
   try{await window.sugDel(b.dataset.sd)}catch(x){}
   sugLoad();
 });
-pvInit0();buildBag();buildTeam();setsUI();buildShop();buildOpts();clBind();clInit();newsUI();welcInit();newsInit();trUI();supUI();frUI();gUI(true);$("navb").hidden=false;sugLoad();S.last=Date.now();S.lt=Date.now();_lt=Date.now();bgBuild();addEventListener("resize",()=>{clearTimeout(window._rz);window._rz=setTimeout(bgBuild,300)});tick();setInterval(tick,500);setInterval(fxTick,1000);setInterval(cpsUpd,250);
+pvInit0();buildBag();buildTeam();setsUI();buildShop();buildOpts();clBind();clInit();newsUI();welcInit();newsInit();trUI();supUI();frUI();gUI(true);rkUI();strkUI();gymUI();zoneUI();seasonUI();evBanUI();$("navb").hidden=false;sugLoad();S.last=Date.now();S.lt=Date.now();_lt=Date.now();bgBuild();addEventListener("resize",()=>{clearTimeout(window._rz);window._rz=setTimeout(bgBuild,300)});tick();setInterval(tick,500);setInterval(fxTick,1000);setInterval(cpsUpd,250);
 document.addEventListener("keydown",e=>{
   if(window._cap){e.preventDefault();e.stopPropagation();tkCapture(e);return}
   if(e.key==="Escape"&&bigMode==="win"){bigSet("");return}
@@ -3866,8 +4214,20 @@ async function main(){
     gKick:(gid,u)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+u]:S.deleteField(),n:S.increment(-1)}),
     gEdit:(gid,f)=>S.updateDoc(S.doc(db,"guilds",gid),f),
     gTransfer:(gid,u)=>S.updateDoc(S.doc(db,"guilds",gid),{owner:u}),
-    gDisband:gid=>S.deleteDoc(S.doc(db,"guilds",gid))
+    gDisband:gid=>S.deleteDoc(S.doc(db,"guilds",gid)),
+    gContrib:(gid,d)=>S.updateDoc(S.doc(db,"guilds",gid),{["bd."+uid]:S.increment(d.dmg),bh:S.increment(-d.dmg),"gm.cap":S.increment(d.cap),"gm.win":S.increment(d.win),"gm.pull":S.increment(d.pull)}),
+    async rankGet(u){const s=await S.getDoc(S.doc(db,"ranks",u));return s.exists()?s.data():null},
+    trInit(cb){const st={inc:[],out:[]},emit=()=>cb({inc:st.inc.slice(),out:st.out.slice()});
+      S.onSnapshot(S.query(S.collection(db,"trades"),S.where("to","==",uid)),sn=>{st.inc=sn.docs.map(d=>Object.assign({id:d.id},d.data()));emit()},()=>{});
+      S.onSnapshot(S.query(S.collection(db,"trades"),S.where("from","==",uid)),sn=>{st.out=sn.docs.map(d=>Object.assign({id:d.id},d.data()));emit()},()=>{})},
+    trSend:(to,tn,fn,o)=>S.addDoc(S.collection(db,"trades"),{from:uid,to:to,fn:String(fn),tn:String(tn),o:o,st:"req",at:Date.now()}),
+    trUpd:(id,f)=>S.updateDoc(S.doc(db,"trades",id),Object.assign({},f,{at:Date.now()})),
+    trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),
+    async rankSave(d){if(!d||!uid)return;const j=JSON.stringify(d);if(j===lastRank)return;await S.setDoc(S.doc(db,"ranks",uid),Object.assign({},d,{at:Date.now()}));lastRank=j},
+    async rankTop(f,lim){const sn=await S.getDocs(S.query(S.collection(db,"ranks"),S.orderBy(f,"desc"),S.limit(lim)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    async rankPos(f,v){const c=await S.getCountFromServer(S.query(S.collection(db,"ranks"),S.where(f,">",v)));return c.data().count+1}
   };
+  let lastRank="";
   // sugerencias: cualquiera con cuenta puede enviar; solo el administrador (reglas de Firestore) puede leerlas
   window.sugSend=async(text,nick)=>{if(!uid)throw {code:"sin-cuenta"};await S.addDoc(S.collection(db,"suggestions"),{uid:uid,name:cu?label(cu):"",nick:String(nick||"").slice(0,40),text:String(text).slice(0,1000),at:Date.now()})};
   window.sugList=async()=>{if(!uid)throw {code:"sin-cuenta"};const sn=await S.getDocs(S.query(S.collection(db,"suggestions"),S.orderBy("at","desc"),S.limit(300)));return sn.docs.map(d=>Object.assign({},d.data(),{id:d.id}))};
@@ -3917,7 +4277,7 @@ async function main(){
     if(pending===lastSaved){pending=null;syncTxt();return}
     if(force!==true&&Date.now()-lastW<(typeof force==="number"?force:0))return;
     busy=true;const d=pending;pending=null;g("sync").textContent="☁️ Guardando…";
-    try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp()});lastSaved=d;lastW=Date.now()}
+    try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp()});lastSaved=d;lastW=Date.now();try{if(window.rankData)await FB.rankSave(window.rankData())}catch(e){}try{if(window.gFlushHook)await window.gFlushHook()}catch(e){}}
     catch(e){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;return}
     busy=false;syncTxt();
   }

@@ -579,7 +579,9 @@ img.pk.item{object-fit:contain;image-rendering:pixelated}
 .hubspark{position:fixed;z-index:62;pointer-events:none;text-shadow:0 0 8px currentColor;line-height:1;will-change:transform,opacity}
 .hubring{will-change:transform,opacity}
 /* con el menú o una ventana abiertos se pausan las animaciones de detrás (no se ven y así el desenfoque no se recalcula) */
-body.menuon main *,body.hubon main *,body.menuon #bgw,body.menuon #bgw *,body.hubon #bgw,body.hubon #bgw *,body.menuon #rain *,body.hubon #rain *{animation-play-state:paused!important}#navb.open .nbring{display:none}
+body.menuon main *,body.hubon main *,body.modalon main *,body.menuon #bgw,body.menuon #bgw *,body.hubon #bgw,body.hubon #bgw *,body.modalon #bgw,body.modalon #bgw *,body.menuon #rain *,body.hubon #rain *,body.modalon #rain *{animation-play-state:paused!important}
+/* la Pokédex solo dibuja las cartas visibles */
+#collP .card{content-visibility:auto;contain-intrinsic-size:auto 150px}#navb.open .nbring{display:none}
 @keyframes nbbob{50%{transform:translateY(-6px) rotate(-6deg)}}
 @keyframes nbring{0%{transform:scale(.85);opacity:.75}70%,100%{transform:scale(1.5);opacity:0}}
 @media (max-width:700px){#navb{width:74px!important;height:74px!important;right:14px!important;bottom:calc(32px + env(safe-area-inset-bottom,0px))!important}#navb .nblab{font-size:11px!important;padding:2px 10px;bottom:-20px}}
@@ -587,9 +589,9 @@ body.menuon main *,body.hubon main *,body.menuon #bgw,body.menuon #bgw *,body.hu
 @keyframes hubfade{from{opacity:0}}
 @keyframes hubpop{from{opacity:0;transform:translateY(18px) scale(.9)}}
 @media (max-width:700px){.hubgl{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.hubtile{min-height:0;flex-direction:row;justify-content:flex-start;text-align:left;padding:12px;gap:12px}.hubtile small{display:none}.hubtile .hti{width:42px;height:42px;font-size:1.35rem;flex:none}#hubG{padding:14px 14px calc(140px + env(safe-area-inset-bottom,0px))}}
-#hubM{position:fixed;inset:0;z-index:58;background:rgba(14,16,40,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
+#hubM{position:fixed;inset:0;z-index:58;background:rgba(12,14,36,.68);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
 #hubM[hidden]{display:none}
-#hubM.in .hubw{animation:hubwin .24s cubic-bezier(.2,.9,.3,1.1)}
+#hubM.in .hubw{animation:hubwin .22s cubic-bezier(.2,.9,.3,1.1);will-change:transform,opacity}
 @keyframes hubwin{from{opacity:0;transform:translateY(24px) scale(.97)}}
 .hubw{width:min(1000px,100%);max-height:calc(100vh - 40px);display:flex;flex-direction:column;background:var(--bg);border-radius:24px;overflow:hidden;box-shadow:0 30px 70px rgba(10,12,40,.45)}
 .hubh{display:flex;align-items:center;gap:14px;padding:18px 20px 12px;background:linear-gradient(135deg,var(--hc),color-mix(in srgb,var(--hc) 65%,#fff));color:#fff}
@@ -606,7 +608,7 @@ body.menuon main *,body.hubon main *,body.menuon #bgw,body.menuon #bgw *,body.hu
 #hubM .hubb>.panel>h2:first-child,#hubM .hubb>.panel>.hhead:first-child>h2{font-size:1.1rem}
 @media (max-width:700px){#hubM{padding:0}.hubw{width:100%;height:100%;max-height:none;border-radius:0}.hubh{padding:14px 14px 10px}.hubtabs{padding:0 14px 12px}.hubb{padding:14px}}
 body.hubon{overflow:hidden}
-#optp{position:fixed!important;inset:0!important;top:0!important;right:0!important;width:auto!important;max-height:none!important;overflow:visible!important;background:rgba(6,10,36,.62)!important;border:none!important;border-radius:0!important;padding:16px!important;box-shadow:none!important;z-index:70!important;display:flex!important;align-items:center;justify-content:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-sizing:border-box}
+#optp{position:fixed!important;inset:0!important;top:0!important;right:0!important;width:auto!important;max-height:none!important;overflow:visible!important;background:rgba(6,10,36,.7)!important;border:none!important;border-radius:0!important;padding:16px!important;box-shadow:none!important;z-index:70!important;display:flex!important;align-items:center;justify-content:center;box-sizing:border-box}
 #optp[hidden]{display:none!important}
 .setw{--px:"Pixelify Sans",ui-monospace,monospace;width:min(740px,100%);height:min(660px,calc(100vh - 32px));display:flex;flex-direction:column;background:linear-gradient(180deg,#24399c,#182b80 55%,#132169);border:3px solid #e8ecff;border-radius:18px;box-shadow:0 0 0 5px #0a1450,0 26px 60px rgba(0,0,0,.55);color:#fff;overflow:hidden}
 #optp:not([hidden]) .setw{animation:setin .26s cubic-bezier(.2,.9,.3,1.15)}
@@ -646,7 +648,7 @@ body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001ms!imp
 body.hc{--mute:color-mix(in srgb,var(--ink) 88%,transparent);--line:color-mix(in srgb,var(--ink) 50%,transparent)}
 body.hc .panel{border-width:2px}
 #out .card[data-pn]{cursor:zoom-in;transition:transform .15s}#out .card[data-pn]:hover{transform:translateY(-3px) scale(1.04)}
-#pkv{position:fixed;inset:0;z-index:72;background:rgba(8,10,34,.7);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
+#pkv{position:fixed;inset:0;z-index:72;background:rgba(8,10,34,.76);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
 #pkv[hidden]{display:none}
 .pkvw{position:relative;width:min(380px,100%);background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--tc) 30%,var(--panel)),var(--panel) 70%);border:4px solid var(--C);border-radius:26px;padding:22px 20px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 26px 60px rgba(0,0,0,.5);color:var(--ink);text-align:center}
 .pkvw.R{border-color:var(--R)}.pkvw.E{border-color:var(--E);box-shadow:0 0 30px var(--E),0 26px 60px rgba(0,0,0,.5)}.pkvw.M{border-color:var(--M);box-shadow:0 0 34px var(--M),0 26px 60px rgba(0,0,0,.5)}.pkvw.L{border-color:var(--L);box-shadow:0 0 40px var(--L),0 26px 60px rgba(0,0,0,.5)}
@@ -4793,7 +4795,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T19:46",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T19:53",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -5460,6 +5462,10 @@ function pkView(n,sh){
 function pkClose(){const m=$("pkv");if(m)m.hidden=true}
 document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest("#out .card[data-pn]");if(c){snd("ui");pkView(c.dataset.pn,c.dataset.sh==="1")}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("pkv");if(m&&!m.hidden)pkClose()}});
+// ---- con los Ajustes o la ficha de Pokémon abiertos también se pausan las animaciones de detrás ----
+(function(){const ids=["optp","pkv"],upd=()=>document.body.classList.toggle("modalon",ids.some(i=>{const e=$(i);return e&&!e.hidden}));
+  const mo=new MutationObserver(upd);const watch=()=>ids.forEach(i=>{const e=$(i);if(e&&!e.dataset.mw){e.dataset.mw=1;mo.observe(e,{attributes:true,attributeFilter:["hidden"]})}});
+  watch();document.addEventListener("click",()=>setTimeout(()=>{watch();upd()},0),true)})();
 
 </script>
 <script>

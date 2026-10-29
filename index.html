@@ -545,7 +545,7 @@ img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
 .pvdot{width:10px;height:10px;border-radius:50%;background:#2fbf5a;box-shadow:0 0 0 3px color-mix(in srgb,#2fbf5a 30%,transparent);flex:none}
 img.pk.item{object-fit:contain;image-rendering:pixelated}
 /* ---- menú (opción A) ---- */
-#hubG{position:fixed;inset:0;z-index:60;background:rgba(14,16,40,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:flex-end;padding:20px 20px calc(140px + env(safe-area-inset-bottom,0px));box-sizing:border-box}
+#hubG{position:fixed;inset:0;z-index:60;background:rgba(14,16,40,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:flex-end;padding:20px 20px calc(170px + env(safe-area-inset-bottom,0px));box-sizing:border-box}
 #hubG[hidden]{display:none}
 .hubgl{display:grid;grid-template-columns:repeat(4,150px);gap:14px;max-width:100%}
 .hubtile{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:140px;padding:14px 10px;border-radius:22px;border:none;background:var(--panel);color:var(--ink);box-shadow:0 12px 28px rgba(10,12,40,.3);text-align:center;cursor:pointer;transition:transform .12s}
@@ -555,29 +555,34 @@ img.pk.item{object-fit:contain;image-rendering:pixelated}
 .hubtile i{position:absolute;top:10px;right:12px;min-width:24px;height:24px;border-radius:12px;background:var(--red);color:#fff;font-style:normal;font-weight:900;font-size:.78rem;display:grid;place-items:center;padding:0 6px;box-sizing:border-box}
 .hubq{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
 .hubq button{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:8px 14px;font-weight:700}
-#navb{width:96px!important;height:96px!important;right:18px!important;bottom:calc(26px + env(safe-area-inset-bottom,0px))!important;background:transparent!important;box-shadow:none!important;border:none!important;padding:0!important;font-size:0!important;overflow:visible;z-index:61!important}
+#navb{width:92px!important;height:92px!important;right:20px!important;bottom:calc(38px + env(safe-area-inset-bottom,0px))!important;background:transparent!important;box-shadow:none!important;border:none!important;padding:0!important;font-size:0!important;overflow:visible;z-index:61!important}
 #navb .nbball{position:absolute;inset:0;display:block;animation:nbbob 2.4s ease-in-out infinite;filter:drop-shadow(0 10px 14px rgba(0,0,0,.35));transition:transform .2s}
 #navb .nbball svg{width:100%;height:100%;display:block}
 #navb .nbring{position:absolute;inset:0;border-radius:50%;border:4px solid #ff6a6a;animation:nbring 2.2s ease-out infinite;pointer-events:none}
-#navb .nblab{position:absolute;left:50%;bottom:-13px;transform:translateX(-50%);background:#1c1f3a;color:#fff;border-radius:99px;padding:3px 12px;font-size:13px;font-weight:900;line-height:1.2;letter-spacing:.5px;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,.25)}
+#navb .nblab{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);background:#1c1f3a;color:#fff;border-radius:99px;padding:3px 12px;font-size:13px;font-weight:900;line-height:1.2;letter-spacing:.5px;white-space:nowrap;box-shadow:0 3px 8px rgba(0,0,0,.25)}
 #navb .nbadge{position:absolute!important;top:0!important;right:0!important;min-width:28px;height:28px;border-radius:14px!important;font-size:.9rem!important;font-weight:900!important;display:grid;place-items:center;padding:0 7px!important;box-sizing:border-box;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 #navb .nbadge[hidden]{display:none}
 #navb:hover .nbball{transform:scale(1.06)}
-#navb.open .nbball{animation:none;transform:rotate(-8deg) scale(.96)}
-#navb .nbtop{transform-box:view-box;transform-origin:8px 50px;transition:transform .45s cubic-bezier(.3,1.6,.5,1)}
-#navb.open .nbtop{transform:rotate(-42deg)}
-#navb .nbin{opacity:0;transition:opacity .25s}#navb.open .nbin{opacity:1;filter:drop-shadow(0 0 6px #fff59a)}
+#navb .nbball svg{overflow:visible}
+#navb .nbtop,#navb .nbbot,#navb .nbbtn{transition:transform .38s cubic-bezier(.34,1.56,.64,1)}
+#navb .nbin{opacity:0;transform-box:fill-box;transform-origin:center;transform:scaleY(.2);transition:opacity .25s,transform .38s cubic-bezier(.34,1.56,.64,1)}
+#navb .nbdot{transition:fill .2s}
+#navb.open .nbball{animation:none;transform:none}
+#navb.open .nbtop{transform:translateY(-15px)}
+#navb.open .nbbot,#navb.open .nbbtn{transform:translateY(5px)}
+#navb.open .nbin{opacity:1;transform:scaleY(1)}
+#navb.open .nbdot{fill:#ffe066}
 #hubG.out{pointer-events:none}
 .hubburst{position:fixed;z-index:62;width:340px;height:340px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#ffffff 0,#fff8c8 22%,rgba(255,220,120,.55) 45%,rgba(255,180,80,0) 70%);mix-blend-mode:screen}
 .hubring{position:fixed;z-index:62;width:120px;height:120px;border-radius:50%;pointer-events:none;border:5px solid rgba(255,255,255,.9);box-shadow:0 0 18px #fff59a,inset 0 0 18px #fff59a}
 .hubspark{position:fixed;z-index:62;pointer-events:none;text-shadow:0 0 8px currentColor;line-height:1}#navb.open .nbring{display:none}
 @keyframes nbbob{50%{transform:translateY(-6px) rotate(-6deg)}}
 @keyframes nbring{0%{transform:scale(.85);opacity:.75}70%,100%{transform:scale(1.5);opacity:0}}
-@media (max-width:700px){#navb{width:78px!important;height:78px!important;right:12px!important;bottom:calc(22px + env(safe-area-inset-bottom,0px))!important}#navb .nblab{font-size:11px!important;padding:2px 10px;bottom:-11px}}
-@media (prefers-reduced-motion:reduce){#navb .nbball,#navb .nbring{animation:none}}
+@media (max-width:700px){#navb{width:74px!important;height:74px!important;right:14px!important;bottom:calc(32px + env(safe-area-inset-bottom,0px))!important}#navb .nblab{font-size:11px!important;padding:2px 10px;bottom:-20px}}
+@media (prefers-reduced-motion:reduce){#navb .nbball{animation:none}#navb .nbring{display:none}}
 @keyframes hubfade{from{opacity:0}}
 @keyframes hubpop{from{opacity:0;transform:translateY(18px) scale(.9)}}
-@media (max-width:700px){.hubgl{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.hubtile{min-height:0;flex-direction:row;justify-content:flex-start;text-align:left;padding:12px;gap:12px}.hubtile small{display:none}.hubtile .hti{width:42px;height:42px;font-size:1.35rem;flex:none}#hubG{padding:14px 14px calc(116px + env(safe-area-inset-bottom,0px))}}
+@media (max-width:700px){.hubgl{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.hubtile{min-height:0;flex-direction:row;justify-content:flex-start;text-align:left;padding:12px;gap:12px}.hubtile small{display:none}.hubtile .hti{width:42px;height:42px;font-size:1.35rem;flex:none}#hubG{padding:14px 14px calc(140px + env(safe-area-inset-bottom,0px))}}
 #hubM{position:fixed;inset:0;z-index:58;background:rgba(14,16,40,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
 #hubM[hidden]{display:none}
 #hubM.in .hubw{animation:hubwin .24s cubic-bezier(.2,.9,.3,1.1)}
@@ -4725,7 +4730,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T18:56",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T19:06",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -5288,7 +5293,7 @@ function hubInit(){
   const G=document.createElement("div");G.id="hubG";G.hidden=true;G.innerHTML='<div class="hubgl" id="hubGl"></div>';document.body.appendChild(G);
   HUB.forEach(g=>g.tabs.forEach(t=>hubPark(t[0])));
   const hd=document.querySelector("main>header");if(hd&&!$("hud")){const d=document.createElement("div");d.id="hud";hd.insertBefore(d,hd.querySelector(".tk"));hudUI();setInterval(hudUI,2000)}
-  {const nb=$("navb"),nn=$("navn");nb.innerHTML='<span class="nbring" aria-hidden="true"></span><span class="nbball" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><radialGradient id="nbg" cx="34%" cy="26%" r="78%"><stop offset="0" stop-color="#ff8a8a"/><stop offset=".55" stop-color="#e3263a"/><stop offset="1" stop-color="#8e0f1e"/></radialGradient><linearGradient id="nbw" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfcbe4"/></linearGradient></defs><circle cx="50" cy="50" r="45" fill="url(#nbw)"/><circle cx="50" cy="50" r="45" fill="none" stroke="#1c1f3a" stroke-width="5"/><ellipse class="nbin" cx="50" cy="47" rx="40" ry="14" fill="#fff6c0"/><rect x="5" y="45" width="90" height="10" fill="#1c1f3a"/><circle cx="50" cy="50" r="15" fill="#1c1f3a"/><circle cx="50" cy="50" r="9" fill="#ffffff"/><g class="nbtop"><path d="M5 50 A45 45 0 0 1 95 50Z" fill="url(#nbg)" stroke="#1c1f3a" stroke-width="5" stroke-linejoin="round"/><ellipse cx="33" cy="24" rx="9" ry="5" fill="#ffffff" opacity=".7" transform="rotate(-30 33 24)"/></g></svg></span><span class="nblab">MENÚ</span>';if(nn)nb.appendChild(nn);nb.setAttribute("aria-label","Abrir el menú");nb.title="Menú"}
+  {const nb=$("navb"),nn=$("navn");nb.innerHTML='<span class="nbring" aria-hidden="true"></span><span class="nbball" aria-hidden="true"><svg viewBox="0 0 100 100"><defs><radialGradient id="nbg" cx="34%" cy="30%" r="80%"><stop offset="0" stop-color="#ff7d7d"/><stop offset=".5" stop-color="#e3263a"/><stop offset="1" stop-color="#9a1222"/></radialGradient><linearGradient id="nbw" x1="0" y1="0" x2=".25" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9d5ea"/></linearGradient><radialGradient id="nbl" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#fff3b0"/><stop offset="1" stop-color="#ffe066" stop-opacity="0"/></radialGradient></defs><ellipse class="nbin" cx="50" cy="48" rx="54" ry="20" fill="url(#nbl)"/><g class="nbbot"><path d="M5 50 A45 45 0 0 0 95 50 Z" fill="url(#nbw)" stroke="#1c1f3a" stroke-width="5" stroke-linejoin="round"/><rect x="5" y="50" width="90" height="5.5" fill="#1c1f3a"/></g><g class="nbtop"><path d="M5 50 A45 45 0 0 1 95 50 Z" fill="url(#nbg)" stroke="#1c1f3a" stroke-width="5" stroke-linejoin="round"/><rect x="5" y="44.5" width="90" height="5.5" fill="#1c1f3a"/><ellipse cx="32" cy="25" rx="10" ry="5.5" fill="#ffffff" opacity=".75" transform="rotate(-32 32 25)"/></g><g class="nbbtn"><circle cx="50" cy="50" r="15" fill="#1c1f3a"/><circle cx="50" cy="50" r="9.5" fill="#ffffff"/><circle class="nbdot" cx="50" cy="50" r="5" fill="#ffffff"/></g></svg></span><span class="nblab">MENÚ</span>';if(nn)nb.appendChild(nn);nb.setAttribute("aria-label","Abrir el menú");nb.title="Menú"}
   $("navb").onclick=()=>{snd("ui");hubMenu()};
   hubDuelWatch();
 }

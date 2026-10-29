@@ -488,6 +488,36 @@ img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
 .profst b{font-size:1.1rem}.profst small{color:var(--mute);font-size:.7rem}
 .proftm{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 10px}.proftm div{display:flex;flex-direction:column;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:4px 6px;min-width:80px}
 .trsel2{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);flex:1;min-width:200px}
+#trdM{position:fixed;inset:0;z-index:106;background:rgba(8,10,28,.8);display:flex;align-items:center;justify-content:center;padding:12px}
+.tbox{max-width:760px;width:100%;max-height:calc(100vh - 24px);overflow:auto;text-align:left;padding:18px;background:linear-gradient(180deg,var(--panel),var(--bg));border-color:#4fc0ee;box-shadow:0 0 40px 6px rgba(79,192,238,.45)}
+.tbox h2{margin:0 0 10px;text-align:center;color:var(--ink)}
+.tvs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin-bottom:8px}
+.tarrow{display:grid;place-items:center}.tarrow span{font-size:2rem;color:#4fc0ee;animation:tarr 1.2s ease-in-out infinite;display:block}
+@keyframes tarr{50%{transform:scale(1.25) rotate(180deg)}}
+.tcard{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;background:linear-gradient(160deg,color-mix(in srgb,#4fc0ee 18%,var(--bg)),var(--bg));border:3px solid var(--C);border-radius:16px;padding:8px;min-height:190px;text-align:center}
+.tcard.R{border-color:var(--R)}.tcard.E{border-color:var(--E);box-shadow:0 0 12px var(--E)}.tcard.L{border-color:var(--L);box-shadow:0 0 18px var(--L)}
+.tcard.shiny{border-color:#ffd35c;box-shadow:0 0 22px #ffe58a}
+.tcard.empty{border:3px dashed var(--line);justify-content:center}
+.tq{font-size:3rem;font-weight:800;color:var(--mute);animation:tqp 1.4s ease-in-out infinite}@keyframes tqp{50%{opacity:.35;transform:scale(.9)}}
+.tspr2 img.pk{max-height:108px!important;max-width:150px!important;object-fit:contain}
+.tspr2{height:110px;overflow:hidden;display:grid;place-items:center;animation:tbob 1.6s ease-in-out infinite}@keyframes tbob{50%{transform:translateY(-5px)}}
+.tcard small{color:var(--mute);font-size:.75rem}.tevo{color:var(--teal)!important;font-weight:700}
+.tsolo{max-width:280px;margin:8px auto}
+.tfil{display:flex;gap:6px;margin:10px 0 6px}.tfil input,.tfil select{font:inherit;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}.tfil input{flex:1;min-width:0}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;max-height:300px;overflow:auto;padding:4px;background:var(--bg);border-radius:12px;border:1px solid var(--line)}
+.tcell{display:flex;flex-direction:column;align-items:center;gap:1px;background:var(--panel);color:var(--ink);border:2px solid var(--C);border-radius:12px;padding:4px 2px;font-weight:600}
+.tcell.R{border-color:var(--R)}.tcell.E{border-color:var(--E)}.tcell.L{border-color:var(--L)}.tcell.shiny{background:color-mix(in srgb,#ffd35c 20%,var(--panel))}
+.tcell b{font-size:.72rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tcell small{font-size:.62rem;color:var(--mute);font-weight:400}
+.tcell.sel{outline:3px solid #4fc0ee;transform:scale(1.04);box-shadow:0 0 14px #4fc0ee}
+.tpulse{text-align:center;animation:tqp 1.4s ease-in-out infinite}
+.thot{border-color:#4fc0ee!important;box-shadow:0 0 10px rgba(79,192,238,.5)}
+.tstage{position:relative;height:300px;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 55%,#2a5d9a,#0d1b3a 70%);border:3px solid #4fc0ee}
+.tstage .tmon{position:absolute;transform:translate(-50%,-50%)}
+.tline{position:absolute;left:50%;top:0;bottom:0;width:6px;margin-left:-3px;background:linear-gradient(transparent,#bff2ff,#fff,#bff2ff,transparent);opacity:0;box-shadow:0 0 24px #4fc0ee}
+.tline.on{animation:tline 1.3s ease-in-out}@keyframes tline{0%{opacity:0;transform:scaleX(.5)}30%,70%{opacity:1;transform:scaleX(3)}100%{opacity:0}}
+.tsp{position:absolute;font-size:1.3rem;opacity:0;animation:hsparkle 1.2s ease-out forwards;pointer-events:none}
+.tflash{position:absolute;inset:0;background:radial-gradient(circle,#fff,transparent 70%);opacity:0;pointer-events:none}
+.tmsg{text-align:center;font-weight:700;min-height:1.5em}
 img.pk.item{object-fit:contain;image-rendering:pixelated}
 .dexn{position:absolute;top:2px;left:6px;font-size:.62rem;color:var(--mute)}
 .shh{font-size:.95rem;margin:14px 0 4px}
@@ -589,6 +619,7 @@ img.pk.item{object-fit:contain;image-rendering:pixelated}
 <div id="toast" hidden role="status" aria-live="polite"></div>
 <div id="newsM" hidden role="dialog" aria-modal="true" aria-label="Novedades"><div class="jbox"><h2>📰 ¡Novedades en PokeGacha!</h2><div id="newsMl"></div><div class="jrow"><button class="red" id="newsOk">¡Genial!</button></div></div></div>
 <div id="strkM" hidden role="dialog" aria-modal="true" aria-label="Racha diaria"><div class="jbox"><div id="strk"></div></div></div>
+<div id="trdM" hidden role="dialog" aria-modal="true" aria-label="Intercambio"><div class="jbox tbox"><div id="trdB"></div></div></div>
 <div id="prof" hidden role="dialog" aria-modal="true" aria-label="Perfil de jugador"><div class="jbox"><div id="profB"></div></div></div>
 <div id="evo" hidden role="dialog" aria-modal="true" aria-label="Evolución"><div class="jbox"><h2>🧬 Evolución</h2><div class="evost"><div id="evoA"></div><div id="evoB"></div></div><p id="evoT"></p><div id="evoBtns"></div></div></div>
 <div id="updB" hidden role="status"><span>🆕 Hay una versión nueva del juego.</span><button id="updGo">Actualizar</button></div>
@@ -3841,7 +3872,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T14:40",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T15:36",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -4092,18 +4123,85 @@ async function pkGive(rec,tradeEvo){
   save();
   if(tradeEvo){const ev=EVO(n).filter(e=>e[1]==="Ilinking-cord"&&PM[e[0]]);if(ev.length&&!fcd)await evoPrompt(n,ev)}
 }
-const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0).sort((a,b)=>lvd(b[0]).l-lvd(a[0]).l);
-function trSel(id){return '<select id="'+id+'" class="trsel2">'+trOwnList().slice(0,400).map(p=>'<option value="'+esc(p[0])+'">'+esc(p[0])+' · Nv'+lvd(p[0]).l+(S.shiny&&S.shiny[p[0]]>0?' ✨':'')+' (×'+S.owned[p[0]]+')</option>').join("")+'</select>'}
+const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0);
 const recTxt=r=>r?(r.s?"✨ ":"")+esc(r.n)+" Nv"+(r.l|0):"?";
+// ---- ventana de intercambio al estilo de los juegos ----
+let TM={st:null,t:null,sel:null,q:"",f:""};
+function trCard(rec,lab,who){
+  if(!rec||!PM[rec.n])return '<div class="tcard empty"><small>'+esc(lab)+'</small><div class="tq">?</div><small class="mut">'+(who||"")+'</small></div>';
+  const p=PM[rec.n];
+  return '<div class="tcard '+p[2]+(rec.s?' shiny':'')+'"><small>'+esc(lab)+'</small><div class="tspr2">'+ico(p,96,false,!!rec.s)+'</div><b>'+(rec.s?"✨ ":"")+esc(rec.n)+'</b><small>Nv'+(rec.l|0)+' · '+EM[p[1]]+' '+TIPO[p[1]]+' · '+STAR[p[2]]+'</small>'+(EVO(rec.n).some(e=>e[1]==="Ilinking-cord")?'<small class="tevo">🧬 Evoluciona al intercambiarlo</small>':'')+'</div>';
+}
+const trRec=n=>n&&S.owned[n]>0?{n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0}:null;
+function trGrid(){
+  const q=nrm(TM.q),L=trOwnList().filter(p=>(!q||nrm(p[0]).includes(q))&&(!TM.f||p[2]===TM.f)).sort((a,b)=>lvd(b[0]).l-lvd(a[0]).l||WW[b[2]]-WW[a[2]]).slice(0,240);
+  return '<div class="tfil"><input id="tq" placeholder="Buscar en tu equipo y colección..." value="'+esc(TM.q)+'"><select id="tf"><option value="">Todas</option>'+["C","R","E","L"].map(r=>'<option value="'+r+'"'+(TM.f===r?' selected':'')+'>'+STAR[r]+'</option>').join("")+'</select></div>'+
+    '<div class="tgrid">'+(L.length?L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;return '<button class="tcell '+p[2]+(TM.sel===p[0]?' sel':'')+(sh?' shiny':'')+'" data-tp="'+esc(p[0])+'">'+ico(p,56,false,sh)+'<b>'+esc(p[0])+'</b><small>Nv'+lvd(p[0]).l+(S.owned[p[0]]>1?' · ×'+S.owned[p[0]]:'')+(S.team.includes(p[0])?' · ⭐':'')+'</small></button>'}).join(""):'<small class="mut">No hay Pokémon con ese filtro.</small>')+'</div>';
+}
+function trOpen(st,t){if(fcd&&st!=="anim"){toast("Termina el combate para intercambiar.");return}TM={st:st,t:t,sel:null,q:"",f:""};$("trdM").hidden=false;trRender()}
+function trClose(){$("trdM").hidden=true;TM.st=null;trdUI()}
+function trRender(){
+  const b=$("trdB"),t=TM.t,st=TM.st;if(!st)return;let h="";
+  const vs=(l,r)=>'<div class="tvs">'+l+'<div class="tarrow"><span>⇄</span></div>'+r+'</div>';
+  if(st==="pick"||st==="pickb"){
+    const partner=st==="pick"?t.n:pvClean(t.fn),mine=trRec(TM.sel);
+    h='<h2>🔄 Intercambio con '+esc(partner)+'</h2>'+vs(trCard(mine,"Tú ofreces",mine?"":"Elige uno abajo"),st==="pickb"?trCard(t.o,esc(partner)+" ofrece"):trCard(null,esc(partner)+" ofrece","Lo elegirá después"))+
+      '<small class="mut">'+(st==="pick"?"Elige el Pokémon que quieres ofrecer. "+esc(partner)+" verá tu oferta y elegirá qué te da a cambio.":"Elige qué Pokémon das a cambio de su "+esc(t.o.n)+".")+' Se envía con su nivel; si te quedan copias, esas vuelven al nivel 1.</small>'+trGrid()+
+      '<div class="jrow"><button class="red" data-tgo="1"'+(mine?'':' disabled')+'>🔄 Ofrecer '+(mine?esc(mine.n):"")+'</button><button class="alt" data-tcl="1">'+(st==="pickb"?"Volver":"Cancelar")+'</button>'+(st==="pickb"?'<button class="alt" data-tno="1">Rechazar</button>':'')+'</div>';
+  }else if(st==="inc"){
+    h='<h2>📨 ¡Solicitud de intercambio!</h2><p><b>'+esc(pvClean(t.fn))+'</b> quiere intercambiar contigo y te ofrece:</p><div class="tsolo">'+trCard(t.o,"Te ofrece")+'</div><div class="jrow"><button class="red" data-tpb="1">👀 Elegir qué le doy a cambio</button><button class="alt" data-tno="1">Rechazar</button><button class="alt" data-tcl="1">Más tarde</button></div>';
+  }else if(st==="wait"){
+    const mine=t.from===window.FB.uid();
+    h='<h2>⏳ Intercambio en curso</h2>'+vs(trCard(mine?t.o:t.b,"Tú ofreces"),trCard(mine?t.b:t.o,mine?esc(pvClean(t.tn))+" ofrece":esc(pvClean(t.fn))+" ofrece",mine?"Esperando su elección…":""))+'<p class="tpulse">Esperando a '+esc(mine?pvClean(t.tn):pvClean(t.fn))+'…</p><div class="jrow"><button class="alt" data-tcl="1">Cerrar</button>'+(mine&&t.st==="req"?'<button class="alt" data-tcx="1">Cancelar intercambio</button>':'')+'</div>';
+  }else if(st==="review"){
+    h='<h2>🔄 ¿Aceptas el intercambio?</h2>'+vs(trCard(t.o,"Tú das"),trCard(t.b,"Recibes de "+esc(pvClean(t.tn))))+'<div class="jrow"><button class="red" data-tacc="1">✅ Aceptar intercambio</button><button class="alt" data-trej="1">Rechazar</button><button class="alt" data-tcl="1">Pensarlo</button></div>';
+  }else if(st==="anim"){h='<div class="tstage" id="tstage"><div class="tline"></div></div><p id="tmsg" class="tmsg"></p><div class="jrow" id="tbtn"></div>'}
+  b.innerHTML=h;
+  if($("tq"))$("tq").oninput=e=>{TM.q=e.target.value;const c=e.target.selectionStart;trRender();const n=$("tq");n.focus();n.setSelectionRange(c,c)};
+  if($("tf"))$("tf").onchange=e=>{TM.f=e.target.value;trRender()};
+}
+const tw=(ms)=>new Promise(r=>setTimeout(r,O.fx?ms:Math.min(ms,120)));
+// animacion del intercambio: tu Pokémon entra en su Poké Ball, viaja y llega el del otro jugador
+async function trAnim(give,get,partner){
+  TM.st="anim";$("trdM").hidden=false;trRender();
+  const st=$("tstage"),msg=t=>{$("tmsg").textContent=t};
+  const add=(html,cls,css)=>{const e=document.createElement("div");e.className=cls;e.innerHTML=html;if(css)e.style.cssText=css;st.appendChild(e);return e};
+  const A=add(ico(PM[give.n],110,false,!!give.s),"tmon","left:50%;top:52%");
+  msg("¡Adiós, "+give.n+"! Te vas con "+partner+".");cry(give.n);
+  if(O.fx)A.animate([{transform:"translate(-50%,-50%) scale(.6)",opacity:0},{transform:"translate(-50%,-50%) scale(1)",opacity:1}],{duration:500,fill:"forwards",easing:"cubic-bezier(.2,1.5,.4,1)"});
+  await tw(1400);
+  snd("throw");
+  const B1=add("","ball mini "+({sb:"R",ub:"E",mb:"L"}[ballOf(PM[give.n])]||""),"position:absolute;left:50%;top:52%;margin:-32px 0 0 -32px");
+  if(O.fx){A.animate([{filter:"brightness(1)",transform:"translate(-50%,-50%) scale(1)"},{filter:"brightness(6)",transform:"translate(-50%,-50%) scale(.2)",opacity:0}],{duration:450,fill:"forwards"});
+    B1.animate([{transform:"scale(.2)",opacity:0},{transform:"scale(1)",opacity:1}],{duration:300,fill:"forwards"})}else A.style.opacity=0;
+  await tw(700);
+  if(O.fx)await B1.animate([{transform:"translate(0,0) rotate(0)"},{transform:"translate(0,20px) rotate(-20deg)",offset:.2},{transform:"translate(0,-320px) rotate(540deg)",opacity:.9}],{duration:900,easing:"ease-in",fill:"forwards"}).finished;
+  B1.remove();msg("Enviando…");snd("flash");
+  const ln=st.querySelector(".tline");ln.classList.add("on");
+  if(O.fx)for(let i=0;i<14;i++){const s=add("✨","tsp","left:"+(10+Math.random()*80)+"%;top:"+(10+Math.random()*80)+"%;animation-delay:"+(i*.07)+"s")}
+  await tw(1300);ln.classList.remove("on");
+  msg(partner+" te envía a "+get.n+"…");snd("throw");
+  const B2=add("","ball mini "+({sb:"R",ub:"E",mb:"L"}[BALLR[PM[get.n][2]]]||""),"position:absolute;left:50%;top:52%;margin:-32px 0 0 -32px");
+  if(O.fx)await B2.animate([{transform:"translate(0,-340px) rotate(-540deg)"},{transform:"translate(0,0) rotate(0)",offset:.75},{transform:"translate(0,-24px)",offset:.87},{transform:"translate(0,0)"}],{duration:1100,easing:"ease-in",fill:"forwards"}).finished;
+  for(let i=0;i<3&&O.fx;i++){await B2.animate([{transform:"rotate(0)"},{transform:"rotate(-18deg)"},{transform:"rotate(16deg)"},{transform:"rotate(0)"}],{duration:380}).finished;await tw(150)}
+  snd("open");const fl=add("","tflash");if(O.fx)fl.animate([{opacity:0},{opacity:1,offset:.2},{opacity:0}],{duration:700,fill:"forwards"});
+  B2.remove();
+  const C=add(ico(PM[get.n],110,false,!!get.s),"tmon","left:50%;top:52%");
+  if(O.fx)C.animate([{transform:"translate(-50%,-50%) scale(.1)",filter:"brightness(6)"},{transform:"translate(-50%,-50%) scale(1.15)",filter:"brightness(2)",offset:.6},{transform:"translate(-50%,-50%) scale(1)",filter:"brightness(1)"}],{duration:700,fill:"forwards",easing:"ease-out"});
+  cry(get.n);if(get.s){snd("lvl")}
+  if(O.fx)for(let i=0;i<18;i++)add(get.s?["✨","⭐","💫"][i%3]:["✨","⭐"][i%2],"tsp","left:"+(30+Math.random()*40)+"%;top:"+(25+Math.random()*50)+"%;animation-delay:"+(i*.05)+"s");
+  snd("capok");msg("¡Has recibido a "+(get.s?"✨ ":"")+get.n+" de "+partner+"! ¡Cuídalo mucho!");
+  $("tbtn").innerHTML='<button class="red" id="tok">¡Genial!</button>';
+  await new Promise(r=>{$("tok").onclick=r});
+  $("trdM").hidden=true;TM.st=null;
+}
+// resumen en el panel de Amigos
 function trdUI(){
   const box=$("trdBox");if(!box)return;if(!window.FB){box.innerHTML="";return}
-  let h='<b>🔄 Intercambios</b>';
-  if(TRC)h+='<div class="lgnow"><b>Proponer un intercambio a '+esc(TRC.n)+'</b><small class="mut">Elige el Pokémon que le ofreces. Él elegirá cuál te da a cambio y tú decidirás si aceptas. Se envía con su nivel; si te quedan copias, esas vuelven al nivel 1.</small><div class="sets-row">'+trSel("trdS")+'<button class="red" data-trgo="1">Ofrecer</button><button class="alt" data-trx="1">Cancelar</button></div></div>';
-  const P0=TRD.inc.filter(t=>["req","resp"].includes(t.st)),P1=TRD.out.filter(t=>["req","resp"].includes(t.st));
-  h+=P0.map(t=>t.st==="req"?'<div class="lgnow"><b>'+esc(pvClean(t.fn))+' te ofrece '+recTxt(t.o)+'</b><small class="mut">Elige qué Pokémon le das a cambio:</small><div class="sets-row">'+trSel("trR_"+t.id)+'<button data-trr="'+esc(t.id)+'">Ofrecer este</button><button class="alt" data-trn="'+esc(t.id)+'">Rechazar</button></div></div>':'<div class="pvrow"><small>Esperando a que '+esc(pvClean(t.fn))+' acepte: '+recTxt(t.o)+' ⇄ '+recTxt(t.b)+'</small></div>').join("");
-  h+=P1.map(t=>t.st==="resp"?'<div class="lgnow"><b>'+esc(pvClean(t.tn))+' te da '+recTxt(t.b)+' a cambio de tu '+recTxt(t.o)+'</b><div class="lgbtn"><button class="red" data-tra="'+esc(t.id)+'">✅ Aceptar</button><button class="alt" data-trj="'+esc(t.id)+'">Rechazar</button></div></div>':'<div class="pvrow"><small>Has ofrecido '+recTxt(t.o)+' a '+esc(pvClean(t.tn))+'. Esperando su respuesta…</small><button class="alt mini" data-trc="'+esc(t.id)+'">Cancelar</button></div>').join("");
-  if(!TRC&&!P0.length&&!P1.length)h+='<small class="mut">No tienes intercambios en curso. Pulsa 🔄 junto a un amigo para proponerle uno. Los Pokémon que evolucionan por intercambio (Kadabra, Machoke, Haunter...) evolucionan al recibirlos.</small>';
-  if(box._h!==h){box._h=h;box.innerHTML=h}
+  const L=TRD.inc.filter(t=>["req","resp"].includes(t.st)).map(t=>({t:t,txt:t.st==="req"?esc(pvClean(t.fn))+' te ofrece '+recTxt(t.o):'Esperando a que '+esc(pvClean(t.fn))+' acepte: '+recTxt(t.o)+' ⇄ '+recTxt(t.b),st:t.st==="req"?"inc":"wait",hot:t.st==="req"}))
+    .concat(TRD.out.filter(t=>["req","resp"].includes(t.st)).map(t=>({t:t,txt:t.st==="resp"?esc(pvClean(t.tn))+' te da '+recTxt(t.b)+' por tu '+recTxt(t.o):'Has ofrecido '+recTxt(t.o)+' a '+esc(pvClean(t.tn)),st:t.st==="resp"?"review":"wait",hot:t.st==="resp"})));
+  const h='<b>🔄 Intercambios</b>'+(L.length?L.map((x,i)=>'<div class="pvrow'+(x.hot?' thot':'')+'"><span class="pvav">'+ico(PM[(x.t.o||{}).n]||P[0],30,false,!!(x.t.o||{}).s)+'</span><small style="flex:1">'+x.txt+'</small><button data-topen="'+i+'">'+(x.hot?"¡Ver!":"Abrir")+'</button></div>').join(""):'<small class="mut">No tienes intercambios en curso. Pulsa 🔄 junto a un amigo para abrir la ventana de intercambio. Los Pokémon que evolucionan por intercambio (Kadabra, Machoke, Haunter...) evolucionan al recibirlos.</small>');
+  box._L=L;if(box._h!==h){box._h=h;box.innerHTML=h}
 }
 // procesa los cambios de estado (cada intercambio se aplica una sola vez)
 async function trProcess(){
@@ -4112,28 +4210,42 @@ async function trProcess(){
     if(t.st==="no"){S.trp[k]=1;await pkGive(t.o,false);toast("🔄 "+pvClean(t.tn)+" ha rechazado el intercambio. Recuperas a "+t.o.n+".");window.FB.trDel(t.id).catch(()=>{})}
     else if(t.st==="done"){S.trp[k]=1;window.FB.trDel(t.id).catch(()=>{})}}
   for(const t of TRD.inc){const k=t.id+":"+t.st;if(S.trp[k])continue;
-    if(t.st==="acc"){S.trp[k]=1;stt().trade=(stt().trade||0)+1;toast("🔄 ¡Intercambio completado! Recibes a "+t.o.n+".");await pkGive(t.o,true);window.FB.trUpd(t.id,{st:"done"}).catch(()=>{})}
+    if(t.st==="acc"){if(fcd||TM.st==="anim")continue;S.trp[k]=1;stt().trade=(stt().trade||0)+1;save();await trAnim(t.b,t.o,pvClean(t.fn));await pkGive(t.o,true);window.FB.trUpd(t.id,{st:"done"}).catch(()=>{})}
     else if(t.st==="rej"){S.trp[k]=1;await pkGive(t.b,false);toast("🔄 "+pvClean(t.fn)+" no ha aceptado tu Pokémon. Lo recuperas.");window.FB.trDel(t.id).catch(()=>{})}
-    else if(t.st==="cx"){S.trp[k]=1;if(t.b)await pkGive(t.b,false);window.FB.trDel(t.id).catch(()=>{})}}
+    else if(t.st==="cx"){S.trp[k]=1;if(t.b)await pkGive(t.b,false);if(TM.t&&TM.t.id===t.id)trClose();toast("🔄 "+pvClean(t.fn)+" ha cancelado el intercambio.");window.FB.trDel(t.id).catch(()=>{})}}
+  // ventanas emergentes como en los juegos: solicitud nueva o respuesta a tu oferta
+  S.trs=S.trs||{};
+  if($("trdM").hidden&&!fcd){
+    const ni=TRD.inc.find(t=>t.st==="req"&&!S.trs[t.id+"r"]);
+    const nr=TRD.out.find(t=>t.st==="resp"&&!S.trs[t.id+"s"]);
+    if(ni){S.trs[ni.id+"r"]=1;snd("lvl");trOpen("inc",ni)}else if(nr){S.trs[nr.id+"s"]=1;snd("lvl");trOpen("review",nr)}
+  }
+  if(TM.st&&TM.t&&TM.st!=="anim"){const cur=TRD.inc.concat(TRD.out).find(x=>TM.t.id?x.id===TM.t.id:(x.from===TM.t.from&&x.to===TM.t.to&&x.o&&TM.t.o&&x.o.n===TM.t.o.n));if(cur&&cur.st==="resp"&&cur.from===window.FB.uid())S.trs[cur.id+"s"]=1;if(cur){TM.t=cur;if(TM.st==="wait"&&cur.st==="resp"&&cur.from===window.FB.uid()){TM.st="review"}if(!TM.st.startsWith("pick"))trRender()}}
   const ks=Object.keys(S.trp);if(ks.length>200)ks.slice(0,ks.length-200).forEach(k=>delete S.trp[k]);
   save();setTimeout(()=>{try{render()}catch(e){}},0);
 }
 function trState(st){TRD=st;setTimeout(()=>{trdUI();trProcess()},0)}
 document.addEventListener("click",async e=>{
-  const b=e.target.closest&&e.target.closest("#trdBox button,#frBox button[data-frt]");if(!b||!window.FB)return;const d=b.dataset;
+  const b=e.target.closest&&e.target.closest("#trdM button,#trdBox button,#frBox button[data-frt]");if(!b||!window.FB)return;const d=b.dataset,t=TM.t;
   try{
-    if(d.frt){TRC={uid:d.frt,n:d.frtn};trdUI();try{$("trdBox").scrollIntoView({behavior:"smooth",block:"center"})}catch(x){}return}
-    if(d.trx){TRC=null;trdUI();return}
-    if(d.trgo){const n=$("trdS").value;if(!n||!TRC)return;if(fcd){toast("Termina el combate antes de intercambiar.");return}b.disabled=true;const rec=pkTake(n);if(!rec)return;
-      try{await window.FB.trSend(TRC.uid,TRC.n,pvClean(pvNick()),rec);if(window.cloudFlush)window.cloudFlush(true);toast("📨 Intercambio propuesto a "+TRC.n);TRC=null}catch(x){await pkGive(rec,false);throw x}trdUI();render();return}
-    if(d.trr){const n=$("trR_"+d.trr).value;if(!n||fcd)return;b.disabled=true;const rec=pkTake(n);if(!rec)return;
-      try{await window.FB.trUpd(d.trr,{st:"resp",b:rec});if(window.cloudFlush)window.cloudFlush(true)}catch(x){await pkGive(rec,false);throw x}render();return}
-    if(d.trn){await window.FB.trUpd(d.trn,{st:"no"});return}
-    if(d.trc){const t=TRD.out.find(x=>x.id===d.trc);if(!t)return;await window.FB.trUpd(t.id,{st:"cx"});S.trp=S.trp||{};S.trp[t.id+":cx"]=1;await pkGive(t.o,false);toast("Intercambio cancelado: recuperas a "+t.o.n+".");return}
-    if(d.tra){const t=TRD.out.find(x=>x.id===d.tra);if(!t||t.st!=="resp")return;b.disabled=true;await window.FB.trUpd(t.id,{st:"acc"});S.trp=S.trp||{};S.trp[t.id+":acc"]=1;stt().trade=(stt().trade||0)+1;toast("🔄 ¡Intercambio completado! Recibes a "+t.b.n+".");await pkGive(t.b,true);if(window.cloudFlush)window.cloudFlush(true);render();return}
-    if(d.trj){const t=TRD.out.find(x=>x.id===d.trj);if(!t)return;await window.FB.trUpd(t.id,{st:"rej"});S.trp=S.trp||{};S.trp[t.id+":rej"]=1;await pkGive(t.o,false);toast("Intercambio rechazado: recuperas a "+t.o.n+".");return}
+    if(d.frt){trOpen("pick",{uid:d.frt,n:d.frtn});return}
+    if(d.topen!=null){const x=($("trdBox")._L||[])[+d.topen];if(x)trOpen(x.st,x.t);return}
+    if(d.tp){TM.sel=d.tp;snd("ui");const sc=$("trdB").querySelector(".tgrid").scrollTop;trRender();$("trdB").querySelector(".tgrid").scrollTop=sc;try{cry(d.tp)}catch(x){}return}
+    if(d.tcl){trClose();return}
+    if(d.tpb){TM.st="pickb";TM.sel=null;trRender();return}
+    if(d.tgo){
+      if(!TM.sel||fcd)return;b.disabled=true;const rec=pkTake(TM.sel);if(!rec)return;
+      if(TM.st==="pick"){try{const ref=await window.FB.trSend(t.uid,t.n,pvClean(pvNick()),rec);if(window.cloudFlush)window.cloudFlush(true);snd("throw");TM.st="wait";TM.t={id:ref&&ref.id,from:window.FB.uid(),to:t.uid,tn:t.n,o:rec,st:"req"};trRender();toast("📨 Oferta enviada a "+t.n)}catch(x){await pkGive(rec,false);throw x}}
+      else{try{await window.FB.trUpd(t.id,{st:"resp",b:rec});if(window.cloudFlush)window.cloudFlush(true);snd("throw");TM.st="wait";TM.t=Object.assign({},t,{b:rec,st:"resp"});trRender()}catch(x){await pkGive(rec,false);throw x}}
+      render();return;
+    }
+    if(d.tno){await window.FB.trUpd(t.id,{st:"no"});trClose();toast("Has rechazado el intercambio.");return}
+    if(d.tcx){const o=TRD.out.find(x=>x.o&&t&&x.st==="req"&&(x.id===t.id||(!t.id&&x.o.n===t.o.n)));if(!o)return;await window.FB.trUpd(o.id,{st:"cx"});S.trp=S.trp||{};S.trp[o.id+":cx"]=1;await pkGive(o.o,false);trClose();toast("Intercambio cancelado: recuperas a "+o.o.n+".");return}
+    if(d.tacc){if(!t||t.st!=="resp")return;b.disabled=true;await window.FB.trUpd(t.id,{st:"acc"});S.trp=S.trp||{};S.trp[t.id+":acc"]=1;stt().trade=(stt().trade||0)+1;save();await trAnim(t.o,t.b,pvClean(t.tn));await pkGive(t.b,true);if(window.cloudFlush)window.cloudFlush(true);render();return}
+    if(d.trej){await window.FB.trUpd(t.id,{st:"rej"});S.trp=S.trp||{};S.trp[t.id+":rej"]=1;await pkGive(t.o,false);trClose();toast("Intercambio rechazado: recuperas a "+t.o.n+".");return}
   }catch(x){toast("No se pudo completar el intercambio ("+((x&&x.code)||"error")+").")}
 });
+$("trdM").addEventListener("click",e=>{if(e.target.id==="trdM"&&TM.st!=="anim")trClose()});
 // ================= gritos de los Pokémon (audio original de PokeAPI) =================
 const CRY="https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/",CRY2="https://cdn.jsdelivr.net/gh/PokeAPI/cries@main/cries/pokemon/latest/";
 function cry(n){

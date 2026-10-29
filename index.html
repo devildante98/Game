@@ -758,6 +758,11 @@ body.hc .panel{border-width:2px}
 .chdml{display:flex;flex-direction:column;gap:6px}.chdm{position:relative;display:flex;align-items:center;gap:10px;padding:8px 10px;text-align:left;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:14px}.chdmt{display:flex;flex-direction:column;min-width:0;flex:1}.chdmt small{color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.chdm i{position:static}
 @media (max-width:560px){main>header h1{font-size:1.15rem;padding-right:150px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;box-sizing:border-box}}
 @media (max-width:620px){#chw{top:0;left:0;right:0;bottom:0;width:auto;border-radius:0;z-index:96}}
+.chcards{display:flex;flex-direction:column;gap:8px;margin-bottom:6px}
+.chcard{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--bg);border:1px solid var(--line)}.chcard>div{flex:1;display:flex;flex-direction:column;min-width:0}
+.chci{font-size:1.8rem;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--panel);border:1px solid var(--line);flex:none}
+.chcn{display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:9px;background:#e63950;color:#fff;font-style:normal;font-size:.68rem;font-weight:900;padding:0 4px;vertical-align:middle}
+.chcl{color:var(--ink);opacity:.8;font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 body.calm .dcheart,body.calm .egg.wob,body.calm .gfb span,body.calm .gfbox,body.calm .hofb,body.calm .twnext.boss,body.calm .safspr{animation:none!important}
 img.pk.hd{image-rendering:auto!important;object-fit:contain}
 .spr img.hd,.pkvspr img.hd,.tspr2 img.hd,.evost img.hd{animation:hdidle 3.2s ease-in-out infinite;transform-origin:50% 90%}
@@ -4329,6 +4334,7 @@ function frUI(){
       '<button data-frch="'+esc(u)+'"'+(canDuel?'':' disabled')+' title="Retar a un duelo 1 vs 1">⚔️ Retar</button>'+
       '<button data-fr2="'+esc(u)+'"'+(o&&!R2&&!fcd&&PV.st==="idle"?'':' disabled')+' title="Crear una sala 2 vs 2 e invitarle">👥 2vs2</button>'+
       (window.FB&&window.FB.gfSend?'<button class="'+(gfSentToday(u)?'alt':'')+'" data-gfs="'+esc(u)+'"'+(gfSentToday(u)?' disabled title="Ya le has enviado un regalo hoy"':' title="Enviar un regalo"')+'>'+(gfSentToday(u)?'✅':'🎁')+'</button>':'')+
+      (window.FB&&window.FB.chSend?'<button class="alt" data-frmsg="'+esc(u)+'" title="Enviar un mensaje privado">💬</button>':'')+
       '<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Proponer un intercambio">🔄</button><button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
   box.innerHTML=h;$("frCnt").textContent=ids.length+" amigo"+(ids.length===1?"":"s")+" · "+ids.filter(u=>on[u]).length+" conectados";
   const n=FR.inc.length;if($("navfr"))$("navfr").hidden=!n,$("navfr").textContent=n;
@@ -6198,6 +6204,26 @@ setInterval(()=>{const o=$("optp");if(o&&!o.hidden&&!$("chMuteBox"))chMuteUI()},
 document.addEventListener("keydown",e=>{if(e.target&&e.target.closest&&e.target.closest("#chw")&&e.key!=="Escape")e.stopPropagation()},true);
 document.addEventListener("keyup",e=>{if(e.target&&e.target.closest&&e.target.closest("#chw"))e.stopPropagation()},true);
 chBtn();
+// ================= pestaña «Chat» dentro de Social =================
+function chOpenAt(tab,dm){hubClose();CH.tab=tab||"global";CH.dm=dm||null;CH.emo=CH.pick=false;if(CH.open){chPanels();chTabs();chRender()}else chToggle(true);snd("ui")}
+nxPanel("chatP","💬 Chat","Habla con todos los jugadores, con tu gremio o en privado con tus amigos. El chat se abre en un panel lateral, así que puedes seguir jugando mientras hablas.");
+{const g=HUB.find(x=>x.k==="soc");if(g&&!g.tabs.some(t=>t[0]==="chatP")){g.tabs.splice(1,0,["chatP","Chat"]);g.d="Amigos, chat, intercambios y gremio"}HUBP.chatP="soc";HUBR.chatP=()=>chHubUI()}
+function chLast(k){const l=CH.msgs[k]||[],m=[...l].reverse().find(x=>!chMuted(x.u));return m?esc(pvClean(m.n||""))+": "+esc(m.p?"📸 "+m.p.n:m.t||"").slice(0,70):""}
+function chHubUI(){
+  const box=$("chatPB");if(!box)return;const on=!!(window.FB&&chMe());if(on)chSync();
+  const card=(ic,t,d,k,btn,attr,n,last)=>'<div class="chcard"><span class="chci">'+ic+'</span><div><b>'+t+(n?' <i class="chcn">'+n+'</i>':'')+'</b><small class="mut">'+d+'</small>'+(last?'<small class="chcl">'+last+'</small>':'')+'</div><button class="red" '+attr+'>'+btn+'</button></div>';
+  if(!on){box.innerHTML='<p class="mut">Inicia sesión con tu cuenta para chatear con otros jugadores.</p>';return}
+  const ids=Object.keys(FR.l||{}),du=ids.reduce((a,u)=>a+chUnread("d:"+dmKey(u)),0);
+  let h='<div class="chcards">'+card("🌍","Chat global","Todos los jugadores conectados","global","Abrir",'data-cho="global"',0,chLast("global"))+
+    card("🛡️","Chat del gremio",GS.gid?"Solo para los miembros de "+esc((GS.doc&&GS.doc.name)||"tu gremio"):"Únete a un gremio para usarlo","guild","Abrir",'data-cho="guild"'+(GS.gid?'':' disabled'),GS.gid?chUnread("g:"+GS.gid):0,GS.gid?chLast("g:"+GS.gid):"")+
+    card("👥","Mensajes privados",ids.length?ids.length+" amigo"+(ids.length===1?"":"s"):"Añade amigos para escribirles","dm","Abrir",'data-cho="dm"',du,"")+'</div>';
+  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3><div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(pvClean(f.n||"Amigo"))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
+  box.innerHTML=h;
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cho],[data-chodm],[data-frmsg]");if(!b)return;
+  if(b.dataset.cho)chOpenAt(b.dataset.cho);else chOpenAt("dm",b.dataset.chodm||b.dataset.frmsg)});
+{const _hb=hubBadges;hubBadges=function(){const o=_hb();try{const n=chUnreadAll();if(n)o.soc=(o.soc|0)+n}catch(e){}return o}}
+setInterval(()=>{try{if(nxOpen("chatP"))chHubUI()}catch(e){}},3000);
 
 </script>
 <script>

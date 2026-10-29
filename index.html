@@ -474,6 +474,8 @@ img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
 .medal.on img{animation:mshine 3.2s ease-in-out infinite}
 @keyframes mshine{0%,70%,100%{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--mc) 70%,#fff)) drop-shadow(0 2px 2px rgba(0,0,0,.35))}82%{filter:brightness(1.45) drop-shadow(0 0 10px #fff) drop-shadow(0 2px 2px rgba(0,0,0,.35))}}
 .medrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0}
+.capbar{display:flex;gap:8px;align-items:flex-start;margin:4px 0 10px;padding:8px 12px;border-radius:12px;background:color-mix(in srgb,#f59e0b 14%,transparent);border:1px solid color-mix(in srgb,#f59e0b 45%,transparent);font-size:13px;line-height:1.4}
+.capbar.ok{background:color-mix(in srgb,#10b981 14%,transparent);border-color:color-mix(in srgb,#10b981 45%,transparent)}
 .ssn{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0}
 .tier{display:inline-block;font-weight:800;border-radius:10px;padding:4px 10px;color:#fff;background:#b07a4a}
 .tier.t1{background:#8c97a8}.tier.t2{background:#d4a000}.tier.t3{background:#2fb0c0}.tier.t4{background:#3f86f0}.tier.t5{background:linear-gradient(90deg,#8a3fd0,#e86aa8)}
@@ -780,7 +782,7 @@ img.pk.item{object-fit:contain;image-rendering:pixelated}
 </section>
 <section class="panel" aria-label="Gimnasios" id="gymP">
   <div class="hhead"><h2>🏅 Gimnasios</h2><span class="hcost">8 medallas</span></div>
-  <p class="rates">Derrota a los 8 Líderes de Gimnasio en orden para conseguir sus medallas. Cada medalla da un buen premio y desbloquea nuevas zonas de exploración, y con las 8 podrás desafiar a la Liga Pokémon. Puedes repetir los combates (revancha) con rivales a tu nivel.</p>
+  <p class="rates">Derrota a los 8 Líderes de Gimnasio en orden para conseguir sus medallas. Cada medalla da un buen premio y desbloquea nuevas zonas de exploración, y con las 8 podrás desafiar a la Liga Pokémon. Cada gimnasio marca el <b>límite de nivel</b>: tus Pokémon no pueden pasar del nivel del as del siguiente Líder (ni puedes capturar salvajes más fuertes) hasta que consigas su medalla. Puedes repetir los combates (revancha) con rivales a tu nivel.</p>
   <div id="gymBox"></div>
 </section>
 <section class="panel" aria-label="Liga Pokémon" id="lgP">
@@ -1988,16 +1990,19 @@ async function offer(p){
   $("menu").innerHTML="";
 }
 async function gainXp(p,amt){
-  const d=lvd(p[0]),act=B&&B.mode==="s"&&B.snap&&snapMon(B.snap,0).p===p;d.x+=amt;
+  const d=lvd(p[0]),act=B&&B.mode==="s"&&B.snap&&snapMon(B.snap,0).p===p,cap=lvCap();
+  if(cap<100&&d.l>=cap){d.x=0;await say(p[0]+" está en el límite de nivel (Nv"+cap+") y no gana experiencia. "+capWhy());return false}
+  d.x+=amt;
   snd("xp");await say(p[0]+" gana "+fmt(amt)+" puntos de experiencia.");
   if(act){xpBar();await sleep(700)}
   let up=false;
-  while(d.l<100&&d.x>=need(d.l)){
+  while(d.l<cap&&d.x>=need(d.l)){
     d.x-=need(d.l);d.l++;up=true;snd("lvl");qEv("lvl");
     if(act){const xb=$("xb");xb.style.transition="none";xb.style.width="0%";void xb.offsetWidth;xb.style.transition="";burst("⭐",pos("msp"),8,60,26);$("ml").textContent=STAR[p[2]]+" "+TIPO[p[1]]+" Nv"+d.l}
     await say("¡"+p[0]+" sube al nivel "+d.l+"!");
     if(act){xpBar();await sleep(500)}
   }
+  if(cap<100&&d.l>=cap){d.x=0;await say(p[0]+" ha alcanzado el límite de nivel (Nv"+cap+"). "+capWhy())}
   if(up)await offer(p);
   return up;
 }
@@ -2118,6 +2123,7 @@ async function turn(k){
     if(!(S.bag[id]>0))return;
     if(!it[3]){B.item=id;setMenu("tgt");return}
     if(B.trainer){B.busy=true;setMenu(false);await say("¡No puedes capturar a los Pokémon de otro entrenador!");B.busy=false;setMenu(true);return}
+    {const wm=beAct(B.E.sd[1]),cap=lvCap();if(wm.l>cap){B.busy=true;setMenu(false);await say("¡"+wm.p[0]+" (Nv"+wm.l+") es demasiado fuerte! Solo puedes capturar Pokémon hasta el Nv"+cap+". "+capWhy());B.busy=false;setMenu(true);return}}
     return ball(id,it);
   }
   if(k==="f"){
@@ -2239,7 +2245,7 @@ function bagUI(){
   $("bgrid").innerHTML=have.length?have.map(it=>'<div class="btile'+(useId===it[0]?' sel':'')+'"><span class="iico big">'+itemIco(it[0],52)+'</span><div class="bti"><b>'+it[1]+' <span class="bcnt">×'+S.bag[it[0]]+'</span></b><small class="mut">'+it[6]+'</small>'+(it[3]===0?'<button data-use="'+it[0]+'">Usar</button>':'<small class="mut">Se usa en combate</small>')+'</div></div>').join(""):'<small class="mut">Tu mochila está vacía. Consigue objetos ganando combates o cómpralos en la tienda.</small>';
 }
 function candList(){
-  const q=nrm($("bcQ").value.trim()),own=P.filter(p=>S.owned[p[0]]&&lvd(p[0]).l<100&&nrm(p[0]).includes(q)).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
+  const q=nrm($("bcQ").value.trim()),cap=lvCap(),own=P.filter(p=>S.owned[p[0]]&&lvd(p[0]).l<cap&&nrm(p[0]).includes(q)).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
   $("bcS").innerHTML=own.slice(0,300).map(p=>'<option value="'+esc(p[0])+'">'+esc(p[0])+' · Nv'+lvd(p[0]).l+(S.team.includes(p[0])?' ⭐':'')+'</option>').join("");
   if(own.length)$("bcS").selectedIndex=0;
 }
@@ -2254,7 +2260,7 @@ function useUI(msg){
     h+=L.length?'<div class="bul">'+L.map(p=>'<button class="bunit" data-bev="'+esc(p[0])+'">'+ico(p,30)+'<span><b>'+esc(p[0])+'</b> <small>Nv'+lvd(p[0]).l+' → '+evoByItem(p[0],useId).map(e=>esc(e[0])).join(" / ")+'</small></span></button>').join("")+'</div>':'<small class="mut">Ninguno de tus Pokémon evoluciona con este objeto. Lo usan: '+esc(evoUsers(useId))+'.</small>';
   }
   else if(useId==="cand"){
-    h+='<div class="sets-row"><input id="bcQ" placeholder="Buscar Pokémon..." aria-label="Buscar Pokémon"><select id="bcS" size="6" aria-label="Pokémon que recibirá el caramelo" style="width:100%"></select></div><div class="sets-row"><label>Cantidad <input id="bcN" type="number" min="1" value="1" style="width:80px"></label><button class="red" id="bcGo">Usar Caramelo Raro</button></div>';
+    h+='<div class="sets-row"><input id="bcQ" placeholder="Buscar Pokémon..." aria-label="Buscar Pokémon"><select id="bcS" size="6" aria-label="Pokémon que recibirá el caramelo" style="width:100%"></select></div><div class="sets-row"><label>Cantidad <input id="bcN" type="number" min="1" value="1" style="width:80px"></label><button class="red" id="bcGo">Usar Caramelo Raro</button></div>'+(lvCap()<100?'<small class="mut">🔒 Límite de nivel actual: Nv'+lvCap()+'. '+esc(capWhy())+'</small>':'');
   }else if(PPI[useId]||useId==="ppup"||useId==="ppmax"){
     const one=useId==="ppup"||useId==="ppmax"||PPI[useId].one;
     h+='<div class="sets-row"><input id="bpQ" placeholder="Buscar Pokémon..." aria-label="Buscar Pokémon"><select id="bpS" size="6" aria-label="Pokémon" style="width:100%"></select></div>'+(one?'<div class="sets-row"><select id="bpM" aria-label="Movimiento" style="width:100%"></select></div>':'')+'<div class="sets-row"><button class="red" id="bpGo">Usar '+it[1]+'</button></div>';
@@ -2311,7 +2317,8 @@ $("buse").addEventListener("click",e=>{
   if(b.id==="bcGo"){
     const n=$("bcS").value;if(!n){useUI("Elige un Pokémon de la lista.");return}
     const d=lvd(n);moveIds(n);
-    const q=Math.max(1,Math.min(Math.floor(+$("bcN").value)||1,S.bag.cand,100-d.l)),l0=d.l;
+    const room=lvCap()-d.l;if(room<=0){useUI(n+" ya está en el límite de nivel (Nv"+lvCap()+"). "+capWhy());return}
+    const q=Math.max(1,Math.min(Math.floor(+$("bcN").value)||1,S.bag.cand,room)),l0=d.l;
     d.l+=q;d.x=0;S.bag.cand-=q;qEv("lvl",q);
     if(S.hp[n]!==undefined)S.hp[n]=Math.min(mxOf(n),S.hp[n]+8*q);
     save();snd("lvl");render();
@@ -2432,7 +2439,7 @@ async function startBattle(cfg){
   fcd=true;$("fgo").disabled=true;
   try{$("batP").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}
   const team=names.map(n=>{const ids=moveIds(n),m=beMon(PM[n],lvd(n).l,S.hp[n],ids,ids.map(id=>ppCur(n,id)));m.sh=S.shiny&&S.shiny[n]>0?1:0;return m});
-  const lead=team.find(t=>t.mh>0).l;
+  const cap=lvCap(),lead=Math.min(team.find(t=>t.mh>0).l,cap),wl=cap<100?Math.min(lead,cap-2):lead;
   let eteam,trainer=null,league=null,tsrc=null;
   if(cfg&&cfg.eteam){eteam=cfg.eteam;trainer=cfg.trainer;league=cfg.league||null;tsrc=cfg.tsrc}
   else if(Math.random()<.18){
@@ -2440,7 +2447,7 @@ async function startBattle(cfg){
     eteam=tr[1].filter(n=>PM[n]).map((n,i)=>mkEnemy(PM[n],clampL(lead+Math.floor(Math.random()*6)-3+tr[2]+i)));
   }else{
     const x=Math.random()*100,r=x<2?"L":x<8?"E":x<30?"R":"C",op=wildPick(r);
-    eteam=[mkEnemy(op,clampL(lead+Math.floor(Math.random()*5)-2+WW[r]-1))];if(Math.random()<SHINY_W)eteam[0].sh=1;
+    eteam=[mkEnemy(op,clampL(wl+Math.floor(Math.random()*5)-2+WW[r]-1))];if(Math.random()<SHINY_W)eteam[0].sh=1;
   }
   const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);
   B={mode:"s",E:E,me:0,SL:[SL_ME,SL_OP],trainer:trainer,tsrc:tsrc,league:league,gym:cfg&&cfg.gym!=null?cfg.gym:null,zone:cfg&&cfg.eteam?null:zoneCur(),xpPool:0,busy:true,choose:null,item:null,showOpp:!!trainer,
@@ -3888,7 +3895,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T15:51",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T15:59",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -4020,6 +4027,11 @@ function zoneUI(){
 // ================= gimnasios y medallas =================
 // [medalla, tipo, nivel, gimnasio, líder] (los 8 gimnasios de Kanto)
 const GYMS=[["Roca","rock",12,"Ciudad Plateada","Brock"],["Cascada","water",18,"Ciudad Celeste","Misty"],["Trueno","electric",24,"Ciudad Carmín","Teniente Surge"],["Arcoíris","grass",30,"Ciudad Azulona","Erika"],["Alma","poison",36,"Ciudad Fucsia","Koga"],["Pantano","psychic",42,"Ciudad Azafrán","Sabrina"],["Volcán","fire",48,"Isla Canela","Blaine"],["Tierra","ground",54,"Ciudad Verde","Giovanni"]];
+// ---- límite de nivel: nadie sube por encima del as del siguiente Líder hasta conseguir su medalla
+const gymAce=i=>GYMS[i][2]+2*(3+Math.floor(i/3))-4;
+const gymNext=()=>{for(let i=0;i<GYMS.length;i++)if(!(S.med&&S.med[i]))return i;return -1};
+const lvCap=()=>{const i=gymNext();return i<0?100:gymAce(i)};
+const capWhy=()=>{const i=gymNext();return i<0?"":"Derrota al Líder "+GYMS[i][4]+" (Gimnasio de "+GYMS[i][3]+") para subir el límite."};
 const medCount=()=>Object.keys(S.med||{}).filter(k=>S.med[k]).length;
 const lgUnlocked=()=>medCount()>=8||Object.keys(S.lgDone||{}).length>0||!!S.lg;
 function gymTeam(i){
@@ -4039,6 +4051,7 @@ async function gymWin(i){
     S.med[i]=1;const rw={t:500000*(i+1),it:i%2?{cand:1}:{ub:3}};grant(rw);snd("lvl");
     await say("¡Has derrotado al Líder del Gimnasio de "+g[3]+"!");await say("¡Has conseguido la Medalla "+g[0]+"! ("+medCount()+"/8)");await say("Premio: "+rwTxt(rw)+".");
     if(medCount()>=8)await say("¡Tienes las 8 medallas! Ya puedes desafiar a la Liga Pokémon.");
+    await say(gymNext()<0?"¡Ya no hay límite de nivel! Tus Pokémon pueden llegar hasta el nivel 100.":"¡El límite de nivel sube al Nv"+lvCap()+"! Tus Pokémon ya pueden seguir entrenando hasta ese nivel.");
     const nz=Object.values(ZONES).filter(z=>z.m===medCount());if(nz.length)await say("Nueva zona desbloqueada: "+nz.map(z=>z.n).join(", ")+".");
   }else{const rw={t:150000*(i+1)};grant(rw);await say("Revancha ganada. Premio: "+rwTxt(rw)+".")}
   save();
@@ -4046,8 +4059,8 @@ async function gymWin(i){
 let _gyk="";
 function gymUI(){
   const box=$("gymBox");if(!box)return;const key=JSON.stringify([S.med,fcd]);if(key===_gyk)return;_gyk=key;
-  box.innerHTML='<div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,S.med&&S.med[i])).join("")+'<b>'+medCount()+' / 8 medallas</b></div><div class="lggrid">'+GYMS.map((g,i)=>{const got=S.med&&S.med[i],open=i===0||(S.med&&S.med[i-1]);
-    return '<div class="lgc">'+gymMedal(i,got,34)+'<b>Gimnasio de '+g[3]+'</b><small>Líder: '+g[4]+' · Medalla '+g[0]+'</small><small class="mut">'+EM[g[1]]+' Tipo '+TIPO[g[1]]+' · Nivel '+g[2]+'</small><button data-gym="'+i+'"'+(!open||fcd?' disabled':'')+'>'+(got?"🔁 Revancha":open?"⚔️ Desafiar":"🔒 Bloqueado")+'</button></div>'}).join("")+'</div><small id="gymMsg" class="mut"></small>';
+  box.innerHTML='<div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,S.med&&S.med[i])).join("")+'<b>'+medCount()+' / 8 medallas</b></div>'+(gymNext()<0?'<div class="capbar ok">🔓 <span><b>Sin límite de nivel</b> · ¡Tienes las 8 medallas! Tus Pokémon pueden llegar al Nv100.</span></div>':'<div class="capbar">🔒 <span><b>Límite de nivel: Nv'+lvCap()+'</b> · Tus Pokémon no subirán de este nivel ni podrás capturar Pokémon salvajes más fuertes hasta que derrotes al Líder '+GYMS[gymNext()][4]+'.</span></div>')+'<div class="lggrid">'+GYMS.map((g,i)=>{const got=S.med&&S.med[i],open=i===0||(S.med&&S.med[i-1]);
+    return '<div class="lgc">'+gymMedal(i,got,34)+'<b>Gimnasio de '+g[3]+'</b><small>Líder: '+g[4]+' · Medalla '+g[0]+'</small><small class="mut">'+EM[g[1]]+' Tipo '+TIPO[g[1]]+' · Nv'+(g[2]-2)+'–'+gymAce(i)+'</small>'+(got?'':'<small class="mut">'+(i===gymNext()?'🔒 Límite actual: Nv'+gymAce(i):'Límite al llegar aquí: Nv'+gymAce(i))+'</small>')+'<button data-gym="'+i+'"'+(!open||fcd?' disabled':'')+'>'+(got?"🔁 Revancha":open?"⚔️ Desafiar":"🔒 Bloqueado")+'</button></div>'}).join("")+'</div><small id="gymMsg" class="mut"></small>';
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#gymBox button[data-gym]");if(!b)return;const i=+b.dataset.gym,g=GYMS[i];
   if(!(S.team||[]).some(n=>n&&S.owned[n]&&S.hp[n]!==0)){$("gymMsg").textContent="Necesitas un equipo con al menos un Pokémon con PS.";return}

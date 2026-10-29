@@ -3305,7 +3305,19 @@ function gUI(force){
   box.innerHTML=h;
   if(aid&&$(aid)){try{$(aid).focus();if(caret!=null)$(aid).setSelectionRange(caret,caret)}catch(e){}}
 }
-async function gRefresh(){if(!window.FB)return;try{GS.list=await window.FB.gList()}catch(e){gMsg("No se pudo cargar la lista ("+((e&&e.code)||"error")+").")}gUI(true)}
+async function gRefresh(){if(!window.FB)return;try{GS.list=await window.FB.gList()}catch(e){gMsg("No se pudo cargar la lista ("+((e&&e.code)||"error")+").")}
+  const me=window.FB.uid();if(!S.gid){const g=GS.list.find(x=>x.members&&x.members[me]);if(g){S.gid=g.id;delete S.greq;save();gWatch(g.id)}}
+  gUI(true)}
+// busca en la nube a qué gremio perteneces (por si entraste aceptado por el líder o desde otro dispositivo)
+async function gFindMine(){if(!window.FB||!window.FB.gMine||S.gid)return;try{const id=await window.FB.gMine();if(id&&!S.gid){S.gid=id;delete S.greq;save();gWatch(id);toast("🛡️ Formas parte del gremio.")}}catch(e){}}
+// mientras tu solicitud esta pendiente, se vigila el gremio para entrar en cuanto el líder te acepte
+let _grqU=null;
+function gReqWatch(gid){
+  if(_grqU){try{_grqU()}catch(e){}_grqU=null}if(!gid||!window.FB||S.gid)return;
+  _grqU=window.FB.gWatch(gid,d=>{const me=window.FB.uid();
+    if(d&&d.members&&d.members[me]){if(_grqU){try{_grqU()}catch(e){}_grqU=null}S.gid=gid;delete S.greq;save();gWatch(gid);snd("lvl");toast("🛡️ ¡Te han aceptado en el gremio "+d.name+"!");return}
+    if(!d||!(d.req||{})[me]){if(_grqU){try{_grqU()}catch(e){}_grqU=null}if(S.greq===gid){delete S.greq;save();toast("Tu solicitud al gremio no ha sido aceptada.");gRefresh()}}});
+}
 function gWatch(gid){
   if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}
   GS.gid=gid;GS.doc=null;
@@ -3339,7 +3351,7 @@ document.addEventListener("click",async e=>{
       if(S.gid){gMsg("Ya perteneces a un gremio. Sal de él antes de unirte a otro.");return}
       const g=GS.list.find(x=>x.id===d.gj);if(!g)return;
       if(g.open){await window.FB.gJoin(d.gj,nick);S.gid=d.gj;save();gWatch(d.gj);toast("🛡️ ¡Te has unido a "+g.name+"!")}
-      else{await window.FB.gRequest(d.gj,nick);gMsg("📨 Solicitud enviada. El líder del gremio tiene que aceptarla.");GS.watchReq=d.gj;await gRefresh()}
+      else{await window.FB.gRequest(d.gj,nick);gMsg("📨 Solicitud enviada. El líder del gremio tiene que aceptarla.");S.greq=d.gj;save();gReqWatch(d.gj);await gRefresh()}
       return;
     }
     if(b.id==="gdLeave"){if(!confirm("¿Seguro que quieres salir del gremio?"))return;await window.FB.gLeave(GS.gid);S.gid=null;save();gWatch(null);gRefresh();return}
@@ -3363,7 +3375,7 @@ function supUI(){
 }
 async function pvInit0(){
   $("pvNick").value=pvNick();
-  if(window.FB){try{window.FB.frInit(frState);window.FB.trInit(trState)}catch(e){}if(S.gid)gWatch(S.gid);gRefresh()}
+  if(window.FB){try{window.FB.frInit(frState);window.FB.trInit(trState)}catch(e){}if(S.gid)gWatch(S.gid);else{gFindMine();if(S.greq)gReqWatch(S.greq)}gRefresh()}
   pvRender();nickInit();
   try{
     if(!window.claude||!window.claude.use)return;
@@ -3872,7 +3884,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T15:36",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T15:45",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -4352,6 +4364,7 @@ async function main(){
     async frRemove(f,me){await S.setDoc(S.doc(db,"friends",uid),{l:{[f]:S.deleteField()}},{merge:true});await S.setDoc(S.doc(db,"freq",uid+"_"+f),{from:uid,to:f,fn:String(me),tn:"",k:"rm",at:Date.now()})},
     gid:n=>"g_"+encodeURIComponent(String(n).trim().replace(/\s+/g," ").toLowerCase()).replace(/\./g,"%2E"),
     async gList(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.orderBy("n","desc"),S.limit(50)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    async gMine(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.where("members."+uid+".at",">",0),S.limit(1)));return sn.empty?null:sn.docs[0].id},
     gWatch:(gid,cb)=>S.onSnapshot(S.doc(db,"guilds",gid),sn=>cb(sn.exists()?sn.data():null),()=>{}),
     async gCreate(d,nick){const id=FB.gid(d.name),ref=S.doc(db,"guilds",id);await S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(s.exists())throw {code:"exists"};tx.set(ref,Object.assign({},d,{owner:uid,members:{[uid]:{n:String(nick),at:Date.now()}},req:{},n:1,at:Date.now()}))});return id},
     gJoin:(gid,nick)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+uid]:{n:String(nick),at:Date.now()},["req."+uid]:S.deleteField(),n:S.increment(1)}),

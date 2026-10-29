@@ -9,7 +9,7 @@
 --C:#8d93b5;--R:#2f7de1;--E:#9b4de0;--L:#f5a300;--M:#e0479e;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12152b;--panel:#1c2040;--ink:#f4f2ff;--mute:#9a9fc8;--line:#2d3260;--red:#ff4d65;--yel:#ffd35c;--teal:#2fe0b0;--C:#8d93b5;--R:#4f9dff;--E:#b26cff;--L:#ffb62e;--M:#ff6fc0}}
-:root[data-theme="dark"]{--bg:#12152b;--panel:#1c2040;--ink:#f4f2ff;--mute:#9a9fc8;--line:#2d3260;--red:#ff4d65;--yel:#ffd35c;--teal:#2fe0b0;--R:#4f9dff;--E:#b26cff;--L:#ffb62e;--M:#ff6fc0}
+:root[data-theme="dark"]{--C:#8d93b5;--bg:#12152b;--panel:#1c2040;--ink:#f4f2ff;--mute:#9a9fc8;--line:#2d3260;--red:#ff4d65;--yel:#ffd35c;--teal:#2fe0b0;--R:#4f9dff;--E:#b26cff;--L:#ffb62e;--M:#ff6fc0}
 *{box-sizing:border-box}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif;line-height:1.4}
@@ -602,6 +602,46 @@ img.pk.item{object-fit:contain;image-rendering:pixelated}
 #hubM .hubb>.panel>h2:first-child,#hubM .hubb>.panel>.hhead:first-child>h2{font-size:1.1rem}
 @media (max-width:700px){#hubM{padding:0}.hubw{width:100%;height:100%;max-height:none;border-radius:0}.hubh{padding:14px 14px 10px}.hubtabs{padding:0 14px 12px}.hubb{padding:14px}}
 body.hubon{overflow:hidden}
+#optp{position:fixed!important;inset:0!important;top:0!important;right:0!important;width:auto!important;max-height:none!important;overflow:visible!important;background:rgba(6,10,36,.62)!important;border:none!important;border-radius:0!important;padding:16px!important;box-shadow:none!important;z-index:70!important;display:flex!important;align-items:center;justify-content:center;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);box-sizing:border-box}
+#optp[hidden]{display:none!important}
+.setw{--px:"Pixelify Sans",ui-monospace,monospace;width:min(740px,100%);height:min(660px,calc(100vh - 32px));display:flex;flex-direction:column;background:linear-gradient(180deg,#24399c,#182b80 55%,#132169);border:3px solid #e8ecff;border-radius:18px;box-shadow:0 0 0 5px #0a1450,0 26px 60px rgba(0,0,0,.55);color:#fff;overflow:hidden}
+#optp:not([hidden]) .setw{animation:setin .26s cubic-bezier(.2,.9,.3,1.15)}
+@keyframes setin{from{opacity:0;transform:scale(.93) translateY(12px)}}
+.seth{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px 6px}
+.seth h2{margin:0;font-family:var(--px);font-weight:700;font-size:2rem;letter-spacing:1px;color:#fff;text-shadow:0 3px 0 #0a1450}
+.setx,.setbtn,.setpane .mrow button{font-family:var(--px)!important;font-weight:700;background:#2b45b4!important;color:#fff!important;border:2px solid #e8ecff!important;border-radius:10px!important;padding:8px 16px!important;font-size:1rem!important;box-shadow:0 3px 0 #0a1450!important;cursor:pointer}
+.setx:hover,.setbtn:hover,.setpane .mrow button:hover{background:#3653cc!important}
+.settabs{display:flex;flex-wrap:wrap;gap:8px;padding:8px 22px 14px}
+.settabs button{font-family:var(--px);font-weight:500;background:#1b2d84;color:#dfe5ff;border:2px solid #4a60c8;border-radius:10px;padding:7px 15px;font-size:1.02rem;box-shadow:0 3px 0 #0a1450;cursor:pointer}
+.settabs button:hover{border-color:#8fa2f0}
+.settabs button.on{border-color:#ffd35c;color:#fff;background:#2b45b4;box-shadow:0 0 0 3px rgba(255,211,92,.28),0 3px 0 #0a1450}
+.setbody{overflow-y:auto;padding:2px 22px 24px;border-top:2px solid rgba(255,255,255,.1)}
+.setpane h3{font-family:var(--px);font-weight:700;color:#ffd35c;font-size:1.35rem;margin:16px 0 10px}
+.setpane h4{font-family:var(--px);font-weight:500;color:#a9bbff;font-size:.95rem;margin:18px 0 8px;letter-spacing:1.5px;text-transform:uppercase}
+.setpane label{display:flex!important;align-items:center;gap:14px;font-size:.93rem!important;color:#eef1ff;background:rgba(8,18,64,.38);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:10px 14px;margin:0 0 8px;line-height:1.35}
+.setpane label.tog{flex-direction:row-reverse;justify-content:space-between;cursor:pointer}
+.setpane label.slid>span{font-family:var(--px);font-size:1.05rem;min-width:118px}
+.setpane input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:8px;background:#0a1450;border:1px solid #4a60c8;border-radius:4px;margin:0}
+.setpane input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:24px;background:#ffd35c;border:2px solid #fff;border-radius:4px;box-shadow:0 2px 0 #8a6a00;cursor:pointer}
+.setpane input[type=range]::-moz-range-thumb{width:16px;height:22px;background:#ffd35c;border:2px solid #fff;border-radius:4px;cursor:pointer}
+.setpane input[type=checkbox]{-webkit-appearance:none;appearance:none;width:48px;height:27px;flex:none;border-radius:14px;background:#0a1450;border:2px solid #4a60c8;position:relative;cursor:pointer;transition:background .2s,border-color .2s;margin:0}
+.setpane input[type=checkbox]::before{content:"";position:absolute;left:3px;top:3px;width:17px;height:17px;border-radius:50%;background:#dfe5ff;transition:transform .2s}
+.setpane input[type=checkbox]:checked{background:#ffd35c;border-color:#ffd35c}
+.setpane input[type=checkbox]:checked::before{transform:translateX(21px);background:#1c1f3a}
+.setpane select,#optp #song{font:inherit;background:#0a1450!important;color:#fff!important;border:2px solid #4a60c8!important;border-radius:10px!important;padding:8px 10px!important}
+#optp #song{width:100%;margin-bottom:8px;display:block}
+.setpane .mrow{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 8px}
+.setpane small,.setnote{display:block;color:#b9c6ff!important;font-size:.82rem;margin:4px 2px 10px;line-height:1.4}
+.setpane .tkl{margin-bottom:8px}
+.setabout{background:rgba(8,18,64,.38);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.setabout b{font-family:var(--px);font-size:1.3rem}
+.setlinks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 6px}
+#setMute{margin:4px 0 4px}
+@media (max-width:600px){#optp{padding:0!important}.setw{width:100%;height:100%;max-height:none;border-radius:0;border:none;box-shadow:none}.seth h2{font-size:1.6rem}.settabs{padding:6px 14px 12px;gap:6px}.settabs button{padding:6px 11px;font-size:.95rem}.setbody{padding:2px 14px 20px}.setlinks{grid-template-columns:minmax(0,1fr)}}
+body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+body.hc{--mute:color-mix(in srgb,var(--ink) 88%,transparent);--line:color-mix(in srgb,var(--ink) 50%,transparent)}
+body.hc .panel{border-width:2px}
+:root[data-theme="dark"]{color-scheme:dark}:root[data-theme="light"]{color-scheme:light}
 .tasum{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:6px 0 16px}
 .tasum>div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center;display:flex;flex-direction:column}
 .tasum b{font-size:1.5rem;color:var(--ink)}.tasum small{color:var(--mute);font-size:.75rem}
@@ -677,6 +717,7 @@ label:has(input[data-o="pColl"]),label:has(input[data-o="pBag"]),label:has(input
 .sugi p{margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
 .sugi .alt{background:var(--line);color:var(--ink);padding:4px 10px;font-size:.8rem;float:right}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div id="auth">
@@ -4730,7 +4771,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T19:06",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T19:25",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -5208,7 +5249,7 @@ function hubBadges(){
   return o;
 }
 let _hubAnim=0;
-const hubCalm=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches||!O.fx}catch(e){return false}};
+const hubCalm=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches||!O.fx||!!O.calm}catch(e){return false}};
 function hubBallC(){const r=$("navb").getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function hubSparks(c){
   const cols=["#ffffff","#fff59a","#ffd35c","#ff8a8a","#9ad7ff"];
@@ -5310,6 +5351,63 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("hubG").hidden)hubMenu(false);else if(!$("hubM").hidden&&$("trdM").hidden&&$("prof").hidden&&$("evo").hidden)hubClose()}});
 hubInit();
+// ================= ajustes en una ventana con secciones (Sonido, Gráficos, Controles, Accesibilidad, Cuenta, Acerca de) =================
+const SETT=[["snd","Sonido"],["gfx","Gráficos"],["ctl","Controles"],["acc","Accesibilidad"],["acct","Cuenta"],["about","Acerca de"]];
+let SETTAB="snd";
+function setTab(k){SETTAB=k;document.querySelectorAll("#optp .settabs button").forEach(b=>b.classList.toggle("on",b.dataset.st===k));document.querySelectorAll("#optp .setpane").forEach(p=>{p.hidden=p.dataset.st!==k});const b=document.querySelector("#optp .setbody");if(b)b.scrollTop=0}
+function setInit(){
+  const op=$("optp");if(!op||op.dataset.v2)return;op.dataset.v2="1";const vEl=$("vol"),sEl=$("svol");
+  const lab=k=>{const i=op.querySelector('input[data-o="'+k+'"]');return i?i.closest("label"):null};
+  const byId=id=>$(id),par=id=>{const e=$(id);return e?e.closest("label,.mrow")||e:null};
+  const panes={};
+  const mk=(k,title)=>{const d=document.createElement("div");d.className="setpane";d.dataset.st=k;d.innerHTML='<h3>'+title+'</h3>';panes[k]=d;return d};
+  const sec=(pane,t)=>{const h=document.createElement("h4");h.textContent=t;pane.appendChild(h)};
+  const add=(pane,els)=>els.forEach(e=>{if(e){if(e.tagName==="LABEL"&&e.querySelector('input[type="checkbox"]'))e.classList.add("tog");pane.appendChild(e)}});
+  // sonido
+  const sP=mk("snd","Sonido");
+  [["vol","🎵 Música"],["svol","🔔 Efectos"]].forEach(([id,t])=>{const l=par(id);if(l){l.classList.add("slid");const tn=[...l.childNodes].find(n=>n.nodeType===3);if(tn)tn.textContent="";const s=document.createElement("span");s.textContent=t;l.insertBefore(s,l.firstChild)}add(sP,[l])});
+  {const b=document.createElement("button");b.className="setbtn";b.id="setMute";b.type="button";sP.appendChild(b);
+    const upd=()=>{b.textContent=(O.vol>0||O.svol>0)?"🔇 Silenciar todo":"🔊 Activar el sonido"};upd();
+    b.onclick=()=>{if(O.vol>0||O.svol>0){O._mv=O.vol;O._ms=O.svol;O.vol=0;O.svol=0}else{O.vol=O._mv||.5;O.svol=O._ms||.7}
+      vEl.value=O.vol;sEl.value=O.svol;try{if(mgain)mgain.gain.value=O.vol;if(sgain)sgain.gain.value=O.svol}catch(e){}saveO();upd()};
+    [vEl,sEl].forEach(e=>e&&e.addEventListener("input",upd))}
+  sec(sP,"Música de fondo");add(sP,[byId("song"),par("mplay"),byId("mnow"),lab("auto")]);
+  sec(sP,"Combate");add(sP,[lab("sfx"),lab("cry")]);
+  // graficos
+  const gP=mk("gfx","Gráficos");
+  sec(gP,"Efectos");add(gP,[lab("fx"),lab("intro"),lab("rain"),lab("flt"),lab("fists"),lab("bg")]);
+  sec(gP,"Pantalla");
+  {const d=document.createElement("label");d.className="slid";d.innerHTML='<span>🌙 Tema</span><select id="setTheme"><option value="">Automático (como tu dispositivo)</option><option value="light">☀️ Claro</option><option value="dark">🌙 Oscuro</option></select>';gP.appendChild(d)}
+  add(gP,[par("bigopt"),lab("pShop"),lab("pBat")]);
+  // controles
+  const cP=mk("ctl","Controles");
+  sec(cP,"Tecla de la Pokéball");add(cP,[byId("tkl"),par("tkadd"),byId("tkmsg")]);
+  sec(cP,"Juego");add(cP,[lab("askip"),lab("skip"),lab("bgprod")]);
+  // accesibilidad
+  const aP=mk("acc","Accesibilidad");
+  {const d=document.createElement("div");d.innerHTML='<label class="slid"><span>🔠 Tamaño del texto</span><select id="setTxt"><option value="1">Normal</option><option value="1.1">Grande</option><option value="1.22">Muy grande</option></select></label><label class="tog"><input type="checkbox" data-o="calm"> Reducir el movimiento (sin animaciones ni balanceos)</label><label class="tog"><input type="checkbox" data-o="hc"> Alto contraste (textos y bordes más marcados)</label><small class="setnote">Estas opciones solo cambian cómo se ve el juego en este dispositivo.</small>';[...d.childNodes].forEach(n=>aP.appendChild(n))}
+  // cuenta
+  const kP=mk("acct","Cuenta y guardado");
+  add(kP,[byId("clInfo"),par("clNow"),par("clDel"),par("clExp"),byId("clImpOk"),byId("clFile"),byId("clCloud"),byId("clMsg")]);
+  // acerca de
+  const bP=mk("about","Acerca de");
+  bP.insertAdjacentHTML("beforeend",'<div class="setabout"><b>Poke Gacha Online</b><small>Juego de fans hecho con cariño. Colecciona, combate y comercia con jugadores de todo el mundo.</small></div><div class="setlinks"><button type="button" class="setbtn" data-sa="news">📰 Novedades</button><button type="button" class="setbtn" data-sa="welc">❓ Cómo se juega</button><button type="button" class="setbtn" data-sa="sug">💡 Enviar una sugerencia</button><button type="button" class="setbtn" data-sa="sup">💖 Apoyar el juego</button></div><small class="setnote">Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company. Sprites de PokeAPI y Pokémon Showdown. Este juego no es oficial ni tiene relación con ellas.</small>');
+  // montaje
+  const w=document.createElement("div");w.className="setw";w.setAttribute("role","dialog");w.setAttribute("aria-label","Ajustes");
+  w.innerHTML='<div class="seth"><h2>Ajustes</h2><button type="button" class="setx" id="setX">Cerrar</button></div><div class="settabs">'+SETT.map(t=>'<button type="button" data-st="'+t[0]+'">'+t[1]+'</button>').join("")+'</div><div class="setbody"></div>';
+  const body=w.querySelector(".setbody");SETT.forEach(t=>body.appendChild(panes[t[0]]));
+  [...op.childNodes].forEach(n=>n.remove());op.appendChild(w);
+  {const s=$("setTxt");s.value=String(O.txt||1);s.onchange=()=>{O.txt=+s.value;saveO();applyO()}}
+  {const s=$("setTheme");s.value=O.theme||"";s.onchange=()=>{O.theme=s.value;saveO();applyO();snd("ui")}}
+  applyO();setTab(SETTAB);
+  op.addEventListener("click",e=>{const t=e.target;if(t===op||t.closest("#setX")){op.hidden=true;return}
+    const st=t.closest(".settabs [data-st]");if(st){snd("ui");setTab(st.dataset.st);return}
+    const sa=t.closest("[data-sa]");if(sa){op.hidden=true;const a=sa.dataset.sa;if(a==="news")newsShow(true);else if(a==="welc")welcShow();else if(a==="sug")hubOpen("mas","sugP");else if(a==="sup")hubOpen("mas","supP")}});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!op.hidden)op.hidden=true});
+}
+const _applyOBase=applyO;
+applyO=function(){_applyOBase();const b=document.body;if(!b)return;b.classList.toggle("calm",!!O.calm);b.classList.toggle("hc",!!O.hc);const z=+O.txt||1;document.documentElement.style.zoom=z===1?"":String(z);const r=document.documentElement;if(O.theme==="dark"||O.theme==="light")r.dataset.theme=O.theme;else delete r.dataset.theme};
+setInit();
 
 </script>
 <script>

@@ -4795,7 +4795,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T19:53",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T20:00",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -5466,6 +5466,19 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("pkv");if
 (function(){const ids=["optp","pkv"],upd=()=>document.body.classList.toggle("modalon",ids.some(i=>{const e=$(i);return e&&!e.hidden}));
   const mo=new MutationObserver(upd);const watch=()=>ids.forEach(i=>{const e=$(i);if(e&&!e.dataset.mw){e.dataset.mw=1;mo.observe(e,{attributes:true,attributeFilter:["hidden"]})}});
   watch();document.addEventListener("click",()=>setTimeout(()=>{watch();upd()},0),true)})();
+// ================= el fondo decorativo no se vuelve a sortear al cambiar de tamaño (pantalla completa, girar el móvil...) =================
+(function(){
+  const CS=118,done=new Set();
+  bgBuild=function(){
+    const w=$("bgw");if(!w||!(innerWidth>0))return;
+    if(!done.size)w.querySelectorAll("i").forEach(i=>{const l=parseFloat(i.style.left),t=parseFloat(i.style.top);if(l>=0&&t>=0)done.add(Math.floor(t/CS)+","+Math.floor(l/CS))});
+    const cols=Math.ceil(innerWidth/CS),rows=Math.ceil(innerHeight/CS);let add="";
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const k=r+","+c;if(done.has(k))continue;done.add(k);
+      const p=P[Math.floor(Math.random()*P.length)],sz=50+Math.random()*36;
+      add+='<i style="left:'+(c*CS+Math.random()*(CS-sz))+'px;top:'+(r*CS+Math.random()*(CS-sz))+'px;transform:rotate('+(Math.random()*40-20)+'deg);animation-duration:'+(6+Math.random()*6)+'s;animation-delay:-'+(Math.random()*8)+'s">'+ico(p,sz)+'</i>'}
+    if(add)w.insertAdjacentHTML("beforeend",add);
+  };
+})();
 
 </script>
 <script>

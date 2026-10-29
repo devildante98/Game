@@ -467,8 +467,12 @@ img.shy{filter:drop-shadow(0 0 6px rgba(255,230,120,.95))}
 .evb.ft{background:color-mix(in srgb,var(--yel) 18%,var(--bg));border:1px solid var(--yel)}
 .evb.ft .pk{flex:none}
 #zoneSel{max-width:260px}
-.medal{--ms:30px;display:inline-grid;place-items:center;width:var(--ms);height:var(--ms);border-radius:50%;font-size:calc(var(--ms)*.5);background:var(--line);border:3px solid var(--line);filter:grayscale(1);opacity:.45}
-.medal.on{background:radial-gradient(circle at 35% 30%,#fff,var(--mc) 55%);border-color:#d4a000;filter:none;opacity:1;box-shadow:0 0 10px var(--mc)}
+.medal{--ms:34px;position:relative;display:inline-grid;place-items:center;width:var(--ms);height:var(--ms);font-size:calc(var(--ms)*.5);filter:grayscale(1) brightness(.55);opacity:.35}
+.medal img{width:100%;height:100%;object-fit:contain;image-rendering:auto;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.medal.on{filter:none;opacity:1}
+.medal.on img{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--mc) 70%,#fff)) drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.medal.on img{animation:mshine 3.2s ease-in-out infinite}
+@keyframes mshine{0%,70%,100%{filter:drop-shadow(0 0 6px color-mix(in srgb,var(--mc) 70%,#fff)) drop-shadow(0 2px 2px rgba(0,0,0,.35))}82%{filter:brightness(1.45) drop-shadow(0 0 10px #fff) drop-shadow(0 2px 2px rgba(0,0,0,.35))}}
 .medrow{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0}
 .ssn{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin:8px 0}
 .tier{display:inline-block;font-weight:800;border-radius:10px;padding:4px 10px;color:#fff;background:#b07a4a}
@@ -3884,7 +3888,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T15:45",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T15:51",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -4014,7 +4018,8 @@ function zoneUI(){
   s.value=zoneCur()||"";
 }
 // ================= gimnasios y medallas =================
-const GYMS=[["Roca","rock",12],["Agua","water",18],["Eléctrico","electric",24],["Planta","grass",30],["Veneno","poison",36],["Psíquico","psychic",42],["Fuego","fire",48],["Tierra","ground",54]];
+// [medalla, tipo, nivel, gimnasio, líder] (los 8 gimnasios de Kanto)
+const GYMS=[["Roca","rock",12,"Ciudad Plateada","Brock"],["Cascada","water",18,"Ciudad Celeste","Misty"],["Trueno","electric",24,"Ciudad Carmín","Teniente Surge"],["Arcoíris","grass",30,"Ciudad Azulona","Erika"],["Alma","poison",36,"Ciudad Fucsia","Koga"],["Pantano","psychic",42,"Ciudad Azafrán","Sabrina"],["Volcán","fire",48,"Isla Canela","Blaine"],["Tierra","ground",54,"Ciudad Verde","Giovanni"]];
 const medCount=()=>Object.keys(S.med||{}).filter(k=>S.med[k]).length;
 const lgUnlocked=()=>medCount()>=8||Object.keys(S.lgDone||{}).length>0||!!S.lg;
 function gymTeam(i){
@@ -4024,12 +4029,15 @@ function gymTeam(i){
   const rm=S.med&&S.med[i]?Math.max(0,leadLevel()-g[2]):0;
   return out.map((p,k)=>mkEnemy(p,clampL(g[2]+k*2-2+rm)));
 }
-function gymMedal(i,on,s){const g=GYMS[i];return '<span class="medal'+(on?' on':'')+'" style="--mc:'+TC[g[1]]+(s?';--ms:'+s+'px':'')+'">'+EM[g[1]]+'</span>'}
+// medallas originales de los juegos (PokeAPI): Roca, Cascada, Trueno, Arcoíris, Alma, Pantano, Volcán y Tierra
+const BADGE="https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/badges/";
+function badgeErr(el){if(!el.dataset.r){el.dataset.r=1;el.src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/badges/"+el.dataset.b+".png";return}const g=GYMS[+el.dataset.g];el.replaceWith(document.createTextNode(EM[g[1]]))}
+function gymMedal(i,on,s){const g=GYMS[i];return '<span class="medal'+(on?' on':'')+'" title="Medalla '+g[0]+(on?'':' (sin conseguir)')+'" style="--mc:'+TC[g[1]]+(s?';--ms:'+s+'px':'')+'"><img src="'+BADGE+(i+1)+'.png" alt="" loading="lazy" data-b="'+(i+1)+'" data-g="'+i+'" onerror="badgeErr(this)"></span>'}
 async function gymWin(i){
   const g=GYMS[i];S.med=S.med||{};
   if(!S.med[i]){
     S.med[i]=1;const rw={t:500000*(i+1),it:i%2?{cand:1}:{ub:3}};grant(rw);snd("lvl");
-    await say("¡Has conseguido la Medalla "+g[0]+"! ("+medCount()+"/8)");await say("Premio: "+rwTxt(rw)+".");
+    await say("¡Has derrotado al Líder del Gimnasio de "+g[3]+"!");await say("¡Has conseguido la Medalla "+g[0]+"! ("+medCount()+"/8)");await say("Premio: "+rwTxt(rw)+".");
     if(medCount()>=8)await say("¡Tienes las 8 medallas! Ya puedes desafiar a la Liga Pokémon.");
     const nz=Object.values(ZONES).filter(z=>z.m===medCount());if(nz.length)await say("Nueva zona desbloqueada: "+nz.map(z=>z.n).join(", ")+".");
   }else{const rw={t:150000*(i+1)};grant(rw);await say("Revancha ganada. Premio: "+rwTxt(rw)+".")}
@@ -4039,11 +4047,11 @@ let _gyk="";
 function gymUI(){
   const box=$("gymBox");if(!box)return;const key=JSON.stringify([S.med,fcd]);if(key===_gyk)return;_gyk=key;
   box.innerHTML='<div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,S.med&&S.med[i])).join("")+'<b>'+medCount()+' / 8 medallas</b></div><div class="lggrid">'+GYMS.map((g,i)=>{const got=S.med&&S.med[i],open=i===0||(S.med&&S.med[i-1]);
-    return '<div class="lgc">'+gymMedal(i,got,34)+'<b>Gimnasio '+g[0]+'</b><small class="mut">'+EM[g[1]]+' Tipo '+TIPO[g[1]]+' · Nivel '+g[2]+'</small><button data-gym="'+i+'"'+(!open||fcd?' disabled':'')+'>'+(got?"🔁 Revancha":open?"⚔️ Desafiar":"🔒 Bloqueado")+'</button></div>'}).join("")+'</div><small id="gymMsg" class="mut"></small>';
+    return '<div class="lgc">'+gymMedal(i,got,34)+'<b>Gimnasio de '+g[3]+'</b><small>Líder: '+g[4]+' · Medalla '+g[0]+'</small><small class="mut">'+EM[g[1]]+' Tipo '+TIPO[g[1]]+' · Nivel '+g[2]+'</small><button data-gym="'+i+'"'+(!open||fcd?' disabled':'')+'>'+(got?"🔁 Revancha":open?"⚔️ Desafiar":"🔒 Bloqueado")+'</button></div>'}).join("")+'</div><small id="gymMsg" class="mut"></small>';
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#gymBox button[data-gym]");if(!b)return;const i=+b.dataset.gym,g=GYMS[i];
   if(!(S.team||[]).some(n=>n&&S.owned[n]&&S.hp[n]!==0)){$("gymMsg").textContent="Necesitas un equipo con al menos un Pokémon con PS.";return}
-  startBattle({eteam:gymTeam(i),trainer:"Líder del Gimnasio "+g[0],tsrc:{k:(LGSPR[g[1]]||LGSPR.normal)[i%2],n:"Líder "+g[0]},gym:i})});
+  startBattle({eteam:gymTeam(i),trainer:"Líder "+g[4],tsrc:{k:(LGSPR[g[1]]||LGSPR.normal)[i%2],n:"Líder "+g[4]},gym:i})});
 // ================= temporadas PVP con rangos =================
 const seasonKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
 const ssnField=()=>"s"+seasonKey().replace("-","");

@@ -647,6 +647,22 @@ body.hubon{overflow:hidden}
 body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 body.hc{--mute:color-mix(in srgb,var(--ink) 88%,transparent);--line:color-mix(in srgb,var(--ink) 50%,transparent)}
 body.hc .panel{border-width:2px}
+#trSets{margin-top:14px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:12px}
+.trsh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}.trsh small{color:var(--mute);font-weight:700}
+.trsg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.trslot{position:relative;aspect-ratio:3/4;border-radius:12px;background:linear-gradient(#bfe6ff,#e8f6ff 62%,#a4de78 63%,#6aa63e);border:2px solid var(--line);overflow:hidden;cursor:pointer;display:grid;place-items:start center;transition:transform .12s}
+.trslot:hover{transform:translateY(-2px)}
+.trslot img{width:150%;margin-top:6%;image-rendering:pixelated;pointer-events:none}
+.trslot.empty{background:var(--panel);border-style:dashed;place-items:center}
+.trsplus{font-size:1.6rem;color:var(--mute);font-weight:700}
+.trslot i{position:absolute;left:4px;bottom:3px;font-style:normal;font-size:.7rem;font-weight:900;background:rgba(28,31,58,.8);color:#fff;border-radius:6px;padding:0 5px}
+.trslot em{position:absolute;right:4px;bottom:3px;font-style:normal;font-size:.7rem;font-weight:900;background:var(--teal);color:#0d2a24;border-radius:6px;padding:0 5px}
+.trslot.sel{border-color:var(--teal);box-shadow:0 0 0 3px color-mix(in srgb,var(--teal) 35%,transparent)}
+.trsdel{position:absolute;top:3px;right:3px;width:20px;height:20px;padding:0;border-radius:6px;border:none;background:rgba(28,31,58,.75);color:#fff;font-size:.65rem;line-height:1;opacity:0;transition:opacity .15s}
+.trslot:hover .trsdel,.trslot:focus-within .trsdel{opacity:1}
+@media (hover:none){.trsdel{opacity:.85}}
+.trsave{width:100%;margin-top:10px}
+.trsmsg{display:block;margin-top:6px;color:var(--mute);font-size:.75rem;line-height:1.3}
 #out .card[data-pn]{cursor:zoom-in;transition:transform .15s}#out .card[data-pn]:hover{transform:translateY(-3px) scale(1.04)}
 #pkv{position:fixed;inset:0;z-index:72;background:rgba(8,10,34,.76);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
 #pkv[hidden]{display:none}
@@ -988,7 +1004,7 @@ label:has(input[data-o="pColl"]),label:has(input[data-o="pBag"]),label:has(input
 <section class="panel" aria-label="Tu entrenador" id="trP">
   <div class="hhead"><h2>🧑 Tu entrenador</h2><button class="alt" id="trDemo" style="background:var(--line);color:var(--ink)">▶ Ver lanzamiento</button></div>
   <p class="rates">Personaliza a tu entrenador: aparece de espaldas en tus combates lanzando la Pokéball, y los demás jugadores lo ven de frente en el PVP.</p>
-  <div class="trwrap"><div><div id="trPrev"></div><div class="sets-row" style="margin-top:8px;justify-content:center"><button id="trRnd">🎲 Aleatorio</button><button class="alt" id="trRst" style="background:var(--line);color:var(--ink)">Restablecer</button></div></div><div id="trOpts"></div></div>
+  <div class="trwrap"><div><div id="trPrev"></div><div class="sets-row" style="margin-top:8px;justify-content:center"><button id="trRnd">🎲 Aleatorio</button><button class="alt" id="trRst" style="background:var(--line);color:var(--ink)">Restablecer</button></div><div id="trSets"></div></div><div id="trOpts"></div></div>
 </section>
 <section class="panel" aria-label="Centro Pokémon" id="healP">
   <div class="hhead"><h2>🏥 Centro Pokémon</h2><span class="hcost">200.000 🎟️ por cura</span></div>
@@ -4199,13 +4215,13 @@ function gUI(force){
   const ae=document.activeElement,aid=ae&&ae.id,caret=ae&&ae.selectionStart;
   let h="";const me=window.FB.uid(),g=GS.doc;
   if(g){
-    const lead=g.owner===me,mem=Object.keys(g.members||{}).sort((a,b)=>(g.owner===b)-(g.owner===a)||(on[b]?1:0)-(on[a]?1:0));
-    h+='<div class="ghead">'+gFlag(g.fl,g.icon,110)+'<div><b class="gname">'+esc(g.name)+' <span class="gtag">['+esc(g.tag)+']</span></b><small class="mut">'+esc(g.desc||"")+'</small><small>'+mem.length+' / '+GUILD_MAX+' miembros · '+(g.open?"Abierto":"Con solicitud")+'</small></div></div>';
+    const lead=g.owner===me,sub=g.sub&&g.members&&g.members[g.sub]?g.sub:"",isSub=!!sub&&sub===me,mem=Object.keys(g.members||{}).sort((a,b)=>(g.owner===b)-(g.owner===a)||(sub===b)-(sub===a)||(on[b]?1:0)-(on[a]?1:0));
+    h+='<div class="ghead">'+gFlag(g.fl,g.icon,110)+'<div><b class="gname">'+esc(g.name)+' <span class="gtag">['+esc(g.tag)+']</span></b><small class="mut">'+esc(g.desc||"")+'</small><small>'+mem.length+' / '+GUILD_MAX+' miembros · '+(g.open?"Abierto":"Con solicitud")+'</small><small>👑 Líder: <b>'+esc(pvClean((g.members[g.owner]||{}).n||"?"))+'</b>'+(sub?' · ⭐ Sublíder: <b>'+esc(pvClean(g.members[sub].n))+'</b>':'')+'</small>'+(lead?'':isSub?'<small class="mut">Eres el sublíder: puedes aceptar o rechazar solicitudes para unirse.</small>':'')+'</div></div>';
     h+=gBossHTML(g);
     if(GS.editing)h+=gEditor(true);
-    h+='<div class="frl">'+mem.map(u=>{const m=g.members[u];return '<div class="pvrow"><b class="plink" data-prof="'+esc(u)+'">'+(g.owner===u?"👑 ":"")+esc(pvClean(m.n))+(u===me?" (tú)":"")+'</b><small class="mut" style="flex:1">'+(on[u]||u===me?"🟢 Conectado":"⚫ Desconectado")+'</small>'+(lead&&u!==me?'<button class="alt" data-gk="'+esc(u)+'">Expulsar</button><button class="alt" data-gt="'+esc(u)+'">👑 Hacer líder</button>':'')+(u!==me&&!isFriend(u)?'<button class="alt" data-gfr="'+esc(pvClean(m.n))+'">+👥</button>':'')+'</div>'}).join("")+'</div>';
+    h+='<div class="frl">'+mem.map(u=>{const m=g.members[u];return '<div class="pvrow"><b class="plink" data-prof="'+esc(u)+'">'+(g.owner===u?"👑 ":sub===u?"⭐ ":"")+esc(pvClean(m.n))+(sub===u?' <small class="gtag">Sublíder</small>':'')+(u===me?" (tú)":"")+'</b><small class="mut" style="flex:1">'+(on[u]||u===me?"🟢 Conectado":"⚫ Desconectado")+'</small>'+(lead&&u!==me?'<button class="alt" data-gk="'+esc(u)+'">Expulsar</button>'+(sub===u?'<button class="alt" data-gunsub="1">Quitar sublíder</button>':'<button class="alt" data-gsub="'+esc(u)+'">⭐ Hacer sublíder</button>')+'<button class="alt" data-gt="'+esc(u)+'">👑 Hacer líder</button>':'')+(u!==me&&!isFriend(u)?'<button class="alt" data-gfr="'+esc(pvClean(m.n))+'">+👥</button>':'')+'</div>'}).join("")+'</div>';
     const rq=Object.keys(g.req||{});
-    if(lead&&rq.length)h+='<div class="lgnow"><b>📩 Solicitudes para unirse</b>'+rq.map(u=>'<div class="pvrow"><b>'+esc(pvClean(g.req[u].n))+'</b><span style="flex:1"></span><button data-gacc="'+esc(u)+'"'+(mem.length>=GUILD_MAX?" disabled":"")+'>Aceptar</button><button class="alt" data-grej="'+esc(u)+'">Rechazar</button></div>').join("")+'</div>';
+    if((lead||isSub)&&rq.length)h+='<div class="lgnow"><b>📩 Solicitudes para unirse</b>'+rq.map(u=>'<div class="pvrow"><b>'+esc(pvClean(g.req[u].n))+'</b><span style="flex:1"></span><button data-gacc="'+esc(u)+'"'+(mem.length>=GUILD_MAX?" disabled":"")+'>Aceptar</button><button class="alt" data-grej="'+esc(u)+'">Rechazar</button></div>').join("")+'</div>';
     h+='<div class="sets-row" style="margin-top:10px">'+(lead?'<button id="gdEdit" class="alt">🎨 Personalizar</button><button id="gdDis" class="alt">💥 Disolver gremio</button>':'<button id="gdLeave" class="alt">🚪 Salir del gremio</button>')+'</div>';
   }else{
     h+='<div class="lgbtn"><button id="gdNew"'+(GS.creating?' class="alt"':' class="red"')+'>'+(GS.creating?"Cerrar":"🛡️ Fundar un gremio")+'</button><button class="alt" id="gdRef">🔄 Actualizar lista</button></div>';
@@ -4265,15 +4281,17 @@ document.addEventListener("click",async e=>{
       else{await window.FB.gRequest(d.gj,nick);gMsg("📨 Solicitud enviada. El líder del gremio tiene que aceptarla.");S.greq=d.gj;save();gReqWatch(d.gj);await gRefresh()}
       return;
     }
-    if(b.id==="gdLeave"){if(!confirm("¿Seguro que quieres salir del gremio?"))return;await window.FB.gLeave(GS.gid);S.gid=null;save();gWatch(null);gRefresh();return}
+    if(b.id==="gdLeave"){if(!confirm("¿Seguro que quieres salir del gremio?"))return;await window.FB.gLeave(GS.gid,!!GS.doc&&GS.doc.sub===window.FB.uid());S.gid=null;save();gWatch(null);gRefresh();return}
     if(b.id==="gdDis"){if(!confirm("¿Seguro que quieres DISOLVER el gremio? Todos los miembros lo perderán y no se devuelven los tickets."))return;await window.FB.gDisband(GS.gid);S.gid=null;save();gWatch(null);gRefresh();return}
     if(b.id==="gdEdit"){const g=GS.doc;GE=Object.assign({},GE,{name:g.name,tag:g.tag,icon:g.icon|0,s:(g.fl||{}).s|0,p:(g.fl||{}).p|0,c1:(g.fl||{}).c1|0,c2:(g.fl||{}).c2|0,c3:(g.fl||{}).c3|0,desc:g.desc||"",open:g.open?1:0});GS.editing=!GS.editing;gUI(true);return}
     if(b.id==="geCancel"){GS.editing=false;gUI(true);return}
     if(b.id==="geSave"){geRead();if(!gTagOk(GE.tag)){gMsg("Las siglas deben tener de 2 a 4 letras o números.");return}if(S.t<GUILD_EDIT)return;await window.FB.gEdit(GS.gid,{tag:GE.tag,icon:GE.icon,fl:{s:GE.s,p:GE.p,c1:GE.c1,c2:GE.c2,c3:GE.c3},desc:GE.desc.trim(),open:!!GE.open});S.t-=GUILD_EDIT;save();GS.editing=false;toast("🎨 Gremio actualizado");return}
     if(d.gacc){const r=GS.doc.req[d.gacc];await window.FB.gAccept(GS.gid,d.gacc,r?r.n:"");return}
     if(d.grej){await window.FB.gReject(GS.gid,d.grej);return}
-    if(d.gk){if(!confirm("¿Expulsar a este miembro del gremio?"))return;await window.FB.gKick(GS.gid,d.gk);return}
-    if(d.gt){if(!confirm("¿Nombrar líder a este miembro? Tú pasarás a ser un miembro normal."))return;await window.FB.gTransfer(GS.gid,d.gt);return}
+    if(d.gk){if(!confirm("¿Expulsar a este miembro del gremio?"))return;await window.FB.gKick(GS.gid,d.gk,GS.doc.sub===d.gk);return}
+    if(d.gt){if(!confirm("¿Nombrar líder a este miembro? Tú pasarás a ser un miembro normal."))return;await window.FB.gTransfer(GS.gid,d.gt,GS.doc.sub===d.gt);return}
+    if(d.gsub){if(!confirm("¿Nombrar sublíder a este miembro? Podrá aceptar y rechazar solicitudes para unirse, pero nada más."+(GS.doc.sub?" El sublíder actual dejará de serlo.":"")))return;await window.FB.gSetSub(GS.gid,d.gsub);toast("⭐ Nuevo sublíder nombrado.");return}
+    if(d.gunsub){await window.FB.gSetSub(GS.gid,"");toast("Has quitado el cargo de sublíder.");return}
     if(d.gfr){frSend(d.gfr);return}
   }catch(x){gMsg(x&&x.code==="exists"?"❌ Ya existe un gremio con ese nombre. Elige otro.":"No se pudo completar ("+((x&&x.code)||"error")+").");gUI(true)}
 });
@@ -4795,7 +4813,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Para publicar novedades: añade una entrada nueva AL PRINCIPIO de esta lista con un "v" distinto y la fecha y hora (at, hora de España).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-29b",at:"2026-10-29T20:00",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
+{v:"2026-10-29b",at:"2026-10-29T20:25",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
 "🔥 Racha diaria: reclama el regalo cada día seguido para conseguir premios extra (Caramelos Raros cada semana y una Master Ball el día 30).",
@@ -5479,6 +5497,31 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("pkv");if
     if(add)w.insertAdjacentHTML("beforeend",add);
   };
 })();
+// ================= conjuntos guardados del entrenador (hasta 5) =================
+const TRSETN=5;let TRSEL=null;
+function trSetsUI(){
+  const box=$("trSets");if(!box)return;
+  S.trSets=Array.isArray(S.trSets)?S.trSets.slice(0,TRSETN):[];while(S.trSets.length<TRSETN)S.trSets.push(null);
+  const cur=trEnc(myLook());
+  if(TRSEL==null){const i=S.trSets.findIndex(x=>!x);TRSEL=i<0?0:i}
+  box.innerHTML='<div class="trsh"><b>👕 Mis conjuntos</b><small>'+S.trSets.filter(Boolean).length+' / '+TRSETN+'</small></div><div class="trsg">'+S.trSets.map((e,i)=>{
+    const on=e&&e===cur;
+    return '<div class="trslot'+(i===TRSEL?' sel':'')+(e?'':' empty')+(on?' on':'')+'" data-ts="'+i+'" role="button" tabindex="0" title="'+(e?"Conjunto "+(i+1)+": pulsa para ponértelo":"Ranura vacía: selecciónala y pulsa Guardar")+'">'+
+      (e?trImg(trDec(e),"f","i"):'<span class="trsplus">+</span>')+'<i>'+(i+1)+'</i>'+(on?'<em>✓</em>':'')+(e?'<button class="trsdel" data-tsd="'+i+'" aria-label="Borrar conjunto '+(i+1)+'">✕</button>':'')+'</div>'}).join("")+'</div>'+
+    '<button id="trSave" class="trsave">💾 Guardar en la ranura '+(TRSEL+1)+'</button><small class="trsmsg">Selecciona una ranura y guarda tu aspecto actual. Pulsa un conjunto guardado para ponértelo.</small>';
+}
+const _trUIBase=trUI;
+trUI=function(){_trUIBase();trSetsUI()};
+document.addEventListener("click",e=>{
+  const t=e.target;if(!t.closest||!t.closest("#trSets"))return;
+  const del=t.closest("[data-tsd]");if(del){const i=+del.dataset.tsd;if(!confirm("¿Borrar el conjunto "+(i+1)+"?"))return;S.trSets[i]=null;TRSEL=i;save();snd("ui");trSetsUI();return}
+  if(t.closest("#trSave")){const i=TRSEL|0,had=S.trSets[i];if(had&&had!==trEnc(myLook())&&!confirm("La ranura "+(i+1)+" ya tiene un conjunto. ¿Sustituirlo por tu aspecto actual?"))return;
+    S.trSets[i]=trEnc(myLook());save();snd("lvl");toast("💾 Conjunto guardado en la ranura "+(i+1)+".");const nx=S.trSets.findIndex(x=>!x);trSetsUI();
+    const s=document.querySelector('#trSets [data-ts="'+i+'"]');if(s)s.animate([{transform:"scale(1.15)"},{transform:"none"}],{duration:300});return}
+  const sl=t.closest("[data-ts]");if(sl){const i=+sl.dataset.ts,e2=S.trSets[i];TRSEL=i;
+    if(e2){S.tr=Object.assign({},TRDEF,trDec(e2));save();snd("ui");trUI();if(typeof pvPub==="function")pvPub();toast("👕 Te has puesto el conjunto "+(i+1)+".")}else{snd("ui");trSetsUI()}}
+});
+document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.closest&&e.target.closest("#trSets [data-ts]")){e.preventDefault();e.target.click()}});
 
 </script>
 <script>
@@ -5545,12 +5588,13 @@ async function main(){
     async gCreate(d,nick){const id=FB.gid(d.name),ref=S.doc(db,"guilds",id);await S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(s.exists())throw {code:"exists"};tx.set(ref,Object.assign({},d,{owner:uid,members:{[uid]:{n:String(nick),at:Date.now()}},req:{},n:1,at:Date.now()}))});return id},
     gJoin:(gid,nick)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+uid]:{n:String(nick),at:Date.now()},["req."+uid]:S.deleteField(),n:S.increment(1)}),
     gRequest:(gid,nick)=>S.updateDoc(S.doc(db,"guilds",gid),{["req."+uid]:{n:String(nick),at:Date.now()}}),
-    gLeave:gid=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+uid]:S.deleteField(),n:S.increment(-1)}),
+    gLeave:(gid,wasSub)=>S.updateDoc(S.doc(db,"guilds",gid),Object.assign({["members."+uid]:S.deleteField(),n:S.increment(-1)},wasSub?{sub:""}:{})),
     gAccept:(gid,u,n)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+u]:{n:String(n||""),at:Date.now()},["req."+u]:S.deleteField(),n:S.increment(1)}),
     gReject:(gid,u)=>S.updateDoc(S.doc(db,"guilds",gid),{["req."+u]:S.deleteField()}),
-    gKick:(gid,u)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+u]:S.deleteField(),n:S.increment(-1)}),
+    gKick:(gid,u,wasSub)=>S.updateDoc(S.doc(db,"guilds",gid),Object.assign({["members."+u]:S.deleteField(),n:S.increment(-1)},wasSub?{sub:""}:{})),
+    gSetSub:(gid,u)=>S.updateDoc(S.doc(db,"guilds",gid),{sub:String(u||"")}),
     gEdit:(gid,f)=>S.updateDoc(S.doc(db,"guilds",gid),f),
-    gTransfer:(gid,u)=>S.updateDoc(S.doc(db,"guilds",gid),{owner:u}),
+    gTransfer:(gid,u,wasSub)=>S.updateDoc(S.doc(db,"guilds",gid),Object.assign({owner:u},wasSub?{sub:""}:{})),
     gDisband:gid=>S.deleteDoc(S.doc(db,"guilds",gid)),
     gContrib:(gid,d)=>S.updateDoc(S.doc(db,"guilds",gid),{["bd."+uid]:S.increment(d.dmg),bh:S.increment(-d.dmg),"gm.cap":S.increment(d.cap),"gm.win":S.increment(d.win),"gm.pull":S.increment(d.pull)}),
     async rankGet(u){const s=await S.getDoc(S.doc(db,"ranks",u));return s.exists()?s.data():null},

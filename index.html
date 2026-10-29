@@ -2871,7 +2871,7 @@ const maxLv=()=>Object.keys(S.lv||{}).reduce((a,n)=>S.owned[n]?Math.max(a,(S.lv[
 // Logros de la partida sin prestigio (nivel 0)
 const ACH0=[
 ["col","📚","Coleccionista","Consigue {g} Pokémon distintos",()=>P.filter(p=>S.owned[p[0]]).length,[[10,0],[50,1],[150,2],[400,3],[800,4],[P.length,5]]],
-["pull","🎰","Adicto a las cápsulas","Haz {g} tiradas",()=>S.pulls||0,[[100,0],[1000,1],[5000,2],[25000,3],[100000,4]]],
+["pull","🎰","Adicto al gacha","Haz {g} tiradas",()=>S.pulls||0,[[100,0],[1000,1],[5000,2],[25000,3],[100000,4]]],
 ["clk","👆","Dedo de acero","Toca la Pokéball {g} veces",()=>S.clicks||0,[[1000,0],[10000,1],[100000,2],[1000000,4]]],
 ["win","⚔️","Combatiente","Gana {g} combates",()=>stt().win||0,[[10,0],[100,1],[500,2],[2500,3],[10000,4]]],
 ["tr","👤","Rival temido","Derrota a {g} entrenadores",()=>stt().tr||0,[[5,0],[50,1],[250,2],[1000,3]]],
@@ -2891,7 +2891,7 @@ const lvCount=l=>Object.keys(S.lv||{}).filter(n=>S.owned[n]&&S.lv[n]&&S.lv[n].l>
 // [clave, icono, nombre, texto, progreso(param), objetivos base (5 niveles), maximo(param), parametro aleatorio]
 const AP=[
 ["col","📚","Coleccionista","Consigue {g} Pokémon distintos",()=>P.filter(p=>S.owned[p[0]]).length,[25,100,250,500,900],()=>P.length],
-["pull","🎰","Adicto a las cápsulas","Haz {g} tiradas",()=>S.pulls||0,[100,500,2000,8000,25000]],
+["pull","🎰","Adicto al gacha","Haz {g} tiradas",()=>S.pulls||0,[100,500,2000,8000,25000]],
 ["spull","✨","Súper suerte","Haz {g} súper tiradas",()=>stt().spull||0,[10,50,200,800,2500]],
 ["clk","👆","Dedo de acero","Toca la Pokéball {g} veces",()=>S.clicks||0,[1000,5000,20000,60000,150000]],
 ["win","⚔️","Combatiente","Gana {g} combates",()=>stt().win||0,[10,50,250,1000,3000]],

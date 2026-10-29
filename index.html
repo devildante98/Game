@@ -647,6 +647,93 @@ body.hubon{overflow:hidden}
 body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 body.hc{--mute:color-mix(in srgb,var(--ink) 88%,transparent);--line:color-mix(in srgb,var(--ink) 50%,transparent)}
 body.hc .panel{border-width:2px}
+.hubgl{grid-template-columns:repeat(3,150px)}
+@media (max-width:700px){.hubgl{grid-template-columns:repeat(2,minmax(0,1fr))}.hubtile:nth-last-child(2):nth-child(odd){grid-column:span 2}}
+.nxp input:not([type=checkbox]){font:inherit;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);width:100%;box-sizing:border-box}.nxp .sets-row{display:flex;gap:8px;align-items:center}.nxp .sets-row button{flex:none}
+.nxi{margin:-4px 0 14px;font-size:.92rem;line-height:1.4}
+.nxbar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:6px}.nxbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#3ecf8e,#13a37f);border-radius:99px;transition:width .6s}
+.nxgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;max-height:330px;overflow:auto;padding:2px}
+.nxcell{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;background:var(--panel);color:var(--ink);border:2px solid var(--line);min-width:0}
+.nxcell b{font-size:.82rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.nxcell small{font-size:.72rem;color:var(--mute);font-weight:600}
+.nxcell.good{border-color:#3ecf8e;background:color-mix(in srgb,#3ecf8e 10%,var(--panel))}.nxcell.sel{border-color:var(--hc,#e0782a);box-shadow:0 0 0 3px color-mix(in srgb,var(--hc,#e0782a) 30%,transparent)}
+.nxpick{background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:12px;margin:12px 0;display:flex;flex-direction:column;gap:8px}
+#nxM{position:fixed;inset:0;z-index:95;background:rgba(14,16,40,.62);display:grid;place-items:center;padding:16px}#nxM[hidden]{display:none}
+.nxmw{background:var(--panel);color:var(--ink);border-radius:24px;padding:24px 22px;width:min(420px,100%);text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 24px 60px rgba(0,0,0,.4);border:3px solid #ffd35c}
+.nxmw h3{margin:4px 0 0;font-size:1.35rem}.nxmw p{margin:0}.nxmw button{margin-top:8px;min-width:160px}
+/* ficha */
+.fich{width:100%;display:flex;flex-direction:column;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:left;box-sizing:border-box}
+.fichr{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center}.fichr>span,.fichr>label{font-weight:800;font-size:.85rem;color:var(--mute)}
+.fichin{display:flex;gap:6px;min-width:0}.fichin input,.fichin select{flex:1;min-width:0;font:inherit;padding:7px 10px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}.fichin button{padding:7px 12px}
+.ffav{justify-self:start;background:var(--panel);color:var(--ink);border:1px solid var(--line)}.ffav.on{background:#ffd35c;color:#2a2200;border-color:#e0b020}
+.fnat{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.fnat button{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:4px 9px;font-size:.8rem}.fnat button:hover{border-color:#13a37f}.fnat small{width:100%;color:var(--mute)}.fnat button small{opacity:.75;font-size:.7rem}
+.fichd{display:flex;align-items:center;gap:6px;font-size:.8rem}.fichb{color:#e0782a;font-weight:700;font-size:.82rem}
+.pkvw{max-height:calc(100vh - 32px);overflow:auto}
+#dex .card[data-dn]{cursor:pointer}#dex .card.fav{box-shadow:0 0 0 2px #ffd35c inset}
+/* guardería y huevos */
+.dcrow{display:grid;grid-template-columns:1fr 130px 1fr;gap:10px;align-items:stretch}
+.dcs{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 8px;border-radius:18px;border:2px dashed var(--line);background:var(--bg);text-align:center}
+.dcs.on{border-style:solid;background:linear-gradient(#fff6e8,#ffe9cc);border-color:#f0c48a}
+.dcspr{height:80px;display:grid;place-items:end center}.dcplus{font-size:2.4rem;color:var(--mute);height:80px;display:grid;place-items:center}
+.dcmid{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:4px;font-size:.8rem;color:var(--mute)}
+.dcheart{font-size:2.2rem;animation:dch 1.4s ease-in-out infinite}.dcheart.off{animation:none;opacity:.5}@keyframes dch{50%{transform:scale(1.15)}}
+.dcegg{display:flex;align-items:center;gap:14px;margin-top:12px;padding:12px 16px;border-radius:16px;background:var(--bg);border:1px solid var(--line)}.dcegg>div{flex:1;display:flex;flex-direction:column}
+.egg{display:inline-block;flex:none;width:34px;height:42px;border-radius:50%/58% 58% 42% 42%;background:radial-gradient(circle at 34% 28%,#fff 0 12%,#fbf6e6 30%,#e9dfbf 75%,#cfc39b);box-shadow:inset -3px -4px 0 rgba(0,0,0,.07),0 4px 6px rgba(0,0,0,.18);position:relative;transform-origin:50% 90%}
+.egg:before,.egg:after{content:"";position:absolute;border-radius:50%;background:#7ccf6a}
+.egg:before{width:26%;height:20%;left:18%;top:46%}.egg:after{width:18%;height:14%;right:20%;top:24%}
+.egg.big{width:56px;height:70px}.egg.huge{width:120px;height:150px}
+.egg.wob{animation:eggw 1.8s ease-in-out infinite}@keyframes eggw{0%,60%,100%{transform:none}70%{transform:rotate(-10deg)}80%{transform:rotate(9deg)}90%{transform:rotate(-4deg)}}
+.egg.c1,.egg.c2,.egg.c3{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M10 42 L24 52 L34 40 L46 54 L58 41 L70 53 L82 42 L92 50' fill='none' stroke='%23574a2c' stroke-width='3'/%3E%3C/svg%3E"),radial-gradient(circle at 34% 28%,#fff 0 12%,#fbf6e6 30%,#e9dfbf 75%,#cfc39b);background-size:100% 100%}
+.egg.c3{filter:brightness(1.15)}
+.eggl{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.eggc{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 8px;border-radius:16px;background:var(--bg);border:1px solid var(--line);text-align:center}.eggc .nxbar{width:100%}.eggc.ready{border-color:#ffb62e;box-shadow:0 0 0 3px rgba(255,182,46,.25)}
+.hatch{position:relative;height:170px;display:grid;place-items:center;width:100%}.hflash{position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(#fff,rgba(255,255,255,0) 70%)}
+.hmon{height:130px;display:grid;place-items:center;filter:drop-shadow(0 8px 8px rgba(0,0,0,.25))}
+@media (max-width:620px){.dcrow{grid-template-columns:1fr 1fr}.dcmid{grid-column:span 2;grid-row:2;flex-direction:row}.dcheart{font-size:1.6rem}}
+/* safari */
+.safin{display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:linear-gradient(135deg,#e6f6cf,#c5e8a0);color:#1d3a12;margin-bottom:10px;flex-wrap:wrap}.safin>div{flex:1;display:flex;flex-direction:column;min-width:180px}.safin .mut{color:#3d5a2c}
+.safgate{font-size:2.6rem}
+.safbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.safbar span{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:.88rem}
+.safmon{position:relative;height:250px;border-radius:20px;overflow:hidden;background:linear-gradient(#bfe6ff,#e6f6ff 55%,#a8dc7a 56%,#79bf4c);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:16px;box-sizing:border-box}
+.safgr{position:absolute;left:0;right:0;bottom:0;height:46%;background:repeating-linear-gradient(100deg,rgba(255,255,255,.0) 0 18px,rgba(40,110,30,.18) 18px 22px)}
+.safspr{position:relative;z-index:1;height:190px;display:grid;place-items:end center;margin-bottom:4px;animation:tbreath 2s ease-in-out infinite;transform-origin:50% 100%}
+.safspr img{max-height:190px;object-fit:contain}.safname{position:absolute;top:12px;left:12px;z-index:2;background:rgba(255,255,255,.88);color:#1c1f3a;border-radius:99px;padding:4px 14px;font-weight:800}.safname small{color:#555;font-weight:700}
+.safst{display:inline-block;border-radius:99px;padding:1px 8px;font-size:.72rem;color:#fff}.safst.eat{background:#e0507a}.safst.ang{background:#d33}
+.safball{position:absolute;z-index:3;left:calc(50% - 14px);bottom:70px;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 8%,transparent 9%),linear-gradient(#7aa83a 0 46%,#222 46% 54%,#f2f0e4 54%);border:2px solid #222;box-sizing:border-box;transform-origin:50% 100%}
+.safball:after{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;margin:-5px;border-radius:50%;background:#fff;border:2px solid #222}
+.safball.ok:after{background:#ff5a5a;box-shadow:0 0 8px #ff5a5a}
+.safmsg{min-height:1.4em;text-align:center;font-weight:700;margin:10px 0}
+.safbtn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:8px}@media (max-width:620px){.safbtn{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.safcl{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}.safcl span{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:2px}.safcl i{position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-style:normal;font-size:.55rem;font-weight:900;background:#e63950;color:#fff;border-radius:6px;padding:0 4px}
+.safsum{text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px}.safsum .safcl{justify-content:center}
+/* torre */
+.twtop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.twst{display:flex;flex-direction:column;align-items:center;padding:12px 6px;border-radius:16px;background:var(--bg);border:1px solid var(--line)}.twst span{font-size:1.5rem}.twst b{font-size:1.5rem}.twst small{color:var(--mute);font-weight:700;font-size:.78rem}
+.twnext{display:flex;align-items:center;gap:12px;margin:12px 0;padding:14px 16px;border-radius:18px;background:linear-gradient(135deg,#2b2f5a,#4a3f8a);color:#fff;flex-wrap:wrap}.twnext>div{flex:1;display:flex;flex-direction:column;min-width:180px}.twnext .mut{color:#cfd3ff}
+.twnext.boss{background:linear-gradient(135deg,#6b1d2a,#c0392b 60%,#f0a030);animation:twb 2s ease-in-out infinite}@keyframes twb{50%{box-shadow:0 0 22px rgba(240,160,48,.6)}}
+.twshop{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.twit{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}.twit>div{flex:1;display:flex;flex-direction:column;min-width:0}.twit b{font-size:.88rem}.twit button{padding:6px 10px;white-space:nowrap}
+/* expediciones */
+.exsl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.exc{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 8px;border-radius:16px;background:var(--bg);border:1px solid var(--line);text-align:center;min-width:0}.exc .nxbar{width:100%}.exc small{font-size:.78rem}
+.exc.empty{border-style:dashed;color:var(--mute);justify-content:center}.exc.empty span{font-size:1.8rem;opacity:.6}
+.exc.done{border-color:#3ecf8e;box-shadow:0 0 0 3px rgba(62,207,142,.25)}.exspr{height:60px;display:grid;place-items:end center}
+.exdest{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:8px}
+.exdest button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:8px 4px;background:var(--panel);color:var(--ink);border:2px solid var(--line);border-radius:14px;min-width:0}.exdest button span{font-size:1.5rem}.exdest button b{font-size:.75rem;line-height:1.1}.exdest button small{font-size:.65rem}
+.exdest button.on,.exdur button.on{border-color:#e0782a;background:color-mix(in srgb,#e0782a 12%,var(--panel))}
+.exdur{display:flex;gap:6px;margin-bottom:8px}.exdur button{flex:1;background:var(--panel);color:var(--ink);border:2px solid var(--line)}
+.exgo{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}.exgo small{flex:1;min-width:180px}
+.exret{font-size:2.4rem}.exm{color:#13a37f;font-weight:800}
+@media (max-width:620px){.exdest{grid-template-columns:repeat(3,minmax(0,1fr))}.exsl{grid-template-columns:1fr}}
+/* salón de la fama */
+.hofe{padding:10px 12px;border-radius:16px;background:var(--bg);border:1px solid var(--line);margin-bottom:8px}.hofh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.hoftm{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.hoftm>div{display:flex;flex-direction:column;align-items:center;min-width:70px}.hoftm b{font-size:.85rem}.hoftm small{font-size:.72rem;color:var(--mute)}
+.hoftm.sm{justify-content:flex-start}.hofb{font-size:3rem;animation:dch 1.6s ease-in-out infinite}
+/* regalos */
+.gfin{border-color:#ffb62e!important}.gfl{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.gfb{display:flex;flex-direction:column;align-items:center;gap:0;padding:8px 12px;background:linear-gradient(#fff4dc,#ffe3a8);color:#5a3a00;border:1px solid #f0c060;border-radius:14px}.gfb span{font-size:1.5rem;animation:dch 1.6s ease-in-out infinite}.gfb b{font-size:.78rem}.gfb small{font-size:.68rem}
+.gfsend{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0}.gfsend small{flex:1}
+.gfbox{font-size:3.4rem;animation:dch 1.2s ease-in-out infinite}
+body.calm .dcheart,body.calm .egg.wob,body.calm .gfb span,body.calm .gfbox,body.calm .hofb,body.calm .twnext.boss,body.calm .safspr{animation:none!important}
 img.pk.hd{image-rendering:auto!important;object-fit:contain}
 .spr img.hd,.pkvspr img.hd,.tspr2 img.hd,.evost img.hd{animation:hdidle 3.2s ease-in-out infinite;transform-origin:50% 90%}
 @keyframes hdidle{50%{transform:scale(1.015,1.035) translateY(-1px)}}
@@ -909,7 +996,7 @@ label:has(input[data-o="pColl"]),label:has(input[data-o="pBag"]),label:has(input
     <select id="fr" aria-label="Rareza"><option value="">Todas las rarezas</option><option value="C">Común</option><option value="R">Raro</option><option value="E">Épico</option><option value="M">Forma especial</option><option value="L">Legendario</option></select>
     <select id="ft" aria-label="Tipo"></select>
     <select id="fg" aria-label="Generación"></select>
-    <select id="fs" aria-label="Estado"><option value="">Todos</option><option value="1">Obtenidos</option><option value="0">Me faltan</option><option value="2">Repetidos</option><option value="3">✨ Variocolor</option></select>
+    <select id="fs" aria-label="Estado"><option value="">Todos</option><option value="1">Obtenidos</option><option value="0">Me faltan</option><option value="2">Repetidos</option><option value="3">✨ Variocolor</option><option value="4">⭐ Favoritos</option></select>
     <select id="fd" aria-label="Fecha de obtención"><option value="">Cualquier fecha</option><option value="0">Obtenidos hoy</option><option value="7">Últimos 7 días</option><option value="30">Últimos 30 días</option></select>
     <select id="fc" aria-label="Cantidad de repetidos"><option value="">Cualquier cantidad</option><option value="2">×2 o más</option><option value="3">×3 o más</option><option value="5">×5 o más</option><option value="10">×10 o más</option><option value="25">×25 o más</option></select>
     <select id="fo" aria-label="Ordenar"><option value="">Orden Pokédex</option><option value="new">Más recientes primero</option><option value="old">Más antiguos primero</option><option value="dup">Más repetidos primero</option><option value="few">Menos repetidos primero</option></select>
@@ -1282,8 +1369,8 @@ function render(){
   $("pity").textContent=S.pity;$("pityN").textContent=$("pityM").textContent=PITY();
   const got=P.filter(p=>hasP(p[0])).length;
   $("prog").textContent=got+" / "+P.length+(shinyTotal()?" · ✨ "+shinyTotal()+" variocolor":"");
-  const dk=JSON.stringify(S.owned)+JSON.stringify(S.reg||{})+JSON.stringify(S.shiny||{})+$("fr").value+$("ft").value+$("fs").value+$("fg").value+$("fd").value+$("fc").value+$("fo").value;if(dk!==window._dk){window._dk=dk;updFight();srch();$("dex").innerHTML=sortDex(P.filter(fok)).map(p=>{const c=S.owned[p[0]]||0,r=c||hasP(p[0]);
-    return `<div class="card ${p[2]} ${r?"":"lock"}" title="${r?p[0]+" · ×"+c+(c?"":" (registrado: lo evolucionaste)")+(S.when&&S.when[p[0]]?" · "+new Date(S.when[p[0]]).toLocaleDateString("es"):""):"Sin conseguir"}"><span class="dexn">#${String(p[4]).padStart(4,"0")}</span><span class="cnt">${r?"×"+c:""}</span>${S.shiny&&S.shiny[p[0]]?'<span class="shb" title="Variocolor ×'+S.shiny[p[0]]+'">✨'+(S.shiny[p[0]]>1?S.shiny[p[0]]:"")+'</span>':""}<div class="em">${r?ico(p,36,false,!!(S.shiny&&S.shiny[p[0]])):"❔"}</div><b>${r?p[0]:"???"}</b><small>${STAR[p[2]]}</small></div>`}).join("")||'<p class="rates">Ningún Pokémon coincide con los filtros.</p>'};
+  const dk=JSON.stringify(S.owned)+JSON.stringify(S.reg||{})+JSON.stringify(S.shiny||{})+JSON.stringify(S.fav||{})+JSON.stringify(S.mote||{})+$("fr").value+$("ft").value+$("fs").value+$("fg").value+$("fd").value+$("fc").value+$("fo").value;if(dk!==window._dk){window._dk=dk;updFight();srch();$("dex").innerHTML=sortDex(P.filter(fok)).map(p=>{const c=S.owned[p[0]]||0,r=c||hasP(p[0]);
+    return `<div class="card ${p[2]} ${r?"":"lock"}${r&&isFav(p[0])?" fav":""}"${r&&S.owned[p[0]]>0?' data-dn="'+esc(p[0])+'"':""} title="${r?p[0]+" · ×"+c+(c?"":" (registrado: lo evolucionaste)")+(S.when&&S.when[p[0]]?" · "+new Date(S.when[p[0]]).toLocaleDateString("es"):""):"Sin conseguir"}"><span class="dexn">#${String(p[4]).padStart(4,"0")}</span><span class="cnt">${r?"×"+c:""}</span>${S.shiny&&S.shiny[p[0]]?'<span class="shb" title="Variocolor ×'+S.shiny[p[0]]+'">✨'+(S.shiny[p[0]]>1?S.shiny[p[0]]:"")+'</span>':""}<div class="em">${r?ico(p,36,false,!!(S.shiny&&S.shiny[p[0]])):"❔"}</div><b>${r?(isFav(p[0])?"⭐ ":"")+esc(nk(p[0])):"???"}</b><small>${STAR[p[2]]}</small></div>`}).join("")||'<p class="rates">Ningún Pokémon coincide con los filtros.</p>'};
 }
 function pickR(r){
   const pool=P.filter(p=>p[2]===r||(r==="E"&&p[2]==="M"));
@@ -1507,12 +1594,33 @@ const ITEMS=[
 const evoUsers=k=>{const o=[];Object.keys(GD.EV).forEach(n=>GD.EV[n].forEach(e=>{if(e[1]==="I"+k&&PM[n])o.push(n+" → "+e[0])}));return o.slice(0,4).join(", ")+(o.length>4?"…":"")};
 const EVO_PRICE=k=>/stone/.test(k)?300000:k==="linking-cord"?450000:k==="soothe-bell"?350000:/apple|cup|pot|augurite|armor|peat|alloy|galarica|whipped|sachet/.test(k)?750000:600000;
 Object.keys(GD.EI).sort((a,b)=>(/stone/.test(b)-/stone/.test(a))||GD.EI[a].localeCompare(GD.EI[b])).forEach(k=>ITEMS.push([k,GD.EI[k],EVO_PRICE(k),0,0,0,"Hace evolucionar a algunos Pokémon: "+evoUsers(k),"evo"]));
+
+// ================= objetos equipables (cada Pokémon puede llevar uno). it[7]="hold" =================
+const HOLD=[
+ ["left","Restos",900000,"Recupera 1/16 de sus PS al final de cada turno"],
+ ["lorb","Vidasfera",1500000,"Sus ataques hacen un 30% más de daño, pero pierde 1/10 de sus PS cada vez que golpea"],
+ ["sash","Banda Focus",1200000,"Con los PS al máximo, aguanta con 1 PS un golpe que lo iba a debilitar (una vez por combate)"],
+ ["sitrus","Baya Zidra",400000,"Recupera el 25% de sus PS cuando bajan de la mitad (una vez por combate)"],
+ ["lum","Baya Ziuela",500000,"Se cura del primer problema de estado o de la confusión (una vez por combate)"],
+ ["qclaw","Garra Rápida",700000,"A veces (20%) le permite atacar primero"],
+ ["scope","Periscopio",700000,"Duplica la probabilidad de asestar golpes críticos"],
+ ["shell","Campana Concha",800000,"Recupera 1/8 del daño que causa con sus ataques"],
+ ["lucky","Huevo Suerte",1000000,"Gana un 50% más de experiencia en los combates"]];
+const HIMG={left:"leftovers",lorb:"life-orb",sash:"focus-sash",sitrus:"sitrus-berry",lum:"lum-berry",qclaw:"quick-claw",scope:"scope-lens",shell:"shell-bell",lucky:"lucky-egg"};
+const HOLDK={};HOLD.forEach(h=>{HOLDK[h[0]]=h;ITEMS.push([h[0],h[1],h[2],0,0,0,h[3]+". Se equipa desde la Mochila o desde la ficha del Pokémon","hold"])});
+// ================= naturalezas: +10% en una estadística y -10% en otra (el Ataque y el Ataque Especial son la misma aquí, igual que la Defensa y la Defensa Especial) =================
+const NAT=[["Fuerte"],["Huraña","atk","def"],["Audaz","atk","spe"],["Firme"],["Pícara","atk","def"],["Osada","def","atk"],["Dócil"],["Plácida","def","spe"],["Agitada","def","atk"],["Floja"],["Miedosa","spe","atk"],["Activa","spe","def"],["Seria"],["Alegre","spe","atk"],["Ingenua","spe","def"],["Modesta"],["Afable","atk","def"],["Mansa","atk","spe"],["Tímida"],["Alocada","atk","def"],["Serena","def","atk"],["Amable"],["Grosera","def","spe"],["Cauta","def","atk"],["Rara"]];
+const NSTAT={atk:"Ataque",def:"Defensa",spe:"Velocidad"};
+function natOf(n){S.nat=S.nat||{};if(S.nat[n]==null){if(!(S.owned&&S.owned[n]>0))return 0;S.nat[n]=Math.floor(Math.random()*NAT.length)}return S.nat[n]|0}
+const natTxt=i=>{const N=NAT[i]||NAT[0];return N[1]?"+10% "+NSTAT[N[1]]+" · −10% "+NSTAT[N[2]]:"Neutra: no cambia ninguna estadística"};
+const heldOf=n=>{const h=S.held&&S.held[n];return h&&HOLDK[h]?h:""};
+function monX(m,nt,it){const N=NAT[nt]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1;m.nt=nt|0;m.ma*=f("atk");m.nd=f("def");m.ns=f("spe");m.it=it||"";return m}
 const RCT={C:.9,R:.6,E:.35,M:.26,L:.18};
 const GLW={C:"#fff",R:"#4f9dff",E:"#b26cff",M:"#ff5fb8",L:"#ffb62e"};
 const qtyOf=i=>Math.max(1,Math.min(9999,Math.floor(+$("bq"+i).value)||1));
 function buildBag(){
   ITEMS.forEach(it=>{if(S.bag[it[0]]==null)S.bag[it[0]]=0});
-  $("bag").innerHTML=ITEMS.map((it,i)=>(i===0?'<h3 class="shh">💊 Curación, Pokéballs y PP</h3>':it[7]==="evo"&&ITEMS[i-1][7]!=="evo"?'<h3 class="shh">🧬 Objetos evolutivos</h3>':'')+'<div class="row"><div class="rowl"><span class="iico">'+itemIco(it[0],44)+'</span><div><b>'+it[1]+'</b> <span id="bc'+i+'"></span><small>'+it[6]+'</small></div></div><div class="qty"><input id="bq'+i+'" type="number" min="1" max="9999" value="1" aria-label="Cantidad de '+it[1]+'"><button id="bb'+i+'"></button></div></div>').join("");
+  $("bag").innerHTML=ITEMS.map((it,i)=>(i===0?'<h3 class="shh">💊 Curación, Pokéballs y PP</h3>':it[7]==="evo"&&ITEMS[i-1][7]!=="evo"?'<h3 class="shh">🧬 Objetos evolutivos</h3>':it[7]==="hold"&&ITEMS[i-1][7]!=="hold"?'<h3 class="shh">🎒 Objetos para equipar</h3>':'')+'<div class="row"><div class="rowl"><span class="iico">'+itemIco(it[0],44)+'</span><div><b>'+it[1]+'</b> <span id="bc'+i+'"></span><small>'+it[6]+'</small></div></div><div class="qty"><input id="bq'+i+'" type="number" min="1" max="9999" value="1" aria-label="Cantidad de '+it[1]+'"><button id="bb'+i+'"></button></div></div>').join("");
   ITEMS.forEach((it,i)=>{
     $("bq"+i).oninput=updBag;
     $("bq"+i).onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();const b=$("bb"+i);if(b.disabled)$("bq"+i).animate([{transform:"translateX(-4px)"},{transform:"translateX(4px)"},{transform:"none"}],200);else b.click()}};
@@ -1523,7 +1631,7 @@ function updBag(){ITEMS.forEach((it,i)=>{const c=it[2]*qtyOf(i);$("bc"+i).textCo
 // ---------- equipo ----------
 function buildTeam(){
   $("team").innerHTML=[0,1,2,3,4,5].map(i=>'<div class="slot6"><span class="tsp" id="ts'+i+'"></span><select id="tm'+i+'" aria-label="Pokémon '+(i+1)+' del equipo"></select></div>').join("");
-  [0,1,2,3,4,5].forEach(i=>{$("tm"+i).onchange=()=>{const v=$("tm"+i).value;S.team[i]=v;if(v)S.team.forEach((n,j)=>{if(j!==i&&n===v)S.team[j]=""});save();updTeam()}});
+  [0,1,2,3,4,5].forEach(i=>{$("tm"+i).onchange=()=>{const v=$("tm"+i).value;if(v&&busyMon(v)){toast("🔒 "+v+" está "+busyTxt(v)+". Recógelo primero.");updTeam();return}S.team[i]=v;if(v)S.team.forEach((n,j)=>{if(j!==i&&n===v)S.team[j]=""});save();updTeam()}});
 }
 function updTeam(){
   const q=nrm($("fq").value.trim()),r=$("fr2").value,t=$("ft2").value,g=$("fg2").value;
@@ -1531,7 +1639,7 @@ function updTeam(){
   const opt=p=>'<option value="'+p[0]+'">'+p[0]+' Nv'+(S.lv[p[0]]?S.lv[p[0]].l:1)+' ('+STAR[p[2]]+') ×'+S.owned[p[0]]+'</option>';
   const html='<option value="">— vacío —</option>'+own.map(opt).join("");
   S.team=(S.team||[]).slice(0,6);while(S.team.length<6)S.team.push("");
-  S.team=S.team.map(n=>S.owned[n]?n:"");
+  S.team=S.team.map(n=>S.owned[n]&&!(typeof busyMon==="function"&&busyMon(n))?n:"");
   for(let i=0;i<6;i++){
     const sel=$("tm"+i),cur=S.team[i];let h=html;
     if(cur&&!own.some(p=>p[0]===cur))h+=opt(PM[cur]);
@@ -2190,7 +2298,11 @@ function sprFit(el){
   sprBox(im,bb=>{
     if(!el.isConnected||el.querySelector("img")!==im)return;
     const bt=el.closest(".bt");if(!bt)return;const me=el.id[0]==="m",dbl=bt.classList.contains("dbl"),sec=/2$/.test(el.id);
-    const pl=bt.querySelector(".plat."+(me?"me":"opp"));if(!pl)return;const r=bt.getBoundingClientRect(),pr=pl.getBoundingClientRect();if(!pr.width)return;
+    const pl=bt.querySelector(".plat."+(me?"me":"opp"));if(!pl)return;const op=el.offsetParent;if(!op)return;
+    // medidas en pixeles CSS del contenedor: se corrige cualquier escala/animacion (ventanas que se abren, zoom, pantalla completa)
+    const R=op.getBoundingClientRect(),P=pl.getBoundingClientRect();if(!P.width||!R.width||!op.offsetWidth)return;
+    const sx=R.width/op.offsetWidth,sy=R.height/(op.offsetHeight||op.offsetWidth)||sx;
+    const r={left:R.left+op.clientLeft*sx,top:R.top+op.clientTop*sy},pr={left:P.left,top:P.top,width:P.width/sx,height:P.height/sy};pr.left=(P.left-r.left)/sx+r.left;pr.top=(P.top-r.top)/sy+r.top;
     const z=parseFloat(getComputedStyle(bt).getPropertyValue("--z"))||1;
     const big=Math.max(bb.w,bb.h)||1,k=(me?1.9:1.75)*z,mn=(me?(dbl?84:104):(dbl?68:84))*z,mx=(me?(dbl?140:168):(dbl?118:150))*z;
     let s=Math.min(mx,Math.max(mn,big*k))/big;
@@ -2205,11 +2317,17 @@ function sprFit(el){
     el.style.setProperty("--fb",((bb.nh-bb.y-bb.h)*s).toFixed(1)+"px");el.dataset.fit="1";
   });
 }
-function sprFitAll(){document.querySelectorAll("#arena .spr").forEach(e=>{if(!e.hidden)sprFit(e)})}
-document.addEventListener("load",e=>{const t=e.target;if(t&&t.tagName==="IMG"&&t.closest){const s=t.closest("#arena .spr");if(s)sprFit(s)}},true);
-window.addEventListener("resize",()=>setTimeout(sprFitAll,60));
+function sprFitAll(){document.querySelectorAll(".bt .spr").forEach(e=>{if(!e.hidden)sprFit(e)})}
+document.addEventListener("load",e=>{const t=e.target;if(t&&t.tagName==="IMG"&&t.closest){const s=t.closest(".bt .spr");if(s)sprFit(s)}},true);
+// reajuste continuo: cada vez que cambia el tamaño del combate (redimensionar, pantalla completa, girar el movil, ventana que se muestra)
+let _fitQ=0;const sprFitSoon=()=>{if(_fitQ)return;_fitQ=requestAnimationFrame(()=>{_fitQ=0;sprFitAll()})};
+window.addEventListener("resize",()=>{sprFitSoon();setTimeout(sprFitAll,120);setTimeout(sprFitAll,400)});
+document.addEventListener("fullscreenchange",()=>{setTimeout(sprFitAll,80);setTimeout(sprFitAll,450)});
+if(window.ResizeObserver){const _ro=new ResizeObserver(sprFitSoon),_seen=new WeakSet();
+  const _obs=()=>document.querySelectorAll(".bt,.bt .plat").forEach(b=>{if(!_seen.has(b)){_seen.add(b);_ro.observe(b)}});
+  _obs();let _oq=0;new MutationObserver(()=>{if(!_oq)_oq=setTimeout(()=>{_oq=0;_obs()},700)}).observe(document.body,{childList:true,subtree:true})}
 const _setSprBase=setSpr;
-setSpr=function(i,sn){_setSprBase(i,sn);const sl=B&&B.SL&&B.SL[i];if(sl&&$(sl.sp))sprFit($(sl.sp))};
+setSpr=function(i,sn){_setSprBase(i,sn);const sl=B&&B.SL&&B.SL[i];if(sl&&$(sl.sp)){const e=$(sl.sp);sprFit(e);requestAnimationFrame(()=>sprFit(e));setTimeout(()=>sprFit(e),350)}};
 const _bigZoomBase=bigZoom;
 bigZoom=function(){_bigZoomBase();setTimeout(sprFitAll,30)};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms/(B&&!$("arena").hidden?BS:1)));
@@ -2239,14 +2357,18 @@ const beAct=sd=>sd.t[sd.ai];
 const beTeamOf=(E,i)=>E.tm.findIndex(t=>t.includes(i));
 const beFoes=(E,i)=>{const ti=beTeamOf(E,i);return E.tm.filter((t,k)=>k!==ti).reduce((a,b)=>a.concat(b),[])};
 const beSnap=E=>({ai:E.sd.map(s=>s.ai),hp:E.sd.map(s=>s.t.map(x=>Math.max(0,x.mh))),st:E.sd.map(s=>s.t.map(x=>x.sts))});
-const beSpd=(s,rng)=>{const m=beAct(s);return (m.l+WW[m.p[2]]*4)*STG(s.v.st.spe)*(m.sts==="par"?.5:1)+rng()*3};
+const beSpd=(s,rng)=>{const m=beAct(s);return (m.l+WW[m.p[2]]*4)*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)+rng()*3};
+// objetos equipados: bayas que se activan solas
+function beBerry(E,j,push){const m=beAct(E.sd[j]);if(m&&m.it==="sitrus"&&!m.ius&&m.mh>0&&m.mh<=m.mx/2){m.ius=1;m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.round(m.mx/4)));push({k:"item",s:j,n:m.p[0],it:"sitrus"})}}
 function beOver(E,push){if(E.over!=null)return;const dead=E.tm.map(t=>t.every(i=>E.sd[i].out));if(dead.some(x=>x)){const al=dead.map((d,k)=>d?-1:k).filter(k=>k>=0);E.over=al.length===1?al[0]:"D";push({k:"win",s:E.over})}}
 function beAil(E,j,a,push,rng,status){
   const sd=E.sd[j],m=beAct(sd),ty=m.p[1];
-  if(a==="cnf"){if(sd.v.cnf){if(status)push({k:"ailfail",s:j,n:m.p[0]});return false}sd.v.cnf=2+Math.floor(rng()*4);push({k:"ail",s:j,n:m.p[0],a:a});return true}
+  if(a==="cnf"){if(sd.v.cnf){if(status)push({k:"ailfail",s:j,n:m.p[0]});return false}sd.v.cnf=2+Math.floor(rng()*4);push({k:"ail",s:j,n:m.p[0],a:a});if(m.it==="lum"&&!m.ius){m.ius=1;sd.v.cnf=0;push({k:"item",s:j,n:m.p[0],it:"lum"})}return true}
   if(m.sts||(a==="par"&&ty==="electric")||((a==="psn"||a==="tox")&&(ty==="poison"||ty==="steel"))||(a==="brn"&&ty==="fire")||(a==="frz"&&ty==="ice")){if(status)push({k:"ailfail",s:j,n:m.p[0]});return false}
   m.sts=a;if(a==="slp")m.slp=1+Math.floor(rng()*3);if(a==="tox")m.tox=0;
-  push({k:"ail",s:j,n:m.p[0],a:a});return true;
+  push({k:"ail",s:j,n:m.p[0],a:a});
+  if(m.it==="lum"&&!m.ius){m.ius=1;m.sts="";m.slp=0;m.tox=0;push({k:"item",s:j,n:m.p[0],it:"lum"})}
+  return true;
 }
 function beStat(E,j,ch,push){
   const sd=E.sd[j],m=beAct(sd);let any=false;
@@ -2289,18 +2411,21 @@ function beUse(E,i,a,rng,push,acted,faint){
   const ty=mv.typeless?"normal":mv.t,special=mv.fixed||mv.flv||mv.half,e=mv.typeless||special?1:eff(ty,tm.p[1]),stab=!mv.typeless&&ty===me.p[1]?1.5:1;
   let tot=0,nh=0,crit=0;
   for(let h=0;h<hits&&tm.mh>0;h++){
-    let d;const cr=!special&&rng()<(mv.crit?1/8:1/24);
+    let d;const cr=!special&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));
     else{let am=STG(v.st.atk),dm=STG(ts.v.st.def);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
-      d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?1.5:1)*am/dm*(ts.v.g?.5:1)*(me.sts==="brn"&&mv.cl===1?.5:1)))}
+      d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?1.5:1)*am/dm*(ts.v.g?.5:1)*(me.it==="lorb"?1.3:1)/(tm.nd||1)*(me.sts==="brn"&&mv.cl===1?.5:1)))}
     if(cr)crit++;
+    let sash=0;if(tm.it==="sash"&&!tm.ius&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;tm.ius=1;sash=1}
     tm.mh=Math.max(0,tm.mh-d);tot+=d;nh++;
-    push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});
+    push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});if(sash)push({k:"item",s:tg,n:tm.p[0],it:"sash"});
   }
   push({k:"after",s:i,tg:tg,e:e,crit:crit,nh:nh});
   if(mv.drain&&tot&&me.mh>0){const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100)));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}
   if(mv.rec&&tot){const d=Math.max(1,Math.round((mv.id==="forc"?me.mx:tot)*mv.rec/100));me.mh=Math.max(0,me.mh-d);push({k:"recoil",s:i,n:me.p[0]})}
-  faint(tg);
+  if(me.it==="shell"&&tot&&me.mh>0&&me.mh<me.mx){me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot/8)));push({k:"item",s:i,n:me.p[0],it:"shell"})}
+  if(me.it==="lorb"&&tot&&me.mh>0){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/10)));push({k:"item",s:i,n:me.p[0],it:"lorb"})}
+  faint(tg);if(tg!==i)beBerry(E,tg,push);beBerry(E,i,push);
   if(tm.mh>0){
     if(mv.ail&&rng()*100<mv.ailc)beAil(E,tg,mv.ail,push,rng,false);
     if(mv.fl&&!acted[tg]&&rng()*100<mv.fl)ts.v.fl=1;
@@ -2314,7 +2439,9 @@ function beUse(E,i,a,rng,push,acted,faint){
 function beTurn(E,acts,rng){
   const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)},N=E.sd.length,acted={};
   const pri=i=>{const a=acts[i]||"x";if(a==="ff")return 9;if(/^s\d$/.test(a))return 8;if(a==="x")return 7;if(a==="d")return 6;const k=String(a).match(/^m(\d)/),sd=E.sd[i];const mv=k?beAct(sd).m[+k[1]]:null;return mv?mv.pr:0};
-  const sp=E.sd.map(s=>s.out?0:beSpd(s,rng));
+  const sp=E.sd.map(s=>s.out?0:beSpd(s,rng)),qc=[];
+  E.sd.forEach((s,i)=>{if(s.out)return;const m=beAct(s);if(m&&m.it==="qclaw"&&m.mh>0&&/^m\d|^st/.test(String(acts[i]||""))&&rng()<.2){sp[i]+=1e4;qc.push(i)}});
+  qc.forEach(i=>push({k:"item",s:i,n:beAct(E.sd[i]).p[0],it:"qclaw"}));
   const order=E.sd.map((s,i)=>i).filter(i=>!E.sd[i].out).sort((a,b)=>pri(b)-pri(a)||sp[b]-sp[a]||a-b);
   const faint=i=>{const m=beAct(E.sd[i]);if(m.mh<=0&&!m.fd){m.mh=0;m.fd=1;push({k:"faint",s:i,n:m.p[0]})}};
   for(const i of order){
@@ -2327,7 +2454,9 @@ function beTurn(E,acts,rng){
   }
   for(let i=0;i<N;i++){const sd=E.sd[i];if(sd.out)continue;const m=beAct(sd);sd.v.prot=0;sd.v.g=0;sd.v.fl=0;if(m.mh<=0)continue;
     let d=0;if(m.sts==="psn")d=m.mx/8;else if(m.sts==="tox"){m.tox=Math.min(15,(m.tox||0)+1);d=m.mx*m.tox/16}else if(m.sts==="brn")d=m.mx/16;
-    if(d){m.mh=Math.max(0,m.mh-Math.max(1,Math.floor(d)));push({k:"res",s:i,n:m.p[0],a:m.sts});faint(i)}}
+    if(d){m.mh=Math.max(0,m.mh-Math.max(1,Math.floor(d)));push({k:"res",s:i,n:m.p[0],a:m.sts});faint(i)}
+    if(m.mh>0&&m.it==="left"&&m.mh<m.mx){m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.floor(m.mx/16)));push({k:"item",s:i,n:m.p[0],it:"left"})}
+    beBerry(E,i,push)}
   for(let i=0;i<N;i++){const sd=E.sd[i];if(sd.out||sd.need)continue;if(beAct(sd).mh<=0){faint(i);if(sd.t.some(x=>x.mh>0))sd.need=1;else{sd.out=1;push({k:"out",s:i})}}}
   beOver(E,push);E.turn++;return ev;
 }
@@ -2361,6 +2490,7 @@ const ART={atk:"El Ataque",def:"La Defensa",spe:"La Velocidad",acc:"La Precisió
 const AILM={par:w=>"¡"+w+" está paralizado! Quizás no pueda moverse.",slp:w=>"¡"+w+" se ha dormido!",psn:w=>"¡"+w+" ha sido envenenado!",tox:w=>"¡"+w+" ha sido gravemente envenenado!",brn:w=>"¡"+w+" se ha quemado!",frz:w=>"¡"+w+" se ha congelado!",cnf:w=>"¡"+w+" se encuentra confuso!"};
 const beWho=(i,n)=>B&&B.who?B.who(i,n):n;
 const snapMon=(sn,i)=>B.E.sd[i].t[sn.ai[i]];
+const ITMSG={left:["h",w=>"¡"+w+" ha recuperado algunos PS gracias a sus Restos!"],lorb:["d",w=>"¡"+w+" ha perdido PS por culpa de la Vidasfera!"],sash:["",w=>"¡"+w+" ha aguantado el golpe gracias a su Banda Focus!"],sitrus:["h",w=>"¡"+w+" se ha comido su Baya Zidra y ha recuperado PS!"],lum:["h",w=>"¡"+w+" se ha comido su Baya Ziuela y se ha curado!"],shell:["h",w=>"¡"+w+" ha recuperado PS gracias a su Campana Concha!"],qclaw:["",w=>"¡La Garra Rápida de "+w+" le permite actuar primero!"]};
 function setSpr(i,sn){
   const sl=B.SL[i];if(!sl)return;const m=snapMon(sn||beSnap(B.E),i),e=$(sl.sp);
   e.innerHTML=ico(m.p,92,sl.back,m.sh);e.className="spr";e.style.transform="";e.style.filter="drop-shadow(0 0 12px "+GLW[m.p[2]]+")";
@@ -2368,7 +2498,7 @@ function setSpr(i,sn){
 function bePaint(sn){
   if(!B||!B.SL)return;sn=sn||beSnap(B.E);B.snap=sn;
   B.SL.forEach((sl,i)=>{if(!sl)return;const sd=B.E.sd[i],a=sn.ai[i],m=sd.t[a];if(!m)return;
-    $(sl.n).textContent=m.p[0];$(sl.l).textContent=STAR[m.p[2]]+" "+TIPO[m.p[1]]+" Nv"+m.l;
+    $(sl.n).textContent=B.mode==="s"&&i===0&&typeof nk==="function"?nk(m.p[0]):m.p[0];$(sl.l).textContent=STAR[m.p[2]]+" "+TIPO[m.p[1]]+" Nv"+m.l;
     const hp=Math.max(0,sn.hp[i][a]),pc=hp/m.mx,bar=$(sl.h);bar.style.width=pc*100+"%";bar.style.background=pc>.5?"#3ecf5a":pc>.2?"#f5c400":"#e63950";
     const st=sn.st[i][a];
     if(sl.st){const e=$(sl.st);e.textContent=st?STS[st][0]:"";e.style.background=st?STS[st][1]:"";e.hidden=!st}
@@ -2405,6 +2535,7 @@ async function bePlay(ev){
       case "statmax":await say("¡"+ART[e.st]+" de "+who+" no puede "+(e.up?"subir":"bajar")+" más!");break;
       case "drain":bePaint(e.snap);fxHeal(sl.sp);await say("¡"+beWho(e.tg,e.n)+" ha perdido energía!");break;
       case "recoil":bePaint(e.snap);hitFx($(sl.sp),1);await say("¡"+who+" ha sufrido daño de retroceso!");break;
+      case "item":{bePaint(e.snap);const q=ITMSG[e.it];if(!q)break;if(q[0]==="h"){snd("heal");fxHeal(sl.sp)}else if(q[0]==="d")hitFx($(sl.sp),1);else snd("buff");await say(q[1](who));break}
       case "rech":await say("¡"+who+" necesita recuperarse!");break;
       case "slp":fxZ(sl.sp);await say(who+" está dormido como un tronco.");break;
       case "wake":bePaint(e.snap);await say("¡"+who+" se ha despertado!");break;
@@ -2620,12 +2751,13 @@ async function finish(res){
     if(rw===33550336)await jackpotLevel();
     const amt=B.trainer?Math.round((B.xpPool||0)*1.2):Math.round((15+om.l*6)*WW[o[2]]*.6*(res==="cap"?.5:1));
     const ups=[];
-    for(const t of E.sd[0].t)if(t.played&&t.mh>0){if(await gainXp(t.p,amt))ups.push(t.p[0])}
+    for(const t of E.sd[0].t)if(t.played&&t.mh>0){if(await gainXp(t.p,t.it==="lucky"?Math.round(amt*1.5):amt))ups.push(t.p[0])}
     for(const n of ups){if(S.owned[n]&&evoLvReady(n).length)await evoPrompt(n,evoLvReady(n))}
     if(B.league&&res==="win")await leagueWin();
     if(B.gym!=null&&res==="win")await gymWin(B.gym);
     if(res==="win"||res==="cap"){const dm=E.sd[1].t.reduce((a,t)=>a+Math.max(0,t.mx-Math.max(0,t.mh)),0);gAccAdd("dmg",dm)}
   }
+  if(typeof afterBattle==="function")try{await afterBattle(res)}catch(e){console.error(e)}
   save();render();updTeam();
   $("menu").innerHTML='<button data-k="9">Volver</button>';B.busy=false;
 }
@@ -2792,7 +2924,7 @@ const ITEM_IMG={pot:"potion",spot:"super-potion",hpot:"hyper-potion",mpot:"max-p
 // si la imagen original no carga se usa el dibujo propio (o 💎 para los objetos evolutivos)
 function itemErr(el){const id=el.dataset.id,s=+el.dataset.s;if(el.src.indexOf("raw.githubusercontent")<0&&!el.dataset.r){el.dataset.r=1;el.src=el.src.replace("https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/","https://raw.githubusercontent.com/PokeAPI/sprites/master/");return}const d=document.createElement("span");d.innerHTML=GD.EI[id]?'<span style="font-size:'+Math.round(s*.6)+'px">💎</span>':itemIco(id,s,1);el.replaceWith(d.firstChild)}
 function itemIco(id,s,noImg){
-  const k=GD.EI[id]?id:ITEM_IMG[id];
+  const k=GD.EI[id]?id:ITEM_IMG[id]||HIMG[id];
   if(k&&!noImg)return '<img class="pk item" src="https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/items/'+k+'.png" width="'+s+'" height="'+s+'" alt="" loading="lazy" data-id="'+id+'" data-s="'+s+'" onerror="itemErr(this)">';
   const svg=b=>'<svg viewBox="0 0 64 64" width="'+s+'" height="'+s+'" aria-hidden="true">'+b+'</svg>';
   const pot=c=>'<rect x="26" y="5" width="12" height="9" rx="2" fill="#6b4a2b" stroke="#3a2614" stroke-width="1.5"/><rect x="28" y="13" width="8" height="9" fill="#e8f1ff" stroke="#3b4260" stroke-width="2"/><path d="M19 30Q19 22 28 23H36Q45 22 45 30V50Q45 60 35 60H29Q19 60 19 50Z" fill="#f2f7ff" stroke="#3b4260" stroke-width="2.4"/><path d="M21.5 37H42.5V50Q42.5 57.5 35 57.5H29Q21.5 57.5 21.5 50Z" fill="'+c+'"/><path d="M32 40v11M26.5 45.5h11" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/><path d="M24 30v10" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>';
@@ -2827,7 +2959,7 @@ function bagUI(){
   const have=ITEMS.filter(it=>(S.bag[it[0]]||0)>0),er=evoReadyList(),key=have.map(it=>it[0]+":"+S.bag[it[0]]).join("|")+"|"+useId+"|"+er.join(",");
   if(key===_bk)return;_bk=key;
   $("evoReady").innerHTML=er.length?'<div class="lgnow"><b>🧬 ¡Pueden evolucionar!</b><small class="mut">Han alcanzado el nivel necesario. Puedes evolucionarlos ahora o esperar.</small><div class="frl">'+er.map(n=>'<div class="pvrow"><span class="pvav">'+ico(PM[n],34)+'</span><b>'+esc(n)+' <small>Nv'+lvd(n).l+'</small></b><span style="flex:1;color:var(--mute);font-size:.85rem">→ '+evoLvReady(n).map(e=>esc(e[0])).join(" / ")+'</span><button data-evo="'+esc(n)+'">🧬 Evolucionar</button></div>').join("")+'</div></div>':"";
-  $("bgrid").innerHTML=have.length?have.map(it=>'<div class="btile'+(useId===it[0]?' sel':'')+'"><span class="iico big">'+itemIco(it[0],52)+'</span><div class="bti"><b>'+it[1]+' <span class="bcnt">×'+S.bag[it[0]]+'</span></b><small class="mut">'+it[6]+'</small>'+(it[3]===0?'<button data-use="'+it[0]+'">Usar</button>':'<small class="mut">Se usa en combate</small>')+'</div></div>').join(""):'<small class="mut">Tu mochila está vacía. Consigue objetos ganando combates o cómpralos en la tienda.</small>';
+  $("bgrid").innerHTML=have.length?have.map(it=>'<div class="btile'+(useId===it[0]?' sel':'')+'"><span class="iico big">'+itemIco(it[0],52)+'</span><div class="bti"><b>'+it[1]+' <span class="bcnt">×'+S.bag[it[0]]+'</span></b><small class="mut">'+it[6]+'</small>'+(it[3]===0?'<button data-use="'+it[0]+'">'+(it[7]==="hold"?"Equipar":"Usar")+'</button>':'<small class="mut">Se usa en combate</small>')+'</div></div>').join(""):'<small class="mut">Tu mochila está vacía. Consigue objetos ganando combates o cómpralos en la tienda.</small>';
 }
 function candList(){
   const q=nrm($("bcQ").value.trim()),cap=lvCap(),own=P.filter(p=>S.owned[p[0]]&&lvd(p[0]).l<cap&&nrm(p[0]).includes(q)).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
@@ -2840,7 +2972,8 @@ function useUI(msg){
   if(!it||!(S.bag[useId]>0)){q.hidden=true;useId=null;_bk="";bagUI();return}
   q.hidden=false;
   let h='<div class="buse-h"><span class="iico">'+itemIco(it[0],40)+'</span><b>'+it[1]+' ×'+S.bag[useId]+'</b><button class="alt" id="buClose">✕ Cerrar</button></div>';
-  if(it[7]==="evo"){
+  if(it[7]==="hold"){h+=holdPickHTML(useId)}
+  else if(it[7]==="evo"){
     const L=P.filter(p=>S.owned[p[0]]&&evoByItem(p[0],useId).length);
     h+=L.length?'<div class="bul">'+L.map(p=>'<button class="bunit" data-bev="'+esc(p[0])+'">'+ico(p,30)+'<span><b>'+esc(p[0])+'</b> <small>Nv'+lvd(p[0]).l+' → '+evoByItem(p[0],useId).map(e=>esc(e[0])).join(" / ")+'</small></span></button>').join("")+'</div>':'<small class="mut">Ninguno de tus Pokémon evoluciona con este objeto. Lo usan: '+esc(evoUsers(useId))+'.</small>';
   }
@@ -2856,6 +2989,7 @@ function useUI(msg){
   h+='<small id="buMsg" class="mut">'+(msg||"")+'</small>';
   q.innerHTML=h;
   if(useId==="cand"){candList();$("bcQ").oninput=candList}
+  if(it[7]==="hold"&&$("bhQ")){$("bhQ").oninput=()=>holdList(useId)}
   if($("bpS")){ppList();$("bpQ").oninput=ppList;$("bpS").onchange=ppMoves}
   _bk="";bagUI();
 }
@@ -2880,6 +3014,7 @@ $("buse").addEventListener("click",e=>{
   if(b.id==="buClose"){useId=null;useUI();return}
   const it=ITEMS.find(i=>i[0]===useId);if(!it)return;
   if(b.dataset.bev){if(fcd){useUI("Termina el combate antes de evolucionar.");return}evoFromBag(b.dataset.bev,evoByItem(b.dataset.bev,useId),useId);return}
+  if(b.dataset.beq){const r=holdEquip(b.dataset.beq,useId);useUI(r);return}
   if(b.dataset.bu){
     const n=b.dataset.bu,mx=mxOf(n);let hp=S.hp[n]===undefined?mx:S.hp[n];
     if(it[5]){if(hp>0)return;hp=Math.round(mx*it[5]/100)}else{if(hp<=0||hp>=mx)return;hp=Math.min(mx,hp+Math.round(mx*it[4]/100))}
@@ -3023,7 +3158,7 @@ async function startBattle(cfg){
   const ok=names.some(n=>S.hp[n]!==0);if(!ok){updTeam();return}
   fcd=true;$("fgo").disabled=true;
   try{$("batP").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}
-  const team=names.map(n=>{const ids=moveIds(n),m=beMon(PM[n],lvd(n).l,S.hp[n],ids,ids.map(id=>ppCur(n,id)));m.sh=S.shiny&&S.shiny[n]>0?1:0;return m});
+  const team=names.map(n=>{const ids=moveIds(n),m=beMon(PM[n],lvd(n).l,S.hp[n],ids,ids.map(id=>ppCur(n,id)));m.sh=S.shiny&&S.shiny[n]>0?1:0;monX(m,natOf(n),heldOf(n));return m});
   const cap=lvCap(),lead=Math.min(team.find(t=>t.mh>0).l,cap),wl=cap<100?Math.min(lead,cap-2):lead;
   let eteam,trainer=null,league=null,tsrc=null;
   if(cfg&&cfg.eteam){eteam=cfg.eteam;trainer=cfg.trainer;league=cfg.league||null;tsrc=cfg.tsrc}
@@ -3036,7 +3171,8 @@ async function startBattle(cfg){
   }
   const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);
   B={mode:"s",E:E,me:0,SL:[SL_ME,SL_OP],trainer:trainer,tsrc:tsrc,league:league,gym:cfg&&cfg.gym!=null?cfg.gym:null,zone:cfg&&cfg.eteam?null:zoneCur(),xpPool:0,busy:true,choose:null,item:null,showOpp:!!trainer,
-    who:(i,n)=>i===0?n:(trainer?n+" de "+trainer:n+" salvaje"),mine:i=>i===0,onSend:sSend};
+    tower:cfg&&cfg.tower?1:0,
+    who:(i,n)=>i===0?(typeof nk==="function"?nk(n):n):(trainer?n+" de "+trainer:n+" salvaje"),mine:i=>i===0,onSend:sSend};
   $("fsel").hidden=true;$("arena").hidden=false;arenaReset();
   $("hlpp").hidden=true;$("otn").textContent=trainer?"👤 "+trainer:"";
   if(O.bigmode&&!bigMode)bigSet(O.bigmode);
@@ -3673,9 +3809,9 @@ const pvClean=t=>Array.from(String(t==null?"":t).replace(/[\u0000-\u001F\u007F-\
 const PVP_CAP=5000000;
 const pvDay=()=>{const d=today();if(!S.pvd||S.pvd.d!==d)S.pvd={d:d,t:0};return S.pvd};
 const pvHash=str=>{let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
-const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,m:moveIds(n).slice(),sh:S.shiny&&S.shiny[n]>0?1:0}));
+const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,m:moveIds(n).slice(),sh:S.shiny&&S.shiny[n]>0?1:0,nt:natOf(n),it:heldOf(n)}));
 function pvOkTeam(t){return Array.isArray(t)&&t.length>=1&&t.length<=6&&t.every(x=>x&&typeof x.n==="string"&&PM[x.n]&&Number.isInteger(x.l)&&x.l>=1&&x.l<=100&&Array.isArray(x.m)&&x.m.length>=1&&x.m.length<=4&&x.m.every(id=>typeof id==="string"&&MVD[id])&&new Set(x.m).size===x.m.length)&&new Set(t.map(x=>x.n)).size===t.length}
-const pvMk=team=>team.map(x=>{const m=beMon(PM[x.n],x.l,null,x.m);m.sh=x.sh?1:0;return m});
+const pvMk=team=>team.map(x=>{const m=beMon(PM[x.n],x.l,null,x.m);m.sh=x.sh?1:0;monX(m,Number.isInteger(x.nt)&&x.nt>=0&&x.nt<NAT.length?x.nt:0,HOLDK[x.it]?x.it:"");return m});
 const gdBadge=g=>g&&typeof g==="object"&&g.t?'<span class="gtag" title="Gremio '+esc(g.t)+'">'+esc(String(g.i||"🛡️").slice(0,4))+' '+esc(String(g.t).slice(0,4))+'</span>':"";
 // ---- lobby ----
 const pvMe=()=>PR&&PR.peers().find(p=>p.sameTab);
@@ -4153,10 +4289,12 @@ function frUI(){
   const box=$("frBox");if(!box)return;
   if(!window.FB){box.innerHTML='<small class="mut">Inicia sesión con tu cuenta para añadir amigos, ver cuándo están conectados e invitarlos a combatir.</small>';return}
   const on={};pvOthers().forEach(p=>{on[p.peer]=p.presence.pvp});
-  const key=JSON.stringify([FR,Object.keys(on).map(k=>k+on[k].st+on[k].n),PV.st,!!R2,R2&&R2.ph,fcd,PV.inv]);if(key===_frk)return;_frk=key;
+  const key=JSON.stringify([typeof GF!=="undefined"?GF.inc.map(g=>g.id):0,S.gfs,FR,Object.keys(on).map(k=>k+on[k].st+on[k].n),PV.st,!!R2,R2&&R2.ph,fcd,PV.inv]);if(key===_frk)return;_frk=key;
   const ids=Object.keys(FR.l).sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)||String(FR.l[a].n).localeCompare(FR.l[b].n));
   let h="";
   if(FR.inc.length)h+='<div class="lgnow"><b>📩 Solicitudes recibidas</b>'+FR.inc.map(r=>'<div class="pvrow"><b>'+esc(pvClean(r.fn))+'</b><span style="flex:1"></span><button data-fra="'+esc(r.from)+'" data-frn="'+esc(pvClean(r.fn))+'">✅ Aceptar</button><button class="alt" data-frd="'+esc(r.from)+'">Rechazar</button></div>').join("")+'</div>';
+  {const gi=typeof GF!=="undefined"?GF.inc:[];if(gi.length)h+='<div class="lgnow gfin"><b>🎁 Regalos recibidos ('+gi.length+')</b><small class="mut">Tus amigos te han enviado un detalle. Puedes abrir hasta 20 al día.</small><div class="gfl">'+gi.slice(0,30).map(g=>'<button class="gfb" data-gfo="'+esc(g.id)+'"><span>🎁</span><b>'+esc(pvClean(g.fn||"Amigo"))+'</b><small>Abrir</small></button>').join("")+'</div></div>'}
+  if(ids.length&&window.FB&&window.FB.gfSend){const left=ids.filter(u=>!gfSentToday(u)).length;h+='<div class="gfsend"><small class="mut">🎁 Envía un regalo a cada amigo una vez al día: tickets, Poké Balls u objetos.</small>'+(left?'<button data-gfall="1">🎁 Enviar a todos ('+left+')</button>':'<small>✅ Hoy ya has enviado regalos a todos</small>')+'</div>'}
   if(FR.out.length)h+='<small class="mut">Solicitudes enviadas: '+FR.out.map(r=>esc(pvClean(r.tn))+' <button class="alt mini" data-frc="'+esc(r.to)+'" title="Cancelar">✕</button>').join(" · ")+'</small>';
   h+=ids.length?'<div class="frl">'+ids.map(u=>{const f=FR.l[u],o=on[u],n=o?pvClean(o.n):pvClean(f.n);
     const st=o?(o.st==="duel"?"🟠 En un duelo":o.st==="room"?"🟠 En una sala 2vs2":o.st==="wait"?"🟠 Retando":"🟢 Conectado"):"⚫ Desconectado";
@@ -4165,6 +4303,7 @@ function frUI(){
       (canInv?'<button data-frinv="'+esc(u)+'">'+(PV.inv&&PV.inv.to.includes(u)?'✅ Invitado':'📨 Invitar a la sala')+'</button>':'')+
       '<button data-frch="'+esc(u)+'"'+(canDuel?'':' disabled')+' title="Retar a un duelo 1 vs 1">⚔️ Retar</button>'+
       '<button data-fr2="'+esc(u)+'"'+(o&&!R2&&!fcd&&PV.st==="idle"?'':' disabled')+' title="Crear una sala 2 vs 2 e invitarle">👥 2vs2</button>'+
+      (window.FB&&window.FB.gfSend?'<button class="'+(gfSentToday(u)?'alt':'')+'" data-gfs="'+esc(u)+'"'+(gfSentToday(u)?' disabled title="Ya le has enviado un regalo hoy"':' title="Enviar un regalo"')+'>'+(gfSentToday(u)?'✅':'🎁')+'</button>':'')+
       '<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Proponer un intercambio">🔄</button><button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
   box.innerHTML=h;$("frCnt").textContent=ids.length+" amigo"+(ids.length===1?"":"s")+" · "+ids.filter(u=>on[u]).length+" conectados";
   const n=FR.inc.length;if($("navfr"))$("navfr").hidden=!n,$("navfr").textContent=n;
@@ -4438,7 +4577,7 @@ function sortDex(a){
 }
 function fok(p){const r=$("fr").value,t=$("ft").value,s=$("fs").value,c=S.owned[p[0]]||0;if($("fd").value!==""){const w=S.when&&S.when[p[0]],dv=$("fd").value,lim=dv==="0"?new Date().setHours(0,0,0,0):Date.now()-dv*864e5;if(!(w&&w>=lim))return false}
   if($("fc").value&&c<+$("fc").value)return false;
-  return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?hasP(p[0]):s==="0"?!hasP(p[0]):s==="3"?!!(S.shiny&&S.shiny[p[0]]):c>1))}
+  return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?hasP(p[0]):s==="0"?!hasP(p[0]):s==="3"?!!(S.shiny&&S.shiny[p[0]]):s==="4"?isFav(p[0]):c>1))}
 $("ft").innerHTML='<option value="">Todos los tipos</option>'+Object.keys(TIPO).map(k=>'<option value="'+k+'">'+TIPO[k]+'</option>').join("");
 $("ft2").innerHTML=$("ft").innerHTML;
 const GN=["Kanto","Johto","Hoenn","Sinnoh","Teselia","Kalos","Alola","Galar","Paldea","Formas especiales"],GO='<option value="">Todas las generaciones</option>'+GN.map((n,i)=>'<option value="'+(i+1)+'">'+(i<9?'Gen '+(i+1)+' · ':'')+n+'</option>').join("");$("fg").innerHTML=GO;$("fg2").innerHTML=GO;
@@ -4820,6 +4959,17 @@ $("prsGo").onclick=()=>$("reset").click();
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-29c",at:"2026-10-29T22:50",t:"Gran actualización: actividades, naturalezas, objetos y regalos",l:[
+"🎪 Nuevo menú «Actividades» con cuatro novedades: Guardería, Zona Safari, Torre Batalla y Expediciones.",
+"🥚 Guardería: deja dos Pokémon compatibles y consigue huevos. Eclosionan tras unos combates y tienen más probabilidad de ser variocolor.",
+"🌾 Zona Safari: una salida gratis al día con 20 Safari Balls para atrapar Pokémon raros usando cebo y rocas.",
+"🗼 Torre Batalla: combates seguidos cada vez más difíciles, récord personal y una tienda con Puntos Torre.",
+"🧭 Expediciones: manda a los Pokémon que no usas a explorar y vuelven con tickets, objetos y experiencia.",
+"🌿 Naturalezas: cada Pokémon tiene una que sube una estadística y baja otra. Tus repetidos traen naturalezas nuevas que puedes elegir.",
+"🎒 Objetos para equipar: Restos, Vidasfera, Banda Focus, Baya Zidra, Garra Rápida, Huevo Suerte y más.",
+"📋 Toca un Pokémon de tu Pokédex para ver su ficha: ponle un mote, márcalo como favorito y elige su naturaleza y su objeto.",
+"🏛️ Salón de la Fama: tu equipo campeón queda registrado al ganar una Liga y se ve en tu perfil.",
+"🎁 Regalos entre amigos: envía un regalo diario a cada amigo desde la lista de amigos."]},
 {v:"2026-10-29b",at:"2026-10-29T20:25",t:"Gran actualización: evoluciones, movimientos originales, amigos y gremios",l:[
 "🧬 Sistema de evoluciones como en los juegos: por nivel o con objetos (Piedra Fuego, Agua, Trueno, Hoja, Lunar, Solar, Alba, Noche, Día, Hielo, Cordón Unión, Cascabel Alivio...). Los objetos están en la tienda y caen en combates.",
 "✨ ¡Pokémon VARIOCOLOR! 1 de cada 500 tiradas (1 de cada 250 en las súper tiradas) y 1 de cada 400 Pokémon salvajes son variocolor. Tienen su propio filtro en la Pokédex y salen brillando en combate.",
@@ -5049,10 +5199,11 @@ async function openProf(uid){
   let d=null;try{d=await window.FB.rankGet(uid)}catch(e){}
   if(!d){$("profB").innerHTML='<p>Este jugador todavía no tiene perfil público (aparece cuando guarda su partida en la nube con el apodo registrado).</p><div class="jrow"><button class="alt" data-pcl="1">Cerrar</button></div>';return}
   const me=window.FB.uid(),sp=d[ssnField()]||0,on=pvOthers().find(p=>p.peer===uid);
-  const st=[["📚","Pokédex",d.dex],["✨","Variocolor",d.sh],["🎯","Combates ganados",d.win],["⚔️","Victorias PVP",d.pw],["🌟","Prestigio",d.prs],["🏅","Medallas",(d.med|0)+"/8"],["🔥","Mejor racha",d.bs|0],["🏆","Logros",d.ach|0]];
+  const st=[["📚","Pokédex",d.dex],["✨","Variocolor",d.sh],["🎯","Combates ganados",d.win],["⚔️","Victorias PVP",d.pw],["🌟","Prestigio",d.prs],["🏅","Medallas",(d.med|0)+"/8"],["🔥","Mejor racha",d.bs|0],["🗼","Récord Torre",d.tw|0],["🏛️","Salón de la Fama",d.hof|0],["🏆","Logros",d.ach|0]];
   $("profB").innerHTML='<div class="profh"><div class="profav">'+trImg(trDec(d.tr),"f","i")+'</div><div><h2>'+esc(pvClean(d.n))+' '+(d.g?'<span class="gtag">'+esc(String(d.g).slice(0,4))+'</span>':'')+'</h2><span class="tier t'+tierIdx(sp)+'">'+TIERS[tierIdx(sp)][1]+'</span> <small class="mut">'+sp+' pts esta temporada · '+(on?"🟢 Conectado":"⚫ Desconectado")+'</small><div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,i<(d.med|0),22)).join("")+'</div></div></div>'+
     '<div class="profst">'+st.map(x=>'<div><span>'+x[0]+'</span><b>'+(typeof x[2]==="number"?fmt(x[2]||0):x[2])+'</b><small>'+x[1]+'</small></div>').join("")+'</div>'+
     (Array.isArray(d.tm)&&d.tm.length?'<b>Equipo</b><div class="proftm">'+d.tm.filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],56,false,!!x.s)+'<small>'+esc(x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
+    (Array.isArray(d.hft)&&d.hft.length?'<b>🏛️ Último equipo en el Salón de la Fama</b><div class="proftm">'+d.hft.filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],56,false,!!x.s)+'<small>'+esc(x.k||x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
     '<div class="jrow">'+(uid!==me&&!isFriend(uid)?'<button data-pfr="'+esc(pvClean(d.n))+'">+👥 Añadir amigo</button>':'')+(on&&uid!==me&&PV.st==="idle"&&!fcd?'<button class="red" data-pch="'+esc(uid)+'">⚔️ Retar</button>':'')+'<button class="alt" data-pcl="1">Cerrar</button></div>';
 }
 document.addEventListener("click",e=>{
@@ -5081,7 +5232,7 @@ async function pkGive(rec,tradeEvo){
   save();
   if(tradeEvo){const ev=EVO(n).filter(e=>e[1]==="Ilinking-cord"&&PM[e[0]]);if(ev.length&&!fcd)await evoPrompt(n,ev)}
 }
-const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0);
+const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0&&!(isFav(p[0])&&S.owned[p[0]]<=1)&&!busyMon(p[0]));
 const recTxt=r=>r?(r.s?"✨ ":"")+esc(r.n)+" Nv"+(r.l|0):"?";
 // ---- ventana de intercambio al estilo de los juegos ----
 let TM={st:null,t:null,sel:null,q:"",f:""};
@@ -5549,6 +5700,343 @@ function icoHDErr(el){
 // el fondo decorativo sigue con los sprites clásicos (son muchos y pequeños)
 {const _bgB=bgBuild;bgBuild=function(){window._noHD=1;try{_bgB()}finally{window._noHD=0}}}
 
+// =====================================================================================
+// NOVEDADES: ficha del Pokémon (motes, favoritos, naturaleza y objeto), guardería con huevos,
+// Zona Safari, Torre Batalla, expediciones, Salón de la Fama y regalos entre amigos
+// =====================================================================================
+const NX={};// estado temporal de las ventanas nuevas
+function nk(n){const m=S.mote&&S.mote[n];return m?m:n}
+function isFav(n){return !!(S.fav&&S.fav[n])}
+const IN2=k=>{const it=ITEMS.find(i=>i[0]===k);return it?it[1]:k};
+const H2=s=>{const m=Math.floor(s/60);return m>=60?Math.floor(m/60)+" h "+(m%60?m%60+" min":""):m>0?m+" min":Math.max(0,Math.ceil(s))+" s"};
+// --- dar un Pokémon (huevos, Safari...) ---
+function giveMon(n,lv,sh){
+  if(!PM[n])return false;const isNew=!hasP(n);
+  if(!S.owned[n]){(S.balls=S.balls||{})[n]=BALLR[PM[n][2]];(S.when=S.when||{})[n]=Date.now()}
+  S.owned[n]=(S.owned[n]||0)+1;if(isNew)qEv("new");
+  if(sh){S.shiny=S.shiny||{};S.shiny[n]=(S.shiny[n]||0)+1;qEv("shiny")}
+  lv=Math.max(1,Math.min(100,lv|0));if(!S.lv[n]||S.lv[n].l<lv){S.lv[n]={l:lv,x:0};delete S.mv[n];S.ml=S.ml||{};S.ml[n]=lv}
+  return isNew;
+}
+// --- naturalezas: los repetidos traen naturalezas nuevas que puedes elegir en la ficha ---
+let _ownPrev=null;
+function natTrack(){
+  const o=S.owned||{};S.nat=S.nat||{};
+  if(_ownPrev){for(const n in o){const c=o[n]|0,b=_ownPrev[n]|0;if(c<=b)continue;const had=S.nat[n]!=null;natOf(n);natAlt(n,c-b-(had?0:1))}}
+  else for(const n in o)if(o[n]>0)natOf(n);
+  _ownPrev=Object.assign({},o);
+}
+const natSync=n=>{if(_ownPrev)_ownPrev[n]=S.owned[n]|0};
+function natAlt(n,k){if(k<=0)return;S.natAlt=S.natAlt||{};const L=S.natAlt[n]=S.natAlt[n]||[];for(let i=0;i<Math.min(k,6);i++){const x=Math.floor(Math.random()*NAT.length);if(x!==natOf(n)&&!L.includes(x))L.push(x)}while(L.length>6)L.shift();if(!L.length)delete S.natAlt[n]}
+{const _r=render;render=function(){try{natTrack()}catch(e){}return _r.apply(this,arguments)}}
+// --- al entregar un Pokémon en un intercambio se limpian sus datos y vuelve su objeto a la Mochila ---
+{const _t=pkTake;pkTake=function(n){const h=heldOf(n),r=_t(n);if(r&&!(S.owned[n]>0)){if(h)S.bag[h]=(S.bag[h]||0)+1;[S.held,S.mote,S.fav,S.nat,S.natAlt].forEach(o=>{if(o)delete o[n]});save()}return r}}
+// Pokémon ocupados (guardería o expedición)
+function busyMon(n){return !!(S.dc&&(S.dc.a===n||S.dc.b===n))||!!(S.exp||[]).some(x=>x.n===n)}
+function busyTxt(n){return S.dc&&(S.dc.a===n||S.dc.b===n)?"en la Guardería":(S.exp||[]).some(x=>x.n===n)?"de expedición":""}
+
+// ================= objetos equipables =================
+function holdEquip(n,id){
+  if(!(S.owned[n]>0)||!HOLDK[id])return "";if(fcd)return "Termina el combate antes de cambiar objetos.";
+  if(!(S.bag[id]>0))return "No te quedan "+IN2(id)+".";
+  S.held=S.held||{};const old=heldOf(n);if(old===id)return nk(n)+" ya lleva "+IN2(id)+".";
+  if(old)S.bag[old]=(S.bag[old]||0)+1;S.held[n]=id;S.bag[id]--;save();snd("buff");_hbk="";
+  return nk(n)+" ahora lleva "+IN2(id)+(old?" (y "+IN2(old)+" vuelve a la Mochila)":"")+".";
+}
+function holdRemove(n){const h=heldOf(n);if(!h)return;if(fcd){toast("Termina el combate antes de cambiar objetos.");return}S.bag[h]=(S.bag[h]||0)+1;delete S.held[n];save();snd("ui");_hbk=""}
+function holdPickHTML(id){return '<small class="mut">'+esc(HOLDK[id][3])+'. Elige quién lo llevará (cada Pokémon puede llevar un objeto):</small><div class="sets-row"><input id="bhQ" placeholder="Buscar Pokémon..." aria-label="Buscar Pokémon"></div><div class="bul" id="bhL">'+holdListHTML(id,"")+'</div>'}
+function holdListHTML(id,q){
+  q=nrm(q||"");const L=P.filter(p=>S.owned[p[0]]>0&&(!q||nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l)).slice(0,60);
+  return L.length?L.map(p=>{const h=heldOf(p[0]);return '<button class="bunit" data-beq="'+esc(p[0])+'">'+ico(p,30)+'<span><b>'+esc(nk(p[0]))+'</b> <small>Nv'+lvd(p[0]).l+(S.team.includes(p[0])?' · ⭐ equipo':'')+(h?' · lleva '+IN2(h):'')+'</small></span></button>'}).join(""):'<small class="mut">No hay Pokémon con ese nombre.</small>';
+}
+function holdList(id){const l=$("bhL");if(l)l.innerHTML=holdListHTML(id,$("bhQ").value)}
+let _hbk="";
+function heldBoxUI(){
+  let box=$("heldBox");if(!box){const g=$("bgrid");if(!g)return;box=document.createElement("div");box.id="heldBox";g.after(box)}
+  const L=Object.keys(S.held||{}).filter(n=>S.owned[n]>0&&heldOf(n)),k=L.map(n=>n+S.held[n]).join("|");if(k===_hbk)return;_hbk=k;
+  box.innerHTML=L.length?'<div class="lgnow"><b>🎒 Objetos equipados</b><small class="mut">Se usan solos en combate. Puedes quitarlos cuando quieras y vuelven a la Mochila.</small><div class="frl">'+L.map(n=>'<div class="pvrow"><span class="pvav">'+ico(PM[n],34)+'</span><b>'+esc(nk(n))+'</b><span class="iico">'+itemIco(S.held[n],26)+'</span><small class="mut" style="flex:1">'+IN2(S.held[n])+'</small><button class="alt" data-hrm="'+esc(n)+'">Quitar</button></div>').join("")+'</div></div>':'';
+}
+{const _b=bagUI;bagUI=function(){_b.apply(this,arguments);try{heldBoxUI()}catch(e){}}}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-hrm]");if(b){holdRemove(b.dataset.hrm);_bk="";bagUI();if(useId)useUI("")}});
+
+// ================= ficha del Pokémon (vista ampliada) =================
+function fichaHTML(n){
+  if(!(S.owned[n]>0))return "";const nt=natOf(n),N=NAT[nt],h=heldOf(n),alt=(S.natAlt&&S.natAlt[n])||[],bz=busyTxt(n);
+  const inv=HOLD.filter(x=>S.bag[x[0]]>0||x[0]===h);
+  return '<div class="fich">'+
+    '<div class="fichr"><label for="fNick">Mote</label><div class="fichin"><input id="fNick" maxlength="12" placeholder="'+esc(n)+'" value="'+esc((S.mote&&S.mote[n])||"")+'"><button data-fnk="'+esc(n)+'">Guardar</button></div></div>'+
+    '<div class="fichr"><span>Favorito</span><button class="ffav'+(isFav(n)?' on':'')+'" data-ffv="'+esc(n)+'" aria-pressed="'+isFav(n)+'">'+(isFav(n)?'⭐ Es favorito':'☆ Marcar como favorito')+'</button></div>'+
+    '<div class="fichr"><span>Naturaleza</span><div><b>'+N[0]+'</b> <small class="mut">'+natTxt(nt)+'</small>'+
+      (alt.length?'<div class="fnat"><small>Tus repetidos traían otras naturalezas. Puedes cambiarla:</small>'+alt.map(x=>'<button class="alt mini" data-fnt="'+x+'" data-fn="'+esc(n)+'" title="'+esc(natTxt(x))+'">'+NAT[x][0]+(NAT[x][1]?' <small>+'+NSTAT[NAT[x][1]].slice(0,3)+' −'+NSTAT[NAT[x][2]].slice(0,3)+'</small>':' <small>neutra</small>')+'</button>').join("")+'</div>':'')+'</div></div>'+
+    '<div class="fichr"><span>Objeto</span><div class="fichin"><select id="fHeld" data-fn="'+esc(n)+'"><option value="">— Ninguno —</option>'+inv.map(x=>'<option value="'+x[0]+'"'+(x[0]===h?' selected':'')+'>'+x[1]+(x[0]===h?' (equipado)':' ×'+S.bag[x[0]])+'</option>').join("")+'</select></div></div>'+
+    (h?'<small class="mut fichd">'+itemIco(h,20)+' '+esc(HOLDK[h][3])+'</small>':(!inv.length?'<small class="mut fichd">No tienes objetos equipables. Cómpralos en la Tienda o consíguelos en la Torre Batalla y las expediciones.</small>':''))+
+    (bz?'<small class="fichb">📍 Ahora mismo está '+bz+'.</small>':'')+
+  '</div>';
+}
+{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{const w=document.querySelector("#pkv .pkvw");if(!w)return;const c=w.querySelector(".pkvcry");if(S.owned[n]>0){
+  const t=w.querySelector("h3");if(t&&S.mote&&S.mote[n])t.innerHTML=(sh?"✨ ":"")+esc(S.mote[n])+' <small class="mut">('+esc(n)+')</small>';
+  const d=document.createElement("div");d.innerHTML=fichaHTML(n);if(c)c.before(d.firstChild);else w.appendChild(d.firstChild)}}catch(e){console.error(e)}}}
+function fichaRefresh(n){const m=$("pkv");if(!m||m.hidden)return;const sh=!!m.querySelector(".pkvw.shiny");pkView(n,sh);const w=m.querySelector(".pkvw");if(w)w.getAnimations().forEach(a=>a.finish())}
+document.addEventListener("click",e=>{
+  const c=e.target.closest&&e.target.closest("#dex .card[data-dn]");if(c){snd("ui");pkView(c.dataset.dn,!!(S.shiny&&S.shiny[c.dataset.dn]));return}
+  const b=e.target.closest&&e.target.closest("#pkv button");if(!b)return;
+  if(b.dataset.fnk){const n=b.dataset.fnk,v=String($("fNick").value||"").replace(/[<>]/g,"").trim().slice(0,12);S.mote=S.mote||{};if(v&&v!==n)S.mote[n]=v;else delete S.mote[n];save();render();snd("ui");toast(v&&v!==n?"✏️ Ahora se llama "+v:"✏️ Mote quitado");fichaRefresh(n)}
+  else if(b.dataset.ffv){const n=b.dataset.ffv;S.fav=S.fav||{};if(S.fav[n])delete S.fav[n];else S.fav[n]=1;save();render();snd(S.fav[n]?"buff":"ui");fichaRefresh(n)}
+  else if(b.dataset.fnt!=null){const n=b.dataset.fn,x=+b.dataset.fnt,L=(S.natAlt&&S.natAlt[n])||[];if(!L.includes(x))return;if(fcd){toast("Termina el combate antes de cambiar la naturaleza.");return}const old=natOf(n);S.nat[n]=x;L.splice(L.indexOf(x),1,old);snd("lvl");save();toast("🌿 "+nk(n)+" ahora tiene naturaleza "+NAT[x][0]);fichaRefresh(n)}
+});
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="fHeld"){const n=e.target.dataset.fn,v=e.target.value;if(fcd){toast("Termina el combate antes de cambiar objetos.");fichaRefresh(n);return}if(!v)holdRemove(n);else{const r=holdEquip(n,v);if(r)toast(r)}_bk="";try{bagUI()}catch(x){}fichaRefresh(n)}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target&&e.target.id==="fNick"){const b=document.querySelector("#pkv [data-fnk]");if(b)b.click()}});
+
+// ================= paneles nuevos dentro del menú =================
+function nxPanel(id,title,intro){let p=$(id);if(!p){p=document.createElement("section");p.className="panel nxp";p.id=id;p.innerHTML='<h2>'+title+'</h2>'+(intro?'<p class="mut nxi">'+intro+'</p>':'')+'<div id="'+id+'B"></div>';hubStore().appendChild(p)}return p}
+nxPanel("dcP","🥚 Guardería Pokémon","Deja dos Pokémon compatibles (del mismo tipo, o cualquiera con Ditto) y cada 30 minutos encontrarás un huevo. Los huevos eclosionan tras unos combates o, si no, con el tiempo.");
+nxPanel("safP","🌾 Zona Safari","Una salida gratis al día con 20 Safari Balls. Aquí no se combate: lanza cebo para que no huyan, rocas para que sean más fáciles de atrapar, ¡y apunta bien!");
+nxPanel("twP","🗼 Torre Batalla","Combates seguidos contra entrenadores cada vez más fuertes. Tu equipo se cura antes de cada combate. Si pierdes, la racha vuelve a empezar. Cada victoria da Puntos Torre (PT).");
+nxPanel("expP","🧭 Expediciones","Manda a los Pokémon que no usas a explorar. Vuelven con tickets, objetos y experiencia. Si su tipo encaja con el lugar, traen más.");
+nxPanel("hofP","🏛️ Salón de la Fama","Cada vez que ganas una Liga Pokémon tu equipo queda registrado aquí para siempre, y los demás jugadores pueden verlo en tu perfil.");
+{const g=HUB.find(x=>x.k==="adv");if(g&&!g.tabs.some(t=>t[0]==="hofP")){g.tabs.push(["hofP","Salón de la Fama"]);g.d="Gimnasios, Liga y Salón de la Fama"}}
+if(!HUB.some(x=>x.k==="act"))HUB.splice(HUB.findIndex(x=>x.k==="adv")+1,0,{k:"act",n:"Actividades",ic:"🎪",c:"#e0782a",d:"Guardería, Safari, Torre y expediciones",tabs:[["dcP","Guardería"],["safP","Zona Safari"],["twP","Torre Batalla"],["expP","Expediciones"]]});
+HUB.forEach(g=>g.tabs.forEach(t=>{HUBP[t[0]]=g.k}));
+Object.assign(HUBR,{dcP:()=>dcUI(true),safP:()=>safUI(),twP:()=>twUI(),expP:()=>expUI(true),hofP:()=>hofUI(true)});
+{const _hb=hubBadges;hubBadges=function(){const o=_hb();let a=0;try{a+=dcEggReady()?1:0;a+=(S.eggs||[]).filter(eggDone).length;a+=(S.exp||[]).filter(x=>Date.now()>=x.t0+x.dur).length;if((S.saf||{}).d!==today())a+=1}catch(e){}if(a)o.act=a;try{const g=(GF.inc||[]).length;if(g)o.soc=(o.soc|0)+g}catch(e){}return o}}
+const nxOpen=id=>{const p=$(id);return !!(p&&p.isConnected&&p.closest("#hubB"))};
+
+// ================= GUARDERÍA =================
+const PREV={};Object.keys(GD.EV).forEach(n=>(GD.EV[n]||[]).forEach(e=>{if(PM[e[0]]&&PM[n]&&!PREV[e[0]])PREV[e[0]]=n}));
+function eggBase(n){let b=n,g=0;while(PREV[b]&&g++<5)b=PREV[b];return b}
+const DC_T=30*60e3,EGG_T=3*3600e3;
+function dcOk(a,b){if(!a||!b||a===b||!PM[a]||!PM[b])return false;const A=PM[a],B2=PM[b];if(/[LM]/.test(A[2])||/[LM]/.test(B2[2]))return false;if(a==="Ditto"&&b==="Ditto")return false;return a==="Ditto"||b==="Ditto"||A[1]===B2[1]}
+function dcClean(){const d=S.dc;if(!d)return;["a","b"].forEach(k=>{if(d[k]&&!(S.owned[d[k]]>0))d[k]=""});if(!dcOk(d.a,d.b))d.t=0;else if(!d.t)d.t=Date.now()}
+const dcEggReady=()=>{const d=S.dc;return !!(d&&dcOk(d.a,d.b)&&d.t&&Date.now()-d.t>=DC_T)};
+const eggNeed=n=>({C:4,R:5,E:7}[PM[n]?PM[n][2]:"C"]||5);
+const eggDone=g=>g.st>=g.need||Date.now()-g.at>=EGG_T;
+function dcPut(slot,n){if(fcd){toast("Termina el combate primero.");return}S.dc=S.dc||{a:"",b:"",t:0};if(n&&S.team.includes(n)){toast("Ese Pokémon está en tu equipo. Sácalo del equipo antes de dejarlo en la Guardería.");return}if(n&&busyMon(n)){toast("Ese Pokémon está "+busyTxt(n)+".");return}S.dc[slot]=n||"";S.dc.t=dcOk(S.dc.a,S.dc.b)?Date.now():0;save();dcUI(true)}
+function dcTake(){if(!dcEggReady())return;if((S.eggs||[]).length>=6){toast("Ya llevas 6 huevos. Haz que eclosione alguno antes.");return}
+  const d=S.dc,par=d.a==="Ditto"?d.b:d.a,sp=eggBase(par);
+  const nt=Math.random()<.5?natOf(Math.random()<.5?d.a:d.b):Math.floor(Math.random()*NAT.length);
+  S.eggs=S.eggs||[];S.eggs.push({s:sp,st:0,need:eggNeed(sp),at:Date.now(),sh:Math.random()<1/120?1:0,nt:nt});d.t=Date.now();save();snd("pop");toast("🥚 ¡Has recogido un huevo!");dcUI(true)}
+let _dck="";
+function dcUI(force){
+  const box=$("dcPB");if(!box)return;dcClean();const d=S.dc||{a:"",b:"",t:0},ok=dcOk(d.a,d.b),eggs=S.eggs||[];
+  const key=JSON.stringify([d,eggs,NX.dcq||"",NX.dcs||"",dcEggReady(),eggs.map(eggDone)]);if(!force&&key===_dck){dcTick();return}_dck=key;
+  const slot=k=>{const n=d[k];return '<div class="dcs'+(n?' on':'')+'">'+(n?'<div class="dcspr">'+ico(PM[n],72,false,!!(S.shiny&&S.shiny[n]))+'</div><b>'+esc(nk(n))+'</b><small class="mut">'+EM[PM[n][1]]+' '+TIPO[PM[n][1]]+' · Nv'+lvd(n).l+'</small><button class="alt mini" data-dcx="'+k+'">Recoger</button>':'<div class="dcplus">＋</div><b>Hueco libre</b><button class="mini" data-dcp="'+k+'">Elegir Pokémon</button>')+'</div>'};
+  let h='<div class="dcrow">'+slot("a")+'<div class="dcmid">'+(d.a&&d.b?(ok?'<span class="dcheart">💞</span><small>Se llevan muy bien</small>':'<span class="dcheart">💔</span><small>'+(/[LM]/.test(PM[d.a][2]+PM[d.b][2])?'Los legendarios y las formas especiales no ponen huevos':'No son compatibles (necesitan el mismo tipo, o que uno sea Ditto)')+'</small>'):'<span class="dcheart off">🤍</span><small>Deja dos Pokémon</small>')+'</div>'+slot("b")+'</div>';
+  if(ok){h+='<div class="dcegg">'+(dcEggReady()?'<span class="egg big wob"></span><div><b>¡El encargado ha encontrado un huevo!</b><small class="mut">No sabe de dónde ha salido…</small></div><button class="red" data-dct="1">Recoger huevo</button>':'<span class="egg big"></span><div><b>Esperando un huevo…</b><small class="mut" id="dcLeft"></small><div class="nxbar"><i id="dcBar"></i></div></div>')+'</div>'}
+  if(NX.dcs){const q=nrm(NX.dcq||""),other=d[NX.dcs==="a"?"b":"a"];
+    const L=P.filter(p=>S.owned[p[0]]>0&&!/[LM]/.test(p[2])&&p[0]!==other&&!S.team.includes(p[0])&&!busyMon(p[0])&&(!q||nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))).sort((a,b)=>(other?(dcOk(b[0],other)-dcOk(a[0],other)):0)||lvd(b[0]).l-lvd(a[0]).l).slice(0,90);
+    h+='<div class="nxpick"><div class="sets-row"><input id="dcQ" placeholder="Buscar Pokémon..." value="'+esc(NX.dcq||"")+'" aria-label="Buscar Pokémon"><button class="alt" data-dcc="1">Cancelar</button></div><small class="mut">'+(other?'Arriba salen los compatibles con '+esc(nk(other))+'. ':'')+'No aparecen los de tu equipo ni los legendarios.</small><div class="nxgrid">'+(L.length?L.map(p=>'<button class="nxcell'+(other&&dcOk(p[0],other)?' good':'')+'" data-dcn="'+esc(p[0])+'">'+ico(p,48)+'<b>'+esc(nk(p[0]))+'</b><small>Nv'+lvd(p[0]).l+' · '+EM[p[1]]+'</small></button>').join(""):'<small class="mut">No hay Pokémon disponibles.</small>')+'</div></div>'}
+  h+='<h3 class="shh">🥚 Tus huevos ('+eggs.length+'/6)</h3>'+(eggs.length?'<div class="eggl">'+eggs.map((g,i)=>{const dn=eggDone(g),left=Math.max(0,g.need-g.st);return '<div class="eggc'+(dn?' ready':'')+'"><span class="egg'+(dn?' wob':'')+'"></span><b>'+(dn?'¡Se mueve!':'Huevo')+'</b><small class="mut">'+(dn?'Está a punto de eclosionar':left+' combate'+(left===1?'':'s')+' o '+H2((g.at+EGG_T-Date.now())/1000))+'</small>'+(dn?'<button class="red mini" data-dch="'+i+'">¡Eclosionar!</button>':'<div class="nxbar"><i style="width:'+Math.min(100,Math.max(g.st/g.need,(Date.now()-g.at)/EGG_T)*100)+'%"></i></div>')+'</div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes huevos.</small>');
+  box.innerHTML=h;const q=$("dcQ");if(q){q.oninput=()=>{NX.dcq=q.value;const pos=q.selectionStart;dcUI(true);const q2=$("dcQ");if(q2){q2.focus();try{q2.setSelectionRange(pos,pos)}catch(e){}}}}
+  dcTick();
+}
+function dcTick(){const d=S.dc;if(!d||!dcOk(d.a,d.b)||!d.t)return;const el=$("dcLeft"),b=$("dcBar"),r=DC_T-(Date.now()-d.t);if(r<=0){if(el)dcUI(true);return}if(el)el.textContent="Faltan "+H2(r/1000);if(b)b.style.width=Math.min(100,(1-r/DC_T)*100)+"%"}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#dcPB button");if(!b)return;const d=b.dataset;
+  if(d.dcp){NX.dcs=d.dcp;NX.dcq="";dcUI(true);snd("ui")}else if(d.dcc){NX.dcs="";dcUI(true)}else if(d.dcn){const s=NX.dcs;NX.dcs="";dcPut(s,d.dcn);snd("ui")}
+  else if(d.dcx){dcPut(d.dcx,"")}else if(d.dct){dcTake()}else if(d.dch!=null)eggHatch(+d.dch)});
+async function eggHatch(i){
+  const g=(S.eggs||[])[i];if(!g||!eggDone(g)||NX.hatching)return;if(fcd){toast("Termina el combate primero.");return}NX.hatching=1;
+  S.eggs.splice(i,1);const n=g.s,had=S.owned[n]>0,isNew=giveMon(n,5,g.sh);
+  S.nat=S.nat||{};if(!had)S.nat[n]=g.nt|0;else if((g.nt|0)!==natOf(n)){S.natAlt=S.natAlt||{};const L=S.natAlt[n]=S.natAlt[n]||[];if(!L.includes(g.nt|0))L.push(g.nt|0);while(L.length>6)L.shift()}
+  natSync(n);
+  qEv("cap");save();
+  const m=nxModal('<div class="hatch"><span class="egg huge"></span></div><h3 id="hT">¿Eh…?</h3><p class="mut" id="hD">¡El huevo se está moviendo!</p><button id="hOk" hidden>¡Genial!</button>');
+  const egg=m.querySelector(".egg"),calm=hubCalm();
+  if(!calm){for(let k=0;k<3;k++){snd("click");await egg.animate([{transform:"rotate(0)"},{transform:"rotate(-16deg)"},{transform:"rotate(14deg)"},{transform:"rotate(0)"}],{duration:520+k*80,easing:"ease-in-out"}).finished;egg.classList.add("c"+(k+1));await sleep(260)}
+    snd("flash");const f=document.createElement("div");f.className="hflash";m.querySelector(".hatch").appendChild(f);await f.animate([{opacity:0,transform:"scale(.2)"},{opacity:1,transform:"scale(1.6)"},{opacity:0,transform:"scale(2.4)"}],{duration:700,easing:"ease-out"}).finished;f.remove()}
+  m.querySelector(".hatch").innerHTML='<div class="hmon">'+ico(PM[n],120,false,!!g.sh)+'</div>';snd("lvl");setTimeout(()=>{try{cry(n)}catch(e){}},200);
+  $("hT").textContent=(g.sh?"✨ ":"")+"¡Ha nacido "+n+"!";
+  $("hD").innerHTML=(isNew?'<b>¡Nuevo en tu Pokédex!</b> ':'')+(g.sh?'<b>¡Es variocolor!</b> ':'')+'Naturaleza '+NAT[g.nt|0][0]+(had&&g.nt!==natOf(n)?' (como ya lo tenías, puedes elegir esta naturaleza en su ficha)':'')+'.';
+  const ok=$("hOk");ok.hidden=false;ok.focus();await new Promise(r=>{ok.onclick=r});nxModalClose();NX.hatching=0;render();dcUI(true);
+}
+function nxModal(html){let m=$("nxM");if(!m){m=document.createElement("div");m.id="nxM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m)}m.innerHTML='<div class="nxmw">'+html+'</div>';m.hidden=false;m.querySelector(".nxmw").animate([{transform:"scale(.7)",opacity:0},{transform:"none",opacity:1}],{duration:260,easing:"cubic-bezier(.2,.9,.3,1.2)"});return m}
+function nxModalClose(){const m=$("nxM");if(m)m.hidden=true}
+
+// ================= ZONA SAFARI =================
+const SAF_EXTRA=750000;
+function safPick(){const x=Math.random()*100,r=x<3?"L":x<23?"E":x<60?"R":"C",pool=P.filter(p=>p[2]===r);return pool[Math.floor(Math.random()*pool.length)]}
+function safNew(){const p=safPick(),s=S.saf.s;s.enc={n:p[0],sh:Math.random()<SHINY_W*2?1:0,eat:0,ang:0,turns:0};s.msg="¡Ha aparecido "+p[0]+" salvaje!";snd("wild")}
+function safStart(paid){
+  if(fcd){toast("Termina el combate primero.");return}S.saf=S.saf||{};
+  if(S.saf.s){safUI();return}
+  if(paid){if(S.t<SAF_EXTRA){toast("Te faltan tickets.");return}S.t-=SAF_EXTRA}else{if(S.saf.d===today())return;S.saf.d=today()}
+  S.saf.s={balls:20,caught:[],seen:0,msg:""};safNew();S.saf.s.seen=1;save();render();safUI();
+}
+const SAF_C={C:.45,R:.32,E:.2,L:.08},SAF_F={C:.08,R:.12,E:.18,L:.28};
+async function safAct(a){
+  const s=S.saf&&S.saf.s;if(!s||!s.enc||NX.safBusy)return;const e=s.enc,p=PM[e.n],r=p[2];NX.safBusy=1;
+  const box=document.querySelector("#safPB .safmon"),spr=box&&box.querySelector(".safspr");
+  try{
+  if(a==="run"){s.msg="Te has alejado de "+e.n+".";snd("flee");await safNext(s);return}
+  if(a==="bait"){e.eat=1+Math.floor(Math.random()*3);e.ang=0;s.msg="¡"+e.n+" está comiendo el cebo!";snd("pop");if(spr)spr.animate([{transform:"none"},{transform:"translateY(-6px) scale(1.04)"},{transform:"none"}],{duration:500,iterations:2})}
+  else if(a==="rock"){e.ang=1+Math.floor(Math.random()*3);e.eat=0;s.msg="¡"+e.n+" se ha enfadado!";snd("hit",1);if(spr)spr.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:200,iterations:3})}
+  else if(a==="ball"){
+    if(s.balls<=0)return;s.balls--;snd("throw");
+    let c=SAF_C[r]*(e.ang?1.8:1)*(e.eat?.75:1);c=Math.min(.95,c);const ok=Math.random()<c,sh=ok?3:Math.random()<c*1.6?2:Math.random()<.5?1:0;
+    if(box&&!hubCalm()){const b=document.createElement("span");b.className="safball";box.appendChild(b);await b.animate([{transform:"translate(-160px,140px) scale(.6) rotate(0)"},{transform:"translate(-60px,-40px) scale(.9) rotate(360deg)",offset:.55},{transform:"translate(0,0) scale(1) rotate(720deg)"}],{duration:520,easing:"cubic-bezier(.3,.6,.4,1)"}).finished;
+      if(spr)spr.style.opacity=0;snd("open");
+      for(let k=0;k<sh;k++){await sleep(220);snd("click");await b.animate([{transform:"rotate(0)"},{transform:"rotate(-22deg)"},{transform:"rotate(18deg)"},{transform:"rotate(0)"}],{duration:420}).finished}
+      await sleep(250);if(!ok){b.remove();if(spr){spr.style.opacity=1;spr.animate([{transform:"scale(.3)",opacity:.3},{transform:"none",opacity:1}],{duration:260})}}else{b.classList.add("ok");snd("capok")}}
+    if(ok){const lv=clampL(Math.min(lvCap(),leadLevel())-1),isNew=giveMon(e.n,lv,e.sh);qEv("cap");s.caught.push({n:e.n,sh:e.sh,nw:isNew?1:0});s.msg="¡Has atrapado a "+(e.sh?"✨ ":"")+e.n+"!"+(isNew?" ¡Nuevo en tu Pokédex!":"");save();render();await sleep(hubCalm()?0:500);await safNext(s,1);return}
+    snd("capfail");s.msg=["¡Oh, no! ¡Se ha escapado!","¡Vaya! ¡Parecía que lo tenías!","¡Casi lo consigues!","¡Qué rabia! ¡Por muy poco!"][sh];
+  }
+  e.turns++;
+  const fl=Math.min(.9,SAF_F[r]*(e.ang?1.7:1)*(e.eat?.45:1)+e.turns*.01);if(e.eat)e.eat--;if(e.ang)e.ang--;
+  if(Math.random()<fl){s.msg+=" ¡"+e.n+" ha huido!";snd("flee");if(spr&&!hubCalm())await spr.animate([{transform:"none",opacity:1},{transform:"translateX(120px)",opacity:0}],{duration:420}).finished;await safNext(s);return}
+  if(s.balls<=0){await safNext(s);return}
+  save();safUI();
+  }finally{NX.safBusy=0}
+}
+async function safNext(s,caught){
+  if(s.balls<=0){s.enc=null;s.end=1;save();safUI();snd(s.caught.length?"win":"ui");return}
+  await sleep(hubCalm()?0:350);const m=s.msg;safNew();s.seen++;s.msg=m+" · "+s.msg;save();safUI();
+}
+function safEnd(){const s=S.saf&&S.saf.s;if(!s)return;S.saf.s=null;save();safUI();toast("🌾 Salida terminada: "+s.caught.length+" capturado"+(s.caught.length===1?"":"s"))}
+function safUI(){
+  const box=$("safPB");if(!box)return;S.saf=S.saf||{};const s=S.saf.s,free=S.saf.d!==today();let h="";
+  if(!s){h='<div class="safin"><div class="safgate">🌾</div><div><b>'+(free?'¡Tu salida de hoy está disponible!':'Ya has hecho tu salida gratis de hoy')+'</b><small class="mut">'+(free?'Entra gratis una vez al día.':'Vuelve mañana o paga una entrada extra.')+'</small></div>'+(free?'<button class="red" data-saf="go">Entrar gratis</button>':'<button data-saf="pay"'+(S.t<SAF_EXTRA?' disabled':'')+'>Entrada extra · '+fmt(SAF_EXTRA)+' 🎟️</button>')+'</div>'+
+    '<small class="mut">Probabilidades: Común 40% · Raro 37% · Épico 20% · Legendario 3%. Los Pokémon que atrapes llegan con el nivel de tu equipo (sin pasar el límite del próximo gimnasio).</small>'}
+  else if(s.end||!s.enc){h='<div class="safsum"><b>📢 «¡Ding-dong! Se han acabado tus Safari Balls.»</b><p>Has visto '+s.seen+' Pokémon y has atrapado '+s.caught.length+'.</p>'+(s.caught.length?'<div class="safcl">'+s.caught.map(c=>'<span title="'+esc(c.n)+'">'+ico(PM[c.n],46,false,!!c.sh)+(c.nw?'<i>NUEVO</i>':'')+'</span>').join("")+'</div>':'')+'<button class="red" data-saf="end">Salir de la Zona Safari</button></div>'}
+  else{const e=s.enc,p=PM[e.n];
+    h='<div class="safbar"><span>🔴 Safari Balls: <b>'+s.balls+'</b></span><span>👀 Vistos: <b>'+s.seen+'</b></span><span>🎒 Atrapados: <b>'+s.caught.length+'</b></span></div>'+
+    '<div class="safmon"><div class="safgr"></div><div class="safspr">'+ico(p,128,false,!!e.sh)+'</div><div class="safname">'+(e.sh?"✨ ":"")+esc(e.n)+' <small>'+STAR[p[2]]+' · '+EM[p[1]]+'</small>'+(e.eat?' <span class="safst eat">🍓 Comiendo</span>':'')+(e.ang?' <span class="safst ang">💢 Enfadado</span>':'')+'</div></div>'+
+    '<p class="safmsg">'+esc(s.msg||"")+'</p>'+
+    '<div class="safbtn"><button class="red" data-saf="ball">🔴 Safari Ball</button><button data-saf="bait">🍓 Cebo</button><button data-saf="rock">🪨 Roca</button><button class="alt" data-saf="run">🏃 Huir</button></div>'+
+    '<small class="mut">🍓 El cebo hace que huya menos (pero cuesta un poco más atraparlo). 🪨 La roca lo hace más fácil de atrapar, pero huye antes.</small>'+(s.caught.length?'<div class="safcl">'+s.caught.map(c=>'<span>'+ico(PM[c.n],36,false,!!c.sh)+'</span>').join("")+'</div>':'')}
+  box.innerHTML=h;
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#safPB [data-saf]");if(!b)return;const a=b.dataset.saf;if(a==="go")safStart(false);else if(a==="pay")safStart(true);else if(a==="end")safEnd();else safAct(a)});
+
+// ================= TORRE BATALLA =================
+const TW_SHOP=[["left",8],["lorb",12],["sash",10],["sitrus",4],["lum",5],["qclaw",7],["scope",7],["shell",8],["lucky",9],["cand",15],["ppmax",10],["mb",60]];
+function twTeam(k){
+  const boss=k%10===9,lv=twLv(k),n=boss?4:3;
+  const w=k<5?{C:5,R:4,E:1}:k<15?{C:2,R:5,E:3}:k<30?{C:1,R:4,E:4,M:1}:{R:3,E:5,M:2};
+  const out=[];
+  if(boss){const L=P.filter(p=>p[2]==="L");out.push(L[Math.floor(Math.random()*L.length)])}
+  while(out.length<n){let t=Object.values(w).reduce((a,b)=>a+b,0),x=Math.random()*t,r="C";for(const q in w){x-=w[q];if(x<=0){r=q;break}}const pl=P.filter(p=>p[2]===r);const p=pl[Math.floor(Math.random()*pl.length)];if(p&&!out.includes(p))out.push(p)}
+  return out.map((p,i)=>monX(mkEnemy(p,clampL(lv+(i===out.length-1?1:0))),Math.floor(Math.random()*NAT.length),k>=8&&Math.random()<.5?HOLD[Math.floor(Math.random()*HOLD.length)][0]:""));
+}
+function twLv(k){const L=(S.team||[]).filter(n=>n&&S.owned[n]).map(n=>lvd(n).l),a=L.length?L.reduce((x,y)=>x+y,0)/L.length:5;return clampL(Math.max(3,a-4)+Math.floor(k/2)+(k%10===9?3:0))}
+function twGo(){
+  if(fcd||busy){toast("Termina lo que estás haciendo primero.");return}
+  const names=(S.team||[]).filter(n=>n&&S.owned[n]);if(!names.length){toast("Necesitas un equipo para entrar en la Torre.");return}
+  S.tw=S.tw||{cur:0,best:0,pts:0};const k=S.tw.cur,boss=k%10===9;
+  names.forEach(n=>{delete S.hp[n]});save();
+  const tr=TRAINERS[Math.floor(Math.random()*TRAINERS.length)],nm=boss?"As de la Torre":tr[0]+" de la Torre";
+  hubClose();startBattle({eteam:twTeam(k),trainer:nm,tsrc:{k:boss?"acetrainer":tr[3],n:nm},tower:1});
+}
+async function afterBattle(res){
+  if(B&&B.tower){S.tw=S.tw||{cur:0,best:0,pts:0};
+    if(res==="win"){const k=S.tw.cur,boss=k%10===9,pt=(1+Math.floor(k/5))*(boss?3:1);S.tw.cur++;S.tw.best=Math.max(S.tw.best,S.tw.cur);S.tw.pts+=pt;(S.team||[]).forEach(n=>{if(n)delete S.hp[n]});
+      await say("🗼 ¡Victoria nº "+S.tw.cur+" seguida en la Torre Batalla! +"+pt+" PT."+(boss?" ¡Has vencido al As de la Torre!":""));await say("Tu equipo se ha recuperado. ¡Puedes seguir subiendo desde la Torre Batalla!")}
+    else{const c=S.tw.cur;S.tw.cur=0;await say("🗼 Tu racha en la Torre Batalla ha terminado con "+c+" victoria"+(c===1?"":"s")+". Récord: "+S.tw.best+".")}
+  }
+  // los huevos avanzan con cada combate
+  if(res!=="flee"&&(S.eggs||[]).length){let r=0;S.eggs.forEach(g=>{const was=eggDone(g);g.st++;if(!was&&eggDone(g))r++});if(r)await say("🥚 ¡"+(r>1?"Algunos huevos se mueven":"Un huevo se mueve")+"! Ve a la Guardería para verlo eclosionar.")}
+}
+function twUI(){
+  const box=$("twPB");if(!box)return;const t=S.tw=S.tw||{cur:0,best:0,pts:0},k=t.cur,boss=k%10===9,lv=twLv(k);
+  box.innerHTML='<div class="twtop"><div class="twst"><span>🔥</span><b>'+t.cur+'</b><small>Racha actual</small></div><div class="twst"><span>🏆</span><b>'+t.best+'</b><small>Récord</small></div><div class="twst"><span>🪙</span><b>'+t.pts+'</b><small>Puntos Torre</small></div></div>'+
+    '<div class="twnext'+(boss?' boss':'')+'"><div><b>'+(boss?'👑 ¡Combate contra el As de la Torre!':'Combate nº '+(k+1))+'</b><small class="mut">'+(boss?'4 Pokémon, uno de ellos legendario':'3 Pokémon')+' · alrededor del Nv'+lv+(k>=8?' · algunos llevan objetos':'')+'</small></div><button class="red" data-tw="go"'+(fcd?' disabled':'')+'>⚔️ Combatir</button></div>'+
+    '<h3 class="shh">🪙 Tienda de la Torre</h3><div class="twshop">'+TW_SHOP.map(x=>'<div class="twit"><span class="iico">'+itemIco(x[0],36)+'</span><div><b>'+IN2(x[0])+'</b><small class="mut">Tienes ×'+(S.bag[x[0]]||0)+'</small></div><button data-twb="'+x[0]+'"'+(t.pts<x[1]?' disabled':'')+'>'+x[1]+' PT</button></div>').join("")+'</div>';
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#twPB button");if(!b)return;
+  if(b.dataset.tw==="go")twGo();
+  else if(b.dataset.twb){const x=TW_SHOP.find(q=>q[0]===b.dataset.twb),t=S.tw;if(!x||!t||t.pts<x[1])return;t.pts-=x[1];S.bag[x[0]]=(S.bag[x[0]]||0)+1;save();snd("ui");toast("🪙 Has conseguido "+IN2(x[0]));render();twUI()}});
+
+// ================= EXPEDICIONES =================
+const DEST=[["🌲","Bosque Verde",["grass","bug","normal","fairy"]],["⛰️","Cueva Celeste",["rock","ground","fighting","steel"]],["🌊","Playa Marina",["water","ice","flying"]],["🌋","Volcán Ardiente",["fire","dragon","dark","poison"]],["🌌","Torre Misteriosa",["ghost","psychic","electric","normal"]]];
+const EXD=[[3600e3,"1 hora",1],[4*3600e3,"4 horas",4.5],[8*3600e3,"8 horas",10]];
+function expSend(){
+  const n=NX.exn,d=NX.exd|0,u=NX.exu|0;if(!n||!(S.owned[n]>0))return;S.exp=S.exp||[];if(S.exp.length>=3){toast("Ya tienes 3 expediciones en marcha.");return}
+  if(S.team.includes(n)){toast("Ese Pokémon está en tu equipo.");return}if(busyMon(n)){toast("Ese Pokémon está "+busyTxt(n)+".");return}
+  S.exp.push({n:n,d:d,u:u,t0:Date.now(),dur:EXD[u][0]});NX.exn="";NX.exq="";save();snd("throw");toast("🧭 "+nk(n)+" se ha ido a "+DEST[d][1]);expUI(true);
+}
+function expClaim(i){
+  const x=(S.exp||[])[i];if(!x||Date.now()<x.t0+x.dur)return;if(fcd){toast("Termina el combate primero.");return}
+  const n=x.n,p=PM[n];S.exp.splice(i,1);if(!p||!(S.owned[n]>0)){save();expUI(true);return}
+  const m=EXD[x.u][2],match=DEST[x.d][2].includes(p[1]),k=m*(match?1.5:1),l=lvd(n).l,rw={t:Math.round((6000+l*700)*WW[p[2]]*k),it:{}},got=[];
+  const add=(id,q)=>{rw.it[id]=(rw.it[id]||0)+q};
+  for(let j=0;j<Math.ceil(m);j++){const r=Math.random();if(r<.35)add("pb",1);else if(r<.55)add("sb",1);else if(r<.65)add("ub",1);else if(r<.8)add("pot",1);else if(r<.9)add("spot",1);else add("eter",1)}
+  if(Math.random()<.06*k)add("cand",1);
+  if(Math.random()<.05*k){const ev=ITEMS.filter(q=>q[7]==="evo");add(ev[Math.floor(Math.random()*ev.length)][0],1)}
+  if(Math.random()<.04*k)add(HOLD[Math.floor(Math.random()*HOLD.length)][0],1);
+  grant(rw);
+  // experiencia (sin pasar el límite del próximo gimnasio)
+  const d=lvd(n),cap=lvCap(),l0=d.l;let xp=Math.round((30+l*8)*k);if(heldOf(n)==="lucky")xp=Math.round(xp*1.5);
+  if(d.l<cap){d.x+=xp;while(d.l<cap&&d.x>=need(d.l)){d.x-=need(d.l);d.l++;qEv("lvl")}if(d.l>=cap)d.x=0}
+  save();render();snd("win");
+  nxModal('<div class="exret">'+DEST[x.d][0]+'</div><div class="hmon">'+ico(p,96,false,!!(S.shiny&&S.shiny[n]))+'</div><h3>¡'+esc(nk(n))+' ha vuelto de '+DEST[x.d][1]+'!</h3>'+(match?'<small class="exm">✨ Su tipo encajaba con el lugar: ¡ha traído un 50% más!</small>':'')+
+    '<p>Ha traído: <b>'+rwTxt(rw)+'</b></p><p class="mut">'+(d.l>l0?'¡Ha subido de Nv'+l0+' a Nv'+d.l+'!':d.l>=cap&&cap<100?'Está en el límite de nivel (Nv'+cap+') y no gana experiencia. '+capWhy():'Ha ganado '+fmt(xp)+' puntos de experiencia.')+'</p><button id="exOk">¡Genial!</button>');
+  $("exOk").onclick=()=>{nxModalClose();if(d.l>l0&&evoLvReady(n).length)toast("🧬 ¡"+nk(n)+" ya puede evolucionar! Míralo en la Mochila.")};$("exOk").focus();expUI(true);
+}
+let _exk="";
+function expUI(force){
+  const box=$("expPB");if(!box)return;const L=S.exp||[];const key=JSON.stringify([L,NX.exn,NX.exd,NX.exu,NX.exq,L.map(x=>Date.now()>=x.t0+x.dur)]);if(!force&&key===_exk){expTick();return}_exk=key;
+  let h='<div class="exsl">'+[0,1,2].map(i=>{const x=L[i];if(!x)return '<div class="exc empty"><span>🧭</span><b>Hueco libre</b><small class="mut">Elige un Pokémon abajo</small></div>';const dn=Date.now()>=x.t0+x.dur,p=PM[x.n];
+    return '<div class="exc'+(dn?' done':'')+'"><div class="exspr">'+(p?ico(p,56):'')+'</div><b>'+esc(nk(x.n))+'</b><small>'+DEST[x.d][0]+' '+DEST[x.d][1]+'</small>'+(dn?'<button class="red mini" data-exc="'+i+'">Recoger</button>':'<small class="mut" data-ext="'+i+'"></small><div class="nxbar"><i data-exb="'+i+'"></i></div>')+'</div>'}).join("")+'</div>';
+  if(L.length<3){const q=nrm(NX.exq||"");
+    const C=P.filter(p=>S.owned[p[0]]>0&&!S.team.includes(p[0])&&!busyMon(p[0])&&(!q||nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))).sort((a,b)=>lvd(b[0]).l-lvd(a[0]).l||WW[b[2]]-WW[a[2]]).slice(0,80);
+    const d=NX.exd|0,u=NX.exu|0,sel=NX.exn&&PM[NX.exn]?PM[NX.exn]:null;
+    h+='<h3 class="shh">Nueva expedición</h3><div class="exdest">'+DEST.map((x,i)=>'<button class="'+(i===d?'on':'')+'" data-exd="'+i+'"><span>'+x[0]+'</span><b>'+x[1]+'</b><small>'+x[2].map(t=>EM[t]).join(" ")+'</small></button>').join("")+'</div>'+
+      '<div class="exdur">'+EXD.map((x,i)=>'<button class="'+(i===u?'on':'')+'" data-exu="'+i+'">⏱️ '+x[1]+'</button>').join("")+'</div>'+
+      '<div class="sets-row"><input id="exQ" placeholder="Buscar Pokémon (no salen los de tu equipo)..." value="'+esc(NX.exq||"")+'" aria-label="Buscar Pokémon"></div>'+
+      '<div class="nxgrid">'+(C.length?C.map(p=>'<button class="nxcell'+(NX.exn===p[0]?' sel':'')+(DEST[d][2].includes(p[1])?' good':'')+'" data-exn="'+esc(p[0])+'">'+ico(p,48)+'<b>'+esc(nk(p[0]))+'</b><small>Nv'+lvd(p[0]).l+' · '+EM[p[1]]+'</small></button>').join(""):'<small class="mut">No tienes Pokémon libres para mandar (los del equipo no pueden ir).</small>')+'</div>'+
+      '<div class="exgo"><small class="mut">'+(sel?(DEST[d][2].includes(sel[1])?'✨ '+esc(nk(NX.exn))+' conoce bien este lugar: traerá un 50% más.':'Consejo: los Pokémon de tipo '+DEST[d][2].map(t=>TIPO[t]).join(", ")+' traen más de aquí.'):'Los marcados en verde conocen bien este lugar.')+'</small><button class="red" data-exgo="1"'+(sel?'':' disabled')+'>🧭 Enviar'+(sel?' a '+esc(nk(NX.exn)):'')+'</button></div>'}
+  box.innerHTML=h;const q=$("exQ");if(q)q.oninput=()=>{NX.exq=q.value;const pos=q.selectionStart;expUI(true);const q2=$("exQ");if(q2){q2.focus();try{q2.setSelectionRange(pos,pos)}catch(e){}}};
+  expTick();
+}
+function expTick(){(S.exp||[]).forEach((x,i)=>{const t=document.querySelector('#expPB [data-ext="'+i+'"]'),b=document.querySelector('#expPB [data-exb="'+i+'"]'),r=x.t0+x.dur-Date.now();if(r<=0){if(t)expUI(true);return}if(t)t.textContent="Vuelve en "+H2(r/1000);if(b)b.style.width=Math.min(100,(1-r/x.dur)*100)+"%"})}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#expPB button");if(!b)return;const d=b.dataset;
+  if(d.exd!=null){NX.exd=+d.exd;expUI(true)}else if(d.exu!=null){NX.exu=+d.exu;expUI(true)}else if(d.exn){NX.exn=NX.exn===d.exn?"":d.exn;expUI(true);snd("ui")}else if(d.exgo)expSend();else if(d.exc!=null)expClaim(+d.exc)});
+setInterval(()=>{try{if(nxOpen("dcP"))dcUI();if(nxOpen("expP"))expUI();}catch(e){}},1000);
+
+// ================= SALÓN DE LA FAMA =================
+{const _lw=leagueWin;leagueWin=async function(){const lg=S.lg,fin=lg&&lg.k>=4,li=lg?lg.li:0;await _lw.apply(this,arguments);if(fin&&!S.lg)await hofEnter(li)}}
+async function hofEnter(li){
+  const tm=(S.team||[]).filter(n=>n&&S.owned[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0,k:S.mote&&S.mote[n]?S.mote[n]:""}));
+  S.hof=S.hof||[];S.hof.push({at:Date.now(),lg:LEAGUES[li].n,tm:tm});while(S.hof.length>60)S.hof.shift();save();
+  const m=nxModal('<div class="hofb">🏛️</div><h3>¡Bienvenido al Salón de la Fama!</h3><p class="mut">'+esc(LEAGUES[li].n)+' · '+new Date().toLocaleDateString("es")+'</p><div class="hoftm">'+tm.map(x=>'<div>'+ico(PM[x.n],64,false,!!x.s)+'<b>'+esc(x.k||x.n)+'</b><small>Nv'+x.l+'</small></div>').join("")+'</div><button id="hofOk">¡Qué orgullo!</button>');
+  snd("win");if(!hubCalm())m.querySelectorAll(".hoftm>div").forEach((d,i)=>d.animate([{transform:"translateY(20px) scale(.6)",opacity:0},{transform:"none",opacity:1}],{duration:400,delay:150+i*160,fill:"backwards",easing:"cubic-bezier(.2,.9,.3,1.3)"}));
+  await new Promise(r=>{$("hofOk").onclick=r});nxModalClose();
+}
+let _hofG=null,_hofAt=0;
+async function hofUI(force){
+  const box=$("hofPB");if(!box)return;const L=(S.hof||[]).slice().reverse();
+  const row=(e,mine)=>'<div class="hofe"><div class="hofh"><b>'+(mine?'🏆 '+esc(e.lg):'👤 <span class="plink" data-prof="'+esc(e.id)+'">'+esc(pvClean(e.n||""))+'</span>')+'</b><small class="mut">'+(e.at?new Date(e.at).toLocaleDateString("es"):"")+(mine?'':' · '+(e.hof|0)+' entrada'+((e.hof|0)===1?'':'s'))+'</small></div><div class="hoftm sm">'+(e.tm||[]).filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],48,false,!!x.s)+'<small>'+esc(x.k||x.n)+' · Nv'+(x.l|0)+'</small></div>').join("")+'</div></div>';
+  let h='<h3 class="shh">Tus campeones ('+L.length+')</h3>'+(L.length?L.slice(0,20).map(e=>row(e,1)).join(""):'<small class="mut">Todavía no has ganado ninguna Liga. Gana las 8 medallas y desafía a una Liga Pokémon en Aventura.</small>');
+  h+='<h3 class="shh">Últimos campeones del mundo</h3><div id="hofW">'+(_hofG?hofW():'<small class="mut">Cargando…</small>')+'</div>';
+  box.innerHTML=h;
+  if(window.FB&&window.FB.rankTop&&(force&&Date.now()-_hofAt>60e3||!_hofG)){_hofAt=Date.now();try{const r=await window.FB.rankTop("hfa",12);_hofG=r.filter(x=>Array.isArray(x.hft));}catch(e){_hofG=[]}const w=$("hofW");if(w)w.innerHTML=hofW()}
+  else if(!window.FB){const w=$("hofW");if(w)w.innerHTML='<small class="mut">Inicia sesión para ver a los campeones de otros jugadores.</small>'}
+  function hofW(){return _hofG&&_hofG.length?_hofG.map(x=>row({id:x.id,n:x.n,at:x.hfa,hof:x.hof,tm:x.hft},0)).join(""):'<small class="mut">Todavía nadie ha entrado en el Salón de la Fama. ¡Sé el primero!</small>'}
+}
+{const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const L=S.hof||[];if(L.length){const e=L[L.length-1];d.hof=L.length;d.hfa=e.at;d.hft=e.tm.map(x=>({n:x.n,l:x.l,s:x.s,k:String(x.k||"").slice(0,12)}))}if(S.tw&&S.tw.best)d.tw=S.tw.best;return d}}
+
+// ================= REGALOS ENTRE AMIGOS =================
+var GF={inc:[]};
+const GF_MAX=20;
+function gfInit(){if(!window.FB||!window.FB.gfWatch||GF.on)return;GF.on=1;try{window.FB.gfWatch(l=>{GF.inc=l.filter(g=>g&&g.from&&g.d);_frk="";try{frUI()}catch(e){}})}catch(e){GF.on=0}}
+setInterval(gfInit,3000);
+function gfSentToday(u){const g=S.gfs;return !!(g&&g.d===today()&&g.u&&g.u[u])}
+async function gfSend(u){
+  if(!window.FB||!window.FB.gfSend)return;if(gfSentToday(u)){toast("Ya le has enviado un regalo hoy.");return}
+  try{await window.FB.gfSend(u,pvNick(),today());S.gfs=S.gfs&&S.gfs.d===today()?S.gfs:{d:today(),u:{}};S.gfs.u[u]=1;save();snd("pop");toast("🎁 ¡Regalo enviado!");_frk="";frUI()}catch(e){toast("No se ha podido enviar el regalo. Inténtalo más tarde.")}
+}
+async function gfOpen(id){
+  const g=GF.inc.find(x=>x.id===id);if(!g)return;S.gfo=S.gfo&&S.gfo.d===today()?S.gfo:{d:today(),n:0};
+  if(S.gfo.n>=GF_MAX){toast("Ya has abierto "+GF_MAX+" regalos hoy. Los demás te esperan mañana.");return}
+  try{await window.FB.gfDel(id)}catch(e){toast("No se ha podido abrir. Inténtalo más tarde.");return}
+  GF.inc=GF.inc.filter(x=>x.id!==id);S.gfo.n++;
+  const r=Math.random(),rw={t:0,it:{}};
+  if(r<.55)rw.t=50000+Math.floor(Math.random()*250000);else if(r<.75)rw.it[Math.random()<.7?"sb":"ub"]=Math.random()<.5?2:1;else if(r<.92){const k=["pot","spot","eter","rev"][Math.floor(Math.random()*4)];rw.it[k]=2}else if(r<.98)rw.it[HOLD[Math.floor(Math.random()*HOLD.length)][0]]=1;else rw.it.cand=1;
+  grant(rw);save();render();snd("lvl");
+  nxModal('<div class="gfbox">🎁</div><h3>Regalo de '+esc(pvClean(g.fn||"un amigo"))+'</h3><p>¡Dentro había <b>'+rwTxt(rw)+'</b>!</p><small class="mut">Hoy has abierto '+S.gfo.n+'/'+GF_MAX+'. No olvides devolverle el detalle.</small><button id="gfOk">¡Gracias!</button>');
+  $("gfOk").onclick=nxModalClose;$("gfOk").focus();_frk="";frUI();
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-gfs],[data-gfo],[data-gfall]");if(!b)return;
+  if(b.dataset.gfs)gfSend(b.dataset.gfs);else if(b.dataset.gfo)gfOpen(b.dataset.gfo);else if(b.dataset.gfall){const ids=Object.keys(FR.l||{}).filter(u=>!gfSentToday(u));(async()=>{for(const u of ids)await gfSend(u)})()}});
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script");sc.textContent=document.getElementById("game").textContent;document.body.appendChild(sc)};
@@ -5630,6 +6118,9 @@ async function main(){
     trSend:(to,tn,fn,o)=>S.addDoc(S.collection(db,"trades"),{from:uid,to:to,fn:String(fn),tn:String(tn),o:o,st:"req",at:Date.now()}),
     trUpd:(id,f)=>S.updateDoc(S.doc(db,"trades",id),Object.assign({},f,{at:Date.now()})),
     trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),
+    gfWatch(cb){S.onSnapshot(S.query(S.collection(db,"gifts"),S.where("to","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
+    gfSend:(to,fn,d)=>S.setDoc(S.doc(db,"gifts",uid+"_"+to+"_"+d),{from:uid,to:to,fn:String(fn||"").slice(0,30),d:String(d),at:Date.now()}),
+    gfDel:id=>S.deleteDoc(S.doc(db,"gifts",id)),
     async rankSave(d){if(!d||!uid)return;const j=JSON.stringify(d);if(j===lastRank)return;await S.setDoc(S.doc(db,"ranks",uid),Object.assign({},d,{at:Date.now()}));lastRank=j},
     async rankTop(f,lim){const sn=await S.getDocs(S.query(S.collection(db,"ranks"),S.orderBy(f,"desc"),S.limit(lim)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     async rankPos(f,v){const c=await S.getCountFromServer(S.query(S.collection(db,"ranks"),S.where(f,">",v)));return c.data().count+1}

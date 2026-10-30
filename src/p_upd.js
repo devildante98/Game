@@ -212,7 +212,7 @@ function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=e
   const sec=(t,L,m)=>L.length?'<h3 class="shh">'+t+'</h3><div class="tshg">'+L.map(q=>card(q,m)).join("")+'</div>':"";
   const cur=all.filter(q=>en&&q[2]===en),cat=all.filter(q=>!q[2]),mine=all.filter(q=>q[2]&&q[2]!==en&&own(q)),soon=all.filter(q=>q[2]&&q[2]!==en&&!own(q));
   const c=cardGet();
-  box.innerHTML='<div class="tshtop"><div class="tshcard big">'+cardMini(myLook(),c.bg,c.fr,pvNick?pvClean(pvNick())||"Entrenador":"Entrenador")+'</div><div><b>Tu tarjeta de entrenador</b><small class="mut">Así la ven los demás jugadores cuando abren tu perfil.</small><div class="tshtk">🎟️ Tienes <b>'+fmt(S.t)+'</b></div></div></div>'+
+  box.innerHTML='<div class="tshtop"><div class="tshcard big">'+cardMini(myLook(),c.bg,c.fr,pvNick?pvClean(pvNick())||"Entrenador":"Entrenador")+'</div><div><b>Tu tarjeta de entrenador</b><small class="mut">Así la ven los demás jugadores cuando abren tu perfil.</small><button class="alt mini" data-myc>👁️ Ver mi tarjeta completa</button><div class="tshtk">🎟️ Tienes <b>'+fmt(S.t)+'</b></div></div></div>'+
     (cur.length?sec(ev.n+' · ¡solo hasta el '+ev.b[1]+' '+MESES[ev.b[0]-1]+'!',cur,""):'<p class="mut">Ahora mismo no hay ningún evento de temporada. Lo próximo aparecerá con el siguiente evento.</p>')+
     sec("🛍️ Catálogo",cat,"")+sec("🎁 Tus artículos de temporada",mine,"")+sec("📅 Próximamente en otros eventos",soon,"soon");
 }
@@ -234,3 +234,12 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
 });
 // la tarjeta se publica con el perfil
 {const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;return d}}
+// ================= MI TARJETA: tu perfil tal y como lo ven los demás =================
+nxPanel("myCardP","🪪 Mi tarjeta","Así ven tu perfil los demás jugadores cuando lo abren desde la clasificación, el chat o la lista de amigos.");
+{const g=HUB.find(x=>x.k==="trn");if(g&&!g.tabs.some(t=>t[0]==="myCardP"))g.tabs.splice(1,0,["myCardP","Mi tarjeta"]);HUBP.myCardP="trn";HUBR.myCardP=()=>myCardUI()}
+function myCardData(){window._rdForce=1;let d=null;try{d=window.rankData?window.rankData():null}catch(e){}window._rdForce=0;
+  d=d||{n:pvClean(pvNick())||"Entrenador",tr:trEnc(myLook()),dex:P.filter(p=>hasP(p[0])).length,prs:S.prs|0};const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;return d}
+async function myCardUI(){const box=$("myCardPB");if(!box)return;
+  box.innerHTML='<div class="mycbar"><button class="red" data-mycs>🛍️ Personalizar en la Tienda de Evento</button><button class="alt" data-mycv>🧑 Cambiar mi entrenador</button></div><div class="mycwrap" id="myCardV"></div>'+(typeof nickOk==="function"&&nickOk()&&window.FB?'':'<small class="mut">Para que los demás puedan ver tu perfil necesitas una cuenta iniciada y un apodo registrado (en PVP online).</small>');
+  const me=window.FB&&window.FB.uid?window.FB.uid():"me";await openProf(me,myCardData(),$("myCardV"))}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;if(t.closest("[data-mycs]")){snd("ui");hubOpen("trn","trShopP")}else if(t.closest("[data-mycv]")){snd("ui");hubOpen("trn","trP")}else if(t.closest("[data-myc]")){e.preventDefault();snd("ui");hubOpen("trn","myCardP")}});

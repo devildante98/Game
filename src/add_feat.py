@@ -58,7 +58,7 @@ s0 = H.index('// ================= sugerencias (solo las lee el creador del jueg
 H = H[:s0] + r'''// ================= clasificacion =================
 const RKC=[["dex","📚 Pokédex","registrados"],["pw","⚔️ PVP","victorias PVP"],["win","🎯 Combates","combates ganados"],["sh","✨ Variocolor","variocolor"],["prs","🌟 Prestigio","prestigio"],["guild","🛡️ Gremios","miembros"]];
 let RK={tab:"dex",cache:{},busy:false,err:""};
-window.rankData=()=>{if(typeof nickOk!=="function"||!nickOk()||!window.FB)return null;return{n:pvClean(pvNick()),tr:trEnc(myLook()),g:GS.doc?String(GS.doc.tag):"",gi:GS.doc?GS.doc.icon|0:0,dex:P.filter(p=>hasP(p[0])).length,pw:(S.pvp&&S.pvp.w)||0,win:stt().win||0,sh:shinyTotal(),prs:PRS()}};
+window.rankData=()=>{if(!window._rdForce&&(typeof nickOk!=="function"||!nickOk()||!window.FB))return null;return{n:pvClean(pvNick())||"Entrenador",tr:trEnc(myLook()),g:GS.doc?String(GS.doc.tag):"",gi:GS.doc?GS.doc.icon|0:0,dex:P.filter(p=>hasP(p[0])).length,pw:(S.pvp&&S.pvp.w)||0,win:stt().win||0,sh:shinyTotal(),prs:PRS()}};
 async function rkLoad(force){
   if(!window.FB||!window.FB.rankTop){rkUI();return}
   const t=RK.tab,c=RK.cache[t];if(c&&!force&&Date.now()-c.at<120000){rkUI();return}

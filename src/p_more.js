@@ -118,17 +118,19 @@ document.addEventListener("click",e=>{
   S.gqc=S.gqc&&S.gqc.w===w?S.gqc:{w:w};if(S.gqc[k])return;S.gqc[k]=1;grant(GQ_RW);save();snd("win");toast("🛡️ Misión de gremio completada: "+rwTxt(GQ_RW));gUI(true);
 });
 // ================= perfiles públicos =================
-async function openProf(uid){
-  if(!window.FB||!window.FB.rankGet){toast("Los perfiles solo se pueden ver con una cuenta iniciada.");return}
-  $("profB").innerHTML='<p class="mut">Cargando perfil…</p>';$("prof").hidden=false;
-  let d=null;try{d=await window.FB.rankGet(uid)}catch(e){}
-  if(!d){$("profB").innerHTML='<p>Este jugador todavía no tiene perfil público (aparece cuando guarda su partida en la nube con el apodo registrado).</p><div class="jrow"><button class="alt" data-pcl="1">Cerrar</button></div>';return}
-  const me=window.FB.uid(),sp=d[ssnField()]||0,on=pvOthers().find(p=>p.peer===uid);
+// dIn: datos ya preparados (tu propia tarjeta); tgt: dibujar en ese elemento en vez de en la ventana
+async function openProf(uid,dIn,tgt){
+  if(!dIn&&(!window.FB||!window.FB.rankGet)){toast("Los perfiles solo se pueden ver con una cuenta iniciada.");return}
+  const box=tgt||$("profB");box.innerHTML='<p class="mut">Cargando perfil…</p>';if(!tgt)$("prof").hidden=false;
+  let d=dIn||null;if(!d)try{d=await window.FB.rankGet(uid)}catch(e){}
+  if(!d){box.innerHTML='<p>Este jugador todavía no tiene perfil público (aparece cuando guarda su partida en la nube con el apodo registrado).</p><div class="jrow"><button class="alt" data-pcl="1">Cerrar</button></div>';return}
+  const me=window.FB&&window.FB.uid?window.FB.uid():uid,sp=d[ssnField()]||0,on=uid===me||pvOthers().find(p=>p.peer===uid);
   const st=[["📚","Pokédex",d.dex],["✨","Variocolor",d.sh],["🎯","Combates ganados",d.win],["⚔️","Victorias PVP",d.pw],["🌟","Prestigio",d.prs],["🏅","Medallas",(d.med|0)+"/8"],["🔥","Mejor racha",d.bs|0],["🏆","Logros",d.ach|0]];
-  $("profB").innerHTML='<div'+(typeof cardAttr==="function"?cardAttr(d.cbg,d.cfr):' class="pcard"')+'><div class="profh"><div class="profav">'+trImg(trDec(d.tr),"f","i")+'</div><div><h2>'+esc(pvClean(d.n))+' '+(d.g?'<span class="gtag">'+esc(String(d.g).slice(0,4))+'</span>':'')+'</h2><span class="tier t'+tierIdx(sp)+'">'+TIERS[tierIdx(sp)][1]+'</span> <small class="mut">'+sp+' pts esta temporada · '+(on?"🟢 Conectado":"⚫ Desconectado")+'</small><div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,i<(d.med|0),22)).join("")+'</div></div></div></div>'+
+  box.innerHTML='<div'+(typeof cardAttr==="function"?cardAttr(d.cbg,d.cfr):' class="pcard"')+'><div class="profh"><div class="profav">'+trImg(trDec(d.tr),"f","i")+'</div><div><h2>'+esc(pvClean(d.n))+' '+(d.g?'<span class="gtag">'+esc(String(d.g).slice(0,4))+'</span>':'')+'</h2><span class="tier t'+tierIdx(sp)+'">'+TIERS[tierIdx(sp)][1]+'</span> <small class="mut">'+sp+' pts esta temporada · '+(on?"🟢 Conectado":"⚫ Desconectado")+'</small><div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,i<(d.med|0),22)).join("")+'</div></div></div></div>'+
     '<div class="profst">'+st.map(x=>'<div><span>'+x[0]+'</span><b>'+(typeof x[2]==="number"?fmt(x[2]||0):x[2])+'</b><small>'+x[1]+'</small></div>').join("")+'</div>'+
     (Array.isArray(d.tm)&&d.tm.length?'<b>Equipo</b><div class="proftm">'+d.tm.filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],56,false,!!x.s)+'<small>'+esc(x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
     '<div class="jrow">'+(uid!==me&&!isFriend(uid)?'<button data-pfr="'+esc(pvClean(d.n))+'">+👥 Añadir amigo</button>':'')+(on&&uid!==me&&PV.st==="idle"&&!fcd?'<button class="red" data-pch="'+esc(uid)+'">⚔️ Retar</button>':'')+'<button class="alt" data-pcl="1">Cerrar</button></div>';
+  if(tgt){const r=box.querySelector('.jrow');if(r)r.remove()}
 }
 document.addEventListener("click",e=>{
   const l=e.target.closest&&e.target.closest("[data-prof]");if(l&&l.dataset.prof){e.preventDefault();openProf(l.dataset.prof);return}

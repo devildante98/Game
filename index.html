@@ -889,15 +889,22 @@ body[data-phase=dawn]:before{background:linear-gradient(rgba(255,170,120,.16),tr
 .hhl{display:flex;flex-direction:column;gap:8px}.hhc{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:16px;background:var(--bg);border:1px solid var(--line)}.hhc>div{flex:1;display:flex;flex-direction:column}.hhc small{color:var(--mute)}
 .hhc.on{border:2px solid #ffb02e;background:color-mix(in srgb,#ffd35c 20%,var(--bg))}.hhc.cd{border-color:#e0447a}.hht{text-align:right;font-weight:800;display:flex;flex-direction:column;font-size:.9rem}.hht small{font-weight:600}
 /* compañero */
-.stage{position:relative}#budW{position:absolute;left:14px;top:64px;z-index:3;cursor:pointer;animation:budwalk 14s ease-in-out infinite}
-.budspr{animation:tbreath 1.6s ease-in-out infinite;transform-origin:50% 100%}.budspr img{width:64px!important;height:64px!important}
-.budgift{position:absolute;top:-14px;right:-6px;font-size:1.3rem;animation:mgwig 1.2s infinite}.budh{position:absolute;left:40%;top:0;pointer-events:none;font-size:1.1rem}
-@keyframes budwalk{0%,100%{transform:translateX(0)}45%{transform:translateX(60px)}50%{transform:translateX(60px) scaleX(-1)}95%{transform:translateX(0) scaleX(-1)}}
+.budh{position:absolute;left:45%;top:10px;pointer-events:none;font-size:1.3rem;z-index:3}
+#budC{display:flex;align-items:stretch;gap:14px;padding:12px;overflow:hidden;background:linear-gradient(135deg,color-mix(in srgb,#ff8ab5 16%,var(--panel)),var(--panel) 60%);border:2px solid color-mix(in srgb,#ff6fa0 45%,var(--line))}
+.bcfield{position:relative;flex:0 0 46%;min-height:120px;border-radius:16px;overflow:hidden;background:linear-gradient(#bfe6ff,#e6f6ff 58%,#a8dc7a 59%,#79bf4c)}
+.bcwalk{position:absolute;left:8%;bottom:6px;cursor:pointer;animation:bcwalk 16s ease-in-out infinite}
+@keyframes bcwalk{0%,100%{left:6%;transform:scaleX(1)}46%{left:calc(94% - 84px);transform:scaleX(1)}50%{left:calc(94% - 84px);transform:scaleX(-1)}96%{left:6%;transform:scaleX(-1)}}
+.bcspr{position:relative;z-index:1;animation:bchop .55s ease-in-out infinite alternate;transform-origin:50% 100%}.bcspr img{width:84px!important;height:84px!important;display:block}
+@keyframes bchop{to{transform:translateY(-4px)}}.bcshadow{position:absolute;left:18%;right:18%;bottom:2px;height:8px;border-radius:50%;background:rgba(0,0,0,.18)}
+.bcinfo{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;justify-content:center}.bchead{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px}.bchead small{width:100%;font-weight:900;letter-spacing:.5px;color:#c42a5e;font-size:.7rem}.bchead b{font-size:1.25rem}.bclv{font-size:.8rem;font-weight:800;color:#c42a5e;background:#ffe3ee;border-radius:99px;padding:1px 8px}
+.bcbtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.bcbtns button{white-space:nowrap}.bcbtns button{padding:7px 11px;font-size:.85rem}.bcgift{animation:bcg 1.1s ease-in-out infinite}@keyframes bcg{50%{transform:scale(1.06);box-shadow:0 0 0 6px rgba(230,57,80,.2)}}
+.bcempty{display:flex;align-items:center;gap:12px;width:100%;flex-wrap:wrap}.bcempty>div{flex:1;min-width:180px;display:flex;flex-direction:column}.bcempty small{color:var(--mute)}.bcegg{font-size:2.2rem}
+@media (max-width:560px){#budC{flex-direction:column}.bcfield{flex-basis:auto}}
+body.calm .bcwalk,body.calm .bcspr,body.calm .bcgift{animation:none!important}
 .budcard{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:14px;border-radius:20px;background:linear-gradient(135deg,#ffe8ef,var(--bg));border:1px solid var(--line)}.budbig{height:160px;display:grid;place-items:center;flex:none}.budbig img{max-height:160px;object-fit:contain}
 .budinfo{flex:1;min-width:220px;display:flex;flex-direction:column;gap:4px}.budinfo h3{margin:0}.budlv{color:#c42a5e}.budbtn{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
 .budperk{margin-top:10px;display:flex;flex-direction:column;gap:4px;font-size:.88rem}.budperk div{color:var(--mute)}.budperk div.on{color:var(--ink)}
 .budev{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-radius:14px;background:#fff3d6;color:#3a2a00}.budev b{flex:1}
-body.calm #budW,body.calm .budspr,body.calm .budgift{animation:none!important}
 /* álbum */
 .albtop{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.albtop span{background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:4px 12px;font-size:.85rem}.albtop .albrdy{background:#ffd35c;color:#3a2a00;border-color:#e0b020;font-weight:800}
 .albnav{display:flex;gap:6px;margin-bottom:10px}.albnav select{flex:1;font:inherit;padding:8px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink)}
@@ -6966,19 +6973,24 @@ const budLv=f=>FR_LV.filter(x=>f>=x[0]).length-1;
 function budSet(n){if(!(S.owned[n]>0))return;S.buddy={n:n,f:(S.bf&&S.bf[n])|0,last:0,feed:0,gift:Date.now()};save();budDraw();toast("🤝 "+nk(n)+" es ahora tu compañero.");snd("lvl")}
 function budF(d){const b=S.buddy;if(!b)return;const o=budLv(b.f);b.f=Math.min(255,(b.f|0)+d);S.bf=S.bf||{};S.bf[b.n]=b.f;save();if(budLv(b.f)>o){toast("💞 ¡"+nk(b.n)+" y tú sois ahora "+FR_LV[budLv(b.f)][1].toLowerCase()+"s!");snd("lvl")}}
 function budDraw(){
-  const st=$("stage");if(!st)return;let w=$("budW");const b=S.buddy;
-  if(!b||!(S.owned[b.n]>0)){if(w)w.remove();return}
-  if(!w){w=document.createElement("div");w.id="budW";st.appendChild(w);w.addEventListener("click",budPet)}
-  const key=b.n+"|"+(S.shiny&&S.shiny[b.n]>0);if(w.dataset.k!==key){w.dataset.k=key;w.innerHTML='<div class="budspr">'+ico(PM[b.n],64,false,!!(S.shiny&&S.shiny[b.n]>0))+'</div><span class="budgift" hidden>🎁</span>'}
-  w.querySelector(".budgift").hidden=!(Date.now()-(b.gift||0)>=10*6e4);w.title=nk(b.n)+" · "+FR_LV[budLv(b.f|0)][1]+" ("+(b.f|0)+"/255)";
+  const ep=$("earnP");if(!ep)return;let c=$("budC");const b=S.buddy,has=b&&S.owned[b.n]>0;
+  if(!c){c=document.createElement("section");c.id="budC";c.className="panel";ep.parentNode.insertBefore(c,ep);
+    c.addEventListener("click",e=>{const t=e.target.closest("[data-bc]");if(!t)return;const k=t.dataset.bc;if(k==="pet")budPet(e);else if(k==="feed"){const b=S.buddy;if(!b||Date.now()-(b.feed||0)<30*6e4){hubOpen("trn","budP");return}b.feed=Date.now();budF(12);snd("heal");toast("🍓 ¡A "+nk(b.n)+" le ha encantado la baya!");budDraw()}else hubOpen("trn","budP")})}
+  if(!has){if(c.dataset.k!=="none"){c.dataset.k="none";c.innerHTML='<div class="bcempty"><span class="bcegg">🤝</span><div><b>¡Elige un Pokémon compañero!</b><small>Te acompañará aquí, encontrará regalos cada 10 minutos y luchará mejor a tu lado.</small></div><button class="red" data-bc="pick">Elegir compañero</button></div>'}return}
+  const sh=!!(S.shiny&&S.shiny[b.n]>0),f=b.f|0,lv=budLv(f),nx=FR_LV[lv+1],gift=Date.now()-(b.gift||0)>=10*6e4,feedOk=Date.now()-(b.feed||0)>=30*6e4,gl=Math.max(0,10*6e4-(Date.now()-(b.gift||0)));
+  const key=[b.n,sh,f,gift,feedOk,Math.ceil(gl/6e4)].join("|");if(c.dataset.k===key)return;
+  const fresh=!c.querySelector(".bcspr")||c.dataset.n!==b.n+sh;c.dataset.k=key;
+  if(fresh){c.dataset.n=b.n+sh;c.innerHTML='<div class="bcfield"><div class="bcwalk" data-bc="pet" title="Tócalo para hacerle mimos"><div class="bcspr">'+ico(PM[b.n],84,false,sh)+'</div><div class="bcshadow"></div></div></div><div class="bcinfo"></div>'}
+  c.querySelector(".bcinfo").innerHTML='<div class="bchead"><small>🤝 TU COMPAÑERO</small><b>'+(sh?"✨ ":"")+esc(nk(b.n))+'</b><span class="bclv">💞 '+FR_LV[lv][1]+'</span></div><div class="nxbar"><i style="width:'+Math.round(f/255*100)+'%"></i></div><small class="mut">Amistad '+f+'/255'+(nx?' · '+(nx[0]-f)+' para «'+nx[1]+'»':'')+'</small>'+
+    '<div class="bcbtns"><button class="'+(gift?'red bcgift':'alt')+'" data-bc="pet">'+(gift?'🎁 ¡Ha encontrado un regalo!':'💗 Mimos · regalo en '+Math.ceil(gl/6e4)+' min')+'</button><button class="alt" data-bc="feed"'+(feedOk?'':' title="Podrás darle otra baya en '+Math.ceil((30*6e4-(Date.now()-(b.feed||0)))/6e4)+' min"')+'>🍓 '+(feedOk?'Dar baya':Math.ceil((30*6e4-(Date.now()-(b.feed||0)))/6e4)+' min')+'</button><button class="alt" data-bc="more">Ver ficha</button></div>';
 }
 function budPet(e){
-  const b=S.buddy;if(!b)return;const w=$("budW");
+  const b=S.buddy;if(!b)return;const w=document.querySelector("#budC .bcwalk");
   if(Date.now()-(b.gift||0)>=10*6e4){const lv=budLv(b.f|0),t=Math.round((20000+lv*30000)*RMUL());b.gift=Date.now();S.t+=t;const it=Math.random()<.15+lv*.05?["pb","sb","pot","ub","cand"][Math.min(4,Math.floor(Math.random()*(2+lv)))]:null;if(it)S.bag[it]=(S.bag[it]||0)+1;save();render();snd("pop");toast("🎁 "+nk(b.n)+" ha encontrado "+fmt(t)+" 🎟️"+(it?" y "+IN2(it):"")+".");budDraw();return}
   if(Date.now()-(b.last||0)>60e3){b.last=Date.now();budF(2)}
   snd("click");for(let i=0;i<4;i++){const h=document.createElement("span");h.className="budh";h.textContent="💗";w.appendChild(h);h.animate([{transform:"translate(0,0) scale(.6)",opacity:1},{transform:"translate("+(Math.random()*60-30)+"px,-70px) scale(1.2)",opacity:0}],{duration:900,delay:i*90}).onfinish=()=>h.remove()}
-  const s=w.querySelector(".budspr");if(s&&!hubCalm())s.animate([{transform:"translateY(0)"},{transform:"translateY(-14px)"},{transform:"translateY(0)"}],{duration:380})}
-setInterval(()=>{try{budDraw()}catch(e){}},5000);
+  const s=w&&w.querySelector(".bcspr");if(s&&!hubCalm())s.animate([{transform:"translateY(0)"},{transform:"translateY(-14px)"},{transform:"translateY(0)"}],{duration:380})}
+setInterval(()=>{try{budDraw()}catch(e){}},5000);setTimeout(()=>{try{budDraw()}catch(e){}},700);
 nxPanel("budP","🤝 Tu compañero","Elige un Pokémon que te acompañe en la pantalla principal. Tócalo para hacerle mimos y dale bayas para que os hagáis amigos. Cuanto mayor sea vuestra amistad, más regalos encuentra y mejor lucha a tu lado.");
 {const g=HUB.find(x=>x.k==="trn");if(g&&!g.tabs.some(t=>t[0]==="budP"))g.tabs.splice(1,0,["budP","Compañero"]);HUBP.budP="trn";HUBR.budP=()=>budUI()}
 function budEvos(n){return EVO(n).filter(e=>e[1]==="Isoothe-bell"&&PM[e[0]])}

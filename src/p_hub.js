@@ -318,3 +318,4 @@ function privShow(){
     document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!m.hidden)m.hidden=true})}
   m.hidden=false;m.querySelector(".jbox").scrollTop=0;try{$("privOk").focus({preventScroll:true})}catch(e){}
 }
+{const m=document.querySelector("main");if(m&&!$("legalF")){m.insertAdjacentHTML("afterend",'<footer id="legalF"><a href="#" id="legalPriv">Política de privacidad</a> · Fangame no oficial y sin ánimo de lucro</footer>');$("legalPriv").onclick=e=>{e.preventDefault();privShow()}}}

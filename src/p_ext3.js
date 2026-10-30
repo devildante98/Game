@@ -35,6 +35,18 @@ const TITLES=[["nov","🌱 Entrenador novato",()=>true],["col","📚 Coleccionis
  ["shy","✨ Cazador de variocolores",()=>shinyTotal()>=5],["med","🏅 Ocho medallas",()=>medCount()>=8],["lga","🏆 Campeón de Liga",()=>Object.keys(S.lgDone||{}).length>0],
  ["twr","🗼 As de la Torre",()=>((S.tw||{}).best|0)>=10],["cmp","👑 Campeón semanal",()=>(S.trophies||[]).some(x=>x.p===1)],["rai","🔴 Cazador de jefes",()=>((stt().raid)|0)>=10],
  ["gld","🛡️ Líder de gremio",()=>!!(GS.doc&&window.FB&&GS.doc.owner===window.FB.uid())],["prs","🌟 Leyenda",()=>PRS()>=3],["mkt","🛒 Mercader",()=>((stt().mksold)|0)>=10]];
+// títulos de la Tienda de Evento: [id, título, precio, evento (null = todo el año)]
+const TITLE_SHOP=[
+ ["s_fire","🔥 Entrenador en llamas",1.5e7,null],["s_bolt","⚡ Rayo veloz",1.5e7,null],["s_aqua","💧 Corazón de agua",1.5e7,null],["s_leaf","🍃 Alma de la naturaleza",1.5e7,null],
+ ["s_moon","🌙 Noctámbulo",3e7,null],["s_luck","🍀 Afortunado",3e7,null],["s_gacha","🎰 Adicto al gacha",5e7,null],["s_brain","🧠 Gran estratega",5e7,null],
+ ["s_rich","💎 Coleccionista de lujo",1e8,null],["s_drag","🐉 Domador de dragones",1e8,null],["s_royal","👑 Realeza Pokémon",2.5e8,null],["s_cosmo","🌌 Leyenda cósmica",5e8,null],
+ ["s_hw1","🎃 Rey de las calabazas",2e7,"🎃 Halloween"],["s_hw2","👻 Alma en pena",2e7,"🎃 Halloween"],["s_hw3","🦇 Señor de la noche",3e7,"🎃 Halloween"],["s_hw4","🕸️ Tejedor de sustos",3e7,"🎃 Halloween"],
+ ["s_xm1","🎄 Espíritu navideño",2e7,"🎄 Navidad"],["s_xm2","❄️ Corazón de hielo",2e7,"🎄 Navidad"],["s_xm3","🎁 Repartidor de regalos",3e7,"🎄 Navidad"],["s_xm4","⛄ Guardián del invierno",3e7,"🎄 Navidad"],
+ ["s_vl1","💘 Flechazo Pokémon",2e7,"💘 San Valentín"],["s_vl2","💖 Corazón de entrenador",2e7,"💘 San Valentín"],["s_vl3","🌹 Romántico empedernido",3e7,"💘 San Valentín"],
+ ["s_sp1","🌸 Flor de cerezo",2e7,"🌸 Primavera"],["s_sp2","🦋 Alma libre",2e7,"🌸 Primavera"],["s_sp3","🌱 Brote de primavera",3e7,"🌸 Primavera"],
+ ["s_su1","☀️ Rey del verano",2e7,"☀️ Verano"],["s_su2","🏖️ Surfista legendario",2e7,"☀️ Verano"],["s_su3","🍉 Fresquito total",3e7,"☀️ Verano"],["s_su4","🌊 Domador de olas",3e7,"☀️ Verano"]];
+TITLE_SHOP.forEach(t=>TITLES.push([t[0],t[1],()=>trOwn("ti",t[0])]));
+const isShopTit=k=>TITLE_SHOP.some(x=>x[0]===k);
 const titleOk=k=>{const t=TITLES.find(x=>x[0]===k);try{return !!(t&&t[2]())}catch(e){return false}};
 // ---------- VITRINA ----------
 nxPanel("shwP","🖼️ Vitrina y estadísticas","Elige los 3 Pokémon y el título que verán los demás jugadores en tu perfil, y consulta tus estadísticas.");
@@ -49,7 +61,7 @@ function shwUI(){
     ["🗼","Récord Torre Batalla",fmt((S.tw||{}).best|0)],["🏅","Medallas",medCount()+" / 8"],["🏆","Ligas ganadas",fmt(Object.values(S.lgDone||{}).reduce((a,b)=>a+(b|0),0))],["🧬","Evoluciones",fmt(st.evo||0)],["🎮","Partidas de minijuegos",fmt(st.mg||0)],
     ["🥚","Huevos eclosionados",fmt(st.hatch||0)],["🏆","Trofeos de torneo",fmt((S.trophies||[]).length)],["🎖️","Logros",fmt(Object.values(S.ach||{}).reduce((a,b)=>a+b,0))],["🎟️","Tickets ahora",fmt(S.t)]];
   box.innerHTML='<h3 class="shh">🖼️ Tu vitrina</h3><div class="shwg">'+[0,1,2].map(slot).join("")+'</div>'+
-    '<div class="fichr shwt"><span>Título</span><div class="fichin"><select id="shwT">'+TITLES.map(t=>'<option value="'+t[0]+'"'+(s.tit===t[0]?' selected':'')+(titleOk(t[0])?'':' disabled')+'>'+t[1]+(titleOk(t[0])?'':' 🔒')+'</option>').join("")+'</select></div></div>'+
+    '<div class="fichr shwt"><span>Título</span><div class="fichin"><select id="shwT">'+TITLES.filter(t=>!isShopTit(t[0])||titleOk(t[0])).map(t=>'<option value="'+t[0]+'"'+(s.tit===t[0]?' selected':'')+(titleOk(t[0])?'':' disabled')+'>'+t[1]+(titleOk(t[0])?'':' 🔒')+'</option>').join("")+'</select><small class="mut">🛍️ Consigue más títulos en la <a href="#" data-trshop>Tienda de Evento</a>.</small></div></div>'+
     '<small class="mut">Los títulos con 🔒 se desbloquean jugando: Pokédex, variocolores, medallas, Liga, Torre, torneos, incursiones, gremio, prestigio y mercadillo.</small>'+
     (NX.shwSel!=null?'<div class="nxpick"><div class="sets-row"><input id="shwQ" placeholder="Buscar Pokémon..." value="'+esc(NX.shwQ||"")+'"><button class="alt" data-shwx="1">Cancelar</button></div><div class="nxgrid">'+P.filter(p=>S.owned[p[0]]>0&&(!NX.shwQ||nrm(p[0]).includes(nrm(NX.shwQ))||nrm(nk(p[0])).includes(nrm(NX.shwQ)))).sort((a,b)=>"CREML".indexOf(b[2])-"CREML".indexOf(a[2])||lvd(b[0]).l-lvd(a[0]).l).slice(0,90).map(p=>'<button class="nxcell" data-shwn="'+esc(p[0])+'">'+ico(p,48,false,!!(S.shiny&&S.shiny[p[0]]>0))+'<b>'+esc(nk(p[0]))+'</b><small>'+STAR[p[2]]+'</small></button>').join("")+'</div></div>':'')+
     '<h3 class="shh">📊 Tus estadísticas</h3><div class="profst shwst">'+stats.map(x=>'<div><span>'+x[0]+'</span><b>'+x[2]+'</b><small>'+x[1]+'</small></div>').join("")+'</div>';

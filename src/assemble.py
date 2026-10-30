@@ -294,6 +294,9 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-30g",at:"2026-10-30T22:00",t:"🏷️ Títulos en la Tienda de Evento",l:[
+"🏷️ 30 títulos nuevos para tu vitrina y tu perfil en la Tienda de Evento: 12 de catálogo todo el año y otros propios de cada temporada.",
+"🎃 Títulos de Halloween solo hasta el 2 de noviembre: Rey de las calabazas, Alma en pena, Señor de la noche y Tejedor de sustos."]},
 {v:"2026-10-30f",at:"2026-10-30T21:00",t:"⚔️ Pokémon de doble tipo",l:[
 "🔥🌪️ Los Pokémon ahora tienen sus dos tipos, como en los juegos: Charizard es Fuego / Volador, Gyarados Agua / Volador, Garchomp Dragón / Tierra…",
 "💥 La eficacia se multiplica por los dos tipos: hay ataques ×4 y ×¼. ¡Monta un equipo más equilibrado!",

@@ -176,7 +176,7 @@ setTimeout(sugReplyCheck,9000);setInterval(sugReplyCheck,10*60000);
 {const w=$("bigW"),f=$("bigF");if(w){const o=w.onclick;w.onclick=()=>{o();O.bigmode=bigMode==="win"?"win":"";saveO();try{$("bigopt").value=O.bigmode}catch(e){}}}
  if(f){const o=f.onclick;f.onclick=()=>{o();O.bigmode=bigMode==="full"?"full":"";saveO();try{$("bigopt").value=O.bigmode}catch(e){}}}}
 // ================= TIENDA DE EVENTO: ropa, fondos y marcos de tarjeta (de temporada solo durante su evento, y de catálogo), con tickets =================
-nxPanel("trShopP","🛍️ Tienda de Evento","Ropa para tu entrenador y fondos y marcos animados para tu tarjeta de perfil. Lo de temporada solo se vende mientras dura su evento, ¡no lo dejes escapar! Lo que compras es tuyo para siempre, también al subir de prestigio.");
+nxPanel("trShopP","🛍️ Tienda de Evento","Ropa para tu entrenador, fondos y marcos animados para tu tarjeta de perfil y títulos para tu vitrina. Lo de temporada solo se vende mientras dura su evento, ¡no lo dejes escapar! Lo que compras es tuyo para siempre, también al subir de prestigio.");
 {const g=HUB.find(x=>x.k==="trn");if(g&&!g.tabs.some(t=>t[0]==="trShopP"))g.tabs.splice(1,0,["trShopP","Tienda de Evento"]);HUBP.trShopP="trn";HUBR.trShopP=()=>trShopUI()}
 const evDates=n=>{const e=EVENTS.find(x=>x.n===n);return e?e.a[1]+" "+MESES[e.a[0]-1]+" – "+e.b[1]+" "+MESES[e.b[0]-1]:""};
 function trShopCard(it,mode){const[k,v,pr,e]=it,o=TRO.find(x=>x[0]===k),L=myLook(),own=trOwn(k,v),on=L[k]===v,look=Object.assign({},L,{[k]:v});
@@ -205,10 +205,14 @@ function cardMini(L,bg,fr,name){return '<div'+cardAttr(bg,fr)+'><div class="pcmi
 function cardShopCard(t,it,mode){const[id,nm,pr,e]=it,own=trOwn(t,id),cur=cardGet(),on=cur[t]===id,c=Object.assign({},cur,{[t]:id});
   const btn=mode==="soon"?'<small class="mut">🔒 Vuelve en '+esc(e)+' ('+evDates(e)+')</small>':own?(on?'<button class="alt" data-cbq="'+t+'">✖ Quitar</button>':'<button data-cbw="'+t+':'+id+'">🖼️ Usar</button>'):'<button class="red" data-cbb="'+t+':'+id+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button>';
   return '<div class="tshc'+(own?' own':'')+(mode==="soon"?' soon':'')+'"><div class="tshcard">'+cardMini(myLook(),c.bg,c.fr,pvNick?pvClean(pvNick())||"Entrenador":"Entrenador")+'</div><b>'+esc(nm)+'</b><small class="mut">'+(t==="bg"?"Fondo de tarjeta":"Marco animado")+(e?' · '+esc(e):'')+'</small>'+btn+'</div>'}
+// títulos (los compras y te los pones en la vitrina)
+function titShopCard(it,mode){const[id,tx,pr,e]=it,own=trOwn("ti",id),on=typeof shwGet==="function"&&shwGet().tit===id;
+  const btn=mode==="soon"?'<small class="mut">🔒 Vuelve en '+esc(e)+' ('+evDates(e)+')</small>':own?(on?'<span class="tshon">✅ Lo llevas puesto</span>':'<button data-tiw="'+id+'">🏷️ Ponérmelo</button>'):'<button class="red" data-tib="'+id+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button>';
+  return '<div class="tshc'+(own?' own':'')+(mode==="soon"?' soon':'')+'"><div class="tshtit"><span>'+esc(tx)+'</span></div><b>Título</b><small class="mut">Para tu vitrina y tu perfil'+(e?' · '+esc(e):'')+'</small>'+btn+'</div>'}
 function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=ev?ev.n:null;
   // todo lo de la tienda como [tipo, item]: ropa ("tr") y tarjeta ("bg"/"fr")
-  const all=[...TRSHOP.map(x=>["tr",x,x[3]]),...CARD_BG.map(x=>["bg",x,x[3]]),...CARD_FR.map(x=>["fr",x,x[3]])],own=q=>q[0]==="tr"?trOwn(q[1][0],q[1][1]):trOwn(q[0],q[1][0]);
-  const card=(q,m)=>q[0]==="tr"?trShopCard(q[1],m):cardShopCard(q[0],q[1],m);
+  const all=[...TRSHOP.map(x=>["tr",x,x[3]]),...CARD_BG.map(x=>["bg",x,x[3]]),...CARD_FR.map(x=>["fr",x,x[3]]),...(typeof TITLE_SHOP!=="undefined"?TITLE_SHOP.map(x=>["ti",x,x[3]]):[])],own=q=>q[0]==="tr"?trOwn(q[1][0],q[1][1]):trOwn(q[0],q[1][0]);
+  const card=(q,m)=>q[0]==="tr"?trShopCard(q[1],m):q[0]==="ti"?titShopCard(q[1],m):cardShopCard(q[0],q[1],m);
   const sec=(t,L,m)=>L.length?'<h3 class="shh">'+t+'</h3><div class="tshg">'+L.map(q=>card(q,m)).join("")+'</div>':"";
   const cur=all.filter(q=>en&&q[2]===en),cat=all.filter(q=>!q[2]),mine=all.filter(q=>q[2]&&q[2]!==en&&own(q)),soon=all.filter(q=>q[2]&&q[2]!==en&&!own(q));
   const c=cardGet();
@@ -219,6 +223,12 @@ function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=e
 document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
   const a=t.closest("[data-trshop]");if(a){e.preventDefault();snd("ui");hubOpen("trn","trShopP");return}
   const w=t.closest("#trShopPB [data-tsw]");if(w){const[k,v]=w.dataset.tsw.split(":");trSet(k,+v);snd("ui");trShopUI();toast("👕 ¡Te queda genial!");return}
+  const tw=t.closest("#trShopPB [data-tiw]");if(tw){if(!trOwn("ti",tw.dataset.tiw))return;shwGet().tit=tw.dataset.tiw;save();snd("ui");trShopUI();toast("🏷️ ¡Título cambiado!");return}
+  const tb=t.closest("#trShopPB [data-tib]");if(tb){const it=TITLE_SHOP.find(x=>x[0]===tb.dataset.tib),ev=evNow();if(!it||trOwn("ti",it[0]))return;
+    if(it[3]&&(!ev||ev.n!==it[3])){toast("Este título solo se vende durante "+it[3]+".");return}
+    if(S.t<it[2]){toast("Te faltan "+fmt(it[2]-S.t)+" 🎟️.");return}
+    if(!confirm("¿Comprar el título «"+it[1]+"» por "+fmt(it[2])+" 🎟️?"))return;
+    S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn["ti:"+it[0]]=1;shwGet().tit=it[0];save();render();snd("lvl");toast("🏷️ ¡Has comprado el título «"+it[1]+"»! Ya lo luces en tu vitrina y tu perfil.");trShopUI();return}
   const cq=t.closest("#trShopPB [data-cbq]");if(cq){S.card=Object.assign({},S.card,{[cq.dataset.cbq]:""});save();snd("ui");trShopUI();return}
   const cw=t.closest("#trShopPB [data-cbw]");if(cw){const[k,id]=cw.dataset.cbw.split(":");if(!trOwn(k,id))return;S.card=Object.assign({},S.card,{[k]:id});save();snd("ui");trShopUI();toast("🖼️ ¡Tarjeta actualizada!");return}
   const cb=t.closest("#trShopPB [data-cbb]");if(cb){const[k,id]=cb.dataset.cbb.split(":"),it=cardIt(k,id),ev=evNow();if(!it||trOwn(k,id))return;

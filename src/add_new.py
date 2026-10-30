@@ -466,6 +466,7 @@ body:has(#mgM:not([hidden]) .rdw) #chw{z-index:99}
 @media (prefers-reduced-motion:reduce){.pcard,.pcard::after{animation:none!important}}
 body.calm .pcard,body.calm .pcard::after{animation:none!important}
 .mycbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.mycwrap{max-width:640px}
+.tshtit{width:100%;min-height:72px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,color-mix(in srgb,#c42a5e 12%,var(--panel)),var(--bg));padding:8px;box-sizing:border-box}.tshtit span{font-weight:800;color:#c42a5e;font-size:.95rem;text-align:center}
 .tshtk{display:inline-block;padding:6px 14px;border-radius:999px;border:2px solid var(--yel);background:var(--panel);font-weight:700;margin-bottom:4px}
 .tshg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .tshc{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:10px;border-radius:16px;background:var(--bg);border:2px solid var(--line)}.tshc.own{border-color:#13a37f}.tshc.soon{opacity:.6;filter:grayscale(.5)}

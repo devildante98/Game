@@ -102,7 +102,7 @@ rep('["🔥","Mejor racha",d.bs|0]','["🔥","Mejor racha",d.bs|0],["🗼","Réc
 rep("""'<div class="jrow">'+(uid!==me&&!isFriend(uid)""","""(Array.isArray(d.hft)&&d.hft.length?'<b>🏛️ Último equipo en el Salón de la Fama</b><div class="proftm">'+d.hft.filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],56,false,!!x.s)+'<small>'+esc(x.k||x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
     '<div class="jrow">'+(uid!==me&&!isFriend(uid)""")
 # ---- estilos ----
-rep('body.hc .panel{border-width:2px}',r'''body.hc .panel{border-width:2px}
+rep('body.hicon .panel{border-width:2px}',r'''body.hicon .panel{border-width:2px}
 .hubgl{grid-template-columns:repeat(5,150px)}
 @media (max-width:980px){.hubgl{grid-template-columns:repeat(3,150px)}}
 #hubG{overflow-y:auto}

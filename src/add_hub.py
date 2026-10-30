@@ -130,16 +130,16 @@ rep('body.hubon{overflow:hidden}',r'''body.hubon{overflow:hidden}
 #setMute{margin:4px 0 4px}
 @media (max-width:600px){#optp{padding:0!important}.setw{width:100%;height:100%;max-height:none;border-radius:0;border:none;box-shadow:none;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr)}.seth h2{font-size:1.25rem}.settabs{flex-direction:row;overflow-x:auto;padding:8px 10px;border-right:none;border-bottom:1px solid var(--line);gap:4px}.settabs button{width:auto;flex:none;padding:8px 12px;font-size:.88rem}.settabs button.on{box-shadow:inset 0 -3px 0 var(--sa)}.setbody{padding:2px 16px 20px}.setlinks{grid-template-columns:minmax(0,1fr)}}
 body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
-body.hc{--mute:color-mix(in srgb,var(--ink) 88%,transparent);--line:color-mix(in srgb,var(--ink) 50%,transparent)}
-body.hc .panel{border-width:2px}''')
+body.hicon{--mute:color-mix(in srgb,var(--ink) 88%,transparent);--line:color-mix(in srgb,var(--ink) 50%,transparent)}
+body.hicon .panel{border-width:2px}''')
 # ---- tema oscuro manual completo ----
 rep(':root[data-theme="dark"]{--bg:#12152b;',':root[data-theme="dark"]{--C:#8d93b5;--bg:#12152b;',1)
-rep('body.hc .panel{border-width:2px}','body.hc .panel{border-width:2px}\n:root[data-theme="dark"]{color-scheme:dark}:root[data-theme="light"]{color-scheme:light}')
+rep('body.hicon .panel{border-width:2px}','body.hicon .panel{border-width:2px}\n:root[data-theme="dark"]{color-scheme:dark}:root[data-theme="light"]{color-scheme:light}')
 # ---- botón de pantalla completa ----
-rep('body.hc .panel{border-width:2px}','body.hc .panel{border-width:2px}\n#fsb{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:58px;z-index:60;width:42px;height:42px;border-radius:50%;padding:0;display:grid;place-items:center;background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer;transition:transform .15s}\n#fsb:hover{transform:scale(1.08)}#fsb.on{background:var(--teal);color:#0d2a24;border-color:var(--teal)}\nbody.hubon #fsb{display:none}')
+rep('body.hicon .panel{border-width:2px}','body.hicon .panel{border-width:2px}\n#fsb{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:58px;z-index:60;width:42px;height:42px;border-radius:50%;padding:0;display:grid;place-items:center;background:var(--panel);color:var(--ink);border:1px solid var(--line);box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer;transition:transform .15s}\n#fsb:hover{transform:scale(1.08)}#fsb.on{background:var(--teal);color:#0d2a24;border-color:var(--teal)}\nbody.hubon #fsb{display:none}')
 # ---- cartas del gacha: clic para verlas en grande ----
 rep('return `<div class="card ${p[2]} ${big?"big":""} ${sh?"shiny":""}">','return `<div class="card ${p[2]} ${big?"big":""} ${sh?"shiny":""}" data-pn="${String(p[0]).replace(/"/g,"&quot;")}" data-sh="${sh?1:0}" title="Toca para verlo en grande">')
-rep('body.hc .panel{border-width:2px}',r'''body.hc .panel{border-width:2px}
+rep('body.hicon .panel{border-width:2px}',r'''body.hicon .panel{border-width:2px}
 #out .card[data-pn]{cursor:zoom-in;transition:transform .15s}#out .card[data-pn]:hover{transform:translateY(-3px) scale(1.04)}
 #pkv{position:fixed;inset:0;z-index:72;background:rgba(8,10,34,.76);display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box}
 #pkv[hidden]{display:none}
@@ -156,7 +156,7 @@ rep('body.hc .panel{border-width:2px}',r'''body.hc .panel{border-width:2px}
 .pkvinfo{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;color:var(--mute);font-size:.9rem}.pkvinfo b{color:var(--ink)}
 .pkvcry{margin-top:4px}''')
 # ---- conjuntos del entrenador ----
-rep('body.hc .panel{border-width:2px}',r'''body.hc .panel{border-width:2px}
+rep('body.hicon .panel{border-width:2px}',r'''body.hicon .panel{border-width:2px}
 #trSets{margin-top:14px;background:var(--bg);border:1px solid var(--line);border-radius:16px;padding:12px}
 .trsh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}.trsh small{color:var(--mute);font-weight:700}
 .trsg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
@@ -174,5 +174,5 @@ rep('body.hc .panel{border-width:2px}',r'''body.hc .panel{border-width:2px}
 .trsave{width:100%;margin-top:10px}
 .trsmsg{display:block;margin-top:6px;color:var(--mute);font-size:.75rem;line-height:1.3}''')
 # ---- sprites en alta definición ----
-rep('body.hc .panel{border-width:2px}','body.hc .panel{border-width:2px}\nimg.pk.hd{image-rendering:auto!important;object-fit:contain}\n.spr img.hd,.pkvspr img.hd,.tspr2 img.hd,.evost img.hd{animation:hdidle 3.2s ease-in-out infinite;transform-origin:50% 90%}\n@keyframes hdidle{50%{transform:scale(1.015,1.035) translateY(-1px)}}\nbody.calm img.hd{animation:none!important}')
+rep('body.hicon .panel{border-width:2px}','body.hicon .panel{border-width:2px}\nimg.pk.hd{image-rendering:auto!important;object-fit:contain}\n.spr img.hd,.pkvspr img.hd,.tspr2 img.hd,.evost img.hd{animation:hdidle 3.2s ease-in-out infinite;transform-origin:50% 90%}\n@keyframes hdidle{50%{transform:scale(1.015,1.035) translateY(-1px)}}\nbody.calm img.hd{animation:none!important}')
 # ---- alta definición solo en las cartas del gacha ----

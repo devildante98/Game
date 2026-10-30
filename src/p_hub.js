@@ -206,7 +206,7 @@ function setInit(){
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!op.hidden)op.hidden=true});
 }
 const _applyOBase=applyO;
-applyO=function(){_applyOBase();const b=document.body;if(!b)return;b.classList.toggle("calm",!!O.calm);b.classList.toggle("hc",!!O.hc);const z=+O.txt||1;document.documentElement.style.zoom=z===1?"":String(z);const r=document.documentElement;if(O.theme==="dark"||O.theme==="light")r.dataset.theme=O.theme;else delete r.dataset.theme};
+applyO=function(){_applyOBase();const b=document.body;if(!b)return;b.classList.toggle("calm",!!O.calm);b.classList.toggle("hicon",!!O.hc);const z=+O.txt||1;document.documentElement.style.zoom=z===1?"":String(z);const r=document.documentElement;if(O.theme==="dark"||O.theme==="light")r.dataset.theme=O.theme;else delete r.dataset.theme};
 setInit();
 // ================= botón de pantalla completa en la pantalla principal =================
 (function(){

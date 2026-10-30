@@ -408,6 +408,7 @@ body.calm .albs.holo{animation:none}
 /* incursiones */
 .rdcard{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:14px;border-radius:20px;background:linear-gradient(135deg,#3a0a18,#b3123b 60%,#ff7a3c);color:#fff}.rdcard>div:last-child{flex:1;display:flex;flex-direction:column;gap:4px;min-width:220px}.rdcard h3{margin:0;font-size:1.5rem}.rdcard .mginf span{background:rgba(0,0,0,.25);border:none;color:#fff}
 .rdbossv{height:180px;display:grid;place-items:center;filter:drop-shadow(0 0 18px rgba(255,60,90,.8))}.rdbossv img{max-height:180px;object-fit:contain}
+.chsys{display:flex;flex-direction:column;align-items:center;gap:1px;margin:8px auto;max-width:90%;text-align:center}.chsys span{background:color-mix(in srgb,#13a37f 14%,var(--panel));color:var(--ink);border:1px solid color-mix(in srgb,#13a37f 40%,var(--line));border-radius:999px;padding:5px 14px;font-weight:700;font-size:.85rem}.chsys small{color:var(--mute);font-size:.7rem}
 .rdrow{gap:8px}.rdw{width:min(680px,100%)}
 body:has(#mgM:not([hidden]) .rdw) #chw{z-index:99}
 .mgx.rdchb{margin-right:-4px}.rdinv{display:block;margin:4px auto 10px;background:#3f86f0}

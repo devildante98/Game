@@ -60,6 +60,10 @@ document.addEventListener("click",async e=>{
     if(d.fr2){await r2Open(r2NewCode(),true);if(R2)r2InviteFriend(d.fr2);return}
   }catch(x){frMsg("No se pudo completar ("+((x&&x.code)||"error")+").")}
 });
+// aviso en el chat del gremio cuando entra alguien (lo envía quien entra o quien acepta la solicitud)
+async function gAnnounce(gid,who,by){try{if(!gid||!window.FB||!window.FB.chSend)return;const me=window.FB.uid(),now=Date.now();
+  const d={u:me,n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",t:"🛡️ ¡"+pvClean(who||"Un entrenador").slice(0,30)+" se ha unido al gremio!"+(by?" (aceptado por "+pvClean(by).slice(0,30)+")":""),sys:"join",at:now};
+  await window.FB.chSend("g",gid,d)}catch(e){}}
 function frState(st){FR=Object.assign({ready:true},st);_frk="";frUI();pvRender();frNamesRefresh(Object.keys(FR.l||{}).some(u=>!FRN[u]))}
 // ================= gremios =================
 const GUILD_COST=50000000,GUILD_EDIT=500000,GUILD_MAX=30;
@@ -159,7 +163,7 @@ document.addEventListener("click",async e=>{
     if(d.gj){
       if(S.gid){gMsg("Ya perteneces a un gremio. Sal de él antes de unirte a otro.");return}
       const g=GS.list.find(x=>x.id===d.gj);if(!g)return;
-      if(g.open){await window.FB.gJoin(d.gj,nick);S.gid=d.gj;save();gWatch(d.gj);toast("🛡️ ¡Te has unido a "+g.name+"!")}
+      if(g.open){await window.FB.gJoin(d.gj,nick);S.gid=d.gj;save();gWatch(d.gj);toast("🛡️ ¡Te has unido a "+g.name+"!");gAnnounce(d.gj,nick)}
       else{await window.FB.gRequest(d.gj,nick);gMsg("📨 Solicitud enviada. El líder del gremio tiene que aceptarla.");S.greq=d.gj;save();gReqWatch(d.gj);await gRefresh()}
       return;
     }
@@ -168,7 +172,7 @@ document.addEventListener("click",async e=>{
     if(b.id==="gdEdit"){const g=GS.doc;GE=Object.assign({},GE,{name:g.name,tag:g.tag,icon:g.icon|0,s:(g.fl||{}).s|0,p:(g.fl||{}).p|0,c1:(g.fl||{}).c1|0,c2:(g.fl||{}).c2|0,c3:(g.fl||{}).c3|0,desc:g.desc||"",open:g.open?1:0});GS.editing=!GS.editing;gUI(true);return}
     if(b.id==="geCancel"){GS.editing=false;gUI(true);return}
     if(b.id==="geSave"){geRead();if(!gTagOk(GE.tag)){gMsg("Las siglas deben tener de 2 a 4 letras o números.");return}if(S.t<GUILD_EDIT)return;await window.FB.gEdit(GS.gid,{tag:GE.tag,icon:GE.icon,fl:{s:GE.s,p:GE.p,c1:GE.c1,c2:GE.c2,c3:GE.c3},desc:GE.desc.trim(),open:!!GE.open});S.t-=GUILD_EDIT;save();GS.editing=false;toast("🎨 Gremio actualizado");return}
-    if(d.gacc){const r=GS.doc.req[d.gacc];await window.FB.gAccept(GS.gid,d.gacc,r?r.n:"");return}
+    if(d.gacc){const r=GS.doc.req[d.gacc];await window.FB.gAccept(GS.gid,d.gacc,r?r.n:"");gAnnounce(GS.gid,r?r.n:"",pvNick());return}
     if(d.grej){await window.FB.gReject(GS.gid,d.grej);return}
     if(d.gk){if(!confirm("¿Expulsar a este miembro del gremio?"))return;await window.FB.gKick(GS.gid,d.gk,GS.doc.sub===d.gk);return}
     if(d.gt){if(!confirm("¿Nombrar líder a este miembro? Tú pasarás a ser un miembro normal."))return;await window.FB.gTransfer(GS.gid,d.gt,GS.doc.sub===d.gt);return}

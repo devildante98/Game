@@ -85,7 +85,7 @@ function chRender(keep){
   else if(CH.tab==="global")sub.innerHTML='<span class="mut">Sé amable 😊 · Pulsa un nombre para ver su perfil</span>';
   const k=chKey();chSub(k);const list=(CH.msgs[k]||[]).filter(m=>!chMuted(m.u));
   const atB=L.scrollHeight-L.scrollTop-L.clientHeight<60;
-  L.innerHTML=list.length?list.map((m,i)=>{const mine=m.u===me,prev=list[i-1],grp=prev&&prev.u===m.u&&(m.at-prev.at)<120e3;
+  L.innerHTML=list.length?list.map((m,i)=>{if(m.sys)return '<div class="chsys"><span>'+esc(m.t||"")+'</span><small>'+chTime(m.at)+'</small></div>';const mine=m.u===me,prev=list[i-1],grp=prev&&prev.u===m.u&&!prev.sys&&(m.at-prev.at)<120e3;
     const body=(m.inv?chInvHTML(m,mine):'')+(m.img?chImgHTML(m):'')+((m.img||m.inv)&&!m.t?'':(m.p&&PM[m.p.n]?'<div class="chpkm '+PM[m.p.n][2]+(m.p.s?' shiny':'')+'">'+ico(PM[m.p.n],56,false,!!m.p.s)+'<div><b>'+(m.p.s?"✨ ":"")+esc(m.p.k||m.p.n)+'</b><small>'+(m.p.k?esc(m.p.n)+' · ':'')+'Nv'+(m.p.l|0)+' · '+STAR[PM[m.p.n][2]]+'</small></div></div>'+(m.t?'<p>'+esc(m.t)+'</p>':''):'<p>'+esc(m.t||"")+'</p>'));
     return '<div class="chm'+(mine?' me':'')+(grp?' grp':'')+'">'+(mine||grp?'':'<span class="chav" data-prof="'+esc(m.u)+'">'+chAv(m.tr)+'</span>')+'<div class="chbub">'+(grp||mine?'':'<div class="chn"><b class="plink" data-prof="'+esc(m.u)+'">'+(m.cr>=1&&m.cr<=3?'<span class="chcr" title="'+["Campeón","Subcampeón","Podio"][m.cr-1]+' del torneo semanal">'+["👑","🥈","🥉"][m.cr-1]+'</span> ':'')+esc(pvClean(m.n||"Entrenador"))+'</b>'+(m.g?' <span class="gtag">'+esc(String(m.g).slice(0,4))+'</span>':'')+'</div>')+body+'<small class="cht">'+chTime(m.at)+(mine?' <button class="chdel" data-chdel="'+esc(m.id)+'" title="Borrar mensaje" aria-label="Borrar mensaje">🗑️</button>':' <button class="chmute" data-chmute="'+esc(m.u)+'" data-chmn="'+esc(pvClean(m.n||""))+'" title="Silenciar a este jugador" aria-label="Silenciar">🔇</button> <button class="chmute" data-chrep="'+esc(m.id)+'" title="Reportar este mensaje" aria-label="Reportar">🚩</button>'+((typeof MOD!=="undefined"&&MOD.admin)?' <button class="chmute" data-chadel="'+esc(m.id)+'" title="Borrar (moderación)">🗑️</button>':''))+'</small></div></div>'}).join(""):'<p class="chempty">'+(CH.msgs[k]?'Todavía no hay mensajes. ¡Saluda! 👋':'Cargando mensajes…')+'</p>';
   if(!keep||atB)L.scrollTop=L.scrollHeight;
@@ -141,7 +141,7 @@ chBtn();
 function chOpenAt(tab,dm){hubClose();CH.tab=tab||"global";CH.dm=dm||null;CH.emo=CH.pick=false;if(CH.open){chPanels();chTabs();chRender()}else chToggle(true);snd("ui")}
 nxPanel("chatP","💬 Chat","Habla con todos los jugadores, con tu gremio o en privado con tus amigos. El chat se abre en un panel lateral, así que puedes seguir jugando mientras hablas.");
 {const g=HUB.find(x=>x.k==="soc");if(g&&!g.tabs.some(t=>t[0]==="chatP")){g.tabs.splice(1,0,["chatP","Chat"]);g.d="Amigos, chat, intercambios y gremio"}HUBP.chatP="soc";HUBR.chatP=()=>chHubUI()}
-function chLast(k){const l=CH.msgs[k]||[],m=[...l].reverse().find(x=>!chMuted(x.u));return m?esc(pvClean(m.n||""))+": "+esc(m.inv?"✉️ Invitación":m.img?"📷 Foto temporal":m.p?"📸 "+m.p.n:m.t||"").slice(0,70):""}
+function chLast(k){const l=CH.msgs[k]||[],m=[...l].reverse().find(x=>!chMuted(x.u));return m?(m.sys?esc(m.t||""):esc(pvClean(m.n||""))+": "+esc(m.inv?"✉️ Invitación":m.img?"📷 Foto temporal":m.p?"📸 "+m.p.n:m.t||"").slice(0,70)):""}
 function chHubUI(){
   const box=$("chatPB");if(!box)return;const on=!!(window.FB&&chMe());if(on)chSync();
   const card=(ic,t,d,k,btn,attr,n,last)=>'<div class="chcard"><span class="chci">'+ic+'</span><div><b>'+t+(n?' <i class="chcn">'+n+'</i>':'')+'</b><small class="mut">'+d+'</small>'+(last?'<small class="chcl">'+last+'</small>':'')+'</div><button class="red" '+attr+'>'+btn+'</button></div>';
@@ -229,7 +229,7 @@ async function chInvAccept(id){
     const g=await new Promise(res=>{let u=null;const tm=setTimeout(()=>{try{u&&u()}catch(e){}res(undefined)},6000);u=window.FB.gWatch(v.gid,d=>{clearTimeout(tm);setTimeout(()=>{try{u&&u()}catch(e){}},0);res(d)})});
     if(!g){toast("Ese gremio ya no existe.");return}if(Object.keys(g.members||{}).length>=GUILD_MAX){toast("Ese gremio está lleno.");return}
     const nick=pvClean(pvNick());
-    try{if(g.open){await window.FB.gJoin(v.gid,nick);S.gid=v.gid;save();gWatch(v.gid);toast("🛡️ ¡Te has unido a "+g.name+"!");snd("lvl")}
+    try{if(g.open){await window.FB.gJoin(v.gid,nick);S.gid=v.gid;save();gWatch(v.gid);toast("🛡️ ¡Te has unido a "+g.name+"!");snd("lvl");gAnnounce(v.gid,nick)}
       else{await window.FB.gRequest(v.gid,nick);S.greq=v.gid;save();gReqWatch(v.gid);toast("📨 Solicitud enviada a "+g.name+". El líder o el sublíder la aprobará.")}
       mark();try{gRefresh()}catch(e){}}catch(e){toast("No se ha podido completar ("+((e&&e.code)||"error")+").")}
   }else if(v.k==="pvp"){

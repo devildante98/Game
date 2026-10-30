@@ -37,7 +37,7 @@ const TRO=[
 ];
 // prendas exclusivas de prestigio: [clave][opción] = nivel de prestigio necesario
 const TRLOCK={hat:{25:1,26:2,27:3,28:4,29:5,30:6},nk:{6:1,7:3}};
-// prendas de la Tienda de ropa: [clave, opción, precio, evento en el que se vende (null = todo el año)]
+// prendas de la Tienda de Evento: [clave, opción, precio, evento en el que se vende (null = todo el año)]
 const TRSHOP=[["hat",31,25e6,"🎃 Halloween"],["nk",8,25e6,"🎃 Halloween"],["hat",32,25e6,"🎄 Navidad"],["hat",33,25e6,"💘 San Valentín"],["hat",34,25e6,"🌸 Primavera"],["hat",35,25e6,"☀️ Verano"],
   ["wr",4,5e7,null],["gl",7,1e8,null],["gl",6,2.5e8,null],["bp",6,5e8,null]];
 const trShopIt=(k,v)=>TRSHOP.find(x=>x[0]===k&&x[1]===v)||null,trOwn=(k,v)=>!!(S.trOwn&&S.trOwn[k+":"+v]);
@@ -463,7 +463,7 @@ function trURL(L,view,pose){
   if(hat===29){const hy0=HY-15.5,ring=(x,y)=>{const d=((x-cx)/9.5)**2+((y-hy0)/3)**2;return d<=1&&d>=.3};shp(ring,cx-11,hy0-4,cx+11,hy0+4,gd,{tag:"hat"})}
   if(hat===30){map(Math.round(cx-8),HY-15,["y...y...y...y...y","yy..yy.yyy.yy..yy","yyy.yyyyyyyyy.yyy","yyyyyyyyyyyyyyyyy","yyyyyyyyyyyyyyyyy","kkkkkkkkkkkkkkkkk"],{y:gd,k:gk});
     if(!back){ell(cx,HY-11,1.6,1.6,hac,{olc:tone(hac,4)});ell(cx-5,HY-11,1.2,1.2,ac,{olc:tone(ac,4)});ell(cx+5,HY-11,1.2,1.2,ac,{olc:tone(ac,4)})}for(const x of[-8,-4,0,4,8])put(cx+x,HY-16,gl2)}
-  // gorros de temporada (Tienda de ropa)
+  // gorros de temporada (Tienda de Evento)
   if(hat===31){const o="#f08a24";shp((x,y)=>((x-cx)/11.4)**2+((y-(HY-7))/7.6)**2<=1&&y<=HY-3,cx-12,HY-15,cx+12,HY-3,o,{tag:"hat",lx:.3});for(const dx of[-6,0,6])for(let y=HY-13;y<=HY-4;y++)if(gtag(Math.round(cx+dx*(1-(HY-8-y)**2/100)),y)==="hat")put(cx+dx*(1-(HY-8-y)**2/100),y,tone(o,2));rect(cx-1,HY-17,3,4,"#4a7a2a",{tag:"hat"});seg(cx+1,HY-16,cx+5,HY-18,1.6,1.2,"#6aa83a");
     if(!back){map(Math.round(cx-6),HY-10,["k.....k","kk...kk"],{k:"#3a1a0a"});map(Math.round(cx-3),HY-7,["k.k.k.k"],{k:"#3a1a0a"})}}
   if(hat===32){for(let i=0;i<=20;i++){const a=Math.PI*(1.08+i*.042);put(cx+Math.cos(a)*10.8,HY-2+Math.sin(a)*9.4,"#7a4a26");put(cx+Math.cos(a)*10.8,HY-1+Math.sin(a)*9.4,tone("#7a4a26",2))}
@@ -527,7 +527,7 @@ function trUI(){
   const cards=[];
   opts.forEach(o=>{if(used.has(o[0]))return;used.add(o[0]);
     if(Array.isArray(o[2])){const v=L[o[0]],cols=(TRGRP[o[0]]||[]).map(k=>TRO.find(x=>x[0]===k)).filter(Boolean);cols.forEach(c=>used.add(c[0]));
-      cards.push('<div class="tro"><div class="trh"><b>'+o[1]+'</b><span class="trn">'+(v+1)+' / '+o[2].length+'</span></div><div class="trsel"><button class="alt" data-tr="'+o[0]+'" data-d="-1" aria-label="Anterior">◀</button><b>'+o[2][v]+'</b><button class="alt" data-tr="'+o[0]+'" data-d="1" aria-label="Siguiente">▶</button></div>'+(trShopIt(o[0],v)?'<small class="trprs">🛍️ Prenda de la Tienda de ropa</small>':TRLOCK[o[0]]?'<small class="trprs">'+(trLk(o[0],v)?'🌟 Prenda de Prestigio '+trLk(o[0],v):'🌟 '+Object.values(TRLOCK[o[0]]).filter(l=>l<=(S.prs||0)).length+' / '+Object.keys(TRLOCK[o[0]]).length+' prendas de prestigio desbloqueadas')+'</small>':'')+cols.map(sw).join("")+'</div>')}
+      cards.push('<div class="tro"><div class="trh"><b>'+o[1]+'</b><span class="trn">'+(v+1)+' / '+o[2].length+'</span></div><div class="trsel"><button class="alt" data-tr="'+o[0]+'" data-d="-1" aria-label="Anterior">◀</button><b>'+o[2][v]+'</b><button class="alt" data-tr="'+o[0]+'" data-d="1" aria-label="Siguiente">▶</button></div>'+(trShopIt(o[0],v)?'<small class="trprs">🛍️ Prenda de la Tienda de Evento</small>':TRLOCK[o[0]]?'<small class="trprs">'+(trLk(o[0],v)?'🌟 Prenda de Prestigio '+trLk(o[0],v):'🌟 '+Object.values(TRLOCK[o[0]]).filter(l=>l<=(S.prs||0)).length+' / '+Object.keys(TRLOCK[o[0]]).length+' prendas de prestigio desbloqueadas')+'</small>':'')+cols.map(sw).join("")+'</div>')}
     else{const own=Object.keys(TRGRP).find(k=>TRGRP[k].includes(o[0])&&opts.some(x=>x[0]===k));if(own)return;cards.push('<div class="tro">'+sw(o)+'</div>')}});
   box.innerHTML='<div class="trtabs">'+TRTABS.map(t=>'<button class="'+(TRTAB===t[0]?"on":"")+'" data-trt="'+t[0]+'">'+t[1]+'</button>').join("")+'</div><div class="trgrid">'+cards.join("")+'</div>';
 }

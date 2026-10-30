@@ -175,25 +175,62 @@ setTimeout(sugReplyCheck,9000);setInterval(sugReplyCheck,10*60000);
 // ================= VENTANA DE COMBATE: se recuerda el modo elegido =================
 {const w=$("bigW"),f=$("bigF");if(w){const o=w.onclick;w.onclick=()=>{o();O.bigmode=bigMode==="win"?"win":"";saveO();try{$("bigopt").value=O.bigmode}catch(e){}}}
  if(f){const o=f.onclick;f.onclick=()=>{o();O.bigmode=bigMode==="full"?"full":"";saveO();try{$("bigopt").value=O.bigmode}catch(e){}}}}
-// ================= TIENDA DE ROPA: prendas de temporada (solo durante su evento) y de catálogo, con tickets =================
-nxPanel("trShopP","🛍️ Tienda de ropa","Ropa exclusiva para tu entrenador. La de temporada solo se vende mientras dura su evento, ¡no la dejes escapar! Lo que compras es tuyo para siempre, también al subir de prestigio.");
-{const g=HUB.find(x=>x.k==="trn");if(g&&!g.tabs.some(t=>t[0]==="trShopP"))g.tabs.splice(1,0,["trShopP","Tienda de ropa"]);HUBP.trShopP="trn";HUBR.trShopP=()=>trShopUI()}
+// ================= TIENDA DE EVENTO: ropa, fondos y marcos de tarjeta (de temporada solo durante su evento, y de catálogo), con tickets =================
+nxPanel("trShopP","🛍️ Tienda de Evento","Ropa para tu entrenador y fondos y marcos animados para tu tarjeta de perfil. Lo de temporada solo se vende mientras dura su evento, ¡no lo dejes escapar! Lo que compras es tuyo para siempre, también al subir de prestigio.");
+{const g=HUB.find(x=>x.k==="trn");if(g&&!g.tabs.some(t=>t[0]==="trShopP"))g.tabs.splice(1,0,["trShopP","Tienda de Evento"]);HUBP.trShopP="trn";HUBR.trShopP=()=>trShopUI()}
 const evDates=n=>{const e=EVENTS.find(x=>x.n===n);return e?e.a[1]+" "+MESES[e.a[0]-1]+" – "+e.b[1]+" "+MESES[e.b[0]-1]:""};
 function trShopCard(it,mode){const[k,v,pr,e]=it,o=TRO.find(x=>x[0]===k),L=myLook(),own=trOwn(k,v),on=L[k]===v,look=Object.assign({},L,{[k]:v});
   const btn=mode==="soon"?'<small class="mut">🔒 Vuelve en '+esc(e)+' ('+evDates(e)+')</small>':own?(on?'<span class="tshon">✅ Te la has puesto</span>':'<button data-tsw="'+k+':'+v+'">👕 Ponérmela</button>'):'<button class="red" data-tsb="'+k+':'+v+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button>';
   return '<div class="tshc'+(own?' own':'')+(mode==="soon"?' soon':'')+'"><div class="tshpv '+(k==="wr"||k==="bp"?"zm":"zt")+'">'+trImg(look,k==="bp"?"b":"f","i","idle")+'</div><b>'+esc(o[2][v])+'</b><small class="mut">'+esc(o[1])+(e?' · '+esc(e):'')+'</small>'+btn+'</div>'}
-function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),sec=(t,L,m)=>L.length?'<h3 class="shh">'+t+'</h3><div class="tshg">'+L.map(x=>trShopCard(x,m)).join("")+'</div>':"";
-  const cur=ev?TRSHOP.filter(x=>x[3]===ev.n):[],cat=TRSHOP.filter(x=>!x[3]),mine=TRSHOP.filter(x=>x[3]&&(!ev||x[3]!==ev.n)&&trOwn(x[0],x[1])),soon=TRSHOP.filter(x=>x[3]&&(!ev||x[3]!==ev.n)&&!trOwn(x[0],x[1]));
-  box.innerHTML='<div class="tshtk">🎟️ Tienes <b>'+fmt(S.t)+'</b></div>'+
-    (cur.length?sec(ev.n+' · ¡solo hasta el '+ev.b[1]+' '+MESES[ev.b[0]-1]+'!',cur,""):'<p class="mut">Ahora mismo no hay ningún evento de temporada. La próxima ropa de temporada aparecerá con el siguiente evento.</p>')+
-    sec("🛍️ Catálogo",cat,"")+sec("🎁 Tus prendas de temporada",mine,"")+sec("📅 Próximas prendas de temporada",soon,"soon");
+// ---- tarjeta de perfil: fondos y marcos animados ----
+const cbPat=(a,b,c)=>'url("data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><text x="4" y="24" font-size="18">'+a+'</text><text x="36" y="58" font-size="16">'+b+'</text></svg>')+'")';
+// [id, nombre, precio, evento, fondo CSS, animado]
+const CARD_BG=[["sun","Atardecer",3e7,null,"linear-gradient(160deg,#ffb36e,#ff6fa8 50%,#6a5acd)",0],
+  ["night","Noche estrellada",6e7,null,"radial-gradient(1.5px 1.5px at 10% 20%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 40% 70%,#fff 50%,transparent 51%),radial-gradient(2px 2px at 70% 30%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 85% 80%,#cfe8ff 50%,transparent 51%),linear-gradient(160deg,#0f1640,#2a1a5a)",1],
+  ["sea","Océano",6e7,null,"repeating-linear-gradient(120deg,rgba(255,255,255,.14) 0 12px,transparent 12px 40px),linear-gradient(180deg,#5fd0e6,#1d6fa8)",1],
+  ["poke","Lluvia de Poké Balls",1.5e8,null,cbPat("🔴","⚪")+",linear-gradient(160deg,#ff8a8a,#e63950)",1],
+  ["hw","Noche de Halloween",4e7,"🎃 Halloween",cbPat("🎃","👻")+",linear-gradient(160deg,#2a1340,#5a2a0a)",1],
+  ["xm","Nevada navideña",4e7,"🎄 Navidad",cbPat("❄️","🎁")+",linear-gradient(180deg,#1d3b6a,#3f86c0)",1],
+  ["vl","Lluvia de corazones",4e7,"💘 San Valentín",cbPat("💖","💌")+",linear-gradient(160deg,#ff9ec7,#c42a5e)",1],
+  ["sp","Pétalos de cerezo",4e7,"🌸 Primavera",cbPat("🌸","🌱")+",linear-gradient(160deg,#ffe0ec,#a8d84a)",1],
+  ["su","Día de playa",4e7,"☀️ Verano",cbPat("☀️","🌊")+",linear-gradient(180deg,#7fd6ff 55%,#ffe08a 56%)",1]];
+// [id, nombre, precio, evento]  (la animación va en la clase .fr-id)
+const CARD_FR=[["gold","Marco dorado",7.5e7,null],["rain","Marco arcoíris",1.5e8,null],["neon","Marco de neón",3e8,null],
+  ["hw","Marco fantasmal",5e7,"🎃 Halloween"],["xm","Marco de guirnalda",5e7,"🎄 Navidad"],["vl","Marco latido",5e7,"💘 San Valentín"],["sp","Marco floral",5e7,"🌸 Primavera"],["su","Marco de olas",5e7,"☀️ Verano"]];
+const cardIt=(t,id)=>(t==="bg"?CARD_BG:CARD_FR).find(x=>x[0]===id)||null;
+function cardGet(){const c=S.card||{};return{bg:c.bg&&trOwn("bg",c.bg)?c.bg:"",fr:c.fr&&trOwn("fr",c.fr)?c.fr:""}}
+// clase y estilo de una tarjeta (también para la de otros jugadores)
+function cardAttr(bg,fr){const b=cardIt("bg",bg),f=cardIt("fr",fr);return ' class="pcard'+(b&&b[5]?' cba':'')+(b?' cbg':'')+(f?' fr fr-'+f[0]:'')+'"'+(b?' style="background:'+b[4].replace(/"/g,"&quot;")+'"':'')}
+function cardMini(L,bg,fr,name){return '<div'+cardAttr(bg,fr)+'><div class="pcmini">'+trImg(L,"f","i")+'<b>'+esc(name)+'</b></div></div>'}
+function cardShopCard(t,it,mode){const[id,nm,pr,e]=it,own=trOwn(t,id),cur=cardGet(),on=cur[t]===id,c=Object.assign({},cur,{[t]:id});
+  const btn=mode==="soon"?'<small class="mut">🔒 Vuelve en '+esc(e)+' ('+evDates(e)+')</small>':own?(on?'<button class="alt" data-cbq="'+t+'">✖ Quitar</button>':'<button data-cbw="'+t+':'+id+'">🖼️ Usar</button>'):'<button class="red" data-cbb="'+t+':'+id+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button>';
+  return '<div class="tshc'+(own?' own':'')+(mode==="soon"?' soon':'')+'"><div class="tshcard">'+cardMini(myLook(),c.bg,c.fr,pvNick?pvClean(pvNick())||"Entrenador":"Entrenador")+'</div><b>'+esc(nm)+'</b><small class="mut">'+(t==="bg"?"Fondo de tarjeta":"Marco animado")+(e?' · '+esc(e):'')+'</small>'+btn+'</div>'}
+function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=ev?ev.n:null;
+  // todo lo de la tienda como [tipo, item]: ropa ("tr") y tarjeta ("bg"/"fr")
+  const all=[...TRSHOP.map(x=>["tr",x,x[3]]),...CARD_BG.map(x=>["bg",x,x[3]]),...CARD_FR.map(x=>["fr",x,x[3]])],own=q=>q[0]==="tr"?trOwn(q[1][0],q[1][1]):trOwn(q[0],q[1][0]);
+  const card=(q,m)=>q[0]==="tr"?trShopCard(q[1],m):cardShopCard(q[0],q[1],m);
+  const sec=(t,L,m)=>L.length?'<h3 class="shh">'+t+'</h3><div class="tshg">'+L.map(q=>card(q,m)).join("")+'</div>':"";
+  const cur=all.filter(q=>en&&q[2]===en),cat=all.filter(q=>!q[2]),mine=all.filter(q=>q[2]&&q[2]!==en&&own(q)),soon=all.filter(q=>q[2]&&q[2]!==en&&!own(q));
+  const c=cardGet();
+  box.innerHTML='<div class="tshtop"><div class="tshcard big">'+cardMini(myLook(),c.bg,c.fr,pvNick?pvClean(pvNick())||"Entrenador":"Entrenador")+'</div><div><b>Tu tarjeta de entrenador</b><small class="mut">Así la ven los demás jugadores cuando abren tu perfil.</small><div class="tshtk">🎟️ Tienes <b>'+fmt(S.t)+'</b></div></div></div>'+
+    (cur.length?sec(ev.n+' · ¡solo hasta el '+ev.b[1]+' '+MESES[ev.b[0]-1]+'!',cur,""):'<p class="mut">Ahora mismo no hay ningún evento de temporada. Lo próximo aparecerá con el siguiente evento.</p>')+
+    sec("🛍️ Catálogo",cat,"")+sec("🎁 Tus artículos de temporada",mine,"")+sec("📅 Próximamente en otros eventos",soon,"soon");
 }
 document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
   const a=t.closest("[data-trshop]");if(a){e.preventDefault();snd("ui");hubOpen("trn","trShopP");return}
   const w=t.closest("#trShopPB [data-tsw]");if(w){const[k,v]=w.dataset.tsw.split(":");trSet(k,+v);snd("ui");trShopUI();toast("👕 ¡Te queda genial!");return}
+  const cq=t.closest("#trShopPB [data-cbq]");if(cq){S.card=Object.assign({},S.card,{[cq.dataset.cbq]:""});save();snd("ui");trShopUI();return}
+  const cw=t.closest("#trShopPB [data-cbw]");if(cw){const[k,id]=cw.dataset.cbw.split(":");if(!trOwn(k,id))return;S.card=Object.assign({},S.card,{[k]:id});save();snd("ui");trShopUI();toast("🖼️ ¡Tarjeta actualizada!");return}
+  const cb=t.closest("#trShopPB [data-cbb]");if(cb){const[k,id]=cb.dataset.cbb.split(":"),it=cardIt(k,id),ev=evNow();if(!it||trOwn(k,id))return;
+    if(it[3]&&(!ev||ev.n!==it[3])){toast("Esto solo se vende durante "+it[3]+".");return}
+    if(S.t<it[2]){toast("Te faltan "+fmt(it[2]-S.t)+" 🎟️.");return}
+    if(!confirm("¿Comprar «"+it[1]+"» por "+fmt(it[2])+" 🎟️?"))return;
+    S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn[k+":"+id]=1;S.card=Object.assign({},S.card,{[k]:id});save();render();snd("lvl");toast("🛍️ ¡Has comprado «"+it[1]+"» en la Tienda de Evento! Ya está en tu tarjeta.");trShopUI();return}
   const b=t.closest("#trShopPB [data-tsb]");if(b){const[k,v0]=b.dataset.tsb.split(":"),v=+v0,it=trShopIt(k,v),ev=evNow();if(!it||trOwn(k,v))return;
     if(it[3]&&(!ev||ev.n!==it[3])){toast("Esta prenda solo se vende durante "+it[3]+".");return}
     if(S.t<it[2]){toast("Te faltan "+fmt(it[2]-S.t)+" 🎟️.");return}
     const o=TRO.find(x=>x[0]===k);if(!confirm("¿Comprar «"+o[2][v]+"» por "+fmt(it[2])+" 🎟️?"))return;
-    S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn[k+":"+v]=1;trSet(k,v);save();render();snd("lvl");toast("🛍️ ¡Has comprado «"+o[2][v]+"»! Ya la llevas puesta.");trShopUI()}
+    S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn[k+":"+v]=1;trSet(k,v);save();render();snd("lvl");toast("🛍️ ¡Has comprado «"+o[2][v]+"» en la Tienda de Evento! Ya la llevas puesta.");trShopUI()}
 });
+// la tarjeta se publica con el perfil
+{const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;return d}}

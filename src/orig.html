@@ -479,7 +479,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
   <div class="earn">
     
     <div><small>Regalo diario (sube cada día)</small><button id="daily">Reclamar +5.000 🎟️</button></div>
-    <div><small>Ticket automático cada 30 s: cada vez recibes más que el anterior. Solo se genera mientras la página está abierta y visible</small><b id="auto">…</b><div class="bar"><i id="bar"></i></div></div>
+    <div><small>Ticket automático cada 30 s: cada vez recibes 10 más que el anterior. Solo se genera mientras la página está abierta y visible</small><b id="auto">…</b><div class="bar"><i id="bar"></i></div></div>
   </div>
   <p class="rates" style="margin-top:10px">Si te sale un repetido, te devolvemos tickets: Común 0, Raro +1, Épico +2, Legendario +4.</p>
 </section>
@@ -806,7 +806,7 @@ function tick(){
     if(!window._sv||nw-window._sv>5000){window._sv=nw;save()}
   }
   const now=Date.now(),n=Math.floor((now-S.last)/TICK);
-  if(n>0){const a=S.ak||0;S.t+=(n*a+n*(n+1)/2+10*n)*PMUL();S.ak=a+n;S.last+=n*TICK;save()}
+  if(n>0){const a=S.ak||0;S.t+=(n*(a+11)+5*n*(n-1))*PMUL();S.ak=a+10*n;S.last+=n*TICK;save()}
   $("bar").style.width=Math.min(100,(now-S.last)/TICK*100)+"%";
   render();
 }

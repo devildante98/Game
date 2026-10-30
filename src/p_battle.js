@@ -259,12 +259,16 @@ function xpBar(){
 }
 function effTag(mv,foe){if(!foe||mv.cl===0||mv.typeless||mv.fixed||mv.flv||mv.half)return"";const e=eff(mv.t,foe.p[1]);return e>1?' · <b class="ef2">×2</b>':e<1?' · <b class="ef5">×½</b>':""}
 function mvBtn(mv,pp,mx,attr,foe){return '<button class="mvb" '+attr+(pp<=0?' disabled':'')+' style="--tc:'+(TC[mv.t]||"#999")+'" title="'+esc(mvDesc(mv))+'"><span>'+esc(mv.n)+'</span><small>'+EM[mv.t]+' '+TIPO[mv.t]+' · PP '+pp+'/'+mx+effTag(mv,foe)+'</small></button>'}
+// tarjeta de Pokémon para elegir a quién sacar (igual que en el selector de equipo: sprite animado, tipo, nivel y PS)
+function swCard(t,attr,dis,tag){const p=t.p,n=p[0],sh=!!(S.shiny&&S.shiny[n]>0),hp=Math.max(0,t.mh),k=t.mx?hp/t.mx:0,col=k>.5?"#3ecf8e":k>.2?"#ffd35c":"#e63950";
+  return '<button class="swc '+p[2]+(hp<=0?' ko':'')+(tag?' tg':'')+'" '+attr+(dis?' disabled':'')+'><span class="swspr">'+ico(p,64,false,sh)+'</span><span class="swt"><b>'+(sh?"✨ ":"")+esc(typeof nk==="function"?nk(n):n)+'</b><small>Nv'+t.l+' · '+(STAR[p[2]]||"")+'</small><small>'+EM[p[1]]+' '+TIPO[p[1]]+'</small><span class="swhp"><i style="width:'+(k*100).toFixed(1)+'%;background:'+col+'"></i></span><small>PS '+hp+'/'+t.mx+(t.sts&&STS[t.sts]?' · '+STS[t.sts][0]:'')+'</small></span>'+(tag?'<i class="swtag">'+tag+'</i>':'')+'</button>'}
+const swGrid=h=>'<div class="swgrid">'+h+'</div>';
 function setMenu(v){
   if(!B||B.mode!=="s")return;
   let h="";const sd=B.E.sd[0],m=beAct(sd),foe=beAct(B.E.sd[1]);
   if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">🏃 Huir</button>';
   else if(v==="bag")h=ITEMS.filter(it=>S.bag[it[0]]>0&&!it[7]&&!["cand","ppup","ppmax"].includes(it[0])).map(it=>'<button data-k="i:'+it[0]+'">'+it[1]+' ×'+S.bag[it[0]]+'</button>').join("")+'<button data-k="main">Atrás</button>';
-  else if(v==="team")h=sd.t.map((t,i)=>'<button data-k="s:'+i+'"'+(i===sd.ai||t.mh<=0?" disabled":"")+'>'+t.p[0]+' Nv'+t.l+' · PS '+Math.max(0,t.mh)+'/'+t.mx+(t.sts?" · "+STS[t.sts][0]:"")+(i===sd.ai?" (activo)":t.mh<=0?" (debilitado)":"")+'</button>').join("")+'<button data-k="main">Atrás</button>';
+  else if(v==="team")h=swGrid(sd.t.map((t,i)=>swCard(t,'data-k="s:'+i+'"',i===sd.ai||t.mh<=0,i===sd.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-k="main">Atrás</button>';
   else if(v==="tgt"){
     const it=ITEMS.find(i=>i[0]===B.item),pp=PPI[it[0]],L=sd.t.map((t,i)=>({t:t,i:i})).filter(x=>pp?x.t.pp.some((p,k)=>p<PPB(x.t.m[k].id)*(1+.2*ppUps(x.t.p[0],x.t.m[k].id))):it[5]?x.t.mh<=0:(x.t.mh>0&&x.t.mh<x.t.mx));
     h=(L.length?L.map(x=>'<button data-k="u:'+x.i+'">'+x.t.p[0]+(pp?' · '+x.t.m.map((mm,k)=>x.t.pp[k]+'/'+ppMax(x.t.p[0],mm.id)).join(" "):' · PS '+Math.max(0,x.t.mh)+'/'+x.t.mx)+'</button>').join(""):'<button disabled>Ninguno lo necesita</button>')+'<button data-k="b">Atrás</button>';
@@ -455,7 +459,7 @@ async function finish(res){
 async function askSwitch(i){
   const sd=B.E.sd[i],rest=sd.t.map((t,k)=>k).filter(k=>sd.t[k].mh>0&&k!==sd.ai);
   await say("Elige tu siguiente Pokémon:");
-  $("menu").innerHTML=rest.map(k=>'<button data-k="l:'+k+'">'+sd.t[k].p[0]+' Nv'+sd.t[k].l+' · PS '+sd.t[k].mh+'/'+sd.t[k].mx+(sd.t[k].sts?" · "+STS[sd.t[k].sts][0]:"")+'</button>').join("");
+  $("menu").innerHTML=swGrid(rest.map(k=>swCard(sd.t[k],'data-k="l:'+k+'"',false,"")).join(""));
   const id=await new Promise(r=>{B.choose=r});
   $("menu").innerHTML="";return "s"+id;
 }

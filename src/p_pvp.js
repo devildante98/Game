@@ -152,12 +152,12 @@ function pvMenu(){
   const alive=side.t.map((t,i)=>({t:t,i:i})).filter(x=>x.t.mh>0&&x.i!==side.ai);
   const claim=D.waitSince&&Date.now()-D.waitSince>90000?'<button data-pv="claim">Reclamar victoria (rival inactivo)</button>':"";
   if(swap){
-    if(side.need&&mine==null){box.textContent="Elige tu siguiente Pokémon:";m.innerHTML=side.t.map((t,i)=>t.mh>0?'<button data-pv="s'+i+'">'+esc(t.p[0])+' Nv'+t.l+' · PS '+t.mh+'/'+t.mx+'</button>':"").join("");return}
+    if(side.need&&mine==null){box.textContent="Elige tu siguiente Pokémon:";m.innerHTML=swGrid(side.t.map((t,i)=>t.mh>0?swCard(t,'data-pv="s'+i+'"',false,""):"").join(""));return}
     box.textContent="Esperando a que "+D.oppNick+" elija su siguiente Pokémon…";m.innerHTML=claim;return;
   }
   if(mine!=null){box.textContent="Esperando la elección de "+D.oppNick+"…";m.innerHTML=claim;return}
   const pm=beAct(side),foe=beAct(E.sd[1-me]);
-  if(D.sw){m.innerHTML=side.t.map((t,i)=>'<button data-pv="s'+i+'"'+(i===side.ai||t.mh<=0?" disabled":"")+'>'+esc(t.p[0])+' Nv'+t.l+' · PS '+Math.max(0,t.mh)+'/'+t.mx+(i===side.ai?" (activo)":t.mh<=0?" (debilitado)":"")+'</button>').join("")+'<button data-pv="back">Atrás</button>';return}
+  if(D.sw){m.innerHTML=swGrid(side.t.map((t,i)=>swCard(t,'data-pv="s'+i+'"',i===side.ai||t.mh<=0,i===side.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-pv="back">Atrás</button>';return}
   box.textContent="¿Qué hará "+pm.p[0]+"?";
   m.innerHTML=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-pv="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-pv="m'+i+'"',foe)).join(""))+'<button data-pv="d">🛡️ Defensa</button><button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-pv="sw"'+(alive.length?'':' disabled')+'>🔁 Equipo</button><button data-pv="ff">🏳️ Huir</button>';
 }
@@ -415,10 +415,10 @@ function dvMenu(req,acts){
   const foesAlive=dvFoes(me).filter(i=>!E.sd[i].out&&beAct(E.sd[i]).mh>0);
   if(!req.includes(me)){t=side.out?"Ya no te quedan Pokémon. Esperando a que termine el combate… ("+waitN.join(", ")+")":"Esperando a: "+waitN.join(", ")+"…";h=claimable?'<button data-dv="claim">Reclamar victoria (rivales inactivos)</button>':""}
   else if(r.hist[key]!=null){t="Esperando a: "+waitN.join(", ")+"…";h=claimable?'<button data-dv="claim">Reclamar victoria (rivales inactivos)</button>':""}
-  else if(side.need){t="Elige tu siguiente Pokémon:";h=side.t.map((x,i)=>x.mh>0?'<button data-dv="s'+i+'">'+esc(x.p[0])+' Nv'+x.l+' · PS '+x.mh+'/'+x.mx+'</button>':"").join("")}
+  else if(side.need){t="Elige tu siguiente Pokémon:";h=swGrid(side.t.map((x,i)=>x.mh>0?swCard(x,'data-dv="s'+i+'"',false,""):"").join(""))}
   else{
     const pm=beAct(side);
-    if(r.sub==="sw"){t="¿A qué Pokémon cambias?";h=side.t.map((x,i)=>'<button data-dv="s'+i+'"'+(i===side.ai||x.mh<=0?" disabled":"")+'>'+esc(x.p[0])+' Nv'+x.l+' · PS '+Math.max(0,x.mh)+'/'+x.mx+(i===side.ai?" (activo)":x.mh<=0?" (debilitado)":"")+'</button>').join("")+'<button data-dv="back">Atrás</button>'}
+    if(r.sub==="sw"){t="¿A qué Pokémon cambias?";h=swGrid(side.t.map((x,i)=>swCard(x,'data-dv="s'+i+'"',i===side.ai||x.mh<=0,i===side.ai?"En combate":x.mh<=0?"Debilitado":"")).join(""))+'<button data-dv="back">Atrás</button>'}
     else if(r.sub[0]==="t"){const mvk=r.sub.slice(1),mv=mvk==="st"?STRUG:pm.m[+mvk.slice(1)];t="¿A quién atacas con "+mv.n+"?";h=foesAlive.map(i=>{const q=beAct(E.sd[i]);return '<button data-dv="'+mvk+'t'+i+'">'+esc(q.p[0])+'<small>de '+esc(r.seats[i].n)+' · PS '+q.mh+'/'+q.mx+effTag(mv,q)+'</small></button>'}).join("")+'<button data-dv="back">Atrás</button>'}
     else{
       t="¿Qué hará "+pm.p[0]+"?";

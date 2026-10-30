@@ -81,7 +81,7 @@ button.red{background:var(--red);color:#fff}
 @media (prefers-reduced-motion:reduce){#fists{animation:none}}
 .grows{flex:1;min-width:230px;display:flex;flex-direction:column;gap:6px}
 .gr{background:linear-gradient(90deg,rgba(0,0,0,.2),transparent);border:1px solid var(--line);border-radius:10px;padding:4px 10px;display:flex;align-items:center;gap:10px;overflow:hidden}
-.gr b{font-size:.8rem;white-space:nowrap;min-width:140px}
+.gr b{font-size:.8rem;white-space:nowrap;min-width:140px;flex:1;overflow:hidden;text-overflow:ellipsis}.gr .gi{flex-wrap:nowrap}.gr .gn{font-weight:800;font-size:.95rem;min-width:44px;text-align:right}
 .gi{display:flex;flex-wrap:wrap;gap:2px;font-size:1.15rem}
 .gi i{font-style:normal;display:inline-block;animation:bob 1.6s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-5px)}}
@@ -786,8 +786,8 @@ function cpsUpd(){
 }
 function rows(){
   const k=S.g.join(",");if(k===window._gk)return;window._gk=k;
-  $("grows").innerHTML=G.map((g,i)=>{const n=S.g[i];if(!n)return"";const sh=Math.min(n,24);
-    return '<div class="gr"><b>'+GI[i]+' '+g[0]+' ×'+n+'</b><div class="gi">'+Array.from({length:sh},(_,j)=>'<i style="animation-delay:'+(j*0.11).toFixed(2)+'s">'+GI[i]+'</i>').join("")+(n>24?'<small>+'+(n-24)+'</small>':"")+'</div></div>'}).join("")||'<small style="color:var(--mute)">Aún no tienes ayudantes. Compra uno en la tienda.</small>';
+  $("grows").innerHTML=G.map((g,i)=>{const n=S.g[i];if(!n)return"";const sh=Math.min(n,3);
+    return '<div class="gr"><b>'+g[0]+'</b><div class="gi">'+Array.from({length:sh},(_,j)=>'<i style="animation-delay:'+(j*0.11).toFixed(2)+'s">'+GI[i]+'</i>').join("")+'</div><span class="gn">×'+fmt(n)+'</span></div>'}).join("")||'<small style="color:var(--mute)">Aún no tienes ayudantes. Compra uno en la tienda.</small>';
 }
 function fxTick(){
   const t=tps();if(document.hidden||!t)return;

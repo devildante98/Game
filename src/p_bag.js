@@ -1,3 +1,7 @@
+// icono de las MT: disco del color del tipo del movimiento
+{const _ii=itemIco;itemIco=function(id,sz){if(/^mt\d+$/.test(id)){const m=MVD[id.slice(2)],c=m?TC[m.t]||"#999":"#999";
+  return '<svg viewBox="0 0 64 64" width="'+sz+'" height="'+sz+'" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="'+c+'" stroke="#2b2b34" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"/><path d="M14 24A20 20 0 0 1 28 12" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".75"/><circle cx="32" cy="32" r="8" fill="#fff" stroke="#2b2b34" stroke-width="3"/></svg>'}
+  return _ii.apply(this,arguments)}}
 // ================= mochila fuera de combate =================
 let _bk="",useId=null,evoBusy=false;
 const mxOf=n=>stH(PM[n],lvd(n).l);
@@ -26,6 +30,7 @@ function useUI(msg){
   }
   else if(useId==="cand"){
     h+='<div class="sets-row"><input id="bcQ" placeholder="Buscar Pokémon..." aria-label="Buscar Pokémon"><select id="bcS" size="6" aria-label="Pokémon que recibirá el caramelo" style="width:100%"></select></div><div class="sets-row"><label>Cantidad <input id="bcN" type="number" min="1" value="1" style="width:80px"></label><button class="red" id="bcGo">Usar Caramelo Raro</button></div>'+(lvCap()<100?'<small class="mut">🔒 Límite de nivel actual: Nv'+lvCap()+'. '+esc(capWhy())+'</small>':'');
+  }else if(it[7]==="mt"){const m=MVD[useId.slice(2)];h+='<div class="mtinfo"><b>'+EM[m.t]+' '+esc(m.n)+'</b><small class="mut">'+esc(mvDesc(m))+'</small></div><div class="sets-row"><input id="bmQ" placeholder="Buscar entre tus Pokémon compatibles..." aria-label="Buscar Pokémon"></div><div id="bmL" class="mtl"></div>'
   }else if(PPI[useId]||useId==="ppup"||useId==="ppmax"){
     const one=useId==="ppup"||useId==="ppmax"||PPI[useId].one;
     h+='<div class="sets-row"><input id="bpQ" placeholder="Buscar Pokémon..." aria-label="Buscar Pokémon"><select id="bpS" size="6" aria-label="Pokémon" style="width:100%"></select></div>'+(one?'<div class="sets-row"><select id="bpM" aria-label="Movimiento" style="width:100%"></select></div>':'')+'<div class="sets-row"><button class="red" id="bpGo">Usar '+it[1]+'</button></div>';
@@ -37,6 +42,7 @@ function useUI(msg){
   q.innerHTML=h;
   if(useId==="cand"){candList();$("bcQ").oninput=candList}
   if(it[7]==="hold"&&$("bhQ")){$("bhQ").oninput=()=>holdList(useId)}
+  if($("bmL")){mtList();$("bmQ").oninput=mtList}
   if($("bpS")){ppList();$("bpQ").oninput=ppList;$("bpS").onchange=ppMoves}
   _bk="";bagUI();
 }
@@ -93,3 +99,20 @@ $("buse").addEventListener("click",e=>{
     useUI(n+" sube de Nv"+l0+" a Nv"+d.l+"."+(pend>0?" Puede aprender "+pend+" movimiento(s) nuevo(s): se le ofrecerán al llevarlo a combate.":"")+(evoLvReady(n).length?" ¡Ya puede evolucionar! Míralo arriba en «Pueden evolucionar».":""));
   }
 });
+
+// ---- enseñar una MT desde la Mochila ----
+function mtList(){const L=$("bmL");if(!L||!useId||!/^mt/.test(useId))return;const mid=useId.slice(2),q=nrm(($("bmQ").value||"").trim());
+  const own=P.filter(p=>S.owned[p[0]]>0&&mtOk(p[0],mid)&&(nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
+  L.innerHTML=own.length?own.slice(0,60).map(p=>{const n=p[0],ids=moveIds(n),knows=ids.includes(mid);
+    return '<div class="mtpk'+(knows?' knows':'')+'"><div class="mtpkh">'+ico(p,44)+'<div><b>'+esc(nk(n))+(S.team.includes(n)?' ⭐':'')+'</b><small class="mut">Nv'+lvd(n).l+' · '+tyTxt(p)+'</small></div></div>'+
+      (knows?'<small class="mut">✅ Ya conoce este movimiento.</small>':'<div class="mtmv">'+(ids.length<4?'<button class="red mini" data-mtl="'+esc(n)+'" data-mtk="-1">➕ Aprenderlo (hueco libre)</button>':'<small class="mut">Elige qué movimiento olvida:</small>')+
+      ids.map((x,k)=>{const o=MVD[x];return o?'<button class="alt mini mtfor" data-mtl="'+esc(n)+'" data-mtk="'+k+'" style="--tc:'+(TC[o.t]||"#999")+'">🔁 Olvidar '+esc(o.n)+'</button>':''}).join("")+'</div>')+'</div>'}).join("")+(own.length>60?'<small class="mut">Hay más: usa el buscador.</small>':''):
+    '<small class="mut">Ninguno de tus Pokémon puede aprender esta MT'+(q?' con ese nombre':'')+'.</small>'}
+$("buse").addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-mtl]");if(!b||!useId||!/^mt/.test(useId))return;
+  if(fcd){toast("Termina el combate antes de enseñar movimientos.");return}
+  const n=b.dataset.mtl,k=+b.dataset.mtk,mid=useId.slice(2),m=MVD[mid];if(!m||!(S.bag[useId]>0)||!mtOk(n,mid))return;
+  const ids=moveIds(n).slice();if(ids.includes(mid))return;
+  if(k>=0&&!confirm("¿"+nk(n)+" olvidará "+MVD[ids[k]].n+" para aprender "+m.n+"?"))return;
+  if(k<0)ids.push(mid);else{const old=ids[k];ids[k]=mid;if(S.pp&&S.pp[n])delete S.pp[n][old]}
+  S.mv[n]=ids;S.bag[useId]=Math.max(0,(S.bag[useId]|0)-1);save();snd("lvl");toast("💿 ¡"+nk(n)+" ha aprendido "+m.n+"!");
+  _bk="";useUI("");render()});

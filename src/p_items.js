@@ -23,3 +23,14 @@ function natOf(n){S.nat=S.nat||{};if(S.nat[n]==null){if(!(S.owned&&S.owned[n]>0)
 const natTxt=i=>{const N=NAT[i]||NAT[0];return N[1]?"+10% "+NSTAT[N[1]]+" · −10% "+NSTAT[N[2]]:"Neutra: no cambia ninguna estadística"};
 const heldOf=n=>{const h=S.held&&S.held[n];return h&&HOLDK[h]?h:""};
 function monX(m,nt,it){const N=NAT[nt]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1;m.nt=nt|0;m.ma*=f("atk");m.nd=f("def");m.ns=f("spe");m.it=it||"";return m}
+
+// ================= MT: discos que enseñan un movimiento fuera de combate (un solo uso). it[7]="mt" =================
+// compatibilidad oficial (aprendizaje por MT o por nivel en cualquier juego, PokeAPI): un bit por Pokémon, en el orden de P
+const MTD=__MT__;
+const MT_PIDX={};P.forEach((p,i)=>{MT_PIDX[p[0]]=i});
+const MT_BITS={};Object.keys(MTD.c).forEach(k=>{MT_BITS[k]=atob(MTD.c[k])});
+function mtOk(n,mid){const p=PM[n];if(!p)return false;mid=String(mid);const i=MT_PIDX[n],b=MT_BITS[mid];
+  if(b!=null&&MTD.n===P.length&&i!=null)return !!(b.charCodeAt(i>>3)&(1<<(i&7)));const m=MVD[mid];return !!m&&(stabP(m.t,p)||m.t==="normal")}
+const mtPrice=m=>m.cl===0?8e5:(m.pw||0)>=100?3e6:(m.pw||0)>=80?1.5e6:6e5;
+const MT_LIST=Object.keys(MTD.c).map(k=>MVD[k]).filter(Boolean).sort((a,b)=>a.t.localeCompare(b.t)||(b.pw||0)-(a.pw||0));
+MT_LIST.forEach(m=>ITEMS.push(["mt"+m.id,"MT "+m.n,mtPrice(m),0,0,0,"Enseña "+m.n+" a un Pokémon compatible (un solo uso). "+mvDesc(m),"mt"]));

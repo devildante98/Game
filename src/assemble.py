@@ -11,7 +11,7 @@ parts += [rd('p_data.js')]
 parts += seg(696, 903)
 parts += [rd('p_moves.js').replace('__T2__', open(W + 'p_t2.json', encoding='utf-8').read())]
 parts += seg(933, 940)
-parts += [rd('p_items.js')]
+parts += [rd('p_items.js').replace('__MT__', open(W + 'p_mt.json', encoding='utf-8').read())]
 parts += seg(941, 1076)
 parts += [rd('p_fx.js'), rd('p_fx2.js'), rd('p_battle.js')]
 parts += seg(1487, 1513)
@@ -270,7 +270,7 @@ rep('const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:
 rep('''if(typeof B!=="undefined"&&B&&B.op&&B.me)h+='<h5>Este combate</h5>'+row("Rival:",B.op[1])+row("Tu "+B.me[0]+":",B.me[1]);''',
     '''if(typeof B!=="undefined"&&B&&B.E){const sn=B.snap||beSnap(B.E),mi=B.me||0,mp=snapMon(sn,mi).p;h+='<h5>Este combate</h5>'+beFoes(B.E,mi).map(j=>row("Rival:",snapMon(sn,j).p[1])).join("")+row("Tu "+mp[0]+":",mp[1])}''')
 # tienda de objetos con cabeceras
-rep('''$("bag").innerHTML=ITEMS.map((it,i)=>'<div class="row">''', '''$("bag").innerHTML=ITEMS.map((it,i)=>(i===0?'<h3 class="shh">💊 Curación, Pokéballs y PP</h3>':it[7]==="evo"&&ITEMS[i-1][7]!=="evo"?'<h3 class="shh">🧬 Objetos evolutivos</h3>':'')+'<div class="row">''')
+rep('''$("bag").innerHTML=ITEMS.map((it,i)=>'<div class="row">''', '''$("bag").innerHTML=ITEMS.map((it,i)=>(i===0?'<h3 class="shh">💊 Curación, Pokéballs y PP</h3>':it[7]==="evo"&&ITEMS[i-1][7]!=="evo"?'<h3 class="shh">🧬 Objetos evolutivos</h3>':'')+'<div class="row'+(it[7]==="mt"?' mtrow':'')+'">''')
 # iconos de objetos evolutivos (sprites originales de PokeAPI)
 rep('function itemIco(id,s){', 'function itemIco(id,s){\n  if(GD.EI[id])return \'<img class="pk" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/\'+id+\'.png" width="\'+s+\'" height="\'+s+\'" alt="" loading="lazy" onerror="this.outerHTML=\\\'<span style=&quot;font-size:\'+Math.round(s*.6)+\'px&quot;>💎</span>\\\'">\';')
 # logros: registrados en la Pokedex cuentan; evoluciones
@@ -294,6 +294,10 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-30h",at:"2026-10-30T23:00",t:"💿 Tienda de MT",l:[
+"💿 Nueva Tienda de MT (Mochila): 79 MT para enseñar movimientos como Terremoto, Rayo Hielo, Bola Sombra o Danza Dragón.",
+"🎒 Se usan fuera de combate desde la Mochila: eliges el Pokémon y qué movimiento olvida.",
+"✅ Cada Pokémon solo aprende las MT que aprende en los juegos originales."]},
 {v:"2026-10-30g",at:"2026-10-30T22:00",t:"🏷️ Títulos en la Tienda de Evento",l:[
 "🏷️ 30 títulos nuevos para tu vitrina y tu perfil en la Tienda de Evento: 12 de catálogo todo el año y otros propios de cada temporada.",
 "🎃 Títulos de Halloween solo hasta el 2 de noviembre: Rey de las calabazas, Alma en pena, Señor de la noche y Tejedor de sustos."]},

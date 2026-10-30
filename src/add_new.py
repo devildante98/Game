@@ -466,6 +466,14 @@ body:has(#mgM:not([hidden]) .rdw) #chw{z-index:99}
 @media (prefers-reduced-motion:reduce){.pcard,.pcard::after{animation:none!important}}
 body.calm .pcard,body.calm .pcard::after{animation:none!important}
 .mycbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.mycwrap{max-width:640px}
+.mtrow{display:none!important}
+.mttop{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.mttop input#mtQ{flex:1;min-width:160px;font:inherit;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}.mtmine{display:flex;gap:6px;align-items:center;font-size:.85rem}
+.mtty{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}.mtty button{padding:5px 10px;font-size:.8rem;border-radius:999px;background:var(--bg);color:var(--ink);border:1.5px solid var(--line);box-shadow:none}.mtty button.on{background:var(--tc,#13a37f);border-color:var(--tc,#13a37f);color:#fff}
+.mtg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.mtc{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:16px;background:var(--bg);border:2px solid color-mix(in srgb,var(--tc) 45%,var(--line));border-left-width:6px}.mtch{display:flex;gap:10px;align-items:center}.mtch small{display:block;color:var(--mute);font-size:.75rem}.mtd{font-size:.75rem;flex:1}.mtcp{font-size:.78rem}.mtc button{padding:7px 10px;font-size:.85rem}
+.mtinfo{display:flex;flex-direction:column;gap:2px;margin:4px 0 8px}.mtl{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto}
+.mtpk{padding:8px 10px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}.mtpk.knows{opacity:.6}.mtpkh{display:flex;gap:8px;align-items:center}.mtpkh small{display:block}
+.mtmv{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}.mtmv .mtfor{border-left:4px solid var(--tc)}
 .tshtit{width:100%;min-height:72px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,color-mix(in srgb,#c42a5e 12%,var(--panel)),var(--bg));padding:8px;box-sizing:border-box}.tshtit span{font-weight:800;color:#c42a5e;font-size:.95rem;text-align:center}
 .tshtk{display:inline-block;padding:6px 14px;border-radius:999px;border:2px solid var(--yel);background:var(--panel);font-weight:700;margin-bottom:4px}
 .tshg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}

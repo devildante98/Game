@@ -253,3 +253,25 @@ async function myCardUI(){const box=$("myCardPB");if(!box)return;
   box.innerHTML='<div class="mycbar"><button class="red" data-mycs>🛍️ Personalizar en la Tienda de Evento</button><button class="alt" data-mycv>🧑 Cambiar mi entrenador</button></div><div class="mycwrap" id="myCardV"></div>'+(typeof nickOk==="function"&&nickOk()&&window.FB?'':'<small class="mut">Para que los demás puedan ver tu perfil necesitas una cuenta iniciada y un apodo registrado (en PVP online).</small>');
   const me=window.FB&&window.FB.uid?window.FB.uid():"me";await openProf(me,myCardData(),$("myCardV"))}
 document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;if(t.closest("[data-mycs]")){snd("ui");hubOpen("trn","trShopP")}else if(t.closest("[data-mycv]")){snd("ui");hubOpen("trn","trP")}else if(t.closest("[data-myc]")){e.preventDefault();snd("ui");hubOpen("trn","myCardP")}});
+// ================= TIENDA DE MT: compra discos que enseñan movimientos fuera de combate =================
+nxPanel("mtP","💿 Tienda de MT","Las MT enseñan un movimiento a un Pokémon fuera de combate. Cada Pokémon solo puede aprender las MT que aprende en los juegos originales. Se usan desde la Mochila (un solo uso).");
+{const g=HUB.find(x=>x.k==="bag");if(g&&!g.tabs.some(t=>t[0]==="mtP")){const i=g.tabs.findIndex(t=>t[0]==="bagP");g.tabs.splice(i+1,0,["mtP","Tienda de MT"])}HUBP.mtP="bag";HUBR.mtP=()=>mtShopUI()}
+let MTF={t:"",q:"",mine:false};
+function mtShopUI(){const box=$("mtPB");if(!box)return;const own=P.filter(p=>S.owned[p[0]]>0),types=[...new Set(MT_LIST.map(m=>m.t))];
+  const q=nrm(MTF.q||"");const L=MT_LIST.filter(m=>(!MTF.t||m.t===MTF.t)&&(!q||nrm(m.n).includes(q))&&(!MTF.mine||own.some(p=>mtOk(p[0],m.id))));
+  let h='<div class="mttop"><div class="tshtk">🎟️ Tienes <b>'+fmt(S.t)+'</b></div><input id="mtQ" placeholder="Buscar MT..." value="'+esc(MTF.q||"")+'" aria-label="Buscar MT"><label class="mtmine"><input type="checkbox" id="mtMine"'+(MTF.mine?' checked':'')+'> Solo las que puede aprender alguno de mis Pokémon</label></div>'+
+    '<div class="mtty"><button class="'+(!MTF.t?'on':'')+'" data-mtt="">Todas</button>'+types.map(t=>'<button class="'+(MTF.t===t?'on':'')+'" data-mtt="'+t+'" style="--tc:'+TC[t]+'">'+EM[t]+' '+TIPO[t]+'</button>').join("")+'</div>';
+  let last="";h+=L.length?'<div class="mtg">'+L.map(m=>{const id="mt"+m.id,pr=mtPrice(m),n=S.bag[id]|0,cnt=own.filter(p=>mtOk(p[0],m.id)).length,hd=m.t!==last?'</div><h3 class="shh">'+EM[m.t]+' '+TIPO[m.t]+'</h3><div class="mtg">':'';last=m.t;
+    return hd+'<div class="mtc" style="--tc:'+TC[m.t]+'"><div class="mtch">'+itemIco(id,42)+'<div><b>MT '+esc(m.n)+'</b><small>'+EM[m.t]+' '+TIPO[m.t]+' · '+(m.cl===0?'Estado':m.cl===1?'Físico':'Especial')+'</small></div></div>'+
+      '<small class="mut mtd">'+esc(mvDesc(m))+'</small><small class="mtcp">'+(cnt?'✅ La pueden aprender <b>'+cnt+'</b> de tus Pokémon':'⚪ Ninguno de tus Pokémon la aprende')+(n?' · Tienes ×'+n:'')+'</small>'+
+      '<button class="red" data-mtb="'+id+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button></div>'}).join("")+'</div>':'<p class="mut">No hay MT con esos filtros.</p>';
+  h=h.replace('<div class="mtg"></div>','');
+  box.innerHTML=h+'<small class="mut">💡 Después de comprarla, ve a la <a href="#" data-mtbag>Mochila</a>, pulsa «Usar» en la MT y elige qué Pokémon la aprende y qué movimiento olvida.</small>';
+  const qi=$("mtQ");if(qi){qi.oninput=()=>{MTF.q=qi.value;const p=qi.selectionStart;mtShopUI();const n=$("mtQ");n.focus();try{n.setSelectionRange(p,p)}catch(e){}}}
+  const mm=$("mtMine");if(mm)mm.onchange=()=>{MTF.mine=mm.checked;mtShopUI()};
+}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
+  const ty=t.closest("#mtPB [data-mtt]");if(ty){MTF.t=ty.dataset.mtt;snd("ui");mtShopUI();return}
+  const bg=t.closest("#mtPB [data-mtbag]");if(bg){e.preventDefault();hubOpen("bag","bagU");return}
+  const b=t.closest("#mtPB [data-mtb]");if(b){const id=b.dataset.mtb,m=MVD[id.slice(2)],pr=mtPrice(m);if(S.t<pr){toast("Te faltan "+fmt(pr-S.t)+" 🎟️.");return}
+    S.t-=pr;S.bag[id]=(S.bag[id]|0)+1;qEv("buy",1);save();render();snd("lvl");toast("💿 Has comprado la MT "+m.n+". Úsala desde la Mochila.");mtShopUI()}});

@@ -190,7 +190,7 @@ function setInit(){
   add(kP,[byId("clInfo"),par("clNow"),par("clDel"),par("clExp"),byId("clImpOk"),byId("clFile"),byId("clCloud"),byId("clMsg")]);
   // acerca de
   const bP=mk("about","Acerca de");
-  bP.insertAdjacentHTML("beforeend",'<div class="setabout"><b>Poke Gacha Online</b><small>Juego de fans hecho con cariño. Colecciona, combate y comercia con jugadores de todo el mundo.</small></div><div class="setlinks"><button type="button" class="setbtn" data-sa="news">📰 Novedades</button><button type="button" class="setbtn" data-sa="welc">❓ Cómo se juega</button><button type="button" class="setbtn" data-sa="sug">💡 Enviar una sugerencia</button><button type="button" class="setbtn" data-sa="sup">💖 Apoyar el juego</button></div><small class="setnote">Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company. Sprites de PokeAPI y Pokémon Showdown. Este juego no es oficial ni tiene relación con ellas.</small>');
+  bP.insertAdjacentHTML("beforeend",'<div class="setabout"><b>Poke Gacha Online</b><small>Juego de fans hecho con cariño. Colecciona, combate y comercia con jugadores de todo el mundo.</small></div><div class="setlinks"><button type="button" class="setbtn" data-sa="news">📰 Novedades</button><button type="button" class="setbtn" data-sa="welc">❓ Cómo se juega</button><button type="button" class="setbtn" data-sa="sug">💡 Enviar una sugerencia</button><button type="button" class="setbtn" data-sa="sup">💖 Apoyar el juego</button><button type="button" class="setbtn" data-sa="priv">🔒 Política de privacidad</button></div><small class="setnote">Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company. Sprites de PokeAPI y Pokémon Showdown. Este juego no es oficial ni tiene relación con ellas.</small>');
   // montaje
   const w=document.createElement("div");w.className="setw";w.setAttribute("role","dialog");w.setAttribute("aria-label","Ajustes");
   w.innerHTML='<div class="seth"><h2>Ajustes</h2><button type="button" class="setx" id="setX">Cerrar</button></div><div class="settabs">'+SETT.map(t=>'<button type="button" data-st="'+t[0]+'">'+t[1]+'</button>').join("")+'</div><div class="setbody"></div>';
@@ -202,7 +202,7 @@ function setInit(){
   applyO();setTab(SETTAB);
   op.addEventListener("click",e=>{const t=e.target;if(t===op||t.closest("#setX")){op.hidden=true;return}
     const st=t.closest(".settabs [data-st]");if(st){snd("ui");setTab(st.dataset.st);return}
-    const sa=t.closest("[data-sa]");if(sa){op.hidden=true;const a=sa.dataset.sa;if(a==="news")newsShow(true);else if(a==="welc")welcShow();else if(a==="sug")hubOpen("mas","sugP");else if(a==="sup")hubOpen("mas","supP")}});
+    const sa=t.closest("[data-sa]");if(sa){op.hidden=true;const a=sa.dataset.sa;if(a==="news")newsShow(true);else if(a==="welc")welcShow();else if(a==="sug")hubOpen("mas","sugP");else if(a==="sup")hubOpen("mas","supP");else if(a==="priv")privShow()}});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!op.hidden)op.hidden=true});
 }
 const _applyOBase=applyO;
@@ -296,3 +296,25 @@ function icoHDErr(el){
 }
 // el fondo decorativo sigue con los sprites clásicos (son muchos y pequeños)
 {const _bgB=bgBuild;bgBuild=function(){window._noHD=1;try{_bgB()}finally{window._noHD=0}}}
+
+// ---- política de privacidad ----
+const PRIV=[
+  ["💚 Gratis y sin ánimo de lucro","Poke Gacha Online es un juego de fans <b>gratuito y sin ánimo de lucro</b>. <b>No tiene anuncios, ni compras dentro del juego, ni ningún tipo de cobro</b>: todo se consigue jugando. Tus datos no se venden ni se ceden a nadie."],
+  ["📋 Qué datos se guardan",'<ul><li><b>Cuenta</b>: tu nombre de usuario o correo, o tu cuenta de Google si entras con ella. La contraseña la gestiona Firebase y nadie más puede verla.</li><li><b>Partida</b>: tu progreso (Pokémon, objetos, tickets, logros, ajustes…).</li><li><b>Perfil público</b>: apodo, tarjeta de entrenador, equipo, vitrina y puntuaciones de los rankings.</li><li><b>Funciones online</b>: mensajes del chat, mensajes privados, amigos, gremios, intercambios, mercado, regalos, incursiones, sugerencias y denuncias.</li></ul>Si juegas <b>sin cuenta</b>, la partida se guarda solo en tu navegador y no se envía a ningún sitio.'],
+  ["🎯 Para qué se usan","Solo para que el juego funcione: guardar tu partida en la nube, mostrar rankings y perfiles, permitir las funciones online y moderar el chat para que sea un sitio seguro."],
+  ["👀 Qué ven otros jugadores","Tu apodo, tu tarjeta de entrenador (equipo, vitrina, título, estadísticas), tus puntuaciones en los rankings y los mensajes que escribas en los chats. Tu correo y tu contraseña <b>nunca</b> se muestran."],
+  ["🔧 Servicios que utiliza el juego",'<ul><li><b>Google Firebase</b>: inicio de sesión y base de datos.</li><li><b>GitHub Pages</b>: aloja la página del juego.</li><li><b>PokeAPI, Pokémon Showdown, jsDelivr y Google Fonts</b>: imágenes, datos y tipografías.</li></ul>Estos servicios pueden registrar datos técnicos (como la dirección IP) según sus propias políticas de privacidad. El juego <b>no usa herramientas de analítica, publicidad ni rastreo</b>.'],
+  ["🍪 Almacenamiento en tu dispositivo","El juego guarda tu partida y tus ajustes en el almacenamiento local del navegador. No se usan cookies publicitarias ni de seguimiento."],
+  ["🗑️ Tus derechos","Puedes pedir ver, corregir o borrar tus datos enviando una <b>sugerencia</b> desde el juego (Más → Sugerencias). La copia de la nube también se puede borrar en Ajustes → Cuenta, y la partida local desaparece al borrar los datos del navegador."],
+  ["🧒 Menores","Si eres menor de 14 años, pide permiso a tu padre, madre o tutor antes de crear una cuenta o usar el chat."],
+  ["™️ Marcas","Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company. Este juego no es oficial ni tiene relación con ellas."],
+  ["📝 Cambios","Si esta política cambia, se avisará en las Novedades del juego. Última actualización: 30 de octubre de 2026."]];
+function privShow(){
+  let m=$("privM");
+  if(!m){m=document.createElement("div");m.id="privM";m.hidden=true;m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");m.setAttribute("aria-label","Política de privacidad");
+    m.innerHTML='<div class="jbox"><h2>🔒 Política de privacidad</h2>'+PRIV.map(x=>'<h3>'+x[0]+'</h3><div class="privt">'+x[1]+'</div>').join("")+'<div class="jrow"><button class="red" id="privOk">Entendido</button></div></div>';
+    document.body.appendChild(m);
+    m.addEventListener("click",e=>{if(e.target===m||e.target.closest("#privOk"))m.hidden=true});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!m.hidden)m.hidden=true})}
+  m.hidden=false;m.querySelector(".jbox").scrollTop=0;try{$("privOk").focus({preventScroll:true})}catch(e){}
+}

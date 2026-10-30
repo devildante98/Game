@@ -534,3 +534,4 @@ body.calm .pcard,body.calm .pcard::after{animation:none!important}
 #tutRe{margin-left:6px}body.calm #tutSpot{animation:none}
 body.calm .p1 .tpm,body.calm .p1 .tpm:before,body.calm .tourrays,body.calm .tpsh,body.calm .tourc,body.calm .rucoin span,body.calm #mgBan,body.calm .mgbi,body.calm .mgbig{animation:none!important}
 body.calm .dcheart,body.calm .egg.wob,body.calm .gfb span,body.calm .gfbox,body.calm .hofb,body.calm .twnext.boss,body.calm .safspr{animation:none!important}''')
+rep('#welc,#newsM{','#privM .jbox{max-height:calc(100vh - 32px);overflow:auto;width:min(680px,calc(100vw - 24px));max-width:none;box-sizing:border-box;text-align:left}\n#privM h2{text-align:center}\n#privM h3{margin:14px 0 4px;font-size:1rem}\n#privM .privt{font-size:.9rem;line-height:1.45;color:var(--ink)}\n#privM .privt ul{margin:4px 0;padding-left:20px}\n#privM .privt li{margin:2px 0}\n#privM[hidden]{display:none}\n#privM{z-index:140!important}\n#welc,#newsM,#privM{')

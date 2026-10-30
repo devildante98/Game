@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793355290">
+<meta name="game-build" content="1793357679">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <style>
@@ -5293,7 +5293,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793355290";
+const GAME_B="1793357679";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7428,9 +7428,9 @@ setTimeout(()=>{try{supComp()}catch(e){console.error(e)}},1800);
 // y dos mejoras nuevas en la tienda
 // =====================================================================================
 // ---------- dos mejoras nuevas en la tienda ----------
-G.push(["Estadio Pokémon",400000,900],["Laboratorio del Profesor",6000000,4000]);GI.push("🏟️","🔬");
-// las dos últimas mejoras suben de precio más rápido (×1,18 y ×1,20)
-const GGR=[1.15,1.15,1.15,1.15,1.15,1.18,1.20];
+G.push(["Estadio Pokémon",400000,250],["Laboratorio del Profesor",6000000,1000]);GI.push("🏟️","🔬");
+// las dos últimas mejoras suben de precio más rápido (×1,18 y ×2)
+const GGR=[1.15,1.15,1.15,1.15,1.15,1.18,2];
 gc=i=>Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,S.g[i]||0));
 function gPad(){S.g=S.g||[];while(S.g.length<G.length)S.g.push(0)}
 gPad();{const _r=render;render=function(){gPad();if(!$("bg"+(G.length-1))&&$("shop"))try{buildShop()}catch(e){}return _r.apply(this,arguments)}}
@@ -7482,6 +7482,10 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 // ---------- orden alfabético en la Pokédex ----------
 {const fo=$("fo");if(fo&&!fo.querySelector('option[value="az"]'))fo.insertAdjacentHTML("beforeend",'<option value="az">Alfabético (A-Z)</option><option value="za">Alfabético (Z-A)</option>')}
 {const _sd=sortDex;sortDex=function(a){const o=$("fo").value;if(o==="az"||o==="za"){const k=p=>hasP(p[0])?nk(p[0]):"￿"+p[0];return a.slice().sort((x,y)=>o==="az"?k(x).localeCompare(k(y),"es"):k(y).localeCompare(k(x),"es"))}return _sd(a)}}
+// al cargar una partida guardada el equipo se dibuja antes de que exista esta mejora: se rehace al momento y se vigila
+setTimeout(()=>{try{tmCards()}catch(e){}},0);
+setInterval(()=>{try{const s=document.querySelector("#team .slot6:not(.tmv)");if(s)tmCards()}catch(e){}},700);
+{const _r2=render;render=function(){const x=_r2.apply(this,arguments);try{if(document.querySelector("#team .slot6:not(.tmv)"))tmCards()}catch(e){}return x}}
 
 </script>
 <script>

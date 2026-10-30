@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793359130">
+<meta name="game-build" content="1793359410">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <style>
@@ -986,6 +986,7 @@ body.calm .albs.holo{animation:none}
 .mgrtabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px;margin-bottom:10px}.mgrtabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;background:var(--bg);color:var(--ink);border:2px solid var(--line);min-width:0}.mgrtabs button span{font-size:1.4rem}.mgrtabs button small{font-size:.66rem;font-weight:700;line-height:1.15;text-align:center}.mgrtabs button.on{border-color:var(--mc);background:color-mix(in srgb,var(--mc) 15%,var(--bg))}
 .mgrb{border-radius:20px;overflow:hidden;border:2px solid var(--mc);background:var(--bg)}.mgrh{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--mc);color:#fff}.mgrh>span{font-size:2rem}.mgrh>div{flex:1;display:flex;flex-direction:column;min-width:0}.mgrh b{font-size:1.1rem}.mgrh small{opacity:.92;font-size:.76rem}
 .mgrwon{display:flex;flex-direction:column;gap:6px;width:100%}.mgrwon div{display:grid;grid-template-columns:32px 1fr;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 10px}.mgrwon span{grid-row:span 2;font-size:1.5rem}.mgrwon small{color:var(--mute)}
+#hubTabs [data-ht]{position:relative}.tbdg{position:absolute;top:-7px;right:-6px;min-width:20px;height:20px;border-radius:10px;background:#e63950;color:#fff;font-style:normal;font-size:.72rem;font-weight:900;display:grid;place-items:center;padding:0 5px;box-sizing:border-box;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25);animation:tbdg 1.6s ease-in-out infinite}@keyframes tbdg{50%{transform:scale(1.12)}}body.calm .tbdg{animation:none}
 body.calm .p1 .tpm,body.calm .p1 .tpm:before,body.calm .tourrays,body.calm .tpsh,body.calm .tourc,body.calm .rucoin span,body.calm #mgBan,body.calm .mgbi,body.calm .mgbig{animation:none!important}
 body.calm .dcheart,body.calm .egg.wob,body.calm .gfb span,body.calm .gfbox,body.calm .hofb,body.calm .twnext.boss,body.calm .safspr{animation:none!important}
 img.pk.hd{image-rendering:auto!important;object-fit:contain}
@@ -5300,7 +5301,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793359130";
+const GAME_B="1793359410";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7590,6 +7591,28 @@ async function mgrUI(force){
   draw();if(window.FB){await mgrLoad(g.id,force);if(nxOpen("mgrP")&&MGR.g===g.id)draw()}
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-mgr]");if(b){MGR.g=b.dataset.mgr;snd("ui");mgrUI(false)}});
+// ================= avisos en cada pestaña de las ventanas del menú =================
+function tabBadges(){const o={};
+  const t=(k,f)=>{try{const v=f();if(v)o[k]=v}catch(e){}};
+  t("qP",()=>dmEnsure().l.filter(m=>!m.c&&m.p>=MISM[m.id][2]).length);
+  t("achP",()=>ACHS().filter(achReady).length);
+  t("passP",()=>{const s=passSt();let r=0;for(let i=1;i<=passLv();i++)if(!s.cl[i])r++;return r});
+  t("bagU",()=>evoReadyList().length);
+  t("frP",()=>(FR.inc||[]).length+((typeof GF!=="undefined"&&GF.inc)?GF.inc.length:0));
+  t("chatP",()=>chUnreadAll());
+  t("budP",()=>{const b=S.buddy;return b&&S.owned[b.n]>0&&Date.now()-(b.gift||0)>=10*6e4?1:0});
+  t("dcP",()=>(dcEggReady()?1:0)+(S.eggs||[]).filter(eggDone).length);
+  t("expP",()=>(S.exp||[]).filter(x=>Date.now()>=x.t0+x.dur).length);
+  t("safP",()=>(S.saf||{}).d!==today()?1:0);
+  t("mgP",()=>MGS.filter(g=>mgLeft(g.id)>0).length);
+  t("gymP",()=>{const i=gymNext(),n=(S.team||[]).find(x=>x&&S.owned[x]);return i>=0&&n&&lvd(n).l>=lvCap()?"!":0});
+  return o}
+let _tbk="";
+function tabBadgeUI(){const box=$("hubTabs");if(!box||$("hubM").hidden)return;const o=tabBadges(),k=JSON.stringify(o);
+  box.querySelectorAll("[data-ht]").forEach(b=>{let i=b.querySelector(".tbdg");const v=o[b.dataset.ht];if(!v){if(i)i.remove();return}if(!i){i=document.createElement("i");i.className="tbdg";b.appendChild(i)}i.textContent=v})}
+{const _ho=hubOpen;hubOpen=function(){const r=_ho.apply(this,arguments);try{tabBadgeUI()}catch(e){}return r}}
+setInterval(()=>{try{tabBadgeUI()}catch(e){}},1500);
+document.addEventListener("click",()=>setTimeout(()=>{try{tabBadgeUI()}catch(e){}},200));
 
 </script>
 <script>

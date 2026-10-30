@@ -952,6 +952,9 @@ body.calm .albs.holo{animation:none}
 #welc .jbox{max-height:calc(100vh - 32px);overflow:auto;width:min(720px,calc(100vw - 24px));max-width:none;box-sizing:border-box}#welc li{margin:0!important}#welc h3{margin:14px 0 4px;font-size:1.02rem}#welc ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px}#welc li{line-height:1.4}
 .wlead{font-size:1.02rem;line-height:1.45}.wloop{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 4px}.wloop span{background:color-mix(in srgb,#13a37f 14%,var(--bg));border:1px solid color-mix(in srgb,#13a37f 40%,var(--line));border-radius:99px;padding:4px 10px;font-weight:800;font-size:.85rem}.wloop i{font-style:normal;color:var(--mute);font-weight:900}
 #welc ul.wgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px}#welc .wgrid li{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:7px 10px;font-size:.9rem}
+.frmb.sup{background:linear-gradient(135deg,#2bd1ff,#7a4ae0 55%,#e0447a)!important;box-shadow:0 0 14px rgba(122,74,224,.6)}.frmb.sup small{opacity:.9}
+.supfx{position:absolute;left:8%;bottom:6%;width:320px;height:320px;margin-left:-70px;z-index:8;pointer-events:none;border-radius:50%;background:conic-gradient(from 0deg,#8fe9ff,#7a4ae0,#e0447a,#ffd35c,#8fe9ff);-webkit-mask:radial-gradient(circle,transparent 18%,#000 22%,#000 40%,transparent 62%);mask:radial-gradient(circle,transparent 18%,#000 22%,#000 40%,transparent 62%)}
+.supnote{background:linear-gradient(135deg,#e6f9ff,#efe6ff);color:#2b1d5a;border:1px solid #b9a4ff;border-radius:12px;padding:8px 12px;font-size:.88rem;text-align:left}
 body.calm .p1 .tpm,body.calm .p1 .tpm:before,body.calm .tourrays,body.calm .tpsh,body.calm .tourc,body.calm .rucoin span,body.calm #mgBan,body.calm .mgbi,body.calm .mgbig{animation:none!important}
 body.calm .dcheart,body.calm .egg.wob,body.calm .gfb span,body.calm .gfbox,body.calm .hofb,body.calm .twnext.boss,body.calm .safspr{animation:none!important}
 img.pk.hd{image-rendering:auto!important;object-fit:contain}
@@ -1849,7 +1852,7 @@ const GLW={C:"#fff",R:"#4f9dff",E:"#b26cff",M:"#ff5fb8",L:"#ffb62e"};
 const qtyOf=i=>Math.max(1,Math.min(9999,Math.floor(+$("bq"+i).value)||1));
 function buildBag(){
   ITEMS.forEach(it=>{if(S.bag[it[0]]==null)S.bag[it[0]]=0});
-  $("bag").innerHTML=ITEMS.map((it,i)=>(i===0?'<h3 class="shh">💊 Curación, Pokéballs y PP</h3>':it[7]==="evo"&&ITEMS[i-1][7]!=="evo"?'<h3 class="shh">🧬 Objetos evolutivos</h3>':it[7]==="hold"&&ITEMS[i-1][7]!=="hold"?'<h3 class="shh">🎒 Objetos para equipar</h3>':'')+'<div class="row"><div class="rowl"><span class="iico">'+itemIco(it[0],44)+'</span><div><b>'+it[1]+'</b> <span id="bc'+i+'"></span><small>'+it[6]+'</small></div></div><div class="qty"><input id="bq'+i+'" type="number" min="1" max="9999" value="1" aria-label="Cantidad de '+it[1]+'"><button id="bb'+i+'"></button></div></div>').join("");
+  $("bag").innerHTML=ITEMS.map((it,i)=>(i===0?'<h3 class="shh">💊 Curación, Pokéballs y PP</h3>':it[7]==="evo"&&ITEMS[i-1][7]!=="evo"?'<h3 class="shh">🧬 Objetos evolutivos</h3>':it[7]==="hold"&&ITEMS[i-1][7]!=="hold"?'<h3 class="shh">🎒 Objetos para equipar</h3>':it[7]==="crys"?'<h3 class="shh">💠 Cristales</h3>':'')+'<div class="row"><div class="rowl"><span class="iico">'+itemIco(it[0],44)+'</span><div><b>'+it[1]+'</b> <span id="bc'+i+'"></span><small>'+it[6]+'</small></div></div><div class="qty"><input id="bq'+i+'" type="number" min="1" max="9999" value="1" aria-label="Cantidad de '+it[1]+'"><button id="bb'+i+'"></button></div></div>').join("");
   ITEMS.forEach((it,i)=>{
     $("bq"+i).oninput=updBag;
     $("bq"+i).onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();const b=$("bb"+i);if(b.disabled)$("bq"+i).animate([{transform:"translateX(-4px)"},{transform:"translateX(4px)"},{transform:"none"}],200);else b.click()}};
@@ -1864,7 +1867,7 @@ function buildTeam(){
 }
 function updTeam(){
   const q=nrm($("fq").value.trim()),r=$("fr2").value,t=$("ft2").value,g=$("fg2").value;
-  const own=P.filter(p=>S.owned[p[0]]&&(!r||p[2]===r)&&(!t||p[1]===t)&&(!g||p[3]===+g)&&nrm(p[0]).includes(q));
+  const own=P.filter(p=>S.owned[p[0]]&&!(typeof isSup==="function"&&isSup(p[0]))&&(!r||p[2]===r)&&(!t||p[1]===t)&&(!g||p[3]===+g)&&nrm(p[0]).includes(q));
   const opt=p=>'<option value="'+p[0]+'">'+p[0]+' Nv'+(S.lv[p[0]]?S.lv[p[0]].l:1)+' ('+STAR[p[2]]+') ×'+S.owned[p[0]]+'</option>';
   const html='<option value="">— vacío —</option>'+own.map(opt).join("");
   S.team=(S.team||[]).slice(0,6);while(S.team.length<6)S.team.push("");
@@ -3189,7 +3192,7 @@ function bagUI(){
   const have=ITEMS.filter(it=>(S.bag[it[0]]||0)>0),er=evoReadyList(),key=have.map(it=>it[0]+":"+S.bag[it[0]]).join("|")+"|"+useId+"|"+er.join(",");
   if(key===_bk)return;_bk=key;
   $("evoReady").innerHTML=er.length?'<div class="lgnow"><b>🧬 ¡Pueden evolucionar!</b><small class="mut">Han alcanzado el nivel necesario. Puedes evolucionarlos ahora o esperar.</small><div class="frl">'+er.map(n=>'<div class="pvrow"><span class="pvav">'+ico(PM[n],34)+'</span><b>'+esc(n)+' <small>Nv'+lvd(n).l+'</small></b><span style="flex:1;color:var(--mute);font-size:.85rem">→ '+evoLvReady(n).map(e=>esc(e[0])).join(" / ")+'</span><button data-evo="'+esc(n)+'">🧬 Evolucionar</button></div>').join("")+'</div></div>':"";
-  $("bgrid").innerHTML=have.length?have.map(it=>'<div class="btile'+(useId===it[0]?' sel':'')+'"><span class="iico big">'+itemIco(it[0],52)+'</span><div class="bti"><b>'+it[1]+' <span class="bcnt">×'+S.bag[it[0]]+'</span></b><small class="mut">'+it[6]+'</small>'+(it[3]===0?'<button data-use="'+it[0]+'">'+(it[7]==="hold"?"Equipar":"Usar")+'</button>':'<small class="mut">Se usa en combate</small>')+'</div></div>').join(""):'<small class="mut">Tu mochila está vacía. Consigue objetos ganando combates o cómpralos en la tienda.</small>';
+  $("bgrid").innerHTML=have.length?have.map(it=>'<div class="btile'+(useId===it[0]?' sel':'')+'"><span class="iico big">'+itemIco(it[0],52)+'</span><div class="bti"><b>'+it[1]+' <span class="bcnt">×'+S.bag[it[0]]+'</span></b><small class="mut">'+it[6]+'</small>'+(it[3]===0&&it[7]!=="crys"?'<button data-use="'+it[0]+'">'+(it[7]==="hold"?"Equipar":"Usar")+'</button>':'<small class="mut">Se usa en combate</small>')+'</div></div>').join(""):'<small class="mut">Tu mochila está vacía. Consigue objetos ganando combates o cómpralos en la tienda.</small>';
 }
 function candList(){
   const q=nrm($("bcQ").value.trim()),cap=lvCap(),own=P.filter(p=>S.owned[p[0]]&&lvd(p[0]).l<cap&&nrm(p[0]).includes(q)).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
@@ -5190,6 +5193,10 @@ $("prsGo").onclick=()=>$("reset").click();
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-30b",at:"2026-10-30T09:45",t:"Formas supremas y Cristales Supremos",l:[
+"💠 Los Pokémon más poderosos (Mega-Rayquaza, Mega-Mewtwo X/Y, Ultra-Necrozma, Kyogre y Groudon Primigenios, Eternatus Dinamax Infinito, Zacian y Zamazenta supremos, Kyurem Negro/Blanco, Calyrex jinete y más) ahora funcionan como en los juegos: llevas a su forma base al combate y lo transformas gastando un Cristal Supremo.",
+"🎁 Si ya tenías alguna forma suprema, la conservas y has recibido 3 Cristales Supremos por cada una (y su forma base si no la tenías).",
+"💎 Consigue Cristales Supremos en la Torre Batalla, las incursiones, el Torneo semanal, el pase de temporada o la tienda. Las formas supremas ya no salen en las tiradas: se ganan en incursiones, el torneo y el pase."]},
 {v:"2026-10-30a",at:"2026-10-30T01:30",t:"Gran actualización: Megaevolución, incursiones, pase de temporada y mucho más",l:[
 "🧬 Megaevolución, Gigamax y Dinamax en combate: si tienes la forma Mega o Gigamax de tu Pokémon, puedes transformarlo una vez por combate.",
 "🔴 Incursiones en directo: hasta 4 entrenadores contra un jefe gigante con PS compartidos. ¡Si lo derrotáis, podéis capturarlo! (Online → Incursiones)",
@@ -7325,6 +7332,62 @@ async function mkCancel(id){
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#mktPB button");if(!b)return;const d=b.dataset;
   if(d.mkt){MK.tab=d.mkt;MK.sel=null;if(d.mkt==="buy")mkLoad(false);mktUI()}else if(d.mkr)mkLoad(true);else if(d.mks){MK.sk=d.mks;MK.sel=null;mktUI()}
   else if(d.mkp||d.mki){MK.sel=d.mkp||d.mki;mktUI();const p=$("mkP");if(p)p.focus()}else if(d.mkgo)mkSell();else if(d.mkb)mkBuy(d.mkb);else if(d.mkx)mkCancel(d.mkx)});
+
+// =====================================================================================
+// FORMAS SUPREMAS: los Pokémon más poderosos ya no salen en tiradas ni van en el equipo.
+// Se lleva la forma base y, si tienes la forma suprema, se transforma en combate gastando un Cristal Supremo.
+// =====================================================================================
+const SUP={"Mega-Mewtwo X":"Mewtwo","Mega-Mewtwo Y":"Mewtwo","Mega-Rayquaza":"Rayquaza","Kyogre Primigenio":"Kyogre","Groudon Primigenio":"Groudon",
+ "Dialga Forma Origen":"Dialga","Palkia Forma Origen":"Palkia","Giratina Forma Origen":"Giratina","Kyurem Negro":"Kyurem","Kyurem Blanco":"Kyurem",
+ "Zygarde Forma Completa":"Zygarde","Hoopa Desatado":"Hoopa","Necrozma Melena Crepuscular":"Necrozma","Necrozma Alas del Alba":"Necrozma","Ultra-Necrozma":"Necrozma",
+ "Zacian Espada Suprema":"Zacian","Zamazenta Escudo Supremo":"Zamazenta","Eternatus Dinamax Infinito":"Eternatus","Calyrex Jinete Glacial":"Calyrex","Calyrex Jinete Espectral":"Calyrex","Terapagos Forma Astral":"Terapagos"};
+Object.keys(SUP).forEach(k=>{if(!PM[k]||!PM[SUP[k]])delete SUP[k]});
+const isSup=n=>!!SUP[n];
+const supOf=base=>Object.keys(SUP).filter(k=>SUP[k]===base);
+// ---- Cristal Supremo ----
+ITEMS.push(["crys","Cristal Supremo",5000000,0,0,0,"Transforma en combate a un Pokémon en su forma suprema (Mega-Rayquaza, Ultra-Necrozma, Kyogre Primigenio…) si la tienes en tu colección. Se gasta al usarlo","crys"]);
+if(S.bag.crys==null)S.bag.crys=0;
+{const _ub=updBag;updBag=function(){if(!$("bq"+(ITEMS.length-1))){try{buildBag()}catch(e){}}return _ub.apply(this,arguments)}}
+{const _ii=itemIco;itemIco=function(id,s,noImg){if(id!=="crys")return _ii(id,s,noImg);return '<svg viewBox="0 0 64 64" width="'+s+'" height="'+s+'" aria-hidden="true"><defs><linearGradient id="cg'+s+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#8fe9ff"/><stop offset=".7" stop-color="#7a4ae0"/><stop offset="1" stop-color="#e0447a"/></linearGradient></defs><path d="M32 3 50 22 32 61 14 22Z" fill="url(#cg'+s+')" stroke="#2b1d5a" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22H50M32 3 26 22 32 61 38 22Z" fill="none" stroke="#2b1d5a" stroke-width="1.6" stroke-linejoin="round" opacity=".7"/><path d="M22 14 26 22 20 22Z" fill="#fff" opacity=".8"/></svg>'}}
+// ---- fuera de las tiradas, la Zona Safari y los combates salvajes ----
+{const _pr=pickR;pickR=function(r){let p=_pr(r);for(let i=0;i<20&&p&&isSup(p[0]);i++)p=_pr(r);return p}}
+{const _wp=wildPick;wildPick=function(r){let p=_wp(r);for(let i=0;i<20&&p&&isSup(p[0]);i++)p=_wp(r);return p}}
+{const _sp=safPick;safPick=function(){let p=_sp();for(let i=0;i<20&&p&&isSup(p[0]);i++)p=_sp();return p}}
+// ---- no pueden ir en el equipo: se quitan de equipos y conjuntos guardados ----
+function supClean(){let ch=false;const f=t=>(t||[]).map(n=>{if(n&&isSup(n)){ch=true;return ""}return n});S.team=f(S.team);(S.sets||[]).forEach(st=>{st.team=f(st.team)});if(ch){save();try{updTeam()}catch(e){}}}
+setInterval(supClean,4000);
+// ---- botón en combate ----
+{const _fb=formBtns;formBtns=function(){let h=_fb();try{if(!B||B.mode!=="s"||B.formUsed)return h;const m=beAct(B.E.sd[0]);if(!m||m.mh<=0)return h;const base=(m.p0||m.p)[0];
+  supOf(base).filter(f=>S.owned[f]>0).forEach(f=>{h='<button class="frmb sup" data-k="sup:'+esc(f)+'">💠 '+esc(f)+' <small>('+(S.bag.crys|0)+' 💎)</small></button>'+h})}catch(e){}return h}}
+async function supDo(fname){
+  if(!B||B.mode!=="s"||B.busy||B.formUsed)return;const sd=B.E.sd[0],m=beAct(sd);if(!m||m.mh<=0)return;const np=PM[fname],base=(m.p0||m.p)[0];
+  if(!np||!(S.owned[fname]>0)||SUP[fname]!==base)return;
+  if(!((S.bag.crys|0)>0)){B.busy=true;setMenu(false);await say("¡Necesitas un Cristal Supremo para transformar a "+nk(base)+"! Consíguelos en la Torre Batalla, las incursiones, el torneo, el pase de temporada o la tienda.");B.busy=false;setMenu(true);return}
+  B.busy=true;setMenu(false);B.formUsed=1;S.bag.crys--;save();
+  await say("¡"+nk(base)+" reacciona al Cristal Supremo!");snd("flash");
+  if(!hubCalm()){const bt=$("arena").querySelector(".bt"),g=document.createElement("div");g.className="supfx";bt.appendChild(g);
+    await g.animate([{opacity:0,transform:"scale(.1) rotate(0deg)"},{opacity:1,transform:"scale(1.1) rotate(180deg)",offset:.55},{opacity:0,transform:"scale(1.8) rotate(360deg)"}],{duration:1500,easing:"ease-out"}).finished;g.remove()}
+  formApply(m,np,1.25,1.3);m.sup=1;setSpr(0);bePaint();snd("lvl");await say("¡"+nk(base)+" se ha transformado en "+fname+"! Su poder es abrumador.");
+  B.busy=false;setMenu(true);
+}
+{const _t=turn;turn=async function(k){if(typeof k==="string"&&k.slice(0,4)==="sup:")return supDo(k.slice(4));return _t.apply(this,arguments)}}
+// ---- ficha: aviso de forma suprema ----
+{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!isSup(n))return;const w=document.querySelector("#pkv .pkvw");if(!w)return;const d=document.createElement("div");d.className="supnote";
+  d.innerHTML='💠 <b>Forma suprema</b>. No se puede poner en el equipo: lleva a <b>'+esc(SUP[n])+'</b> a un combate y transfórmalo con un <b>Cristal Supremo</b> (tienes '+(S.bag.crys|0)+').'+(S.owned[SUP[n]]>0?'':' <b>Todavía no tienes a '+esc(SUP[n])+'.</b>');
+  const t=w.querySelector(".pkvtags");if(t)t.after(d);else w.appendChild(d)}catch(e){}}}
+// ---- cómo conseguir cristales ----
+TW_SHOP.unshift(["crys",45]);
+{const _w=rdWin;rdWin=async function(){const r=await _w.apply(this,arguments);try{if(Math.random()<.3){S.bag.crys=(S.bag.crys|0)+1;save();toast("💎 ¡Has encontrado un Cristal Supremo entre los restos de la incursión!")}}catch(e){}return r}}
+{const _pr2=passRw;passRw=function(i){const r=_pr2(i);if(i===20||i===28){const o=Object.assign({},r);o.it=Object.assign({},r.it||{},{crys:1});return o}return r}}
+TOUR_TIERS[0].it.crys=3;TOUR_TIERS[1].it.crys=2;TOUR_TIERS[2].it.crys=1;
+// ---- compensación para quien ya tenía formas supremas ----
+function supComp(){
+  if(S.supComp)return;const L=Object.keys(SUP).filter(n=>S.owned[n]>0);S.supComp=1;supClean();if(!L.length){save();return}
+  let cr=0;const gave=[];L.forEach(n=>{cr+=3;const b=SUP[n];if(!(S.owned[b]>0)&&!gave.includes(b)){giveMon(b,(S.lv[n]&&S.lv[n].l)||50,!!(S.shiny&&S.shiny[n]));gave.push(b)}else if(S.lv[n]&&(!S.lv[b]||S.lv[b].l<S.lv[n].l)){S.lv[b]={l:S.lv[n].l,x:0}}});
+  S.bag.crys=(S.bag.crys|0)+cr;save();render();
+  setTimeout(()=>{nxModal('<div class="hofb">💠</div><h3>Las formas supremas han cambiado</h3><p>Los Pokémon más poderosos ('+L.map(esc).join(", ")+') siguen en tu colección, pero ahora se usan como en los juegos: llevas a su forma base al combate y lo transformas con un <b>Cristal Supremo</b>.</p><p>Como compensación has recibido <b>'+cr+' Cristales Supremos</b>'+(gave.length?' y '+gave.map(esc).join(", ")+' para poder usarlos ya':'')+'. ¡Gracias por jugar!</p><button id="supOk">¡Entendido!</button>');$("supOk").onclick=nxModalClose},2500);
+}
+setTimeout(()=>{try{supComp()}catch(e){console.error(e)}},1800);
 
 </script>
 <script>

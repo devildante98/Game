@@ -11,7 +11,7 @@ const raidLeft=()=>{const s=mgState();return Math.max(0,RD_DAY-(s.n.raid|0))};
 function rdShell(){
   mgStop();MG.g={id:"raid",n:"Incursión",ic:"🔴",c:"#b3123b"};hubClose();
   let m=$("mgM");if(!m){m=document.createElement("div");m.id="mgM";m.setAttribute("role","dialog");document.body.appendChild(m)}m.style.setProperty("--mc","#b3123b");
-  m.innerHTML='<div class="mgw rdw"><div class="mgh"><span class="mgic">🔴</span><b>Incursión</b><span class="mgsc" id="rdTm">--:--</span><button class="mgx" aria-label="Salir de la incursión">✕</button></div><div class="mgb" id="mgB"></div></div>';m.hidden=false;
+  m.innerHTML='<div class="mgw rdw"><div class="mgh"><span class="mgic">🔴</span><b>Incursión</b><span class="mgsc" id="rdTm">--:--</span><button class="mgx rdchb" data-rdchat="1" aria-label="Abrir el chat" title="Chat">💬</button><button class="mgx" aria-label="Salir de la incursión">✕</button></div><div class="mgb" id="mgB"></div></div>';m.hidden=false;
   m.querySelector(".mgx").onclick=()=>{rdLeave();mgClose()};
 }
 async function rdCreate(){
@@ -42,7 +42,7 @@ function rdTick(fromSnap){
   const d=RD.d;if(!d||!$("mgB"))return;const now=Date.now(),me=RD.me,pl=d.pl||{},ids=Object.keys(pl);
   if(d.st==="lobby"){RD.phase="lobby";const b=PM[d.boss]||raidBoss();if(!fromSnap&&$("rdLob"))return;
     $("rdTm").textContent=ids.length+"/"+RD_MAX;
-    $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+EM[b[1]]+' '+TIPO[b[1]]+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos.</p><div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
+    $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+EM[b[1]]+' '+TIPO[b[1]]+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos.</p>'+(ids.length<RD_MAX?'<button class="rdinv" data-rdchat="inv">📨 Invitar a más gente por el chat</button>':'')+'<div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
       (d.h===me?'<button class="red big" id="rdGo">⚔️ ¡Empezar la incursión!</button><small class="mut">Cuantos más seáis, más PS tendrá el jefe… ¡pero más probabilidades de ganar!</small>':'<p><b>Esperando a que el anfitrión empiece…</b></p>')+'</div>';
     const g=$("rdGo");if(g)g.onclick=()=>{const n=Object.keys(RD.d.pl||{}).length,mx=Math.round(RD_HP*n*(PM[d.boss][2]==="L"?1.15:1));window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:Date.now()+3500,end:Date.now()+3500+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
     return}
@@ -121,3 +121,6 @@ function rdListHTML(){if(!window.FB)return "";if(!RD.list)return '<small class="
   return L.length?L.map(d=>{const n=Object.keys(d.pl||{}).length,b=PM[d.boss];return '<div class="pvrow rdrow">'+(b?ico(b,40):'')+'<b>'+esc(d.boss)+'</b><small class="mut">de '+esc(pvClean(d.hn||""))+' · '+n+'/'+RD_MAX+'</small><span style="flex:1"></span><button class="red mini" data-rdj="'+esc(d.id)+'"'+(n>=RD_MAX?' disabled':'')+'>Unirse</button></div>'}).join("")+'<button class="alt mini" data-rdr="1">🔄 Actualizar</button>':'<small class="mut">No hay salas abiertas ahora mismo. ¡Crea una y avisa a tus amigos por el chat!</small> <button class="alt mini" data-rdr="1">🔄 Actualizar</button>'}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-rdj],[data-rdr]");if(!b)return;if(b.dataset.rdj)rdJoin(b.dataset.rdj);else raidUI(true)});
 setInterval(()=>{try{if(nxOpen("raidP"))raidUI(false)}catch(e){}},15000);
+// el chat se puede abrir encima de la incursión para invitar a más gente
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-rdchat]");if(!b||typeof chToggle!=="function")return;snd("ui");
+  chToggle(true);if(b.dataset.rdchat==="inv"&&typeof CH!=="undefined"){CH.inv=true;CH.emo=CH.pick=false;try{chPanels()}catch(x){}}});

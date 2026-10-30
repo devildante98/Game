@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793363953">
+<meta name="game-build" content="1793366208">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -5356,7 +5356,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793363953";
+const GAME_B="1793366208";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7938,7 +7938,8 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 var MOD={admin:false,ban:null,reports:null,bans:null,unsub:null};
 const MOD_WHY=["Insultos o acoso","Spam o publicidad","Contenido inapropiado","Trampas","Otro"];
 function modInit(){if(MOD.on||!window.FB||!window.FB.uid||!window.FB.uid()||!window.FB.modIsAdmin)return;MOD.on=1;
-  window.FB.modIsAdmin().then(a=>{MOD.admin=!!a;if(a){modTab();if(CH.open)chRender(true)}}).catch(()=>{});
+  if(!$("sugAdm").hidden){MOD.admin=true;modTab()}
+  window.FB.modIsAdmin().then(a=>{MOD.admin=MOD.admin||!!a;if(MOD.admin){modTab();if(CH.open)chRender(true)}}).catch(()=>{});
   try{MOD.unsub=window.FB.banWatch(b=>{MOD.ban=b;})}catch(e){}}
 setInterval(modInit,3000);
 const banActive=b=>!!(b&&((b.until|0)===0||b.until>Date.now()));
@@ -8000,6 +8001,8 @@ function sanity(){let fix=0;
   for(const k in S.bag){const q=S.bag[k];if(!(q>=0)||!isFinite(q)){S.bag[k]=0;fix++}else if(q>999999){S.bag[k]=999999;fix++}}
   if(fix)save();return fix}
 setTimeout(sanity,3000);setInterval(sanity,60000);
+// si el panel de sugerencias de administrador aparece después, también activa la moderación
+setInterval(()=>{try{if(!MOD.admin&&$("sugAdm")&&!$("sugAdm").hidden){MOD.admin=true;modTab();if(typeof CH!=="undefined"&&CH.open)chRender(true)}}catch(e){}},3000);
 
 // =====================================================================================
 // APP INSTALABLE (PWA) Y NOTIFICACIONES
@@ -8187,7 +8190,9 @@ async function main(){
     chWatch(tp,id,cb){const c=tp==="global"?S.collection(db,"chats","global","msgs"):tp==="g"?S.collection(db,"gchats",id,"msgs"):S.collection(db,"dms",id,"msgs");return S.onSnapshot(S.query(c,S.orderBy("at","desc"),S.limit(tp==="global"?60:50)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
     chSend(tp,id,d){const c=tp==="global"?S.collection(db,"chats","global","msgs"):tp==="g"?S.collection(db,"gchats",id,"msgs"):S.collection(db,"dms",id,"msgs");return S.addDoc(c,d)},
     del:()=>S.deleteField(),
-    async modIsAdmin(){try{const s=await S.getDoc(S.doc(db,"admins",uid));return s.exists()}catch(e){return false}},
+    async modIsAdmin(){try{const s=await S.getDoc(S.doc(db,"admins",uid));if(s.exists())return true}catch(e){}
+      try{await S.getDocs(S.query(S.collection(db,"suggestions"),S.limit(1)));return true}catch(e){}
+      try{await S.getDocs(S.query(S.collection(db,"reports"),S.limit(1)));return true}catch(e){}return false},
     banWatch(cb){return S.onSnapshot(S.doc(db,"bans",uid),sn=>cb(sn.exists()?sn.data():null),()=>{})},
     reportAdd:d=>S.addDoc(S.collection(db,"reports"),d),
     async reportList(){const sn=await S.getDocs(S.query(S.collection(db,"reports"),S.orderBy("at","desc"),S.limit(100)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},

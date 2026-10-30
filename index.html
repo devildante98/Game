@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793385436">
+<meta name="game-build" content="1793385949">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -4722,6 +4722,14 @@ $("menu").addEventListener("click",e=>{
 // Las solicitudes viajan por Firestore (colecciones friends y freq). Solo con cuenta iniciada.
 let FR={l:{},inc:[],out:[],ready:false},_frk="";
 const isFriend=u=>!!(FR.l&&FR.l[u]);
+// apodo actual de un amigo: el de su presencia en línea, el de su perfil público o, si no, el guardado al hacerse amigos
+const FRN={};let _frnAt=0;
+function frName(u){const o=pvOthers().find(p=>p.peer===u);if(o&&o.presence&&o.presence.pvp&&o.presence.pvp.n){FRN[u]=pvClean(o.presence.pvp.n);return FRN[u]}return FRN[u]||pvClean((FR.l[u]&&FR.l[u].n)||"")||"Amigo"}
+async function frNamesRefresh(force){if(!window.FB||!window.FB.rankGet||(!force&&Date.now()-_frnAt<10*60000))return;_frnAt=Date.now();let ch=false;
+  for(const u of Object.keys(FR.l||{})){try{const d=await window.FB.rankGet(u);if(d&&d.n){const n=pvClean(d.n);if(n&&FRN[u]!==n){FRN[u]=n;ch=true}
+    if(n&&FR.l[u]&&FR.l[u].n!==n&&window.FB.frRename)window.FB.frRename(u,n).catch(()=>{})}}catch(e){}}
+  if(ch){_frk="";try{frUI()}catch(e){}try{if(typeof chRender==="function")chRender()}catch(e){}}}
+setInterval(()=>frNamesRefresh(false),60000);
 const frOnline=()=>pvOthers().filter(p=>isFriend(p.peer)).map(p=>({uid:p.peer,n:pvClean(p.presence.pvp.n),st:p.presence.pvp.st}));
 function frMsg(t){const e=$("frMsg");if(e)e.textContent=t}
 async function frSend(nick){
@@ -4744,7 +4752,7 @@ function frUI(){
   {const gi=typeof GF!=="undefined"?GF.inc:[];if(gi.length)h+='<div class="lgnow gfin"><b>🎁 Regalos recibidos ('+gi.length+')</b><small class="mut">Tus amigos te han enviado un detalle. Puedes abrir hasta 20 al día.</small><div class="gfl">'+gi.slice(0,30).map(g=>'<button class="gfb" data-gfo="'+esc(g.id)+'"><span>🎁</span><b>'+esc(pvClean(g.fn||"Amigo"))+'</b><small>Abrir</small></button>').join("")+'</div></div>'}
   if(ids.length&&window.FB&&window.FB.gfSend){const left=ids.filter(u=>!gfSentToday(u)).length;h+='<div class="gfsend"><small class="mut">🎁 Envía un regalo a cada amigo una vez al día: tickets, Poké Balls u objetos.</small>'+(left?'<button data-gfall="1">🎁 Enviar a todos ('+left+')</button>':'<small>✅ Hoy ya has enviado regalos a todos</small>')+'</div>'}
   if(FR.out.length)h+='<small class="mut">Solicitudes enviadas: '+FR.out.map(r=>esc(pvClean(r.tn))+' <button class="alt mini" data-frc="'+esc(r.to)+'" title="Cancelar">✕</button>').join(" · ")+'</small>';
-  h+=ids.length?'<div class="frl">'+ids.map(u=>{const f=FR.l[u],o=on[u],n=o?pvClean(o.n):pvClean(f.n);
+  h+=ids.length?'<div class="frl">'+ids.map(u=>{const f=FR.l[u],o=on[u],n=o?pvClean(o.n):frName(u);
     const st=o?(o.st==="duel"?"🟠 En un duelo":o.st==="room"?"🟠 En una sala 2vs2":o.st==="wait"?"🟠 Retando":"🟢 Conectado"):"⚫ Desconectado";
     const canDuel=o&&o.st==="idle"&&PV.st==="idle"&&!fcd&&!R2&&pvTeamData().length,canInv=o&&R2&&R2.ph==="lobby";
     return '<div class="pvrow">'+(o?'<span class="pvav">'+trImg(trDec(o.tr),"f","i")+'</span>':'<span class="pvav off">👤</span>')+'<b class="plink" data-prof="'+esc(u)+'">'+esc(n)+' '+gdBadge(o&&o.gd)+'</b><small class="mut" style="flex:1">'+st+'</small>'+
@@ -4772,7 +4780,7 @@ document.addEventListener("click",async e=>{
     if(d.fr2){await r2Open(r2NewCode(),true);if(R2)r2InviteFriend(d.fr2);return}
   }catch(x){frMsg("No se pudo completar ("+((x&&x.code)||"error")+").")}
 });
-function frState(st){FR=Object.assign({ready:true},st);_frk="";frUI();pvRender()}
+function frState(st){FR=Object.assign({ready:true},st);_frk="";frUI();pvRender();frNamesRefresh(Object.keys(FR.l||{}).some(u=>!FRN[u]))}
 // ================= gremios =================
 const GUILD_COST=50000000,GUILD_EDIT=500000,GUILD_MAX=30;
 const GPAL=["#e63950","#f57c20","#f5c400","#2fa36b","#0fa97d","#3f86f0","#233f94","#8a3fd0","#e86aa8","#f4f2ff","#9aa7b8","#2b2b34","#7a4a26","#c9a227","#5fd0e6","#a8d84a"];
@@ -4843,7 +4851,7 @@ function gWatch(gid){
   if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}
   GS.gid=gid;GS.doc=null;
   if(!gid||!window.FB){gUI(true);return}
-  GS.unsub=window.FB.gWatch(gid,d=>{
+  GS.unsub=window.FB.gWatch(gid,d=>{try{const me=window.FB.uid(),cur=pvClean(pvNick());if(d&&d.members&&d.members[me]&&cur&&d.members[me].n!==cur&&window.FB.gRename)window.FB.gRename(gid,cur).catch(()=>{})}catch(e){}
     const me=window.FB.uid();
     if(!d||!d.members||!d.members[me]){if(GS.doc||S.gid){toast(d?"Ya no formas parte del gremio.":"El gremio ha sido disuelto.")}GS.doc=null;S.gid=null;save();if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}gUI(true);pvPub();return}
     GS.doc=d;if(S.gid!==gid){S.gid=gid;save()}gUI(true);pvPub();
@@ -5506,7 +5514,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793385436";
+const GAME_B="1793385949";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -6617,7 +6625,7 @@ function chRender(keep){
   if(CH.tab==="guild"&&!GS.gid){L.innerHTML='<p class="chempty">Únete a un gremio para hablar con sus miembros. Lo encontrarás en Social → Gremio.</p>';$("chF").hidden=true;return}
   if(CH.tab==="dm"&&!CH.dm){
     const ids=Object.keys(FR.l||{});$("chF").hidden=true;
-    L.innerHTML=ids.length?'<div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),l=CH.msgs[k]||[],last=l[l.length-1],n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chdm="'+esc(u)+'"><span class="chav">'+(last&&last.u===u?chAv(last.tr):'👤')+'</span><span class="chdmt"><b>'+esc(pvClean(f.n||"Amigo"))+'</b><small>'+(last?esc((last.u===me?"Tú: ":"")+(last.p?"📸 Pokémon: "+last.p.n:last.t)).slice(0,60):"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'</button>'}).join("")+'</div>':'<p class="chempty">Añade amigos en Social → Amigos para poder escribirles en privado.</p>';
+    L.innerHTML=ids.length?'<div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),l=CH.msgs[k]||[],last=l[l.length-1],n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chdm="'+esc(u)+'"><span class="chav">'+(last&&last.u===u?chAv(last.tr):'👤')+'</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(last?esc((last.u===me?"Tú: ":"")+(last.p?"📸 Pokémon: "+last.p.n:last.t)).slice(0,60):"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'</button>'}).join("")+'</div>':'<p class="chempty">Añade amigos en Social → Amigos para poder escribirles en privado.</p>';
     return;
   }
   if(CH.tab==="dm"&&CH.dm){const f=(FR.l||{})[CH.dm];sub.innerHTML='<button class="chback" data-chback="1">← Amigos</button><b>'+esc(pvClean(f?f.n:"Amigo"))+'</b><span class="mut">Conversación privada</span>'}
@@ -6690,7 +6698,7 @@ function chHubUI(){
   let h='<div class="chcards">'+card("🌍","Chat global","Todos los jugadores conectados","global","Abrir",'data-cho="global"',0,chLast("global"))+
     card("🛡️","Chat del gremio",GS.gid?"Solo para los miembros de "+esc((GS.doc&&GS.doc.name)||"tu gremio"):"Únete a un gremio para usarlo","guild","Abrir",'data-cho="guild"'+(GS.gid?'':' disabled'),GS.gid?chUnread("g:"+GS.gid):0,GS.gid?chLast("g:"+GS.gid):"")+
     card("👥","Mensajes privados",ids.length?ids.length+" amigo"+(ids.length===1?"":"s"):"Añade amigos para escribirles","dm","Abrir",'data-cho="dm"',du,"")+'</div>';
-  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3><div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(pvClean(f.n||"Amigo"))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
+  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3><div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
   box.innerHTML=h;
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cho],[data-chodm],[data-frmsg]");if(!b)return;
@@ -7189,7 +7197,7 @@ async function duChallenge(u,name){
   try{await window.FB.duCreate(id,d)}catch(e){toast("No se ha podido enviar el reto.");return}
   toast("⚔️ Reto enviado a "+(name||"tu amigo")+". Esperando a que acepte…");duWatch(id,true);
 }
-async function duAccept(d){if(DU.cur)return;try{await window.FB.duUpd(d.id,{st:"go",go:Date.now()+5000})}catch(e){toast("No se ha podido aceptar el reto.");return}duWatch(d.id,false)}
+async function duAccept(d){if(DU.cur)return;try{await window.FB.duUpd(d.id,{st:"go",go:Date.now()+5000,bn:pvClean(pvNick()).slice(0,30)})}catch(e){toast("No se ha podido aceptar el reto.");return}duWatch(d.id,false)}
 function duWatch(id,mine){
   if(DU.unsub)try{DU.unsub()}catch(e){}DU.cur={id:id,mine:mine,d:null,started:false};
   const exp=setTimeout(()=>{if(DU.cur&&DU.cur.id===id&&!DU.cur.started){toast("⌛ Tu amigo no ha aceptado el reto a tiempo.");if(mine)window.FB.duDel(id).catch(()=>{});duQuit()}},90e3);
@@ -7235,7 +7243,7 @@ function duelHTML(){
   if(!window.FB)return '<div class="duelb"><b>⚔️ Duelo de siluetas en directo</b><small class="mut">Inicia sesión para retar a tus amigos.</small></div>';
   return '<div class="duelb"><div class="duelh"><span>⚔️</span><div><b>Duelo de siluetas en directo</b><small>Reta a un amigo: '+DU_R+' rondas de «¿Quién es ese Pokémon?» a la vez. ¡Gana quien acierte antes! (5 premios al día)</small></div></div>'+
     (DU.inv.length?'<div class="duinv">'+DU.inv.map(d=>'<div class="pvrow"><b>📨 '+esc(pvClean(d.an||"Amigo"))+' te ha retado</b><span style="flex:1"></span><button class="red mini" data-duy="'+esc(d.id)+'">Aceptar</button></div>').join("")+'</div>':'')+
-    (ids.length?'<div class="dufl">'+ids.sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)).map(u=>'<div class="pvrow"><span>'+(on[u]?'🟢':'⚫')+'</span><b>'+esc(pvClean(FR.l[u].n||"Amigo"))+'</b><span style="flex:1"></span><button class="mini" data-duc="'+esc(u)+'" data-dun="'+esc(pvClean(FR.l[u].n||""))+'"'+(on[u]?'':' title="No está conectado: verá el reto si entra en menos de 2 minutos"')+'>⚔️ Retar</button></div>').join("")+'</div>':'<small class="mut">Añade amigos en Social → Amigos para poder retarles.</small>')+'</div>';
+    (ids.length?'<div class="dufl">'+ids.sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)).map(u=>'<div class="pvrow"><span>'+(on[u]?'🟢':'⚫')+'</span><b>'+esc(frName(u))+'</b><span style="flex:1"></span><button class="mini" data-duc="'+esc(u)+'" data-dun="'+esc(frName(u))+'"'+(on[u]?'':' title="No está conectado: verá el reto si entra en menos de 2 minutos"')+'>⚔️ Retar</button></div>').join("")+'</div>':'<small class="mut">Añade amigos en Social → Amigos para poder retarles.</small>')+'</div>';
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-duc],[data-duy]");if(!b)return;
   if(b.dataset.duc)duChallenge(b.dataset.duc,b.dataset.dun);else{const d=DU.inv.find(x=>x.id===b.dataset.duy);if(d)duAccept(d)}});
@@ -8548,6 +8556,8 @@ async function main(){
     async frAccept(from,fn,me){await S.setDoc(S.doc(db,"friends",uid),{l:{[from]:{n:String(fn||""),at:Date.now()}}},{merge:true});await S.updateDoc(S.doc(db,"freq",from+"_"+uid),{k:"ok",tn:String(me)})},
     frDecline:from=>S.deleteDoc(S.doc(db,"freq",from+"_"+uid)),
     frCancel:to=>S.deleteDoc(S.doc(db,"freq",uid+"_"+to)),
+    frRename:(f,n)=>S.setDoc(S.doc(db,"friends",uid),{l:{[f]:{n:String(n||"").slice(0,30)}}},{merge:true}),
+    gRename:(gid,n)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+uid+".n"]:String(n||"").slice(0,30)}),
     async frRemove(f,me){await S.setDoc(S.doc(db,"friends",uid),{l:{[f]:S.deleteField()}},{merge:true});await S.setDoc(S.doc(db,"freq",uid+"_"+f),{from:uid,to:f,fn:String(me),tn:"",k:"rm",at:Date.now()})},
     gid:n=>"g_"+encodeURIComponent(String(n).trim().replace(/\s+/g," ").toLowerCase()).replace(/\./g,"%2E"),
     async gList(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.orderBy("n","desc"),S.limit(50)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},

@@ -2,6 +2,14 @@
 // Las solicitudes viajan por Firestore (colecciones friends y freq). Solo con cuenta iniciada.
 let FR={l:{},inc:[],out:[],ready:false},_frk="";
 const isFriend=u=>!!(FR.l&&FR.l[u]);
+// apodo actual de un amigo: el de su presencia en línea, el de su perfil público o, si no, el guardado al hacerse amigos
+const FRN={};let _frnAt=0;
+function frName(u){const o=pvOthers().find(p=>p.peer===u);if(o&&o.presence&&o.presence.pvp&&o.presence.pvp.n){FRN[u]=pvClean(o.presence.pvp.n);return FRN[u]}return FRN[u]||pvClean((FR.l[u]&&FR.l[u].n)||"")||"Amigo"}
+async function frNamesRefresh(force){if(!window.FB||!window.FB.rankGet||(!force&&Date.now()-_frnAt<10*60000))return;_frnAt=Date.now();let ch=false;
+  for(const u of Object.keys(FR.l||{})){try{const d=await window.FB.rankGet(u);if(d&&d.n){const n=pvClean(d.n);if(n&&FRN[u]!==n){FRN[u]=n;ch=true}
+    if(n&&FR.l[u]&&FR.l[u].n!==n&&window.FB.frRename)window.FB.frRename(u,n).catch(()=>{})}}catch(e){}}
+  if(ch){_frk="";try{frUI()}catch(e){}try{if(typeof chRender==="function")chRender()}catch(e){}}}
+setInterval(()=>frNamesRefresh(false),60000);
 const frOnline=()=>pvOthers().filter(p=>isFriend(p.peer)).map(p=>({uid:p.peer,n:pvClean(p.presence.pvp.n),st:p.presence.pvp.st}));
 function frMsg(t){const e=$("frMsg");if(e)e.textContent=t}
 async function frSend(nick){
@@ -24,7 +32,7 @@ function frUI(){
   {const gi=typeof GF!=="undefined"?GF.inc:[];if(gi.length)h+='<div class="lgnow gfin"><b>🎁 Regalos recibidos ('+gi.length+')</b><small class="mut">Tus amigos te han enviado un detalle. Puedes abrir hasta 20 al día.</small><div class="gfl">'+gi.slice(0,30).map(g=>'<button class="gfb" data-gfo="'+esc(g.id)+'"><span>🎁</span><b>'+esc(pvClean(g.fn||"Amigo"))+'</b><small>Abrir</small></button>').join("")+'</div></div>'}
   if(ids.length&&window.FB&&window.FB.gfSend){const left=ids.filter(u=>!gfSentToday(u)).length;h+='<div class="gfsend"><small class="mut">🎁 Envía un regalo a cada amigo una vez al día: tickets, Poké Balls u objetos.</small>'+(left?'<button data-gfall="1">🎁 Enviar a todos ('+left+')</button>':'<small>✅ Hoy ya has enviado regalos a todos</small>')+'</div>'}
   if(FR.out.length)h+='<small class="mut">Solicitudes enviadas: '+FR.out.map(r=>esc(pvClean(r.tn))+' <button class="alt mini" data-frc="'+esc(r.to)+'" title="Cancelar">✕</button>').join(" · ")+'</small>';
-  h+=ids.length?'<div class="frl">'+ids.map(u=>{const f=FR.l[u],o=on[u],n=o?pvClean(o.n):pvClean(f.n);
+  h+=ids.length?'<div class="frl">'+ids.map(u=>{const f=FR.l[u],o=on[u],n=o?pvClean(o.n):frName(u);
     const st=o?(o.st==="duel"?"🟠 En un duelo":o.st==="room"?"🟠 En una sala 2vs2":o.st==="wait"?"🟠 Retando":"🟢 Conectado"):"⚫ Desconectado";
     const canDuel=o&&o.st==="idle"&&PV.st==="idle"&&!fcd&&!R2&&pvTeamData().length,canInv=o&&R2&&R2.ph==="lobby";
     return '<div class="pvrow">'+(o?'<span class="pvav">'+trImg(trDec(o.tr),"f","i")+'</span>':'<span class="pvav off">👤</span>')+'<b class="plink" data-prof="'+esc(u)+'">'+esc(n)+' '+gdBadge(o&&o.gd)+'</b><small class="mut" style="flex:1">'+st+'</small>'+
@@ -52,7 +60,7 @@ document.addEventListener("click",async e=>{
     if(d.fr2){await r2Open(r2NewCode(),true);if(R2)r2InviteFriend(d.fr2);return}
   }catch(x){frMsg("No se pudo completar ("+((x&&x.code)||"error")+").")}
 });
-function frState(st){FR=Object.assign({ready:true},st);_frk="";frUI();pvRender()}
+function frState(st){FR=Object.assign({ready:true},st);_frk="";frUI();pvRender();frNamesRefresh(Object.keys(FR.l||{}).some(u=>!FRN[u]))}
 // ================= gremios =================
 const GUILD_COST=50000000,GUILD_EDIT=500000,GUILD_MAX=30;
 const GPAL=["#e63950","#f57c20","#f5c400","#2fa36b","#0fa97d","#3f86f0","#233f94","#8a3fd0","#e86aa8","#f4f2ff","#9aa7b8","#2b2b34","#7a4a26","#c9a227","#5fd0e6","#a8d84a"];
@@ -123,7 +131,7 @@ function gWatch(gid){
   if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}
   GS.gid=gid;GS.doc=null;
   if(!gid||!window.FB){gUI(true);return}
-  GS.unsub=window.FB.gWatch(gid,d=>{
+  GS.unsub=window.FB.gWatch(gid,d=>{try{const me=window.FB.uid(),cur=pvClean(pvNick());if(d&&d.members&&d.members[me]&&cur&&d.members[me].n!==cur&&window.FB.gRename)window.FB.gRename(gid,cur).catch(()=>{})}catch(e){}
     const me=window.FB.uid();
     if(!d||!d.members||!d.members[me]){if(GS.doc||S.gid){toast(d?"Ya no formas parte del gremio.":"El gremio ha sido disuelto.")}GS.doc=null;S.gid=null;save();if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}gUI(true);pvPub();return}
     GS.doc=d;if(S.gid!==gid){S.gid=gid;save()}gUI(true);pvPub();

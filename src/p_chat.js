@@ -77,7 +77,7 @@ function chRender(keep){
   if(CH.tab==="guild"&&!GS.gid){L.innerHTML='<p class="chempty">Únete a un gremio para hablar con sus miembros. Lo encontrarás en Social → Gremio.</p>';$("chF").hidden=true;return}
   if(CH.tab==="dm"&&!CH.dm){
     const ids=Object.keys(FR.l||{});$("chF").hidden=true;
-    L.innerHTML=ids.length?'<div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),l=CH.msgs[k]||[],last=l[l.length-1],n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chdm="'+esc(u)+'"><span class="chav">'+(last&&last.u===u?chAv(last.tr):'👤')+'</span><span class="chdmt"><b>'+esc(pvClean(f.n||"Amigo"))+'</b><small>'+(last?esc((last.u===me?"Tú: ":"")+(last.p?"📸 Pokémon: "+last.p.n:last.t)).slice(0,60):"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'</button>'}).join("")+'</div>':'<p class="chempty">Añade amigos en Social → Amigos para poder escribirles en privado.</p>';
+    L.innerHTML=ids.length?'<div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),l=CH.msgs[k]||[],last=l[l.length-1],n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chdm="'+esc(u)+'"><span class="chav">'+(last&&last.u===u?chAv(last.tr):'👤')+'</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(last?esc((last.u===me?"Tú: ":"")+(last.p?"📸 Pokémon: "+last.p.n:last.t)).slice(0,60):"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'</button>'}).join("")+'</div>':'<p class="chempty">Añade amigos en Social → Amigos para poder escribirles en privado.</p>';
     return;
   }
   if(CH.tab==="dm"&&CH.dm){const f=(FR.l||{})[CH.dm];sub.innerHTML='<button class="chback" data-chback="1">← Amigos</button><b>'+esc(pvClean(f?f.n:"Amigo"))+'</b><span class="mut">Conversación privada</span>'}
@@ -150,7 +150,7 @@ function chHubUI(){
   let h='<div class="chcards">'+card("🌍","Chat global","Todos los jugadores conectados","global","Abrir",'data-cho="global"',0,chLast("global"))+
     card("🛡️","Chat del gremio",GS.gid?"Solo para los miembros de "+esc((GS.doc&&GS.doc.name)||"tu gremio"):"Únete a un gremio para usarlo","guild","Abrir",'data-cho="guild"'+(GS.gid?'':' disabled'),GS.gid?chUnread("g:"+GS.gid):0,GS.gid?chLast("g:"+GS.gid):"")+
     card("👥","Mensajes privados",ids.length?ids.length+" amigo"+(ids.length===1?"":"s"):"Añade amigos para escribirles","dm","Abrir",'data-cho="dm"',du,"")+'</div>';
-  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3><div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(pvClean(f.n||"Amigo"))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
+  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3><div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
   box.innerHTML=h;
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cho],[data-chodm],[data-frmsg]");if(!b)return;

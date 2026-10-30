@@ -465,6 +465,8 @@ FB_API = '''
     async frAccept(from,fn,me){await S.setDoc(S.doc(db,"friends",uid),{l:{[from]:{n:String(fn||""),at:Date.now()}}},{merge:true});await S.updateDoc(S.doc(db,"freq",from+"_"+uid),{k:"ok",tn:String(me)})},
     frDecline:from=>S.deleteDoc(S.doc(db,"freq",from+"_"+uid)),
     frCancel:to=>S.deleteDoc(S.doc(db,"freq",uid+"_"+to)),
+    frRename:(f,n)=>S.setDoc(S.doc(db,"friends",uid),{l:{[f]:{n:String(n||"").slice(0,30)}}},{merge:true}),
+    gRename:(gid,n)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+uid+".n"]:String(n||"").slice(0,30)}),
     async frRemove(f,me){await S.setDoc(S.doc(db,"friends",uid),{l:{[f]:S.deleteField()}},{merge:true});await S.setDoc(S.doc(db,"freq",uid+"_"+f),{from:uid,to:f,fn:String(me),tn:"",k:"rm",at:Date.now()})},
     gid:n=>"g_"+encodeURIComponent(String(n).trim().replace(/\\s+/g," ").toLowerCase()).replace(/\\./g,"%2E"),
     async gList(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.orderBy("n","desc"),S.limit(50)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},

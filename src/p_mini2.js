@@ -202,7 +202,7 @@ async function duChallenge(u,name){
   try{await window.FB.duCreate(id,d)}catch(e){toast("No se ha podido enviar el reto.");return}
   toast("⚔️ Reto enviado a "+(name||"tu amigo")+". Esperando a que acepte…");duWatch(id,true);
 }
-async function duAccept(d){if(DU.cur)return;try{await window.FB.duUpd(d.id,{st:"go",go:Date.now()+5000})}catch(e){toast("No se ha podido aceptar el reto.");return}duWatch(d.id,false)}
+async function duAccept(d){if(DU.cur)return;try{await window.FB.duUpd(d.id,{st:"go",go:Date.now()+5000,bn:pvClean(pvNick()).slice(0,30)})}catch(e){toast("No se ha podido aceptar el reto.");return}duWatch(d.id,false)}
 function duWatch(id,mine){
   if(DU.unsub)try{DU.unsub()}catch(e){}DU.cur={id:id,mine:mine,d:null,started:false};
   const exp=setTimeout(()=>{if(DU.cur&&DU.cur.id===id&&!DU.cur.started){toast("⌛ Tu amigo no ha aceptado el reto a tiempo.");if(mine)window.FB.duDel(id).catch(()=>{});duQuit()}},90e3);
@@ -248,7 +248,7 @@ function duelHTML(){
   if(!window.FB)return '<div class="duelb"><b>⚔️ Duelo de siluetas en directo</b><small class="mut">Inicia sesión para retar a tus amigos.</small></div>';
   return '<div class="duelb"><div class="duelh"><span>⚔️</span><div><b>Duelo de siluetas en directo</b><small>Reta a un amigo: '+DU_R+' rondas de «¿Quién es ese Pokémon?» a la vez. ¡Gana quien acierte antes! (5 premios al día)</small></div></div>'+
     (DU.inv.length?'<div class="duinv">'+DU.inv.map(d=>'<div class="pvrow"><b>📨 '+esc(pvClean(d.an||"Amigo"))+' te ha retado</b><span style="flex:1"></span><button class="red mini" data-duy="'+esc(d.id)+'">Aceptar</button></div>').join("")+'</div>':'')+
-    (ids.length?'<div class="dufl">'+ids.sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)).map(u=>'<div class="pvrow"><span>'+(on[u]?'🟢':'⚫')+'</span><b>'+esc(pvClean(FR.l[u].n||"Amigo"))+'</b><span style="flex:1"></span><button class="mini" data-duc="'+esc(u)+'" data-dun="'+esc(pvClean(FR.l[u].n||""))+'"'+(on[u]?'':' title="No está conectado: verá el reto si entra en menos de 2 minutos"')+'>⚔️ Retar</button></div>').join("")+'</div>':'<small class="mut">Añade amigos en Social → Amigos para poder retarles.</small>')+'</div>';
+    (ids.length?'<div class="dufl">'+ids.sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)).map(u=>'<div class="pvrow"><span>'+(on[u]?'🟢':'⚫')+'</span><b>'+esc(frName(u))+'</b><span style="flex:1"></span><button class="mini" data-duc="'+esc(u)+'" data-dun="'+esc(frName(u))+'"'+(on[u]?'':' title="No está conectado: verá el reto si entra en menos de 2 minutos"')+'>⚔️ Retar</button></div>').join("")+'</div>':'<small class="mut">Añade amigos en Social → Amigos para poder retarles.</small>')+'</div>';
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-duc],[data-duy]");if(!b)return;
   if(b.dataset.duc)duChallenge(b.dataset.duc,b.dataset.dun);else{const d=DU.inv.find(x=>x.id===b.dataset.duy);if(d)duAccept(d)}});

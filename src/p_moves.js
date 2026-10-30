@@ -1,5 +1,10 @@
 const BT={};"fire:grass,ice,bug,steel;water:fire,ground,rock;grass:water,ground,rock;electric:water,flying;ground:electric,fire,rock,poison,steel;psychic:fighting,poison;ghost:psychic,ghost;dark:psychic,ghost;fighting:normal,rock,dark,ice,steel;ice:grass,dragon,flying,ground;dragon:dragon;fairy:dragon,fighting,dark;bug:grass,psychic,dark;rock:fire,ice,flying,bug;steel:ice,rock,fairy;poison:grass,fairy;flying:grass,fighting,bug".split(";").forEach(s=>{const q=s.split(":");BT[q[0]]=q[1].split(",")});
 const adv=(a,d)=>(BT[a]||[]).includes(d);
+// segundo tipo de cada Pokémon (datos oficiales de PokeAPI); T1 corrige el tipo principal de algunas formas
+const TT=__T2__;Object.keys(TT.T1).forEach(n=>{const p=P.find(x=>x[0]===n);if(p)p[1]=TT.T1[n]});const T2=TT.T2;
+const ty2=p=>(p&&T2[p[0]])||null,tys=p=>ty2(p)?[p[1],ty2(p)]:[p[1]];
+const effP=(a,p)=>tys(p).reduce((m,t)=>m*eff(a,t),1),stabP=(t,p)=>tys(p).includes(t);
+const tyNm=p=>tys(p).map(t=>TIPO[t]).join(" / "),tyTxt=p=>tys(p).map(t=>EM[t]+" "+TIPO[t]).join(" · ");
 const WW={C:1,R:2,E:3,L:4},HPM={C:90,R:120,E:150,L:180},ATK={C:15,R:20,E:25,L:30};
 const lvd=n=>S.lv[n]||(S.lv[n]={l:1,x:0});
 const stH=(p,l)=>HPM[p[2]]+(l-1)*8,stA=(p,l)=>ATK[p[2]]+(l-1)*1.5,need=l=>25*l;

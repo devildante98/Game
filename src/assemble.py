@@ -9,7 +9,7 @@ parts = []
 parts += seg(1, 695)
 parts += [rd('p_data.js')]
 parts += seg(696, 903)
-parts += [rd('p_moves.js')]
+parts += [rd('p_moves.js').replace('__T2__', open(W + 'p_t2.json', encoding='utf-8').read())]
 parts += seg(933, 940)
 parts += [rd('p_items.js')]
 parts += seg(941, 1076)
@@ -264,7 +264,7 @@ rep('''$("dex").innerHTML=sortDex(P.filter(fok)).map(p=>{const c=S.owned[p[0]]||
 rep('const p=sup?rollS():roll(),isNew=!S.owned[p[0]];\n    if(isNew){S.balls[p[0]]=BALLR[p[2]];(S.when=S.when||{})[p[0]]=Date.now()}',
     'const p=sup?rollS():roll(),isNew=!hasP(p[0]);\n    if(!S.owned[p[0]]){S.balls[p[0]]=BALLR[p[2]];(S.when=S.when||{})[p[0]]=Date.now()}')
 rep('return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?c>0:s==="0"?c===0:c>1))}',
-    'return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?hasP(p[0]):s==="0"?!hasP(p[0]):c>1))}')
+    'return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||tys(p).includes(t))&&(s===""||(s==="1"?hasP(p[0]):s==="0"?!hasP(p[0]):c>1))}')
 rep('const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp};', 'const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp,tr:S.tr,gid:S.gid,sugSeen:S.sugSeen,trOwn:S.trOwn,card:S.card};')
 # ayuda de tipos con el motor nuevo
 rep('''if(typeof B!=="undefined"&&B&&B.op&&B.me)h+='<h5>Este combate</h5>'+row("Rival:",B.op[1])+row("Tu "+B.me[0]+":",B.me[1]);''',
@@ -294,6 +294,11 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-30f",at:"2026-10-30T21:00",t:"⚔️ Pokémon de doble tipo",l:[
+"🔥🌪️ Los Pokémon ahora tienen sus dos tipos, como en los juegos: Charizard es Fuego / Volador, Gyarados Agua / Volador, Garchomp Dragón / Tierra…",
+"💥 La eficacia se multiplica por los dos tipos: hay ataques ×4 y ×¼. ¡Monta un equipo más equilibrado!",
+"✨ Los ataques del mismo tipo que cualquiera de los dos tipos de tu Pokémon hacen más daño (STAB).",
+"🔎 Los filtros por tipo de la Pokédex y del equipo encuentran también por el segundo tipo."]},
 {v:"2026-10-30e",at:"2026-10-30T19:00",t:"🛍️ Tienda de Evento: ropa, fondos y marcos de Halloween",l:[
 "🛍️ Nueva Tienda de Evento (Tu entrenador): gasta tus tickets en ropa para tu entrenador y en fondos y marcos animados para tu tarjeta de perfil.",
 "🖼️ Personaliza tu tarjeta de entrenador: los demás jugadores la ven al abrir tu perfil.",

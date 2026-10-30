@@ -227,7 +227,7 @@ function pkView(n,sh){
   const own=S.owned[n]||0,shn=(S.shiny&&S.shiny[n])||0,RN={C:"Común",R:"Raro",E:"Épico",M:"Forma especial",L:"Legendario"}[p[2]]||"";
   m.innerHTML='<div class="pkvw '+p[2]+(sh?' shiny':'')+'" style="--tc:'+(TC[p[1]]||"#999")+'"><button class="pkvx" aria-label="Cerrar">✕</button>'+
     '<div class="pkvdex">#'+String(p[4]||0).padStart(4,"0")+'</div><div class="pkvspr">'+icoHD(p,210,false,!!sh)+'</div>'+
-    '<h3>'+(sh?"✨ ":"")+esc(n)+'</h3><div class="pkvtags"><span class="pkvty">'+EM[p[1]]+' '+TIPO[p[1]]+'</span><span class="pkvr">'+STAR[p[2]]+' '+RN+'</span></div>'+
+    '<h3>'+(sh?"✨ ":"")+esc(n)+'</h3><div class="pkvtags"><span class="pkvty">'+tyTxt(p)+'</span><span class="pkvr">'+STAR[p[2]]+' '+RN+'</span></div>'+
     '<div class="pkvinfo"><span>Tienes <b>×'+own+'</b></span>'+(shn?'<span>✨ Variocolor <b>×'+shn+'</b></span>':'')+(S.lv&&S.lv[n]?'<span>Nivel <b>'+S.lv[n].l+'</b></span>':'')+'</div>'+
     '<button class="pkvcry" data-n="'+esc(n)+'">🔊 Escuchar su grito</button></div>';
   m.hidden=false;const w=m.querySelector(".pkvw");w.animate([{transform:"scale(.6) rotate(-4deg)",opacity:0},{transform:"scale(1.04)",opacity:1,offset:.7},{transform:"none"}],{duration:380,easing:"cubic-bezier(.2,.9,.3,1.2)"});

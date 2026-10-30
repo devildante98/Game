@@ -165,7 +165,7 @@ let TM={st:null,t:null,sel:null,q:"",f:""};
 function trCard(rec,lab,who){
   if(!rec||!PM[rec.n])return '<div class="tcard empty"><small>'+esc(lab)+'</small><div class="tqm">?</div><small class="mut">'+(who||"")+'</small></div>';
   const p=PM[rec.n];
-  return '<div class="tcard '+p[2]+(rec.s?' shiny':'')+'"><small>'+esc(lab)+'</small><div class="tspr2">'+ico(p,96,false,!!rec.s)+'</div><b>'+(rec.s?"✨ ":"")+esc(rec.n)+'</b><small>Nv'+(rec.l|0)+' · '+EM[p[1]]+' '+TIPO[p[1]]+' · '+STAR[p[2]]+'</small>'+(EVO(rec.n).some(e=>e[1]==="Ilinking-cord")?'<small class="tevo">🧬 Evoluciona al intercambiarlo</small>':'')+'</div>';
+  return '<div class="tcard '+p[2]+(rec.s?' shiny':'')+'"><small>'+esc(lab)+'</small><div class="tspr2">'+ico(p,96,false,!!rec.s)+'</div><b>'+(rec.s?"✨ ":"")+esc(rec.n)+'</b><small>Nv'+(rec.l|0)+' · '+tyTxt(p)+' · '+STAR[p[2]]+'</small>'+(EVO(rec.n).some(e=>e[1]==="Ilinking-cord")?'<small class="tevo">🧬 Evoluciona al intercambiarlo</small>':'')+'</div>';
 }
 const trRec=n=>n&&S.owned[n]>0?{n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0}:null;
 function trGrid(){

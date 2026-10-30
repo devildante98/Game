@@ -836,7 +836,7 @@ function roll(){
   return pickR(r);
 }
 function cardHTML(p,isNew,back,big){
-  return `<div class="card ${p[2]} ${big?"big":""}"><span class="tag ${isNew?"":"dup"}">${isNew?"¡NUEVO!":"+"+back+" 🎟️"}</span><div class="em">${ico(p,big?76:46)}</div><b>${p[0]}</b><small>${TIPO[p[1]]} · ${STAR[p[2]]}</small></div>`;
+  return `<div class="card ${p[2]} ${big?"big":""}"><span class="tag ${isNew?"":"dup"}">${isNew?"¡NUEVO!":"+"+back+" 🎟️"}</span><div class="em">${ico(p,big?76:46)}</div><b>${p[0]}</b><small>${tyNm(p)} · ${STAR[p[2]]}</small></div>`;
 }
 let busy=false,PT=[],SK=null;
 const tm=(f,ms)=>{PT.push(setTimeout(f,ms))};

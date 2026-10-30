@@ -84,7 +84,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   if(!hitOk()){push({k:"miss",s:i,tg:tg});return}
   {const ty0=mv.typeless?"normal":mv.t,ta=tm.ab;if(tg!==i&&!mv.fixed&&!mv.flv&&((ty0==="ground"&&ta===26)||(ty0==="water"&&ta===11)||(ty0==="electric"&&ta===10)||(ty0==="fire"&&ta===18))){let hl=0;if(ta!==26&&ta!==18&&tm.mh<tm.mx){const b=tm.mh;tm.mh=Math.min(tm.mx,tm.mh+Math.max(1,Math.round(tm.mx/4)));hl=tm.mh-b}if(ta===18)tm.ffire=1;push({k:"abil",s:tg,n:tm.p[0],ab:ta,imm:1,h:hl});return}}
   let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}
-  const ty=mv.typeless?"normal":mv.t,special=mv.fixed||mv.flv||mv.half,e=mv.typeless||special?1:eff(ty,tm.p[1]),stab=!mv.typeless&&ty===me.p[1]?(me.ab===91?2:1.5):1;
+  const ty=mv.typeless?"normal":mv.t,special=mv.fixed||mv.flv||mv.half,e=mv.typeless||special?1:effP(ty,tm.p),stab=!mv.typeless&&stabP(ty,me.p)?(me.ab===91?2:1.5):1;
   let tot=0,nh=0,crit=0;
   for(let h=0;h<hits&&tm.mh>0;h++){
     let d;const cr=!special&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1);
@@ -158,7 +158,7 @@ function aiPick(E,i){
   if(!ok.length)return "st";
   const sc=ok.map(o=>{const mv=o.mv;
     if(mv.cl===0){if(mv.heal||mv.rest)return m.mh<m.mx*.4?140:3;if(mv.prot)return 14;if(mv.ail)return t.sts||(mv.ail==="cnf"&&tsd.v.cnf)?2:40;if(mv.ch.length){const s=mv.self?sd.v.st[mv.ch[0][0]]:tsd.v.st[mv.ch[0][0]];return Math.abs(s)>=2?3:22}return 4}
-    return (mv.fixed||mv.flv||mv.half?55:mv.pw*(mv.hits?(mv.hits[0]+mv.hits[1])/2:1))*eff(mv.t,t.p[1])*(mv.t===m.p[1]?1.5:1)*(mv.ac?mv.ac/100:1)+8});
+    return (mv.fixed||mv.flv||mv.half?55:mv.pw*(mv.hits?(mv.hits[0]+mv.hits[1])/2:1))*effP(mv.t,t.p)*(stabP(mv.t,m.p)?1.5:1)*(mv.ac?mv.ac/100:1)+8});
   const tot=sc.reduce((a,b)=>a+b*b,0);let r=Math.random()*tot;
   for(let z=0;z<ok.length;z++){r-=sc[z]*sc[z];if(r<=0)return "m"+ok[z].k}
   return "m"+ok[0].k;
@@ -180,7 +180,7 @@ function setSpr(i,sn){
 function bePaint(sn){
   if(!B||!B.SL)return;sn=sn||beSnap(B.E);B.snap=sn;
   B.SL.forEach((sl,i)=>{if(!sl)return;const sd=B.E.sd[i],a=sn.ai[i],m=sd.t[a];if(!m)return;
-    $(sl.n).textContent=B.mode==="s"&&i===0&&typeof nk==="function"?nk(m.p[0]):m.p[0];$(sl.l).textContent=STAR[m.p[2]]+" "+TIPO[m.p[1]]+" Nv"+m.l;
+    $(sl.n).textContent=B.mode==="s"&&i===0&&typeof nk==="function"?nk(m.p[0]):m.p[0];$(sl.l).textContent=STAR[m.p[2]]+" "+tyNm(m.p)+" Nv"+m.l;
     const hp=Math.max(0,sn.hp[i][a]),pc=hp/m.mx,bar=$(sl.h);bar.style.width=pc*100+"%";bar.style.background=pc>.5?"#3ecf5a":pc>.2?"#f5c400":"#e63950";
     const st=sn.st[i][a];
     if(sl.st){const e=$(sl.st);e.textContent=st?STS[st][0]:"";e.style.background=st?STS[st][1]:"";e.hidden=!st}
@@ -257,11 +257,11 @@ function xpBar(){
   $("xb").style.width=(d.l>=100?100:Math.min(100,d.x/nd*100))+"%";
   $("xt").textContent="Exp "+(d.l>=100?"máx.":Math.min(d.x,nd)+"/"+nd);
 }
-function effTag(mv,foe){if(!foe||mv.cl===0||mv.typeless||mv.fixed||mv.flv||mv.half)return"";const e=eff(mv.t,foe.p[1]);return e>1?' · <b class="ef2">×2</b>':e<1?' · <b class="ef5">×½</b>':""}
+function effTag(mv,foe){if(!foe||mv.cl===0||mv.typeless||mv.fixed||mv.flv||mv.half)return"";const e=effP(mv.t,foe.p);return e>=4?' · <b class="ef2">×4</b>':e>1?' · <b class="ef2">×2</b>':e<=.25?' · <b class="ef5">×¼</b>':e<1?' · <b class="ef5">×½</b>':""}
 function mvBtn(mv,pp,mx,attr,foe){return '<button class="mvb" '+attr+(pp<=0?' disabled':'')+' style="--tc:'+(TC[mv.t]||"#999")+'" title="'+esc(mvDesc(mv))+'"><span>'+esc(mv.n)+'</span><small>'+EM[mv.t]+' '+TIPO[mv.t]+' · PP '+pp+'/'+mx+effTag(mv,foe)+'</small></button>'}
 // tarjeta de Pokémon para elegir a quién sacar (igual que en el selector de equipo: sprite animado, tipo, nivel y PS)
 function swCard(t,attr,dis,tag){const p=t.p,n=p[0],sh=!!(S.shiny&&S.shiny[n]>0),hp=Math.max(0,t.mh),k=t.mx?hp/t.mx:0,col=k>.5?"#3ecf8e":k>.2?"#ffd35c":"#e63950";
-  return '<button class="swc '+p[2]+(hp<=0?' ko':'')+(tag?' tg':'')+'" '+attr+(dis?' disabled':'')+'><span class="swspr">'+ico(p,64,false,sh)+'</span><span class="swt"><b>'+(sh?"✨ ":"")+esc(typeof nk==="function"?nk(n):n)+'</b><small>Nv'+t.l+' · '+(STAR[p[2]]||"")+'</small><small>'+EM[p[1]]+' '+TIPO[p[1]]+'</small><span class="swhp"><i style="width:'+(k*100).toFixed(1)+'%;background:'+col+'"></i></span><small>PS '+hp+'/'+t.mx+(t.sts&&STS[t.sts]?' · '+STS[t.sts][0]:'')+'</small></span>'+(tag?'<i class="swtag">'+tag+'</i>':'')+'</button>'}
+  return '<button class="swc '+p[2]+(hp<=0?' ko':'')+(tag?' tg':'')+'" '+attr+(dis?' disabled':'')+'><span class="swspr">'+ico(p,64,false,sh)+'</span><span class="swt"><b>'+(sh?"✨ ":"")+esc(typeof nk==="function"?nk(n):n)+'</b><small>Nv'+t.l+' · '+(STAR[p[2]]||"")+'</small><small>'+tyTxt(p)+'</small><span class="swhp"><i style="width:'+(k*100).toFixed(1)+'%;background:'+col+'"></i></span><small>PS '+hp+'/'+t.mx+(t.sts&&STS[t.sts]?' · '+STS[t.sts][0]:'')+'</small></span>'+(tag?'<i class="swtag">'+tag+'</i>':'')+'</button>'}
 const swGrid=h=>'<div class="swgrid">'+h+'</div>';
 function setMenu(v){
   if(!B||B.mode!=="s")return;
@@ -409,7 +409,7 @@ async function gainXp(p,amt){
   let up=false;
   while(d.l<cap&&d.x>=need(d.l)){
     d.x-=need(d.l);d.l++;up=true;snd("lvl");qEv("lvl");
-    if(act){const xb=$("xb");xb.style.transition="none";xb.style.width="0%";void xb.offsetWidth;xb.style.transition="";burst("⭐",pos("msp"),8,60,26);$("ml").textContent=STAR[p[2]]+" "+TIPO[p[1]]+" Nv"+d.l}
+    if(act){const xb=$("xb");xb.style.transition="none";xb.style.width="0%";void xb.offsetWidth;xb.style.transition="";burst("⭐",pos("msp"),8,60,26);$("ml").textContent=STAR[p[2]]+" "+tyNm(p)+" Nv"+d.l}
     await say("¡"+p[0]+" sube al nivel "+d.l+"!");
     if(act){xpBar();await sleep(500)}
   }

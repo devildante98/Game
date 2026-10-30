@@ -42,7 +42,7 @@ function rdTick(fromSnap){
   const d=RD.d;if(!d||!$("mgB"))return;const now=Date.now(),me=RD.me,pl=d.pl||{},ids=Object.keys(pl);
   if(d.st==="lobby"){RD.phase="lobby";const b=PM[d.boss]||raidBoss();if(!fromSnap&&$("rdLob"))return;
     $("rdTm").textContent=ids.length+"/"+RD_MAX;
-    $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+EM[b[1]]+' '+TIPO[b[1]]+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos.</p>'+(ids.length<RD_MAX?'<button class="rdinv" data-rdchat="inv">📨 Invitar a más gente por el chat</button>':'')+'<div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
+    $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+tyTxt(b)+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos.</p>'+(ids.length<RD_MAX?'<button class="rdinv" data-rdchat="inv">📨 Invitar a más gente por el chat</button>':'')+'<div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
       (d.h===me?'<button class="red big" id="rdGo">⚔️ ¡Empezar la incursión!</button><small class="mut">Cuantos más seáis, más PS tendrá el jefe… ¡pero más probabilidades de ganar!</small>':'<p><b>Esperando a que el anfitrión empiece…</b></p>')+'</div>';
     const g=$("rdGo");if(g)g.onclick=()=>{const n=Object.keys(RD.d.pl||{}).length,mx=Math.round(RD_HP*n*(PM[d.boss][2]==="L"?1.15:1));window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:Date.now()+3500,end:Date.now()+3500+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
     return}
@@ -72,7 +72,7 @@ function rdMeUI(){const m=RD.team[RD.ai],box=$("rdMe");if(!box)return;
 }
 function rdAttack(k){
   if(RD.phase!=="fight"||RD.out||!RD.d)return;const now=Date.now();if(now<(RD.d.go||0)||now<RD.cd)return;const m=RD.team[RD.ai];if(!m||m.mh<=0)return;
-  const mv=k>=0?m.m[k]:{n:"Placaje",pw:40,t:"normal",cl:1},foe=PM[RD.d.boss],e=mv.typeless?1:eff(mv.t,foe[1]),stab=mv.t===m.p[1]?1.5:1,cr=Math.random()<(m.it==="scope"?.12:.06);
+  const mv=k>=0?m.m[k]:{n:"Placaje",pw:40,t:"normal",cl:1},foe=PM[RD.d.boss],e=mv.typeless?1:effP(mv.t,foe),stab=stabP(mv.t,m.p)?1.5:1,cr=Math.random()<(m.it==="scope"?.12:.06);
   const dmg=Math.max(1,Math.round(m.ma*(mv.pw||40)/45*e*stab*(.85+Math.random()*.15)*(cr?1.5:1)*(m.it==="lorb"?1.3:1)*2.2));
   RD.acc+=dmg;RD.cd=now+Math.max(650,900+(mv.pw||40)*3);snd("hit",e);
   const bs=$("rdBoss");if(bs&&!hubCalm()){bs.animate([{transform:"translateX(0)",filter:"brightness(1)"},{transform:"translateX(-8px)",filter:"brightness(2.2)"},{transform:"translateX(6px)"},{transform:"none",filter:"brightness(1)"}],{duration:300});const r=bs.getBoundingClientRect();mgPop(r.left+r.width/2+Math.random()*80-40,r.top+r.height/3,(cr?"¡Crítico! ":"")+fmt(dmg),e>1?"#ffd35c":e<1?"#9aa":"#fff")}
@@ -82,7 +82,7 @@ function rdAttack(k){
 }
 function rdFlush(){clearTimeout(RD.flushT);RD.flushT=0;const a=RD.acc;if(!a||!RD.id||!window.FB)return;RD.acc=0;window.FB.raidHit(RD.id,RD.me,a).catch(()=>{RD.acc+=a})}
 function rdBossHit(){
-  const m=RD.team[RD.ai];if(!m||RD.out)return;const foe=PM[RD.d.boss],e=eff(foe[1],m.p[1]),dmg=Math.max(1,Math.round(m.mx*(.11+Math.random()*.1)*e/(m.nd||1)));
+  const m=RD.team[RD.ai];if(!m||RD.out)return;const foe=PM[RD.d.boss],e=effP(foe[1],m.p),dmg=Math.max(1,Math.round(m.mx*(.11+Math.random()*.1)*e/(m.nd||1)));
   m.mh=Math.max(0,m.mh-dmg);snd("hit",1);const me=$("rdMe");if(me&&!hubCalm())me.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:220});
   const bs=$("rdBoss");if(bs&&!hubCalm())bs.animate([{transform:"scale(1)"},{transform:"scale(1.08) translateY(10px)"},{transform:"none"}],{duration:300});
   $("rdMsg").textContent="¡"+RD.d.boss+" ataca! "+(e>1?"¡Es súper eficaz! ":"")+nk(m.p[0])+" pierde "+dmg+" PS.";
@@ -113,7 +113,7 @@ nxPanel("raidP","🔴 Incursiones","Uníos hasta 4 entrenadores para derrotar a 
 {const g=HUB.find(x=>x.k==="onl");if(g&&!g.tabs.some(t=>t[0]==="raidP"))g.tabs.splice(1,0,["raidP","Incursiones"]);HUBP.raidP="onl";HUBR.raidP=()=>raidUI(true)}
 async function raidUI(force){
   const box=$("raidPB");if(!box)return;const b=raidBoss(),nxt=(Math.floor(Date.now()/(3*36e5))+1)*3*36e5;
-  let h='<div class="rdcard"><div class="rdbossv">'+icoHD(b,170,false,false)+'</div><div><small>JEFE ACTUAL · cambia en '+hhFmt(nxt-Date.now())+'</small><h3>'+esc(b[0])+'</h3><small>'+STAR[b[2]]+' · '+EM[b[1]]+' '+TIPO[b[1]]+' · Débil a: '+Object.keys(TIPO).filter(t=>eff(t,b[1])>1).map(t=>EM[t]).join(" ")+'</small><div class="mginf"><span>🎁 Premios hoy: <b>'+raidLeft()+'/'+RD_DAY+'</b></span></div>'+(window.FB?'<button class="red big" id="rdNew">➕ Crear sala</button>':'<small class="mut">Inicia sesión para participar en incursiones.</small>')+'</div></div>';
+  let h='<div class="rdcard"><div class="rdbossv">'+icoHD(b,170,false,false)+'</div><div><small>JEFE ACTUAL · cambia en '+hhFmt(nxt-Date.now())+'</small><h3>'+esc(b[0])+'</h3><small>'+STAR[b[2]]+' · '+tyTxt(b)+' · Débil a: '+Object.keys(TIPO).filter(t=>effP(t,b)>1).map(t=>EM[t]).join(" ")+'</small><div class="mginf"><span>🎁 Premios hoy: <b>'+raidLeft()+'/'+RD_DAY+'</b></span></div>'+(window.FB?'<button class="red big" id="rdNew">➕ Crear sala</button>':'<small class="mut">Inicia sesión para participar en incursiones.</small>')+'</div></div>';
   h+='<h3 class="shh">Salas abiertas</h3><div id="rdList">'+rdListHTML()+'</div>';box.innerHTML=h;const n=$("rdNew");if(n)n.onclick=rdCreate;
   if(window.FB&&window.FB.raidList&&(force||!RD.list||Date.now()-RD.at>15e3)){try{RD.list=await window.FB.raidList();RD.at=Date.now()}catch(e){RD.list=RD.list||[]}const l=$("rdList");if(l)l.innerHTML=rdListHTML()}
 }

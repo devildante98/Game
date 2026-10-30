@@ -18,7 +18,7 @@ var TP={slot:-1,q:"",o:"lv"};
 const tpSorts={lv:["Nivel (mayor primero)",(a,b)=>lvd(b[0]).l-lvd(a[0]).l||a[0].localeCompare(b[0],"es")],az:["Alfabético (A-Z)",(a,b)=>nk(a[0]).localeCompare(nk(b[0]),"es")],za:["Alfabético (Z-A)",(a,b)=>nk(b[0]).localeCompare(nk(a[0]),"es")],rar:["Rareza",(a,b)=>"CREML".indexOf(b[2])-"CREML".indexOf(a[2])||lvd(b[0]).l-lvd(a[0]).l],dex:["Número de Pokédex",(a,b)=>(a[4]||0)-(b[4]||0)]};
 function tpOwn(){
   const q=nrm(($("fq")||{}).value||"").trim(),r=($("fr2")||{}).value,t=($("ft2")||{}).value,g=($("fg2")||{}).value,q2=nrm(TP.q||"");
-  return P.filter(p=>S.owned[p[0]]&&!isSup(p[0])&&(!r||p[2]===r)&&(!t||p[1]===t)&&(!g||p[3]===+g)&&(nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))&&(!q2||nrm(p[0]).includes(q2)||nrm(nk(p[0])).includes(q2))).sort(tpSorts[TP.o]?tpSorts[TP.o][1]:tpSorts.lv[1]);
+  return P.filter(p=>S.owned[p[0]]&&!isSup(p[0])&&(!r||p[2]===r)&&(!t||tys(p).includes(t))&&(!g||p[3]===+g)&&(nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))&&(!q2||nrm(p[0]).includes(q2)||nrm(nk(p[0])).includes(q2))).sort(tpSorts[TP.o]?tpSorts[TP.o][1]:tpSorts.lv[1]);
 }
 // ---------- casillas visuales del equipo ----------
 {const _u=updTeam;updTeam=function(){_u.apply(this,arguments);try{tmCards()}catch(e){console.error(e)}}}
@@ -27,7 +27,7 @@ function tmCards(){
     const sel=$("tm"+i);if(!sel)continue;const slot=sel.closest(".slot6");if(!slot)continue;slot.classList.add("tmv");
     let b=slot.querySelector(".tmbtn");if(!b){b=document.createElement("button");b.type="button";b.className="tmbtn";b.dataset.tm=i;slot.appendChild(b)}
     const n=S.team[i],p=n&&PM[n];
-    b.innerHTML=p?'<span class="tmn">'+(i+1)+'</span><span class="tmspr">'+ico(p,64,false,!!(S.shiny&&S.shiny[n]>0))+'</span><span class="tmt"><b>'+esc(nk(n))+'</b><small>Nv'+lvd(n).l+' · '+STAR[p[2]]+'</small><small>'+EM[p[1]]+' '+TIPO[p[1]]+(S.hp[n]===0?' · <span class="tmko">debilitado</span>':'')+'</small></span><span class="tmch">Cambiar</span>':'<span class="tmn">'+(i+1)+'</span><span class="tmspr tmempty">＋</span><span class="tmt"><b>Casilla vacía</b><small>Toca para elegir un Pokémon</small></span>';
+    b.innerHTML=p?'<span class="tmn">'+(i+1)+'</span><span class="tmspr">'+ico(p,64,false,!!(S.shiny&&S.shiny[n]>0))+'</span><span class="tmt"><b>'+esc(nk(n))+'</b><small>Nv'+lvd(n).l+' · '+STAR[p[2]]+'</small><small>'+tyTxt(p)+(S.hp[n]===0?' · <span class="tmko">debilitado</span>':'')+'</small></span><span class="tmch">Cambiar</span>':'<span class="tmn">'+(i+1)+'</span><span class="tmspr tmempty">＋</span><span class="tmt"><b>Casilla vacía</b><small>Toca para elegir un Pokémon</small></span>';
     b.classList.toggle("on",!!p);
   }
 }
@@ -45,7 +45,7 @@ function tpRender(){const m=$("tpM");
 function tpList(){const L=$("tpL");if(!L)return;const own=tpOwn(),cur=S.team[TP.slot];
   L.innerHTML=(cur?'<button class="tpc tpquit" data-tpn=""><span class="tpspr">✖</span><b>Dejar vacía</b><small>Quitar a '+esc(nk(cur))+'</small></button>':'')+
     (own.length?own.slice(0,400).map(p=>{const n=p[0],inT=S.team.indexOf(n),bz=busyMon(n),sh=S.shiny&&S.shiny[n]>0;
-      return '<button class="tpc '+p[2]+(inT===TP.slot?' cur':'')+(bz?' busy':'')+'" data-tpn="'+esc(n)+'"'+(bz?' disabled title="Está '+esc(busyTxt(n))+'"':'')+'><span class="tpspr">'+ico(p,56,false,sh)+'</span><b>'+(sh?"✨ ":"")+esc(nk(n))+'</b><small>Nv'+lvd(n).l+' · '+STAR[p[2]]+'</small><small>'+EM[p[1]]+' '+TIPO[p[1]]+'</small>'+(inT>=0?'<i class="tpin">En casilla '+(inT+1)+'</i>':'')+(S.hp[n]===0?'<i class="tpko">Debilitado</i>':'')+'</button>'}).join(""):'<small class="mut">No tienes Pokémon que coincidan con la búsqueda o los filtros.</small>')}
+      return '<button class="tpc '+p[2]+(inT===TP.slot?' cur':'')+(bz?' busy':'')+'" data-tpn="'+esc(n)+'"'+(bz?' disabled title="Está '+esc(busyTxt(n))+'"':'')+'><span class="tpspr">'+ico(p,56,false,sh)+'</span><b>'+(sh?"✨ ":"")+esc(nk(n))+'</b><small>Nv'+lvd(n).l+' · '+STAR[p[2]]+'</small><small>'+tyTxt(p)+'</small>'+(inT>=0?'<i class="tpin">En casilla '+(inT+1)+'</i>':'')+(S.hp[n]===0?'<i class="tpko">Debilitado</i>':'')+'</button>'}).join(""):'<small class="mut">No tienes Pokémon que coincidan con la búsqueda o los filtros.</small>')}
 function tpSet(i,n){
   if(fcd){toast("Termina el combate antes de cambiar el equipo.");return false}
   if(n&&isSup(n)){toast("💠 "+n+" es una forma suprema: lleva a "+SUP[n]+" y transfórmalo en combate.");return false}

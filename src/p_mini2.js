@@ -133,6 +133,9 @@ const tourPrevWeek=()=>isoWeek(new Date(Date.now()-7*864e5));
 const TOUR_ROT=[["","who mem dig fish thr run exc wgt"],["2026-W45","who mem dig fish thr run exc wgt fos"]];
 function tourGameOf(w){const n=parseInt(String(w).split("-W")[1],10)+parseInt(w,10)*53;let ids=TOUR_ROT[0][1];for(const r of TOUR_ROT)if(String(w)>=r[0])ids=r[1];
   const L=ids.split(" ").map(id=>MGS.find(g=>g.id===id)).filter(Boolean);return L[n%L.length]}
+// desde 2026-W44 el torneo usa la clasificación semanal de su minijuego (tours/{semana}_{juego}): así ambas coinciden siempre
+const TOUR_MGR_FROM="2026-W44",tourKey=w=>String(w)>=TOUR_MGR_FROM?w+"_"+tourGameOf(w).id:w;
+const tourBest=w=>Math.max(S.tour&&S.tour.w===w?S.tour.b|0:0,S.mgw&&S.mgw.w===w?(S.mgw.b[tourGameOf(w).id]|0):0);
 const tourEndsIn=()=>{const d=new Date(),k=(8-(d.getDay()||7))%7||7,e=new Date(d.getFullYear(),d.getMonth(),d.getDate()+k);return e-d};
 // premios del torneo: cada semana tiene su propio legendario, su forma especial y su variocolor de premio
 function tourMons(w){let h=0;for(const ch of String(w))h=(h*31+ch.charCodeAt(0))|0;const r=rngSeed(h),pk=a=>a[Math.floor(r()*a.length)];
@@ -155,18 +158,18 @@ function tourGive(pos,w){
 let TR_={w:"",top:null,at:0};
 function tourSubmit(id,score){
   const w=tourWeek(),g=tourGameOf(w);if(!g||g.id!==id||score<=0)return "";
-  S.tour=S.tour&&S.tour.w===w?S.tour:{w:w,b:0};if(score<=S.tour.b)return '<p class="tourm">🏆 Torneo semanal: tu mejor marca sigue siendo <b>'+fmt(S.tour.b)+'</b>.</p>';
+  S.tour=S.tour&&S.tour.w===w?S.tour:{w:w,b:0};const best=tourBest(w);if(score<=best)return '<p class="tourm">🏆 Torneo semanal: tu mejor marca sigue siendo <b>'+fmt(best)+'</b>.</p>';
   S.tour.b=score;save();
-  if(window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid())window.FB.tourSet(w,{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()}).then(()=>{TR_.at=0}).catch(()=>{});
+  if(String(w)<TOUR_MGR_FROM&&window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid())window.FB.tourSet(w,{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()}).then(()=>{TR_.at=0}).catch(()=>{});
   return '<p class="tourm">🏆 ¡Nueva mejor marca en el Torneo semanal: <b>'+fmt(score)+'</b>!'+(window.FB?'':' (Inicia sesión para aparecer en la clasificación.)')+'</p>';
 }
 async function tourLoad(force){
   const w=tourWeek();if(!window.FB||!window.FB.tourTop)return null;if(!force&&TR_.w===w&&TR_.top&&Date.now()-TR_.at<60e3)return TR_.top;
-  try{TR_.top=await window.FB.tourTop(w,10);TR_.w=w;TR_.at=Date.now()}catch(e){TR_.top=TR_.top||[]}return TR_.top;
+  try{TR_.top=await window.FB.tourTop(tourKey(w),10);TR_.w=w;TR_.at=Date.now()}catch(e){TR_.top=TR_.top||[]}return TR_.top;
 }
 async function tourClaim(){
-  const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!S.tour||S.tour.w!==pw||!(S.tour.b>0)||S.tourDone===pw)return;
-  let top=null;try{top=await window.FB.tourTop(pw,10)}catch(e){return}S.tourDone=pw;const me=window.FB.uid(),i=(top||[]).findIndex(x=>x.id===me);
+  const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!(tourBest(pw)>0)||S.tourDone===pw)return;
+  let top=null;try{top=await window.FB.tourTop(tourKey(pw),10)}catch(e){return}S.tourDone=pw;const me=window.FB.uid(),i=(top||[]).findIndex(x=>x.id===me);
   const g=tourGiveShow(i,pw);
 }
 function tourGiveShow(i,pw){
@@ -180,7 +183,7 @@ function tourGiveShow(i,pw){
 function myCrown(){try{return S.crown&&S.crown.w===tourWeek()?S.crown.p:0}catch(e){return 0}}
 setTimeout(()=>{try{tourClaim()}catch(e){}},6000);
 function tourHTML(){
-  const w=tourWeek(),g=tourGameOf(w),ms=tourEndsIn(),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),my=S.tour&&S.tour.w===w?S.tour.b:0,me=window.FB&&window.FB.uid?window.FB.uid():null;
+  const w=tourWeek(),g=tourGameOf(w),ms=tourEndsIn(),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),my=tourBest(w),me=window.FB&&window.FB.uid?window.FB.uid():null;
   const L=TR_.w===w&&TR_.top?TR_.top:null,M=tourMons(w),myPos=L?L.findIndex(x=>x.id===me):-1;
   const pod=(T,p,cls)=>'<div class="tpod '+cls+'"><div class="tpm">'+icoHD(p,cls==="p1"?120:92,false,!!T.sh)+(T.sh?'<span class="tpsh">✨</span>':'')+'</div><span class="tpic">'+T.ic+'</span><b>'+(T.sh?"✨ ":"")+esc(p[0])+'</b><small>'+fmt(T.t)+' 🎟️ + '+Object.keys(T.it).map(k=>T.it[k]+" "+IN2(k)).join(" + ")+'</small><div class="tpbar"></div></div>';
   const tro=(S.trophies||[]),cnt=k=>tro.filter(x=>k===4?x.p>3:x.p===k).length;

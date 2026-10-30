@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793387190">
+<meta name="game-build" content="1793387541">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -5519,7 +5519,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793387190";
+const GAME_B="1793387541";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7133,6 +7133,9 @@ const tourPrevWeek=()=>isoWeek(new Date(Date.now()-7*864e5));
 const TOUR_ROT=[["","who mem dig fish thr run exc wgt"],["2026-W45","who mem dig fish thr run exc wgt fos"]];
 function tourGameOf(w){const n=parseInt(String(w).split("-W")[1],10)+parseInt(w,10)*53;let ids=TOUR_ROT[0][1];for(const r of TOUR_ROT)if(String(w)>=r[0])ids=r[1];
   const L=ids.split(" ").map(id=>MGS.find(g=>g.id===id)).filter(Boolean);return L[n%L.length]}
+// desde 2026-W44 el torneo usa la clasificación semanal de su minijuego (tours/{semana}_{juego}): así ambas coinciden siempre
+const TOUR_MGR_FROM="2026-W44",tourKey=w=>String(w)>=TOUR_MGR_FROM?w+"_"+tourGameOf(w).id:w;
+const tourBest=w=>Math.max(S.tour&&S.tour.w===w?S.tour.b|0:0,S.mgw&&S.mgw.w===w?(S.mgw.b[tourGameOf(w).id]|0):0);
 const tourEndsIn=()=>{const d=new Date(),k=(8-(d.getDay()||7))%7||7,e=new Date(d.getFullYear(),d.getMonth(),d.getDate()+k);return e-d};
 // premios del torneo: cada semana tiene su propio legendario, su forma especial y su variocolor de premio
 function tourMons(w){let h=0;for(const ch of String(w))h=(h*31+ch.charCodeAt(0))|0;const r=rngSeed(h),pk=a=>a[Math.floor(r()*a.length)];
@@ -7155,18 +7158,18 @@ function tourGive(pos,w){
 let TR_={w:"",top:null,at:0};
 function tourSubmit(id,score){
   const w=tourWeek(),g=tourGameOf(w);if(!g||g.id!==id||score<=0)return "";
-  S.tour=S.tour&&S.tour.w===w?S.tour:{w:w,b:0};if(score<=S.tour.b)return '<p class="tourm">🏆 Torneo semanal: tu mejor marca sigue siendo <b>'+fmt(S.tour.b)+'</b>.</p>';
+  S.tour=S.tour&&S.tour.w===w?S.tour:{w:w,b:0};const best=tourBest(w);if(score<=best)return '<p class="tourm">🏆 Torneo semanal: tu mejor marca sigue siendo <b>'+fmt(best)+'</b>.</p>';
   S.tour.b=score;save();
-  if(window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid())window.FB.tourSet(w,{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()}).then(()=>{TR_.at=0}).catch(()=>{});
+  if(String(w)<TOUR_MGR_FROM&&window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid())window.FB.tourSet(w,{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()}).then(()=>{TR_.at=0}).catch(()=>{});
   return '<p class="tourm">🏆 ¡Nueva mejor marca en el Torneo semanal: <b>'+fmt(score)+'</b>!'+(window.FB?'':' (Inicia sesión para aparecer en la clasificación.)')+'</p>';
 }
 async function tourLoad(force){
   const w=tourWeek();if(!window.FB||!window.FB.tourTop)return null;if(!force&&TR_.w===w&&TR_.top&&Date.now()-TR_.at<60e3)return TR_.top;
-  try{TR_.top=await window.FB.tourTop(w,10);TR_.w=w;TR_.at=Date.now()}catch(e){TR_.top=TR_.top||[]}return TR_.top;
+  try{TR_.top=await window.FB.tourTop(tourKey(w),10);TR_.w=w;TR_.at=Date.now()}catch(e){TR_.top=TR_.top||[]}return TR_.top;
 }
 async function tourClaim(){
-  const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!S.tour||S.tour.w!==pw||!(S.tour.b>0)||S.tourDone===pw)return;
-  let top=null;try{top=await window.FB.tourTop(pw,10)}catch(e){return}S.tourDone=pw;const me=window.FB.uid(),i=(top||[]).findIndex(x=>x.id===me);
+  const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!(tourBest(pw)>0)||S.tourDone===pw)return;
+  let top=null;try{top=await window.FB.tourTop(tourKey(pw),10)}catch(e){return}S.tourDone=pw;const me=window.FB.uid(),i=(top||[]).findIndex(x=>x.id===me);
   const g=tourGiveShow(i,pw);
 }
 function tourGiveShow(i,pw){
@@ -7180,7 +7183,7 @@ function tourGiveShow(i,pw){
 function myCrown(){try{return S.crown&&S.crown.w===tourWeek()?S.crown.p:0}catch(e){return 0}}
 setTimeout(()=>{try{tourClaim()}catch(e){}},6000);
 function tourHTML(){
-  const w=tourWeek(),g=tourGameOf(w),ms=tourEndsIn(),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),my=S.tour&&S.tour.w===w?S.tour.b:0,me=window.FB&&window.FB.uid?window.FB.uid():null;
+  const w=tourWeek(),g=tourGameOf(w),ms=tourEndsIn(),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),my=tourBest(w),me=window.FB&&window.FB.uid?window.FB.uid():null;
   const L=TR_.w===w&&TR_.top?TR_.top:null,M=tourMons(w),myPos=L?L.findIndex(x=>x.id===me):-1;
   const pod=(T,p,cls)=>'<div class="tpod '+cls+'"><div class="tpm">'+icoHD(p,cls==="p1"?120:92,false,!!T.sh)+(T.sh?'<span class="tpsh">✨</span>':'')+'</div><span class="tpic">'+T.ic+'</span><b>'+(T.sh?"✨ ":"")+esc(p[0])+'</b><small>'+fmt(T.t)+' 🎟️ + '+Object.keys(T.it).map(k=>T.it[k]+" "+IN2(k)).join(" + ")+'</small><div class="tpbar"></div></div>';
   const tro=(S.trophies||[]),cnt=k=>tro.filter(x=>k===4?x.p>3:x.p===k).length;

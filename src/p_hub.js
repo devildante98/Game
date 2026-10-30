@@ -150,7 +150,7 @@ document.addEventListener("click",e=>{
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("hubG").hidden)hubMenu(false);else if(!$("hubM").hidden&&$("trdM").hidden&&$("prof").hidden&&$("evo").hidden)hubClose()}});
 hubInit();
 // ================= ajustes en una ventana con secciones (Sonido, Gráficos, Controles, Accesibilidad, Cuenta, Acerca de) =================
-const SETT=[["snd","Sonido"],["gfx","Gráficos"],["ctl","Controles"],["acc","Accesibilidad"],["acct","Cuenta"],["about","Acerca de"]];
+const SETT=[["snd","🔊 Sonido"],["gfx","🎨 Gráficos"],["ctl","🎮 Controles"],["acc","♿ Accesibilidad"],["acct","👤 Cuenta"],["about","ℹ️ Acerca de"]];
 let SETTAB="snd";
 function setTab(k){SETTAB=k;document.querySelectorAll("#optp .settabs button").forEach(b=>b.classList.toggle("on",b.dataset.st===k));document.querySelectorAll("#optp .setpane").forEach(p=>{p.hidden=p.dataset.st!==k});const b=document.querySelector("#optp .setbody");if(b)b.scrollTop=0}
 function setInit(){

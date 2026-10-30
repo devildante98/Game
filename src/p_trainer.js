@@ -14,7 +14,7 @@ const TRO=[
   ["bl","Mejillas",["Normales","Sonrojadas","Pecas","Tirita","Lunar"],"c"],
   ["hs","Peinado",["Corto","Puntiagudo","Melena","Coleta","Dos coletas","Rapado","Rizado","Flequillo largo","Moño","Afro","Cresta","Media melena","Trenza","Dos moños","Despeinado","Tupé","Bob","Ondulado largo","Hacia atrás","Mechón en el ojo","Coleta alta","Dos trenzas","Calvo","Melena salvaje","Pelo largo liso","Coletas bajas","Rastas","Undercut","Media cola","Puntas largas"],"p"],
   ["hc","Color de pelo","hair","p"],
-  ["hat","Gorro",["Ninguno","Gorra","Gorra al revés","Gorro de lana","Sombrero","Cinta","Lazo","Gafas de sol","Boina","Visera","Gorro de pescador","Sombrero de paja","Corona de flores","Gafas de aviador","Diadema","Pañuelo","Orejas de gato","Casco de explorador","Sombrero de copa","Sombrero vaquero","Gorro de Navidad","Auriculares","Bandana","Sombrero de bruja","Gorra de capitán"],"a"],
+  ["hat","Gorro",["Ninguno","Gorra","Gorra al revés","Gorro de lana","Sombrero","Cinta","Lazo","Gafas de sol","Boina","Visera","Gorro de pescador","Sombrero de paja","Corona de flores","Gafas de aviador","Diadema","Pañuelo","Orejas de gato","Casco de explorador","Sombrero de copa","Sombrero vaquero","Gorro de Navidad","Auriculares","Bandana","Sombrero de bruja","Gorra de capitán","Gorra de Prestigio","Cinta de Prestigio","Corona de laurel","Sombrero de Campeón","Halo de Prestigio","Corona Suprema"],"a"],
   ["hac","Color del gorro y adornos","cl","a"],["gl","Gafas",["No","Redondas","Cuadradas","De sol","Media montura","Parche"],"a"],
   ["top","Parte de arriba",["Camiseta","Chaqueta","Sudadera","Chaleco","Vestido","Camisa","Camiseta de tirantes","Polo","Abrigo largo","Jersey","Top corto","Chaqueta deportiva","Bata","Peto","Camiseta de rayas","Cazadora","Kimono","Uniforme de marinero","Traje","Sudadera abierta","Chaqueta de plumas","Camiseta de fútbol"],"r"],
   ["tc","Color principal","cl","r"],["ac","Color secundario","cl","r"],
@@ -23,7 +23,7 @@ const TRO=[
   ["bp","Mochila",["No","Mochila","Bandolera","Riñonera","Mochila de explorador","Bolso"],"a"],["bpc","Color de la mochila","cl","a"],
   ["shs","Calzado",["Zapatillas","Botas","Sandalias","Zapatos","Botas altas","Botas de montaña","Zapatillas altas","Botas de agua"],"r"],
   ["pat","Estampado",["Liso","Rayas","Estrella","Rayo","Corazón","Hoja","Llama","Gota","Número 1"],"r"],["pc","Color del estampado","cl","r"],
-  ["nk","Cuello",["Nada","Bufanda","Collar","Pañuelo","Corbata","Lazo"],"a"],["nkc","Color del cuello","cl","a"],
+  ["nk","Cuello",["Nada","Bufanda","Collar","Pañuelo","Corbata","Lazo","Medalla de Prestigio","Collar de estrellas"],"a"],["nkc","Color del cuello","cl","a"],
   ["glv","Guantes",["No","Sin dedos","Completos","Muñequeras"],"a"],["glc","Color de los guantes","cl","a"],
   ["blt","Cinturón",["No","Cinturón","Con Pokéballs"],"a"],["ear","Pendientes",["No","Aros","Bolitas","Estrellas"],"a"],
   ["mch","Mechas",["No","Puntas","Mechón","Reflejos"],"p"],["mcc","Color de las mechas","hair","p"],
@@ -35,6 +35,10 @@ const TRO=[
   ["wst","Prenda en la cintura",["Nada","Chaqueta atada","Jersey atado"],"r"],["wsc","Color de la prenda atada","cl","r"],
   ["wr","Muñeca",["Nada","Reloj","Pulsera","Brazalete"],"a"],["wrc","Color de la pulsera","cl","a"]
 ];
+// prendas exclusivas de prestigio: [clave][opción] = nivel de prestigio necesario
+const TRLOCK={hat:{25:1,26:2,27:3,28:4,29:5,30:6},nk:{6:1,7:3}};
+const trLk=(k,v)=>(TRLOCK[k]&&TRLOCK[k][v])||0,trOk=(k,v)=>trLk(k,v)<=(S.prs||0);
+const trPrsItems=l=>{const r=[];Object.keys(TRLOCK).forEach(k=>{const o=TRO.find(x=>x[0]===k);Object.keys(TRLOCK[k]).forEach(v=>{if(TRLOCK[k][v]===l)r.push(o[2][v])})});return r};
 const TRTABS=[["c","🙂 Cara y cuerpo"],["p","💇 Pelo"],["r","👕 Ropa"],["a","🎒 Accesorios"]];
 const TRDEF={b:0,sk:1,fs:0,ey:0,ec:0,mo:0,bl:0,hs:1,hc:1,hat:1,hac:4,gl:0,top:1,tc:1,ac:9,bot:0,bc:6,sh:11,bp:1,bpc:3,shs:0,pat:0,pc:9,nk:0,nkc:0,glv:0,glc:11,blt:0,ear:0,mch:0,mcc:4,brw:0,brd:0,mk:0,mkc:0,ha:0,sck:0,sckc:9,wst:0,wsc:5,wr:0,wrc:2};
 const trN=o=>Array.isArray(o[2])?o[2].length:TRP[o[2]].length;
@@ -43,7 +47,7 @@ const trEnc=L=>TRO.map(o=>(+L[o[0]]||0).toString(36)).join("");
 function trDec(s){const L=Object.assign({},TRDEF);if(typeof s!=="string")return L;TRO.forEach((o,i)=>{if(i>=s.length)return;const v=parseInt(s[i],36);if(v>=0&&v<trN(o))L[o[0]]=v});return L}
 function trRandom(){const L={};TRO.forEach(o=>{const n=trN(o),r=Math.random();
   L[o[0]]=["gl","nk","glv","blt","ear","mch","bl","brd","mk","ha","wst","wr"].includes(o[0])&&r<.6?0:o[0]==="hs"&&Math.random()<.9&&false?0:Math.floor(Math.random()*n)});
-  if(L.top===4&&[2,4].includes(L.bot))L.bot=0;if(Math.random()<.8)L.brd=0;if(Math.random()<.75)L.mk=0;if(L.b===1)L.brd=0;if(L.hs===22&&Math.random()<.7)L.hs=0;if(Math.random()<.35)L.hat=0;return L}
+  if(L.top===4&&[2,4].includes(L.bot))L.bot=0;if(Math.random()<.8)L.brd=0;if(Math.random()<.75)L.mk=0;if(L.b===1)L.brd=0;if(L.hs===22&&Math.random()<.7)L.hs=0;if(Math.random()<.35)L.hat=0;Object.keys(TRLOCK).forEach(k=>{if(!trOk(k,L[k]))L[k]=0});return L}
 // ---- color: sombreado con desplazamiento de tono (como el pixel art de los juegos) ----
 function trHex(c){c=c.replace("#","");return[parseInt(c.slice(0,2),16),parseInt(c.slice(2,4),16),parseInt(c.slice(4,6),16)]}
 function trHsl(c){let[r,g,b]=trHex(c).map(v=>v/255);const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2;let h=0,s=0;
@@ -331,7 +335,7 @@ function trURL(L,view,pose){
   }
   // ---- pelo ----
   const HFG=gNew(),ho={g:HFG},STK=[];
-  const capd=[1,2,3,4,8,10,11,15,17,18,19,20,22,23,24].includes(L.hat);
+  const capd=[1,2,3,4,8,10,11,15,17,18,19,20,22,23,24,25,28].includes(L.hat);
   const H0=HY-10.6;
   function crown(lowSides,c){c=c||hc;shp((x,y)=>{const dx=(x-cx)/11,dy=(y-(HY-1.5))/10.6;if(dx*dx+dy*dy>1)return false;if(back)return y<=HY+8;const a=Math.abs(x-cx);return y<=HY-6+(a>6.5?(a-6.5)*lowSides:0)},cx-12,HY-13,cx+12,HY+10,c,ho)}
   function bangs(n,len,c){c=c||hc;for(let i=0;i<n;i++){const t=n===1?.5:i/(n-1),x=cx-8+t*16,ln=len*(1-.25*Math.abs(t-.5));seg(x,HY-9,x+(t<.5?-1:1)*1.2,HY-9+ln,5.4,1.2,c,ho);if(i)STK.push([x-2,HY-7,x-2+(t<.5?-.6:.6),HY-9+ln*.8])}}
@@ -441,6 +445,16 @@ function trURL(L,view,pose){
   if(hat===23){ell(cx,HY-5,16.5,2.9,hac,{tag:"hat"});shp((x,y)=>{const t=(HY-6-y)/(HY-7);return t>=0&&t<=1&&Math.abs(x-(cx+t*t*5))<=9.5*(1-t)+.6},cx-11,0,cx+11,HY-6,hac,{tag:"hat"});rect(cx-8,HY-9,17,3,ac,{ol:false,flat:true});if(!back)put(cx,HY-8,"#ffd35c")}
   if(hat===24){shp((x,y)=>((x-cx)/11.6)**2+((y-(HY-10))/5)**2<=1&&y<=HY-6,cx-13,HY-16,cx+13,HY-6,hac,{tag:"hat"});rect(cx-10,HY-8,21,3,"#26262e",{tag:"hat"});
     if(!back){shp((x,y)=>y>=HY-5&&y<=HY-3&&Math.abs(x-cx)<=10-(y-(HY-5))*1.6,cx-11,HY-5,cx+11,HY-3,"#1c1c22",{tag:"hat"});map(Math.round(cx-1),HY-12,[".g.","ggg",".g."],{g:"#f2c84a"})}}
+  // gorros de prestigio
+  const gd="#f2c84a",gl2="#fff2a8",gk="#9a6f1c",star=(x,y)=>map(Math.round(x-1),Math.round(y-1),[".y.","yyy",".y."],{y:gl2});
+  if(hat===25){capDome(hac);if(!back){shp((x,y)=>y>=HY-5&&y<=HY-3&&Math.abs(x-cx-1)<=12-(y-(HY-5))*1.5,cx-12,HY-5,cx+14,HY-3,gd,{tag:"hat"});rect(cx-3,HY-13,7,5,gd,{tag:"hat"});star(cx,HY-11)}else{rect(cx-3,HY-6,7,2,gd,{ol:false,flat:true});put(cx,HY-14,gd)}}
+  if(hat===26){for(let x=cx-10.5;x<=cx+10.5;x++){put(x,HY-7,hac);put(x,HY-6,gd);put(x,HY-5,tone(gd,2))}if(!back){star(cx-4,HY-6);star(cx+4,HY-6)}else{seg(cx+3,HY-6,cx+6,HY+4,2,1.6,hac);seg(cx-3,HY-6,cx-5,HY+4,2,1.6,hac)}}
+  if(hat===27){for(let i=0;i<=12;i++){const a=Math.PI*(1.06+i*.0733),X=cx+Math.cos(a)*11,Y=HY-2+Math.sin(a)*9.6;if(back&&i>4&&i<8)continue;ell(X,Y,1.9,1.4,i%2?"#5fae3c":"#7fcf4a",{olc:"#2f6b22"});if(i%3===0)put(X,Y-1,gd)}
+    if(!back){ell(cx,HY-11.6,1.6,1.6,gd,{olc:gk});put(cx,HY-12,gl2)}}
+  if(hat===28){ell(cx,HY-5,15,2.8,tone(hac,1),{tag:"hat"});shp((x,y)=>((x-cx)/8.6)**2+((y-(HY-10))/7)**2<=1&&y<=HY-5,cx-9,HY-18,cx+9,HY-5,hac,{tag:"hat"});rect(cx-8,HY-9,17,3,gd,{tag:"hat",ol:false,flat:true});if(!back)star(cx,HY-13)}
+  if(hat===29){const hy0=HY-15.5,ring=(x,y)=>{const d=((x-cx)/9.5)**2+((y-hy0)/3)**2;return d<=1&&d>=.3};shp(ring,cx-11,hy0-4,cx+11,hy0+4,gd,{tag:"hat"})}
+  if(hat===30){map(Math.round(cx-8),HY-15,["y...y...y...y...y","yy..yy.yyy.yy..yy","yyy.yyyyyyyyy.yyy","yyyyyyyyyyyyyyyyy","yyyyyyyyyyyyyyyyy","kkkkkkkkkkkkkkkkk"],{y:gd,k:gk});
+    if(!back){ell(cx,HY-11,1.6,1.6,hac,{olc:tone(hac,4)});ell(cx-5,HY-11,1.2,1.2,ac,{olc:tone(ac,4)});ell(cx+5,HY-11,1.2,1.2,ac,{olc:tone(ac,4)})}for(const x of[-8,-4,0,4,8])put(cx+x,HY-16,gl2)}
   // ---- adornos del pelo ----
   if(L.ha&&L.hs!==22){const hx=back?cx-7:cx+6,hy2=HY-8,a=hac;
     if(L.ha===1){for(let k=0;k<4;k++){put(hx-1+k,hy2+k*.3,a);put(hx-1+k,hy2+2+k*.3,tone(a,2))}}
@@ -463,6 +477,8 @@ function trURL(L,view,pose){
     if(n===3){if(!back)shp((x,y)=>y>=34&&y<=41&&Math.abs(x-cx)<=(41-y)*.85,cx-7,34,cx+7,41,c);else shp((x,y)=>y>=34&&y<=42&&Math.abs(x-cx)<=(42-y)*.8,cx-7,34,cx+7,42,c)}
     if(n===4&&!back){map(Math.round(cx-1),34,[".kk.",".kk.","kkkk",".kk.",".kk.",".kk.",".kk.",".kk.",".kk.","kkkk",".kk."],{k:c});for(let y=36;y<45;y++)put(cx+1,y,tone(c,2))}
     if(n===5&&!back){map(Math.round(cx-3),33,["kk.kk","kkkkk","kk.kk"],{k:c});put(cx-1,34,tone(c,3))}
+    if(n===6&&!back){for(let i=0;i<=5;i++){put(cx-4+i*.7,33+i,c);put(cx+4-i*.7,33+i,c);put(cx-3+i*.7,33+i,tone(c,2));put(cx+3-i*.7,33+i,tone(c,2))}ell(cx,40.5,2.4,2.4,"#f2c84a",{olc:"#9a6f1c"});map(Math.round(cx-1),40,[".y.","yyy",".y."].slice(0,2),{y:"#fff2a8"})}
+    if(n===7&&!back){for(let i=0;i<=8;i++){const a=Math.PI*(.15+i*.0875),X=cx+Math.cos(a)*5.2,Y=34+Math.sin(a)*3.6;put(X,Y,"#f2c84a");if(i%2===0)map(Math.round(X-1),Math.round(Y+1),[".y.","yyy",".y."],{y:i===4?c:"#fff2a8"})}}
   }
   // ---- capucha por detras ----
   if(back&&hood){}
@@ -489,7 +505,7 @@ function trUI(){
   const cards=[];
   opts.forEach(o=>{if(used.has(o[0]))return;used.add(o[0]);
     if(Array.isArray(o[2])){const v=L[o[0]],cols=(TRGRP[o[0]]||[]).map(k=>TRO.find(x=>x[0]===k)).filter(Boolean);cols.forEach(c=>used.add(c[0]));
-      cards.push('<div class="tro"><div class="trh"><b>'+o[1]+'</b><span class="trn">'+(v+1)+' / '+o[2].length+'</span></div><div class="trsel"><button class="alt" data-tr="'+o[0]+'" data-d="-1" aria-label="Anterior">◀</button><b>'+o[2][v]+'</b><button class="alt" data-tr="'+o[0]+'" data-d="1" aria-label="Siguiente">▶</button></div>'+cols.map(sw).join("")+'</div>')}
+      cards.push('<div class="tro"><div class="trh"><b>'+o[1]+'</b><span class="trn">'+(v+1)+' / '+o[2].length+'</span></div><div class="trsel"><button class="alt" data-tr="'+o[0]+'" data-d="-1" aria-label="Anterior">◀</button><b>'+o[2][v]+'</b><button class="alt" data-tr="'+o[0]+'" data-d="1" aria-label="Siguiente">▶</button></div>'+(TRLOCK[o[0]]?'<small class="trprs">'+(trLk(o[0],v)?'🌟 Prenda de Prestigio '+trLk(o[0],v):'🌟 '+Object.values(TRLOCK[o[0]]).filter(l=>l<=(S.prs||0)).length+' / '+Object.keys(TRLOCK[o[0]]).length+' prendas de prestigio desbloqueadas')+'</small>':'')+cols.map(sw).join("")+'</div>')}
     else{const own=Object.keys(TRGRP).find(k=>TRGRP[k].includes(o[0])&&opts.some(x=>x[0]===k));if(own)return;cards.push('<div class="tro">'+sw(o)+'</div>')}});
   box.innerHTML='<div class="trtabs">'+TRTABS.map(t=>'<button class="'+(TRTAB===t[0]?"on":"")+'" data-trt="'+t[0]+'">'+t[1]+'</button>').join("")+'</div><div class="trgrid">'+cards.join("")+'</div>';
 }

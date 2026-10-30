@@ -887,7 +887,7 @@ function newGame(prs,seed){
 $("reset").onclick=()=>{
   if(achAllDone()){
     if(!confirm("🌟 ¡Has conseguido todos los logros!\n\nSi reinicias ahora empezarás de cero, pero subirás a PRESTIGIO "+(PRS()+1)+" con estas ventajas:\n• "+prsPerks(PRS()+1).join("\n• ")+"\n\nAdemás, tendrás logros nuevos y distintos. ¿Reiniciar con prestigio?"))return;
-    newGame(PRS()+1,Math.floor(Math.random()*2147483646)+1);snd("lvl");toast("🌟 ¡Has alcanzado el Prestigio "+PRS()+"!");
+    newGame(PRS()+1,Math.floor(Math.random()*2147483646)+1);snd("lvl");toast("🌟 ¡Has alcanzado el Prestigio "+PRS()+"!"+(typeof trPrsItems==="function"&&trPrsItems(PRS()).length?" Nueva ropa en Tu entrenador: "+trPrsItems(PRS()).join(", ")+".":""));
   }else{
     if(!confirm("⚠️ ¡ATENCIÓN! Todavía no has conseguido todos los logros (te faltan "+achLeft()+" niveles de logro).\n\nSi reinicias la partida ahora PERDERÁS TODO tu progreso (Pokémon, tickets, niveles, objetos...) y NO conseguirás ningún nivel de prestigio ni ninguna ventaja.\n\n¿Seguro que quieres borrarlo todo?"))return;
     newGame(PRS(),S.prsSeed);
@@ -2985,6 +2985,7 @@ function prsPerks(l){
   if(l>=3)a.push("Épico o mejor garantizado cada "+(l>=6?20:25)+" tiradas","Logros más difíciles con mejores recompensas (+1 ★)");
   if(l>=4)a.push("Empiezas con 1 Master Ball y 5 Caramelos Raros");
   if(l>=5)a.push("4 misiones diarias en vez de 3");
+  if(typeof trPrsItems==="function"){const r=[];for(let i=1;i<=l;i++)r.push(...trPrsItems(i));if(r.length)a.push("Ropa exclusiva para tu entrenador: "+r.join(", "))}
   return a;
 }
 let _pk="";
@@ -3142,6 +3143,9 @@ async function main(){
   window.sugSend=async(text,nick)=>{if(!uid)throw {code:"sin-cuenta"};await S.addDoc(S.collection(db,"suggestions"),{uid:uid,name:cu?label(cu):"",nick:String(nick||"").slice(0,40),text:String(text).slice(0,1000),at:Date.now()})};
   window.sugList=async()=>{if(!uid)throw {code:"sin-cuenta"};const sn=await S.getDocs(S.query(S.collection(db,"suggestions"),S.orderBy("at","desc"),S.limit(300)));return sn.docs.map(d=>Object.assign({},d.data(),{id:d.id}))};
   window.sugDel=async id=>{await S.deleteDoc(S.doc(db,"suggestions",id))};
+  // cada jugador puede leer y cancelar las suyas; el administrador cambia el estado y responde
+  window.sugMine=async()=>{if(!uid)throw {code:"sin-cuenta"};const sn=await S.getDocs(S.query(S.collection(db,"suggestions"),S.where("uid","==",uid),S.limit(100)));return sn.docs.map(d=>Object.assign({},d.data(),{id:d.id})).sort((a,b)=>(b.at||0)-(a.at||0))};
+  window.sugUpd=async(id,f)=>{await S.updateDoc(S.doc(db,"suggestions",id),f)};
   class FsRoom{
     constructor(db,uid,path){
       this.db=db;this.uid=uid;this.path=path;this.map={};this.hs=[];this.mine={};this.lastJ="";this.lastW=0;this.closed=false;

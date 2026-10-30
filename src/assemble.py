@@ -111,6 +111,7 @@ canvas.ambc{position:absolute;left:0;top:0;width:100%;height:100%;z-index:1;poin
 .trsel{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px}
 .trsel b{flex:1;text-align:center;font-size:.92rem;font-weight:600}
 .trsel button{width:38px;height:38px;padding:0;border-radius:10px;flex:none}
+.trprs{display:block;margin-top:4px;color:#c99a1e;font-weight:600;font-size:.78rem}
 .trcol{display:flex;flex-direction:column;gap:8px}.trcol small{color:var(--mute);font-size:.78rem;font-weight:600}
 .trsw{display:flex;flex-wrap:wrap;gap:7px}
 .trsw button{width:26px;height:26px;padding:0;border-radius:8px;border:2px solid color-mix(in srgb,var(--ink) 15%,transparent);box-shadow:none;transition:transform .1s}
@@ -237,7 +238,7 @@ rep('const p=sup?rollS():roll(),isNew=!S.owned[p[0]];\n    if(isNew){S.balls[p[0
     'const p=sup?rollS():roll(),isNew=!hasP(p[0]);\n    if(!S.owned[p[0]]){S.balls[p[0]]=BALLR[p[2]];(S.when=S.when||{})[p[0]]=Date.now()}')
 rep('return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?c>0:s==="0"?c===0:c>1))}',
     'return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?hasP(p[0]):s==="0"?!hasP(p[0]):c>1))}')
-rep('const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp};', 'const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp,tr:S.tr,gid:S.gid};')
+rep('const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp};', 'const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp,tr:S.tr,gid:S.gid,sugSeen:S.sugSeen};')
 # ayuda de tipos con el motor nuevo
 rep('''if(typeof B!=="undefined"&&B&&B.op&&B.me)h+='<h5>Este combate</h5>'+row("Rival:",B.op[1])+row("Tu "+B.me[0]+":",B.me[1]);''',
     '''if(typeof B!=="undefined"&&B&&B.E){const sn=B.snap||beSnap(B.E),mi=B.me||0,mp=snapMon(sn,mi).p;h+='<h5>Este combate</h5>'+beFoes(B.E,mi).map(j=>row("Rival:",snapMon(sn,j).p[1])).join("")+row("Tu "+mp[0]+":",mp[1])}''')
@@ -266,6 +267,12 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-30d",at:"2026-10-30T16:30",t:"Cazafósiles, ropa de prestigio y sugerencias con respuesta",l:[
+"🦴 Nuevo minijuego Cazafósiles: desentierra fósiles y revívelos en el 🧪 Laboratorio de fósiles (Minijuegos). ¡Omanyte, Kabuto, Aerodactyl, Tyrunt, Dracozolt y muchos más!",
+"⛏️ La Excavación subterránea ahora es de 12×12, y sus fósiles también se pueden revivir.",
+"🌟 Ropa exclusiva de prestigio para tu entrenador: gorros, coronas, halo y medallas que se desbloquean al subir de prestigio.",
+"📨 Nueva pestaña «Mis sugerencias» (Más): mira el estado de tus sugerencias, lee las respuestas del desarrollador y cancela las que aún no estén completadas.",
+"⚙️ Los Ajustes tienen un diseño nuevo."]},
 {v:"2026-10-30c",at:"2026-10-30T13:45",t:"Combates dobles, habilidades, calendario y app instalable",l:[
 "⚔️⚔️ Combate doble contra la máquina: tú y un compañero contra dos entrenadores (botón junto a «¡Combatir!»).",
 "✨ Habilidades: Intimidación, Levitación, Absorbe Agua, Mar Llamas, Robustez y muchas más funcionan en combate. Elige la de cada Pokémon en su ficha.",
@@ -352,7 +359,7 @@ rep('const nb=rq+ra.length;$("navn").hidden=!nb;', 'const nb=rq+ra.length+FR.inc
 s0 = H.index('// ================= sugerencias (solo las lee el creador del juego) =================')
 H = H[:s0] + """// ---- tu entrenador ----
 $("trOpts").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!b.dataset.tr)return;const o=TRO.find(x=>x[0]===b.dataset.tr),L=myLook();snd("ui");
-  if(b.dataset.v!=null)trSet(o[0],+b.dataset.v);else trSet(o[0],(L[o[0]]+(+b.dataset.d)+trN(o))%trN(o))});
+  if(b.dataset.v!=null)trSet(o[0],+b.dataset.v);else{const n=trN(o);let v=L[o[0]];do v=(v+(+b.dataset.d)+n)%n;while(!trOk(o[0],v));trSet(o[0],v)}});
 $("trRnd").onclick=()=>{S.tr=trRandom();save();trUI();pvPub();snd("ui")};
 $("trRst").onclick=()=>{S.tr=Object.assign({},TRDEF);save();trUI();pvPub()};
 $("trDemo").onclick=trDemo;

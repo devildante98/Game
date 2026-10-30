@@ -45,7 +45,7 @@ y después ejecuta los parches `add_spr, add_feat, add_more, add_ui2, add_rar, a
 
 - `add_hub.py` inserta `p_hub.js` (menú, ventanas, ajustes).
 - `add_new.py` inserta el resto de módulos nuevos en este orden:
-  `p_new, p_chat, p_mini, p_mini2, p_extra, p_raid, p_market, p_supreme, p_upd, p_mgrank, p_abil, p_dbl, p_ext3, p_mod, p_pwa, p_tut`,
+  `p_new, p_chat, p_mini, p_mini2, p_fossil, p_extra, p_raid, p_market, p_supreme, p_upd, p_mgrank, p_abil, p_dbl, p_ext3, p_mod, p_pwa, p_tut`,
   añade las funciones de Firebase (`window.FB`), el CSS nuevo y la lista de **Novedades** está en `assemble.py` (constante `NEWS`).
 
 Como todo acaba en un único `<script>`, los módulos posteriores amplían a los anteriores
@@ -66,10 +66,11 @@ Por eso **el orden importa**.
 | `p_new.js` | Ficha del Pokémon, guardería, Safari, Torre, expediciones, Salón de la Fama, regalos |
 | `p_chat.js` | Chat, fotos temporales, invitaciones |
 | `p_mini.js`, `p_mini2.js`, `p_mgrank.js` | Minijuegos, duelo de siluetas, torneo semanal y clasificaciones |
+| `p_fossil.js` | Minijuego Cazafósiles y Laboratorio de fósiles (revivir Pokémon fósil) |
 | `p_extra.js` | Mega/Gigamax/Dinamax, día y noche, horas felices, compañero, álbum, pase, invitaciones |
 | `p_raid.js`, `p_market.js` | Incursiones y mercadillo |
 | `p_supreme.js` | Formas supremas y Cristal Supremo |
-| `p_upd.js` | Equipo visual, mejoras de tienda, sugerencias con fotos |
+| `p_upd.js` | Equipo visual, mejoras de tienda, sugerencias con fotos, «Mis sugerencias» (estado, respuestas y cancelar) |
 | `p_abil.js`, `p_dbl.js` | Habilidades y combate doble contra la máquina |
 | `p_ext3.js` | Calendario, vitrina y estadísticas |
 | `p_mod.js` | Moderación, reportes, sanciones y comprobaciones anti-trampas |

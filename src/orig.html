@@ -954,7 +954,7 @@ function updBag(){ITEMS.forEach((it,i)=>{const c=it[2]*qtyOf(i);$("bc"+i).textCo
 // ---------- equipo ----------
 function buildTeam(){
   $("team").innerHTML=[0,1,2,3,4,5].map(i=>'<div class="slot6"><span class="tsp" id="ts'+i+'"></span><select id="tm'+i+'" aria-label="Pokémon '+(i+1)+' del equipo"></select></div>').join("");
-  [0,1,2,3,4,5].forEach(i=>{$("tm"+i).onchange=()=>{const v=$("tm"+i).value;S.team[i]=v;if(v)S.team.forEach((n,j)=>{if(j!==i&&n===v)S.team[j]=""});save();updTeam()}});
+  [0,1,2,3,4,5].forEach(i=>{$("tm"+i).onchange=()=>{const v=$("tm"+i).value;S.team[i]=v;if(v)S.team.forEach((n,j)=>{if(j!==i&&n===v)S.team[j]=_o||""});save();updTeam()}});
 }
 function updTeam(){
   const q=nrm($("fq").value.trim()),r=$("fr2").value,t=$("ft2").value,g=$("fg2").value;

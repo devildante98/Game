@@ -94,7 +94,7 @@ rep('<option value="3">✨ Variocolor</option></select>','<option value="3">✨ 
 # ---- intercambios: los favoritos (si solo tienes uno) y los ocupados no se pueden dar ----
 rep('const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0);','const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0&&!(isFav(p[0])&&S.owned[p[0]]<=1)&&!busyMon(p[0]));')
 # ---- equipo: no se puede usar a los que están en la guardería o de expedición ----
-rep('const v=$("tm"+i).value;S.team[i]=v;','const v=$("tm"+i).value;if(v&&busyMon(v)){toast("🔒 "+v+" está "+busyTxt(v)+". Recógelo primero.");updTeam();return}S.team[i]=v;')
+rep('const v=$("tm"+i).value;S.team[i]=v;','const v=$("tm"+i).value;if(v&&busyMon(v)){toast("🔒 "+v+" está "+busyTxt(v)+". Recógelo primero.");updTeam();return}const _o=S.team[i];S.team[i]=v;')
 rep('S.team=S.team.map(n=>S.owned[n]?n:"");','S.team=S.team.map(n=>S.owned[n]&&!(typeof busyMon==="function"&&busyMon(n))?n:"");')
 # ---- perfil público: récord de la Torre y Salón de la Fama ----
 rep('<h2>\'+esc(pvClean(d.n))+\' \'+','<h2>\'+(d.cr>=1&&d.cr<=3?["👑 ","🥈 ","🥉 "][d.cr-1]:"")+esc(pvClean(d.n))+\' \'+')

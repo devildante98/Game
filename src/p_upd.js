@@ -47,13 +47,17 @@ function tpSet(i,n){
   if(fcd){toast("Termina el combate antes de cambiar el equipo.");return false}
   if(n&&isSup(n)){toast("💠 "+n+" es una forma suprema: lleva a "+SUP[n]+" y transfórmalo en combate.");return false}
   if(n&&busyMon(n)){toast("🔒 "+n+" está "+busyTxt(n)+".");return false}
-  S.team[i]=n||"";if(n)S.team.forEach((x,j)=>{if(j!==i&&x===n)S.team[j]=""});save();updTeam();snd("ui");return true}
+  // si ya estaba en otra casilla, intercambian posiciones (no sale del equipo)
+  const old=S.team[i]||"",from=n?S.team.findIndex((x,j)=>j!==i&&x===n):-1;
+  S.team[i]=n||"";if(from>=0)S.team[from]=old;save();updTeam();snd("ui");
+  if(from>=0){toast(old?"🔄 "+nk(n)+" y "+nk(old)+" han intercambiado sus casillas ("+(i+1)+" ↔ "+(from+1)+")":"🔄 "+nk(n)+" ha pasado de la casilla "+(from+1)+" a la "+(i+1));return "swap"}
+  return true}
 // ---------- añadir al equipo desde la ficha ----------
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;const d=document.createElement("div");d.className="fichr fteam";d.innerHTML=fteamHTML(n);w.prepend(d)}catch(e){console.error(e)}}}
 function fteamHTML(n){const at=S.team.indexOf(n);
   return '<span>Equipo</span><div><div class="ftslots">'+[0,1,2,3,4,5].map(i=>{const x=S.team[i];return '<button class="'+(x===n?'me':'')+'" data-fts="'+i+'" data-fn="'+esc(n)+'" title="'+(x?esc(nk(x))+' — toca para cambiarlo por '+esc(nk(n)):'Casilla '+(i+1)+' vacía')+'">'+(x&&PM[x]?ico(PM[x],34):'<span>＋</span>')+'<i>'+(i+1)+'</i></button>'}).join("")+'</div><small class="mut">'+(at>=0?'Está en la casilla '+(at+1)+'. Toca otra casilla para moverlo, o la suya para sacarlo.':'Toca una casilla para poner a '+esc(nk(n))+' en tu equipo.')+'</small></div>'}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-fts]");if(!b)return;const i=+b.dataset.fts,n=b.dataset.fn;
-  const ok=S.team[i]===n?tpSet(i,""):tpSet(i,n);if(ok!==false){toast(S.team[i]===n?"⭐ "+nk(n)+" está ahora en la casilla "+(i+1)+" de tu equipo":"Has sacado a "+nk(n)+" del equipo");const r=b.closest(".fteam");if(r)r.innerHTML=fteamHTML(n)}});
+  const ok=S.team[i]===n?tpSet(i,""):tpSet(i,n);if(ok!==false){if(ok!=="swap")toast(S.team[i]===n?"⭐ "+nk(n)+" está ahora en la casilla "+(i+1)+" de tu equipo":"Has sacado a "+nk(n)+" del equipo");const r=b.closest(".fteam");if(r)r.innerHTML=fteamHTML(n)}});
 // ---------- orden alfabético en la Pokédex ----------
 {const fo=$("fo");if(fo&&!fo.querySelector('option[value="az"]'))fo.insertAdjacentHTML("beforeend",'<option value="az">Alfabético (A-Z)</option><option value="za">Alfabético (Z-A)</option>')}
 {const _sd=sortDex;sortDex=function(a){const o=$("fo").value;if(o==="az"||o==="za"){const k=p=>hasP(p[0])?nk(p[0]):"￿"+p[0];return a.slice().sort((x,y)=>o==="az"?k(x).localeCompare(k(y),"es"):k(y).localeCompare(k(x),"es"))}return _sd(a)}}

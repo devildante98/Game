@@ -251,8 +251,11 @@ button.big{font-size:1.15rem;padding:12px 30px;border-radius:16px}.mgbtns{displa
 .whoq{position:absolute;left:12px;bottom:10px;background:#ffd35c;color:#1c1f3a;border:3px solid #1c1f3a;border-radius:12px;padding:4px 12px;font-weight:900;font-size:1rem;transform:rotate(-3deg)}
 .whoopt{display:grid;grid-template-columns:1fr 1fr;gap:8px}.whoopt button{padding:12px 6px;font-size:1rem;background:var(--bg);color:var(--ink);border:2px solid var(--line)}.whoopt button.ok{background:#3ecf8e;color:#fff;border-color:#3ecf8e}.whoopt button.bad{background:#e63950;color:#fff;border-color:#e63950}
 .memg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;perspective:800px}
-.memc{position:relative;aspect-ratio:1;padding:0;border:none;background:none;transform-style:preserve-3d;transition:transform .35s}.memc.up{transform:rotateY(180deg)}
-.memf{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;display:grid;place-items:center}
+.memc{position:relative;aspect-ratio:1;padding:0;border:none;background:none;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;transition:transform .4s cubic-bezier(.3,.7,.4,1.2);will-change:transform;-webkit-tap-highlight-color:transparent}.memc.up{transform:rotateY(180deg)}
+/* el brillo general de los botones al pasar el ratón (filter) aplana el 3D y la carta se ve del revés: aquí se resalta solo la cara visible */
+.memc:hover:not(:disabled),.memc:active{filter:none!important}.memc:not(.up):hover .memb{box-shadow:0 0 0 3px rgba(255,255,255,.55),0 6px 12px rgba(0,0,0,.25)}
+.memf{position:absolute;inset:0;border-radius:14px;-webkit-backface-visibility:hidden;backface-visibility:hidden;display:grid;place-items:center;overflow:hidden}
+.memb{transform:rotateY(0deg)}
 .memb{background:radial-gradient(circle at 50% 50%,#fff 0 12%,#1c1f3a 12% 17%,transparent 17%),linear-gradient(#e3263a 0 46%,#1c1f3a 46% 54%,#f2f0fa 54%);border:3px solid #1c1f3a;box-shadow:0 3px 6px rgba(0,0,0,.2)}
 .memp{transform:rotateY(180deg);background:var(--bg);border:3px solid var(--line)}.memp img{max-width:90%;max-height:90%}
 .memc.done .memp{border-color:#3ecf8e;box-shadow:0 0 0 3px rgba(62,207,142,.35)}

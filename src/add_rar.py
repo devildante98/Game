@@ -28,7 +28,7 @@ _I1="https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/items/";_I2="htt
 exec(open(W+'ball_svg.py',encoding='utf-8').read())
 _bg=lambda n:'background:'+ball({'poke-ball':'pb','great-ball':'sb','ultra-ball':'ub','master-ball':'mb','poke-ball-red':'pbr'}[n])+' center/contain no-repeat!important'
 rep('img.pk.item{object-fit:contain;image-rendering:pixelated}','img.pk.item{object-fit:contain;image-rendering:pixelated}\n'
- '.ball,.bigball{'+_bg('poke-ball')+';border:none!important;border-radius:50%!important;box-shadow:none!important}\n'
+ '.ball,.bigball{'+_bg('poke-ball-red')+';border:none!important;border-radius:50%!important;box-shadow:none!important}\n'
  '.ball:before,.ball:after,.bigball:after{display:none!important}\n'
  '.ball.R{'+_bg('great-ball')+'}.ball.E{'+_bg('ultra-ball')+'}.ball.L{'+_bg('master-ball')+'}\n'
  '.bigball{'+_bg('poke-ball-red')+';filter:drop-shadow(0 8px 12px rgba(0,0,0,.35))}.bigball:hover{filter:drop-shadow(0 8px 12px rgba(0,0,0,.35)) brightness(1.12)}\n'

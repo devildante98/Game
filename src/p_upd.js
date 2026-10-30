@@ -8,7 +8,10 @@ G.push(["Estadio Pokémon",400000,250],["Laboratorio del Profesor",6000000,1000]
 const GGR=[1.15,1.15,1.15,1.15,1.15,1.18,1.40];
 gc=i=>Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,S.g[i]||0));
 function gPad(){S.g=S.g||[];while(S.g.length<G.length)S.g.push(0)}
-gPad();{const _r=render;render=function(){gPad();if(!$("bg"+(G.length-1))&&$("shop"))try{buildShop()}catch(e){}return _r.apply(this,arguments)}}
+gPad();
+// la lista de ayudantes ya se dibujó con 5 mejoras al arrancar: se fuerza a rehacerla con las 7
+window._gk=null;
+{const _r=render;render=function(){gPad();if(!$("bg"+(G.length-1))&&$("shop"))try{buildShop()}catch(e){}return _r.apply(this,arguments)}}
 
 // ---------- orden de la lista del equipo ----------
 var TP={slot:-1,q:"",o:"lv"};

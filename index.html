@@ -6801,7 +6801,7 @@ function tourGiveShow(i,pw){
   if(big&&!hubCalm()){const w=m.querySelector(".nxmw");for(let k=0;k<50;k++){const s=document.createElement("span");s.className="mgconf";s.textContent=["🎉","✨","⭐","🏆","🎊"][k%5];s.style.left=Math.random()*100+"%";w.appendChild(s);s.animate([{transform:"translateY(-20px)",opacity:1},{transform:"translateY("+(300+Math.random()*200)+"px) rotate("+(Math.random()*720-360)+"deg)",opacity:0}],{duration:1600+Math.random()*1000,delay:Math.random()*500,easing:"ease-in"}).onfinish=()=>s.remove()}}
   $("tourOk").onclick=nxModalClose;return r;
 }
-const myCrown=()=>S.crown&&S.crown.w===tourWeek()?S.crown.p:0;
+function myCrown(){try{return S.crown&&S.crown.w===tourWeek()?S.crown.p:0}catch(e){return 0}}
 setTimeout(()=>{try{tourClaim()}catch(e){}},6000);
 function tourHTML(){
   const w=tourWeek(),g=tourGameOf(w),ms=tourEndsIn(),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),my=S.tour&&S.tour.w===w?S.tour.b:0,me=window.FB&&window.FB.uid?window.FB.uid():null;
@@ -7337,13 +7337,13 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 // FORMAS SUPREMAS: los Pokémon más poderosos ya no salen en tiradas ni van en el equipo.
 // Se lleva la forma base y, si tienes la forma suprema, se transforma en combate gastando un Cristal Supremo.
 // =====================================================================================
-const SUP={"Mega-Mewtwo X":"Mewtwo","Mega-Mewtwo Y":"Mewtwo","Mega-Rayquaza":"Rayquaza","Kyogre Primigenio":"Kyogre","Groudon Primigenio":"Groudon",
+var SUP={"Mega-Mewtwo X":"Mewtwo","Mega-Mewtwo Y":"Mewtwo","Mega-Rayquaza":"Rayquaza","Kyogre Primigenio":"Kyogre","Groudon Primigenio":"Groudon",
  "Dialga Forma Origen":"Dialga","Palkia Forma Origen":"Palkia","Giratina Forma Origen":"Giratina","Kyurem Negro":"Kyurem","Kyurem Blanco":"Kyurem",
  "Zygarde Forma Completa":"Zygarde","Hoopa Desatado":"Hoopa","Necrozma Melena Crepuscular":"Necrozma","Necrozma Alas del Alba":"Necrozma","Ultra-Necrozma":"Necrozma",
  "Zacian Espada Suprema":"Zacian","Zamazenta Escudo Supremo":"Zamazenta","Eternatus Dinamax Infinito":"Eternatus","Calyrex Jinete Glacial":"Calyrex","Calyrex Jinete Espectral":"Calyrex","Terapagos Forma Astral":"Terapagos"};
 Object.keys(SUP).forEach(k=>{if(!PM[k]||!PM[SUP[k]])delete SUP[k]});
-const isSup=n=>!!SUP[n];
-const supOf=base=>Object.keys(SUP).filter(k=>SUP[k]===base);
+function isSup(n){return !!(SUP&&SUP[n])}
+function supOf(base){return SUP?Object.keys(SUP).filter(k=>SUP[k]===base):[]}
 // ---- Cristal Supremo ----
 ITEMS.push(["crys","Cristal Supremo",5000000,0,0,0,"Transforma en combate a un Pokémon en su forma suprema (Mega-Rayquaza, Ultra-Necrozma, Kyogre Primigenio…) si la tienes en tu colección. Se gasta al usarlo","crys"]);
 if(S.bag.crys==null)S.bag.crys=0;

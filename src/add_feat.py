@@ -8,8 +8,8 @@ rep('''function cardHTML(p,isNew,back,big){
 '''function cardHTML(p,isNew,back,big,sh){
   return `<div class="card ${p[2]} ${big?"big":""} ${sh?"shiny":""}"><span class="tag ${isNew?"":"dup"}">${isNew?"¡NUEVO!":"+"+back+" 🎟️"}</span>${sh?'<span class="shtag">✨ VARIOCOLOR</span>':""}<div class="em">${ico(p,big?76:46,false,sh)}</div><b>${sh?"✨ ":""}${p[0]}</b>''')
 rep('$("msg").textContent=(best==="L"?"¡LEGENDARIO! ":best==="E"?"¡Épico! ":"")', '$("msg").textContent=(anySh?"✨ ¡VARIOCOLOR! ":"")+(best==="L"?"¡LEGENDARIO! ":best==="E"?"¡Épico! ":"")')
-rep('if(n===1){$("out").innerHTML=cards[0];tm(end,300)}', 'if(n===1){$("out").innerHTML=cards[0];if(anySh){snd("lvl");flash("#fff6a0")}tm(end,300)}')
-rep('sl[i].innerHTML=cards[i];if("CREL".indexOf(x[0][2])>1)flash(RC[x[0][2]])', 'sl[i].innerHTML=cards[i];if(x[3]){snd("lvl");flash("#fff6a0")}else if("CREL".indexOf(x[0][2])>1)flash(RC[x[0][2]])')
+rep('if(n===1){$("out").innerHTML=cards[0];tm(end,300)}', 'if(n===1){$("out").innerHTML=cards[0];snd("rev",anySh&&best!=="L"?"S":best);if(anySh){flash("#fff6a0")}tm(end,300)}')
+rep('sl[i].innerHTML=cards[i];if("CREL".indexOf(x[0][2])>1)flash(RC[x[0][2]])', 'sl[i].innerHTML=cards[i];snd("rev",x[3]&&x[0][2]!=="L"?"S":x[0][2]);if(x[3]){flash("#fff6a0")}else if("CREL".indexOf(x[0][2])>1)flash(RC[x[0][2]])')
 # ---- Pokedex ----
 rep('const dk=JSON.stringify(S.owned)+JSON.stringify(S.reg||{})', 'const dk=JSON.stringify(S.owned)+JSON.stringify(S.reg||{})+JSON.stringify(S.shiny||{})')
 rep('<div class="em">${r?ico(p,36):"❔"}</div>', '${S.shiny&&S.shiny[p[0]]?\'<span class="shb" title="Variocolor ×\'+S.shiny[p[0]]+\'">✨\'+(S.shiny[p[0]]>1?S.shiny[p[0]]:"")+\'</span>\':""}<div class="em">${r?ico(p,36,false,!!(S.shiny&&S.shiny[p[0]])):"❔"}</div>')

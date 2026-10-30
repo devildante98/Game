@@ -859,7 +859,7 @@ function pull(n,sup){
   if(n>1){b.style.display="none";$("out").innerHTML=res.map(x=>'<div class="slot"><div class="ball mini '+x[0][2]+' shake"></div></div>').join("")}else b.style.display="";
   const cards=res.map(x=>cardHTML(x[0],x[1],x[2],n===1));
   const end=()=>{PT.forEach(clearTimeout);PT=[];SK=null;$("skip").hidden=true;$("msg").textContent=(best==="L"?"¡LEGENDARIO! ":best==="E"?"¡Épico! ":"")+(back?"Repetidos devueltos: +"+back+" 🎟️":"");busy=false;render()};
-  SK=()=>{b.style.opacity=.35;$("out").classList.add("nox");if(n===1)$("out").innerHTML=cards[0];else document.querySelectorAll(".slot").forEach((e,i)=>{e.innerHTML=cards[i]});end()};
+  SK=()=>{b.style.opacity=.35;$("out").classList.add("nox");snd("rev",res.some(x=>x[3])&&best!=="L"?"S":best);if(n===1)$("out").innerHTML=cards[0];else document.querySelectorAll(".slot").forEach((e,i)=>{e.innerHTML=cards[i]});end()};
   $("skip").hidden=!O.skip||!!O.askip;
   if(O.askip){SK();return}
   const flash=c=>{const f=$("flash");f.style.background="radial-gradient(circle,"+c+",transparent 70%)";f.classList.remove("go");void f.offsetWidth;f.classList.add("go")};
@@ -2739,6 +2739,7 @@ function snd(name,a){
     case "throw":N(.4,.25,0,600,2600,"bandpass");T(300,.35,"sine",.12,0,900);break;
     case "open":A([784,988,1175,1568,1976],.12,"sine",.14,.06);N(.3,.12,0,3000,8000,"highpass");break;
     case "pop":T(220,.12,"square",.14,0,700);break;
+    case "rev":if(a==="L"){T(130,1,"triangle",.32,0,65);A([523,659,784,1047],.16,"square",.11,.11);T(1047,.8,"sawtooth",.09,.46);T(1319,.8,"square",.07,.46);T(1568,.8,"sine",.1,.46);[2093,2637,3136,4186].forEach((f,i)=>T(f,.1,"sine",.09,.9+i*.07));N(1.3,.1,.42,4000,11000,"highpass")}else if(a==="S"){A([1568,2093,2637,3136],.08,"sine",.13,.05);N(.45,.12,0,6000,12000,"highpass");T(784,.3,"triangle",.1,.2)}else if(a==="E"){A([784,988,1319,1568],.1,"sine",.14,.06);N(.35,.07,.12,3000,9000,"highpass")}else if(a==="R")A([659,880,1175],.09,"triangle",.13,.06);else{T(660,.08,"triangle",.12);T(990,.1,"triangle",.1,.06)}break;
     case "click":T(1000,.04,"square",.12);T(600,.05,"square",.1,.05);break;
     case "capok":A([659,784,988,1319,988,1319],.14,"square",.14,.13);break;
     case "capfail":T(420,.35,"sawtooth",.16,0,120);break;

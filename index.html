@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793381100">
+<meta name="game-build" content="1793381705">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -1765,7 +1765,7 @@ function pull(n,sup){
   if(n>1){b.style.display="none";$("out").innerHTML=res.map(x=>'<div class="slot"><div class="ball mini C shake"></div></div>').join("")}else b.style.display="";
   const cards=res.map(x=>cardHTML(x[0],x[1],x[2],n===1,x[3])),anySh=res.some(x=>x[3]);
   const end=()=>{PT.forEach(clearTimeout);PT=[];SK=null;$("skip").hidden=true;$("msg").textContent=(anySh?"✨ ¡VARIOCOLOR! ":"")+(best==="L"?"¡LEGENDARIO! ":best==="M"?"¡FORMA ESPECIAL! ":best==="E"?"¡Épico! ":"")+(back?"Repetidos devueltos: +"+back+" 🎟️":"");busy=false;render()};
-  SK=()=>{b.style.opacity=.35;$("out").classList.add("nox");if(n===1)$("out").innerHTML=cards[0];else document.querySelectorAll(".slot").forEach((e,i)=>{e.innerHTML=cards[i]});end()};
+  SK=()=>{b.style.opacity=.35;$("out").classList.add("nox");snd("rev",res.some(x=>x[3])&&best!=="L"?"S":best);if(n===1)$("out").innerHTML=cards[0];else document.querySelectorAll(".slot").forEach((e,i)=>{e.innerHTML=cards[i]});end()};
   $("skip").hidden=!O.skip||!!O.askip;
   if(O.askip){SK();return}
   const flash=c=>{const f=$("flash");f.style.background="radial-gradient(circle,"+c+",transparent 70%)";f.classList.remove("go");void f.offsetWidth;f.classList.add("go")};
@@ -1774,8 +1774,8 @@ function pull(n,sup){
   const rev=(n===1?700:900)+[0,380,800,1220][lvl];
   tm(()=>{
     flash(RC[best]);b.style.opacity=.35;if(n===1&&lvl>=2)cry(res[0][0][0]);
-    if(n===1){$("out").innerHTML=cards[0];if(anySh){snd("lvl");flash("#fff6a0")}tm(end,300)}
-    else{const sl=document.querySelectorAll(".slot");res.forEach((x,i)=>tm(()=>{sl[i].innerHTML=cards[i];if(x[3]){snd("lvl");flash("#fff6a0")}else if("CREML".indexOf(x[0][2])>1)flash(RC[x[0][2]])},i*350));tm(end,n*350+200)}
+    if(n===1){$("out").innerHTML=cards[0];snd("rev",anySh&&best!=="L"?"S":best);if(anySh){flash("#fff6a0")}tm(end,300)}
+    else{const sl=document.querySelectorAll(".slot");res.forEach((x,i)=>tm(()=>{sl[i].innerHTML=cards[i];snd("rev",x[3]&&x[0][2]!=="L"?"S":x[0][2]);if(x[3]){flash("#fff6a0")}else if("CREML".indexOf(x[0][2])>1)flash(RC[x[0][2]])},i*350));tm(end,n*350+200)}
   },rev);
 }
 $("skip").onclick=()=>{if(SK)SK()};
@@ -5082,6 +5082,7 @@ function snd(name,a){
     case "throw":N(.4,.25,0,600,2600,"bandpass");T(300,.35,"sine",.12,0,900);break;
     case "open":A([784,988,1175,1568,1976],.12,"sine",.14,.06);N(.3,.12,0,3000,8000,"highpass");break;
     case "pop":T(220,.12,"square",.14,0,700);break;
+    case "rev":if(a==="L"){T(130,1,"triangle",.32,0,65);A([523,659,784,1047],.16,"square",.11,.11);T(1047,.8,"sawtooth",.09,.46);T(1319,.8,"square",.07,.46);T(1568,.8,"sine",.1,.46);[2093,2637,3136,4186].forEach((f,i)=>T(f,.1,"sine",.09,.9+i*.07));N(1.3,.1,.42,4000,11000,"highpass")}else if(a==="S"){A([1568,2093,2637,3136],.08,"sine",.13,.05);N(.45,.12,0,6000,12000,"highpass");T(784,.3,"triangle",.1,.2)}else if(a==="E"){A([784,988,1319,1568],.1,"sine",.14,.06);N(.35,.07,.12,3000,9000,"highpass")}else if(a==="R")A([659,880,1175],.09,"triangle",.13,.06);else{T(660,.08,"triangle",.12);T(990,.1,"triangle",.1,.06)}break;
     case "click":T(1000,.04,"square",.12);T(600,.05,"square",.1,.05);break;
     case "capok":A([659,784,988,1319,988,1319],.14,"square",.14,.13);break;
     case "capfail":T(420,.35,"sawtooth",.16,0,120);break;
@@ -5447,7 +5448,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793381100";
+const GAME_B="1793381705";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

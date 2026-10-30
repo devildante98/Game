@@ -949,6 +949,9 @@ body.calm .albs.holo{animation:none}
 .mkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}.mkc{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 8px;border-radius:16px;background:var(--bg);border:2px solid var(--line);text-align:center}
 .mkc.shiny{border-color:#ffd35c}.mki{height:66px;display:grid;place-items:center}.mkc small{font-size:.74rem}.mkc button{width:100%;margin-top:auto}
 .mksell{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px;padding:12px;border-radius:16px;background:var(--bg);border:2px solid #c42a5e}.mksell label{display:flex;align-items:center;gap:6px}.mksell input{width:140px}
+#welc .jbox{max-height:calc(100vh - 32px);overflow:auto;width:min(720px,calc(100vw - 24px));max-width:none;box-sizing:border-box}#welc li{margin:0!important}#welc h3{margin:14px 0 4px;font-size:1.02rem}#welc ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:6px}#welc li{line-height:1.4}
+.wlead{font-size:1.02rem;line-height:1.45}.wloop{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 4px}.wloop span{background:color-mix(in srgb,#13a37f 14%,var(--bg));border:1px solid color-mix(in srgb,#13a37f 40%,var(--line));border-radius:99px;padding:4px 10px;font-weight:800;font-size:.85rem}.wloop i{font-style:normal;color:var(--mute);font-weight:900}
+#welc ul.wgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px}#welc .wgrid li{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:7px 10px;font-size:.9rem}
 body.calm .p1 .tpm,body.calm .p1 .tpm:before,body.calm .tourrays,body.calm .tpsh,body.calm .tourc,body.calm .rucoin span,body.calm #mgBan,body.calm .mgbi,body.calm .mgbig{animation:none!important}
 body.calm .dcheart,body.calm .egg.wob,body.calm .gfb span,body.calm .gfbox,body.calm .hofb,body.calm .twnext.boss,body.calm .safspr{animation:none!important}
 img.pk.hd{image-rendering:auto!important;object-fit:contain}
@@ -1088,26 +1091,35 @@ label:has(input[data-o="pColl"]),label:has(input[data-o="pBag"]),label:has(input
 <div id="jlv" hidden role="dialog" aria-modal="true" aria-label="Bonus del premio gordo"><div class="jbox"><h2>🌟 ¡Bonus del premio gordo! 🌟</h2><p>Elige a uno de tus Pokémon para subirlo <b>directamente al nivel 100</b>, con todas las elecciones de habilidades.</p><input id="jlq" placeholder="Buscar Pokémon..." aria-label="Buscar Pokémon"><select id="jls" size="8" aria-label="Pokémon que subirá al nivel 100"></select><div class="jrow"><button class="red" id="jlok">⬆️ Subir al nivel 100</button><button id="jlno" class="alt">No, gracias</button></div></div></div>
 <div id="clm" hidden role="dialog" aria-modal="true" aria-label="Elegir partida"><div class="jbox"><h2>☁️ Dos partidas distintas</h2><p>Hay una partida guardada en tu cuenta y otra en este navegador. ¿Cuál quieres usar? La otra se sobrescribirá.</p><p id="clmCloud"></p><p id="clmLocal"></p><div class="jrow"><button class="red" id="clmUseCloud">Usar la de la nube</button><button id="clmUseLocal" class="alt">Usar la de este navegador</button></div></div></div>
 <div id="welc" hidden role="dialog" aria-modal="true" aria-label="Bienvenida"><div class="jbox">
-  <h2>👋 ¡Bienvenido a PokeGacha!</h2>
-  <p>Colecciona más de 1.200 Pokémon, entrénalos y combate. Esto es lo más importante que debes saber:</p>
+  <h2>👋 ¡Bienvenido a Poke Gacha Online!</h2>
+  <p class="wlead">Un juego de <b>coleccionar Pokémon</b>: consigues tickets, los gastas en <b>tiradas</b> para obtener Pokémon (más de 1.200, incluidos legendarios, megas y variocolores), formas un equipo, lo haces más fuerte combatiendo y compites y colaboras con otros jugadores.</p>
+  <div class="wloop"><span>🎟️ Consigue tickets</span><i>→</i><span>🎰 Haz tiradas</span><i>→</i><span>⚔️ Combate y sube de nivel</span><i>→</i><span>🏅 Gana medallas</span></div>
+  <h3>🔑 Lo básico</h3>
   <ul>
-    <li>🎟️ <b>Tickets</b>: son la moneda del juego. Consíguelos tocando la <b>Pokéball grande</b> (o con la tecla <b>U</b>), con el regalo diario, el ticket automático, los combates, las misiones y los logros.</li>
-    <li>🛍️ <b>Tienda de mejoras</b>: compra Guantes (más tickets por toque) y ayudantes que generan tickets por segundo.</li>
-    <li>🎰 <b>Tiradas</b>: gasta tickets para conseguir Pokémon (Común, Raro, Épico y Legendario). Cada 30 tiradas tienes un Épico o mejor garantizado. Cada 10 tiradas el precio sube.</li>
-    <li>📚 <b>Pokedex</b>: mira los Pokémon que tienes y los que te faltan.</li>
-    <li>🏅 <b>Gimnasios y zonas</b>: gana las 8 medallas para desbloquear zonas de exploración y la Liga.</li>
-    <li>🔥 <b>Pase diario</b>: reclama el regalo cada día seguido para avanzar en tu racha (botón 🔥 junto al regalo diario).</li>
-    <li>⚔️ <b>Combate</b>: forma un equipo de hasta 6 Pokémon. Ganando suben de nivel, aprenden habilidades y consigues tickets y objetos. ¡También puedes capturar Pokémon salvajes! Cada movimiento tiene <b>PP</b> (usos limitados): recupéralos con Éter, Elixir o en el Centro Pokémon.</li>
-    <li>🏥 <b>Centro Pokémon</b> y 🎒 <b>Mochila</b>: los PS no se recuperan solos; cura a tu equipo o usa pociones.</li>
-    <li>🏆 <b>Liga Pokémon</b> y 🌐 <b>PVP online</b>: reta al Alto Mando o a otros jugadores conectados, en duelos 1 contra 1 o en salas 2 vs 2 con código.</li>
-    <li>📅 <b>Misiones diarias</b> y 🏅 <b>Logros</b>: complétalos para ganar grandes recompensas.</li>
-    <li>🌟 <b>Prestigio</b>: cuando tengas todos los logros, reinicia la partida para conseguir ventajas permanentes y logros nuevos.</li>
-    <li>🧬 <b>Evoluciones</b>: tus Pokémon evolucionan al llegar a su nivel o con objetos como la Piedra Fuego, la Piedra Lunar o el Cordón Unión (en la tienda y como botín).</li>
-    <li>👥 <b>Amigos</b> y 🛡️ <b>Gremios</b>: añade amigos para retarles e invitarles a tus salas, o únete a un gremio.</li>
-    <li>🧑 <b>Tu entrenador</b>: personaliza su cara, pelo, ropa y mochila. ¡Aparece en tus combates!</li>
-    <li>🧭 Usa el botón de <b>accesos directos</b> (abajo a la derecha) para ir a cualquier parte sin hacer scroll, y ⚙️ (arriba a la derecha) para la música y las opciones.</li>
+    <li>🎟️ <b>Tickets</b>: la moneda del juego. Toca la Poké Ball grande (o la tecla <b>U</b>), compra ayudantes en la tienda para generarlos solos y reclama el regalo diario 🔥 para mantener tu racha.</li>
+    <li>🎰 <b>Tiradas</b>: Común ★, Raro ★★, Épico ★★★, Forma especial ★★★★ y Legendario ★★★★★. Cada 30 tiradas, Épico o mejor garantizado. Toca un Pokémon que te salga para verlo en grande.</li>
+    <li>⚔️ <b>Combates</b>: equipo de hasta 6. Ganando suben de nivel, aprenden movimientos, <b>evolucionan</b> y consigues tickets y objetos. Captura Pokémon salvajes con Poké Balls. Los PS y los PP no se recuperan solos: usa el Centro Pokémon o la Mochila.</li>
+    <li>🏅 <b>Gimnasios</b>: tus Pokémon no pueden pasar del nivel del siguiente líder. Vence los 8 gimnasios para subir el límite y desbloquear la <b>Liga</b> y el <b>Salón de la Fama</b>.</li>
+    <li>🧬 <b>Profundidad</b>: cada Pokémon tiene <b>naturaleza</b> y puede llevar un <b>objeto</b> (Restos, Vidasfera…). Si tienes su forma Mega o Gigamax, puedes <b>megaevolucionar o dinamaxizar</b> en combate. Toca un Pokémon en la Pokédex para ver su ficha, ponerle mote o marcarlo como favorito.</li>
   </ul>
-  <p>Si has iniciado sesión, tu progreso se guarda solo en la nube cada pocos minutos (y al pulsar 💾 arriba). ¡Mucha suerte, entrenador!</p>
+  <h3>🎪 Cosas que hacer cada día</h3>
+  <ul class="wgrid">
+    <li>📅 <b>Misiones</b> y 🎫 <b>Pase de temporada</b> (30 niveles al mes, legendario al final)</li>
+    <li>🎮 <b>Minijuegos</b> con premio y 🏆 <b>Torneo semanal</b> con Pokémon exclusivos</li>
+    <li>🤝 <b>Compañero</b>, 🥚 <b>Guardería</b>, 🌾 <b>Safari</b>, 🗼 <b>Torre Batalla</b> y 🧭 <b>Expediciones</b></li>
+    <li>🎉 <b>Horas felices</b> a las 13:00 y 20:00, y 🌙 Pokémon distintos de <b>día y de noche</b></li>
+    <li>📔 <b>Álbum de pegatinas</b>, 🏅 <b>Logros</b> y 🌟 <b>Prestigio</b> para ventajas permanentes</li>
+  </ul>
+  <h3>🌐 Con otros jugadores</h3>
+  <ul class="wgrid">
+    <li>⚔️ <b>PVP</b> 1 vs 1 y salas 2 vs 2, con temporadas y clasificación</li>
+    <li>🔴 <b>Incursiones</b>: hasta 4 contra un jefe gigante que luego podéis capturar</li>
+    <li>👥 <b>Amigos</b>, 💬 <b>chat</b>, 🎁 regalos diarios, 🔄 intercambios y ⚔️ duelos de siluetas</li>
+    <li>🛡️ <b>Gremios</b>, 🛒 <b>Mercadillo</b> y 📨 <b>invitar amigos</b> con tu código</li>
+  </ul>
+  <h3>🧭 Cómo moverte</h3>
+  <p>Pulsa la <b>Poké Ball MENÚ</b> (abajo a la derecha) para abrir cualquier sección en una ventana; los números rojos te avisan de lo que tienes pendiente. Arriba tienes 💬 chat, pantalla completa y ⚙️ ajustes. Tu entrenador se personaliza en «Tu entrenador».</p>
+  <p class="mut">Con sesión iniciada tu progreso se guarda en la nube automáticamente. ¡Mucha suerte, entrenador!</p>
   <div class="jrow"><button class="red" id="welcOk">¡A jugar!</button></div>
 </div></div>
 <button id="navb" aria-label="Accesos directos" title="Accesos directos" hidden>🧭<span class="nbadge" id="navn" hidden></span></button>

@@ -183,7 +183,7 @@ document.addEventListener("click",async e=>{
 });
 // ================= apoyar el juego =================
 // Pon aqui tus enlaces de donacion (por ejemplo Ko-fi o PayPal). Si un enlace esta vacio, su boton no aparece.
-const SUPPORT=[{n:"Ko-fi",i:"☕",u:""},{n:"PayPal",i:"💳",u:""},{n:"Patreon",i:"🎁",u:""}];
+const SUPPORT=[{n:"Ko-fi",i:"☕",u:"https://ko-fi.com/devildante98"},{n:"PayPal",i:"💳",u:"https://paypal.me/devildante98"},{n:"Patreon",i:"🎁",u:""}];
 function supUI(){
   const box=$("supBox");if(!box)return;const L=SUPPORT.filter(s=>/^https:\/\//.test(s.u));
   box.innerHTML=L.length?L.map(s=>'<a class="supb" href="'+esc(s.u)+'" target="_blank" rel="noopener noreferrer">'+s.i+' Donar con '+esc(s.n)+'</a>').join(""):'<small class="mut">Los enlaces de donación se activarán muy pronto. ¡Gracias por tu interés!</small>';

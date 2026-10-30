@@ -234,7 +234,8 @@ rep('<section class="panel" aria-label="Centro Pokémon" id="healP">', NEW_PANEL
 rep('''<section class="panel" aria-label="Sugerencias" id="sugP">''', '''<section class="panel" aria-label="Apoyar" id="supP">
   <h2>💝 Apoyar el juego</h2>
   <p class="rates">PokeGacha es gratis y lo seguirá siendo. Si te gusta y quieres, puedes hacer una donación voluntaria.</p>
-  <div class="supnote">⚠️ <b>Donar no da ninguna ventaja dentro del juego</b>: ni tickets, ni Pokémon, ni objetos. Tu ayuda se destina a pagar los servidores (base de datos, cuentas y PVP online) para que todo el mundo pueda seguir jugando.</div>
+  <div class="supnote">⚠️ <b>Donar no da ninguna ventaja dentro del juego</b>: ni tickets, ni Pokémon, ni objetos. Tu ayuda se destina solo a pagar los servidores (base de datos, cuentas y PVP online) y el dominio, para que todo el mundo pueda seguir jugando.</div>
+  <p class="rates" style="margin:6px 0 0">🧒 Si eres menor de edad, pide permiso a tu padre, madre o tutor antes de donar.</p>
   <div id="supBox"></div>
   <p class="rates" style="margin-top:8px">¡Muchas gracias por jugar y por tu apoyo! 💖</p>
 </section>

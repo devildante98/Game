@@ -46,17 +46,22 @@ const EXT=[// [id, nombre, ancho, alto, valor, tipo de premio]
  ["red","Esfera Roja",1,1,40,{t:30000}],["blu","Esfera Azul",1,1,40,{t:30000}],["prl","Perla",1,1,60,{t:60000}],["big","Esfera Grande",2,2,120,{t:150000}],
  ["nug","Pepita",1,1,90,{t:120000}],["star","Trozo Estrella",2,2,160,{t:220000}],["bone","Hueso Raro",3,1,140,{t:180000}],
  ["evo","Piedra evolutiva",2,2,200,{evo:1}],["hold","Objeto escondido",2,1,220,{hold:1}],["cand","Caramelo Raro",1,1,260,{it:{cand:1}}],
- ["helix","Fósil Hélix",3,3,300,{t:400000}],["dome","Fósil Domo",3,3,300,{t:400000}]];
+ ["helix","Fósil Hélix",3,3,300,{fos:"helix"}],["dome","Fósil Domo",3,3,300,{fos:"dome"}]];
 const G_EXC={id:"exc",n:"Excavación subterránea",ic:"⛏️",c:"#8a5a2b",d:"Pica la pared para desenterrar tesoros: esferas, piedras evolutivas, objetos y fósiles. ¡Si golpeas demasiado, la pared se derrumba!",
   rw:s=>s*150,
-  start(B,end){
-    const CW=13,CH=10,cells=[],items=[];let stab=100,tool="pick",over=false;
+  start(B,end){excRun(B,end,{pool:EXT,weights:[12,12,9,5,8,4,4,6,5,2,1,1],want:2+Math.floor(Math.random()*3)})},
+  after(score,prize){return excAfter(score,prize,"⛏️ Tesoros")}};
+// pared de excavación común (12x12: múltiplo de 3 para el martillo 3x3 y el pico en cruz)
+// o: {pool, weights, want, must (tesoros que salen siempre), art}
+function excRun(B,end,o){
+    const CW=12,CH=12,cells=[],items=[],EXP=o.pool,weights=o.weights,want=o.want,art=o.art||exArt;let stab=100,tool="pick",over=false;
     for(let i=0;i<CW*CH;i++)cells.push({h:1+Math.floor(Math.random()*3)+(Math.random()<.25?2:0),it:-1});
-    const want=2+Math.floor(Math.random()*3),weights=[12,12,9,5,8,4,4,6,5,2,1,1];
-    for(let tries=0;items.length<want&&tries<200;tries++){let t=weights.reduce((a,b)=>a+b,0),x=Math.random()*t,k=0;for(;k<EXT.length;k++){x-=weights[k];if(x<=0)break}const e=EXT[Math.min(k,EXT.length-1)];
+    const must=(o.must||[]).slice();
+    for(let tries=0;items.length<want&&tries<300;tries++){let e;if(must.length)e=must[0];else{let t=weights.reduce((a,b)=>a+b,0),x=Math.random()*t,k=0;for(;k<EXP.length;k++){x-=weights[k];if(x<=0)break}e=EXP[Math.min(k,EXP.length-1)]}
       const cx=Math.floor(Math.random()*(CW-e[2]+1)),cy=Math.floor(Math.random()*(CH-e[3]+1));let free=true;for(let a=0;a<e[2];a++)for(let b=0;b<e[3];b++)if(cells[(cy+b)*CW+cx+a].it>=0)free=false;if(!free)continue;
+      if(must.length&&must[0]===e)must.shift();
       const id=items.length;items.push({e:e,x:cx,y:cy,got:false});for(let a=0;a<e[2];a++)for(let b=0;b<e[3];b++)cells[(cy+b)*CW+cx+a].it=id}
-    B.innerHTML='<div class="whohd"><span>💎 Tesoros: <b id="exF">0</b>/'+items.length+'</span><div class="exstab"><i id="exS"></i></div></div><div class="exwall" id="exW" style="--cw:'+CW+'">'+items.map((it,i)=>'<div class="exitm ex-'+it.e[0]+'" data-ei="'+i+'" style="grid-column:'+(it.x+1)+' / span '+it.e[2]+';grid-row:'+(it.y+1)+' / span '+it.e[3]+'">'+exArt(it.e)+'</div>').join("")+cells.map((c,i)=>'<button class="excell h'+Math.min(5,c.h)+'" data-ec="'+i+'" style="grid-column:'+(i%CW+1)+';grid-row:'+(Math.floor(i/CW)+1)+'" aria-label="Roca"></button>').join("")+'</div>'+
+    B.innerHTML='<div class="whohd"><span>💎 Tesoros: <b id="exF">0</b>/'+items.length+'</span><div class="exstab"><i id="exS"></i></div></div><div class="exwall" id="exW" style="--cw:'+CW+';--ch:'+CH+'">'+items.map((it,i)=>'<div class="exitm ex-'+it.e[0]+'" data-ei="'+i+'" style="grid-column:'+(it.x+1)+' / span '+it.e[2]+';grid-row:'+(it.y+1)+' / span '+it.e[3]+'">'+art(it.e)+'</div>').join("")+cells.map((c,i)=>'<button class="excell h'+Math.min(5,c.h)+'" data-ec="'+i+'" style="grid-column:'+(i%CW+1)+';grid-row:'+(Math.floor(i/CW)+1)+'" aria-label="Roca"></button>').join("")+'</div>'+
       '<div class="extools"><button class="on" data-et="pick">⛏️ Pico<small>Rompe poco, daña poco la pared</small></button><button data-et="ham">🔨 Martillo<small>Rompe mucho, daña más la pared</small></button><button class="alt" data-et="stop">✋ Terminar</button></div>';
     mgSet(0);const W=$("exW");
     const updStab=()=>{const s=$("exS");s.style.width=Math.max(0,stab)+"%";s.style.background=stab>50?"#3ecf8e":stab>25?"#ffd35c":"#e63950"};updStab();
@@ -70,16 +75,16 @@ const G_EXC={id:"exc",n:"Excavación subterránea",ic:"⛏️",c:"#8a5a2b",d:"Pi
       else{for(let a=-1;a<=1;a++)for(let c=-1;c<=1;c++){const X=x+a,Y=y+c;if(X>=0&&X<CW&&Y>=0&&Y<CH)hit(Y*CW+X,a===0&&c===0?3:2)}stab-=4.4;snd("hit",1);if(!hubCalm())W.animate([{transform:"translate(-3px,2px)"},{transform:"translate(3px,-2px)"},{transform:"none"}],{duration:160})}
       updStab();check();if(stab<=0&&!over){$("exF").parentNode.innerHTML='💥 ¡La pared se ha derrumbado!';finish(false)}});
     B.querySelector(".extools").addEventListener("click",e=>{const b=e.target.closest("[data-et]");if(!b||over)return;if(b.dataset.et==="stop"){finish(true);return}tool=b.dataset.et;B.querySelectorAll(".extools [data-et]").forEach(x=>x.classList.toggle("on",x===b))});
-  },
-  after(score,prize){
+}
+function excAfter(score,prize,lab){
     const L=MG.exc||[];MG.exc=null;if(!L.length)return "";
     if(!prize)return '<p class="mut">Has desenterrado: '+L.map(e=>e[1]).join(", ")+'. (Hoy ya no quedan premios: los tesoros vuelven a la tierra.)</p>';
-    const rw={t:0,it:{}};L.forEach(e=>{const q=e[5];if(q.t)rw.t+=q.t;if(q.it)Object.keys(q.it).forEach(k=>rw.it[k]=(rw.it[k]||0)+q.it[k]);
+    const rw={t:0,it:{}},fos=[];L.forEach(e=>{const q=e[5];if(q.t)rw.t+=q.t;if(q.it)Object.keys(q.it).forEach(k=>rw.it[k]=(rw.it[k]||0)+q.it[k]);if(q.fos&&typeof fosAdd==="function"){fosAdd(q.fos,1);fos.push(e[1])}
       if(q.evo){const ev=ITEMS.filter(i=>i[7]==="evo");const k=ev[Math.floor(Math.random()*ev.length)][0];rw.it[k]=(rw.it[k]||0)+1}
       if(q.hold){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}});
-    grant(rw);save();render();
-    return '<div class="mgget"><span>⛏️ Tesoros: <b>'+rwTxt(rw)+'</b></span></div>';
-  }};
+    if(rw.t||Object.keys(rw.it).length)grant(rw);save();render();
+    return '<div class="mgget"><span>'+lab+': <b>'+[rw.t||Object.keys(rw.it).length?rwTxt(rw):"",...fos.map(f=>"🦴 "+f)].filter(Boolean).join(", ")+'</b></span></div>'+(fos.length?'<p class="mut">Los fósiles se guardan en el <a href="#" data-fosgo>🧪 Laboratorio de fósiles</a>, donde puedes revivirlos.</p>':'');
+}
 function exArt(e){
   const k=e[0];
   if(k==="red"||k==="blu"||k==="prl"||k==="big"){const c=k==="red"?"#ff4d5e":k==="blu"?"#4da3ff":k==="prl"?"#f4f0ff":"#b06cff";return '<span class="exorb" style="--oc:'+c+'"></span>'}

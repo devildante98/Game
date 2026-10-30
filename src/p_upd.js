@@ -175,3 +175,25 @@ setTimeout(sugReplyCheck,9000);setInterval(sugReplyCheck,10*60000);
 // ================= VENTANA DE COMBATE: se recuerda el modo elegido =================
 {const w=$("bigW"),f=$("bigF");if(w){const o=w.onclick;w.onclick=()=>{o();O.bigmode=bigMode==="win"?"win":"";saveO();try{$("bigopt").value=O.bigmode}catch(e){}}}
  if(f){const o=f.onclick;f.onclick=()=>{o();O.bigmode=bigMode==="full"?"full":"";saveO();try{$("bigopt").value=O.bigmode}catch(e){}}}}
+// ================= TIENDA DE ROPA: prendas de temporada (solo durante su evento) y de catálogo, con tickets =================
+nxPanel("trShopP","🛍️ Tienda de ropa","Ropa exclusiva para tu entrenador. La de temporada solo se vende mientras dura su evento, ¡no la dejes escapar! Lo que compras es tuyo para siempre, también al subir de prestigio.");
+{const g=HUB.find(x=>x.k==="trn");if(g&&!g.tabs.some(t=>t[0]==="trShopP"))g.tabs.splice(1,0,["trShopP","Tienda de ropa"]);HUBP.trShopP="trn";HUBR.trShopP=()=>trShopUI()}
+const evDates=n=>{const e=EVENTS.find(x=>x.n===n);return e?e.a[1]+" "+MESES[e.a[0]-1]+" – "+e.b[1]+" "+MESES[e.b[0]-1]:""};
+function trShopCard(it,mode){const[k,v,pr,e]=it,o=TRO.find(x=>x[0]===k),L=myLook(),own=trOwn(k,v),on=L[k]===v,look=Object.assign({},L,{[k]:v});
+  const btn=mode==="soon"?'<small class="mut">🔒 Vuelve en '+esc(e)+' ('+evDates(e)+')</small>':own?(on?'<span class="tshon">✅ Te la has puesto</span>':'<button data-tsw="'+k+':'+v+'">👕 Ponérmela</button>'):'<button class="red" data-tsb="'+k+':'+v+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button>';
+  return '<div class="tshc'+(own?' own':'')+(mode==="soon"?' soon':'')+'"><div class="tshpv '+(k==="wr"||k==="bp"?"zm":"zt")+'">'+trImg(look,k==="bp"?"b":"f","i","idle")+'</div><b>'+esc(o[2][v])+'</b><small class="mut">'+esc(o[1])+(e?' · '+esc(e):'')+'</small>'+btn+'</div>'}
+function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),sec=(t,L,m)=>L.length?'<h3 class="shh">'+t+'</h3><div class="tshg">'+L.map(x=>trShopCard(x,m)).join("")+'</div>':"";
+  const cur=ev?TRSHOP.filter(x=>x[3]===ev.n):[],cat=TRSHOP.filter(x=>!x[3]),mine=TRSHOP.filter(x=>x[3]&&(!ev||x[3]!==ev.n)&&trOwn(x[0],x[1])),soon=TRSHOP.filter(x=>x[3]&&(!ev||x[3]!==ev.n)&&!trOwn(x[0],x[1]));
+  box.innerHTML='<div class="tshtk">🎟️ Tienes <b>'+fmt(S.t)+'</b></div>'+
+    (cur.length?sec(ev.n+' · ¡solo hasta el '+ev.b[1]+' '+MESES[ev.b[0]-1]+'!',cur,""):'<p class="mut">Ahora mismo no hay ningún evento de temporada. La próxima ropa de temporada aparecerá con el siguiente evento.</p>')+
+    sec("🛍️ Catálogo",cat,"")+sec("🎁 Tus prendas de temporada",mine,"")+sec("📅 Próximas prendas de temporada",soon,"soon");
+}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
+  const a=t.closest("[data-trshop]");if(a){e.preventDefault();snd("ui");hubOpen("trn","trShopP");return}
+  const w=t.closest("#trShopPB [data-tsw]");if(w){const[k,v]=w.dataset.tsw.split(":");trSet(k,+v);snd("ui");trShopUI();toast("👕 ¡Te queda genial!");return}
+  const b=t.closest("#trShopPB [data-tsb]");if(b){const[k,v0]=b.dataset.tsb.split(":"),v=+v0,it=trShopIt(k,v),ev=evNow();if(!it||trOwn(k,v))return;
+    if(it[3]&&(!ev||ev.n!==it[3])){toast("Esta prenda solo se vende durante "+it[3]+".");return}
+    if(S.t<it[2]){toast("Te faltan "+fmt(it[2]-S.t)+" 🎟️.");return}
+    const o=TRO.find(x=>x[0]===k);if(!confirm("¿Comprar «"+o[2][v]+"» por "+fmt(it[2])+" 🎟️?"))return;
+    S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn[k+":"+v]=1;trSet(k,v);save();render();snd("lvl");toast("🛍️ ¡Has comprado «"+o[2][v]+"»! Ya la llevas puesta.");trShopUI()}
+});

@@ -265,7 +265,7 @@ rep('const p=sup?rollS():roll(),isNew=!S.owned[p[0]];\n    if(isNew){S.balls[p[0
     'const p=sup?rollS():roll(),isNew=!hasP(p[0]);\n    if(!S.owned[p[0]]){S.balls[p[0]]=BALLR[p[2]];(S.when=S.when||{})[p[0]]=Date.now()}')
 rep('return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?c>0:s==="0"?c===0:c>1))}',
     'return(!$("fg").value||p[3]===+$("fg").value)&&(!r||p[2]===r)&&(!t||p[1]===t)&&(s===""||(s==="1"?hasP(p[0]):s==="0"?!hasP(p[0]):c>1))}')
-rep('const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp};', 'const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp,tr:S.tr,gid:S.gid,sugSeen:S.sugSeen};')
+rep('const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp};', 'const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp,tr:S.tr,gid:S.gid,sugSeen:S.sugSeen,trOwn:S.trOwn};')
 # ayuda de tipos con el motor nuevo
 rep('''if(typeof B!=="undefined"&&B&&B.op&&B.me)h+='<h5>Este combate</h5>'+row("Rival:",B.op[1])+row("Tu "+B.me[0]+":",B.me[1]);''',
     '''if(typeof B!=="undefined"&&B&&B.E){const sn=B.snap||beSnap(B.E),mi=B.me||0,mp=snapMon(sn,mi).p;h+='<h5>Este combate</h5>'+beFoes(B.E,mi).map(j=>row("Rival:",snapMon(sn,j).p[1])).join("")+row("Tu "+mp[0]+":",mp[1])}''')
@@ -294,6 +294,11 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-30e",at:"2026-10-30T19:00",t:"🛍️ Tienda de ropa y ropa de Halloween",l:[
+"🛍️ Nueva Tienda de ropa (Tu entrenador): gasta tus tickets en prendas exclusivas para tu entrenador.",
+"🎃 Ropa de Halloween solo hasta el 2 de noviembre: Gorro de calabaza y Pajarita de murciélago. Cada evento de temporada traerá su propia prenda.",
+"⌚ Catálogo todo el año: Pokéreloj, Gafas de corazón, Monóculo dorado y Mochila Poké Ball.",
+"🔊 Cada Pokémon del gacha suena al salir de la Poké Ball, ¡y los legendarios tienen fanfarria!"]},
 {v:"2026-10-30d",at:"2026-10-30T16:30",t:"Cazafósiles, ropa de prestigio y sugerencias con respuesta",l:[
 "🦴 Nuevo minijuego Cazafósiles: desentierra fósiles y revívelos en el 🧪 Laboratorio de fósiles (Minijuegos). ¡Omanyte, Kabuto, Aerodactyl, Tyrunt, Dracozolt y muchos más!",
 "⛏️ La Excavación subterránea ahora es de 12×12, y sus fósiles también se pueden revivir.",

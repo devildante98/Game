@@ -441,6 +441,12 @@ body.calm .albs.holo{animation:none}
 .swtag{position:absolute;top:6px;right:8px;font-style:normal;font-size:.66rem;font-weight:800;padding:1px 7px;border-radius:999px;background:#13a37f;color:#fff}.swc.ko .swtag{background:#e63950}
 #arena.bigbat .menu .swc{padding:6px 12px 6px 6px;font-size:1rem}
 @media (max-width:560px){.menu .swgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.menu .swc{flex-direction:column;align-items:stretch;gap:2px;padding:6px 8px 8px;min-height:0;text-align:center}.swspr{width:100%;height:56px}.swspr img{max-height:56px}.swc.tg .swt b{padding-right:0}.swtag{top:4px;right:4px;font-size:.6rem}.menu .swt small{font-size:.72rem}}
+.tshtk{display:inline-block;padding:6px 14px;border-radius:999px;border:2px solid var(--yel);background:var(--panel);font-weight:700;margin-bottom:4px}
+.tshg{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tshc{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:10px;border-radius:16px;background:var(--bg);border:2px solid var(--line)}.tshc.own{border-color:#13a37f}.tshc.soon{opacity:.6;filter:grayscale(.5)}
+.tshpv{width:100%;height:120px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(#bfe6ff,#e8f6ff);overflow:hidden}.tshpv img{image-rendering:pixelated;animation:none!important;transform:none!important;margin:0!important;width:100%;height:100%;object-fit:cover}.tshpv.zt img{object-position:50% 4%}.tshpv.zm img{object-position:50% 62%}
+.tshc button{width:100%;padding:7px 8px;font-size:.85rem}.tshon{font-weight:700;color:#13a37f;font-size:.85rem}
+.evshop{display:inline-block;margin-left:6px;padding:2px 10px;border-radius:999px;background:#ffd35c;color:#3a2a00!important;font-weight:800;text-decoration:none}
 .tmbtn{position:relative;width:100%;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:8px 12px 8px 8px;border-radius:16px;background:var(--bg);color:var(--ink);border:2px dashed var(--line);text-align:left;min-height:84px;cursor:pointer}
 .tmbtn.on{border-style:solid;background:linear-gradient(135deg,var(--panel),var(--bg))}.tmbtn:hover{border-color:#13a37f}
 .tmn{flex:none;width:24px;height:24px;border-radius:50%;background:#2b2f5a;color:#fff;display:grid;place-items:center;font-weight:900;font-size:.8rem}

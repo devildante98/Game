@@ -14,16 +14,16 @@ const TRO=[
   ["bl","Mejillas",["Normales","Sonrojadas","Pecas","Tirita","Lunar"],"c"],
   ["hs","Peinado",["Corto","Puntiagudo","Melena","Coleta","Dos coletas","Rapado","Rizado","Flequillo largo","Moño","Afro","Cresta","Media melena","Trenza","Dos moños","Despeinado","Tupé","Bob","Ondulado largo","Hacia atrás","Mechón en el ojo","Coleta alta","Dos trenzas","Calvo","Melena salvaje","Pelo largo liso","Coletas bajas","Rastas","Undercut","Media cola","Puntas largas"],"p"],
   ["hc","Color de pelo","hair","p"],
-  ["hat","Gorro",["Ninguno","Gorra","Gorra al revés","Gorro de lana","Sombrero","Cinta","Lazo","Gafas de sol","Boina","Visera","Gorro de pescador","Sombrero de paja","Corona de flores","Gafas de aviador","Diadema","Pañuelo","Orejas de gato","Casco de explorador","Sombrero de copa","Sombrero vaquero","Gorro de Navidad","Auriculares","Bandana","Sombrero de bruja","Gorra de capitán","Gorra de Prestigio","Cinta de Prestigio","Corona de laurel","Sombrero de Campeón","Halo de Prestigio","Corona Suprema"],"a"],
-  ["hac","Color del gorro y adornos","cl","a"],["gl","Gafas",["No","Redondas","Cuadradas","De sol","Media montura","Parche"],"a"],
+  ["hat","Gorro",["Ninguno","Gorra","Gorra al revés","Gorro de lana","Sombrero","Cinta","Lazo","Gafas de sol","Boina","Visera","Gorro de pescador","Sombrero de paja","Corona de flores","Gafas de aviador","Diadema","Pañuelo","Orejas de gato","Casco de explorador","Sombrero de copa","Sombrero vaquero","Gorro de Navidad","Auriculares","Bandana","Sombrero de bruja","Gorra de capitán","Gorra de Prestigio","Cinta de Prestigio","Corona de laurel","Sombrero de Campeón","Halo de Prestigio","Corona Suprema","Gorro de calabaza","Cuernos de reno","Diadema de corazones","Sombrero con flor","Gafas de buceo"],"a"],
+  ["hac","Color del gorro y adornos","cl","a"],["gl","Gafas",["No","Redondas","Cuadradas","De sol","Media montura","Parche","Monóculo dorado","Gafas de corazón"],"a"],
   ["top","Parte de arriba",["Camiseta","Chaqueta","Sudadera","Chaleco","Vestido","Camisa","Camiseta de tirantes","Polo","Abrigo largo","Jersey","Top corto","Chaqueta deportiva","Bata","Peto","Camiseta de rayas","Cazadora","Kimono","Uniforme de marinero","Traje","Sudadera abierta","Chaqueta de plumas","Camiseta de fútbol"],"r"],
   ["tc","Color principal","cl","r"],["ac","Color secundario","cl","r"],
   ["bot","Parte de abajo",["Pantalón","Pantalón corto","Falda","Pantalón pirata","Falda larga","Mallas","Pantalón ancho","Bermudas cargo","Vaqueros rotos","Falda plisada","Pantalón de chándal","Pantalón de traje"],"r"],
   ["bc","Color de abajo","cl","r"],["sh","Color del calzado","cl","r"],
-  ["bp","Mochila",["No","Mochila","Bandolera","Riñonera","Mochila de explorador","Bolso"],"a"],["bpc","Color de la mochila","cl","a"],
+  ["bp","Mochila",["No","Mochila","Bandolera","Riñonera","Mochila de explorador","Bolso","Mochila Poké Ball"],"a"],["bpc","Color de la mochila","cl","a"],
   ["shs","Calzado",["Zapatillas","Botas","Sandalias","Zapatos","Botas altas","Botas de montaña","Zapatillas altas","Botas de agua"],"r"],
   ["pat","Estampado",["Liso","Rayas","Estrella","Rayo","Corazón","Hoja","Llama","Gota","Número 1"],"r"],["pc","Color del estampado","cl","r"],
-  ["nk","Cuello",["Nada","Bufanda","Collar","Pañuelo","Corbata","Lazo","Medalla de Prestigio","Collar de estrellas"],"a"],["nkc","Color del cuello","cl","a"],
+  ["nk","Cuello",["Nada","Bufanda","Collar","Pañuelo","Corbata","Lazo","Medalla de Prestigio","Collar de estrellas","Pajarita de murciélago"],"a"],["nkc","Color del cuello","cl","a"],
   ["glv","Guantes",["No","Sin dedos","Completos","Muñequeras"],"a"],["glc","Color de los guantes","cl","a"],
   ["blt","Cinturón",["No","Cinturón","Con Pokéballs"],"a"],["ear","Pendientes",["No","Aros","Bolitas","Estrellas"],"a"],
   ["mch","Mechas",["No","Puntas","Mechón","Reflejos"],"p"],["mcc","Color de las mechas","hair","p"],
@@ -33,11 +33,15 @@ const TRO=[
   ["ha","Adorno del pelo",["Nada","Horquilla","Flor","Estrella","Lazo pequeño","Cinta en la frente"],"p"],
   ["sck","Calcetines",["Normales","Altos","De rayas","Medias"],"r"],["sckc","Color de los calcetines","cl","r"],
   ["wst","Prenda en la cintura",["Nada","Chaqueta atada","Jersey atado"],"r"],["wsc","Color de la prenda atada","cl","r"],
-  ["wr","Muñeca",["Nada","Reloj","Pulsera","Brazalete"],"a"],["wrc","Color de la pulsera","cl","a"]
+  ["wr","Muñeca",["Nada","Reloj","Pulsera","Brazalete","Pokéreloj"],"a"],["wrc","Color de la pulsera","cl","a"]
 ];
 // prendas exclusivas de prestigio: [clave][opción] = nivel de prestigio necesario
 const TRLOCK={hat:{25:1,26:2,27:3,28:4,29:5,30:6},nk:{6:1,7:3}};
-const trLk=(k,v)=>(TRLOCK[k]&&TRLOCK[k][v])||0,trOk=(k,v)=>trLk(k,v)<=(S.prs||0);
+// prendas de la Tienda de ropa: [clave, opción, precio, evento en el que se vende (null = todo el año)]
+const TRSHOP=[["hat",31,25e6,"🎃 Halloween"],["nk",8,25e6,"🎃 Halloween"],["hat",32,25e6,"🎄 Navidad"],["hat",33,25e6,"💘 San Valentín"],["hat",34,25e6,"🌸 Primavera"],["hat",35,25e6,"☀️ Verano"],
+  ["wr",4,5e7,null],["gl",7,1e8,null],["gl",6,2.5e8,null],["bp",6,5e8,null]];
+const trShopIt=(k,v)=>TRSHOP.find(x=>x[0]===k&&x[1]===v)||null,trOwn=(k,v)=>!!(S.trOwn&&S.trOwn[k+":"+v]);
+const trLk=(k,v)=>(TRLOCK[k]&&TRLOCK[k][v])||0,trOk=(k,v)=>trLk(k,v)<=(S.prs||0)&&(!trShopIt(k,v)||trOwn(k,v));
 const trPrsItems=l=>{const r=[];Object.keys(TRLOCK).forEach(k=>{const o=TRO.find(x=>x[0]===k);Object.keys(TRLOCK[k]).forEach(v=>{if(TRLOCK[k][v]===l)r.push(o[2][v])})});return r};
 const TRTABS=[["c","🙂 Cara y cuerpo"],["p","💇 Pelo"],["r","👕 Ropa"],["a","🎒 Accesorios"]];
 const TRDEF={b:0,sk:1,fs:0,ey:0,ec:0,mo:0,bl:0,hs:1,hc:1,hat:1,hac:4,gl:0,top:1,tc:1,ac:9,bot:0,bc:6,sh:11,bp:1,bpc:3,shs:0,pat:0,pc:9,nk:0,nkc:0,glv:0,glc:11,blt:0,ear:0,mch:0,mcc:4,brw:0,brd:0,mk:0,mkc:0,ha:0,sck:0,sckc:9,wst:0,wsc:5,wr:0,wrc:2};
@@ -47,7 +51,7 @@ const trEnc=L=>TRO.map(o=>(+L[o[0]]||0).toString(36)).join("");
 function trDec(s){const L=Object.assign({},TRDEF);if(typeof s!=="string")return L;TRO.forEach((o,i)=>{if(i>=s.length)return;const v=parseInt(s[i],36);if(v>=0&&v<trN(o))L[o[0]]=v});return L}
 function trRandom(){const L={};TRO.forEach(o=>{const n=trN(o),r=Math.random();
   L[o[0]]=["gl","nk","glv","blt","ear","mch","bl","brd","mk","ha","wst","wr"].includes(o[0])&&r<.6?0:o[0]==="hs"&&Math.random()<.9&&false?0:Math.floor(Math.random()*n)});
-  if(L.top===4&&[2,4].includes(L.bot))L.bot=0;if(Math.random()<.8)L.brd=0;if(Math.random()<.75)L.mk=0;if(L.b===1)L.brd=0;if(L.hs===22&&Math.random()<.7)L.hs=0;if(Math.random()<.35)L.hat=0;Object.keys(TRLOCK).forEach(k=>{if(!trOk(k,L[k]))L[k]=0});return L}
+  if(L.top===4&&[2,4].includes(L.bot))L.bot=0;if(Math.random()<.8)L.brd=0;if(Math.random()<.75)L.mk=0;if(L.b===1)L.brd=0;if(L.hs===22&&Math.random()<.7)L.hs=0;if(Math.random()<.35)L.hat=0;TRO.forEach(o=>{if(!trOk(o[0],L[o[0]]))L[o[0]]=0});return L}
 // ---- color: sombreado con desplazamiento de tono (como el pixel art de los juegos) ----
 function trHex(c){c=c.replace("#","");return[parseInt(c.slice(0,2),16),parseInt(c.slice(2,4),16),parseInt(c.slice(4,6),16)]}
 function trHsl(c){let[r,g,b]=trHex(c).map(v=>v/255);const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2;let h=0,s=0;
@@ -255,6 +259,9 @@ function trURL(L,view,pose){
     if(!back){rect(cx-1.5,55,4,4,"#f2d27a",{ol:"#8a6a22",olc:"#8a6a22"});}
     if(L.blt===2){const bx=back?[cx-6,cx-1,cx+4]:[cx-8,cx+5];bx.forEach(x=>map(Math.round(x),55,[".rr.","rrrr","kwwk",".ww."],{r:"#e63950",k:ink,w:white}))}}
   // ---- mochilas (correas por delante, mochila por detras) ----
+  if(!back&&L.bp===6){seg(cx-6,35,cx-7,50,2.6,2.6,"#2b2b34",{tag:"strap"});seg(cx+6,35,cx+7,50,2.6,2.6,"#2b2b34",{tag:"strap"})}
+  if(back&&L.bp===6){const y0=34,r=10;shp((x,y)=>((x-cx)/r)**2+((y-(y0+r))/r)**2<=1,cx-r-1,y0-1,cx+r+1,y0+2*r+1,"#ffffff",{lx:.3});shp((x,y)=>((x-cx)/r)**2+((y-(y0+r))/r)**2<=1&&y<y0+r-1,cx-r-1,y0-1,cx+r+1,y0+r,"#e63950",{lx:.3});
+    for(let x=cx-r;x<=cx+r;x++){put(x,y0+r-1,"#2b2b34");put(x,y0+r,"#2b2b34")}ell(cx,y0+r,3,3,"#ffffff",{olc:"#2b2b34"})}
   if(!back&&(L.bp===1||L.bp===4)){seg(cx-6,35,cx-7,50,2.6,2.6,tone(bpc,2),{tag:"strap"});seg(cx+6,35,cx+7,50,2.6,2.6,tone(bpc,2),{tag:"strap"})}
   if(L.bp===2){seg(back?cx+9:cx-8,35,back?cx-8:cx+8,54,2.4,2.4,tone(bpc,2));rect(back?cx-12:cx+5,52,8,7,bpc);rect(back?cx-12:cx+5,52,8,2,tone(bpc,2),{ol:false,flat:true})}
   if(L.bp===3){rect(cx-6,54,13,5,bpc);put(cx,56,"#f2d27a")}
@@ -284,6 +291,7 @@ function trURL(L,view,pose){
     if(L.wr&&side<0){const wx=hd[0]-(hd[0]-el[0])*.08,wy=hd[1]-(hd[1]-el[1])*.08,wc=P("cl",L.wrc);
       if(L.wr===1){rect(wx-2,wy-1.4,5,3,"#3a3a46",{ol:false,flat:true});if(!back){put(wx,wy,"#e8f6ff");put(wx+1,wy,"#bfe6ff");put(wx,wy-1,wc)}}
       else if(L.wr===2){for(let k=-2;k<=2;k++)put(wx+k,wy+(k%2?0:1),k%2?wc:tone(wc,0))}
+      else if(L.wr===4){rect(wx-2.5,wy-2,6,4,"#e63950",{olc:"#7a1020"});if(!back){rect(wx-1.5,wy-1,4,2,"#bfffcf",{ol:false,flat:true});put(wx,wy,"#2a7a3a")}}
       else{rect(wx-2.5,wy-1.5,6,3,wc,{olc:tone(wc,4)});put(wx,wy,"#ffffff");put(wx+1,wy,"#7fe0ff")}}
     if(L.bp===5&&side<0&&!back){seg(hcx,hcy+1,hcx-1,hcy+5,1.2,1.2,tone(bpc,3));rect(hcx-4,hcy+4,7,6,bpc)}
   }
@@ -335,7 +343,7 @@ function trURL(L,view,pose){
   }
   // ---- pelo ----
   const HFG=gNew(),ho={g:HFG},STK=[];
-  const capd=[1,2,3,4,8,10,11,15,17,18,19,20,22,23,24,25,28].includes(L.hat);
+  const capd=[1,2,3,4,8,10,11,15,17,18,19,20,22,23,24,25,28,31,34].includes(L.hat);
   const H0=HY-10.6;
   function crown(lowSides,c){c=c||hc;shp((x,y)=>{const dx=(x-cx)/11,dy=(y-(HY-1.5))/10.6;if(dx*dx+dy*dy>1)return false;if(back)return y<=HY+8;const a=Math.abs(x-cx);return y<=HY-6+(a>6.5?(a-6.5)*lowSides:0)},cx-12,HY-13,cx+12,HY+10,c,ho)}
   function bangs(n,len,c){c=c||hc;for(let i=0;i<n;i++){const t=n===1?.5:i/(n-1),x=cx-8+t*16,ln=len*(1-.25*Math.abs(t-.5));seg(x,HY-9,x+(t<.5?-1:1)*1.2,HY-9+ln,5.4,1.2,c,ho);if(i)STK.push([x-2,HY-7,x-2+(t<.5?-.6:.6),HY-9+ln*.8])}}
@@ -455,6 +463,17 @@ function trURL(L,view,pose){
   if(hat===29){const hy0=HY-15.5,ring=(x,y)=>{const d=((x-cx)/9.5)**2+((y-hy0)/3)**2;return d<=1&&d>=.3};shp(ring,cx-11,hy0-4,cx+11,hy0+4,gd,{tag:"hat"})}
   if(hat===30){map(Math.round(cx-8),HY-15,["y...y...y...y...y","yy..yy.yyy.yy..yy","yyy.yyyyyyyyy.yyy","yyyyyyyyyyyyyyyyy","yyyyyyyyyyyyyyyyy","kkkkkkkkkkkkkkkkk"],{y:gd,k:gk});
     if(!back){ell(cx,HY-11,1.6,1.6,hac,{olc:tone(hac,4)});ell(cx-5,HY-11,1.2,1.2,ac,{olc:tone(ac,4)});ell(cx+5,HY-11,1.2,1.2,ac,{olc:tone(ac,4)})}for(const x of[-8,-4,0,4,8])put(cx+x,HY-16,gl2)}
+  // gorros de temporada (Tienda de ropa)
+  if(hat===31){const o="#f08a24";shp((x,y)=>((x-cx)/11.4)**2+((y-(HY-7))/7.6)**2<=1&&y<=HY-3,cx-12,HY-15,cx+12,HY-3,o,{tag:"hat",lx:.3});for(const dx of[-6,0,6])for(let y=HY-13;y<=HY-4;y++)if(gtag(Math.round(cx+dx*(1-(HY-8-y)**2/100)),y)==="hat")put(cx+dx*(1-(HY-8-y)**2/100),y,tone(o,2));rect(cx-1,HY-17,3,4,"#4a7a2a",{tag:"hat"});seg(cx+1,HY-16,cx+5,HY-18,1.6,1.2,"#6aa83a");
+    if(!back){map(Math.round(cx-6),HY-10,["k.....k","kk...kk"],{k:"#3a1a0a"});map(Math.round(cx-3),HY-7,["k.k.k.k"],{k:"#3a1a0a"})}}
+  if(hat===32){for(let i=0;i<=20;i++){const a=Math.PI*(1.08+i*.042);put(cx+Math.cos(a)*10.8,HY-2+Math.sin(a)*9.4,"#7a4a26");put(cx+Math.cos(a)*10.8,HY-1+Math.sin(a)*9.4,tone("#7a4a26",2))}
+    for(const sd of[-1,1]){const b="#e8c48a";seg(cx+sd*7,HY-9,cx+sd*11,HY-19,3,2.4,b,{tag:"hat"});seg(cx+sd*9.5,HY-15,cx+sd*15,HY-17,2.4,2,b,{tag:"hat"});seg(cx+sd*11,HY-19,cx+sd*15,HY-23,2.2,1.8,b,{tag:"hat"});seg(cx+sd*11,HY-19,cx+sd*9,HY-24,2,1.6,b,{tag:"hat"})}if(!back)ell(cx,HY-13,1.6,1.6,"#e63950",{olc:"#8a1020"})}
+  if(hat===33){for(let i=0;i<=20;i++){const a=Math.PI*(1.08+i*.042);put(cx+Math.cos(a)*10.8,HY-2+Math.sin(a)*9.4,"#ff6fa8");put(cx+Math.cos(a)*10.8,HY-1+Math.sin(a)*9.4,tone("#ff6fa8",2))}
+    for(const sd of[-1,1]){seg(cx+sd*5,HY-10,cx+sd*7,HY-15,1,1,"#c9c9d6");map(Math.round(cx+sd*7-2),HY-19,[".r.r.","rrrrr",".rrr.","..r.."],{r:"#ff3d6e"});put(cx+sd*7-1,HY-18,"#ffd0dc")}}
+  if(hat===34){ell(cx,HY-5,16,3,"#f3d27a",{tag:"hat"});shp((x,y)=>((x-cx)/8.4)**2+((y-(HY-9))/5.6)**2<=1&&y<=HY-5,cx-9,HY-15,cx+9,HY-5,"#f3d27a",{tag:"hat"});rect(cx-8,HY-8,17,2,"#ff8fb8",{ol:false,flat:true});
+    const fx=back?cx-6:cx+6;map(Math.round(fx-2),HY-11,[".p.p.","ppypp",".ppp.","..g.."],{p:"#ff6fa8",y:"#ffe25a",g:"#4a9a3a"})}
+  if(hat===35){for(let x=cx-10.5;x<=cx+10.5;x++){put(x,HY-6,"#2b2b34");put(x,HY-5,"#3a3a46")}
+    if(!back){for(const sd of[-1,1]){ell(cx+sd*4.6,HY-8,4,3,"#3fb0ff",{olc:"#14304a"});put(cx+sd*4.6-1,HY-9,"#d8f4ff");put(cx+sd*4.6,HY-9,"#a8e2ff")}rect(cx-1,HY-9,3,2,"#2b2b34",{ol:false,flat:true})}}
   // ---- adornos del pelo ----
   if(L.ha&&L.hs!==22){const hx=back?cx-7:cx+6,hy2=HY-8,a=hac;
     if(L.ha===1){for(let k=0;k<4;k++){put(hx-1+k,hy2+k*.3,a);put(hx-1+k,hy2+2+k*.3,tone(a,2))}}
@@ -469,6 +488,8 @@ function trURL(L,view,pose){
     if(L.gl===3){[lx0,rx0].forEach(x0=>map(x0,ly-1,["kkkkk","kssbk","ksssk",".kkk."],{k:g,s:"#2a2f45",b:"#9ad7ff"}));put(cx,ly,g);put(cx+1,ly,g)}
     if(L.gl===4){[lx0,rx0].forEach(x0=>map(x0,ly+1,["k...k",".kkk."],{k:g}));put(cx,ly+1,g);put(cx+1,ly+1,g)}
     if(L.gl===5){map(lx0,ly-1,[".kkk.","kkkkk","kkkkk",".kkk."],{k:"#20202a"});for(let i=0;i<12;i++)put(cx-9.5+i*1.7,HY-3+i*.15*(i<6?-1:1),"#20202a")}
+    if(L.gl===6){map(rx0,ly-1,[".ggg.","g...g","g...g",".ggg."],{g:"#e0b23a"});put(rx0+1,ly,"#ffffff");for(let i=0;i<7;i++)put(rx0+4+i*.3,ly+2+i,"#e0b23a")}
+    if(L.gl===7){[lx0,rx0].forEach(x0=>map(x0,ly-1,["rr.rr","rpppr",".rpr.","..r.."],{r:"#e63970",p:"#ff9ec7"}));put(cx,ly,"#e63970");put(cx+1,ly,"#e63970")}
   }
   // ---- cuello (bufanda, collar, pañuelo, corbata, lazo) ----
   if(L.nk){const n=L.nk,c=nkc;
@@ -478,6 +499,7 @@ function trURL(L,view,pose){
     if(n===4&&!back){map(Math.round(cx-1),34,[".kk.",".kk.","kkkk",".kk.",".kk.",".kk.",".kk.",".kk.",".kk.","kkkk",".kk."],{k:c});for(let y=36;y<45;y++)put(cx+1,y,tone(c,2))}
     if(n===5&&!back){map(Math.round(cx-3),33,["kk.kk","kkkkk","kk.kk"],{k:c});put(cx-1,34,tone(c,3))}
     if(n===6&&!back){for(let i=0;i<=5;i++){put(cx-4+i*.7,33+i,c);put(cx+4-i*.7,33+i,c);put(cx-3+i*.7,33+i,tone(c,2));put(cx+3-i*.7,33+i,tone(c,2))}ell(cx,40.5,2.4,2.4,"#f2c84a",{olc:"#9a6f1c"});map(Math.round(cx-1),40,[".y.","yyy",".y."].slice(0,2),{y:"#fff2a8"})}
+    if(n===8&&!back){map(Math.round(cx-6),33,["kk.........kk","kpk..ppp..kpk","kppkpppppkppk","kpk..ppp..kpk","kk.........kk"],{k:"#1a0f24",p:"#7a3ac0"})}
     if(n===7&&!back){for(let i=0;i<=8;i++){const a=Math.PI*(.15+i*.0875),X=cx+Math.cos(a)*5.2,Y=34+Math.sin(a)*3.6;put(X,Y,"#f2c84a");if(i%2===0)map(Math.round(X-1),Math.round(Y+1),[".y.","yyy",".y."],{y:i===4?c:"#fff2a8"})}}
   }
   // ---- capucha por detras ----
@@ -505,7 +527,7 @@ function trUI(){
   const cards=[];
   opts.forEach(o=>{if(used.has(o[0]))return;used.add(o[0]);
     if(Array.isArray(o[2])){const v=L[o[0]],cols=(TRGRP[o[0]]||[]).map(k=>TRO.find(x=>x[0]===k)).filter(Boolean);cols.forEach(c=>used.add(c[0]));
-      cards.push('<div class="tro"><div class="trh"><b>'+o[1]+'</b><span class="trn">'+(v+1)+' / '+o[2].length+'</span></div><div class="trsel"><button class="alt" data-tr="'+o[0]+'" data-d="-1" aria-label="Anterior">◀</button><b>'+o[2][v]+'</b><button class="alt" data-tr="'+o[0]+'" data-d="1" aria-label="Siguiente">▶</button></div>'+(TRLOCK[o[0]]?'<small class="trprs">'+(trLk(o[0],v)?'🌟 Prenda de Prestigio '+trLk(o[0],v):'🌟 '+Object.values(TRLOCK[o[0]]).filter(l=>l<=(S.prs||0)).length+' / '+Object.keys(TRLOCK[o[0]]).length+' prendas de prestigio desbloqueadas')+'</small>':'')+cols.map(sw).join("")+'</div>')}
+      cards.push('<div class="tro"><div class="trh"><b>'+o[1]+'</b><span class="trn">'+(v+1)+' / '+o[2].length+'</span></div><div class="trsel"><button class="alt" data-tr="'+o[0]+'" data-d="-1" aria-label="Anterior">◀</button><b>'+o[2][v]+'</b><button class="alt" data-tr="'+o[0]+'" data-d="1" aria-label="Siguiente">▶</button></div>'+(trShopIt(o[0],v)?'<small class="trprs">🛍️ Prenda de la Tienda de ropa</small>':TRLOCK[o[0]]?'<small class="trprs">'+(trLk(o[0],v)?'🌟 Prenda de Prestigio '+trLk(o[0],v):'🌟 '+Object.values(TRLOCK[o[0]]).filter(l=>l<=(S.prs||0)).length+' / '+Object.keys(TRLOCK[o[0]]).length+' prendas de prestigio desbloqueadas')+'</small>':'')+cols.map(sw).join("")+'</div>')}
     else{const own=Object.keys(TRGRP).find(k=>TRGRP[k].includes(o[0])&&opts.some(x=>x[0]===k));if(own)return;cards.push('<div class="tro">'+sw(o)+'</div>')}});
   box.innerHTML='<div class="trtabs">'+TRTABS.map(t=>'<button class="'+(TRTAB===t[0]?"on":"")+'" data-trt="'+t[0]+'">'+t[1]+'</button>').join("")+'</div><div class="trgrid">'+cards.join("")+'</div>';
 }

@@ -7,7 +7,7 @@ let _ft=null,_ftk="";
 function featured(){const k=weekKey();if(_ftk===k)return _ft;_ftk=k;const r=rngS(pvHash("feat"+k)),pool=P.filter(p=>(p[2]==="E"||p[2]==="R")&&p[3]<10);_ft=pool[Math.floor(r()*pool.length)];return _ft}
 function evBanUI(){
   const ev=evNow(),f=featured(),b=$("evBan");if(!b)return;const key=(ev?ev.n:"")+f[0];if(b._k===key)return;b._k=key;
-  b.innerHTML=(ev?'<div class="evb ev"><b>'+ev.n+'</b> · Evento activo hasta el '+ev.b[1]+' '+MESES[ev.b[0]-1]+': más Pokémon de tipo '+ev.t.map(t=>EM[t]+" "+TIPO[t]).join(" y ")+' en tiradas y combates.</div>':'')+
+  b.innerHTML=(ev?'<div class="evb ev"><b>'+ev.n+'</b> · Evento activo hasta el '+ev.b[1]+' '+MESES[ev.b[0]-1]+': más Pokémon de tipo '+ev.t.map(t=>EM[t]+" "+TIPO[t]).join(" y ")+' en tiradas y combates.'+(typeof TRSHOP!=="undefined"&&TRSHOP.some(x=>x[3]===ev.n)?' <a href="#" data-trshop class="evshop">🛍️ ¡Ropa de temporada en la Tienda de ropa!</a>':'')+'</div>':'')+
     '<div class="evb ft">'+ico(f,40)+'<span><b>⭐ Pokémon de la semana: '+esc(f[0])+'</b> '+STAR[f[2]]+'<br><small>Sale mucho más a menudo en las tiradas hasta el lunes.</small></span></div>';
 }
 // ================= zonas de exploración =================

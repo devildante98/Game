@@ -3095,7 +3095,9 @@ document.addEventListener("keydown",e=>{
   if(e.ctrlKey||e.metaKey||e.altKey)return;
   const tg=e.target&&e.target.tagName;if(tg==="INPUT"||tg==="SELECT"||tg==="TEXTAREA")return;
   const k=e.key.toLowerCase();
-  if((O.tkeys||["u"]).includes(k)){if(!e.repeat||Date.now()-(window._u||0)>=250){window._u=Date.now();$("train").click();$("train").animate([{transform:"scale(.93)"},{transform:"none"}],120)}}
+  // Enter sobre la Poké Ball enfocada haría clics nativos a la velocidad de autorrepetición: se limita igual que las demás teclas
+  const trEnt=k==="enter"&&e.target&&e.target.id==="train";
+  if((O.tkeys||["u"]).includes(k)||trEnt){e.preventDefault();if(!e.repeat||Date.now()-(window._u||0)>=250){window._u=Date.now();$("train").click();$("train").animate([{transform:"scale(.93)"},{transform:"none"}],120)}}
   else if((k===" "||e.code==="Space"||k==="e")&&sk){e.preventDefault();window._sp=k==="e"?0:1;sk()}
   else if(/^[1-6]$/.test(k)&&!e.repeat){const b=$(k==="1"?"bcl":"bg"+(+k-2));if(b&&!b.disabled){b.click();b.animate([{transform:"scale(.96)"},{transform:"none"}],140)}}
 });

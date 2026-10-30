@@ -128,7 +128,11 @@ MGS.push(G_RUN,G_EXC,G_WGT);
 function isoWeek(d){d=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const n=d.getUTCDay()||7;d.setUTCDate(d.getUTCDate()+4-n);const y=new Date(Date.UTC(d.getUTCFullYear(),0,1));return d.getUTCFullYear()+"-W"+String(Math.ceil(((d-y)/864e5+1)/7)).padStart(2,"0")}
 const tourWeek=()=>isoWeek(new Date());
 const tourPrevWeek=()=>isoWeek(new Date(Date.now()-7*864e5));
-function tourGameOf(w){const n=parseInt(String(w).split("-W")[1],10)+parseInt(w,10)*53;const L=MGS.filter(g=>!g.noTour);return L[n%L.length]}
+// rotación fija del torneo: un minijuego nuevo entra a partir de una semana FUTURA (si se añadiera sin más,
+// cambiaría el torneo de la semana en curso). Para añadir otro: nueva fila con la semana en la que empieza.
+const TOUR_ROT=[["","who mem dig fish thr run exc wgt"],["2026-W45","who mem dig fish thr run exc wgt fos"]];
+function tourGameOf(w){const n=parseInt(String(w).split("-W")[1],10)+parseInt(w,10)*53;let ids=TOUR_ROT[0][1];for(const r of TOUR_ROT)if(String(w)>=r[0])ids=r[1];
+  const L=ids.split(" ").map(id=>MGS.find(g=>g.id===id)).filter(Boolean);return L[n%L.length]}
 const tourEndsIn=()=>{const d=new Date(),k=(8-(d.getDay()||7))%7||7,e=new Date(d.getFullYear(),d.getMonth(),d.getDate()+k);return e-d};
 // premios del torneo: cada semana tiene su propio legendario, su forma especial y su variocolor de premio
 function tourMons(w){let h=0;for(const ch of String(w))h=(h*31+ch.charCodeAt(0))|0;const r=rngSeed(h),pk=a=>a[Math.floor(r()*a.length)];

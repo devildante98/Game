@@ -36,7 +36,12 @@ CSS_ADD = r'''
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--mute) 30%,transparent);border-radius:8px;border:2px solid transparent;background-clip:padding-box}
 ::-webkit-scrollbar-thumb:hover{background-color:color-mix(in srgb,var(--mute) 55%,transparent)}
-#acct .sv{padding:4px 8px;background:var(--line);color:var(--ink)}
+#acct .sv{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;font-size:.88rem;font-weight:800;letter-spacing:.2px;background:linear-gradient(135deg,#22c896,#13a37f);color:#fff;border:2px solid #fff;border-radius:999px;box-shadow:0 2px 0 #0b6e55,0 0 0 3px rgba(19,163,127,.25);cursor:pointer}
+#acct .sv:hover:not(:disabled){filter:brightness(1.08)}#acct #aout{background:var(--line);color:var(--ink);box-shadow:none}#acct .sv:disabled{opacity:.75;cursor:default}
+#acct.dirty .sv{animation:svp 1.6s ease-in-out infinite}@keyframes svp{50%{box-shadow:0 2px 0 #0b6e55,0 0 0 7px rgba(19,163,127,.38)}}
+@media (prefers-reduced-motion:reduce){#acct.dirty .sv{animation:none}}
+@media (min-width:601px){body:has(#acct:not([hidden])) header{padding-top:40px}}
+@media (max-width:600px){#acct #aname{display:none}#acct{padding-left:6px}}
 /* ---- gacha: botones fijos ---- */
 .stage{justify-content:flex-start}
 .gbtn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:100%}
@@ -147,7 +152,7 @@ rep('#acct{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:8px;
 
 # ---------------------------------------------------------------- HTML
 rep('<div id="acct" hidden><span id="aname"></span><span id="sync">☁️</span><button id="aout">Salir</button></div>',
-    '<div id="acct" hidden><span id="aname"></span><button id="asave" class="sv" title="Guardar ahora en la nube">💾</button><small id="sync">☁️</small><button id="aout">Salir</button></div>')
+    '<div id="acct" hidden><span id="aname"></span><button id="asave" class="sv" title="Guardar ahora en la nube">💾 Guardar</button><small id="sync">☁️</small><button id="aout">Salir</button></div>')
 rep('<div id="updB" hidden role="status">', '<div id="evo" hidden role="dialog" aria-modal="true" aria-label="Evolución"><div class="jbox"><h2>🧬 Evolución</h2><div class="evost"><div id="evoA"></div><div id="evoB"></div></div><p id="evoT"></p><div id="evoBtns"></div></div></div>\n<div id="updB" hidden role="status">')
 rep('<label><input type="checkbox" data-o="bgprod"> Seguir generando tickets con la pestaña oculta (con la ventana cerrada o fuera del enlace nunca se generan)</label>',
     '<label><input type="checkbox" data-o="bgprod"> Seguir generando tickets con la pestaña oculta (activado por defecto; con la ventana cerrada o fuera del enlace nunca se generan)</label>')
@@ -219,7 +224,7 @@ rep('''    <li>🧭 Usa el botón de <b>accesos directos</b> (abajo a la derecha
     <li>🧑 <b>Tu entrenador</b>: personaliza su cara, pelo, ropa y mochila. ¡Aparece en tus combates!</li>
     <li>🧭 Usa el botón de <b>accesos directos</b> (abajo a la derecha) para ir a cualquier parte sin hacer scroll, y ⚙️ (arriba a la derecha) para la música y las opciones.</li>''')
 rep('<li>Si has iniciado sesión, tu progreso se guarda solo en la nube.', '<li>Si has iniciado sesión, tu progreso se guarda solo en la nube.') if False else None
-rep('<p>Si has iniciado sesión, tu progreso se guarda solo en la nube. ¡Mucha suerte, entrenador!</p>', '<p>Si has iniciado sesión, tu progreso se guarda solo en la nube cada pocos minutos (y al pulsar 💾 arriba). ¡Mucha suerte, entrenador!</p>')
+rep('<p>Si has iniciado sesión, tu progreso se guarda solo en la nube. ¡Mucha suerte, entrenador!</p>', '<p>Si has iniciado sesión, tu progreso se guarda solo en la nube cada pocos minutos (y al pulsar «💾 Guardar» arriba). ¡Mucha suerte, entrenador!</p>')
 
 # ---------------------------------------------------------------- JS: ajustes y gacha
 rep('const OD={skip:1,bg:1,rain:1,flt:1,fists:1,intro:1,fx:1,pColl:1,pBat:1,pBag:1,pShop:1,pHeal:1,pPvp:1,bgprod:0,', 'const OD={skip:1,bg:1,rain:1,flt:1,fists:1,intro:1,fx:1,pColl:1,pBat:1,pBag:1,pShop:1,pHeal:1,pPvp:1,bgprod:1,')
@@ -372,7 +377,7 @@ rep('async function pvInit0(){\n  $("pvNick").value=pvNick();', 'async function 
 rep("PR.onPeers(()=>pvRender(),()=>{PR=null;pvRender()});", "PR.onPeers(()=>{pvRender();gUI()},()=>{PR=null;pvRender()});")
 # guardado en la nube: textos
 rep('local:"Si has iniciado sesión, tu progreso se guarda también en tu cuenta (nube). Si juegas sin cuenta, solo se guarda en este navegador.",',
-    'local:window.FB?"Tu progreso se guarda siempre en este navegador y se sube a tu cuenta en la nube automáticamente cada 5 minutos, al cerrar o cambiar de pestaña y cuando pulses 💾 (arriba).":"Juegas sin cuenta: tu progreso solo se guarda en este navegador. Usa Exportar para hacer una copia.",')
+    'local:window.FB?"Tu progreso se guarda siempre en este navegador y se sube a tu cuenta en la nube automáticamente cada 5 minutos, al cerrar o cambiar de pestaña y cuando pulses «💾 Guardar» (arriba).":"Juegas sin cuenta: tu progreso solo se guarda en este navegador. Usa Exportar para hacer una copia.",')
 rep('function clBind(){', 'function clBind(){\n  if(window.FB){$("clCloud").hidden=false;$("clCloud").onclick=()=>$("asave").click()}')
 
 # ---------------------------------------------------------------- Firebase: menos escrituras + amigos y gremios
@@ -390,7 +395,7 @@ rep('''  async function flush(){
   // solo se sube cada 5 minutos (si hay cambios), al ocultar/cerrar la pestaña y al pulsar el boton 💾.
   const AUTO=5*60000;let lastW=0,lastSaved="",busy=false;
   const hhmm=t=>new Date(t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});
-  const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 5 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
+  const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;{const a=g("acct");if(a)a.classList.toggle("dirty",dirty)}e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 5 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
   async function flush(force){
     if(!uid||pending===null||busy)return;
     if(pending===lastSaved){pending=null;syncTxt();return}

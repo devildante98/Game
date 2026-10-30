@@ -48,7 +48,7 @@ rep('["jp","🎉","¡Qué suerte!","Consigue el premio gordo ({g} vez)",()=>S.jp
 # ---- clasificacion ----
 rep('<section class="panel" aria-label="Novedades" id="newsP">', '''<section class="panel" aria-label="Clasificación" id="rkP">
   <div class="hhead"><h2>📊 Clasificación</h2><button id="rkRe" style="background:var(--line);color:var(--ink)">🔄 Actualizar</button></div>
-  <p class="rates">Los mejores entrenadores entre todos los jugadores con cuenta. Tu puntuación se actualiza cuando la partida se guarda en la nube (cada 5 minutos o al pulsar 💾).</p>
+  <p class="rates">Los mejores entrenadores entre todos los jugadores con cuenta. Tu puntuación se actualiza cuando la partida se guarda en la nube (cada 5 minutos o al pulsar «💾 Guardar»).</p>
   <div class="rktabs" id="rkTabs"></div>
   <div id="rkBox"></div>
 </section>

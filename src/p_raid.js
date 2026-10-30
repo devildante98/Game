@@ -12,7 +12,7 @@ function rdShell(){
   mgStop();MG.g={id:"raid",n:"Incursión",ic:"🔴",c:"#b3123b"};hubClose();
   let m=$("mgM");if(!m){m=document.createElement("div");m.id="mgM";m.setAttribute("role","dialog");document.body.appendChild(m)}m.style.setProperty("--mc","#b3123b");
   m.innerHTML='<div class="mgw rdw"><div class="mgh"><span class="mgic">🔴</span><b>Incursión</b><span class="mgsc" id="rdTm">--:--</span><button class="mgx rdchb" data-rdchat="1" aria-label="Abrir el chat" title="Chat">💬</button><button class="mgx" aria-label="Salir de la incursión">✕</button></div><div class="mgb" id="mgB"></div></div>';m.hidden=false;
-  m.querySelector(".mgx").onclick=()=>{rdLeave();mgClose()};
+  m.querySelector(".mgx:not(.rdchb)").onclick=()=>{rdLeave();mgClose()};
 }
 async function rdCreate(){
   if(!window.FB||!window.FB.raidNew)return;if(fcd){toast("Termina el combate primero.");return}

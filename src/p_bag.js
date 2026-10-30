@@ -1,6 +1,6 @@
-// icono de las MT: disco del color del tipo del movimiento
+// icono de las MT: el disco de MT de la saga según el tipo (sprites de PokeAPI); si no carga, un disco dibujado del color del tipo
 {const _ii=itemIco;itemIco=function(id,sz){if(/^mt\d+$/.test(id)){const m=MVD[id.slice(2)],c=m?TC[m.t]||"#999":"#999";
-  return '<svg viewBox="0 0 64 64" width="'+sz+'" height="'+sz+'" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="'+c+'" stroke="#2b2b34" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"/><path d="M14 24A20 20 0 0 1 28 12" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".75"/><circle cx="32" cy="32" r="8" fill="#fff" stroke="#2b2b34" stroke-width="3"/></svg>'}
+  return '<span class="mtico" style="width:'+sz+'px;height:'+sz+'px">'+(m?'<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/tm-'+m.t+'.png" width="'+sz+'" height="'+sz+'" alt="" loading="lazy" onerror="this.remove()">':'')+'<svg viewBox="0 0 64 64" width="'+sz+'" height="'+sz+'" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="'+c+'" stroke="#2b2b34" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"/><path d="M14 24A20 20 0 0 1 28 12" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" opacity=".75"/><circle cx="32" cy="32" r="8" fill="#fff" stroke="#2b2b34" stroke-width="3"/></svg></span>'}
   return _ii.apply(this,arguments)}}
 // ================= mochila fuera de combate =================
 let _bk="",useId=null,evoBusy=false;

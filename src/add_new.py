@@ -467,6 +467,7 @@ body:has(#mgM:not([hidden]) .rdw) #chw{z-index:99}
 body.calm .pcard,body.calm .pcard::after{animation:none!important}
 .mycbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.mycwrap{max-width:640px}
 .mtrow{display:none!important}
+.mtico{display:inline-grid;place-items:center;flex:none;vertical-align:middle}.mtico>*{grid-area:1/1}.mtico img{image-rendering:pixelated;object-fit:contain;z-index:1}.mtico img+svg{visibility:hidden}
 .mttop{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.mttop input#mtQ{flex:1;min-width:160px;font:inherit;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}.mtmine{display:flex;gap:6px;align-items:center;font-size:.85rem}
 .mtty{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}.mtty button{padding:5px 10px;font-size:.8rem;border-radius:999px;background:var(--bg);color:var(--ink);border:1.5px solid var(--line);box-shadow:none}.mtty button.on{background:var(--tc,#13a37f);border-color:var(--tc,#13a37f);color:#fff}
 .mtg{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}

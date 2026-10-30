@@ -2,6 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="game-build" content="1793354640">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <style>
@@ -5289,12 +5293,16 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-function verCheck(){
+const GAME_B="1793354640";
+function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
+function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
-  fetch(location.href.split("#")[0],{cache:"no-store"}).then(r=>r.text()).then(h=>{const m=h.match(new RegExp('\\{v:"([^"]+)"'));if(m&&m[1]!==GAME_V)$("updB").hidden=false}).catch(()=>{});
+  fetch(verURL(),{cache:"no-store"}).then(r=>r.text()).then(h=>{const m=h.match(/name="game-build" content="(\d+)"/);if(m&&m[1]!==GAME_B&&+m[1]>+GAME_B){if(auto===true&&!fcd)verGo();else $("updB").hidden=false}}).catch(()=>{});
 }
-$("updGo").onclick=async()=>{save();try{if(window.cloudFlush)await window.cloudFlush()}catch(e){}location.reload()};
-setInterval(verCheck,5*60000);
+async function verGo(){try{save()}catch(e){}try{if(window.cloudFlush)await window.cloudFlush()}catch(e){}const u=new URL(location.href);u.searchParams.set("v",Date.now());location.replace(u.toString())}
+$("updGo").onclick=verGo;
+setTimeout(()=>verCheck(true),1500);document.addEventListener("visibilitychange",()=>{if(!document.hidden)verCheck(false)});
+setInterval(()=>verCheck(false),2*60000);
 function newsUI(){$("newsList").innerHTML=newsHTML(newsLive())}
 setInterval(newsUI,600000);
 // ================= bienvenida para nuevos jugadores =================

@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793357679">
+<meta name="game-build" content="1793358373">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <style>
@@ -980,6 +980,9 @@ body.calm .albs.holo{animation:none}
 .tpin,.tpko{position:absolute;top:4px;left:4px;font-style:normal;font-size:.6rem;font-weight:900;border-radius:6px;padding:1px 5px;background:#13a37f;color:#fff}.tpko{left:auto;right:4px;background:#e63950}.tpquit{border-style:dashed}
 .fteam>div{min-width:0}.fteam .ftslots{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}.ftslots button{position:relative;aspect-ratio:1;min-width:0;padding:0;border-radius:10px;background:var(--panel);color:var(--mute);border:2px dashed var(--line);display:grid;place-items:center;font-weight:900}.ftslots button.me{border:2px solid #13a37f;background:color-mix(in srgb,#13a37f 15%,var(--panel))}.ftslots img{max-width:90%;max-height:90%}.ftslots i{position:absolute;left:3px;top:1px;font-style:normal;font-size:.6rem;color:var(--mute)}.fteam small{display:block;margin-top:3px;font-size:.72rem}
 @media (max-width:560px){.tpl{grid-template-columns:repeat(auto-fill,minmax(98px,1fr))}.tmspr{width:56px;height:56px}}
+.sugbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-2px 0 8px}.sugadd{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:12px;border:1px dashed var(--line);background:var(--bg);cursor:pointer;font-weight:700;font-size:.88rem}.sugadd:hover{border-color:#13a37f}
+#sugImgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}#sugImgs:empty{display:none}.sugth{position:relative;width:84px;height:84px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}.sugth img{width:100%;height:100%;object-fit:cover}.sugth button{position:absolute;top:3px;right:3px;width:22px;height:22px;padding:0;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;border:none;font-size:.7rem}
+.sugbt{float:right;display:flex;gap:6px}.sugims{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.sugims img{width:120px;height:90px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}.sugbig{max-width:100%;max-height:70vh;border-radius:12px}
 body.calm .p1 .tpm,body.calm .p1 .tpm:before,body.calm .tourrays,body.calm .tpsh,body.calm .tourc,body.calm .rucoin span,body.calm #mgBan,body.calm .mgbi,body.calm .mgbig{animation:none!important}
 body.calm .dcheart,body.calm .egg.wob,body.calm .gfb span,body.calm .gfbox,body.calm .hofb,body.calm .twnext.boss,body.calm .safspr{animation:none!important}
 img.pk.hd{image-rendering:auto!important;object-fit:contain}
@@ -5293,7 +5296,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793357679";
+const GAME_B="1793358373";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7486,6 +7489,58 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 setTimeout(()=>{try{tmCards()}catch(e){}},0);
 setInterval(()=>{try{const s=document.querySelector("#team .slot6:not(.tmv)");if(s)tmCards()}catch(e){}},700);
 {const _r2=render;render=function(){const x=_r2.apply(this,arguments);try{if(document.querySelector("#team .slot6:not(.tmv)"))tmCards()}catch(e){}return x}}
+// ================= SUGERENCIAS CON FOTOS =================
+const SUG_MAXI=3,SUG_IMGB=230000;var SUGI=[];
+function sugImgUI(){
+  let w=$("sugImgs");const t=$("sugT");if(!t)return;
+  if(!w){w=document.createElement("div");w.id="sugImgs";t.after(w);
+    const bar=document.createElement("div");bar.className="sugbar";bar.innerHTML='<label class="sugadd" title="Añadir fotos"><input type="file" id="sugFile" accept="image/*" multiple hidden>📷 Añadir fotos</label><small class="mut">Máx. '+SUG_MAXI+' fotos · Enter para enviar, Shift+Enter para saltar de línea · también puedes pegar capturas con Ctrl+V</small>';w.before(bar);
+    $("sugFile").onchange=e=>{sugAddFiles([...e.target.files]);e.target.value=""};
+    w.addEventListener("click",e=>{const b=e.target.closest("[data-sx]");if(b){SUGI.splice(+b.dataset.sx,1);sugImgUI()}});
+    t.addEventListener("paste",e=>{const f=[...(e.clipboardData||{}).items||[]].filter(i=>i.kind==="file"&&/^image\//.test(i.type)).map(i=>i.getAsFile());if(f.length){e.preventDefault();sugAddFiles(f)}});
+    t.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing){e.preventDefault();e.stopPropagation();$("sugGo").click()}});
+  }
+  w.innerHTML=SUGI.map((s,i)=>'<span class="sugth"><img src="'+s+'" alt="Foto '+(i+1)+'"><button type="button" data-sx="'+i+'" aria-label="Quitar foto">✕</button></span>').join("");
+}
+async function sugComp(file){
+  const url=await new Promise((r,j)=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.onerror=j;fr.readAsDataURL(file)});
+  const img=await new Promise((r,j)=>{const im=new Image();im.onload=()=>r(im);im.onerror=j;im.src=url});
+  let max=1100,q=.72,out="";
+  for(let k=0;k<8;k++){const s=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(img.width*s));c.height=Math.max(1,Math.round(img.height*s));const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);g.drawImage(img,0,0,c.width,c.height);out=c.toDataURL("image/jpeg",q);if(out.length<=SUG_IMGB)break;max*=.8;q=Math.max(.4,q-.08)}
+  return out;
+}
+async function sugAddFiles(files){
+  for(const f of files){if(SUGI.length>=SUG_MAXI){sugMsg("Puedes adjuntar como máximo "+SUG_MAXI+" fotos.");break}if(!/^image\//.test(f.type))continue;try{SUGI.push(await sugComp(f))}catch(e){sugMsg("No se ha podido leer esa imagen.")}}
+  sugImgUI();
+}
+$("sugGo").onclick=async()=>{
+  const t=$("sugT").value.trim();
+  if(!window.sugSend){sugMsg("Para enviar sugerencias tienes que haber iniciado sesión con tu cuenta.");return}
+  if(t.length<5&&!SUGI.length){sugMsg("Escribe un poco más (mínimo 5 caracteres) o adjunta una foto.");return}
+  $("sugGo").disabled=true;sugMsg("Enviando…");
+  try{await window.sugSend(t.slice(0,1000),pvNick(),SUGI.slice(0,SUG_MAXI));$("sugT").value="";SUGI=[];sugImgUI();sugMsg("✅ ¡Gracias! Tu sugerencia se ha enviado.");if(!$("sugAdm").hidden)sugLoad()}
+  catch(e){sugMsg("No se pudo enviar la sugerencia ("+((e&&e.code)||"error")+"). Inténtalo más tarde.")}
+  $("sugGo").disabled=false;
+};
+sugLoad=async function(){
+  if(!window.sugList)return;
+  let l;try{l=await window.sugList()}catch(e){$("sugAdm").hidden=true;return}
+  $("sugAdm").hidden=false;
+  $("sugList").innerHTML=l.length?l.map(s=>{const im=Array.isArray(s.imgs)?s.imgs:[];return '<div class="sugi"><div class="sugbt">'+(im.length?'<button class="alt" data-sdi="'+esc(s.id)+'">🖼️ Borrar fotos</button>':'')+'<button class="alt" data-sd="'+esc(s.id)+'">🗑️ Borrar</button></div><b>'+esc(s.name||"Anónimo")+'</b>'+(s.nick?' <small class="mut">('+esc(s.nick)+')</small>':'')+' <small class="mut">· '+(s.at?new Date(s.at).toLocaleString("es"):"")+'</small><p>'+esc(s.text||"").replace(/\n/g,"<br>")+'</p>'+
+    (im.length?'<div class="sugims">'+im.map(u=>/^data:image\/(jpeg|png|webp);base64,/.test(u)?'<a href="#" data-sgv="1"><img src="'+u+'" alt="Foto adjunta"></a>':'').join("")+'</div>':(s.nimg?'<small class="mut">🖼️ '+s.nimg+' foto'+(s.nimg>1?'s':'')+' borrada'+(s.nimg>1?'s':'')+'</small>':''))+'</div>'}).join(""):'<small class="mut">Aún no hay sugerencias.</small>';
+};
+$("sugRe").onclick=()=>sugLoad();
+$("sugList").addEventListener("click",async e=>{
+  const v=e.target.closest("[data-sgv]");if(v){e.preventDefault();const u=v.querySelector("img").src;nxModal('<img class="sugbig" src="'+u+'" alt="Foto adjunta"><button id="sgOk">Cerrar</button>');$("sgOk").onclick=nxModalClose;return}
+  const b=e.target.closest("[data-sdi]");if(!b||!window.sugImgDel)return;
+  if(!confirm("¿Borrar las fotos de esta sugerencia? El texto se conserva."))return;
+  b.disabled=true;try{await window.sugImgDel(b.dataset.sdi)}catch(x){toast("No se han podido borrar las fotos ("+((x&&x.code)||"error")+").")}
+  sugLoad();
+});
+setTimeout(sugImgUI,300);
+// ================= VENTANA DE COMBATE: se recuerda el modo elegido =================
+{const w=$("bigW"),f=$("bigF");if(w){const o=w.onclick;w.onclick=()=>{o();O.bigmode=bigMode==="win"?"win":"";saveO();try{$("bigopt").value=O.bigmode}catch(e){}}}
+ if(f){const o=f.onclick;f.onclick=()=>{o();O.bigmode=bigMode==="full"?"full":"";saveO();try{$("bigopt").value=O.bigmode}catch(e){}}}}
 
 </script>
 <script>
@@ -7606,7 +7661,8 @@ async function main(){
   };
   let lastRank="";
   // sugerencias: cualquiera con cuenta puede enviar; solo el administrador (reglas de Firestore) puede leerlas
-  window.sugSend=async(text,nick)=>{if(!uid)throw {code:"sin-cuenta"};await S.addDoc(S.collection(db,"suggestions"),{uid:uid,name:cu?label(cu):"",nick:String(nick||"").slice(0,40),text:String(text).slice(0,1000),at:Date.now()})};
+  window.sugSend=async(text,nick,imgs)=>{if(!uid)throw {code:"sin-cuenta"};const d={uid:uid,name:cu?label(cu):"",nick:String(nick||"").slice(0,40),text:String(text).slice(0,1000),at:Date.now()};if(Array.isArray(imgs)&&imgs.length){d.imgs=imgs.slice(0,3);d.nimg=d.imgs.length}await S.addDoc(S.collection(db,"suggestions"),d)};
+  window.sugImgDel=async id=>{await S.updateDoc(S.doc(db,"suggestions",id),{imgs:S.deleteField()})};
   window.sugList=async()=>{if(!uid)throw {code:"sin-cuenta"};const sn=await S.getDocs(S.query(S.collection(db,"suggestions"),S.orderBy("at","desc"),S.limit(300)));return sn.docs.map(d=>Object.assign({},d.data(),{id:d.id}))};
   window.sugDel=async id=>{await S.deleteDoc(S.doc(db,"suggestions",id))};
   class FsRoom{

@@ -41,7 +41,29 @@ CSS_ADD = r'''
 #acct.dirty .sv{animation:svp 1.6s ease-in-out infinite}@keyframes svp{50%{box-shadow:0 2px 0 #0b6e55,0 0 0 7px rgba(19,163,127,.38)}}
 @media (prefers-reduced-motion:reduce){#acct.dirty .sv{animation:none}}
 @media (min-width:601px){body:has(#acct:not([hidden])) header{padding-top:40px}}
-@media (max-width:600px){#acct #aname{display:none}#acct{padding-left:6px}}
+/* ---- parte superior en móvil: barra fija con fondo, botones sin solaparse y fila del entrenador alineada ---- */
+@media (max-width:600px){
+body::before{content:"";position:fixed;left:0;right:0;top:0;height:calc(58px + env(safe-area-inset-top,0px));z-index:49;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);pointer-events:none}
+body.hubon::before{display:none}
+#optb,#fsb,#chb{width:38px!important;height:38px!important;top:calc(10px + env(safe-area-inset-top,0px))!important}
+#optb{right:8px!important}#fsb{right:52px!important}#chb{right:96px!important}
+#acct{top:calc(9px + env(safe-area-inset-top,0px));padding:3px 4px 3px 4px;gap:6px;max-width:calc(100vw - 150px);box-sizing:border-box}
+#acct #aname{display:none}
+#acct .sv{padding:5px 11px;font-size:.82rem}
+#acct #sync{font-size:.7rem;max-width:58px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#acct #aout{font-size:0;width:30px;height:30px;padding:0;border-radius:50%;display:grid;place-items:center;flex:none}
+#acct #aout::before{content:"🚪";font-size:.95rem}
+main>header{padding-top:52px}
+body:has(#acct:not([hidden])) main>header h1{display:none}
+main>header h1{padding-right:0!important}
+main>header{gap:8px;justify-content:flex-start}
+main>header #clSt:empty{display:none}
+#hud{flex:none;gap:6px}
+#hud .hudav{width:40px;height:40px}
+#hud button{padding:5px 10px}
+main>header .tk{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:4px;font-size:1.05rem;padding:6px 14px}
+}
+@media (max-width:374px){#acct #sync{display:none}#hud button{padding:4px 8px;font-size:.85rem}}
 /* ---- gacha: botones fijos ---- */
 .stage{justify-content:flex-start}
 .gbtn{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:100%}
@@ -152,7 +174,7 @@ rep('#acct{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:8px;
 
 # ---------------------------------------------------------------- HTML
 rep('<div id="acct" hidden><span id="aname"></span><span id="sync">☁️</span><button id="aout">Salir</button></div>',
-    '<div id="acct" hidden><span id="aname"></span><button id="asave" class="sv" title="Guardar ahora en la nube">💾 Guardar</button><small id="sync">☁️</small><button id="aout">Salir</button></div>')
+    '<div id="acct" hidden><span id="aname"></span><button id="asave" class="sv" title="Guardar ahora en la nube">💾 Guardar</button><small id="sync">☁️</small><button id="aout" title="Cerrar sesión" aria-label="Salir">Salir</button></div>')
 rep('<div id="updB" hidden role="status">', '<div id="evo" hidden role="dialog" aria-modal="true" aria-label="Evolución"><div class="jbox"><h2>🧬 Evolución</h2><div class="evost"><div id="evoA"></div><div id="evoB"></div></div><p id="evoT"></p><div id="evoBtns"></div></div></div>\n<div id="updB" hidden role="status">')
 rep('<label><input type="checkbox" data-o="bgprod"> Seguir generando tickets con la pestaña oculta (con la ventana cerrada o fuera del enlace nunca se generan)</label>',
     '<label><input type="checkbox" data-o="bgprod"> Seguir generando tickets con la pestaña oculta (activado por defecto; con la ventana cerrada o fuera del enlace nunca se generan)</label>')

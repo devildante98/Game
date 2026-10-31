@@ -295,6 +295,9 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-31a",at:"2026-10-31T01:00",t:"⚔️ Movimientos en la ficha",l:[
+"⚔️ La ficha de cada Pokémon (tócalo en la Pokédex) muestra ahora sus 4 movimientos: tipo, clase, poder, precisión, PP que le quedan y efectos.",
+"🔒 Nueva Política de privacidad en Ajustes → Acerca de y al pie del juego."]},
 {v:"2026-10-30h",at:"2026-10-30T23:00",t:"💿 Tienda de MT",l:[
 "💿 Nueva Tienda de MT (Mochila): 79 MT para enseñar movimientos como Terremoto, Rayo Hielo, Bola Sombra o Danza Dragón.",
 "🎒 Se usan fuera de combate desde la Mochila: eliges el Pokémon y qué movimiento olvida.",

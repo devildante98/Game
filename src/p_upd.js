@@ -275,3 +275,8 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
   const bg=t.closest("#mtPB [data-mtbag]");if(bg){e.preventDefault();hubOpen("bag","bagU");return}
   const b=t.closest("#mtPB [data-mtb]");if(b){const id=b.dataset.mtb,m=MVD[id.slice(2)],pr=mtPrice(m);if(S.t<pr){toast("Te faltan "+fmt(pr-S.t)+" 🎟️.");return}
     S.t-=pr;S.bag[id]=(S.bag[id]|0)+1;qEv("buy",1);save();render();snd("lvl");toast("💿 Has comprado la MT "+m.n+". Úsala desde la Mochila.");mtShopUI()}});
+// ================= ficha: movimientos que conoce el Pokémon =================
+function fmovHTML(n){const L=moves(PM[n]).filter(x=>x);if(!L.length)return "";const CL=["💫 Estado","💥 Físico","🔮 Especial"];
+  return '<span>Movimientos</span><div class="fmovs">'+L.map(mv=>{const c=ppCur(n,mv.id),x=ppMax(n,mv.id),fx=String(mvDesc(mv)).split(" · ").filter(t=>!/^(PP|Poder|Prec\.)\s|^(Físico|Especial|Estado)$/.test(t)).slice(1).join(" · ");
+    return '<div class="fmov" style="--tc:'+(TC[mv.t]||"#999")+'" title="'+esc(mvDesc(mv))+'"><b>'+esc(mv.n)+'</b><small><i>'+EM[mv.t]+' '+TIPO[mv.t]+'</i> '+(CL[mv.cl]||"")+'</small><small class="mut">'+(mv.cl?'Poder '+(mv.pw||"—")+' · ':'')+'Prec. '+(mv.ac?mv.ac+'%':'—')+' · <span class="'+(c<=0?'fmov0':'')+'">PP '+c+'/'+x+'</span></small>'+(fx?'<small class="fmovd">'+esc(fx)+'</small>':'')+'</div>'}).join("")+'</div>'}
+{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;const h=fmovHTML(n);if(!h)return;const d=document.createElement("div");d.className="fichr fmovr";d.innerHTML=h;w.appendChild(d)}catch(e){console.error(e)}}}

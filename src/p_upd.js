@@ -396,3 +396,24 @@ hubWatch();setInterval(hubWatch,250);
 function tmItem(n){const h=typeof heldOf==="function"?heldOf(n):"",it=h&&ITEMS.find(x=>x[0]===h);return it?'<small class="tmit">'+itemIco(h,16)+' '+esc(it[1])+'</small>':''}
 document.addEventListener("click",e=>{const f=e.target.closest&&e.target.closest("[data-tmf]");if(!f)return;e.preventDefault();e.stopPropagation();snd("ui");const n=f.dataset.tmf;if(S.owned[n]>0)pkView(n,!!(S.shiny&&S.shiny[n]>0))},true);
 {const _pc=pkClose;pkClose=function(){const r=_pc.apply(this,arguments);try{tmCards()}catch(e){}return r}}
+// ================= ficha: estadísticas del Pokémon =================
+function fstatHTML(n){const p=PM[n];if(!p)return "";const l=lvd(n).l,N=NAT[natOf(n)]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1,
+  hp=stH(p,l),atk=Math.round(stA(p,l)*f("atk")),spe=Math.round((l+WW[p[2]]*4)*f("spe")),df=f("def"),
+  mxH=stH(["","","L"],100),mxA=Math.round(stA(["","","L"],100)*1.1),mxS=Math.round((100+16)*1.1),
+  arr=k=>N[1]===k?' <i class="fsup">▲10%</i>':N[2]===k?' <i class="fsdn">▼10%</i>':'',
+  bar=(v,m,c)=>'<span class="fsb"><i style="width:'+Math.min(100,v/m*100).toFixed(1)+'%;background:'+c+'"></i></span>';
+  return '<span>Estadísticas</span><div class="fstat">'+
+    '<div><b>❤️ PS</b><span>'+hp+'</span>'+bar(hp,mxH,"#3ecf5a")+'</div>'+
+    '<div><b>⚔️ Ataque</b><span>'+atk+arr("atk")+'</span>'+bar(atk,mxA,"#ff6b5a")+'</div>'+
+    '<div><b>🛡️ Defensa</b><span>'+(df>1?'Alta':df<1?'Baja':'Normal')+arr("def")+'</span>'+bar(df,1.1,"#5aa0ff")+'</div>'+
+    '<div><b>💨 Velocidad</b><span>'+spe+arr("spe")+'</span>'+bar(spe,mxS,"#ffcc33")+'</div>'+
+    '<small class="mut">Dependen de la rareza ('+({C:"Común",R:"Raro",E:"Épico",M:"Forma especial",L:"Legendario"}[p[2]]||"")+'), el nivel y la naturaleza ('+esc(N[0])+'). Suben al subir de nivel.</small></div>'}
+{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;
+  const d=document.createElement("div");d.className="fichr fstatr";d.innerHTML=fstatHTML(n);const mv=w.querySelector(".fmovr");if(mv)mv.before(d);else w.appendChild(d)}catch(e){console.error(e)}}}
+// ================= Más → Próximamente: proyectos que vienen =================
+// Para añadir un proyecto: una línea nueva en ROADMAP [icono, título, descripción]
+const ROADMAP=[
+ ["📊","Estadísticas base reales de cada especie","Cada Pokémon tendrá sus propias estadísticas oficiales (PS, Ataque, Defensa, Ataque Especial, Defensa Especial y Velocidad): Snorlax aguantará muchísimo, Jolteon será rapidísimo, Alakazam tendrá un Ataque Especial enorme… Los combates se parecerán mucho más a los juegos originales."]];
+nxPanel("roadP","🚀 Próximas actualizaciones","Lo que estamos preparando para el juego. ¡Atento a las Novedades!");
+{const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="roadP"))g.tabs.splice(1,0,["roadP","Próximamente"]);HUBP.roadP="mas";HUBR.roadP=()=>roadUI()}
+function roadUI(){const b=$("roadPB");if(!b)return;b.innerHTML='<div class="roadl">'+ROADMAP.map(r=>'<div class="roadc"><span class="roadi">'+r[0]+'</span><div><b>'+esc(r[1])+'</b><span class="roadt">⏳ Próximamente</span><p>'+esc(r[2])+'</p></div></div>').join("")+'</div><small class="mut">¿Tienes alguna idea? Envíala desde Más → Sugerencias.</small>'}

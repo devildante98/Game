@@ -295,6 +295,10 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-31b",at:"2026-10-31T13:00",t:"📈 Movimientos al subir de nivel",l:[
+"📈 Los Pokémon nuevos empiezan con 2 movimientos y aprenden más al subir de nivel, como en los juegos: al llegar a 4, te preguntan cuál olvidar.",
+"🗒️ La ficha de cada Pokémon muestra qué movimiento aprenderá a continuación y a qué nivel.",
+"⚔️ Los Pokémon que ya tenías conservan sus movimientos."]},
 {v:"2026-10-31a",at:"2026-10-31T01:00",t:"⚔️ Movimientos en la ficha",l:[
 "⚔️ La ficha de cada Pokémon (tócalo en la Pokédex) muestra ahora sus 4 movimientos: tipo, clase, poder, precisión, PP que le quedan y efectos.",
 "🔒 Nueva Política de privacidad en Ajustes → Acerca de y al pie del juego."]},

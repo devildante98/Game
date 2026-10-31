@@ -278,5 +278,10 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
 // ================= ficha: movimientos que conoce el Pokémon =================
 function fmovHTML(n){const L=moves(PM[n]).filter(x=>x);if(!L.length)return "";const CL=["💫 Estado","💥 Físico","🔮 Especial"];
   return '<span>Movimientos</span><div class="fmovs">'+L.map(mv=>{const c=ppCur(n,mv.id),x=ppMax(n,mv.id),fx=String(mvDesc(mv)).split(" · ").filter(t=>!/^(PP|Poder|Prec\.)\s|^(Físico|Especial|Estado)$/.test(t)).slice(1).join(" · ");
-    return '<div class="fmov" style="--tc:'+(TC[mv.t]||"#999")+'" title="'+esc(mvDesc(mv))+'"><b>'+esc(mv.n)+'</b><small><i>'+EM[mv.t]+' '+TIPO[mv.t]+'</i> '+(CL[mv.cl]||"")+'</small><small class="mut">'+(mv.cl?'Poder '+(mv.pw||"—")+' · ':'')+'Prec. '+(mv.ac?mv.ac+'%':'—')+' · <span class="'+(c<=0?'fmov0':'')+'">PP '+c+'/'+x+'</span></small>'+(fx?'<small class="fmovd">'+esc(fx)+'</small>':'')+'</div>'}).join("")+'</div>'}
+    return '<div class="fmov" style="--tc:'+(TC[mv.t]||"#999")+'" title="'+esc(mvDesc(mv))+'"><b>'+esc(mv.n)+'</b><small><i>'+EM[mv.t]+' '+TIPO[mv.t]+'</i> '+(CL[mv.cl]||"")+'</small><small class="mut">'+(mv.cl?'Poder '+(mv.pw||"—")+' · ':'')+'Prec. '+(mv.ac?mv.ac+'%':'—')+' · <span class="'+(c<=0?'fmov0':'')+'">PP '+c+'/'+x+'</span></small>'+(fx?'<small class="fmovd">'+esc(fx)+'</small>':'')+'</div>'}).join("")+fmovNext(n)+'</div>'}
+// próximo movimiento que aprenderá al subir de nivel
+function fmovNext(n){const l=lvd(n).l,from=S.ml&&S.ml[n]!=null?S.ml[n]:l,ids=moveIds(n);
+  const pend=learn(n).filter(x=>x[0]>from&&x[0]<=l&&!ids.includes(x[1])),nx=learn(n).find(x=>x[0]>l&&!ids.includes(x[1]));
+  if(pend.length)return '<small class="fmovnx">✨ Tiene '+pend.length+' movimiento(s) nuevo(s) por aprender: se le ofrecerán en su próximo combate.</small>';
+  return nx&&MVD[nx[1]]?'<small class="fmovnx">📈 Próximo: <b>'+esc(MVD[nx[1]].n)+'</b> al Nv'+nx[0]+'</small>':''}
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;const h=fmovHTML(n);if(!h)return;const d=document.createElement("div");d.className="fichr fmovr";d.innerHTML=h;w.appendChild(d)}catch(e){console.error(e)}}}

@@ -31,16 +31,34 @@ const STRUG={id:"forc",n:"Forcejeo",t:"normal",pw:50,ac:0,pp:1,pr:0,cl:1,fx:"c",
 const MVI=id=>id==="forc"?STRUG:MVD[id];
 // aprendizaje por nivel (como en los juegos): [[nivel, id], ...]
 const _ls={};
-function learn(n){
-  if(_ls[n])return _ls[n];
+function learnRaw(n){
   const s=GD.LS[n]||"",o=[];
   for(let i=0;i+3<s.length;i+=4){const m=MVX[parseInt(s.slice(i+2,i+4),36)];if(m)o.push([parseInt(s.slice(i,i+2),36),m.id])}
+  return o;
+}
+// Muchos Pokémon (sobre todo los evolucionados y legendarios) tienen un montón de movimientos "de nivel 1".
+// Para que vayan aprendiendo a medida que suben de nivel, como en los juegos: empiezan con 2 de ellos
+// (el ataque más flojo y uno de estado o el siguiente más flojo) y el resto se aprende cada 4 niveles, de menos a más fuerte.
+function learn(n){
+  if(_ls[n])return _ls[n];
+  const raw=learnRaw(n),later=new Set(raw.filter(x=>x[0]>1).map(x=>x[1])),pile=[];
+  raw.forEach(x=>{if(x[0]<=1&&!later.has(x[1])&&!pile.includes(x[1]))pile.push(x[1])});
+  const pw=id=>{const m=MVD[id];return m&&m.cl?(m.pw||40):0};
+  const dmg=pile.filter(id=>MVD[id]&&MVD[id].cl).sort((a,b)=>pw(a)-pw(b)),st=pile.filter(id=>!(MVD[id]&&MVD[id].cl));
+  const start=[];if(dmg.length)start.push(dmg[0]);const sec=st[0]||dmg[1];if(sec)start.push(sec);if(!start.length&&pile.length)start.push(pile[0]);
+  // el resto alterna ataques (de menos a más fuerte) y movimientos de estado, para no quedarse sin ataques
+  const rd=dmg.filter(id=>!start.includes(id)),rs=st.filter(id=>!start.includes(id)),rest=[];
+  while(rd.length||rs.length){if(rd.length)rest.push(rd.shift());if(rs.length)rest.push(rs.shift())}
+  const o=start.map(id=>[1,id]).concat(rest.map((id,i)=>[4*(i+1),id]),raw.filter(x=>x[0]>1));
+  o.sort((a,b)=>a[0]-b[0]);
   return _ls[n]=o;
 }
 function defMoves(n,l){
   const ls=learn(n);let a=ls.filter(x=>x[0]<=l).map(x=>x[1]);
   if(!a.length)a=ls.slice(0,2).map(x=>x[1]);
   const u=[];for(let i=a.length-1;i>=0&&u.length<4;i--)if(!u.includes(a[i]))u.unshift(a[i]);
+  // que tenga al menos un ataque que haga daño
+  const hit=id=>MVD[id]&&MVD[id].cl;if(u.length&&!u.some(hit)){const h=a.slice().reverse().find(hit)||ls.map(x=>x[1]).find(hit);if(h){if(u.length<4)u.push(h);else u[0]=h}}
   return u.length?u:["33"];
 }
 function moveIds(n){

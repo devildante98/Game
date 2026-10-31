@@ -50,7 +50,7 @@ function tpList(){const L=$("tpL");if(!L)return;const own=tpOwn(),cur=S.team[TP.
 function tpSet(i,n){
   if(fcd){toast("Termina el combate antes de cambiar el equipo.");return false}
   if(n&&isSup(n)){toast("💠 "+n+" es una forma suprema: lleva a "+SUP[n]+" y transfórmalo en combate.");return false}
-  if(n&&isMegaF(n)){toast("🧬 "+n+" no va en el equipo: lleva a "+megaBase(n)+" y megaevoluciónalo en combate.");return false}
+  if(n&&isMegaF(n)){toast("🧬 "+n+" no va en el equipo: lleva a "+megaBase(n)+" y "+megaVerb(n)+" en combate.");return false}
   if(n&&busyMon(n)){toast("🔒 "+n+" está "+busyTxt(n)+".");return false}
   // si ya estaba en otra casilla, intercambian posiciones (no sale del equipo)
   const old=S.team[i]||"",from=n?S.team.findIndex((x,j)=>j!==i&&x===n):-1;
@@ -58,7 +58,7 @@ function tpSet(i,n){
   if(from>=0){toast(old?"🔄 "+nk(n)+" y "+nk(old)+" han intercambiado sus casillas ("+(i+1)+" ↔ "+(from+1)+")":"🔄 "+nk(n)+" ha pasado de la casilla "+(from+1)+" a la "+(i+1));return "swap"}
   return true}
 // ---------- añadir al equipo desde la ficha ----------
-{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;if(isMegaF(n)){const d=document.createElement("div");d.className="fichr fteam";d.innerHTML='<span>Equipo</span><div><small class="mut">🧬 Las megaevoluciones no van en el equipo: pon a <b>'+esc(megaBase(n))+'</b> y pulsa «Megaevolucionar» en combate.</small></div>';w.prepend(d);return}const d=document.createElement("div");d.className="fichr fteam";d.innerHTML=fteamHTML(n);w.prepend(d)}catch(e){console.error(e)}}}
+{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;if(isMegaF(n)){const d=document.createElement("div");d.className="fichr fteam";d.innerHTML='<span>Equipo</span><div><small class="mut">🧬 '+(/ Gigamax$/.test(n)?'Las formas Gigamax':'Las megaevoluciones')+' no van en el equipo: pon a <b>'+esc(megaBase(n))+'</b> y pulsa «'+(/ Gigamax$/.test(n)?'Gigamax':'Megaevolucionar')+'» en combate.</small></div>';w.prepend(d);return}const d=document.createElement("div");d.className="fichr fteam";d.innerHTML=fteamHTML(n);w.prepend(d)}catch(e){console.error(e)}}}
 function fteamHTML(n){const at=S.team.indexOf(n);
   return '<span>Equipo</span><div><div class="ftslots">'+[0,1,2,3,4,5].map(i=>{const x=S.team[i];return '<button class="'+(x===n?'me':'')+'" data-fts="'+i+'" data-fn="'+esc(n)+'" title="'+(x?esc(nk(x))+' — toca para cambiarlo por '+esc(nk(n)):'Casilla '+(i+1)+' vacía')+'">'+(x&&PM[x]?ico(PM[x],34):'<span>＋</span>')+'<i>'+(i+1)+'</i></button>'}).join("")+'</div><small class="mut">'+(at>=0?'Está en la casilla '+(at+1)+'. Toca otra casilla para moverlo, o la suya para sacarlo.':'Toca una casilla para poner a '+esc(nk(n))+' en tu equipo.')+'</small></div>'}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-fts]");if(!b)return;const i=+b.dataset.fts,n=b.dataset.fn;
@@ -420,9 +420,10 @@ nxPanel("roadP","🚀 Próximas actualizaciones","Lo que estamos preparando para
 function roadUI(){const b=$("roadPB");if(!b)return;b.innerHTML='<div class="roadl">'+ROADMAP.map(r=>'<div class="roadc"><span class="roadi">'+r[0]+'</span><div><b>'+esc(r[1])+'</b><span class="roadt">⏳ Próximamente</span><p>'+esc(r[2])+'</p></div></div>').join("")+'</div><small class="mut">¿Tienes alguna idea? Envíala desde Más → Sugerencias.</small>'}
 
 // ================= megaevoluciones: solo en combate, nunca directamente en el equipo =================
-const isMegaF=n=>/^Mega-/.test(String(n||""))&&!(typeof isSup==="function"&&isSup(n));
-const megaBase=n=>String(n).replace(/^Mega-/,"").replace(/ [XY]$/,"");
+const isMegaF=n=>/^Mega-| Gigamax$/.test(String(n||""))&&!(typeof isSup==="function"&&isSup(n));
+const megaBase=n=>String(n).replace(/^Mega-/,"").replace(/ [XY]$/,"").replace(/ Gigamax$/,"");
+const megaVerb=n=>/ Gigamax$/.test(String(n))?"gigamaxízalo":"megaevoluciónalo";
 function megaClean(){if(fcd)return;const out=[];const f=t=>(t||[]).map(n=>{if(n&&isMegaF(n)){out.push(n);return ""}return n});
   S.team=f(S.team);(S.sets||[]).forEach(st=>{st.team=f(st.team)});
-  if(out.length){save();try{updTeam()}catch(e){}const u=[...new Set(out)];toast("🧬 "+u.join(", ")+(u.length>1?" han salido":" ha salido")+" del equipo: las megaevoluciones se activan en combate desde "+u.map(megaBase).join(", ")+".")}}
+  if(out.length){save();try{updTeam()}catch(e){}const u=[...new Set(out)];toast("🧬 "+u.join(", ")+(u.length>1?" han salido":" ha salido")+" del equipo: las megaevoluciones y formas Gigamax se activan en combate desde "+[...new Set(u.map(megaBase))].join(", ")+".")}}
 setTimeout(megaClean,1500);setInterval(megaClean,4000);

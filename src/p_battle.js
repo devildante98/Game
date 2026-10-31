@@ -25,91 +25,97 @@ const beAct=sd=>sd.t[sd.ai];
 const beTeamOf=(E,i)=>E.tm.findIndex(t=>t.includes(i));
 const beFoes=(E,i)=>{const ti=beTeamOf(E,i);return E.tm.filter((t,k)=>k!==ti).reduce((a,b)=>a.concat(b),[])};
 const beSnap=E=>({ai:E.sd.map(s=>s.ai),hp:E.sd.map(s=>s.t.map(x=>Math.max(0,x.mh))),st:E.sd.map(s=>s.t.map(x=>x.sts))});
-const beSpd=(s,rng)=>{const m=beAct(s);return (m.l+WW[m.p[2]]*4)*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)+rng()*3};
+const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+WW[m.p[2]]*4)*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(E?axSpdK(s,E):1)+rng()*3};
 // habilidades: multiplicadores de daño e Intimidación
 function abAtk(me,mv,ty){const a=me.ab;let k=1;if(!a)return 1;
   if(me.mh<=me.mx/3&&((a===65&&ty==="grass")||(a===66&&ty==="fire")||(a===67&&ty==="water")||(a===68&&ty==="bug")))k*=1.5;
   if((a===37||a===74)&&mv.cl===1)k*=1.5;if(a===62&&me.sts)k*=1.5;if(a===101&&(mv.pw||0)<=60)k*=1.5;if(me.ffire&&ty==="fire")k*=1.5;return k}
-function abDef(tm,ty){const a=tm.ab;if(!a)return 1;let k=1;if(a===47&&(ty==="fire"||ty==="ice"))k*=.5;if(a===136&&tm.mh>=tm.mx)k*=.5;return k}
-function beIntim(E,i,push){const m=beAct(E.sd[i]);if(!m||m.mh<=0||m.ab!==22)return;push({k:"abil",s:i,n:m.p[0],ab:22});beFoes(E,i).forEach(j=>{const sd=E.sd[j];if(!sd.out&&beAct(sd).mh>0)beStat(E,j,[["atk",-1]],push)})}
+function abDef(tm,ty,me){const a=axMB(me)?0:tm.ab;if(!a)return 1;let k=1;if(a===47&&(ty==="fire"||ty==="ice"))k*=.5;if(a===136&&tm.mh>=tm.mx)k*=.5;return k}
+function beIntim(E,i,push){const m=beAct(E.sd[i]);if(!m||m.mh<=0||m.ab!==22)return;push({k:"abil",s:i,n:m.p[0],ab:22});beFoes(E,i).forEach(j=>{const sd=E.sd[j];if(!sd.out&&beAct(sd).mh>0)beStat(E,j,[["atk",-1]],push,i,"int")})}
 // objetos equipados: bayas que se activan solas
-function beBerry(E,j,push){const m=beAct(E.sd[j]);if(m&&m.it==="sitrus"&&!m.ius&&m.mh>0&&m.mh<=m.mx/2){m.ius=1;m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.round(m.mx/4)));push({k:"item",s:j,n:m.p[0],it:"sitrus"})}}
+function beBerry(E,j,push){const m=beAct(E.sd[j]);if(m&&m.it==="sitrus"&&!m.ius&&m.mh>0&&m.mh<=m.mx/2&&!axNoBerry(E,j)){m.ius=1;if(m.ab===291)m.ru=E.turn+1;m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.round(m.mx*axBerryK(m))));push({k:"item",s:j,n:m.p[0],it:"sitrus"})}}
 function beOver(E,push){if(E.over!=null)return;const dead=E.tm.map(t=>t.every(i=>E.sd[i].out));if(dead.some(x=>x)){const al=dead.map((d,k)=>d?-1:k).filter(k=>k>=0);E.over=al.length===1?al[0]:"D";push({k:"win",s:E.over})}}
-function beAil(E,j,a,push,rng,status){
+function beAil(E,j,a,push,rng,status,src){if(axAilBlock(E,j,a,push,status,src))return false;
   const sd=E.sd[j],m=beAct(sd),ty=m.p[1];
   if(a==="cnf"){if(sd.v.cnf){if(status)push({k:"ailfail",s:j,n:m.p[0]});return false}sd.v.cnf=2+Math.floor(rng()*4);push({k:"ail",s:j,n:m.p[0],a:a});if(m.it==="lum"&&!m.ius){m.ius=1;sd.v.cnf=0;push({k:"item",s:j,n:m.p[0],it:"lum"})}return true}
   if(!m.sts&&((a==="slp"&&(m.ab===15||m.ab===72))||((a==="psn"||a==="tox")&&m.ab===17)||(a==="par"&&m.ab===7))){if(status)push({k:"abil",s:j,n:m.p[0],ab:m.ab,blk:1});return false}
-  if(m.sts||(a==="par"&&ty==="electric")||((a==="psn"||a==="tox")&&(ty==="poison"||ty==="steel"))||(a==="brn"&&ty==="fire")||(a==="frz"&&ty==="ice")){if(status)push({k:"ailfail",s:j,n:m.p[0]});return false}
+  if(m.sts||(a==="par"&&ty==="electric")||((a==="psn"||a==="tox")&&(ty==="poison"||ty==="steel")&&!axCorr(E,src,a))||(a==="brn"&&ty==="fire")||(a==="frz"&&ty==="ice")){if(status)push({k:"ailfail",s:j,n:m.p[0]});return false}
   m.sts=a;if(a==="slp")m.slp=1+Math.floor(rng()*3);if(a==="tox")m.tox=0;
   push({k:"ail",s:j,n:m.p[0],a:a});
   if(m.it==="lum"&&!m.ius){m.ius=1;m.sts="";m.slp=0;m.tox=0;push({k:"item",s:j,n:m.p[0],it:"lum"})}
+  axAilPost(E,j,a,push,rng,src);
   return true;
 }
-function beStat(E,j,ch,push){
-  const sd=E.sd[j],m=beAct(sd);let any=false;
+function beStat(E,j,ch,push,src,tag){
+  const sd=E.sd[j],m=beAct(sd);let any=false;ch=axStatPre(E,j,ch,push,src,tag);if(!ch.length)return false;
   ch.forEach(q=>{const s=q[0],o=sd.v.st[s],nv=Math.max(-6,Math.min(6,o+q[1]));if(nv===o)push({k:"statmax",s:j,n:m.p[0],st:s,up:q[1]>0});else{sd.v.st[s]=nv;any=true;push({k:"stat",s:j,n:m.p[0],st:s,c:nv-o})}});
+  if(any)axStatPost(E,j,ch,push,src,tag);
   return any;
 }
 function beUse(E,i,a,rng,push,acted,faint){
   const sd=E.sd[i],me=beAct(sd),v=sd.v;
   if(v.rech){v.rech=0;push({k:"rech",s:i,n:me.p[0]});return}
-  if(me.sts==="slp"){if(me.slp>0){me.slp--;push({k:"slp",s:i,n:me.p[0]});return}me.sts="";push({k:"wake",s:i,n:me.p[0]})}
+  if(me.ab===54){if(v.tru){v.tru=0;axSay(push,i,me,"¡{w} está holgazaneando!");return}v.tru=1}
+  if(me.sts==="slp"){if(me.slp>0){me.slp-=me.ab===48?2:1;push({k:"slp",s:i,n:me.p[0]});return}me.sts="";push({k:"wake",s:i,n:me.p[0]})}
   if(me.sts==="frz"){if(rng()<.2){me.sts="";push({k:"thaw",s:i,n:me.p[0]})}else{push({k:"frz",s:i,n:me.p[0]});return}}
-  if(v.fl){v.fl=0;push({k:"flinch",s:i,n:me.p[0]});return}
+  if(v.fl){v.fl=0;push({k:"flinch",s:i,n:me.p[0]});if(me.ab===80)beStat(E,i,[["spe",1]],push);return}
   if(v.cnf>0){v.cnf--;if(!v.cnf)push({k:"cnfend",s:i,n:me.p[0]});else{push({k:"cnf",s:i,n:me.p[0]});if(rng()<1/3){const d=Math.max(1,Math.round(me.ma*40/45*STG(v.st.atk)*(.85+rng()*.15)));me.mh=Math.max(0,me.mh-d);push({k:"cnfhit",s:i,n:me.p[0],d:d});faint(i);return}}}
   if(me.sts==="par"&&rng()<.25){push({k:"par",s:i,n:me.p[0]});return}
   const q=String(a).match(/^(?:m(\d)|st)(?:t(\d))?$/);if(!q)return;
   let mv,k=-1;const allOut=me.pp.every(x=>x<=0);
   if(q[1]==null){if(!allOut)return;mv=STRUG}
   else{k=+q[1];mv=me.m[k];if(!mv)return;if(me.pp[k]<=0){if(!allOut)return;mv=STRUG;k=-1}}
-  if(k>=0)me.pp[k]--;
+  if(k>=0){me.pp[k]--;if(me.pp[k]>0&&axFoesL(E,i).some(o=>o.m.ab===46))me.pp[k]--}
   if(!mv.prot)v.pc=0;
   push({k:"use",s:i,n:me.p[0],mv:mv.id});
   let tg=i;
   if(!mv.tself){const fo=beFoes(E,i).filter(j=>!E.sd[j].out&&beAct(E.sd[j]).mh>0);tg=q[2]!=null&&fo.includes(+q[2])?+q[2]:fo[0];if(tg==null){push({k:"none",s:i});return}}
   const ts=E.sd[tg],tm=beAct(ts);
-  if(tg!==i&&ts.v.prot){push({k:"blocked",s:tg,n:tm.p[0]});return}
-  const hitOk=()=>!mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(ts.v.st.eva);
+  if(tg!==i&&ts.v.prot&&!(me.ab===260&&mv.cl===1)){push({k:"blocked",s:tg,n:tm.p[0]});return}
+  const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g};
   if(mv.cl===0){
     if(mv.prot){if(v.pc&&rng()>=1/Math.pow(3,v.pc)){v.pc=0;push({k:"fail",s:i});return}v.prot=1;v.pc++;push({k:"prot",s:i,n:me.p[0]});return}
     if(mv.rest){if(me.mh>=me.mx||me.sts==="slp"){push({k:"fail",s:i});return}me.mh=me.mx;me.sts="slp";me.slp=2;push({k:"rest",s:i,n:me.p[0]});return}
+    if(tg!==i&&axStatusImm(E,i,tg,me,tm,mv,push,rng))return;
     if(tg!==i&&!hitOk()){push({k:"miss",s:i,tg:tg});return}
     let did=false;
     if(mv.heal){const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.round(me.mx*mv.heal/100));push({k:"heal",s:i,n:me.p[0],h:me.mh-b});did=true}
-    if(mv.ail)did=beAil(E,tg,mv.ail,push,rng,true)||did;
-    if(mv.ch.length&&rng()*100<mv.sc)did=beStat(E,mv.self?i:tg,mv.ch,push)||did;
+    if(mv.ail)did=beAil(E,tg,mv.ail,push,rng,true,i)||did;
+    if(mv.ch.length&&rng()*100<mv.sc)did=beStat(E,mv.self?i:tg,mv.ch,push,mv.self?undefined:i)||did;
     if(!did&&!mv.heal)push({k:"noeff",s:i});
     return;
   }
   if(!hitOk()){push({k:"miss",s:i,tg:tg});return}
-  {const ty0=mv.typeless?"normal":mv.t,ta=tm.ab;if(tg!==i&&!mv.fixed&&!mv.flv&&((ty0==="ground"&&ta===26)||(ty0==="water"&&ta===11)||(ty0==="electric"&&ta===10)||(ty0==="fire"&&ta===18))){let hl=0;if(ta!==26&&ta!==18&&tm.mh<tm.mx){const b=tm.mh;tm.mh=Math.min(tm.mx,tm.mh+Math.max(1,Math.round(tm.mx/4)));hl=tm.mh-b}if(ta===18)tm.ffire=1;push({k:"abil",s:tg,n:tm.p[0],ab:ta,imm:1,h:hl});return}}
-  let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}
-  const ty=mv.typeless?"normal":mv.t,special=mv.fixed||mv.flv||mv.half,e=mv.typeless||special?1:effP(ty,tm.p),stab=!mv.typeless&&stabP(ty,me.p)?(me.ab===91?2:1.5):1;
+  {const ty0=mv.typeless?"normal":axTy(me,mv),ta=axMB(me)?0:tm.ab;if(tg!==i&&!mv.fixed&&!mv.flv&&((ty0==="ground"&&ta===26)||(ty0==="water"&&ta===11)||(ty0==="electric"&&ta===10)||(ty0==="fire"&&ta===18))){let hl=0;if(ta!==26&&ta!==18&&tm.mh<tm.mx){const b=tm.mh;tm.mh=Math.min(tm.mx,tm.mh+Math.max(1,Math.round(tm.mx/4)));hl=tm.mh-b}if(ta===18)tm.ffire=1;push({k:"abil",s:tg,n:tm.p[0],ab:ta,imm:1,h:hl});return}}
+  if(tg!==i&&axImm(E,i,tg,me,tm,mv,push,rng))return;
+  let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}if(mv.hits&&me.ab===92)hits=mv.hits[1];
+  const ty=mv.typeless?"normal":axTy(me,mv),special=mv.fixed||mv.flv||mv.half,e=mv.typeless||special?1:axEff(E,me,tm,ty,effP(ty,tm.p)),stab=!mv.typeless&&(stabP(ty,me.p)||[168,236,121,225].includes(me.ab))?(me.ab===91?2:1.5):1,pb=me.ab===185&&hits===1&&!mv.hits&&!special,h0=tm.mh;if(pb)hits=2;
   let tot=0,nh=0,crit=0;
   for(let h=0;h<hits&&tm.mh>0;h++){
-    let d;const cr=!special&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1);
+    let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));
-    else{let am=STG(v.st.atk),dm=STG(ts.v.st.def);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
-      d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?1.5:1)*am/dm*(ts.v.g?.5:1)*(me.it==="lorb"?1.3:1)/(tm.nd||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty)))}
+    else{let am=tm.ab===109&&!axMB(me)?1:STG(v.st.atk),dm=me.ab===109?1:STG(ts.v.st.def);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
+      d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/(tm.nd||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
     if(cr)crit++;
+    if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
     let sash=0;if(tm.it==="sash"&&!tm.ius&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;tm.ius=1;sash=1}
-    else if(tm.ab===5&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;sash=3}
+    else if(tm.ab===5&&!axMB(me)&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;sash=3}
     else if(tm.bud&&!tm.bud2&&tm.mh>1&&d>=tm.mh&&rng()<.25){d=tm.mh-1;tm.bud2=1;sash=2}
     tm.mh=Math.max(0,tm.mh-d);tot+=d;nh++;
     push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});if(sash===3)push({k:"abil",s:tg,n:tm.p[0],ab:5});else if(sash)push({k:"item",s:tg,n:tm.p[0],it:sash===2?"bud":"sash"});
   }
   push({k:"after",s:i,tg:tg,e:e,crit:crit,nh:nh});
-  if(mv.drain&&tot&&me.mh>0){const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100)));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}
-  if(mv.rec&&tot&&!(me.ab===69&&mv.id!=="forc")){const d=Math.max(1,Math.round((mv.id==="forc"?me.mx:tot)*mv.rec/100));me.mh=Math.max(0,me.mh-d);push({k:"recoil",s:i,n:me.p[0]})}
-  if(tot&&mv.cl===1&&tg!==i&&me.mh>0){const ta=tm.ab;if(ta===24||ta===160){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/8)));push({k:"abil",s:tg,n:tm.p[0],ab:ta,o:i,on:me.p[0]})}
-    else if((ta===9||ta===38||ta===49||ta===27)&&!me.sts&&rng()<.3){const a2=ta===9?"par":ta===38?"psn":ta===49?"brn":["psn","par","slp"][Math.floor(rng()*3)];push({k:"abil",s:tg,n:tm.p[0],ab:ta});beAil(E,i,a2,push,rng,false)}}
+  if(mv.drain&&tot&&me.mh>0){if(tm.ab===64&&!axMB(me)){me.mh=Math.max(0,me.mh-Math.max(1,Math.round(tot*mv.drain/100)));axSay(push,tg,tm,"¡{o} ha absorbido el lodo de {w} y pierde PS!",{i:i,m:me},{});faint(i)}else{const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100)));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}}
+  if(mv.rec&&tot&&!((me.ab===69||me.ab===98)&&mv.id!=="forc")){const d=Math.max(1,Math.round((mv.id==="forc"?me.mx:tot)*mv.rec/100));me.mh=Math.max(0,me.mh-d);push({k:"recoil",s:i,n:me.p[0]})}
+  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&me.ab!==203){const ta=tm.ab;if((ta===24||ta===160)&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/8)));push({k:"abil",s:tg,n:tm.p[0],ab:ta,o:i,on:me.p[0]})}
+    else if((ta===9||ta===38||ta===49||ta===27)&&!me.sts&&rng()<.3){const a2=ta===9?"par":ta===38?"psn":ta===49?"brn":["psn","par","slp"][Math.floor(rng()*3)];push({k:"abil",s:tg,n:tm.p[0],ab:ta});beAil(E,i,a2,push,rng,false,tg)}}
   if(me.it==="shell"&&tot&&me.mh>0&&me.mh<me.mx){me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot/8)));push({k:"item",s:i,n:me.p[0],it:"shell"})}
-  if(me.it==="lorb"&&tot&&me.mh>0){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/10)));push({k:"item",s:i,n:me.p[0],it:"lorb"})}
-  faint(tg);if(tg!==i)beBerry(E,tg,push);beBerry(E,i,push);
-  if(tm.mh>0){
-    if(mv.ail&&rng()*100<mv.ailc)beAil(E,tg,mv.ail,push,rng,false);
-    if(mv.fl&&!acted[tg]&&rng()*100<mv.fl)ts.v.fl=1;
-    if(mv.ch.length&&!mv.self&&rng()*100<mv.sc)beStat(E,tg,mv.ch,push);
+  if(me.it==="lorb"&&tot&&me.mh>0&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/10)));push({k:"item",s:i,n:me.p[0],it:"lorb"})}
+  faint(tg);if(tg!==i)beBerry(E,tg,push);beBerry(E,i,push);axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint);
+  if(tm.mh>0&&!axNoSec(me,tm)){
+    if(mv.ail&&rng()*100<mv.ailc*axSec(me))beAil(E,tg,mv.ail,push,rng,false,i);
+    if(mv.fl&&!acted[tg]&&tm.ab!==39&&rng()*100<mv.fl*axSec(me))ts.v.fl=1;
+    if(mv.ch.length&&!mv.self&&rng()*100<mv.sc*axSec(me))beStat(E,tg,mv.ch,push,i);
   }
   if(mv.ch.length&&mv.self&&me.mh>0&&rng()*100<mv.sc)beStat(E,i,mv.ch,push);
   if(mv.kami)me.mh=0;
@@ -119,26 +125,27 @@ function beUse(E,i,a,rng,push,acted,faint){
 function beTurn(E,acts,rng){
   const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)},N=E.sd.length,acted={};
   const pri=i=>{const a=acts[i]||"x";if(a==="ff")return 9;if(/^s\d$/.test(a))return 8;if(a==="x")return 7;if(a==="d")return 6;const k=String(a).match(/^m(\d)/),sd=E.sd[i];const mv=k?beAct(sd).m[+k[1]]:null;return mv?mv.pr:0};
-  if(!E.abi){E.abi=1;E.sd.forEach((s,i)=>{if(!s.out)beIntim(E,i,push)})}
-  const sp=E.sd.map(s=>s.out?0:beSpd(s,rng)),qc=[];
+  if(!E.abi){E.abi=1;E.fcl=E.sd.reduce((a,s)=>a+s.t.filter(x=>x.mh<=0).length,0);E.sd.forEach((s,i)=>{if(!s.out)beEnter(E,i,push)})}
+  const sp=E.sd.map(s=>s.out?0:beSpd(s,rng,E)),qc=[];
   E.sd.forEach((s,i)=>{if(s.out)return;const m=beAct(s);if(m&&m.it==="qclaw"&&m.mh>0&&/^m\d|^st/.test(String(acts[i]||""))&&rng()<.2){sp[i]+=1e4;qc.push(i)}});
   qc.forEach(i=>push({k:"item",s:i,n:beAct(E.sd[i]).p[0],it:"qclaw"}));
-  const order=E.sd.map((s,i)=>i).filter(i=>!E.sd[i].out).sort((a,b)=>pri(b)-pri(a)||sp[b]-sp[a]||a-b);
+  const PR=E.sd.map((s,i)=>s.out?0:pri(i)+axPri(E,i,acts[i],rng,push)),order=E.sd.map((s,i)=>i).filter(i=>!E.sd[i].out).sort((a,b)=>PR[b]-PR[a]||sp[b]-sp[a]||a-b);
   const faint=i=>{const m=beAct(E.sd[i]);if(m.mh<=0&&!m.fd){m.mh=0;m.fd=1;push({k:"faint",s:i,n:m.p[0]})}};
   for(const i of order){
     const sd=E.sd[i],a=acts[i]||"x";if(sd.out)continue;
     if(a==="ff"){sd.t.forEach(x=>{x.mh=0;x.fd=1});sd.out=1;sd.need=0;push({k:"ff",s:i});acted[i]=1;continue}
-    if(/^s\d$/.test(a)){const k=+a[1];if(sd.t[k]&&sd.t[k].mh>0&&k!==sd.ai&&beAct(sd).mh>0){const old=beAct(sd);if(old.sts==="tox")old.tox=0;if(old.ab===144&&old.mh>0)old.mh=Math.min(old.mx,old.mh+Math.round(old.mx/3));if(old.ab===30)old.sts="";sd.ai=k;sd.v=beVol();sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old.p[0]});beIntim(E,i,push)}acted[i]=1;continue}
+    if(/^s\d$/.test(a)){const k=+a[1];if(sd.t[k]&&sd.t[k].mh>0&&k!==sd.ai&&beAct(sd).mh>0){const old=beAct(sd);if(old.sts==="tox")old.tox=0;if(old.ab===144&&old.mh>0)old.mh=Math.min(old.mx,old.mh+Math.round(old.mx/3));if(old.ab===30)old.sts="";axLeave(E,i,old);sd.ai=k;sd.v=beVol();sd.v.nw=1;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old.p[0]});beEnter(E,i,push)}acted[i]=1;continue}
     if(a==="x"||beAct(sd).mh<=0){acted[i]=1;continue}
     if(a==="d"){sd.v.g=1;push({k:"guard",s:i,n:beAct(sd).p[0]});acted[i]=1;continue}
     beUse(E,i,a,rng,push,acted,faint);acted[i]=1;
   }
   for(let i=0;i<N;i++){const sd=E.sd[i];if(sd.out)continue;const m=beAct(sd);sd.v.prot=0;sd.v.g=0;sd.v.fl=0;if(m.mh<=0)continue;
     let d=0;if(m.sts==="psn")d=m.mx/8;else if(m.sts==="tox"){m.tox=Math.min(15,(m.tox||0)+1);d=m.mx*m.tox/16}else if(m.sts==="brn")d=m.mx/16;
-    if(d){m.mh=Math.max(0,m.mh-Math.max(1,Math.floor(d)));push({k:"res",s:i,n:m.p[0],a:m.sts});faint(i)}
+    if(d&&m.ab===90&&(m.sts==="psn"||m.sts==="tox")){if(m.mh<m.mx){axHeal(m,1/8);axSay(push,i,m,"¡{w} se cura con el veneno gracias a {a}!",null,{hl:1})}}else if(d&&m.ab!==98){if(m.ab===85&&m.sts==="brn")d/=2;m.mh=Math.max(0,m.mh-Math.max(1,Math.floor(d)));push({k:"res",s:i,n:m.p[0],a:m.sts});faint(i)}
     if(m.mh>0&&m.ab===3&&sd.v.st.spe<6){sd.v.st.spe++;push({k:"abil",s:i,n:m.p[0],ab:3})}
     if(m.mh>0&&m.it==="left"&&m.mh<m.mx){m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.floor(m.mx/16)));push({k:"item",s:i,n:m.p[0],it:"left"})}
-    beBerry(E,i,push)}
+    axEnd(E,i,push,rng,faint);beBerry(E,i,push)}
+  axField(E,push);
   for(let i=0;i<N;i++){const sd=E.sd[i];if(sd.out||sd.need)continue;if(beAct(sd).mh<=0){faint(i);if(sd.t.some(x=>x.mh>0))sd.need=1;else{sd.out=1;push({k:"out",s:i})}}}
   beOver(E,push);E.turn++;return ev;
 }
@@ -147,7 +154,7 @@ function beSwap(E,acts){
   E.sd.forEach((sd,i)=>{if(!sd.need)return;const a=acts[i]||"";
     if(a==="ff"){sd.t.forEach(x=>{x.mh=0;x.fd=1});sd.out=1;sd.need=0;push({k:"ff",s:i});return}
     let k=/^s\d$/.test(a)?+a[1]:-1;if(!(sd.t[k]&&sd.t[k].mh>0))k=sd.t.findIndex(x=>x.mh>0);
-    const old=beAct(sd).p[0];sd.ai=k;sd.v=beVol();sd.need=0;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old,forced:1});beIntim(E,i,push)});
+    const om=beAct(sd),old=om.p[0];axLeave(E,i,om);sd.ai=k;sd.v=beVol();sd.need=0;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old,forced:1});beEnter(E,i,push);axRecv(E,i,om,push)});
   beOver(E,push);return ev;
 }
 // IA de los rivales: prefiere los movimientos mas utiles, con algo de azar
@@ -218,8 +225,9 @@ async function bePlay(ev){
       case "drain":bePaint(e.snap);fxHeal(sl.sp);await say("¡"+beWho(e.tg,e.n)+" ha perdido energía!");break;
       case "recoil":bePaint(e.snap);hitFx($(sl.sp),1);await say("¡"+who+" ha sufrido daño de retroceso!");break;
       case "item":{bePaint(e.snap);const q=ITMSG[e.it];if(!q)break;if(q[0]==="h"){snd("heal");fxHeal(sl.sp)}else if(q[0]==="d")hitFx($(sl.sp),1);else snd("buff");await say(q[1](who));break}
-      case "abil":{bePaint(e.snap);const an=abName(e.ab);snd(e.imm?"guard":"buff");
-        if(e.imm)await say(e.h?"¡"+who+" absorbe el ataque con "+an+" y recupera PS!":e.ab===18?"¡"+an+" de "+who+" absorbe el fuego y potencia sus ataques!":"¡"+who+" no se ve afectado gracias a "+an+"!");
+      case "abil":{bePaint(e.snap);const an=abName(e.ab);snd(e.imm?"guard":e.dm?"hit":"buff");
+        if(e.t){if(e.hl){snd("heal");fxHeal(sl.sp)}if(e.dm)hitFx($(sl.sp),1);await say(axFmt(e,who,an))}
+        else if(e.imm)await say(e.h?"¡"+who+" absorbe el ataque con "+an+" y recupera PS!":e.ab===18?"¡"+an+" de "+who+" absorbe el fuego y potencia sus ataques!":"¡"+who+" no se ve afectado gracias a "+an+"!");
         else if(e.blk)await say("¡"+an+" de "+who+" le protege!");
         else if(e.ab===5)await say("¡"+who+" ha aguantado el golpe gracias a "+an+"!");
         else if(e.ab===24||e.ab===160){hitFx($(B.SL[e.o].sp),1);await say("¡"+beWho(e.o,e.on)+" se ha hecho daño con "+an+" de "+who+"!")}
@@ -227,6 +235,7 @@ async function bePlay(ev){
         else if(e.ab===3)await say("¡"+an+" de "+who+" sube su Velocidad!");
         else await say("¡"+an+" de "+who+" se ha activado!");
         break}
+      case "msg":bePaint(e.snap);await say(e.t);break;
       case "rech":await say("¡"+who+" necesita recuperarse!");break;
       case "slp":fxZ(sl.sp);await say(who+" está dormido como un tronco.");break;
       case "wake":bePaint(e.snap);await say("¡"+who+" se ha despertado!");break;
@@ -544,6 +553,7 @@ async function turn(k){
     if(B.trainer){const why=B.league?" Quedarás eliminado de la "+LEAGUES[B.league.li].n+".":B.tower?" Se acabará tu racha en la Torre Batalla.":"";
       if(!confirm("¿Seguro que quieres rendirte? El combate contará como derrota."+why)){B.busy=false;setMenu(true);return}
       B.ff=true;snd("flee");await say("¡Te has rendido!");return finish("lose")}
+    {const tp=axTrapped();if(tp){await say(tp);B.busy=false;setMenu(true);return}}
     syncPP();saveHp();snd("flee");await say("¡Has huido sin problemas!");B.busy=false;$("menu").innerHTML='<button data-k="9">Volver</button>';return;
   }
   const m=beAct(B.E.sd[0]);

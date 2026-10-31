@@ -27,7 +27,8 @@ function tmCards(){
     const sel=$("tm"+i);if(!sel)continue;const slot=sel.closest(".slot6");if(!slot)continue;slot.classList.add("tmv");
     let b=slot.querySelector(".tmbtn");if(!b){b=document.createElement("button");b.type="button";b.className="tmbtn";b.dataset.tm=i;slot.appendChild(b)}
     const n=S.team[i],p=n&&PM[n];
-    b.innerHTML=p?'<span class="tmn">'+(i+1)+'</span><span class="tmspr">'+ico(p,64,false,!!(S.shiny&&S.shiny[n]>0))+'</span><span class="tmt"><b>'+esc(nk(n))+'</b><small>Nv'+lvd(n).l+' · '+STAR[p[2]]+'</small><small>'+tyTxt(p)+(S.hp[n]===0?' · <span class="tmko">debilitado</span>':'')+'</small></span><span class="tmch">Cambiar</span>':'<span class="tmn">'+(i+1)+'</span><span class="tmspr tmempty">＋</span><span class="tmt"><b>Casilla vacía</b><small>Toca para elegir un Pokémon</small></span>';
+    const h=p?'<span class="tmn">'+(i+1)+'</span><span class="tmspr">'+ico(p,64,false,!!(S.shiny&&S.shiny[n]>0))+'</span><span class="tmt"><b>'+esc(nk(n))+'</b><small>Nv'+lvd(n).l+' · '+STAR[p[2]]+'</small><small>'+tyTxt(p)+(S.hp[n]===0?' · <span class="tmko">debilitado</span>':'')+'</small>'+tmHp(n)+'</span><span class="tmch">Cambiar</span>':'<span class="tmn">'+(i+1)+'</span><span class="tmspr tmempty">＋</span><span class="tmt"><b>Casilla vacía</b><small>Toca para elegir un Pokémon</small></span>';
+    if(b._h!==h){b._h=h;b.innerHTML=h}
     b.classList.toggle("on",!!p);
   }
 }
@@ -67,7 +68,10 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 // al cargar una partida guardada el equipo se dibuja antes de que exista esta mejora: se rehace al momento y se vigila
 setTimeout(()=>{try{tmCards()}catch(e){}},0);
 setInterval(()=>{try{const s=document.querySelector("#team .slot6:not(.tmv)");if(s)tmCards()}catch(e){}},700);
-{const _r2=render;render=function(){const x=_r2.apply(this,arguments);try{if(document.querySelector("#team .slot6:not(.tmv)"))tmCards()}catch(e){}return x}}
+{const _r2=render;render=function(){const x=_r2.apply(this,arguments);try{tmCards()}catch(e){}return x}}
+// barra de vida en las casillas del equipo
+function tmHp(n){const mx=mxOf(n),hp=S.hp[n]==null?mx:Math.max(0,Math.min(mx,S.hp[n])),k=mx?hp/mx:0,c=k>.5?"#3ecf5a":k>.2?"#f5c400":"#e63950";
+  return '<span class="tmhp" title="PS '+hp+' / '+mx+'"><i style="width:'+(k*100).toFixed(1)+'%;background:'+c+'"></i></span><small class="tmhpt">PS '+hp+' / '+mx+'</small>'}
 // ================= SUGERENCIAS CON FOTOS =================
 const SUG_MAXI=3,SUG_IMGB=230000;var SUGI=[];
 function sugImgUI(){

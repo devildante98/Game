@@ -27,7 +27,7 @@ function tmCards(){
     const sel=$("tm"+i);if(!sel)continue;const slot=sel.closest(".slot6");if(!slot)continue;slot.classList.add("tmv");
     let b=slot.querySelector(".tmbtn");if(!b){b=document.createElement("button");b.type="button";b.className="tmbtn";b.dataset.tm=i;slot.appendChild(b)}
     const n=S.team[i],p=n&&PM[n];
-    const h=p?'<span class="tmn">'+(i+1)+'</span><span class="tmspr">'+ico(p,64,false,!!(S.shiny&&S.shiny[n]>0))+'</span><span class="tmt"><b>'+esc(nk(n))+'</b><small>Nv'+lvd(n).l+' · '+STAR[p[2]]+'</small><small>'+tyTxt(p)+(S.hp[n]===0?' · <span class="tmko">debilitado</span>':'')+'</small>'+tmHp(n)+'</span><span class="tmch">Cambiar</span>':'<span class="tmn">'+(i+1)+'</span><span class="tmspr tmempty">＋</span><span class="tmt"><b>Casilla vacía</b><small>Toca para elegir un Pokémon</small></span>';
+    const h=p?'<span class="tmn">'+(i+1)+'</span><span class="tmspr">'+ico(p,64,false,!!(S.shiny&&S.shiny[n]>0))+'</span><span class="tmt"><b>'+esc(nk(n))+'</b><small>Nv'+lvd(n).l+' · '+STAR[p[2]]+'</small><small>'+tyTxt(p)+(S.hp[n]===0?' · <span class="tmko">debilitado</span>':'')+'</small>'+tmHp(n)+tmItem(n)+'</span><span class="tmch">Cambiar</span><span class="tmfi" data-tmf="'+esc(n)+'" role="button" title="Ver la ficha: objeto, habilidad, movimientos…">🔍 Ficha</span>':'<span class="tmn">'+(i+1)+'</span><span class="tmspr tmempty">＋</span><span class="tmt"><b>Casilla vacía</b><small>Toca para elegir un Pokémon</small></span>';
     if(b._h!==h){b._h=h;b.innerHTML=h}
     b.classList.toggle("on",!!p);
   }
@@ -391,3 +391,8 @@ function hubWatch(){hubBackBtn();HB_OV.forEach(id=>{const el=$(id);if(!el)return
   if(!el._hw){el._hw=1;new MutationObserver(()=>{if(!el.hidden)bind();else if(el._ret){const r=el._ret;el._ret=null;setTimeout(()=>{if($("hubM").hidden&&!fcd&&$("arena").hidden)hubOpen(r.g,r.t)},120)}}).observe(el,{attributes:true,attributeFilter:["hidden"]})}
   bind()})}
 hubWatch();setInterval(hubWatch,250);
+
+// equipo: objeto equipado en la casilla y botón «Ficha» para ampliar la información (objeto, habilidad, movimientos, mote…)
+function tmItem(n){const h=typeof heldOf==="function"?heldOf(n):"",it=h&&ITEMS.find(x=>x[0]===h);return it?'<small class="tmit">'+itemIco(h,16)+' '+esc(it[1])+'</small>':''}
+document.addEventListener("click",e=>{const f=e.target.closest&&e.target.closest("[data-tmf]");if(!f)return;e.preventDefault();e.stopPropagation();snd("ui");const n=f.dataset.tmf;if(S.owned[n]>0)pkView(n,!!(S.shiny&&S.shiny[n]>0))},true);
+{const _pc=pkClose;pkClose=function(){const r=_pc.apply(this,arguments);try{tmCards()}catch(e){}return r}}

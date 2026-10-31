@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793411061">
+<meta name="game-build" content="1793411385">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -5134,16 +5134,20 @@ function clBind(){
   $("clExp").onclick=async()=>{
     try{
       const d=window.claude&&window.claude.use?await window.claude.use("downloads"):null;
-      if(!d){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="capsula-pokemon-partida.json";document.body.appendChild(a);a.click();a.remove();clMsg("Partida exportada.");return}
-      await d.save({filename:"capsula-pokemon-partida.json",data:JSON.stringify(S)});clMsg("Partida exportada.");
+      const sj=JSON.stringify(S),out=JSON.stringify({pgo:1,d:sj,s:await saveSign(sj)});
+      if(!d){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([out],{type:"application/json"}));a.download="poke-gacha-online-partida.json";document.body.appendChild(a);a.click();a.remove();clMsg("Partida exportada.");return}
+      await d.save({filename:"poke-gacha-online-partida.json",data:out});clMsg("Partida exportada.");
     }catch(e){clMsg(e&&e.code==="declined"?"Descarga cancelada.":"No se pudo exportar la partida.")}
   };
   $("clImp").onclick=()=>$("clFile").click();
   $("clFile").onchange=async()=>{
     const f=$("clFile").files[0];$("clFile").value="";if(!f)return;
     try{
-      const t=await f.text(),d=JSON.parse(t);
-      if(!d||typeof d!=="object"||typeof d.owned!=="object"||typeof d.t!=="number")throw 0;
+      const raw=JSON.parse(await f.text());
+      if(!raw||raw.pgo!==1||typeof raw.d!=="string"||typeof raw.s!=="string"){clMsg("Este archivo no tiene firma: es de una versión anterior del juego o se ha modificado. Exporta tu partida otra vez desde el juego.");$("clImpOk").hidden=true;return}
+      if(await saveSign(raw.d)!==raw.s){clMsg("❌ Este archivo se ha modificado fuera del juego y no se puede importar.");$("clImpOk").hidden=true;return}
+      const t=raw.d,d=JSON.parse(t),bad=saveCheck(d);
+      if(bad){clMsg("❌ No se puede importar: "+bad+".");$("clImpOk").hidden=true;return}
       CL.imp=t;clMsg("Archivo válido: "+clSum(t,0)+". Pulsa «Confirmar importación» para sustituir tu partida actual.");
       $("clImpOk").hidden=false;
     }catch(e){clMsg("Ese archivo no es una partida válida.");$("clImpOk").hidden=true}
@@ -5543,6 +5547,8 @@ $("prsGo").onclick=()=>$("reset").click();
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
 {v:"2026-10-31b",at:"2026-10-31T13:00",t:"📈 Movimientos al subir de nivel",l:[
+"💾 Las partidas exportadas ahora llevan firma: los archivos exportados antes de hoy ya no se pueden importar, así que exporta tu partida de nuevo si quieres una copia.",
+"🏳️ Ya puedes rendirte en los combates contra entrenadores (cuenta como derrota).",
 "📈 Los Pokémon nuevos empiezan con 2 movimientos y aprenden más al subir de nivel, como en los juegos: al llegar a 4, te preguntan cuál olvidar.",
 "🗒️ La ficha de cada Pokémon muestra qué movimiento aprenderá a continuación y a qué nivel.",
 "⚔️ Los Pokémon que ya tenías conservan sus movimientos."]},
@@ -5657,7 +5663,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793411061";
+const GAME_B="1793411385";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8344,6 +8350,23 @@ window.addEventListener("click",e=>{
   ACK.w=ACK.w.filter(x=>now-x<1000);if(ACK.w.length>=15){acBlock(e);return}
   ACK.w.push(now);
 },true);
+// ================= partidas exportadas: firma y comprobación de valores imposibles =================
+// La firma detecta archivos editados a mano (no es infalible: el código del juego es visible, pero frena la edición casual).
+const SAVE_SALT="pgo·v1·a7f3c91e5b·🎟️";
+async function saveSign(j){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(SAVE_SALT+j+SAVE_SALT));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+function saveCheck(d){
+  const isI=(v,mx)=>Number.isInteger(v)&&v>=0&&v<=mx,obj=v=>v&&typeof v==="object"&&!Array.isArray(v);
+  if(!obj(d)||!obj(d.owned)||typeof d.t!=="number")return "no es una partida válida";
+  if(!Number.isFinite(d.t)||d.t<0||d.t>1e18)return "la cantidad de tickets es imposible";
+  for(const k in d.owned){if(!isI(d.owned[k],1e7))return "tiene una cantidad imposible de "+String(k).slice(0,30)}
+  if(d.shiny!=null){if(!obj(d.shiny))return "datos de variocolores incorrectos";for(const k in d.shiny){if(!isI(d.shiny[k],1e7))return "datos de variocolores incorrectos"}}
+  if(d.lv!=null){if(!obj(d.lv))return "datos de niveles incorrectos";for(const k in d.lv){const v=d.lv[k];if(!obj(v)||!isI(v.l,100)||v.l<1||!(v.x>=0))return "tiene un nivel imposible ("+String(k).slice(0,30)+")"}}
+  if(d.bag!=null){if(!obj(d.bag))return "datos de la mochila incorrectos";for(const k in d.bag)if(!isI(d.bag[k],1e9))return "tiene una cantidad imposible de objetos"}
+  if(d.g!=null&&(!Array.isArray(d.g)||d.g.some(v=>!isI(v,1e7))))return "tiene una cantidad imposible de ayudantes";
+  if(d.prs!=null&&!isI(d.prs,1000))return "el prestigio es imposible";
+  if(d.pulls!=null&&!isI(d.pulls,1e9))return "el número de tiradas es imposible";
+  return "";
+}
 
 // =====================================================================================
 // CLASIFICACIÓN SEMANAL DE CADA MINIJUEGO (Firestore: tours/{semana_juego}/s/{uid})

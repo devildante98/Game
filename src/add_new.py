@@ -541,3 +541,16 @@ rep('#welc,#newsM,#privM{','.pkvspr img.hd{margin:0!important}\n.pkvw h3{positio
 # anti-autoclicker: los toques con teclado se marcan (2 = tecla mantenida, ya limitada a 4/s y sin control de ritmo)
 rep('window._u=Date.now();$("train").click();','window._u=Date.now();window._kbT=e.repeat?2:1;try{$("train").click()}finally{window._kbT=0}')
 rep('#welc,#newsM,#privM{','#acM{position:fixed;inset:0;z-index:160;background:rgba(10,12,30,.8);display:flex;align-items:center;justify-content:center;padding:16px}\n#acM[hidden]{display:none}\n#acM .jbox{width:min(440px,calc(100vw - 24px));box-sizing:border-box;text-align:center}\n#acM .acar{position:relative;height:180px;border:2px dashed var(--line);border-radius:14px;margin-top:10px}\n#acM .acar button{position:absolute;white-space:nowrap}\n#welc,#newsM,#privM{')
+# ---- partidas exportadas: nombre nuevo, firma y comprobaciones al importar ----
+rep('''      if(!d){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));a.download="capsula-pokemon-partida.json";document.body.appendChild(a);a.click();a.remove();clMsg("Partida exportada.");return}
+      await d.save({filename:"capsula-pokemon-partida.json",data:JSON.stringify(S)});clMsg("Partida exportada.");''',
+'''      const sj=JSON.stringify(S),out=JSON.stringify({pgo:1,d:sj,s:await saveSign(sj)});
+      if(!d){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([out],{type:"application/json"}));a.download="poke-gacha-online-partida.json";document.body.appendChild(a);a.click();a.remove();clMsg("Partida exportada.");return}
+      await d.save({filename:"poke-gacha-online-partida.json",data:out});clMsg("Partida exportada.");''')
+rep('''      const t=await f.text(),d=JSON.parse(t);
+      if(!d||typeof d!=="object"||typeof d.owned!=="object"||typeof d.t!=="number")throw 0;''',
+'''      const raw=JSON.parse(await f.text());
+      if(!raw||raw.pgo!==1||typeof raw.d!=="string"||typeof raw.s!=="string"){clMsg("Este archivo no tiene firma: es de una versión anterior del juego o se ha modificado. Exporta tu partida otra vez desde el juego.");$("clImpOk").hidden=true;return}
+      if(await saveSign(raw.d)!==raw.s){clMsg("❌ Este archivo se ha modificado fuera del juego y no se puede importar.");$("clImpOk").hidden=true;return}
+      const t=raw.d,d=JSON.parse(t),bad=saveCheck(d);
+      if(bad){clMsg("❌ No se puede importar: "+bad+".");$("clImpOk").hidden=true;return}''')

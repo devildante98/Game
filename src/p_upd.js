@@ -311,3 +311,20 @@ window.addEventListener("click",e=>{
   ACK.w=ACK.w.filter(x=>now-x<1000);if(ACK.w.length>=15){acBlock(e);return}
   ACK.w.push(now);
 },true);
+// ================= partidas exportadas: firma y comprobación de valores imposibles =================
+// La firma detecta archivos editados a mano (no es infalible: el código del juego es visible, pero frena la edición casual).
+const SAVE_SALT="pgo·v1·a7f3c91e5b·🎟️";
+async function saveSign(j){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(SAVE_SALT+j+SAVE_SALT));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+function saveCheck(d){
+  const isI=(v,mx)=>Number.isInteger(v)&&v>=0&&v<=mx,obj=v=>v&&typeof v==="object"&&!Array.isArray(v);
+  if(!obj(d)||!obj(d.owned)||typeof d.t!=="number")return "no es una partida válida";
+  if(!Number.isFinite(d.t)||d.t<0||d.t>1e18)return "la cantidad de tickets es imposible";
+  for(const k in d.owned){if(!isI(d.owned[k],1e7))return "tiene una cantidad imposible de "+String(k).slice(0,30)}
+  if(d.shiny!=null){if(!obj(d.shiny))return "datos de variocolores incorrectos";for(const k in d.shiny){if(!isI(d.shiny[k],1e7))return "datos de variocolores incorrectos"}}
+  if(d.lv!=null){if(!obj(d.lv))return "datos de niveles incorrectos";for(const k in d.lv){const v=d.lv[k];if(!obj(v)||!isI(v.l,100)||v.l<1||!(v.x>=0))return "tiene un nivel imposible ("+String(k).slice(0,30)+")"}}
+  if(d.bag!=null){if(!obj(d.bag))return "datos de la mochila incorrectos";for(const k in d.bag)if(!isI(d.bag[k],1e9))return "tiene una cantidad imposible de objetos"}
+  if(d.g!=null&&(!Array.isArray(d.g)||d.g.some(v=>!isI(v,1e7))))return "tiene una cantidad imposible de ayudantes";
+  if(d.prs!=null&&!isI(d.prs,1000))return "el prestigio es imposible";
+  if(d.pulls!=null&&!isI(d.pulls,1e9))return "el número de tiradas es imposible";
+  return "";
+}

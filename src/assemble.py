@@ -296,6 +296,8 @@ NEWS = '''// ================= novedades =================
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
 {v:"2026-10-31b",at:"2026-10-31T13:00",t:"📈 Movimientos al subir de nivel",l:[
+"💾 Las partidas exportadas ahora llevan firma: los archivos exportados antes de hoy ya no se pueden importar, así que exporta tu partida de nuevo si quieres una copia.",
+"🏳️ Ya puedes rendirte en los combates contra entrenadores (cuenta como derrota).",
 "📈 Los Pokémon nuevos empiezan con 2 movimientos y aprenden más al subir de nivel, como en los juegos: al llegar a 4, te preguntan cuál olvidar.",
 "🗒️ La ficha de cada Pokémon muestra qué movimiento aprenderá a continuación y a qué nivel.",
 "⚔️ Los Pokémon que ya tenías conservan sus movimientos."]},

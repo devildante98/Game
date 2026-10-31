@@ -324,3 +324,9 @@ function nkPop(){
 }
 setTimeout(nkPop,2500);
 {const b=$("welcOk");if(b)b.addEventListener("click",()=>setTimeout(nkPop,500))}
+// ================= mochila: barra de búsqueda =================
+function bagFilter(){const g=$("bgrid"),i=$("bagQ");if(!g||!i)return;const q=nrm(i.value.trim());let n=0,t=0;
+  g.querySelectorAll(".btile").forEach(el=>{t++;const ok=!q||nrm(el.querySelector("b")?el.querySelector("b").textContent+" "+el.textContent:el.textContent).includes(q);el.hidden=!ok;if(ok)n++});
+  let e=$("bagQn");if(!e){e=document.createElement("small");e.id="bagQn";e.className="mut";g.after(e)}e.textContent=q&&t?(n?"":"Ningún objeto coincide con «"+i.value.trim()+"».")
+:""}
+{const _bu=bagUI;bagUI=function(){_bu.apply(this,arguments);try{const g=$("bgrid");if(!g)return;if(!$("bagQ")){const w=document.createElement("div");w.className="bagq";w.innerHTML='<input id="bagQ" type="search" placeholder="🔎 Buscar en la mochila…" aria-label="Buscar en la mochila" autocomplete="off">';g.before(w);$("bagQ").addEventListener("input",bagFilter)}bagFilter()}catch(e){console.error(e)}}}

@@ -562,3 +562,17 @@ rep('setTimeout(()=>{if(S.daily!==today()&&$("welc").hidden&&$("newsM").hidden)s
 rep('toast("🏅 ¡Logro conseguido: "+a[2]+"! Reclama tu recompensa.")','(typeof popToast==="function"?popToast:toast)("🏅 ¡Logro conseguido: "+a[2]+"! Reclama tu recompensa.")')
 rep('#welc,#newsM,#privM{','.infob{display:inline;background:none;border:0;padding:0 2px;margin:0;color:var(--teal);font:inherit;font-weight:700;cursor:pointer;box-shadow:none;min-height:0;width:auto}\n.infob:hover{text-decoration:underline;transform:none}\n#welc,#newsM,#privM{')
 rep('#welc,#newsM,#privM{','.tmhp{display:block;height:7px;border-radius:99px;background:rgba(0,0,0,.18);overflow:hidden;margin-top:4px;max-width:170px}\n.tmhp i{display:block;height:100%;border-radius:99px;transition:width .3s}\n.tmhpt{font-size:.68rem!important;opacity:.8}\n#welc,#newsM,#privM{')
+# recompensas de los logros más bajas (antes 100K / 1M / 10M / 50M / 250M / 1.000M y más objetos)
+rep('''const AR=[
+{t:100000,it:{pb:5,pot:3}},
+{t:1000000,it:{sb:5,spot:3}},
+{t:10000000,it:{ub:5,hpot:5,cand:1}},
+{t:50000000,it:{ub:10,mpot:5,cand:3,mb:1}},
+{t:250000000,it:{mrev:5,cand:10,mb:3}},
+{t:1000000000,it:{mrev:10,cand:25,mb:10}}];''','''const AR=[
+{t:10000,it:{pb:3,pot:2}},
+{t:75000,it:{sb:3,spot:2}},
+{t:500000,it:{ub:3,hpot:3}},
+{t:3000000,it:{ub:5,mpot:3,cand:1}},
+{t:15000000,it:{mrev:3,cand:3,mb:1}},
+{t:60000000,it:{mrev:5,cand:8,mb:3}}];''')

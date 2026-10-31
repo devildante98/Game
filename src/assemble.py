@@ -295,6 +295,11 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-10-31e",at:"2026-10-31T15:16",t:"⚖️ Ajustes de equilibrio y mejoras",l:[
+"⚖️ Las recompensas de los logros son más bajas para que el progreso tenga más mérito.",
+"📈 Los Caramelos Raros enseñan al momento los movimientos nuevos (si ya conoce 4, eliges cuál olvidar).",
+"❤️ Las casillas del equipo muestran la barra de vida de cada Pokémon.",
+"🎒 Al usar un objeto de la Mochila, eliges el Pokémon en una ventana."]},
 {v:"2026-10-31d",at:"2026-10-31T09:17",t:"✨ Todas las habilidades funcionan",l:[
 "✨ Las 306 habilidades de los Pokémon tienen ya efecto en combate: Llovizna, Sequía, Chorro Arena, Nevada, Nado Rápido, Clorofila, Pararrayos, Disfraz, Gas Reactivo, Rompemoldes, Bromista, Ausente… Míralas en la ficha de cada Pokémon.",
 "🌦️ Nuevo tiempo atmosférico en combate: lluvia, sol, tormenta de arena y nieve, que potencian o debilitan ataques y pueden dañar cada turno.",

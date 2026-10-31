@@ -95,8 +95,8 @@ $("buse").addEventListener("click",e=>{
     d.l+=q;d.x=0;S.bag.cand-=q;qEv("lvl",q);
     if(S.hp[n]!==undefined)S.hp[n]=Math.min(mxOf(n),S.hp[n]+8*q);
     save();snd("lvl");render();
-    const pend=learn(n).filter(x=>x[0]>(S.ml[n]==null?l0:S.ml[n])&&x[0]<=d.l&&!moveIds(n).includes(x[1])).length;
-    useUI(n+" sube de Nv"+l0+" a Nv"+d.l+"."+(pend>0?" Puede aprender "+pend+" movimiento(s) nuevo(s): se le ofrecerán al llevarlo a combate.":"")+(evoLvReady(n).length?" ¡Ya puede evolucionar! Míralo arriba en «Pueden evolucionar».":""));
+    useUI(n+" sube de Nv"+l0+" a Nv"+d.l+"."+(evoLvReady(n).length?" ¡Ya puede evolucionar! Míralo arriba en «Pueden evolucionar».":""));
+    lrnNow(n,l0);
   }
 });
 
@@ -116,3 +116,25 @@ $("buse").addEventListener("click",e=>{const b=e.target.closest&&e.target.closes
   if(k<0)ids.push(mid);else{const old=ids[k];ids[k]=mid;if(S.pp&&S.pp[n])delete S.pp[n][old]}
   S.mv[n]=ids;S.bag[useId]=Math.max(0,(S.bag[useId]|0)-1);save();snd("lvl");toast("💿 ¡"+nk(n)+" ha aprendido "+m.n+"!");
   _bk="";useUI("");render()});
+
+// ---- aprender movimientos al subir de nivel fuera de combate (Caramelo Raro): con hueco se aprenden solos; con 4, se elige cuál olvidar ----
+let _lrnBusy=false;
+async function lrnNow(n,l0){
+  if(_lrnBusy||!S.owned[n])return;_lrnBusy=true;
+  try{moveIds(n);const l=lvd(n).l,from=S.ml[n]==null?l0:S.ml[n],ls=learn(n).filter(x=>x[0]>from&&x[0]<=l);S.ml[n]=l;save();const got=[];
+    for(const x of ls){const id=x[1],mv=MVD[id],ids=moveIds(n).slice();if(!mv||ids.includes(id))continue;
+      if(ids.length<4){ids.push(id);S.mv[n]=ids;save();got.push(mv.n);continue}
+      const k=await lrnAsk(n,mv,ids);
+      if(k>=0){const old=ids[k];ids[k]=id;S.mv[n]=ids;if(S.pp&&S.pp[n])delete S.pp[n][old];save();got.push(mv.n);toast("1, 2 y… ¡Puf! "+nk(n)+" ha olvidado "+MVD[old].n+" y ha aprendido "+mv.n+".")}
+      else toast(nk(n)+" no ha aprendido "+mv.n+".")}
+    if(got.length){snd("lvl");toast("✨ ¡"+nk(n)+" ha aprendido "+got.join(", ")+"!")}
+    if(got.length){const m=$("bagMsg");if(m)m.textContent+=" ✨ Ha aprendido "+got.join(", ")+"."}
+  }catch(e){console.error(e)}finally{_lrnBusy=false}
+}
+function lrnAsk(n,mv,ids){return new Promise(res=>{
+  const M=document.createElement("div");M.id="lrnM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Aprender movimiento");
+  const bt=(o,k)=>'<button class="lrnb" data-lk="'+k+'" style="--tc:'+(TC[o.t]||"#999")+'"><b>'+esc(o.n)+'</b><small>'+EM[o.t]+' '+TIPO[o.t]+(o.cl?' · Poder '+(o.pw||"—"):' · Estado')+'</small></button>';
+  M.innerHTML='<div class="jbox"><div class="lrnh">'+ico(PM[n],56)+'<div><h3>'+esc(nk(n))+' quiere aprender '+esc(mv.n)+'</h3><small class="mut">'+EM[mv.t]+' '+TIPO[mv.t]+(mv.cl?' · Poder '+(mv.pw||"—"):' · Estado')+' · '+esc(mvDesc(mv))+'</small></div></div>'+
+    '<p>Pero ya conoce 4 movimientos. ¿Cuál quieres que olvide?</p><div class="lrng">'+ids.map((x,k)=>MVD[x]?bt(MVD[x],k):'').join("")+'</div><button class="alt" data-lk="-1">No aprender '+esc(mv.n)+'</button></div>';
+  document.body.appendChild(M);
+  M.addEventListener("click",e=>{const b=e.target.closest("[data-lk]");if(!b)return;snd("ui");M.remove();res(+b.dataset.lk)})})}

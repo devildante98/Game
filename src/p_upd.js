@@ -375,3 +375,19 @@ const MGHOW={
  wgt:["Dos Pokémon: elige cuál pesa más o menos, o cuál es más alto o más bajo.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>.","Se juega hasta el <b>primer fallo</b>: cuantas más seguidas aciertes, más vale cada una."],
  fos:["Igual que la Excavación: destapa del todo cada fósil para que cuente.","Cada fósil vale <b>300–520 puntos</b> (el Ámbar Viejo es el que más). Los tesoros pequeños dan 40–110.","Cuida la <b>estabilidad</b>: el martillo daña el doble que el pico.","Los fósiles que saques van al 🧪 Laboratorio, donde puedes revivirlos."]};
 function mgHow(id){const L=MGHOW[id];return L?'<details class="mghow" open><summary>🏆 Cómo conseguir más puntos</summary><ul>'+L.map(x=>'<li>'+x+'</li>').join("")+'</ul></details>':""}
+// ================= menú: volver al panel anterior =================
+// 1) botón «‹» en la cabecera de cada ventana del menú para volver a la cuadrícula del menú
+// 2) si algo se abre desde una ventana del menú (un minijuego, un combate, los ajustes…), al cerrarlo se vuelve a esa ventana
+const HBR={ret:null,at:0};let _hubU=false;
+const hubUser=()=>{_hubU=true;setTimeout(()=>{_hubU=false},0)};
+{const _hc=hubClose;hubClose=function(){const M=$("hubM");if(M&&!M.hidden&&HB.g){if(_hubU)HBR.ret=null;else{HBR.ret={g:HB.g,t:HB.t};HBR.at=Date.now()}}_hubU=false;return _hc.apply(this,arguments)}}
+document.addEventListener("click",e=>{const t=e.target;if(t&&(t.id==="hubM"||(t.closest&&t.closest("#hubX,#hubBk"))))hubUser()},true);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("hubM")&&!$("hubM").hidden)hubUser()},true);
+function hubBackBtn(){const h=document.querySelector("#hubM .hubh");if(!h||$("hubBk"))return;const b=document.createElement("button");b.id="hubBk";b.type="button";b.title="Volver al menú";b.setAttribute("aria-label","Volver al menú");b.textContent="‹";
+  b.addEventListener("click",()=>{snd("ui");hubClose();hubMenu(true)});h.prepend(b)}
+const HB_OV=["mgM","optp","welc","arena","evo","chw","jlv","prof"];
+function hubWatch(){hubBackBtn();HB_OV.forEach(id=>{const el=$(id);if(!el)return;
+  const bind=()=>{if(!el.hidden&&HBR.ret&&Date.now()-HBR.at<2500){el._ret=HBR.ret;HBR.ret=null}};
+  if(!el._hw){el._hw=1;new MutationObserver(()=>{if(!el.hidden)bind();else if(el._ret){const r=el._ret;el._ret=null;setTimeout(()=>{if($("hubM").hidden&&!fcd&&$("arena").hidden)hubOpen(r.g,r.t)},120)}}).observe(el,{attributes:true,attributeFilter:["hidden"]})}
+  bind()})}
+hubWatch();setInterval(hubWatch,250);

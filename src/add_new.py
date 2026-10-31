@@ -577,3 +577,4 @@ rep('''const AR=[
 {t:120000000,it:{mrev:5,cand:8,mb:2}},
 {t:500000000,it:{mrev:8,cand:20,mb:6}}];''')
 rep('#welc,#newsM,#privM{','.mghow{margin:12px auto 0;max-width:520px;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 14px}\n.mghow summary{cursor:pointer;font-weight:800}\n.mghow ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:.88rem;line-height:1.4}\n#welc,#newsM,#privM{')
+rep('#welc,#newsM,#privM{','#hubBk{width:44px;height:44px;border-radius:14px;border:none;background:rgba(255,255,255,.25);color:#fff;font-size:1.7rem;line-height:1;padding:0 0 3px;flex:none;font-weight:800}\n#hubBk:hover{background:rgba(255,255,255,.38)}\n#welc,#newsM,#privM{')

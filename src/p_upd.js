@@ -330,3 +330,13 @@ function bagFilter(){const g=$("bgrid"),i=$("bagQ");if(!g||!i)return;const q=nrm
   let e=$("bagQn");if(!e){e=document.createElement("small");e.id="bagQn";e.className="mut";g.after(e)}e.textContent=q&&t?(n?"":"Ningún objeto coincide con «"+i.value.trim()+"».")
 :""}
 {const _bu=bagUI;bagUI=function(){_bu.apply(this,arguments);try{const g=$("bgrid");if(!g)return;if(!$("bagQ")){const w=document.createElement("div");w.className="bagq";w.innerHTML='<input id="bagQ" type="search" placeholder="🔎 Buscar en la mochila…" aria-label="Buscar en la mochila" autocomplete="off">';g.before(w);$("bagQ").addEventListener("input",bagFilter)}bagFilter()}catch(e){console.error(e)}}}
+// ================= mochila: usar un objeto en una ventana emergente =================
+{const bu=$("buse");if(bu){const M=document.createElement("div");M.id="buseM";M.hidden=true;M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Usar objeto");
+  const W=document.createElement("div");W.className="busew";const msg=document.createElement("small");msg.id="buseMsg";msg.className="mut";
+  W.appendChild(bu);W.appendChild(msg);M.appendChild(W);document.body.appendChild(M);
+  const sync=()=>{M.hidden=bu.hidden;const t=$("bagMsg");msg.textContent=t?t.textContent:"";msg.hidden=!msg.textContent};
+  new MutationObserver(sync).observe(bu,{attributes:true,attributeFilter:["hidden"]});
+  {const t=$("bagMsg");if(t)new MutationObserver(sync).observe(t,{childList:true,characterData:true,subtree:true})}
+  M.addEventListener("click",e=>{if(e.target===M){const c=$("buClose");if(c)c.click()}});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!M.hidden){const c=$("buClose");if(c){e.stopPropagation();c.click()}}},true);
+  sync()}}

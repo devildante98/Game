@@ -551,3 +551,4 @@ rep('''      const t=await f.text(),d=JSON.parse(t);
       if(await saveSign(raw.d)!==raw.s){clMsg("❌ Este archivo se ha modificado fuera del juego y no se puede importar.");$("clImpOk").hidden=true;return}
       const t=raw.d,d=JSON.parse(t),bad=saveCheck(d);
       if(bad){clMsg("❌ No se puede importar: "+bad+".");$("clImpOk").hidden=true;return}''')
+rep('#welc,#newsM,#privM{','#nkM{position:fixed;inset:0;z-index:170;background:rgba(10,12,30,.75);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}\n#nkM .jbox{width:min(440px,calc(100vw - 24px));box-sizing:border-box;text-align:center}\n#nkM input{width:100%;box-sizing:border-box;font-size:1.15rem;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);text-align:center;margin:6px 0 4px}\n#nkM #nkMsg{display:block;min-height:1.2em;margin-bottom:6px}\n#welc,#newsM,#privM{')

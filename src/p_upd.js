@@ -303,3 +303,24 @@ function saveCheck(d){
   if(d.pulls!=null&&!isI(d.pulls,1e9))return "el número de tiradas es imposible";
   return "";
 }
+// ================= jugadores nuevos: ventana para elegir el apodo =================
+// sale una vez a quien todavía tiene el apodo automático («Entrenador1234»), después de la bienvenida
+function nkPopNeeded(){return !S.nickPick&&/^Entrenador\d+$/.test(pvNick())}
+function nkPop(){
+  if(!nkPopNeeded()||$("nkM"))return;
+  const w=$("welc");if(w&&!w.hidden){setTimeout(nkPop,1500);return}
+  const m=document.createElement("div");m.id="nkM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");m.setAttribute("aria-label","Elige tu apodo");
+  m.innerHTML='<div class="jbox"><h2>✏️ Elige tu apodo</h2><p>Es el nombre con el que te verán los demás jugadores en el chat, los rankings, los combates y tu tarjeta de entrenador. Es único: nadie más podrá usarlo.</p>'+
+    '<input id="nkIn" maxlength="16" autocomplete="off" spellcheck="false" placeholder="Tu apodo" aria-label="Tu apodo"><small id="nkMsg" class="mut">Puedes cambiarlo cuando quieras en Online → PVP.</small>'+
+    '<div class="jrow"><button class="red" id="nkOk">Guardar apodo</button><button class="alt" id="nkLater">Más tarde</button></div></div>';
+  document.body.appendChild(m);const inp=$("nkIn");inp.value="";
+  const close=()=>{S.nickPick=1;save();m.remove()};
+  const go=async()=>{const nn=pvClean(inp.value);if(!inp.value.trim()||nn.length<3){$("nkMsg").textContent="El apodo debe tener al menos 3 caracteres.";return}
+    $("nkOk").disabled=true;$("pvNick").value=nn;try{await nickSave()}catch(e){}$("nkOk").disabled=false;
+    const r=$("pvNickMsg").textContent||"";if(r.startsWith("✅")){close();snd("lvl");toast("✏️ ¡Tu apodo ahora es «"+pvNick()+"»!")}else $("nkMsg").textContent=r||"No se pudo guardar el apodo. Inténtalo de nuevo."};
+  $("nkOk").onclick=go;inp.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();e.stopPropagation();go()}});
+  $("nkLater").onclick=close;
+  setTimeout(()=>{try{inp.focus()}catch(e){}},100);
+}
+setTimeout(nkPop,2500);
+{const b=$("welcOk");if(b)b.addEventListener("click",()=>setTimeout(nkPop,500))}

@@ -295,34 +295,36 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
-{v:"2026-10-31b",at:"2026-10-31T13:00",t:"📈 Movimientos al subir de nivel",l:[
-"💾 Las partidas exportadas ahora llevan firma: los archivos exportados antes de hoy ya no se pueden importar, así que exporta tu partida de nuevo si quieres una copia.",
+{v:"2026-10-31c",at:"2026-10-31T03:10",t:"🏳️ Rendirse, partidas con firma y elegir apodo",l:[
 "🏳️ Ya puedes rendirte en los combates contra entrenadores (cuenta como derrota).",
+"💾 Las partidas exportadas ahora llevan firma: los archivos exportados antes de hoy ya no se pueden importar, así que exporta tu partida de nuevo si quieres una copia.",
+"✏️ Los jugadores nuevos eligen su apodo nada más empezar (se puede cambiar cuando quieras en Online → PVP)."]},
+{v:"2026-10-31b",at:"2026-10-31T02:00",t:"📈 Movimientos al subir de nivel",l:[
 "📈 Los Pokémon nuevos empiezan con 2 movimientos y aprenden más al subir de nivel, como en los juegos: al llegar a 4, te preguntan cuál olvidar.",
 "🗒️ La ficha de cada Pokémon muestra qué movimiento aprenderá a continuación y a qué nivel.",
 "⚔️ Los Pokémon que ya tenías conservan sus movimientos."]},
-{v:"2026-10-31a",at:"2026-10-31T01:00",t:"⚔️ Movimientos en la ficha",l:[
+{v:"2026-10-31a",at:"2026-10-31T01:20",t:"⚔️ Movimientos en la ficha",l:[
 "⚔️ La ficha de cada Pokémon (tócalo en la Pokédex) muestra ahora sus 4 movimientos: tipo, clase, poder, precisión, PP que le quedan y efectos.",
 "🔒 Nueva Política de privacidad en Ajustes → Acerca de y al pie del juego."]},
-{v:"2026-10-30h",at:"2026-10-30T23:00",t:"💿 Tienda de MT",l:[
+{v:"2026-10-30h",at:"2026-10-30T21:05",t:"💿 Tienda de MT",l:[
 "💿 Nueva Tienda de MT (Mochila): 79 MT para enseñar movimientos como Terremoto, Rayo Hielo, Bola Sombra o Danza Dragón.",
 "🎒 Se usan fuera de combate desde la Mochila: eliges el Pokémon y qué movimiento olvida.",
 "✅ Cada Pokémon solo aprende las MT que aprende en los juegos originales."]},
-{v:"2026-10-30g",at:"2026-10-30T22:00",t:"🏷️ Títulos en la Tienda de Evento",l:[
+{v:"2026-10-30g",at:"2026-10-30T20:50",t:"🏷️ Títulos en la Tienda de Evento",l:[
 "🏷️ 30 títulos nuevos para tu vitrina y tu perfil en la Tienda de Evento: 12 de catálogo todo el año y otros propios de cada temporada.",
 "🎃 Títulos de Halloween solo hasta el 2 de noviembre: Rey de las calabazas, Alma en pena, Señor de la noche y Tejedor de sustos."]},
-{v:"2026-10-30f",at:"2026-10-30T21:00",t:"⚔️ Pokémon de doble tipo",l:[
+{v:"2026-10-30f",at:"2026-10-30T20:25",t:"⚔️ Pokémon de doble tipo",l:[
 "🔥🌪️ Los Pokémon ahora tienen sus dos tipos, como en los juegos: Charizard es Fuego / Volador, Gyarados Agua / Volador, Garchomp Dragón / Tierra…",
 "💥 La eficacia se multiplica por los dos tipos: hay ataques ×4 y ×¼. ¡Monta un equipo más equilibrado!",
 "✨ Los ataques del mismo tipo que cualquiera de los dos tipos de tu Pokémon hacen más daño (STAB).",
 "🔎 Los filtros por tipo de la Pokédex y del equipo encuentran también por el segundo tipo."]},
-{v:"2026-10-30e",at:"2026-10-30T19:00",t:"🛍️ Tienda de Evento: ropa, fondos y marcos de Halloween",l:[
+{v:"2026-10-30e",at:"2026-10-30T19:15",t:"🛍️ Tienda de Evento: ropa, fondos y marcos de Halloween",l:[
 "🛍️ Nueva Tienda de Evento (Tu entrenador): gasta tus tickets en ropa para tu entrenador y en fondos y marcos animados para tu tarjeta de perfil.",
 "🖼️ Personaliza tu tarjeta de entrenador: los demás jugadores la ven al abrir tu perfil.",
 "🎃 Ropa de Halloween solo hasta el 2 de noviembre: Gorro de calabaza y Pajarita de murciélago. Cada evento de temporada traerá su propia prenda.",
 "⌚ Catálogo todo el año: Pokéreloj, Gafas de corazón, Monóculo dorado y Mochila Poké Ball.",
 "🔊 Cada Pokémon del gacha suena al salir de la Poké Ball, ¡y los legendarios tienen fanfarria!"]},
-{v:"2026-10-30d",at:"2026-10-30T16:30",t:"Cazafósiles, ropa de prestigio y sugerencias con respuesta",l:[
+{v:"2026-10-30d",at:"2026-10-30T17:00",t:"Cazafósiles, ropa de prestigio y sugerencias con respuesta",l:[
 "🦴 Nuevo minijuego Cazafósiles: desentierra fósiles y revívelos en el 🧪 Laboratorio de fósiles (Minijuegos). ¡Omanyte, Kabuto, Aerodactyl, Tyrunt, Dracozolt y muchos más!",
 "⛏️ La Excavación subterránea ahora es de 12×12, y sus fósiles también se pueden revivir.",
 "🌟 Ropa exclusiva de prestigio para tu entrenador: gorros, coronas, halo y medallas que se desbloquean al subir de prestigio.",

@@ -136,7 +136,7 @@ document.addEventListener("click",e=>{
   const l=e.target.closest&&e.target.closest("[data-prof]");if(l&&l.dataset.prof){e.preventDefault();openProf(l.dataset.prof);return}
   const b=e.target.closest&&e.target.closest("#prof button");if(!b)return;
   if(b.dataset.pcl){$("prof").hidden=true;return}
-  if(b.dataset.pfr){frSend(b.dataset.pfr);toast("📨 Solicitud de amistad enviada");$("prof").hidden=true;return}
+  if(b.dataset.pfr){frSend(b.dataset.pfr,b);return}
   if(b.dataset.pch){$("prof").hidden=true;if(pvChallenge(b.dataset.pch)){toast("⚔️ Reto enviado");try{$("pvpP").scrollIntoView({behavior:"smooth"})}catch(x){}}}
 });
 $("prof").addEventListener("click",e=>{if(e.target.id==="prof")$("prof").hidden=true});

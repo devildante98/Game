@@ -12,7 +12,15 @@ async function frNamesRefresh(force){if(!window.FB||!window.FB.rankGet||(!force&
 setInterval(()=>frNamesRefresh(false),60000);
 const frOnline=()=>pvOthers().filter(p=>isFriend(p.peer)).map(p=>({uid:p.peer,n:pvClean(p.presence.pvp.n),st:p.presence.pvp.st}));
 function frMsg(t){const e=$("frMsg");if(e)e.textContent=t}
-async function frSend(nick){
+// btn: el botón pulsado (fuera del panel de Amigos): muestra el progreso en él y el resultado en un aviso
+async function frSend(nick,btn){
+  if(btn){const t0=btn.textContent;btn.disabled=true;btn.textContent="⏳";const em=$("frMsg");let last="";
+    const ob=em?new MutationObserver(()=>{last=em.textContent}):null;if(ob)ob.observe(em,{childList:true,characterData:true,subtree:true});
+    try{await frSend(nick)}finally{if(ob)ob.disconnect()}
+    const msg=em?em.textContent:last;const ok=/✅|📨|Ya sois amigos/.test(msg);
+    if(msg&&!/Enviando/.test(msg))toast(msg);
+    if(ok){btn.textContent=/✅|Ya sois/.test(msg)?"✅ Amigos":"📨 Enviada";btn.title=msg}else{btn.disabled=false;btn.textContent=t0}
+    return}
   if(!window.FB){frMsg("Para tener amigos tienes que iniciar sesión con tu cuenta.");return}
   nick=pvClean(nick);if(!nick){frMsg("Escribe el apodo de tu amigo.");return}
   if(nick.toLowerCase()===pvClean(pvNick()).toLowerCase()){frMsg("No puedes enviarte una solicitud a ti mismo 😅");return}
@@ -105,7 +113,7 @@ function gUI(force){
     h+='<div class="ghead">'+gFlag(g.fl,g.icon,110)+'<div><b class="gname">'+esc(g.name)+' <span class="gtag">['+esc(g.tag)+']</span></b><small class="mut">'+esc(g.desc||"")+'</small><small>'+mem.length+' / '+GUILD_MAX+' miembros · '+(g.open?"Abierto":"Con solicitud")+'</small><small>👑 Líder: <b>'+esc(pvClean((g.members[g.owner]||{}).n||"?"))+'</b>'+(sub?' · ⭐ Sublíder: <b>'+esc(pvClean(g.members[sub].n))+'</b>':'')+'</small>'+(lead?'':isSub?'<small class="mut">Eres el sublíder: puedes aceptar o rechazar solicitudes para unirse.</small>':'')+'</div></div>';
     h+=gBossHTML(g);
     if(GS.editing)h+=gEditor(true);
-    h+='<div class="frl">'+mem.map(u=>{const m=g.members[u];return '<div class="pvrow"><b class="plink" data-prof="'+esc(u)+'">'+(g.owner===u?"👑 ":sub===u?"⭐ ":"")+esc(pvClean(m.n))+(sub===u?' <small class="gtag">Sublíder</small>':'')+(u===me?" (tú)":"")+'</b><small class="mut" style="flex:1">'+(on[u]||u===me?"🟢 Conectado":"⚫ Desconectado")+'</small>'+(lead&&u!==me?'<button class="alt" data-gk="'+esc(u)+'">Expulsar</button>'+(sub===u?'<button class="alt" data-gunsub="1">Quitar sublíder</button>':'<button class="alt" data-gsub="'+esc(u)+'">⭐ Hacer sublíder</button>')+'<button class="alt" data-gt="'+esc(u)+'">👑 Hacer líder</button>':'')+(u!==me&&!isFriend(u)?'<button class="alt" data-gfr="'+esc(pvClean(m.n))+'">+👥</button>':'')+'</div>'}).join("")+'</div>';
+    h+='<div class="frl">'+mem.map(u=>{const m=g.members[u];return '<div class="pvrow"><b class="plink" data-prof="'+esc(u)+'">'+(g.owner===u?"👑 ":sub===u?"⭐ ":"")+esc(pvClean(m.n))+(sub===u?' <small class="gtag">Sublíder</small>':'')+(u===me?" (tú)":"")+'</b><small class="mut" style="flex:1">'+(on[u]||u===me?"🟢 Conectado":"⚫ Desconectado")+'</small>'+(lead&&u!==me?'<button class="alt" data-gk="'+esc(u)+'">Expulsar</button>'+(sub===u?'<button class="alt" data-gunsub="1">Quitar sublíder</button>':'<button class="alt" data-gsub="'+esc(u)+'">⭐ Hacer sublíder</button>')+'<button class="alt" data-gt="'+esc(u)+'">👑 Hacer líder</button>':'')+(u!==me&&!isFriend(u)?(frPend(u)?'<button class="alt" disabled title="Solicitud de amistad enviada">📨</button>':'<button class="alt" data-gfr="'+esc(pvClean(m.n))+'" title="Enviar solicitud de amistad">+👥</button>'):'')+'</div>'}).join("")+'</div>';
     const rq=Object.keys(g.req||{});
     if((lead||isSub)&&rq.length)h+='<div class="lgnow"><b>📩 Solicitudes para unirse</b>'+rq.map(u=>'<div class="pvrow"><b>'+esc(pvClean(g.req[u].n))+'</b><span style="flex:1"></span><button data-gacc="'+esc(u)+'"'+(mem.length>=GUILD_MAX?" disabled":"")+'>Aceptar</button><button class="alt" data-grej="'+esc(u)+'">Rechazar</button></div>').join("")+'</div>';
     h+='<div class="sets-row" style="margin-top:10px">'+(lead?'<button id="gdEdit" class="alt">🎨 Personalizar</button><button id="gdDis" class="alt">💥 Disolver gremio</button>':'<button id="gdLeave" class="alt">🚪 Salir del gremio</button>')+'</div>';
@@ -178,7 +186,7 @@ document.addEventListener("click",async e=>{
     if(d.gt){if(!confirm("¿Nombrar líder a este miembro? Tú pasarás a ser un miembro normal."))return;await window.FB.gTransfer(GS.gid,d.gt,GS.doc.sub===d.gt);return}
     if(d.gsub){if(!confirm("¿Nombrar sublíder a este miembro? Podrá aceptar y rechazar solicitudes para unirse, pero nada más."+(GS.doc.sub?" El sublíder actual dejará de serlo.":"")))return;await window.FB.gSetSub(GS.gid,d.gsub);toast("⭐ Nuevo sublíder nombrado.");return}
     if(d.gunsub){await window.FB.gSetSub(GS.gid,"");toast("Has quitado el cargo de sublíder.");return}
-    if(d.gfr){frSend(d.gfr);return}
+    if(d.gfr){frSend(d.gfr,b);return}
   }catch(x){gMsg(x&&x.code==="exists"?"❌ Ya existe un gremio con ese nombre. Elige otro.":"No se pudo completar ("+((x&&x.code)||"error")+").");gUI(true)}
 });
 // ================= apoyar el juego =================
@@ -188,3 +196,6 @@ function supUI(){
   const box=$("supBox");if(!box)return;const L=SUPPORT.filter(s=>/^https:\/\//.test(s.u));
   box.innerHTML=L.length?L.map(s=>'<a class="supb" href="'+esc(s.u)+'" target="_blank" rel="noopener noreferrer">'+s.i+' Donar con '+esc(s.n)+'</a>').join(""):'<small class="mut">Los enlaces de donación se activarán muy pronto. ¡Gracias por tu interés!</small>';
 }
+
+// ¿hay una solicitud de amistad mía pendiente hacia este jugador?
+const frPend=u=>(FR.out||[]).some(r=>r.to===u&&r.k==="req");

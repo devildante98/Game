@@ -18,7 +18,10 @@ function mgrSubmit(gid,score){
   return '<p class="tourm">📊 Nueva mejor marca semanal en la clasificación: <b>'+fmt(score)+'</b></p>';
 }
 async function mgrLoad(gid,force){if(!window.FB||!window.FB.tourTop)return null;const w=tourWeek();if(!force&&MGR.top[gid]&&MGR.top[gid].w===w&&Date.now()-(MGR.at[gid]||0)<60e3)return MGR.top[gid].l;
-  try{const l=await window.FB.tourTop(MGR_KEY(w,gid),10);MGR.top[gid]={w:w,l:l};MGR.at[gid]=Date.now()}catch(e){MGR.top[gid]=MGR.top[gid]||{w:w,l:[]}}return MGR.top[gid].l}
+  try{const l=await window.FB.tourTop(MGR_KEY(w,gid),10);MGR.top[gid]={w:w,l:l};MGR.at[gid]=Date.now();
+    // si en la nube tienes una marca mejor que la de este dispositivo, se usa esa
+    const me=window.FB.uid&&window.FB.uid(),x=me&&l.find(y=>y.id===me);if(x&&(x.sc|0)>0){S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};if((x.sc|0)>(S.mgw.b[gid]|0)){S.mgw.b[gid]=x.sc|0;save()}}
+  }catch(e){MGR.top[gid]=MGR.top[gid]||{w:w,l:[]}}return MGR.top[gid].l}
 // premios de la semana pasada
 async function mgrClaim(){
   const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!window.FB.uid||!window.FB.uid())return;if(!S.mgw||S.mgw.w!==pw||S.mgrDone===pw)return;

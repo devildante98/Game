@@ -43,7 +43,8 @@ rep('trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),','''trDel:id=>S.deleteDoc(S.d
     duDel:id=>S.deleteDoc(S.doc(db,"sdu",id)),
     duWatch:(id,cb)=>S.onSnapshot(S.doc(db,"sdu",id),sn=>cb(sn.exists()?Object.assign({id:sn.id},sn.data()):null),()=>{}),
     duInbox(cb){return S.onSnapshot(S.query(S.collection(db,"sdu"),S.where("b","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
-    tourSet:(w,d)=>S.setDoc(S.doc(db,"tours",w,"s",uid),d),
+    // solo sube la marca si es mejor que la guardada (si no, una partida de otro dispositivo podía bajarla)
+    tourSet:(w,d)=>{const r=S.doc(db,"tours",w,"s",uid);return S.runTransaction(db,async tx=>{const o=await tx.get(r);if(o.exists()&&(+o.data().sc||0)>=(+d.sc||0))return;tx.set(r,d)})},
     async tourTop(w,n){const sn=await S.getDocs(S.query(S.collection(db,"tours",w,"s"),S.orderBy("sc","desc"),S.limit(n)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     chDel(tp,id,m){return S.deleteDoc(tp==="global"?S.doc(db,"chats","global","msgs",m):tp==="g"?S.doc(db,"gchats",id,"msgs",m):S.doc(db,"dms",id,"msgs",m))},''')
 rep('const k=GD.EI[id]?id:ITEM_IMG[id];','const k=GD.EI[id]?id:ITEM_IMG[id]||HIMG[id];')

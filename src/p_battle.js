@@ -300,9 +300,20 @@ function trainerLook(name){const h=tHash(name);return{skin:TSK[h%4],hair:THC[(h>
 function trainerSVG(L){return '<svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="50" cy="143" rx="30" ry="6" fill="#000" opacity=".25"/><rect x="34" y="94" width="14" height="42" rx="5" fill="'+L.pants+'"/><rect x="52" y="94" width="14" height="42" rx="5" fill="'+L.pants+'"/><rect x="30" y="52" width="40" height="46" rx="12" fill="'+L.top+'"/><circle cx="50" cy="34" r="17" fill="'+L.skin+'"/><path d="M32 33Q33 13 50 13Q67 13 68 33Q60 24 50 25Q40 24 32 33Z" fill="'+L.hair+'"/><circle cx="43" cy="36" r="2.4" fill="#2b2118"/><circle cx="57" cy="36" r="2.4" fill="#2b2118"/></svg>'}
 const TQ_WIN=["¡No puede ser! ¡He perdido!","Has sido mejor que yo... ¡Enhorabuena!","¡Increíble! ¡Eres muy fuerte!","Tendré que entrenar mucho más...","¡Vaya! No me lo esperaba..."];
 const TQ_CHAMP=["Mi reinado ha terminado... ¡Eres un gran entrenador!","¡Qué combate tan increíble! Has demostrado tu valor.","He dado todo lo que tenía... y aun así has ganado."];
-function tPose(p){const t=$("tsp");t.classList.remove("t-throw","t-win","t-lose");if(p&&p!=="i")t.classList.add("t-"+({t:"throw",w:"win",l:"lose"}[p]||p));if(B&&B.tsrc&&B.tsrc.c)t.innerHTML=tHTML(B.tsrc,p)}
+function tPose(p){const t=$("tsp");t.classList.remove("t-throw","t-win","t-lose");if(p&&p!=="i")t.classList.add("t-"+({t:"throw",w:"win",l:"lose"}[p]||p));if(B&&B.tsrc&&B.tsrc.c){t.innerHTML=tHTML(B.tsrc,p);tPlace()}}
+// coloca al entrenador rival centrado sobre su base, con los pies en el centro de la plataforma
+function tPlace(){const t=$("tsp"),pl=document.querySelector(".plat.opp");if(!t||!pl||!t.offsetParent)return;
+  const h=t.offsetHeight,w=t.offsetWidth;if(!h||!w)return;t.style.right="auto";t.style.left=Math.round(pl.offsetLeft+pl.offsetWidth/2-w/2)+"px";t.style.top=Math.round(pl.offsetTop+pl.offsetHeight*.55-h)+"px"}
+addEventListener("resize",()=>{try{tPlace()}catch(e){}});
+try{new ResizeObserver(()=>{try{tPlace()}catch(e){}}).observe($("tsp"))}catch(e){}
+// el Pokémon rival se retira (si sigue en la base) antes de que aparezca el entrenador: nunca se ven a la vez
+async function oppHide(){for(const id of ["osp","osp2"]){const e=$(id);if(!e||e.hidden||+getComputedStyle(e).opacity<.05)continue;
+  if(O.intro)await e.animate([{opacity:1,transform:"none"},{opacity:0,transform:"scale(.4) translateY(30px)"}],{duration:380,easing:"ease-in"}).finished;e.style.opacity=0}}
 async function trainerEnter(pose){
-  const t=$("tsp");t.innerHTML=tHTML(B.tsrc,pose);t.style.opacity=1;tPose(pose);
+  await oppHide();
+  const t=$("tsp");t.style.opacity=0;t.innerHTML=tHTML(B.tsrc,pose);
+  {const im=t.querySelector("img");if(im&&!im.complete)await Promise.race([new Promise(r=>{im.addEventListener("load",r);im.addEventListener("error",()=>setTimeout(r,0))}),new Promise(r=>setTimeout(r,500))])}
+  tPose(pose);tPlace();t.style.opacity=1;
   if(O.intro)await t.animate([{translate:"280px 0",opacity:0},{translate:"0 0",opacity:1}],{duration:700,easing:"ease-out"}).finished;
 }
 async function trainerLeave(){const t=$("tsp");if(O.intro)await t.animate([{translate:"0 0",opacity:1},{translate:"300px 0",opacity:0}],{duration:600,easing:"ease-in"}).finished;t.style.opacity=0}
@@ -327,7 +338,7 @@ async function trainerSendOut(first,sid,iid,name,bid){
   const sp=say((B.trainerName||B.trainer)+" envía a "+m+"!");
   if(first)tPose("t");
   snd("throw");await ballArc(first,sid,bid||BALLR[PM[m]?PM[m][2]:"C"]);
-  if(first)trainerLeave();
+  if(first)await trainerLeave();
   await popIn(sid,iid,false);
   await sp;
 }

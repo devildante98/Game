@@ -440,3 +440,21 @@ function megaClean(){if(fcd)return;const out=[],slots=[];const f=(t,main)=>(t||[
   if(out.length||gift.length){save();try{updTeam();render()}catch(e){}}
   if(gift.length)setTimeout(()=>toast("🎁 Compensación: has recibido "+gift.join(", ")+" para poder megaevolucionar o gigamaxizar en combate."),4500)}
 setTimeout(megaClean,1500);setInterval(megaClean,4000);
+
+// ================= megas y Gigamax en la colección: son «llaves» para transformarse en combate =================
+// 1) ficha: sin nivel, movimientos, habilidad, objeto ni estadísticas (no se usan); explica a qué Pokémon desbloquea
+{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);if(isMegaF(n)&&S.owned[n]>0)Promise.resolve().then(()=>{try{megaFicha(n)}catch(e){console.error(e)}})}}
+function megaFicha(n){const m=$("pkv");if(!m||m.hidden)return;const b=megaBase(n),gm=/ Gigamax$/.test(n),lb=S.owned[b]>0?lvd(b).l:0;
+  const inf=m.querySelector(".pkvinfo");if(inf)[...inf.children].forEach(x=>{if(/Nivel/.test(x.textContent))x.remove()});
+  const w=m.querySelector(".fich");if(!w)return;
+  [...w.querySelectorAll(".fichr")].forEach(r=>{const l=(r.querySelector("span")||{}).textContent||"";if(!/Mote|Favorito/.test(l))r.remove()});
+  const k=document.createElement("div");k.className="fichr fkey";
+  k.innerHTML='<span>🔑 Llave</span><div><b>Desbloquea '+(gm?'la forma Gigamax':'la megaevolución')+' de '+esc(b)+'</b><small class="mut">Pon a '+esc(b)+' en tu equipo y pulsa «'+(gm?'🔴 Gigamax':'🧬 Megaevolucionar')+'» en combate. Usará el nivel y los movimientos de tu '+esc(b)+(lb?' (Nv'+lb+')':' (todavía no lo tienes)')+'.<br>Solo necesitas una: las copias repetidas del gacha se convierten en Caramelos Raros o tickets.</small></div>';
+  w.prepend(k)}
+// 2) los Caramelos Raros y las MT no se ofrecen para estas formas (ver p_bag: candList y mtList)
+// 3) copias repetidas del gacha: al azar, Caramelos Raros o tickets
+let MDUP={c:0,t:0};
+function megaDup(n){if(!isMegaF(n))return null;S.owned[n]=Math.max(1,(S.owned[n]|0)-1);
+  if(Math.random()<.5){const q=1+(Math.random()<.35?1:0);S.bag.cand=(S.bag.cand||0)+q;MDUP.c+=q;return -q}
+  const t=Math.round(Math.max(5000,cost(1,false)*5));MDUP.t+=t;return t}
+{const _pu=pull;pull=function(){MDUP={c:0,t:0};const r=_pu.apply(this,arguments);if(MDUP.c||MDUP.t){const c=MDUP.c,t=MDUP.t;setTimeout(()=>toast("🔑 Megas/Gigamax repetidas convertidas en: "+[c?c+" Caramelo"+(c>1?"s":"")+" Raro"+(c>1?"s":""):"",t?fmt(t)+" 🎟️":""].filter(Boolean).join(" y ")+"."),1800)}return r}}

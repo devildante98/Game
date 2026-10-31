@@ -13,7 +13,7 @@ function bagUI(){
   $("bgrid").innerHTML=have.length?have.map(it=>'<div class="btile'+(useId===it[0]?' sel':'')+'"><span class="iico big">'+itemIco(it[0],52)+'</span><div class="bti"><b>'+it[1]+' <span class="bcnt">×'+S.bag[it[0]]+'</span></b><small class="mut">'+it[6]+'</small>'+(it[3]===0&&it[7]!=="crys"?'<button data-use="'+it[0]+'">'+(it[7]==="hold"?"Equipar":"Usar")+'</button>':'<small class="mut">Se usa en combate</small>')+'</div></div>').join(""):'<small class="mut">Tu mochila está vacía. Consigue objetos ganando combates o cómpralos en la tienda.</small>';
 }
 function candList(){
-  const q=nrm($("bcQ").value.trim()),cap=lvCap(),own=P.filter(p=>S.owned[p[0]]&&lvd(p[0]).l<cap&&nrm(p[0]).includes(q)).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
+  const q=nrm($("bcQ").value.trim()),cap=lvCap(),own=P.filter(p=>S.owned[p[0]]&&!(typeof isMegaF==="function"&&isMegaF(p[0]))&&lvd(p[0]).l<cap&&nrm(p[0]).includes(q)).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
   $("bcS").innerHTML=own.slice(0,300).map(p=>'<option value="'+esc(p[0])+'">'+esc(p[0])+' · Nv'+lvd(p[0]).l+(S.team.includes(p[0])?' ⭐':'')+'</option>').join("");
   if(own.length)$("bcS").selectedIndex=0;
 }
@@ -102,7 +102,7 @@ $("buse").addEventListener("click",e=>{
 
 // ---- enseñar una MT desde la Mochila ----
 function mtList(){const L=$("bmL");if(!L||!useId||!/^mt/.test(useId))return;const mid=useId.slice(2),q=nrm(($("bmQ").value||"").trim());
-  const own=P.filter(p=>S.owned[p[0]]>0&&mtOk(p[0],mid)&&(nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
+  const own=P.filter(p=>S.owned[p[0]]>0&&!(typeof isMegaF==="function"&&isMegaF(p[0]))&&mtOk(p[0],mid)&&(nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l));
   L.innerHTML=own.length?own.slice(0,60).map(p=>{const n=p[0],ids=moveIds(n),knows=ids.includes(mid);
     return '<div class="mtpk'+(knows?' knows':'')+'"><div class="mtpkh">'+ico(p,44)+'<div><b>'+esc(nk(n))+(S.team.includes(n)?' ⭐':'')+'</b><small class="mut">Nv'+lvd(n).l+' · '+tyTxt(p)+'</small></div></div>'+
       (knows?'<small class="mut">✅ Ya conoce este movimiento.</small>':'<div class="mtmv">'+(ids.length<4?'<button class="red mini" data-mtl="'+esc(n)+'" data-mtk="-1">➕ Aprenderlo (hueco libre)</button>':'<small class="mut">Elige qué movimiento olvida:</small>')+

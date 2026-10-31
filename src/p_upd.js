@@ -308,7 +308,7 @@ function saveCheck(d){
 function nkPopNeeded(){return !S.nickPick&&/^Entrenador\d+$/.test(pvNick())}
 function nkPop(){
   if(!nkPopNeeded()||$("nkM"))return;
-  const w=$("welc");if(w&&!w.hidden){setTimeout(nkPop,1500);return}
+  if(popBusy()){setTimeout(nkPop,1500);return}
   const m=document.createElement("div");m.id="nkM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");m.setAttribute("aria-label","Elige tu apodo");
   m.innerHTML='<div class="jbox"><h2>✏️ Elige tu apodo</h2><p>Es el nombre con el que te verán los demás jugadores en el chat, los rankings, los combates y tu tarjeta de entrenador. Es único: nadie más podrá usarlo.</p>'+
     '<input id="nkIn" maxlength="16" autocomplete="off" spellcheck="false" placeholder="Tu apodo" aria-label="Tu apodo"><small id="nkMsg" class="mut">Puedes cambiarlo cuando quieras en Online → PVP.</small>'+
@@ -340,3 +340,21 @@ function bagFilter(){const g=$("bgrid"),i=$("bagQ");if(!g||!i)return;const q=nrm
   M.addEventListener("click",e=>{if(e.target===M){const c=$("buClose");if(c)c.click()}});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!M.hidden){const c=$("buClose");if(c){e.stopPropagation();c.click()}}},true);
   sync()}}
+
+// ================= ventanas al entrar: de una en una =================
+// orden para jugadores nuevos: bienvenida → apodo → tutorial → pase diario; los avisos de logros esperan a que no haya ventanas
+function popBusy(){return ["welc","newsM","strkM","privM","lrnM","nkM"].some(id=>{const e=$(id);return e&&!e.hidden})||(typeof TS!=="undefined"&&TS.i>=0)}
+const tutPending=()=>typeof TS!=="undefined"&&(TS.i>=0||(!S.tutDone&&!((S.pulls|0)>0)));
+function popFree(){return !popBusy()&&!tutPending()&&!(typeof nkPopNeeded==="function"&&nkPopNeeded())}
+const _popQ=[];let _popT=0;
+function popToast(t){_popQ.push(t);popFlush()}
+function popFlush(){if(!_popQ.length||Date.now()<_popT)return;if(popBusy())return;_popT=Date.now()+4300;toast(_popQ.shift())}
+setInterval(popFlush,1000);
+// ================= textos de introducción largos: una línea y «Más información» =================
+function introCollapse(){document.querySelectorAll("section.panel > p.rates, section.panel > p.nxi").forEach(p=>{
+  if(p.dataset.ic)return;p.dataset.ic=1;const pr=p.previousElementSibling;if(!pr||pr.tagName!=="H2"||p.querySelector("[id]")||p.textContent.length<150)return;
+  const h=p.innerHTML,m=h.match(/^([\s\S]*?[.!?])\s+(?=[A-ZÁÉÍÓÚ¿¡<])/);if(!m||m[1].replace(/<[^>]*>/g,"").length>140)return;
+  const rest=h.slice(m[0].length);if(rest.replace(/<[^>]*>/g,"").trim().length<30)return;
+  p.innerHTML=m[1]+' <button type="button" class="infob" aria-expanded="false">ℹ️ Más información</button><span class="infor" hidden> '+rest+'</span>'})}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".infob");if(!b)return;const r=b.nextElementSibling;if(!r)return;const o=r.hidden;r.hidden=!o;b.setAttribute("aria-expanded",String(o));b.textContent=o?"▲ Menos":"ℹ️ Más información"});
+introCollapse();setInterval(introCollapse,2000);

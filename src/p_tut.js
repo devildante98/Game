@@ -34,6 +34,6 @@ function tutEnd(done){clearInterval(TS.iv);TS.i=-1;if(TS.box)TS.box.hidden=true;
 document.addEventListener("click",e=>{if(TS.i>=0&&e.target.closest&&e.target.closest("#train"))window._tutCk=(window._tutCk|0)+1},true);
 document.addEventListener("keydown",e=>{if(TS.i>=0&&(O.tkeys||["u"]).includes(String(e.key).toLowerCase()))window._tutCk=(window._tutCk|0)+1},true);
 // empieza solo para jugadores nuevos, cuando no hay otras ventanas abiertas
-setInterval(()=>{try{if(TS.i>=0||S.tutDone||(S.pulls|0)>0)return;if(!$("welc").hidden||!$("newsM").hidden||!$("strkM").hidden)return;tutStart(false)}catch(e){}},2000);
+setInterval(()=>{try{if(TS.i>=0||S.tutDone||(S.pulls|0)>0)return;if(!$("welc").hidden||!$("newsM").hidden||!$("strkM").hidden)return;if(typeof popBusy==="function"&&popBusy())return;if(typeof nkPopNeeded==="function"&&nkPopNeeded())return;tutStart(false)}catch(e){}},2000);
 // repetir el tutorial desde «Cómo se juega»
 (function(){const w=$("welcOk");if(!w||$("tutRe"))return;const b=document.createElement("button");b.id="tutRe";b.className="alt";b.type="button";b.textContent="🧭 Ver el tutorial guiado";b.onclick=()=>{$("welc").hidden=true;S.tutDone=0;TS.i=-1;tutStart(true)};w.after(b)})();

@@ -423,7 +423,20 @@ function roadUI(){const b=$("roadPB");if(!b)return;b.innerHTML='<div class="road
 const isMegaF=n=>/^Mega-| Gigamax$/.test(String(n||""))&&!(typeof isSup==="function"&&isSup(n));
 const megaBase=n=>String(n).replace(/^Mega-/,"").replace(/ [XY]$/,"").replace(/ Gigamax$/,"");
 const megaVerb=n=>/ Gigamax$/.test(String(n))?"gigamaxízalo":"megaevoluciónalo";
-function megaClean(){if(fcd)return;const out=[];const f=t=>(t||[]).map(n=>{if(n&&isMegaF(n)){out.push(n);return ""}return n});
-  S.team=f(S.team);(S.sets||[]).forEach(st=>{st.team=f(st.team)});
-  if(out.length){save();try{updTeam()}catch(e){}const u=[...new Set(out)];toast("🧬 "+u.join(", ")+(u.length>1?" han salido":" ha salido")+" del equipo: las megaevoluciones y formas Gigamax se activan en combate desde "+[...new Set(u.map(megaBase))].join(", ")+".")}}
+// compensación: quien tenía una mega o Gigamax y no tenía su forma base, la recibe (al nivel de la forma, si es mayor)
+function megaComp(n){const b=megaBase(n);if(!PM[b]||isMegaF(b)||(typeof isSup==="function"&&isSup(b)))return "";const L=Math.max(1,Math.min(100,(S.lv[n]&&S.lv[n].l)||1));let got="";
+  if(!(S.owned[b]>0)){S.owned[b]=1;got=b}
+  S.lv=S.lv||{};if(!S.lv[b]||S.lv[b].l<L){S.lv[b]={l:L,x:0};delete S.mv[b];S.ml=S.ml||{};S.ml[b]=L;if(S.hp)delete S.hp[b]}
+  return got}
+function megaClean(){if(fcd)return;const out=[],slots=[];const f=(t,main)=>(t||[]).map((n,i)=>{if(n&&isMegaF(n)){out.push(n);if(main)slots.push([i,n]);return ""}return n});
+  S.team=f(S.team,1);(S.sets||[]).forEach(st=>{st.team=f(st.team)});
+  // una sola vez: quien ya perdió su mega/Gigamax del equipo antes de esta compensación y no tiene la forma base
+  let gift=[];if(!S.megaComp){S.megaComp=1;Object.keys(S.owned||{}).forEach(n=>{if(S.owned[n]>0&&isMegaF(n)&&!(S.owned[megaBase(n)]>0)){const g=megaComp(n);if(g)gift.push(g)}});if(!gift.length)save()}
+  if(out.length){const u=[...new Set(out)];u.forEach(n=>{const g=megaComp(n);if(g)gift.push(g)});
+    // el Pokémon base ocupa la casilla que dejó su forma (si no está ya en el equipo)
+    slots.forEach(([i,n])=>{const b=megaBase(n);if(PM[b]&&S.owned[b]>0&&!S.team.includes(b)&&!S.team[i])S.team[i]=b});
+    toast("🧬 "+u.join(", ")+(u.length>1?" han salido":" ha salido")+" del equipo: las megaevoluciones y formas Gigamax se activan en combate desde "+[...new Set(u.map(megaBase))].join(", ")+".")}
+  gift=[...new Set(gift)];
+  if(out.length||gift.length){save();try{updTeam();render()}catch(e){}}
+  if(gift.length)setTimeout(()=>toast("🎁 Compensación: has recibido "+gift.join(", ")+" para poder megaevolucionar o gigamaxizar en combate."),4500)}
 setTimeout(megaClean,1500);setInterval(megaClean,4000);

@@ -266,7 +266,7 @@ const swGrid=h=>'<div class="swgrid">'+h+'</div>';
 function setMenu(v){
   if(!B||B.mode!=="s")return;
   let h="";const sd=B.E.sd[0],m=beAct(sd),foe=beAct(B.E.sd[1]);
-  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">🏃 Huir</button>';
+  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
   else if(v==="bag")h=ITEMS.filter(it=>S.bag[it[0]]>0&&!it[7]&&!["cand","ppup","ppmax"].includes(it[0])).map(it=>'<button data-k="i:'+it[0]+'">'+it[1]+' ×'+S.bag[it[0]]+'</button>').join("")+'<button data-k="main">Atrás</button>';
   else if(v==="team")h=swGrid(sd.t.map((t,i)=>swCard(t,'data-k="s:'+i+'"',i===sd.ai||t.mh<=0,i===sd.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-k="main">Atrás</button>';
   else if(v==="tgt"){
@@ -431,7 +431,7 @@ async function finish(res){
   const E=B.E,om=beAct(E.sd[1]),o=om.p;syncPP();saveHp();
   E.sd[0].t.forEach(t=>{t.sts=""});
   if(res==="flee")await say("¡"+o[0]+" salvaje huyó!");
-  else if(res==="lose"){if(B.trainer){await trainerEnter("w");await say("¡"+B.trainer+" ha ganado el combate!")}snd("lose");await say("¡Todo tu equipo se debilitó! Has perdido...");if(B.league){S.lg=null;await say("Has sido eliminado de la "+LEAGUES[B.league.li].n+". Puedes volver a intentarlo cuando quieras.")}}
+  else if(res==="lose"){if(B.trainer){await trainerEnter("w");await say("¡"+B.trainer+" ha ganado el combate!")}snd("lose");await say(B.ff?"Has perdido el combate.":"¡Todo tu equipo se debilitó! Has perdido...");if(B.league){S.lg=null;await say("Has sido eliminado de la "+LEAGUES[B.league.li].n+". Puedes volver a intentarlo cuando quieras.")}}
   else{
     if(res==="win"){qEv("win");if(B.trainer){qEv("tr");await trainerDefeat()}}
     const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL());S.t+=rw;
@@ -540,7 +540,10 @@ async function turn(k){
   }
   if(k==="f"){
     B.busy=true;setMenu(false);
-    if(B.trainer){await say("¡No puedes huir de un combate contra un entrenador!");B.busy=false;setMenu(true);return}
+    // contra entrenadores no se puede huir, pero sí rendirse (cuenta como derrota)
+    if(B.trainer){const why=B.league?" Quedarás eliminado de la "+LEAGUES[B.league.li].n+".":B.tower?" Se acabará tu racha en la Torre Batalla.":"";
+      if(!confirm("¿Seguro que quieres rendirte? El combate contará como derrota."+why)){B.busy=false;setMenu(true);return}
+      B.ff=true;snd("flee");await say("¡Te has rendido!");return finish("lose")}
     syncPP();saveHp();snd("flee");await say("¡Has huido sin problemas!");B.busy=false;$("menu").innerHTML='<button data-k="9">Volver</button>';return;
   }
   const m=beAct(B.E.sd[0]);

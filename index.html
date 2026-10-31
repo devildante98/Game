@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793410827">
+<meta name="game-build" content="1793411061">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -3075,7 +3075,7 @@ const swGrid=h=>'<div class="swgrid">'+h+'</div>';
 function setMenu(v){
   if(!B||B.mode!=="s")return;
   let h="";const sd=B.E.sd[0],m=beAct(sd),foe=beAct(B.E.sd[1]);
-  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">🏃 Huir</button>';
+  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
   else if(v==="bag")h=ITEMS.filter(it=>S.bag[it[0]]>0&&!it[7]&&!["cand","ppup","ppmax"].includes(it[0])).map(it=>'<button data-k="i:'+it[0]+'">'+it[1]+' ×'+S.bag[it[0]]+'</button>').join("")+'<button data-k="main">Atrás</button>';
   else if(v==="team")h=swGrid(sd.t.map((t,i)=>swCard(t,'data-k="s:'+i+'"',i===sd.ai||t.mh<=0,i===sd.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-k="main">Atrás</button>';
   else if(v==="tgt"){
@@ -3240,7 +3240,7 @@ async function finish(res){
   const E=B.E,om=beAct(E.sd[1]),o=om.p;syncPP();saveHp();
   E.sd[0].t.forEach(t=>{t.sts=""});
   if(res==="flee")await say("¡"+o[0]+" salvaje huyó!");
-  else if(res==="lose"){if(B.trainer){await trainerEnter("w");await say("¡"+B.trainer+" ha ganado el combate!")}snd("lose");await say("¡Todo tu equipo se debilitó! Has perdido...");if(B.league){S.lg=null;await say("Has sido eliminado de la "+LEAGUES[B.league.li].n+". Puedes volver a intentarlo cuando quieras.")}}
+  else if(res==="lose"){if(B.trainer){await trainerEnter("w");await say("¡"+B.trainer+" ha ganado el combate!")}snd("lose");await say(B.ff?"Has perdido el combate.":"¡Todo tu equipo se debilitó! Has perdido...");if(B.league){S.lg=null;await say("Has sido eliminado de la "+LEAGUES[B.league.li].n+". Puedes volver a intentarlo cuando quieras.")}}
   else{
     if(res==="win"){qEv("win");if(B.trainer){qEv("tr");await trainerDefeat()}}
     const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL());S.t+=rw;
@@ -3349,7 +3349,10 @@ async function turn(k){
   }
   if(k==="f"){
     B.busy=true;setMenu(false);
-    if(B.trainer){await say("¡No puedes huir de un combate contra un entrenador!");B.busy=false;setMenu(true);return}
+    // contra entrenadores no se puede huir, pero sí rendirse (cuenta como derrota)
+    if(B.trainer){const why=B.league?" Quedarás eliminado de la "+LEAGUES[B.league.li].n+".":B.tower?" Se acabará tu racha en la Torre Batalla.":"";
+      if(!confirm("¿Seguro que quieres rendirte? El combate contará como derrota."+why)){B.busy=false;setMenu(true);return}
+      B.ff=true;snd("flee");await say("¡Te has rendido!");return finish("lose")}
     syncPP();saveHp();snd("flee");await say("¡Has huido sin problemas!");B.busy=false;$("menu").innerHTML='<button data-k="9">Volver</button>';return;
   }
   const m=beAct(B.E.sd[0]);
@@ -5654,7 +5657,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793410827";
+const GAME_B="1793411061";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

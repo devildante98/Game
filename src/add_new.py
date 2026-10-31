@@ -6,7 +6,7 @@ rep('trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),','''trDel:id=>S.deleteDoc(S.d
     gfWatch(cb){S.onSnapshot(S.query(S.collection(db,"gifts"),S.where("to","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
     gfSend:(to,fn,d)=>S.setDoc(S.doc(db,"gifts",uid+"_"+to+"_"+d),{from:uid,to:to,fn:String(fn||"").slice(0,30),d:String(d),at:Date.now()}),
     gfDel:id=>S.deleteDoc(S.doc(db,"gifts",id)),
-    chWatch(tp,id,cb){const c=tp==="global"?S.collection(db,"chats","global","msgs"):tp==="g"?S.collection(db,"gchats",id,"msgs"):S.collection(db,"dms",id,"msgs");return S.onSnapshot(S.query(c,S.orderBy("at","desc"),S.limit(tp==="global"?60:50)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
+    chWatch(tp,id,cb,lim){const c=tp==="global"?S.collection(db,"chats","global","msgs"):tp==="g"?S.collection(db,"gchats",id,"msgs"):S.collection(db,"dms",id,"msgs");return S.onSnapshot(S.query(c,S.orderBy("at","desc"),S.limit(lim||(tp==="global"?40:tp==="g"?30:15))),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
     chSend(tp,id,d){const c=tp==="global"?S.collection(db,"chats","global","msgs"):tp==="g"?S.collection(db,"gchats",id,"msgs"):S.collection(db,"dms",id,"msgs");return S.addDoc(c,d)},
     del:()=>S.deleteField(),
     async modIsAdmin(){try{const s=await S.getDoc(S.doc(db,"admins",uid));if(s.exists())return true}catch(e){}

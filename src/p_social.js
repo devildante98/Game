@@ -5,7 +5,7 @@ const isFriend=u=>!!(FR.l&&FR.l[u]);
 // apodo actual de un amigo: el de su presencia en línea, el de su perfil público o, si no, el guardado al hacerse amigos
 const FRN={};let _frnAt=0;
 function frName(u){const o=pvOthers().find(p=>p.peer===u);if(o&&o.presence&&o.presence.pvp&&o.presence.pvp.n){FRN[u]=pvClean(o.presence.pvp.n);return FRN[u]}return FRN[u]||pvClean((FR.l[u]&&FR.l[u].n)||"")||"Amigo"}
-async function frNamesRefresh(force){if(!window.FB||!window.FB.rankGet||(!force&&Date.now()-_frnAt<10*60000))return;_frnAt=Date.now();let ch=false;
+async function frNamesRefresh(force){if(!window.FB||!window.FB.rankGet||(!force&&(document.hidden||Date.now()-_frnAt<30*60000)))return;_frnAt=Date.now();let ch=false;
   for(const u of Object.keys(FR.l||{})){try{const d=await window.FB.rankGet(u);if(d&&d.n){const n=pvClean(d.n);if(n&&FRN[u]!==n){FRN[u]=n;ch=true}
     if(n&&FR.l[u]&&FR.l[u].n!==n&&window.FB.frRename)window.FB.frRename(u,n).catch(()=>{})}}catch(e){}}
   if(ch){_frk="";try{frUI()}catch(e){}try{if(typeof chRender==="function")chRender()}catch(e){}}}

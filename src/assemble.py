@@ -456,10 +456,16 @@ rep('''  async function flush(){
   document.addEventListener("visibilitychange",()=>{if(document.hidden)flush(20000)});
   g("asave").onclick=async()=>{const b=g("asave");if(b.disabled)return;b.disabled=true;try{if(typeof save==="function")save()}catch(e){}if(pending===null||pending===lastSaved){g("sync").textContent="☁️ Ya estaba guardado";setTimeout(syncTxt,1500)}else await flush(true);setTimeout(()=>{b.disabled=false},5000)};''')
 rep('''      this.hb=setInterval(()=>{if(!this.closed&&Object.keys(this.mine).length)this._w(true).catch(()=>{})},20000);''',
-    '''      const lob=path[0]==="lobby";
-      // latido: en el vestibulo cada 2 min (y solo con la pestaña visible); en los duelos cada 20 s
-      this.hb=setInterval(()=>{if(!this.closed&&Object.keys(this.mine).length&&!(lob&&document.hidden))this._w(true).catch(()=>{})},lob?120000:20000);''')
-rep('if(this.path[0]==="lobby"&&now-e.seen>60000)continue;', 'if(this.path[0]==="lobby"&&now-e.seen>300000)continue;')
+    '''      const lob=path[0]==="lobby";this.unsub=this._sub();
+      // latido: en el vestibulo cada 4 min (y solo con la pestaña visible); en los duelos cada 20 s
+      this.hb=setInterval(()=>{if(!this.closed&&Object.keys(this.mine).length&&!(lob&&document.hidden))this._w(true).catch(()=>{})},lob?240000:20000);
+      // vestibulo con la pestaña oculta más de 1 min: deja de escuchar (cada latido ajeno es una lectura) y vuelve al mostrarla
+      if(lob)document.addEventListener("visibilitychange",()=>{if(this.closed)return;clearTimeout(this._ht);
+        if(document.hidden)this._ht=setTimeout(()=>{if(document.hidden&&this.unsub){try{this.unsub()}catch(e){}this.unsub=null}},60000);
+        else{if(!this.unsub)this.unsub=this._sub();if(Object.keys(this.mine).length&&Date.now()-this.lastW>60000)this._w(true).catch(()=>{})}});''')
+rep('if(this.path[0]==="lobby"&&now-e.seen>60000)continue;', 'if(this.path[0]==="lobby"&&now-e.seen>600000)continue;')
+# vestibulo: al suscribirse solo se leen los jugadores vistos en los últimos 10 min (no todos los que han pasado alguna vez)
+rep('      this.unsub=S.onSnapshot(S.collection(db,...path),snap=>{', '      this._sub=()=>S.onSnapshot(path[0]==="lobby"?S.query(S.collection(db,...path),S.where("seen",">",Date.now()-600000)):S.collection(db,...path),snap=>{')
 rep('if(!force&&j===this.lastJ&&Date.now()-this.lastW<20000)return;', 'if(!force&&j===this.lastJ)return;')
 FB_API = '''
   // ---- amigos y gremios (Firestore: friends, freq, guilds) ----

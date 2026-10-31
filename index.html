@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793407176">
+<meta name="game-build" content="1793407660">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -4818,7 +4818,7 @@ const isFriend=u=>!!(FR.l&&FR.l[u]);
 // apodo actual de un amigo: el de su presencia en línea, el de su perfil público o, si no, el guardado al hacerse amigos
 const FRN={};let _frnAt=0;
 function frName(u){const o=pvOthers().find(p=>p.peer===u);if(o&&o.presence&&o.presence.pvp&&o.presence.pvp.n){FRN[u]=pvClean(o.presence.pvp.n);return FRN[u]}return FRN[u]||pvClean((FR.l[u]&&FR.l[u].n)||"")||"Amigo"}
-async function frNamesRefresh(force){if(!window.FB||!window.FB.rankGet||(!force&&Date.now()-_frnAt<10*60000))return;_frnAt=Date.now();let ch=false;
+async function frNamesRefresh(force){if(!window.FB||!window.FB.rankGet||(!force&&(document.hidden||Date.now()-_frnAt<30*60000)))return;_frnAt=Date.now();let ch=false;
   for(const u of Object.keys(FR.l||{})){try{const d=await window.FB.rankGet(u);if(d&&d.n){const n=pvClean(d.n);if(n&&FRN[u]!==n){FRN[u]=n;ch=true}
     if(n&&FR.l[u]&&FR.l[u].n!==n&&window.FB.frRename)window.FB.frRename(u,n).catch(()=>{})}}catch(e){}}
   if(ch){_frk="";try{frUI()}catch(e){}try{if(typeof chRender==="function")chRender()}catch(e){}}}
@@ -5626,7 +5626,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793407176";
+const GAME_B="1793407660";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -6701,13 +6701,16 @@ const chKey=()=>CH.tab==="global"?"global":CH.tab==="guild"?(GS.gid?"g:"+GS.gid:
 function chSub(k){
   if(!k||CH.unsub[k]||!window.FB||!window.FB.chWatch)return;
   const [t,id]=k==="global"?["global","global"]:k.split(":");
-  try{CH.unsub[k]=window.FB.chWatch(t,id,l=>{CH.msgs[k]=l.sort((a,b)=>(a.at||0)-(b.at||0));chOnMsgs(k)})}catch(e){CH.unsub[k]=null}
+  // los chats privados se escuchan con pocos mensajes (para avisar de los nuevos) y al abrirlos se cargan enteros
+  const full=CH.full&&CH.full[k];CH.lim=CH.lim||{};CH.lim[k]=full?1:0;
+  try{CH.unsub[k]=window.FB.chWatch(t,id,l=>{CH.msgs[k]=l.sort((a,b)=>(a.at||0)-(b.at||0));chOnMsgs(k)},full?50:0)}catch(e){CH.unsub[k]=null}
 }
 function chUnsub(k){if(CH.unsub[k]){try{CH.unsub[k]()}catch(e){}delete CH.unsub[k];delete CH.msgs[k]}}
 let _chSync="";
 function chSync(){
   if(!window.FB||!window.FB.chWatch||!chMe())return;
   const want=["global"];if(GS.gid)want.push("g:"+GS.gid);Object.keys(FR.l||{}).slice(0,40).forEach(u=>want.push("d:"+dmKey(u)));
+  const act=CH.open?chKey():"";if(act&&act.startsWith("d:")){CH.full=CH.full||{};if(!CH.full[act]){CH.full[act]=1;if(CH.unsub[act]&&!(CH.lim&&CH.lim[act])){try{CH.unsub[act]()}catch(e){}delete CH.unsub[act];_chSync=""}}}
   const key=want.join("|");if(key===_chSync)return;_chSync=key;
   Object.keys(CH.unsub).forEach(k=>{if(!want.includes(k))chUnsub(k)});want.forEach(chSub);
 }
@@ -8776,7 +8779,7 @@ async function main(){
     gfWatch(cb){S.onSnapshot(S.query(S.collection(db,"gifts"),S.where("to","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
     gfSend:(to,fn,d)=>S.setDoc(S.doc(db,"gifts",uid+"_"+to+"_"+d),{from:uid,to:to,fn:String(fn||"").slice(0,30),d:String(d),at:Date.now()}),
     gfDel:id=>S.deleteDoc(S.doc(db,"gifts",id)),
-    chWatch(tp,id,cb){const c=tp==="global"?S.collection(db,"chats","global","msgs"):tp==="g"?S.collection(db,"gchats",id,"msgs"):S.collection(db,"dms",id,"msgs");return S.onSnapshot(S.query(c,S.orderBy("at","desc"),S.limit(tp==="global"?60:50)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
+    chWatch(tp,id,cb,lim){const c=tp==="global"?S.collection(db,"chats","global","msgs"):tp==="g"?S.collection(db,"gchats",id,"msgs"):S.collection(db,"dms",id,"msgs");return S.onSnapshot(S.query(c,S.orderBy("at","desc"),S.limit(lim||(tp==="global"?40:tp==="g"?30:15))),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
     chSend(tp,id,d){const c=tp==="global"?S.collection(db,"chats","global","msgs"):tp==="g"?S.collection(db,"gchats",id,"msgs"):S.collection(db,"dms",id,"msgs");return S.addDoc(c,d)},
     del:()=>S.deleteField(),
     async modIsAdmin(){try{const s=await S.getDoc(S.doc(db,"admins",uid));if(s.exists())return true}catch(e){}
@@ -8832,20 +8835,24 @@ async function main(){
   class FsRoom{
     constructor(db,uid,path){
       this.db=db;this.uid=uid;this.path=path;this.map={};this.hs=[];this.mine={};this.lastJ="";this.lastW=0;this.closed=false;
-      this.unsub=S.onSnapshot(S.collection(db,...path),snap=>{
+      this._sub=()=>S.onSnapshot(path[0]==="lobby"?S.query(S.collection(db,...path),S.where("seen",">",Date.now()-600000)):S.collection(db,...path),snap=>{
         const m={};snap.forEach(d=>{const v=d.data();if(v&&typeof v==="object")m[d.id]={presence:(v.p&&typeof v.p==="object")?v.p:{},seen:+v.seen||0}});
         this.map=m;this._n();
       },e=>{if(e&&e.code==="permission-denied"){window.__pvErr=1;window.pvRender&&window.pvRender()}});
-      const lob=path[0]==="lobby";
-      // latido: en el vestibulo cada 2 min (y solo con la pestaña visible); en los duelos cada 20 s
-      this.hb=setInterval(()=>{if(!this.closed&&Object.keys(this.mine).length&&!(lob&&document.hidden))this._w(true).catch(()=>{})},lob?120000:20000);
+      const lob=path[0]==="lobby";this.unsub=this._sub();
+      // latido: en el vestibulo cada 4 min (y solo con la pestaña visible); en los duelos cada 20 s
+      this.hb=setInterval(()=>{if(!this.closed&&Object.keys(this.mine).length&&!(lob&&document.hidden))this._w(true).catch(()=>{})},lob?240000:20000);
+      // vestibulo con la pestaña oculta más de 1 min: deja de escuchar (cada latido ajeno es una lectura) y vuelve al mostrarla
+      if(lob)document.addEventListener("visibilitychange",()=>{if(this.closed)return;clearTimeout(this._ht);
+        if(document.hidden)this._ht=setTimeout(()=>{if(document.hidden&&this.unsub){try{this.unsub()}catch(e){}this.unsub=null}},60000);
+        else{if(!this.unsub)this.unsub=this._sub();if(Object.keys(this.mine).length&&Date.now()-this.lastW>60000)this._w(true).catch(()=>{})}});
     }
     _n(){setTimeout(()=>this.hs.slice().forEach(h=>{try{h({peers:this.peers()})}catch(e){}}),0)}
     peers(){
       const now=Date.now(),a=[{peer:this.uid,by:null,isMe:true,sameTab:true,kind:"viewer",guest:false,presence:this.mine,updatedAt:now}];
       for(const id in this.map){
         if(id===this.uid)continue;const e=this.map[id];
-        if(this.path[0]==="lobby"&&now-e.seen>300000)continue;
+        if(this.path[0]==="lobby"&&now-e.seen>600000)continue;
         a.push({peer:id,by:null,isMe:false,sameTab:false,kind:"viewer",guest:false,presence:e.presence,updatedAt:e.seen});
       }
       return a;

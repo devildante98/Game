@@ -18,13 +18,16 @@ const chKey=()=>CH.tab==="global"?"global":CH.tab==="guild"?(GS.gid?"g:"+GS.gid:
 function chSub(k){
   if(!k||CH.unsub[k]||!window.FB||!window.FB.chWatch)return;
   const [t,id]=k==="global"?["global","global"]:k.split(":");
-  try{CH.unsub[k]=window.FB.chWatch(t,id,l=>{CH.msgs[k]=l.sort((a,b)=>(a.at||0)-(b.at||0));chOnMsgs(k)})}catch(e){CH.unsub[k]=null}
+  // los chats privados se escuchan con pocos mensajes (para avisar de los nuevos) y al abrirlos se cargan enteros
+  const full=CH.full&&CH.full[k];CH.lim=CH.lim||{};CH.lim[k]=full?1:0;
+  try{CH.unsub[k]=window.FB.chWatch(t,id,l=>{CH.msgs[k]=l.sort((a,b)=>(a.at||0)-(b.at||0));chOnMsgs(k)},full?50:0)}catch(e){CH.unsub[k]=null}
 }
 function chUnsub(k){if(CH.unsub[k]){try{CH.unsub[k]()}catch(e){}delete CH.unsub[k];delete CH.msgs[k]}}
 let _chSync="";
 function chSync(){
   if(!window.FB||!window.FB.chWatch||!chMe())return;
   const want=["global"];if(GS.gid)want.push("g:"+GS.gid);Object.keys(FR.l||{}).slice(0,40).forEach(u=>want.push("d:"+dmKey(u)));
+  const act=CH.open?chKey():"";if(act&&act.startsWith("d:")){CH.full=CH.full||{};if(!CH.full[act]){CH.full[act]=1;if(CH.unsub[act]&&!(CH.lim&&CH.lim[act])){try{CH.unsub[act]()}catch(e){}delete CH.unsub[act];_chSync=""}}}
   const key=want.join("|");if(key===_chSync)return;_chSync=key;
   Object.keys(CH.unsub).forEach(k=>{if(!want.includes(k))chUnsub(k)});want.forEach(chSub);
 }

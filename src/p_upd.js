@@ -285,3 +285,29 @@ function fmovNext(n){const l=lvd(n).l,from=S.ml&&S.ml[n]!=null?S.ml[n]:l,ids=mov
   if(pend.length)return '<small class="fmovnx">✨ Tiene '+pend.length+' movimiento(s) nuevo(s) por aprender: se le ofrecerán en su próximo combate.</small>';
   return nx&&MVD[nx[1]]?'<small class="fmovnx">📈 Próximo: <b>'+esc(MVD[nx[1]].n)+'</b> al Nv'+nx[0]+'</small>':''}
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;const h=fmovHTML(n);if(!h)return;const d=document.createElement("div");d.className="fichr fmovr";d.innerHTML=h;w.appendChild(d)}catch(e){console.error(e)}}}
+
+// ================= anti-autoclicker en la Poké Ball =================
+// 1) descarta los clics hechos con código (consola), 2) cuenta como máximo 15 clics por segundo y
+// 3) si detecta un ritmo de máquina (40 clics seguidos con intervalos casi idénticos) para la Poké Ball hasta pasar una comprobación
+const ACK={w:[],h:[],lock:false};
+function acBlock(e){e.preventDefault();e.stopImmediatePropagation()}
+function acCheck(){
+  ACK.lock=true;ACK.h=[];let m=$("acM");
+  if(!m){m=document.createElement("div");m.id="acM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");m.setAttribute("aria-label","Comprobación");document.body.appendChild(m)}
+  m.innerHTML='<div class="jbox"><h2>🤖 ¿Sigues ahí?</h2><p>Hemos detectado clics con un ritmo demasiado perfecto. La Poké Ball está en pausa: pulsa el botón para seguir jugando.</p><div class="acar"><button type="button" class="red" id="acOk">Sigo aquí</button></div></div>';
+  const b=m.querySelector("#acOk");b.style.left=(5+Math.random()*55)+"%";b.style.top=(5+Math.random()*60)+"%";
+  b.addEventListener("click",e=>{if(!e.isTrusted)return;ACK.lock=false;ACK.h=[];ACK.w=[];m.hidden=true;snd("ui");toast("✅ ¡Gracias! Ya puedes seguir.")});
+  m.hidden=false;
+}
+window.addEventListener("click",e=>{
+  const t=e.target;if(!t||!t.closest||!t.closest("#train"))return;
+  const kb=window._kbT||0;
+  if(!e.isTrusted&&!kb){acBlock(e);return}
+  if(ACK.lock){acBlock(e);const m=$("acM");if(m)m.hidden=false;return}
+  const now=performance.now();
+  if(kb!==2){ACK.h.push(now);if(ACK.h.length>41)ACK.h.shift();
+    if(ACK.h.length===41){const d=[];for(let i=1;i<41;i++)d.push(ACK.h[i]-ACK.h[i-1]);const mu=d.reduce((a,b)=>a+b,0)/d.length,sd=Math.sqrt(d.reduce((a,b)=>a+(b-mu)*(b-mu),0)/d.length);
+      if(mu<1500&&sd<Math.max(3,mu*.03)){acBlock(e);acCheck();return}}}
+  ACK.w=ACK.w.filter(x=>now-x<1000);if(ACK.w.length>=15){acBlock(e);return}
+  ACK.w.push(now);
+},true);

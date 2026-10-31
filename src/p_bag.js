@@ -134,7 +134,7 @@ async function lrnNow(n,l0){
 function lrnAsk(n,mv,ids){return new Promise(res=>{
   const M=document.createElement("div");M.id="lrnM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Aprender movimiento");
   const bt=(o,k)=>'<button class="lrnb" data-lk="'+k+'" style="--tc:'+(TC[o.t]||"#999")+'"><b>'+esc(o.n)+'</b><small>'+EM[o.t]+' '+TIPO[o.t]+(o.cl?' · Poder '+(o.pw||"—"):' · Estado')+'</small></button>';
-  M.innerHTML='<div class="jbox"><div class="lrnh">'+ico(PM[n],56)+'<div><h3>'+esc(nk(n))+' quiere aprender '+esc(mv.n)+'</h3><small class="mut">'+EM[mv.t]+' '+TIPO[mv.t]+(mv.cl?' · Poder '+(mv.pw||"—"):' · Estado')+' · '+esc(mvDesc(mv))+'</small></div></div>'+
+  M.innerHTML='<div class="jbox"><div class="lrnh">'+ico(PM[n],56)+'<div><h3>'+esc(nk(n))+' quiere aprender '+esc(mv.n)+'</h3><small class="mut">'+esc(mvDesc(mv))+'</small></div></div>'+
     '<p>Pero ya conoce 4 movimientos. ¿Cuál quieres que olvide?</p><div class="lrng">'+ids.map((x,k)=>MVD[x]?bt(MVD[x],k):'').join("")+'</div><button class="alt" data-lk="-1">No aprender '+esc(mv.n)+'</button></div>';
   document.body.appendChild(M);
   M.addEventListener("click",e=>{const b=e.target.closest("[data-lk]");if(!b)return;snd("ui");M.remove();res(+b.dataset.lk)})})}

@@ -576,3 +576,4 @@ rep('''const AR=[
 {t:3000000,it:{ub:5,mpot:3,cand:1}},
 {t:15000000,it:{mrev:3,cand:3,mb:1}},
 {t:60000000,it:{mrev:5,cand:8,mb:3}}];''')
+rep('#welc,#newsM,#privM{','.mghow{margin:12px auto 0;max-width:520px;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 14px}\n.mghow summary{cursor:pointer;font-weight:800}\n.mghow ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:.88rem;line-height:1.4}\n#welc,#newsM,#privM{')

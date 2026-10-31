@@ -149,7 +149,7 @@ function mgOpen(id){
   m.innerHTML='<div class="mgw"><div class="mgh"><span class="mgic">'+g.ic+'</span><b>'+g.n+'</b><span class="mgsc">⭐ <b id="mgSc">0</b></span><button class="mgx" aria-label="Salir del minijuego">✕</button></div><div class="mgb" id="mgB"></div></div>';
   m.hidden=false;m.querySelector(".mgx").onclick=mgClose;
   const left=mgLeft(id),best=mgState().best[id]|0;
-  $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+g.ic+'</div><h3>'+g.n+'</h3><p>'+g.d+'</p><div class="mginf"><span>🏆 Récord: <b>'+fmt(best)+'</b></span><span>🎁 Partidas con premio hoy: <b>'+left+'/'+MG_DAY+'</b></span></div><button class="red big" id="mgGo">▶ ¡Jugar!</button>'+(left?'':'<small class="mut">Hoy ya has ganado todos los premios de este minijuego, pero puedes seguir jugando para batir tu récord.</small>')+'</div>';
+  $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+g.ic+'</div><h3>'+g.n+'</h3><p>'+g.d+'</p><div class="mginf"><span>🏆 Récord: <b>'+fmt(best)+'</b></span><span>🎁 Partidas con premio hoy: <b>'+left+'/'+MG_DAY+'</b></span></div><button class="red big" id="mgGo">▶ ¡Jugar!</button>'+(typeof mgHow==="function"?mgHow(g.id):"")+(left?'':'<small class="mut">Hoy ya has ganado todos los premios de este minijuego, pero puedes seguir jugando para batir tu récord.</small>')+'</div>';
   $("mgGo").onclick=()=>{snd("ui");g.start($("mgB"),mgEnd)};
   m.querySelector(".mgw").animate([{transform:"scale(.85)",opacity:0},{transform:"none",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.9,.3,1.2)"});
 }

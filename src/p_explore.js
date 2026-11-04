@@ -74,14 +74,16 @@ function exUpdate(dt,ts){if(EX.title)return;EX.npcs.forEach(n=>{if(n.mv)exNpcSte
   if(EX.walkTo){exNpcWalk(dt);return}
   if(EX.dlg)return;
   exNpcAI(dt,ts);
-  if(EX.mv){EX.mv.t+=dt;const p=Math.min(1,EX.mv.t/EX.mv.d);EX.px=EX.mv.x0+(EX.x-EX.mv.x0)*p;EX.py=EX.mv.y0+(EX.y-EX.mv.y0)*p;
-    if(p>=1){EX.mv=null;EX.px=EX.x;EX.py=EX.y;exArrive()}else return}
-  const d=exKeyDir();if(!d){EX.anim=0;return}
-  if(EX.f!==d&&!EX.turned){EX.f=d;EX.turned=ts;return}if(EX.turned&&ts-EX.turned<90)return;EX.turned=0;
+  let carry=0,flow=false;
+  if(EX.mv){EX.mv.t+=dt;const p=Math.min(1,EX.mv.t/EX.mv.d);EX.px=EX.mv.x0+(EX.x-EX.mv.x0)*p;EX.py=EX.mv.y0+(EX.y-EX.mv.y0)*p;EX.dist=(EX.dist||0)+dt/EX.mv.d;
+    if(p>=1){carry=Math.min(EX.mv.t-EX.mv.d,60);EX.mv=null;EX.px=EX.x;EX.py=EX.y;flow=true;exArrive();if(EX.dlg||EX.trans||EX.walkTo||EX.alert)return}else return}
+  const d=exKeyDir();if(!d){EX.anim=0;EX.dist=0;return}
+  // girar en el sitio solo si estabas parado (andando, cambias de dirección sin frenar)
+  if(EX.f!==d&&!flow&&!EX.turned){EX.f=d;EX.turned=ts;return}if(!flow&&EX.turned&&ts-EX.turned<90)return;EX.turned=0;
   const[dx,dy]=EXDIR[d],nx=EX.x+dx,ny=EX.y+dy;EX.f=d;
-  if(exBlocked(nx,ny)){if(!EX.bump||ts-EX.bump>350){EX.bump=ts;snd("ui")}return}
+  if(exBlocked(nx,ny)){const c=exAt(nx,ny);if((c==="I"||c==="H")&&(!EX.bump||ts-EX.bump>600)){EX.bump=ts;EX.keys={};exInteract();return}if(!EX.bump||ts-EX.bump>350){EX.bump=ts;snd("ui")}EX.dist=0;return}
   EX.trail.unshift({x:EX.x,y:EX.y});EX.trail.length=3;
-  EX.mv={x0:EX.x,y0:EX.y,t:0,d:EX.keys.b||EX.run?130:240};EX.mvRun=EX.mv.d<150;EX.x=nx;EX.y=ny;EX.step=(EX.step||0)+1}
+  EX.mv={x0:EX.x,y0:EX.y,t:carry,d:EX.keys.b||EX.run?130:240};EX.mvRun=EX.mv.d<150;EX.x=nx;EX.y=ny;EX.step=(EX.step||0)+1}
 function exArrive(){const st=exSt();exStepFx(EX.x,EX.y,EX.f,EX.mvRun);st.x=EX.x;st.y=EX.y;st.f=EX.f;EX.steps++;if(EX.steps%20===0)save();
   const c=exAt(EX.x,EX.y),M=EX.M;
   if(M.w&&M.w[c]){const w=M.w[c];if(w.med&&medCount()<w.med){exSay(["Un guardia te detiene:","«Para entrar ahí necesitas al menos "+w.med+" medalla"+(w.med>1?"s":"")+" de gimnasio.»"],()=>{exStepBack()});return}
@@ -129,8 +131,7 @@ async function exFollower(){const b=S.buddy&&S.owned[S.buddy.n]>0?S.buddy.n:(S.t
 function exFollowerReset(){if(EX.fol){EX.fol.x=null}}
 // ---------- dibujo ----------
 function exCam(W,H){const M=EX.M,mw=M.g[0].length*EXTL,mh=M.g.length*EXTL,cx=EX.px*EXTL+EXTL/2-W/2,cy=EX.py*EXTL+EXTL/2-H/2;const t=[Math.max(0,Math.min(mw-W,cx)),Math.max(0,Math.min(mh-H,cy))];
-  if(!EX.cam||EX.camMap!==EX.map||Math.abs(EX.cam[0]-t[0])>200||Math.abs(EX.cam[1]-t[1])>200){EX.cam=t.slice();EX.camMap=EX.map}else{EX.cam[0]+=(t[0]-EX.cam[0])*.22;EX.cam[1]+=(t[1]-EX.cam[1])*.22}
-  return[Math.round(EX.cam[0]*2)/2,Math.round(EX.cam[1]*2)/2]}
+  EX.cam=t;return[Math.round(t[0]*2)/2,Math.round(t[1]*2)/2]}
 function exDraw(ts){const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.height/EXS;g.imageSmoothingEnabled=false;g.setTransform(EXS,0,0,EXS,0,0);
   g.fillStyle="#000";g.fillRect(0,0,W,H);let[cx,cy]=exCam(W,H);const fr=Math.floor(ts/500)%2;
   if(EX.title){const mw=EX.M.g[0].length*EXTL-W,mh=EX.M.g.length*EXTL-H,t=ts/14000;cx=Math.round((Math.sin(t)*.5+.5)*mw);cy=Math.round((Math.sin(t*.7+1)*.5+.5)*mh)}
@@ -138,17 +139,19 @@ function exDraw(ts){const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.hei
   const fr4=Math.floor(ts/350)%4;
   for(let y=y0;y<=y1+1;y++)for(let x=x0;x<=x1;x++){const c=exAt(x,y),w=EX.M.w&&EX.M.w[c];let t;
     if(c==="w")t=xCavePuddle(Math.floor(exRnd(x,y,7)*4),fr);else if(w&&w.look==="ladder")t=xLadder();else if(w&&w.look==="cave")t=xCaveMouth();else t=xGround(x,y,c==="~"?fr4:fr);
-    g.drawImage(t,Math.round(x*EXTL-cx),Math.round(y*EXTL-cy))}
+    g.drawImage(t,x*EXTL-cx,y*EXTL-cy)}
   // personajes ordenados por profundidad
-  const ents=[];for(let y=y0;y<=y1+2;y++)for(let x=x0;x<=x1;x++){const c=exAt(x,y),o=xObj(c,x,y);if(o){const X=Math.round(x*EXTL-cx),Y=Math.round(y*EXTL-cy)-16;
+  const ents=[];for(let y=y0;y<=y1+2;y++)for(let x=x0;x<=x1;x++){const c=exAt(x,y),o=xObj(c,x,y);if(o){const X=x*EXTL-cx,Y=y*EXTL-cy-16;
     if(c==="#"||c==="p"){const sw=Math.round(Math.sin(ts/1300+x*.9+y*1.7)*.75+Math.sin(ts/470+x)*.25);ents.push({y:y-.001,d:()=>{g.drawImage(o,0,30,32,18,X,Y+30,32,18);g.drawImage(o,0,0,32,30,X+sw,Y,32,30)}})}
     else ents.push({y:y-.001,d:()=>g.drawImage(o,X,Y)})}}
   EX.npcs.forEach(n=>{const q=exNpcPos(n);ents.push({y:q.y,d:()=>exDrawTr(g,n.look,n.f,q.x*EXTL-cx,q.y*EXTL-cy,q.fr,n.beat,false,n.ph)})});
-  const walking=!!EX.mv,ph=walking?Math.min(1,EX.mv.t/EX.mv.d):0,run=walking&&EX.mv.d<150,sf=walking?(ph<(run?.8:.55)?((EX.step||0)%2?1:3):0):0;
+  const walking=!!EX.mv,ph=walking?Math.min(1,EX.mv.t/EX.mv.d):0,run=walking&&EX.mv.d<150,sf=walking?[1,0,3,0][Math.floor((EX.dist||0)*2)%4]:0;
   if(!EX.title)ents.push({y:EX.py,d:()=>exDrawTr(g,trEnc(myLook()),EX.f,EX.px*EXTL-cx,EX.py*EXTL-cy,sf,false,true,0)});
   if(EX.fol&&!EX.title)ents.push({y:exFolPos().y-.01,d:()=>exDrawFol(g,cx,cy,ts)});
   ents.sort((a,b)=>a.y-b.y).forEach(e=>e.d());
   exFxDraw(g,cx,cy,ts);
+  if(!EX.mv&&!EX.dlg&&!EX.trans&&!EX.title){const[dx,dy]=EXDIR[EX.f],ax=EX.x+dx,ay=EX.y+dy,c=exAt(ax,ay),npc=EX.npcs.some(n=>n.px===ax&&n.py===ay);
+    if(c==="I"||c==="H"||npc){const X=Math.round((ax*EXTL-cx+16)*2)/2,Y=Math.round((ay*EXTL-cy-(npc?22:2)+Math.sin(ts/220)*2)*2)/2;g.fillStyle="#222";g.fillRect(X-7,Y-8,14,13);g.fillStyle="#fff";g.fillRect(X-6,Y-7,12,11);g.fillStyle="#e83a50";g.fillRect(X-3,Y-5,6,1);g.fillRect(X-4,Y-4,2,6);g.fillRect(X+2,Y-4,2,6);g.fillRect(X-3,Y-2,6,1)}}
   // hierba alta por encima de los pies
   const gr=(x,y)=>{const c=exAt(Math.round(x),Math.round(y));return c==="T"||c==="d"||c==="g"};
   if(gr(EX.x,EX.y)&&(!EX.mv||ph>.5)){const rs=EX.rustle&&EX.rustle.x===EX.x&&EX.rustle.y===EX.y&&ts-EX.rustle.t<450,t=xGround(EX.x,EX.y,rs?Math.floor(ts/70)%2:fr);g.drawImage(t,0,16,32,16,Math.round(EX.px*EXTL-cx),Math.round(EX.py*EXTL-cy)+16,32,16)}
@@ -167,7 +170,7 @@ function exDraw(ts){const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.hei
 function exDrawTr(g,code,face,x,y,fr,beat,me,ph){const sp=ovSprite(code),img=(sp[face]||sp.d)[fr||0];
   const br=!fr&&((performance.now()/1000+(ph||0))%2.4)<.18?-1:0;
   xdisc(g,Math.round(x+16),Math.round(y+30),8,2.5,"rgba(0,0,0,.24)");
-  g.drawImage(img,Math.round(x),Math.round(y-14+br))}
+  g.drawImage(img,Math.round(x*2)/2,Math.round((y-14+br)*2)/2)}
 function exFolPos(){const t=EX.trail[0]||{x:EX.x,y:EX.y};if(!EX.mv)return{x:t.x,y:t.y};const p=Math.min(1,EX.mv.t/EX.mv.d),u=EX.trail[1]||t;return{x:u.x+(t.x-u.x)*p,y:u.y+(t.y-u.y)*p}}
 function exDrawFol(g,cx,cy,ts){const f=EX.fol;if(!f)return;const p=exFolPos();if(p.x===EX.px&&p.y===EX.py)return;
   const dx=EX.px-p.x,dy=EX.py-p.y,face=Math.abs(dx)>Math.abs(dy)?(dx>0?"r":"l"):(dy>0?"d":"u"),X=p.x*EXTL-cx+16,Y=p.y*EXTL-cy+28;
@@ -308,8 +311,8 @@ function xShroom(v){const k="MU"+v;if(XG[k])return XG[k];const c=xc(32,48),g=c.g
 function xSign(){const k="SG";if(XG[k])return XG[k];const c=xc(32,48),g=c.getContext("2d");xdisc(g,16,44,10,2.5,"rgba(0,0,0,.25)");
   xr(g,9,34,3,10,"#3e2414");xr(g,20,34,3,10,"#3e2414");xr(g,10,34,1,10,"#8a5a30");xr(g,21,34,1,10,"#8a5a30");
   xr(g,4,21,24,15,"#3e2414");xr(g,5,22,22,13,"#c88a4a");xr(g,5,22,22,2,"#e8b070");xr(g,5,33,22,2,"#9a6430");[25,28,31].forEach((y,i)=>xr(g,8,y,i===1?12:16,1,"#6a3e1a"));return XG[k]=c}
-function xBall(){const k="IB";if(XG[k])return XG[k];const c=xc(32,48),g=c.getContext("2d");xdisc(g,16,43,7,2,"rgba(0,0,0,.25)");
-  xbmp(g,10,30,["...kkkkk...","..krrrrrk..",".krrwrrrrk.","krrrrrrrrrk","krrrkkkrrrk","kkkkkwkkkkk","kwwwkkkwwwk",".kwwwwwwwk.","..kwwwwwk..","...kkkkk..."],{k:"#202028",r:"#e83a40",w:"#f4f4f8"});return XG[k]=c}
+function xBall(){const k="IB2";if(XG[k])return XG[k];const c=xc(32,48),g=c.getContext("2d");xdisc(g,16,39,7,2,"rgba(0,0,0,.25)");
+  xbmp(g,10,26,["...kkkkk...","..krrrrrk..",".krrwrrrrk.","krrrrrrrrrk","krrrkkkrrrk","kkkkkwkkkkk","kwwwkkkwwwk",".kwwwwwwwk.","..kwwwwwk..","...kkkkk..."],{k:"#202028",r:"#e83a40",w:"#f4f4f8"});return XG[k]=c}
 function xObj(c,x,y){const v=Math.floor(exRnd(x,y,7)*4);
   if(c==="#")return xTree(v);if(c==="p")return xPalm(v);if(c==="o")return xRock(v,0);if(c==="k")return xRock(v,1);if(c==="b")return xBush(v);if(c==="u")return xShroom(v);if(c==="H")return xSign();if(c==="I")return xBall();
   if(c==="X"&&!(xMask(x,y,q=>q==="X")&15))return xPillar(v);return null}

@@ -1,5 +1,5 @@
 const sleep=ms=>new Promise(r=>setTimeout(r,ms/(B&&!$("arena").hidden?BS:1)));
-const eff=(a,d)=>adv(a,d)?2:adv(d,a)?.5:1;
+const eff=(a,d)=>typeEff(a,d);
 let sk=null;
 const waitSkip=ms=>new Promise(r=>{const id=setTimeout(done,ms);function done(){clearTimeout(id);sk=null;r()}sk=done});
 async function say(t){
@@ -77,6 +77,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     if(mv.prot){if(v.pc&&rng()>=1/Math.pow(3,v.pc)){v.pc=0;push({k:"fail",s:i});return}v.prot=1;v.pc++;push({k:"prot",s:i,n:me.p[0]});return}
     if(mv.rest){if(me.mh>=me.mx||me.sts==="slp"){push({k:"fail",s:i});return}me.mh=me.mx;me.sts="slp";me.slp=2;push({k:"rest",s:i,n:me.p[0]});return}
     if(tg!==i&&axStatusImm(E,i,tg,me,tm,mv,push,rng))return;
+    if(tg!==i&&mv.id==="86"&&effP("electric",tm.p)===0){push({k:"noaff",s:tg,n:tm.p[0]});return}
     if(tg!==i&&!hitOk()){push({k:"miss",s:i,tg:tg});return}
     let did=false;
     if(mv.heal){const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.round(me.mx*mv.heal/100));push({k:"heal",s:i,n:me.p[0],h:me.mh-b});did=true}
@@ -90,6 +91,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   if(tg!==i&&axImm(E,i,tg,me,tm,mv,push,rng))return;
   let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}if(mv.hits&&me.ab===92)hits=mv.hits[1];
   const ty=mv.typeless?"normal":axTy(me,mv),special=mv.fixed||mv.flv||mv.half,e=mv.typeless||special?1:axEff(E,me,tm,ty,effP(ty,tm.p)),stab=!mv.typeless&&(stabP(ty,me.p)||[168,236,121,225].includes(me.ab))?(me.ab===91?2:1.5):1,pb=me.ab===185&&hits===1&&!mv.hits&&!special,h0=tm.mh;if(pb)hits=2;
+  if(!mv.typeless&&tg!==i&&(special?axEff(E,me,tm,ty,effP(ty,tm.p)):e)===0){push({k:"noaff",s:tg,n:tm.p[0]});return}
   let tot=0,nh=0,crit=0;
   for(let h=0;h<hits&&tm.mh>0;h++){
     let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
@@ -236,6 +238,7 @@ async function bePlay(ev){
         else await say("¡"+an+" de "+who+" se ha activado!");
         break}
       case "msg":bePaint(e.snap);await say(e.t);break;
+      case "noaff":snd("miss");await say("No afecta a "+who+"...");break;
       case "rech":await say("¡"+who+" necesita recuperarse!");break;
       case "slp":fxZ(sl.sp);await say(who+" está dormido como un tronco.");break;
       case "wake":bePaint(e.snap);await say("¡"+who+" se ha despertado!");break;

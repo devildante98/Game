@@ -1,9 +1,12 @@
 const BT={};"fire:grass,ice,bug,steel;water:fire,ground,rock;grass:water,ground,rock;electric:water,flying;ground:electric,fire,rock,poison,steel;psychic:fighting,poison;ghost:psychic,ghost;dark:psychic,ghost;fighting:normal,rock,dark,ice,steel;ice:grass,dragon,flying,ground;dragon:dragon;fairy:dragon,fighting,dark;bug:grass,psychic,dark;rock:fire,ice,flying,bug;steel:ice,rock,fairy;poison:grass,fairy;flying:grass,fighting,bug".split(";").forEach(s=>{const q=s.split(":");BT[q[0]]=q[1].split(",")});
-const adv=(a,d)=>(BT[a]||[]).includes(d);
+// tabla de tipos oficial (con inmunidades): multiplicador del atacante contra cada tipo defensor
+const TCH={};"normal:rock.5,ghost0,steel.5;fire:fire.5,water.5,grass2,ice2,bug2,rock.5,dragon.5,steel2;water:fire2,water.5,grass.5,ground2,rock2,dragon.5;electric:water2,electric.5,grass.5,ground0,flying2,dragon.5;grass:fire.5,water2,grass.5,poison.5,ground2,flying.5,bug.5,rock2,dragon.5,steel.5;ice:fire.5,water.5,grass2,ice.5,ground2,flying2,dragon2,steel.5;fighting:normal2,ice2,poison.5,flying.5,psychic.5,bug.5,rock2,ghost0,dark2,steel2,fairy.5;poison:grass2,poison.5,ground.5,rock.5,ghost.5,steel0,fairy2;ground:fire2,electric2,grass.5,poison2,flying0,bug.5,rock2,steel2;flying:electric.5,grass2,fighting2,bug2,rock.5,steel.5;psychic:fighting2,poison2,psychic.5,dark0,steel.5;bug:fire.5,grass2,fighting.5,poison.5,flying.5,psychic2,ghost.5,dark2,steel.5,fairy.5;rock:fire2,ice2,fighting.5,ground.5,flying2,bug2,steel.5;ghost:normal0,psychic2,ghost2,dark.5;dragon:dragon2,steel.5,fairy0;dark:fighting.5,psychic2,ghost2,dark.5,fairy.5;steel:fire.5,water.5,electric.5,ice2,rock2,steel.5,fairy2;fairy:fire.5,fighting2,poison.5,dragon2,dark2,steel.5".split(";").forEach(x=>{const q=x.split(":");TCH[q[0]]={};q[1].split(",").forEach(y=>{const m=y.match(/^([a-z]+)([\d.]+)$/);TCH[q[0]][m[1]]=+m[2]})});
+const typeEff=(a,d)=>{const r=TCH[a];return r&&r[d]!=null?r[d]:1};
+const adv=(a,d)=>typeEff(a,d)>1;
 // segundo tipo de cada Pokémon (datos oficiales de PokeAPI); T1 corrige el tipo principal de algunas formas
 const TT=__T2__;Object.keys(TT.T1).forEach(n=>{const p=P.find(x=>x[0]===n);if(p)p[1]=TT.T1[n]});const T2=TT.T2;
 const ty2=p=>(p&&T2[p[0]])||null,tys=p=>ty2(p)?[p[1],ty2(p)]:[p[1]];
-const effP=(a,p)=>tys(p).reduce((m,t)=>m*eff(a,t),1),stabP=(t,p)=>tys(p).includes(t);
+const effP=(a,p)=>tys(p).reduce((m,t)=>m*typeEff(a,t),1),stabP=(t,p)=>tys(p).includes(t);
 const tyNm=p=>tys(p).map(t=>TIPO[t]).join(" / "),tyTxt=p=>tys(p).map(t=>EM[t]+" "+TIPO[t]).join(" · ");
 const WW={C:1,R:2,E:3,L:4},HPM={C:90,R:120,E:150,L:180},ATK={C:15,R:20,E:25,L:30};
 const lvd=n=>S.lv[n]||(S.lv[n]={l:1,x:0});

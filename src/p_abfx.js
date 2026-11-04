@@ -25,7 +25,7 @@ Object.assign(ABDESC,{
  99:"Sus ataques y los que recibe nunca fallan",100:"Siempre actúa el último",102:"Con sol no sufre problemas de estado",103:"No puede usar el objeto que lleva",104:"Sus ataques ignoran las habilidades defensivas del rival",
  106:"Si cae por un ataque físico, el atacante pierde muchos PS",107:"Al entrar presiente los ataques peligrosos del rival y sube su Evasión",108:"Al entrar descubre el ataque más fuerte del rival y sube su Precisión",
  109:"Ignora los cambios de características del rival",110:"Sus ataques poco eficaces hacen el doble de daño",111:"Recibe menos daño de los ataques súper eficaces",112:"Los primeros 5 turnos su Ataque y su Velocidad están a la mitad",
- 113:"Sus ataques Normal y Lucha no pierden fuerza contra ningún tipo",114:"Atrae los ataques de agua: no le afectan y suben su Ataque",115:"Recupera PS cada turno cuando nieva",116:"Recibe menos daño de los ataques súper eficaces",
+ 113:"Sus ataques Normal y Lucha también golpean a los Pokémon de tipo Fantasma",114:"Atrae los ataques de agua: no le afectan y suben su Ataque",115:"Recupera PS cada turno cuando nieva",116:"Recibe menos daño de los ataques súper eficaces",
  117:"Al entrar hace que nieve durante 5 turnos",118:"Puede encontrar pociones al ganar un combate",119:"Al entrar descubre los objetos de los rivales",120:"Los ataques con daño de retroceso son más fuertes",
  121:"Todos sus ataques reciben la bonificación de su propio tipo",122:"Con sol, sus ataques físicos y los de sus aliados son más fuertes",123:"Los rivales dormidos pierden PS cada turno",124:"Si le golpean físicamente, roba el objeto del atacante",
  125:"Ataques más fuertes, pero sin efectos secundarios",126:"Sus cambios de características se invierten",127:"Los rivales no pueden comer bayas",128:"Si un rival le baja una característica, su Ataque sube mucho",
@@ -72,7 +72,7 @@ Object.assign(ABDESC,{
  287:"Debilita la defensa especial de todos los demás",288:"Al entrar hace salir el sol; con sol, sus ataques físicos son más fuertes",289:"Al entrar crea un campo eléctrico; en él, sus ataques especiales son más fuertes",
  290:"Copia las subidas de características de los rivales",291:"Vuelve a comerse su baya un turno después",292:"Los ataques cortantes son más fuertes",293:"Pega más fuerte por cada compañero debilitado",
  294:"Al entrar sube su Ataque",295:"Al recibir un golpe físico puede envenenar al atacante",296:"Los rivales no pueden usar ataques con prioridad contra él",297:"Los ataques de tierra le curan en vez de dañarle",
- 298:"Sus movimientos de estado no fallan nunca",299:"Ignora la evasión y sus ataques Normal y Lucha no pierden fuerza",300:"Al entrar baja la Evasión de los rivales",301:"Al entrar cura un poco a su aliado (o a sí mismo)",
+ 298:"Sus movimientos de estado no fallan nunca",299:"Ignora la evasión y sus ataques Normal y Lucha golpean a los de tipo Fantasma",300:"Al entrar baja la Evasión de los rivales",301:"Al entrar cura un poco a su aliado (o a sí mismo)",
  302:"Sus ataques pueden envenenar gravemente al rival (30%)",304:"Al entrar cambia a su Forma Teracristal y sube su Defensa",305:"Con los PS al máximo, todos los ataques le son poco eficaces",306:"Al entrar borra el tiempo atmosférico y los campos",
  307:"Los rivales que envenena también quedan confusos"});
 // ---------- utilidades ----------
@@ -120,9 +120,9 @@ const axEva=(me,ts)=>[51,239,109,299].includes(me.ab)?0:ts.v.st.eva;
 // ---------- golpes críticos y eficacia ----------
 const axNoCrit=(me,tm)=>!axMB(me)&&(tm.ab===4||tm.ab===75);
 const axCritK=(me,tm)=>me.ab===196&&(tm.sts==="psn"||tm.sts==="tox")?99:1;
-function axEff(E,me,tm,ty,e){return axSafe(()=>{if((me.ab===113||me.ab===299)&&(ty==="normal"||ty==="fighting")&&e<1)e=1;
+function axEff(E,me,tm,ty,e){return axSafe(()=>{if((me.ab===113||me.ab===299)&&(ty==="normal"||ty==="fighting")&&tys(tm.p).includes("ghost"))e=tys(tm.p).reduce((m,t)=>m*(t==="ghost"?1:typeEff(ty,t)),1);
   if(!axMB(me)){if(tm.ab===305&&tm.mh>=tm.mx)e=Math.min(e,.5);if(tm.ab===16&&tm.cc===ty)e*=.5}
-  if(axWx(E)==="wind"&&tys(tm.p).includes("flying")&&e>1)e=1;return e},e)}
+  if(axWx(E)==="wind"&&tys(tm.p).includes("flying")&&e>1)e=tys(tm.p).reduce((m,t)=>m*(t==="flying"&&typeEff(ty,t)>1?1:typeEff(ty,t)),1);return e},e)}
 // ---------- multiplicador de daño ----------
 function axDmg(E,i,tg,me,tm,mv,ty,e,acted){return axSafe(()=>{
   let k=1;const a=me.ab,d=axMB(me)?0:tm.ab,ph=mv.cl===1,sp=mv.cl===2,nm=mv.n||"",wx=axWx(E),tr=axTr(E),hp=me.mh/me.mx;

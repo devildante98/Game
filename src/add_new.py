@@ -584,3 +584,7 @@ rep('#welc,#newsM,#privM{','.fstatr{align-items:start}\n.fstat{display:flex;flex
 rep('    const r=isNew?0:REF[p[2]];back+=r;res.push([p,isNew,r,sh]);','    let r=isNew?0:REF[p[2]];if(!isNew&&typeof megaDup==="function"){const x=megaDup(p[0]);if(x!=null)r=x}back+=Math.max(0,r);res.push([p,isNew,r,sh]);')
 rep('isNew?"¡NUEVO!":"+"+back+" 🎟️"','isNew?"¡NUEVO!":back<0?"+"+(-back)+" 🍬":"+"+fmt(back)+" 🎟️"')
 rep('#welc,#newsM,#privM{','.fkey>div{display:flex;flex-direction:column;gap:4px}\n.fkey b{font-size:.95rem}\n#welc,#newsM,#privM{')
+# ayuda de tipos con la tabla oficial (incluye inmunidades)
+rep("const keys=Object.keys(TIPO),weak=d=>keys.filter(a=>adv(a,d)),res=d=>keys.filter(a=>adv(d,a));","const keys=Object.keys(TIPO),weak=d=>keys.filter(a=>typeEff(a,d)>1),res=d=>keys.filter(a=>{const v=typeEff(a,d);return v>0&&v<1}),imm=d=>keys.filter(a=>typeEff(a,d)===0);")
+rep("""'</div><div>Resiste (×0,5): '+(res(t).map(typeChip).join("")||'<small>ninguno</small>')+'</div></div>';""","""'</div><div>Resiste (×0,5): '+(res(t).map(typeChip).join("")||'<small>ninguno</small>')+'</div>'+(imm(t).length?'<div>Inmune (×0): '+imm(t).map(typeChip).join("")+'</div>':'')+'</div>';""")
+rep("Un ataque hace ×2 contra un tipo débil y ×0,5 si el rival lo resiste.","Tabla oficial: ×2 contra un tipo débil, ×0,5 si lo resiste y ×0 si es inmune. Con dos tipos se multiplican (×4, ×¼…).")

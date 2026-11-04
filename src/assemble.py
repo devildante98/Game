@@ -465,8 +465,8 @@ s0 = H.index('// ================= sugerencias (solo las lee el creador del jueg
 H = H[:s0] + """// ---- tu entrenador ----
 $("trOpts").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!b.dataset.tr)return;const o=TRO.find(x=>x[0]===b.dataset.tr),L=myLook();snd("ui");
   if(b.dataset.v!=null)trSet(o[0],+b.dataset.v);else{const n=trN(o);let v=L[o[0]],g=0;do{v=(v+(+b.dataset.d)+n)%n;g++}while((!trOk(o[0],v)||!trSexOk(o[0],v))&&g<=n);trSet(o[0],v)}});
-$("trRnd").onclick=()=>{S.tr=trRandom();save();trUI();pvPub();snd("ui")};
-$("trRst").onclick=()=>{S.tr=Object.assign({},TRDEF);save();trUI();pvPub()};
+$("trRnd").onclick=()=>{S.tr=trRandom();save();trUI();trPubSoon();snd("ui")};
+$("trRst").onclick=()=>{S.tr=Object.assign({},TRDEF);save();trUI();trPubSoon()};
 $("trDemo").onclick=trDemo;
 """ + H[s0:]
 rep('updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();', 'updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();gUI();')

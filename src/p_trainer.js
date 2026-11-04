@@ -586,7 +586,9 @@ function trUI(){
 document.addEventListener("click",e=>{const f=e.target.closest&&e.target.closest("#trOpts [data-trf]");if(!f)return;TRF=f.dataset.trf;try{localStorage.setItem("trF",TRF)}catch(x){}snd("ui");trUI()});
 try{const f=localStorage.getItem("trF");if(f==="m"||f==="f")TRF=f}catch(x){}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#trOpts [data-trt]");if(!b)return;TRTAB=b.dataset.trt;snd("ui");trUI()});
-function trSet(k,v){S.tr=Object.assign(myLook(),{[k]:v});save();trUI();if(typeof pvPub==="function")pvPub()}
+// el aspecto se publica a los demás jugadores cuando dejas de cambiar de ropa unos segundos (cada publicación cuesta una lectura por jugador conectado)
+let _trPubT=0;function trPubSoon(){clearTimeout(_trPubT);_trPubT=setTimeout(()=>{if(typeof pvPub==="function")pvPub()},6000)}
+function trSet(k,v){S.tr=Object.assign(myLook(),{[k]:v});save();trUI();trPubSoon()}
 async function trDemo(){
   const L=myLook(),imgs=$("trPrev").querySelectorAll("img"),b=imgs[1],f=imgs[0];if(!b)return;
   b.classList.remove("idle");

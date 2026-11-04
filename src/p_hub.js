@@ -276,7 +276,7 @@ document.addEventListener("click",async e=>{
     S.trSets[i]=trEnc(myLook());save();snd("lvl");toast("💾 Conjunto guardado en la ranura "+(i+1)+".");const nx=S.trSets.findIndex(x=>!x);trSetsUI();
     const s=document.querySelector('#trSets [data-ts="'+i+'"]');if(s)s.animate([{transform:"scale(1.15)"},{transform:"none"}],{duration:300});return}
   const sl=t.closest("[data-ts]");if(sl){const i=+sl.dataset.ts,e2=S.trSets[i];TRSEL=i;
-    if(e2){S.tr=Object.assign({},TRDEF,trDec(e2));save();snd("ui");trUI();if(typeof pvPub==="function")pvPub();toast("👕 Te has puesto el conjunto "+(i+1)+".")}else{snd("ui");trSetsUI()}}
+    if(e2){S.tr=Object.assign({},TRDEF,trDec(e2));save();snd("ui");trUI();if(typeof trPubSoon==="function")trPubSoon();toast("👕 Te has puesto el conjunto "+(i+1)+".")}else{snd("ui");trSetsUI()}}
 });
 document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.closest&&e.target.closest("#trSets [data-ts]")){e.preventDefault();e.target.click()}});
 // ================= sprites en alta definición (renders de Pokémon HOME, 512 px) =================

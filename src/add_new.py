@@ -806,6 +806,42 @@ H=H[:_ai]+'''<div id="auth">
     BF.forEach(function(b){b.a+=dt;b.x+=Math.cos(b.a*.7)*30*dt+Math.sin(b.a*2.3)*14*dt;b.y+=Math.sin(b.a*1.1)*16*dt;if(b.x<-20)b.x=W+10;if(b.x>W+20)b.x=-10;b.y=Math.max(H*.62,Math.min(H*.95,b.y));var o=Math.abs(Math.sin(t/90+b.a))*4+1;f.fillStyle=b.c;f.beginPath();f.ellipse(b.x-o,b.y,o,3,0,0,7);f.ellipse(b.x+o,b.y,o,3,0,0,7);f.fill();f.fillStyle="#3a2a20";f.fillRect(b.x-.5,b.y-3,1,6)});
     var wind=Math.sin(t/1800)*.5+.5;BL.forEach(function(b){var sw=Math.sin(t/700+b.ph+b.x/90)*b.h*.25*(.6+wind);f.strokeStyle=b.c;f.lineWidth=b.w;f.beginPath();f.moveTo(b.x,H+2);f.quadraticCurveTo(b.x+sw*.4,H-b.h*.5,b.x+sw,H-b.h);f.stroke()})}
   setup();requestAnimationFrame(frame);var rt=0;addEventListener("resize",function(){clearTimeout(rt);rt=setTimeout(setup,250)});
+  // ===== tema musical original de la portada (chiptune al estilo de las consolas portátiles) =====
+  var AC=null,MG=null,mOn=false,nextT=0,step=0,tmr=0,muted=false;try{muted=localStorage.getItem("pgcMusic")==="0"}catch(e){}
+  var BPM=132,E8=60/BPM/2;
+  var MEL=[[76,0,79,0,84,-1,83,81],[79,-1,76,0,81,-1,79,76],[77,0,81,0,84,-1,81,79],[79,-1,-1,0,74,0,79,0],[76,0,79,0,84,-1,86,88],[86,-1,83,0,79,-1,76,79],[81,-1,79,77,76,0,77,79],[79,-1,-1,-1,-1,0,0,0],
+           [84,0,83,0,81,-1,76,0],[77,-1,81,0,84,-1,81,0],[79,0,76,0,72,-1,76,79],[83,-1,81,0,79,-1,74,0],[81,0,84,0,89,-1,88,86],[86,-1,83,0,79,0,83,86],[88,-1,86,84,79,0,76,79],[84,-1,-1,-1,-1,0,0,0]];
+  var CH=[[48,52,55],[45,48,52],[41,45,48],[43,47,50],[48,52,55],[40,43,47],[41,45,48],[43,47,50],[45,48,52],[41,45,48],[48,52,55],[43,47,50],[41,45,48],[43,47,50],[48,52,55],[48,52,55]];
+  var hz=function(m){return 440*Math.pow(2,(m-69)/12)};var pulse=null,noise=null;
+  function mkAudio(){if(AC)return;var C=window.AudioContext||window.webkitAudioContext;if(!C)return;AC=new C();MG=AC.createGain();MG.gain.value=0;MG.connect(AC.destination);
+    var n=32,re=new Float32Array(n),im=new Float32Array(n);for(var k=1;k<n;k++)im[k]=2/(k*Math.PI)*Math.sin(k*Math.PI*.25);pulse=AC.createPeriodicWave(re,im);
+    var nb=AC.createBuffer(1,AC.sampleRate*.2,AC.sampleRate),d=nb.getChannelData(0);for(var i=0;i<d.length;i++)d[i]=Math.random()*2-1;noise=nb}
+  function note(t,f,dur,type,vol,wave){var o=AC.createOscillator(),g=AC.createGain();if(wave)o.setPeriodicWave(wave);else o.type=type;o.frequency.value=f;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.setValueAtTime(vol*.8,t+Math.max(.02,dur*.6));g.gain.linearRampToValueAtTime(0,t+dur);o.connect(g);g.connect(MG);o.start(t);o.stop(t+dur+.02)}
+  function hat(t,v){var s=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();s.buffer=noise;f.type="highpass";f.frequency.value=7000;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+.05);s.connect(f);f.connect(g);g.connect(MG);s.start(t);s.stop(t+.06)}
+  function kick(t){var o=AC.createOscillator(),g=AC.createGain();o.frequency.setValueAtTime(140,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.14);o.connect(g);g.connect(MG);o.start(t);o.stop(t+.16)}
+  function sched(){while(nextT<AC.currentTime+.25){var bar=Math.floor(step/8)%16,i=step%8,m=MEL[bar][i];
+      if(m>0){var len=1;while(i+len<8&&MEL[bar][i+len]===-1)len++;note(nextT,hz(m),E8*len*.95,"square",.11,pulse);note(nextT+.012,hz(m)*1.004,E8*len*.9,"square",.03,pulse)}
+      var c=CH[bar];note(nextT,hz(c[0]-12+(i%2?12:0)),E8*.9,"triangle",.26);
+      note(nextT,hz(c[i%3]+12),E8*.45,"square",.025,pulse);note(nextT+E8/2,hz(c[(i+1)%3]+12),E8*.45,"square",.02,pulse);
+      if(i===0||i===4)kick(nextT);if(i%2===1)hat(nextT,.05);
+      nextT+=E8;step++}}
+  function mStart(){if(muted||mOn||$i("auth").hidden)return;mkAudio();if(!AC)return;try{AC.resume()}catch(e){}mOn=true;nextT=AC.currentTime+.1;MG.gain.cancelScheduledValues(AC.currentTime);MG.gain.setValueAtTime(MG.gain.value,AC.currentTime);MG.gain.linearRampToValueAtTime(.55,AC.currentTime+1.5);tmr=setInterval(sched,60);mBtn()}
+  function mStop(fade){if(!mOn)return;mOn=false;var t=AC.currentTime;MG.gain.cancelScheduledValues(t);MG.gain.setValueAtTime(MG.gain.value,t);MG.gain.linearRampToValueAtTime(0,t+(fade||.3));setTimeout(function(){clearInterval(tmr)},(fade||.3)*1000+300);mBtn()}
+  // genera el bucle completo en un archivo WAV (para escucharlo fuera del juego)
+  window.pcMusicWav=async function(){var C=window.OfflineAudioContext||window.webkitOfflineAudioContext,len=E8*8*16+.5,sr=44100,o=new C(2,Math.ceil(len*sr),sr),sv=[AC,MG,pulse,noise,nextT,step];AC=o;MG=o.createGain();MG.gain.value=.55;MG.connect(o.destination);
+    var n=32,re=new Float32Array(n),im=new Float32Array(n);for(var k=1;k<n;k++)im[k]=2/(k*Math.PI)*Math.sin(k*Math.PI*.25);pulse=o.createPeriodicWave(re,im);var nb=o.createBuffer(1,sr*.2,sr),dd=nb.getChannelData(0);for(var i=0;i<dd.length;i++)dd[i]=Math.random()*2-1;noise=nb;
+    nextT=.05;step=0;var cur={get currentTime(){return len}};var _ac=AC;AC={currentTime:len-.3,createOscillator:o.createOscillator.bind(o),createGain:o.createGain.bind(o),createBufferSource:o.createBufferSource.bind(o),createBiquadFilter:o.createBiquadFilter.bind(o)};while(step<128)sched();AC=_ac;
+    var buf=await o.startRendering();AC=sv[0];MG=sv[1];pulse=sv[2];noise=sv[3];nextT=sv[4];step=sv[5];
+    var L=buf.getChannelData(0),N=L.length,ab=new ArrayBuffer(44+N*2),v=new DataView(ab),w=function(o2,str){for(var i=0;i<str.length;i++)v.setUint8(o2+i,str.charCodeAt(i))};
+    w(0,"RIFF");v.setUint32(4,36+N*2,true);w(8,"WAVE");w(12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,"data");v.setUint32(40,N*2,true);
+    for(var i=0;i<N;i++)v.setInt16(44+i*2,Math.max(-1,Math.min(1,L[i]))*32767,true);var u=new Uint8Array(ab),bs="";for(var i=0;i<u.length;i+=32768)bs+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return btoa(bs)};
+  var mb=document.createElement("button");mb.type="button";mb.className="pcmus";mb.setAttribute("aria-label","Música");$i("auth").appendChild(mb);
+  function mBtn(){mb.textContent=muted?"🔇":"🎵";mb.title=muted?"Activar la música":"Silenciar la música";mb.classList.toggle("on",mOn)}mBtn();
+  mb.addEventListener("click",function(e){e.stopPropagation();muted=!muted;try{localStorage.setItem("pgcMusic",muted?"0":"1")}catch(x){}if(muted)mStop();else mStart();mBtn()});
+  ["pointerdown","keydown"].forEach(function(ev){$i("auth").addEventListener(ev,function(){mStart()},{passive:true})});
+  document.addEventListener("visibilitychange",function(){if(!AC)return;if(document.hidden)AC.suspend();else if(mOn)AC.resume()});
+  new MutationObserver(function(){if($i("auth").hidden)mStop(1.2)}).observe($i("auth"),{attributes:true,attributeFilter:["hidden"]});
 })();
 </script>
 '''+H[_aj:]
@@ -846,5 +882,7 @@ rep('#welc,#newsM,#privM{',r'''#auth{background:#8cc4f2!important;overflow:hidde
 #auth #amsg{margin:0;text-align:center;font-size:.85rem}
 #aform .afan{color:#5a6080}
 @media (max-width:520px){.pclogo h1 span{font-size:1.85rem}.pcball{width:52px;height:52px}#auth form#aform{padding:16px 16px 12px}#auth .pcplay{font-size:1.3rem;padding:13px}.pcfeat span{font-size:.68rem;padding:3px 8px}}
+.pcmus{position:absolute;right:14px;bottom:14px;z-index:6;width:46px;height:46px;border-radius:50%;padding:0;font-size:1.3rem;background:rgba(255,255,255,.85);border:3px solid #fff;box-shadow:0 0 0 3px #e83a50,0 6px 14px rgba(0,0,0,.25)}
+.pcmus.on{animation:pcpulse 1.2s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.pcmon,.pcball,.pcplay,.pclogo h1 span{animation:none!important}}
 #welc,#newsM,#privM{''')

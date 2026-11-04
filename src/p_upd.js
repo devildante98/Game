@@ -529,3 +529,10 @@ function remOpen(n){const L=remList(n);let M=$("remM");if(M)M.remove();M=documen
     M.remove();render();try{fichaRefresh(n)}catch(x){}})}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-remo]");if(!b)return;snd("ui");remOpen(b.dataset.remo)});
 {const _fm=fmovHTML;fmovHTML=function(n){const h=_fm(n);if(!h||isMegaF(n))return h;const k=remList(n).length;return h.replace(/<\/div>$/,'<button type="button" class="alt mini remopen" data-remo="'+esc(n)+'">🧠 Recordar movimientos'+(k?' ('+k+')':'')+'</button></div>')}}
+// ================= ventanas que salen al terminar un combate (Salón de la Fama, evolución, premio gordo…) =================
+// en modo «Ventana» o «Pantalla completa» quedaban ocultas detrás del combate: se sale de ese modo antes de mostrarlas
+function bigFree(){try{if(typeof bigMode!=="undefined"&&bigMode)bigSet("")}catch(e){}}
+{const _nm=nxModal;nxModal=function(){bigFree();return _nm.apply(this,arguments)}}
+const BIG_OV=["nxM","evo","jack","jlv","lrnM","evcM"];
+setInterval(()=>{BIG_OV.forEach(id=>{const el=$(id);if(!el||el._bw)return;el._bw=1;new MutationObserver(()=>{if(!el.hidden)bigFree()}).observe(el,{attributes:true,attributeFilter:["hidden"]});if(!el.hidden)bigFree()})},500);
+new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1&&BIG_OV.includes(n.id)&&!n.hidden)bigFree()}))).observe(document.body,{childList:true});

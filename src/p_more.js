@@ -34,17 +34,37 @@ const lvCap=()=>{const i=gymNext();return i<0?100:gymAce(i)};
 const capWhy=()=>{const i=gymNext();return i<0?"":"Derrota al Líder "+GYMS[i][4]+" (Gimnasio de "+GYMS[i][3]+") para subir el límite."};
 const medCount=()=>Object.keys(S.med||{}).filter(k=>S.med[k]).length;
 const lgUnlocked=()=>medCount()>=8||Object.keys(S.lgDone||{}).length>0||!!S.lg;
+// ---- Líderes por región: cambian con cada nivel de prestigio (Kanto, Johto, Hoenn, Sinnoh, Teselia, Kalos y vuelta a empezar)
+// [medalla, tipo, ciudad, líder, sprite]
+const GYM_REG=[
+ ["Kanto",[["Roca","rock","Ciudad Plateada","Brock","brock"],["Cascada","water","Ciudad Celeste","Misty","misty"],["Trueno","electric","Ciudad Carmín","Teniente Surge","ltsurge"],["Arcoíris","grass","Ciudad Azulona","Erika","erika"],["Alma","poison","Ciudad Fucsia","Koga","koga"],["Pantano","psychic","Ciudad Azafrán","Sabrina","sabrina"],["Volcán","fire","Isla Canela","Blaine","blaine"],["Tierra","ground","Ciudad Verde","Giovanni","giovanni"]]],
+ ["Johto",[["Céfiro","flying","Ciudad Malva","Pegaso","falkner"],["Colmena","bug","Pueblo Azalea","Antón","bugsy"],["Planicie","normal","Ciudad Trigal","Blanca","whitney"],["Niebla","ghost","Ciudad Iris","Morti","morty"],["Tormenta","fighting","Ciudad Orquídea","Aníbal","chuck"],["Mineral","steel","Ciudad Olivo","Yasmina","jasmine"],["Glaciar","ice","Pueblo Caoba","Fredo","pryce"],["Dragón","dragon","Ciudad Endrino","Débora","clair"]]],
+ ["Hoenn",[["Piedra","rock","Ciudad Férrica","Petra","roxanne"],["Puño","fighting","Pueblo Azuliza","Marcial","brawly"],["Dinamo","electric","Ciudad Malvalona","Erico","wattson"],["Calor","fire","Pueblo Lavacalda","Candela","flannery"],["Equilibrio","normal","Ciudad Petalia","Norman","norman"],["Pluma","flying","Ciudad Arborada","Alana","winona"],["Mente","psychic","Ciudad Algaria","Vito y Leti","tateandliza"],["Lluvia","water","Ciudad Arrecípolis","Galano","juan"]]],
+ ["Sinnoh",[["Lignito","rock","Ciudad Pirita","Roco","roark"],["Bosque","grass","Ciudad Vetusta","Gardenia","gardenia"],["Adoquín","fighting","Pueblo Rocavelo","Brega","maylene"],["Ciénaga","water","Ciudad Pradera","Mananti","crasherwake"],["Reliquia","ghost","Ciudad Corazón","Fantina","fantina"],["Mina","steel","Ciudad Canal","Acero","byron"],["Carámbano","ice","Ciudad Puntaneva","Inverna","candice"],["Faro","electric","Ciudad Marina","Lectro","volkner"]]],
+ ["Teselia",[["Trío","grass","Ciudad Gres","Millo","cilan"],["Base","normal","Ciudad Esmalte","Aloe","lenora"],["Insecto","bug","Ciudad Porcelana","Camus","burgh"],["Voltio","electric","Ciudad Mayólica","Camila","elesa"],["Temblor","ground","Ciudad Fayenza","Yakón","clay"],["Jet","flying","Ciudad Loza","Gerania","skyla"],["Iceberg","ice","Ciudad Teja","Junco","brycen"],["Leyenda","dragon","Ciudad Caolín","Lirio","drayden"]]],
+ ["Kalos",[["Insecto","bug","Ciudad Novarte","Violeta","viola"],["Muro","rock","Ciudad Relieve","Lino","grant"],["Lucha","fighting","Ciudad Yantra","Corelia","korrina"],["Planta","grass","Ciudad Romantis","Amaro","ramos"],["Voltio","electric","Ciudad Luminalia","Lem","clemont"],["Hada","fairy","Ciudad Fluxus","Valeria","valerie"],["Psique","psychic","Ciudad Témpera","Ástrid","olympia"],["Iceberg","ice","Ciudad Fractal","Édel","wulfric"]]]];
+const GYM_LV=[12,18,24,30,36,42,48,54];let _gymReg=-1;
+const gymRegI=()=>(S.prs|0)%GYM_REG.length;
+function gymRegion(){const r=gymRegI();if(r===_gymReg)return;_gymReg=r;GYM_REG[r][1].forEach((g,i)=>{GYMS[i]=[g[0],g[1],GYM_LV[i],g[2],g[3],g[4]]});try{_gyk=""}catch(e){}}
+gymRegion();setInterval(gymRegion,3000);
+// ---- etapa evolutiva acorde al nivel (como en los juegos: nada de prevoluciones a nivel 40)
+function stageFor(p,L){if(!p)return p;let n=p[0];for(let k=0;k<4&&typeof PREVO!=="undefined"&&PREVO[n];k++)n=PREVO[n];
+  for(let k=0;k<4;k++){const ev=EVO(n).filter(e=>PM[e[0]]&&!isMegaF(e[0])&&!(typeof isSup==="function"&&isSup(e[0])));if(!ev.length)break;
+    const lvE=ev.find(e=>e[1][0]==="L"&&L>=+e[1].slice(1)),otE=ev.find(e=>e[1][0]!=="L"&&L>=30);const nx=lvE||otE;if(!nx)break;n=nx[0]}
+  return PM[n]||p}
 function gymTeam(i){
-  const g=GYMS[i],rng=rngS(1000+i*77),n=3+Math.floor(i/3),pool=P.filter(p=>p[1]===g[1]&&p[3]<10&&p[2]!=="L"),out=[];
-  for(let k=0;k<30&&out.length<n;k++){const p=pool[Math.floor(rng()*pool.length)];if(p&&!out.includes(p))out.push(p)}
+  gymRegion();
+  const g=GYMS[i],rng=rngS(1000+i*77+(S.prs|0)*7919),n=Math.min(6,3+Math.floor(i/2)),pool=P.filter(p=>tys(p).includes(g[1])&&p[3]<10&&p[2]!=="L"&&p[2]!=="M"&&!isMegaF(p[0])),out=[];
+  const lvK=k=>gymAce(i)-(n-1-k)*2;
+  for(let k=0;k<60&&out.length<n;k++){const p0=pool[Math.floor(rng()*pool.length)],lv=lvK(out.length),p=stageFor(p0,lv);if(p&&tys(p).includes(g[1])&&!out.includes(p))out.push(p)}
   out.sort((a,b)=>WW[a[2]]-WW[b[2]]);
   const rm=S.med&&S.med[i]?Math.max(0,leadLevel()-g[2]):0;
-  return out.map((p,k)=>mkEnemy(p,clampL(g[2]+k*2-2+rm)));
+  return out.map((p,k)=>{const L=clampL(lvK(k)+rm);return mkEnemy(stageFor(p,L),L)});
 }
 // medallas originales de los juegos (PokeAPI): Roca, Cascada, Trueno, Arcoíris, Alma, Pantano, Volcán y Tierra
 const BADGE="https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/badges/";
 function badgeErr(el){if(!el.dataset.r){el.dataset.r=1;el.src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/badges/"+el.dataset.b+".png";return}const g=GYMS[+el.dataset.g];el.replaceWith(document.createTextNode(EM[g[1]]))}
-function gymMedal(i,on,s){const g=GYMS[i];return '<span class="medal'+(on?' on':'')+'" title="Medalla '+g[0]+(on?'':' (sin conseguir)')+'" style="--mc:'+TC[g[1]]+(s?';--ms:'+s+'px':'')+'"><img src="'+BADGE+(i+1)+'.png" alt="" loading="lazy" data-b="'+(i+1)+'" data-g="'+i+'" onerror="badgeErr(this)"></span>'}
+function gymMedal(i,on,s){const g=GYMS[i];return '<span class="medal'+(on?' on':'')+'" title="Medalla '+g[0]+(on?'':' (sin conseguir)')+'" style="--mc:'+TC[g[1]]+(s?';--ms:'+s+'px':'')+'"><img src="'+BADGE+(gymRegI()*8+i+1)+'.png" alt="" loading="lazy" data-b="'+(gymRegI()*8+i+1)+'" data-g="'+i+'" onerror="badgeErr(this)"></span>'}
 async function gymWin(i){
   const g=GYMS[i];S.med=S.med||{};
   if(!S.med[i]){
@@ -59,12 +79,12 @@ async function gymWin(i){
 let _gyk="";
 function gymUI(){
   const box=$("gymBox");if(!box)return;const key=JSON.stringify([S.med,fcd]);if(key===_gyk)return;_gyk=key;
-  box.innerHTML='<div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,S.med&&S.med[i])).join("")+'<b>'+medCount()+' / 8 medallas</b></div>'+(gymNext()<0?'<div class="capbar ok">🔓 <span><b>Sin límite de nivel</b> · ¡Tienes las 8 medallas! Tus Pokémon pueden llegar al Nv100.</span></div>':'<div class="capbar">🔒 <span><b>Límite de nivel: Nv'+lvCap()+'</b> · Tus Pokémon no subirán de este nivel ni podrás capturar Pokémon salvajes más fuertes hasta que derrotes al Líder '+GYMS[gymNext()][4]+'.</span></div>')+'<div class="lggrid">'+GYMS.map((g,i)=>{const got=S.med&&S.med[i],open=i===0||(S.med&&S.med[i-1]);
+  box.innerHTML='<div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,S.med&&S.med[i])).join("")+'<b>'+medCount()+' / 8 medallas · Región de '+GYM_REG[gymRegI()][0]+'</b></div>'+(gymNext()<0?'<div class="capbar ok">🔓 <span><b>Sin límite de nivel</b> · ¡Tienes las 8 medallas! Tus Pokémon pueden llegar al Nv100.</span></div>':'<div class="capbar">🔒 <span><b>Límite de nivel: Nv'+lvCap()+'</b> · Tus Pokémon no subirán de este nivel ni podrás capturar Pokémon salvajes más fuertes hasta que derrotes al Líder '+GYMS[gymNext()][4]+'.</span></div>')+'<div class="lggrid">'+GYMS.map((g,i)=>{const got=S.med&&S.med[i],open=i===0||(S.med&&S.med[i-1]);
     return '<div class="lgc">'+gymMedal(i,got,34)+'<b>Gimnasio de '+g[3]+'</b><small>Líder: '+g[4]+' · Medalla '+g[0]+'</small><small class="mut">'+EM[g[1]]+' Tipo '+TIPO[g[1]]+' · Nv'+(g[2]-2)+'–'+gymAce(i)+'</small>'+(got?'':'<small class="mut">'+(i===gymNext()?'🔒 Límite actual: Nv'+gymAce(i):'Límite al llegar aquí: Nv'+gymAce(i))+'</small>')+'<button data-gym="'+i+'"'+(!open||fcd?' disabled':'')+'>'+(got?"🔁 Revancha":open?"⚔️ Desafiar":"🔒 Bloqueado")+'</button></div>'}).join("")+'</div><small id="gymMsg" class="mut"></small>';
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#gymBox button[data-gym]");if(!b)return;const i=+b.dataset.gym,g=GYMS[i];
   if(!(S.team||[]).some(n=>n&&S.owned[n]&&S.hp[n]!==0)){$("gymMsg").textContent="Necesitas un equipo con al menos un Pokémon con PS.";return}
-  startBattle({eteam:gymTeam(i),trainer:"Líder "+g[4],tsrc:{k:(LGSPR[g[1]]||LGSPR.normal)[i%2],n:"Líder "+g[4]},gym:i})});
+  startBattle({eteam:gymTeam(i),trainer:"Líder "+g[4],tsrc:{k:g[5]||(LGSPR[g[1]]||LGSPR.normal)[i%2],n:"Líder "+g[4]},gym:i})});
 // ================= temporadas PVP con rangos =================
 const seasonKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
 const ssnField=()=>"s"+seasonKey().replace("-","");

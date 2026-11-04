@@ -131,7 +131,7 @@ function beUse(E,i,a,rng,push,acted,faint){
 }
 function beTurn(E,acts,rng){
   const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)},N=E.sd.length,acted={};E._acts=acts;
-  const pri=i=>{const a=acts[i]||"x";if(a==="ff")return 9;if(/^s\d$/.test(a))return 8;if(a==="x")return 7;if(a==="d")return 6;const k=String(a).match(/^m(\d)/),sd=E.sd[i];const mv=k?beAct(sd).m[+k[1]]:null;return mv?mv.pr:0};
+  const pri=i=>{const a=acts[i]||"x";if(a==="ff")return 9;if(/^s\d$/.test(a))return 8;if(a==="x"||a==="h")return 7;if(a==="d")return 6;const k=String(a).match(/^m(\d)/),sd=E.sd[i];const mv=k?beAct(sd).m[+k[1]]:null;return mv?mv.pr:0};
   if(!E.abi){E.abi=1;E.fcl=E.sd.reduce((a,s)=>a+s.t.filter(x=>x.mh<=0).length,0);E.sd.forEach((s,i)=>{if(!s.out)beEnter(E,i,push)})}
   const sp=E.sd.map(s=>s.out?0:beSpd(s,rng,E)),qc=[];
   E.sd.forEach((s,i)=>{if(s.out)return;const m=beAct(s);if(m&&m.it==="qclaw"&&m.mh>0&&/^m\d|^st/.test(String(acts[i]||""))&&rng()<.2){sp[i]+=1e4;qc.push(i)}});
@@ -142,6 +142,7 @@ function beTurn(E,acts,rng){
     const sd=E.sd[i],a=acts[i]||"x";if(sd.out)continue;
     if(a==="ff"){sd.t.forEach(x=>{x.mh=0;x.fd=1});sd.out=1;sd.need=0;push({k:"ff",s:i});acted[i]=1;continue}
     if(/^s\d$/.test(a)){const k=+a[1];if(sd.t[k]&&sd.t[k].mh>0&&k!==sd.ai&&beAct(sd).mh>0){const old=beAct(sd);if(old.sts==="tox")old.tox=0;if(old.ab===144&&old.mh>0)old.mh=Math.min(old.mx,old.mh+Math.round(old.mx/3));if(old.ab===30)old.sts="";axLeave(E,i,old);sd.ai=k;sd.v=beVol();sd.v.nw=1;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old.p[0]});beEnter(E,i,push)}acted[i]=1;continue}
+    if(a==="h"){const m=beAct(sd);if(m.mh>0){const b0=m.mh;m.mh=Math.min(m.mx,m.mh+Math.round(m.mx*.5));push({k:"theal",s:i,n:m.p[0],h:m.mh-b0})}acted[i]=1;continue}
     if(a==="x"||beAct(sd).mh<=0){acted[i]=1;continue}
     if(a==="d"){sd.v.g=1;push({k:"guard",s:i,n:beAct(sd).p[0]});acted[i]=1;continue}
     beUse(E,i,a,rng,push,acted,faint);acted[i]=1;
@@ -171,9 +172,11 @@ function aiPick(E,i){
   const fo=beFoes(E,i).filter(j=>!E.sd[j].out&&beAct(E.sd[j]).mh>0);if(!fo.length)return "x";
   const tsd=E.sd[fo[0]],t=beAct(tsd),ok=m.m.map((mv,k)=>({mv:mv,k:k})).filter(o=>m.pp[o.k]>0);
   if(!ok.length)return "st";
-  const sc=ok.map(o=>{const mv=o.mv;if((mv.id==="252"||mv.id==="660")&&(sd.v.tn|0)>0)return 1;
+  const sc=ok.map(o=>{const mv=o.mv;if((mv.id==="252"||mv.id==="660")&&(sd.v.tn|0)>0)return 1;if(mv.cl>0&&!mv.typeless&&effP(axTy(m,mv),t.p)===0)return 1;
     if(mv.cl===0){if(mv.heal||mv.rest)return m.mh<m.mx*.4?140:3;if(mv.prot)return 14;if(mv.ail)return t.sts||(mv.ail==="cnf"&&tsd.v.cnf)?2:40;if(mv.ch.length){const s=mv.self?sd.v.st[mv.ch[0][0]]:tsd.v.st[mv.ch[0][0]];return Math.abs(s)>=2?3:22}return 4}
     return (mv.fixed||mv.flv||mv.half?55:mv.pw*(mv.hits?(mv.hits[0]+mv.hits[1])/2:1))*effP(mv.t,t.p)*(stabP(mv.t,m.p)?1.5:1)*(mv.ac?mv.ac/100:1)+8});
+  // entrenadores (gimnasios, Liga, Torre…): casi siempre eligen el mejor movimiento, como en los juegos
+  if(E.ai==="hard"&&Math.random()<.8){let bi=0;sc.forEach((v,z)=>{if(v>sc[bi])bi=z});return "m"+ok[bi].k}
   const tot=sc.reduce((a,b)=>a+b*b,0);let r=Math.random()*tot;
   for(let z=0;z<ok.length;z++){r-=sc[z]*sc[z];if(r<=0)return "m"+ok[z].k}
   return "m"+ok[0].k;
@@ -244,6 +247,7 @@ async function bePlay(ev){
         else await say("¡"+an+" de "+who+" se ha activado!");
         break}
       case "msg":bePaint(e.snap);await say(e.t);break;
+      case "theal":snd("heal");await fxHeal(sl.sp);bePaint(e.snap);await say("¡"+(B.trainerName||B.trainer||"El rival")+" ha usado una Hiperpoción! ¡"+who+" ha recuperado PS!");break;
       case "noaff":snd("miss");await say("No afecta a "+who+"...");break;
       case "rech":await say("¡"+who+" necesita recuperarse!");break;
       case "slp":fxZ(sl.sp);await say(who+" está dormido como un tronco.");break;
@@ -505,7 +509,7 @@ async function sSend(e){
 }
 async function sTurn(act){
   const b=B;B.busy=true;setMenu(false);
-  const ev=beTurn(B.E,[act,aiPick(B.E,1)],Math.random);
+  const ev=beTurn(B.E,[act,aiAct(B.E,1)],Math.random);
   await bePlay(ev);if(B!==b)return;
   await sAfter();
 }
@@ -647,3 +651,6 @@ async function evoPrompt(n,list){
   if(ok){evoApply(n,to);toast("🧬 ¡"+n+" ha evolucionado en "+to+"!");render();updTeam();setsUI&&setsUI()}
   return ok;
 }
+
+// entrenadores: usan Hiperpociones cuando su Pokémon está muy débil (las que les queden)
+function aiAct(E,i){const m=beAct(E.sd[i]);if(B&&B.trainer&&(B.tHeal|0)>0&&m&&m.mh>0&&m.mh<m.mx*.25&&Math.random()<.75){B.tHeal--;return "h"}return aiPick(E,i)}

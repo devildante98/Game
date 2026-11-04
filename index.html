@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793775308">
+<meta name="game-build" content="1793775528">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -3010,7 +3010,7 @@ function beUse(E,i,a,rng,push,acted,faint){
 }
 function beTurn(E,acts,rng){
   const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)},N=E.sd.length,acted={};E._acts=acts;
-  const pri=i=>{const a=acts[i]||"x";if(a==="ff")return 9;if(/^s\d$/.test(a))return 8;if(a==="x")return 7;if(a==="d")return 6;const k=String(a).match(/^m(\d)/),sd=E.sd[i];const mv=k?beAct(sd).m[+k[1]]:null;return mv?mv.pr:0};
+  const pri=i=>{const a=acts[i]||"x";if(a==="ff")return 9;if(/^s\d$/.test(a))return 8;if(a==="x"||a==="h")return 7;if(a==="d")return 6;const k=String(a).match(/^m(\d)/),sd=E.sd[i];const mv=k?beAct(sd).m[+k[1]]:null;return mv?mv.pr:0};
   if(!E.abi){E.abi=1;E.fcl=E.sd.reduce((a,s)=>a+s.t.filter(x=>x.mh<=0).length,0);E.sd.forEach((s,i)=>{if(!s.out)beEnter(E,i,push)})}
   const sp=E.sd.map(s=>s.out?0:beSpd(s,rng,E)),qc=[];
   E.sd.forEach((s,i)=>{if(s.out)return;const m=beAct(s);if(m&&m.it==="qclaw"&&m.mh>0&&/^m\d|^st/.test(String(acts[i]||""))&&rng()<.2){sp[i]+=1e4;qc.push(i)}});
@@ -3021,6 +3021,7 @@ function beTurn(E,acts,rng){
     const sd=E.sd[i],a=acts[i]||"x";if(sd.out)continue;
     if(a==="ff"){sd.t.forEach(x=>{x.mh=0;x.fd=1});sd.out=1;sd.need=0;push({k:"ff",s:i});acted[i]=1;continue}
     if(/^s\d$/.test(a)){const k=+a[1];if(sd.t[k]&&sd.t[k].mh>0&&k!==sd.ai&&beAct(sd).mh>0){const old=beAct(sd);if(old.sts==="tox")old.tox=0;if(old.ab===144&&old.mh>0)old.mh=Math.min(old.mx,old.mh+Math.round(old.mx/3));if(old.ab===30)old.sts="";axLeave(E,i,old);sd.ai=k;sd.v=beVol();sd.v.nw=1;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old.p[0]});beEnter(E,i,push)}acted[i]=1;continue}
+    if(a==="h"){const m=beAct(sd);if(m.mh>0){const b0=m.mh;m.mh=Math.min(m.mx,m.mh+Math.round(m.mx*.5));push({k:"theal",s:i,n:m.p[0],h:m.mh-b0})}acted[i]=1;continue}
     if(a==="x"||beAct(sd).mh<=0){acted[i]=1;continue}
     if(a==="d"){sd.v.g=1;push({k:"guard",s:i,n:beAct(sd).p[0]});acted[i]=1;continue}
     beUse(E,i,a,rng,push,acted,faint);acted[i]=1;
@@ -3050,9 +3051,11 @@ function aiPick(E,i){
   const fo=beFoes(E,i).filter(j=>!E.sd[j].out&&beAct(E.sd[j]).mh>0);if(!fo.length)return "x";
   const tsd=E.sd[fo[0]],t=beAct(tsd),ok=m.m.map((mv,k)=>({mv:mv,k:k})).filter(o=>m.pp[o.k]>0);
   if(!ok.length)return "st";
-  const sc=ok.map(o=>{const mv=o.mv;if((mv.id==="252"||mv.id==="660")&&(sd.v.tn|0)>0)return 1;
+  const sc=ok.map(o=>{const mv=o.mv;if((mv.id==="252"||mv.id==="660")&&(sd.v.tn|0)>0)return 1;if(mv.cl>0&&!mv.typeless&&effP(axTy(m,mv),t.p)===0)return 1;
     if(mv.cl===0){if(mv.heal||mv.rest)return m.mh<m.mx*.4?140:3;if(mv.prot)return 14;if(mv.ail)return t.sts||(mv.ail==="cnf"&&tsd.v.cnf)?2:40;if(mv.ch.length){const s=mv.self?sd.v.st[mv.ch[0][0]]:tsd.v.st[mv.ch[0][0]];return Math.abs(s)>=2?3:22}return 4}
     return (mv.fixed||mv.flv||mv.half?55:mv.pw*(mv.hits?(mv.hits[0]+mv.hits[1])/2:1))*effP(mv.t,t.p)*(stabP(mv.t,m.p)?1.5:1)*(mv.ac?mv.ac/100:1)+8});
+  // entrenadores (gimnasios, Liga, Torre…): casi siempre eligen el mejor movimiento, como en los juegos
+  if(E.ai==="hard"&&Math.random()<.8){let bi=0;sc.forEach((v,z)=>{if(v>sc[bi])bi=z});return "m"+ok[bi].k}
   const tot=sc.reduce((a,b)=>a+b*b,0);let r=Math.random()*tot;
   for(let z=0;z<ok.length;z++){r-=sc[z]*sc[z];if(r<=0)return "m"+ok[z].k}
   return "m"+ok[0].k;
@@ -3123,6 +3126,7 @@ async function bePlay(ev){
         else await say("¡"+an+" de "+who+" se ha activado!");
         break}
       case "msg":bePaint(e.snap);await say(e.t);break;
+      case "theal":snd("heal");await fxHeal(sl.sp);bePaint(e.snap);await say("¡"+(B.trainerName||B.trainer||"El rival")+" ha usado una Hiperpoción! ¡"+who+" ha recuperado PS!");break;
       case "noaff":snd("miss");await say("No afecta a "+who+"...");break;
       case "rech":await say("¡"+who+" necesita recuperarse!");break;
       case "slp":fxZ(sl.sp);await say(who+" está dormido como un tronco.");break;
@@ -3384,7 +3388,7 @@ async function sSend(e){
 }
 async function sTurn(act){
   const b=B;B.busy=true;setMenu(false);
-  const ev=beTurn(B.E,[act,aiPick(B.E,1)],Math.random);
+  const ev=beTurn(B.E,[act,aiAct(B.E,1)],Math.random);
   await bePlay(ev);if(B!==b)return;
   await sAfter();
 }
@@ -3526,6 +3530,9 @@ async function evoPrompt(n,list){
   if(ok){evoApply(n,to);toast("🧬 ¡"+n+" ha evolucionado en "+to+"!");render();updTeam();setsUI&&setsUI()}
   return ok;
 }
+
+// entrenadores: usan Hiperpociones cuando su Pokémon está muy débil (las que les queden)
+function aiAct(E,i){const m=beAct(E.sd[i]);if(B&&B.trainer&&(B.tHeal|0)>0&&m&&m.mh>0&&m.mh<m.mx*.25&&Math.random()<.75){B.tHeal--;return "h"}return aiPick(E,i)}
 // ================= imagenes de objetos (SVG creado con codigo) =================
 const ITEM_IMG={pot:"potion",spot:"super-potion",hpot:"hyper-potion",mpot:"max-potion",rev:"revive",mrev:"max-revive",pb:"poke-ball",sb:"great-ball",ub:"ultra-ball",mb:"master-ball",cand:"rare-candy",eter:"ether",meter:"max-ether",elix:"elixir",melix:"max-elixir",ppup:"pp-up",ppmax:"pp-max"};
 // si la imagen original no carga se usa el dibujo propio (o 💎 para los objetos evolutivos)
@@ -3735,7 +3742,7 @@ function leagueEnemies(li,k,lead){
   }
   out.sort((a,b)=>WW[a[2]]-WW[b[2]]);
   const base=lead+2+k*2+li*2;
-  return out.map((p,i)=>mkEnemy(p,clampL(base+i)));
+  return out.map((p,i)=>{const L=clampL(base+i);return mkEnemy(typeof stageFor==="function"?stageFor(p,L):p,L)});
 }
 function leagueSpr(li,k){const L=LEAGUES[li],nm=k===4?L.c[0]:L.e[k][0],ty=k===4?"normal":L.e[k][1],q=LGSPR[ty]||LGSPR.normal;return k===4?(isFem(nm)?"acetrainerf":"acetrainer"):q[isFem(nm)?1:0]}
 const leadLevel=()=>{const n=(S.team||[]).find(x=>x&&S.owned[x]&&S.hp[x]!==0);return n?lvd(n).l:1};
@@ -3821,9 +3828,11 @@ async function startBattle(cfg){
     const x=Math.random()*100,r=x<2?"L":x<8?"E":x<30?"R":"C",op=wildPick(r);
     eteam=[mkEnemy(op,clampL(wl+Math.floor(Math.random()*5)-2+WW[r]-1))];if(Math.random()<SHINY_W)eteam[0].sh=1;
   }
-  const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);
+  // dificultad como en los juegos: los entrenadores tienen Pokémon mejor entrenados (Líderes, Liga y Torre más aún)
+  if(trainer){const k=cfg&&cfg.eteam?1.2:1.1,ka=cfg&&cfg.eteam?1.15:1.08;eteam.forEach(m=>{m.mx=Math.round(m.mx*k);m.mh=m.mx;m.ma*=ka})}
+  const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);E.ai=trainer?"hard":"";
   B={mode:"s",E:E,me:0,SL:[SL_ME,SL_OP],trainer:trainer,tsrc:tsrc,league:league,gym:cfg&&cfg.gym!=null?cfg.gym:null,zone:cfg&&cfg.eteam?null:zoneCur(),xpPool:0,busy:true,choose:null,item:null,showOpp:!!trainer,
-    tower:cfg&&cfg.tower?1:0,
+    tower:cfg&&cfg.tower?1:0,tHeal:!trainer?0:cfg&&cfg.gym!=null?2:league?3:cfg&&cfg.tower?1:1,
     who:(i,n)=>i===0?(typeof nk==="function"?nk(n):n):(trainer?n+" de "+trainer:n+" salvaje"),mine:i=>i===0,onSend:sSend};
   $("fsel").hidden=true;$("arena").hidden=false;arenaReset();
   $("hlpp").hidden=true;$("otn").textContent=trainer?"👤 "+trainer:"";
@@ -5810,7 +5819,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793775308";
+const GAME_B="1793775528";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -5912,17 +5921,37 @@ const lvCap=()=>{const i=gymNext();return i<0?100:gymAce(i)};
 const capWhy=()=>{const i=gymNext();return i<0?"":"Derrota al Líder "+GYMS[i][4]+" (Gimnasio de "+GYMS[i][3]+") para subir el límite."};
 const medCount=()=>Object.keys(S.med||{}).filter(k=>S.med[k]).length;
 const lgUnlocked=()=>medCount()>=8||Object.keys(S.lgDone||{}).length>0||!!S.lg;
+// ---- Líderes por región: cambian con cada nivel de prestigio (Kanto, Johto, Hoenn, Sinnoh, Teselia, Kalos y vuelta a empezar)
+// [medalla, tipo, ciudad, líder, sprite]
+const GYM_REG=[
+ ["Kanto",[["Roca","rock","Ciudad Plateada","Brock","brock"],["Cascada","water","Ciudad Celeste","Misty","misty"],["Trueno","electric","Ciudad Carmín","Teniente Surge","ltsurge"],["Arcoíris","grass","Ciudad Azulona","Erika","erika"],["Alma","poison","Ciudad Fucsia","Koga","koga"],["Pantano","psychic","Ciudad Azafrán","Sabrina","sabrina"],["Volcán","fire","Isla Canela","Blaine","blaine"],["Tierra","ground","Ciudad Verde","Giovanni","giovanni"]]],
+ ["Johto",[["Céfiro","flying","Ciudad Malva","Pegaso","falkner"],["Colmena","bug","Pueblo Azalea","Antón","bugsy"],["Planicie","normal","Ciudad Trigal","Blanca","whitney"],["Niebla","ghost","Ciudad Iris","Morti","morty"],["Tormenta","fighting","Ciudad Orquídea","Aníbal","chuck"],["Mineral","steel","Ciudad Olivo","Yasmina","jasmine"],["Glaciar","ice","Pueblo Caoba","Fredo","pryce"],["Dragón","dragon","Ciudad Endrino","Débora","clair"]]],
+ ["Hoenn",[["Piedra","rock","Ciudad Férrica","Petra","roxanne"],["Puño","fighting","Pueblo Azuliza","Marcial","brawly"],["Dinamo","electric","Ciudad Malvalona","Erico","wattson"],["Calor","fire","Pueblo Lavacalda","Candela","flannery"],["Equilibrio","normal","Ciudad Petalia","Norman","norman"],["Pluma","flying","Ciudad Arborada","Alana","winona"],["Mente","psychic","Ciudad Algaria","Vito y Leti","tateandliza"],["Lluvia","water","Ciudad Arrecípolis","Galano","juan"]]],
+ ["Sinnoh",[["Lignito","rock","Ciudad Pirita","Roco","roark"],["Bosque","grass","Ciudad Vetusta","Gardenia","gardenia"],["Adoquín","fighting","Pueblo Rocavelo","Brega","maylene"],["Ciénaga","water","Ciudad Pradera","Mananti","crasherwake"],["Reliquia","ghost","Ciudad Corazón","Fantina","fantina"],["Mina","steel","Ciudad Canal","Acero","byron"],["Carámbano","ice","Ciudad Puntaneva","Inverna","candice"],["Faro","electric","Ciudad Marina","Lectro","volkner"]]],
+ ["Teselia",[["Trío","grass","Ciudad Gres","Millo","cilan"],["Base","normal","Ciudad Esmalte","Aloe","lenora"],["Insecto","bug","Ciudad Porcelana","Camus","burgh"],["Voltio","electric","Ciudad Mayólica","Camila","elesa"],["Temblor","ground","Ciudad Fayenza","Yakón","clay"],["Jet","flying","Ciudad Loza","Gerania","skyla"],["Iceberg","ice","Ciudad Teja","Junco","brycen"],["Leyenda","dragon","Ciudad Caolín","Lirio","drayden"]]],
+ ["Kalos",[["Insecto","bug","Ciudad Novarte","Violeta","viola"],["Muro","rock","Ciudad Relieve","Lino","grant"],["Lucha","fighting","Ciudad Yantra","Corelia","korrina"],["Planta","grass","Ciudad Romantis","Amaro","ramos"],["Voltio","electric","Ciudad Luminalia","Lem","clemont"],["Hada","fairy","Ciudad Fluxus","Valeria","valerie"],["Psique","psychic","Ciudad Témpera","Ástrid","olympia"],["Iceberg","ice","Ciudad Fractal","Édel","wulfric"]]]];
+const GYM_LV=[12,18,24,30,36,42,48,54];let _gymReg=-1;
+const gymRegI=()=>(S.prs|0)%GYM_REG.length;
+function gymRegion(){const r=gymRegI();if(r===_gymReg)return;_gymReg=r;GYM_REG[r][1].forEach((g,i)=>{GYMS[i]=[g[0],g[1],GYM_LV[i],g[2],g[3],g[4]]});try{_gyk=""}catch(e){}}
+gymRegion();setInterval(gymRegion,3000);
+// ---- etapa evolutiva acorde al nivel (como en los juegos: nada de prevoluciones a nivel 40)
+function stageFor(p,L){if(!p)return p;let n=p[0];for(let k=0;k<4&&typeof PREVO!=="undefined"&&PREVO[n];k++)n=PREVO[n];
+  for(let k=0;k<4;k++){const ev=EVO(n).filter(e=>PM[e[0]]&&!isMegaF(e[0])&&!(typeof isSup==="function"&&isSup(e[0])));if(!ev.length)break;
+    const lvE=ev.find(e=>e[1][0]==="L"&&L>=+e[1].slice(1)),otE=ev.find(e=>e[1][0]!=="L"&&L>=30);const nx=lvE||otE;if(!nx)break;n=nx[0]}
+  return PM[n]||p}
 function gymTeam(i){
-  const g=GYMS[i],rng=rngS(1000+i*77),n=3+Math.floor(i/3),pool=P.filter(p=>p[1]===g[1]&&p[3]<10&&p[2]!=="L"),out=[];
-  for(let k=0;k<30&&out.length<n;k++){const p=pool[Math.floor(rng()*pool.length)];if(p&&!out.includes(p))out.push(p)}
+  gymRegion();
+  const g=GYMS[i],rng=rngS(1000+i*77+(S.prs|0)*7919),n=Math.min(6,3+Math.floor(i/2)),pool=P.filter(p=>tys(p).includes(g[1])&&p[3]<10&&p[2]!=="L"&&p[2]!=="M"&&!isMegaF(p[0])),out=[];
+  const lvK=k=>gymAce(i)-(n-1-k)*2;
+  for(let k=0;k<60&&out.length<n;k++){const p0=pool[Math.floor(rng()*pool.length)],lv=lvK(out.length),p=stageFor(p0,lv);if(p&&tys(p).includes(g[1])&&!out.includes(p))out.push(p)}
   out.sort((a,b)=>WW[a[2]]-WW[b[2]]);
   const rm=S.med&&S.med[i]?Math.max(0,leadLevel()-g[2]):0;
-  return out.map((p,k)=>mkEnemy(p,clampL(g[2]+k*2-2+rm)));
+  return out.map((p,k)=>{const L=clampL(lvK(k)+rm);return mkEnemy(stageFor(p,L),L)});
 }
 // medallas originales de los juegos (PokeAPI): Roca, Cascada, Trueno, Arcoíris, Alma, Pantano, Volcán y Tierra
 const BADGE="https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/badges/";
 function badgeErr(el){if(!el.dataset.r){el.dataset.r=1;el.src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/badges/"+el.dataset.b+".png";return}const g=GYMS[+el.dataset.g];el.replaceWith(document.createTextNode(EM[g[1]]))}
-function gymMedal(i,on,s){const g=GYMS[i];return '<span class="medal'+(on?' on':'')+'" title="Medalla '+g[0]+(on?'':' (sin conseguir)')+'" style="--mc:'+TC[g[1]]+(s?';--ms:'+s+'px':'')+'"><img src="'+BADGE+(i+1)+'.png" alt="" loading="lazy" data-b="'+(i+1)+'" data-g="'+i+'" onerror="badgeErr(this)"></span>'}
+function gymMedal(i,on,s){const g=GYMS[i];return '<span class="medal'+(on?' on':'')+'" title="Medalla '+g[0]+(on?'':' (sin conseguir)')+'" style="--mc:'+TC[g[1]]+(s?';--ms:'+s+'px':'')+'"><img src="'+BADGE+(gymRegI()*8+i+1)+'.png" alt="" loading="lazy" data-b="'+(gymRegI()*8+i+1)+'" data-g="'+i+'" onerror="badgeErr(this)"></span>'}
 async function gymWin(i){
   const g=GYMS[i];S.med=S.med||{};
   if(!S.med[i]){
@@ -5937,12 +5966,12 @@ async function gymWin(i){
 let _gyk="";
 function gymUI(){
   const box=$("gymBox");if(!box)return;const key=JSON.stringify([S.med,fcd]);if(key===_gyk)return;_gyk=key;
-  box.innerHTML='<div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,S.med&&S.med[i])).join("")+'<b>'+medCount()+' / 8 medallas</b></div>'+(gymNext()<0?'<div class="capbar ok">🔓 <span><b>Sin límite de nivel</b> · ¡Tienes las 8 medallas! Tus Pokémon pueden llegar al Nv100.</span></div>':'<div class="capbar">🔒 <span><b>Límite de nivel: Nv'+lvCap()+'</b> · Tus Pokémon no subirán de este nivel ni podrás capturar Pokémon salvajes más fuertes hasta que derrotes al Líder '+GYMS[gymNext()][4]+'.</span></div>')+'<div class="lggrid">'+GYMS.map((g,i)=>{const got=S.med&&S.med[i],open=i===0||(S.med&&S.med[i-1]);
+  box.innerHTML='<div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,S.med&&S.med[i])).join("")+'<b>'+medCount()+' / 8 medallas · Región de '+GYM_REG[gymRegI()][0]+'</b></div>'+(gymNext()<0?'<div class="capbar ok">🔓 <span><b>Sin límite de nivel</b> · ¡Tienes las 8 medallas! Tus Pokémon pueden llegar al Nv100.</span></div>':'<div class="capbar">🔒 <span><b>Límite de nivel: Nv'+lvCap()+'</b> · Tus Pokémon no subirán de este nivel ni podrás capturar Pokémon salvajes más fuertes hasta que derrotes al Líder '+GYMS[gymNext()][4]+'.</span></div>')+'<div class="lggrid">'+GYMS.map((g,i)=>{const got=S.med&&S.med[i],open=i===0||(S.med&&S.med[i-1]);
     return '<div class="lgc">'+gymMedal(i,got,34)+'<b>Gimnasio de '+g[3]+'</b><small>Líder: '+g[4]+' · Medalla '+g[0]+'</small><small class="mut">'+EM[g[1]]+' Tipo '+TIPO[g[1]]+' · Nv'+(g[2]-2)+'–'+gymAce(i)+'</small>'+(got?'':'<small class="mut">'+(i===gymNext()?'🔒 Límite actual: Nv'+gymAce(i):'Límite al llegar aquí: Nv'+gymAce(i))+'</small>')+'<button data-gym="'+i+'"'+(!open||fcd?' disabled':'')+'>'+(got?"🔁 Revancha":open?"⚔️ Desafiar":"🔒 Bloqueado")+'</button></div>'}).join("")+'</div><small id="gymMsg" class="mut"></small>';
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#gymBox button[data-gym]");if(!b)return;const i=+b.dataset.gym,g=GYMS[i];
   if(!(S.team||[]).some(n=>n&&S.owned[n]&&S.hp[n]!==0)){$("gymMsg").textContent="Necesitas un equipo con al menos un Pokémon con PS.";return}
-  startBattle({eteam:gymTeam(i),trainer:"Líder "+g[4],tsrc:{k:(LGSPR[g[1]]||LGSPR.normal)[i%2],n:"Líder "+g[4]},gym:i})});
+  startBattle({eteam:gymTeam(i),trainer:"Líder "+g[4],tsrc:{k:g[5]||(LGSPR[g[1]]||LGSPR.normal)[i%2],n:"Líder "+g[4]},gym:i})});
 // ================= temporadas PVP con rangos =================
 const seasonKey=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
 const ssnField=()=>"s"+seasonKey().replace("-","");

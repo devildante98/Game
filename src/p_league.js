@@ -35,7 +35,7 @@ function leagueEnemies(li,k,lead){
   }
   out.sort((a,b)=>WW[a[2]]-WW[b[2]]);
   const base=lead+2+k*2+li*2;
-  return out.map((p,i)=>mkEnemy(p,clampL(base+i)));
+  return out.map((p,i)=>{const L=clampL(base+i);return mkEnemy(typeof stageFor==="function"?stageFor(p,L):p,L)});
 }
 function leagueSpr(li,k){const L=LEAGUES[li],nm=k===4?L.c[0]:L.e[k][0],ty=k===4?"normal":L.e[k][1],q=LGSPR[ty]||LGSPR.normal;return k===4?(isFem(nm)?"acetrainerf":"acetrainer"):q[isFem(nm)?1:0]}
 const leadLevel=()=>{const n=(S.team||[]).find(x=>x&&S.owned[x]&&S.hp[x]!==0);return n?lvd(n).l:1};
@@ -121,9 +121,11 @@ async function startBattle(cfg){
     const x=Math.random()*100,r=x<2?"L":x<8?"E":x<30?"R":"C",op=wildPick(r);
     eteam=[mkEnemy(op,clampL(wl+Math.floor(Math.random()*5)-2+WW[r]-1))];if(Math.random()<SHINY_W)eteam[0].sh=1;
   }
-  const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);
+  // dificultad como en los juegos: los entrenadores tienen Pokémon mejor entrenados (Líderes, Liga y Torre más aún)
+  if(trainer){const k=cfg&&cfg.eteam?1.2:1.1,ka=cfg&&cfg.eteam?1.15:1.08;eteam.forEach(m=>{m.mx=Math.round(m.mx*k);m.mh=m.mx;m.ma*=ka})}
+  const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);E.ai=trainer?"hard":"";
   B={mode:"s",E:E,me:0,SL:[SL_ME,SL_OP],trainer:trainer,tsrc:tsrc,league:league,gym:cfg&&cfg.gym!=null?cfg.gym:null,zone:cfg&&cfg.eteam?null:zoneCur(),xpPool:0,busy:true,choose:null,item:null,showOpp:!!trainer,
-    tower:cfg&&cfg.tower?1:0,
+    tower:cfg&&cfg.tower?1:0,tHeal:!trainer?0:cfg&&cfg.gym!=null?2:league?3:cfg&&cfg.tower?1:1,
     who:(i,n)=>i===0?(typeof nk==="function"?nk(n):n):(trainer?n+" de "+trainer:n+" salvaje"),mine:i=>i===0,onSend:sSend};
   $("fsel").hidden=true;$("arena").hidden=false;arenaReset();
   $("hlpp").hidden=true;$("otn").textContent=trainer?"👤 "+trainer:"";

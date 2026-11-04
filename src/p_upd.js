@@ -831,20 +831,24 @@ function gmFill(){const g=document.querySelector("#gmach .gmballs");if(!g||g.chi
   g.innerHTML=L.map((r,i)=>gbHTML(r).replace('class="gb','style="left:'+P[i][0]+'px;top:'+P[i][1]+'px" class="gb')).join("")}
 setTimeout(gmFill,300);
 function gachaShow(res,n,best,back,sup,RC){
-  gmFill();const out=$("out"),M=$("gmach"),calm=typeof hubCalm==="function"&&hubCalm(),stage=$("stage");
+  gmFill();const M=$("gmach"),calm=typeof hubCalm==="function"&&hubCalm();$("out").innerHTML="";
+  let GM=$("gacM");if(!GM){GM=document.createElement("div");GM.id="gacM";GM.setAttribute("role","dialog");GM.setAttribute("aria-modal","true");GM.setAttribute("aria-label","Resultados de la tirada");document.body.appendChild(GM);
+    GM.addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.dataset.gk==="skip"){if(SK)SK();return}if((b&&b.dataset.gk==="ok")||(e.target===GM&&!busy)){GM.hidden=true;snd("ui")}})}
+  GM.innerHTML='<div class="gacbox'+(sup?' sup':'')+(n>=100?' gx100':'')+'"><h2>'+(sup?'✨ Súper tirada':'🎰 Tirada')+' ×'+n+'</h2><div id="gacOut" class="results"></div><p class="gacmsg" id="gacMsg"></p><div class="jrow"><button class="alt" data-gk="skip">Saltar animación ⏭</button><button class="red" data-gk="ok" hidden>¡Genial!</button></div></div>';
+  GM.hidden=true;const out=$("gacOut"),stage=GM.querySelector(".gacbox");
   const cards=res.map(x=>cardHTML(x[0],x[1],x[2],n===1,x[3])),anySh=res.some(x=>x[3]);
   const cnt={};res.forEach(x=>{const r=x[0][2];cnt[r]=(cnt[r]||0)+1});const nn=res.filter(x=>x[1]).length;
   const sum=n>=100?["C","R","E","M","L"].filter(r=>cnt[r]).map(r=>({C:"Común",R:"Raro",E:"Épico",M:"Forma especial",L:"Legendario"}[r])+" ×"+cnt[r]).join(" · ")+(nn?" · ¡"+nn+" nuevos!":"")+(anySh?" · ✨ "+res.filter(x=>x[3]).length+" variocolor":""):"";
   out.className="results"+(n>=100?" x100":n===1?" one":"");
   const flash=c=>{const f=$("flash");f.style.background="radial-gradient(circle,"+c+",transparent 70%)";f.classList.remove("go");void f.offsetWidth;f.classList.add("go")};
-  const end=()=>{PT.forEach(clearTimeout);PT=[];SK=null;$("skip").hidden=true;if(M)M.classList.remove("spin","pull","chute");
+  const end=()=>{PT.forEach(clearTimeout);PT=[];SK=null;$("skip").hidden=true;GM.hidden=false;const ok=GM.querySelector('[data-gk="ok"]'),sk=GM.querySelector('[data-gk="skip"]');if(ok){ok.hidden=false;ok.focus()}if(sk)sk.hidden=true;if(M)M.classList.remove("spin","pull","chute");
     if(sum&&!out.querySelector(".gsum"))out.insertAdjacentHTML("afterbegin",'<div class="gsum">'+esc(sum)+'</div>');
-    $("msg").textContent=(anySh?"✨ ¡VARIOCOLOR! ":"")+(best==="L"?"¡LEGENDARIO! ":best==="M"?"¡FORMA ESPECIAL! ":best==="E"?"¡Épico! ":"")+(back?"Repetidos devueltos: +"+fmt(back)+" 🎟️":"");busy=false;render()};
+    const mt=(anySh?"✨ ¡VARIOCOLOR! ":"")+(best==="L"?"¡LEGENDARIO! ":best==="M"?"¡FORMA ESPECIAL! ":best==="E"?"¡Épico! ":"")+(back?"Repetidos devueltos: +"+fmt(back)+" 🎟️":"");$("msg").textContent=mt;const gm=$("gacMsg");if(gm)gm.textContent=mt;busy=false;render()};
   SK=()=>{out.innerHTML=res.map((x,i)=>'<div class="slot">'+cards[i]+'</div>').join("");snd("rev",anySh&&best!=="L"?"S":best);end()};
-  $("skip").hidden=!O.skip||!!O.askip;
+  $("skip").hidden=true;
   if(O.askip||calm||!M){SK();return}
   out.innerHTML="";M.classList.toggle("sup",!!sup);M.classList.remove("pull","spin","chute");void M.offsetWidth;M.classList.add("pull","spin");snd("click");
-  const big=n>=100,step=big?16:n>1?190:0,t0=720;
+  const big=n>=100,step=big?16:n>1?190:0,t0=900;tm(()=>{GM.hidden=false},650);
   res.forEach((x,i)=>tm(()=>{const s=document.createElement("div");s.className="slot";s.innerHTML=gbHTML(x[0][2],"drop"+(x[3]?" shiny":"")+(n===1?" big":""));
     s.firstChild.style.setProperty("--dx",(Math.random()*60-30).toFixed(0)+"px");out.appendChild(s);
     if(!big||i%10===0){snd(big?"pop":"ui");M.classList.remove("chute");void M.offsetWidth;M.classList.add("chute")}},t0+i*step));

@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793802664">
+<meta name="game-build" content="1793802988">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -6211,7 +6211,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793802664";
+const GAME_B="1793802988";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7305,20 +7305,21 @@ const chMuted=u=>!!(S.chMute&&S.chMute[u]);
 const dmKey=u=>{const me=chMe();return [me,u].sort().join("_")};
 const chKey=()=>CH.tab==="global"?"global":CH.tab==="guild"?(GS.gid?"g:"+GS.gid:""):CH.dm?"d:"+dmKey(CH.dm):"";
 // ---- suscripciones ----
+// con el chat cerrado cada conversación se escucha con 1 solo mensaje (basta para avisar de los nuevos);
+// la que tienes abierta se carga entera y sigue así 2 minutos después de cerrarla
+function chLimFor(k){const act=CH.open?chKey():"";CH.fu=CH.fu||{};if(k===act)CH.fu[k]=Date.now()+120000;if(k===act||(CH.fu[k]||0)>Date.now())return k==="global"?40:k.startsWith("g:")?30:50;return 1}
 function chSub(k){
   if(!k||CH.unsub[k]||!window.FB||!window.FB.chWatch)return;
-  const [t,id]=k==="global"?["global","global"]:k.split(":");
-  // los chats privados se escuchan con pocos mensajes (para avisar de los nuevos) y al abrirlos se cargan enteros
-  const full=CH.full&&CH.full[k];CH.lim=CH.lim||{};CH.lim[k]=full?1:0;
-  try{CH.unsub[k]=window.FB.chWatch(t,id,l=>{CH.msgs[k]=l.sort((a,b)=>(a.at||0)-(b.at||0));chOnMsgs(k)},full?50:0)}catch(e){CH.unsub[k]=null}
+  const [t,id]=k==="global"?["global","global"]:k.split(":");const lim=chLimFor(k);CH.lim=CH.lim||{};CH.lim[k]=lim;
+  try{CH.unsub[k]=window.FB.chWatch(t,id,l=>{CH.msgs[k]=l.sort((a,b)=>(a.at||0)-(b.at||0));chOnMsgs(k)},lim)}catch(e){CH.unsub[k]=null}
 }
 function chUnsub(k){if(CH.unsub[k]){try{CH.unsub[k]()}catch(e){}delete CH.unsub[k];delete CH.msgs[k]}}
 let _chSync="";
 function chSync(){
   if(!window.FB||!window.FB.chWatch||!chMe())return;
   const want=["global"];if(GS.gid)want.push("g:"+GS.gid);Object.keys(FR.l||{}).slice(0,40).forEach(u=>want.push("d:"+dmKey(u)));
-  const act=CH.open?chKey():"";if(act&&act.startsWith("d:")){CH.full=CH.full||{};if(!CH.full[act]){CH.full[act]=1;if(CH.unsub[act]&&!(CH.lim&&CH.lim[act])){try{CH.unsub[act]()}catch(e){}delete CH.unsub[act];_chSync=""}}}
-  const key=want.join("|");if(key===_chSync)return;_chSync=key;
+  CH.lim=CH.lim||{};want.forEach(k=>{if(CH.unsub[k]&&CH.lim[k]!==chLimFor(k)){try{CH.unsub[k]()}catch(e){}delete CH.unsub[k];_chSync=""}});
+  const key=want.join("|")+"#"+want.filter(k=>CH.unsub[k]).length;if(key===_chSync)return;_chSync=key;
   Object.keys(CH.unsub).forEach(k=>{if(!want.includes(k))chUnsub(k)});want.forEach(chSub);
 }
 setInterval(()=>{try{chSync();chBtn()}catch(e){}},3000);
@@ -10884,6 +10885,12 @@ async function main(){
     const u="https://www.gstatic.com/firebasejs/10.14.1";
     [A,F,S]=await Promise.all([import(u+"/firebase-app.js"),import(u+"/firebase-auth.js"),import(u+"/firebase-firestore.js")]);
   }catch(e){msg("No se pudo cargar Firebase (¿sin conexión?). Puedes jugar sin cuenta.");return}
+  {const os=S.onSnapshot,subs=new Set();let paused=false,ht=0;
+    const W=(...a)=>{const s={a:a,u:null,dead:false};if(!paused)s.u=os(...a);subs.add(s);return()=>{s.dead=true;subs.delete(s);try{s.u&&s.u()}catch(e){}s.u=null}};
+    document.addEventListener("visibilitychange",()=>{clearTimeout(ht);
+      if(document.hidden)ht=setTimeout(()=>{if(!document.hidden)return;paused=true;subs.forEach(s=>{try{s.u&&s.u()}catch(e){}s.u=null})},90000);
+      else if(paused){paused=false;subs.forEach(s=>{if(!s.dead&&!s.u){try{s.u=os(...s.a)}catch(e){}}})}});
+    S=Object.assign({},S,{onSnapshot:W})}
   const app=A.initializeApp(cfg),auth=F.getAuth(app),db=S.getFirestore(app);
   let uid=null,started=false,timer=0,pending=null,lobby=null,cu=null;
   // apodos unicos: nicks/{clave} guarda el uid del dueño

@@ -15,20 +15,21 @@ const chMuted=u=>!!(S.chMute&&S.chMute[u]);
 const dmKey=u=>{const me=chMe();return [me,u].sort().join("_")};
 const chKey=()=>CH.tab==="global"?"global":CH.tab==="guild"?(GS.gid?"g:"+GS.gid:""):CH.dm?"d:"+dmKey(CH.dm):"";
 // ---- suscripciones ----
+// con el chat cerrado cada conversación se escucha con 1 solo mensaje (basta para avisar de los nuevos);
+// la que tienes abierta se carga entera y sigue así 2 minutos después de cerrarla
+function chLimFor(k){const act=CH.open?chKey():"";CH.fu=CH.fu||{};if(k===act)CH.fu[k]=Date.now()+120000;if(k===act||(CH.fu[k]||0)>Date.now())return k==="global"?40:k.startsWith("g:")?30:50;return 1}
 function chSub(k){
   if(!k||CH.unsub[k]||!window.FB||!window.FB.chWatch)return;
-  const [t,id]=k==="global"?["global","global"]:k.split(":");
-  // los chats privados se escuchan con pocos mensajes (para avisar de los nuevos) y al abrirlos se cargan enteros
-  const full=CH.full&&CH.full[k];CH.lim=CH.lim||{};CH.lim[k]=full?1:0;
-  try{CH.unsub[k]=window.FB.chWatch(t,id,l=>{CH.msgs[k]=l.sort((a,b)=>(a.at||0)-(b.at||0));chOnMsgs(k)},full?50:0)}catch(e){CH.unsub[k]=null}
+  const [t,id]=k==="global"?["global","global"]:k.split(":");const lim=chLimFor(k);CH.lim=CH.lim||{};CH.lim[k]=lim;
+  try{CH.unsub[k]=window.FB.chWatch(t,id,l=>{CH.msgs[k]=l.sort((a,b)=>(a.at||0)-(b.at||0));chOnMsgs(k)},lim)}catch(e){CH.unsub[k]=null}
 }
 function chUnsub(k){if(CH.unsub[k]){try{CH.unsub[k]()}catch(e){}delete CH.unsub[k];delete CH.msgs[k]}}
 let _chSync="";
 function chSync(){
   if(!window.FB||!window.FB.chWatch||!chMe())return;
   const want=["global"];if(GS.gid)want.push("g:"+GS.gid);Object.keys(FR.l||{}).slice(0,40).forEach(u=>want.push("d:"+dmKey(u)));
-  const act=CH.open?chKey():"";if(act&&act.startsWith("d:")){CH.full=CH.full||{};if(!CH.full[act]){CH.full[act]=1;if(CH.unsub[act]&&!(CH.lim&&CH.lim[act])){try{CH.unsub[act]()}catch(e){}delete CH.unsub[act];_chSync=""}}}
-  const key=want.join("|");if(key===_chSync)return;_chSync=key;
+  CH.lim=CH.lim||{};want.forEach(k=>{if(CH.unsub[k]&&CH.lim[k]!==chLimFor(k)){try{CH.unsub[k]()}catch(e){}delete CH.unsub[k];_chSync=""}});
+  const key=want.join("|")+"#"+want.filter(k=>CH.unsub[k]).length;if(key===_chSync)return;_chSync=key;
   Object.keys(CH.unsub).forEach(k=>{if(!want.includes(k))chUnsub(k)});want.forEach(chSub);
 }
 setInterval(()=>{try{chSync();chBtn()}catch(e){}},3000);

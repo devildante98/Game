@@ -31,7 +31,22 @@ const HOLD=[
  ["z_dragon","Dracostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Dragón (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
  ["z_dark","Nictostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Siniestro (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
  ["z_steel","Metalostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Acero (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
- ["z_fairy","Feeristal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Hada (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"]];
+ ["z_fairy","Feeristal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Hada (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["zx_incin","Incinostal Z",0,"Cristal Z exclusivo de Incineroar: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_decid","Decidustal Z",0,"Cristal Z exclusivo de Decidueye: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_prima","Primastal Z",0,"Cristal Z exclusivo de Primarina: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_pika","Pikastal Z",0,"Cristal Z exclusivo de Pikachu: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_raichu","Raichustal Z",0,"Cristal Z exclusivo de Raichu de Alola: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_snor","Snorlastal Z",0,"Cristal Z exclusivo de Snorlax: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_mimi","Mimikyustal Z",0,"Cristal Z exclusivo de Mimikyu: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_lycan","Lycanrostal Z",0,"Cristal Z exclusivo de Lycanroc: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_kommo","Kommostal Z",0,"Cristal Z exclusivo de Kommo-o: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_solga","Solgalestal Z",0,"Cristal Z exclusivo de Solgaleo: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_luna","Lunalastal Z",0,"Cristal Z exclusivo de Lunala: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_marsha","Marshastal Z",0,"Cristal Z exclusivo de Marshadow: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_tapu","Tapustal Z",0,"Cristal Z exclusivo de los Tapus: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_mew","Mewstal Z",0,"Cristal Z exclusivo de Mew: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"],
+ ["zx_unec","Ultranecrostal Z",0,"Cristal Z exclusivo de Ultra-Necrozma: le permite usar su movimiento Z propio una vez por combate (si conoce su ataque especial)"]];
 const HIMG={left:"leftovers",lorb:"life-orb",sash:"focus-sash",sitrus:"sitrus-berry",lum:"lum-berry",qclaw:"quick-claw",scope:"scope-lens",shell:"shell-bell",lucky:"lucky-egg"};
 const HOLDK={};HOLD.forEach(h=>{HOLDK[h[0]]=h;ITEMS.push([h[0],h[1],h[2],0,0,0,h[3]+". Se equipa desde la Mochila o desde la ficha del Pokémon","hold"])});
 // ================= naturalezas: +10% en una estadística y -10% en otra (el Ataque y el Ataque Especial son la misma aquí, igual que la Defensa y la Defensa Especial) =================
@@ -39,6 +54,9 @@ const NAT=[["Fuerte"],["Huraña","atk","def"],["Audaz","atk","spe"],["Firme"],["
 const NSTAT={atk:"Ataque",def:"Defensa",spe:"Velocidad"};
 function natOf(n){S.nat=S.nat||{};if(S.nat[n]==null){if(!(S.owned&&S.owned[n]>0))return 0;S.nat[n]=Math.floor(Math.random()*NAT.length)}return S.nat[n]|0}
 const natTxt=i=>{const N=NAT[i]||NAT[0];return N[1]?"+10% "+NSTAT[N[1]]+" · −10% "+NSTAT[N[2]]:"Neutra: no cambia ninguna estadística"};
+// Mentas (como en Espada y Escudo): cambian la naturaleza de un Pokémon
+const MINTS=NAT.map((N,i)=>[N,i]).filter(x=>x[0][1]||x[0][0]==="Seria");
+MINTS.forEach(([N,i])=>ITEMS.push(["mint"+i,"Menta "+N[0],400000,0,0,0,"Cambia la naturaleza de un Pokémon a "+N[0]+" ("+natTxt(i)+")","mint"]));
 const heldOf=n=>{const h=S.held&&S.held[n];return h&&HOLDK[h]?h:""};
 function monX(m,nt,it){const N=NAT[nt]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1;m.nt=nt|0;m.ma*=f("atk");m.nd=f("def");m.ns=f("spe");m.it=it||"";return m}
 

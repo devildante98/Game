@@ -587,3 +587,54 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
   if(res==="win"){if(!st.z[t]){st.z[t]=1;S.bag["z_"+t]=(S.bag["z_"+t]|0)+1;const it=ITEMS.find(x=>x[0]==="z_"+t);snd("lvl");await say("💎 ¡Has conseguido "+(it?it[1]:"un cristal Z")+"!")}
     else{const rw={t:150000,it:{cand:1}};grant(rw);await say("🎁 ¡El Pokémon dominante te deja "+rwTxt(rw)+"!")}}
   save()}}catch(e){console.error(e)}}}
+// ================= MOVIMIENTOS Z EXCLUSIVOS =================
+// clave: [especies, ataque necesario, nombre del movimiento Z, poder, efecto extra, tipo]
+const ZX={incin:[["Incineroar"],"Lariat Oscuro","Hiperplancha Oscura",180,"","dark"],decid:[["Decidueye"],"Puntada Sombría","Aluvión de Flechas Sombrías",180,"","ghost"],
+ prima:[["Primarina"],"Aria Burbuja","Sinfonía de la Diva Marina",195,"","water"],pika:[["Pikachu"],"Rayo","Pikavoltio Letal",195,"crit","electric"],raichu:[["Raichu de Alola"],"Rayo","Surfeo Galvánico",175,"par","electric"],
+ snor:[["Snorlax"],"Gigaimpacto","Arrojo Intempestivo",210,"","normal"],mimi:[["Mimikyu"],"Carantoña","Somanta Amistosa",190,"","fairy"],lycan:[["Lycanroc","Lycanroc Forma Nocturna","Lycanroc Forma Crepuscular"],"Roca Afilada","Tempestad Rocosa",190,"clrTr","rock"],
+ kommo:[["Kommo-o"],"Fragor Escamas","Estruendo Implacable",185,"allup","dragon"],solga:[["Solgaleo","Necrozma Melena Crepuscular"],"Meteoimpacto","Embestida Solar",200,"","steel"],
+ luna:[["Lunala","Necrozma Alas del Alba"],"Rayo Umbrío","Deflagración Lunar",200,"","ghost"],marsha:[["Marshadow"],"Robasombra","Constelación Robaalmas",195,"steal","ghost"],
+ tapu:[["Tapu Koko","Tapu Lele","Tapu Bulu","Tapu Fini"],"Furia Natural","Cólera del Guardián",0,"pct","fairy"],mew:[["Mew"],"Psíquico","Supernova Original",185,"terr","psychic"],
+ unec:[["Ultra-Necrozma"],"Géiser Fotónico","Fotodestrucción Apocalíptica",200,"","psychic"]};
+Object.assign(HIMG,{zx_incin:"incinium-z",zx_decid:"decidium-z",zx_prima:"primarium-z",zx_pika:"pikashunium-z",zx_raichu:"aloraichium-z",zx_snor:"snorlium-z",zx_mimi:"mimikium-z",zx_lycan:"lycanium-z",zx_kommo:"kommonium-z",zx_solga:"solganium-z",zx_luna:"lunalium-z",zx_marsha:"marshadium-z",zx_tapu:"tapunium-z",zx_mew:"mewnium-z",zx_unec:"ultranecrozium-z"});
+function zxById(k){const z=ZX[k];if(!z)return null;const b=MVX.find(m=>m.n===z[1])||{t:z[5],cl:2,pw:90,pp:5,pr:0,fx:"",ch:[]};
+  return Object.assign({},b,{id:"zx:"+k,n:z[2],t:z[5],pw:z[4]==="pct"?0:z[3],pct:z[4]==="pct"?75:0,ac:0,ailc:0,fl:0,ch:[],sc:0,hits:null,rec:0,drain:0,kami:0,rech:0,fixed:0,flv:0,half:0,crit:z[4]==="crit"?1:0,z:1,zxe:z[4]||""})}
+function zxMove(me,mv){const k=String(me.it||"").replace(/^zx_/,"");return zxById(k)||zMove(mv)}
+function zxEffect(E,i,tg,me,tm,mv,push,rng){axSafe(()=>{const x=mv.zxe;
+  if(x==="par"&&tm.mh>0)beAil(E,tg,"par",push,rng,false,i);
+  else if(x==="allup")beStat(E,i,[["atk",1],["def",1],["spe",1]],push);
+  else if(x==="terr")axTrSet(E,"psychic",5,push);
+  else if(x==="clrTr"&&E.tr){E.tr=null;push({k:"msg",t:"¡El campo ha desaparecido!"})}
+  else if(x==="steal"){const fv=E.sd[tg].v.st,up=Object.keys(fv).filter(s=>fv[s]>0).map(s=>[s,fv[s]]);if(up.length){up.forEach(q=>{fv[q[0]]=0});axSay(push,i,me,"¡{w} ha robado las mejoras de {o}!",{i:tg,m:tm});beStat(E,i,up,push)}}})}
+const zxFor=m=>{const k=String(m.it||"").replace(/^zx_/,""),z=ZX[k];if(!z)return null;const sp=[m.p[0],(m.p0||[])[0]];return z[0].some(n=>sp.includes(n))?z:null};
+{const _zo=zOpts;zOpts=function(){if(B&&B.mode==="s"&&!B.zUsed&&B.E){const m=beAct(B.E.sd[0]);if(m&&m.mh>0&&/^zx_/.test(m.it||"")){const z=zxFor(m);if(!z)return [];
+  return m.m.map((mv,k)=>({mv:mv,k:k,x:1})).filter(o=>o.mv&&o.mv.n===z[1]&&m.pp[o.k]>0)}}return _zo()}}
+{const _t=turn;turn=async function(k){if(k==="zmenu"){const L=zOpts();if(L.length&&L[0].x){const m=beAct(B.E.sd[0]),z=zxMove(m,L[0].mv);
+    $("menu").innerHTML=L.map(o=>'<button class="mvb zmv" data-k="x'+o.k+'" style="--tc:'+(TC[z.t]||"#999")+'">💎 '+esc(z.n)+'<small>desde '+esc(o.mv.n)+(z.pct?' · quita el 75% de sus PS':' · Poder '+z.pw)+'</small></button>').join("")+'<button data-k="zback">Volver</button>';return}}
+  if(typeof k==="string"&&/^x\d$/.test(k)){if(!zOpts().some(o=>"x"+o.k===k))return;B.zUsed=1;return sTurn(k)}
+  return _t.apply(this,arguments)}}
+// cómo se consiguen: prueba exclusiva contra el Pokémon dominante de esa especie (si lo tienes en tu colección)
+const zxOwnSp=k=>ZX[k][0].find(n=>S.owned[n]>0||(n==="Ultra-Necrozma"&&S.owned["Necrozma"]>0));
+{const _tu=totUI;totUI=function(){_tu.apply(this,arguments);try{const b=$("totPB");if(!b)return;const st=totSt();
+  const L=Object.keys(ZX).filter(k=>zxOwnSp(k));
+  b.insertAdjacentHTML("beforeend",'<h3 class="zxh">💎 Cristales Z exclusivos</h3><p class="mut">Cada uno desbloquea el movimiento Z propio de un Pokémon (por ejemplo, Hiperplancha Oscura de Incineroar con Lariat Oscuro). Aparece la prueba de los Pokémon que tienes en tu colección.</p>'+
+    (L.length?'<div class="totg">'+L.map(k=>{const z=ZX[k],sp=zxOwnSp(k),p0=PM[sp==="Ultra-Necrozma"?"Necrozma":sp]||PM[z[0][0]],p=p0?stageFor(p0,totLv()):null,won=!!(st.z&&st.z["x:"+k]),done=!!st.w["x:"+k],it=ITEMS.find(x=>x[0]==="zx_"+k);if(!p)return "";
+      return '<div class="totc" style="--tc:'+(TC[z[5]]||"#999")+'"><span class="totsp">'+ico(p,64)+'</span><div><b>'+esc(it?it[1]:k)+'</b><small>'+esc(z[2])+' · necesita '+esc(z[1])+'</small><small>'+(won?'✅ Conseguido':'⚔️ Vence a '+esc(p[0])+' dominante')+' · tienes ×'+(S.bag["zx_"+k]|0)+'</small></div><button data-totx="'+k+'"'+(done||fcd?' disabled':'')+'>'+(done?'✔️ Mañana':'⚔️ Retar')+'</button></div>'}).join("")+'</div>':'<small class="mut">Consigue a Incineroar, Decidueye, Primarina, Pikachu, Raichu de Alola, Snorlax, Mimikyu, Lycanroc, Kommo-o, Solgaleo, Lunala, Marshadow, un Tapu, Mew o Necrozma para desbloquear su prueba.</small>'))}catch(e){console.error(e)}}}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-totx]");if(!b||fcd)return;const k=b.dataset.totx,z=ZX[k];if(!z)return;const sp=zxOwnSp(k),p0=PM[sp==="Ultra-Necrozma"?"Necrozma":sp]||PM[z[0][0]];if(!p0)return;
+  if(!(S.team||[]).some(n=>n&&S.owned[n]&&S.hp[n]!==0)){toast("Necesitas un equipo con al menos un Pokémon con PS.");return}
+  const L=totLv();startBattle({eteam:[mkEnemy(stageFor(p0,L),L)],trainer:null,totem:"x:"+k})});
+{const _ab=afterBattle;afterBattle=async function(res){
+  const t=B&&B.totem;if(t&&String(t).startsWith("x:")){const k=t.slice(2),st=totSt();B.totem=null;try{await _ab(res)}finally{if(B)B.totem=t}
+    st.w[t]=1;if(res==="win"){if(!st.z[t]){st.z[t]=1;S.bag["zx_"+k]=(S.bag["zx_"+k]|0)+1;const it=ITEMS.find(x=>x[0]==="zx_"+k);snd("lvl");await say("💎 ¡Has conseguido "+(it?it[1]:"un cristal Z exclusivo")+"!")}else{const rw={t:150000,it:{cand:1}};grant(rw);await say("🎁 ¡El Pokémon dominante te deja "+rwTxt(rw)+"!")}}save();return}
+  return _ab(res)}}
+// ================= MENTAS: cambiar la naturaleza =================
+{const _uu=useUI;useUI=function(msg){_uu.apply(this,arguments);try{const it=ITEMS.find(i=>i[0]===useId);if(!it||it[7]!=="mint"||!(S.bag[useId]>0))return;const q=$("buse"),ni=+useId.slice(4);
+  const L=P.filter(p=>S.owned[p[0]]>0&&!isMegaF(p[0])&&!(typeof isSup==="function"&&isSup(p[0]))).sort((a,b)=>((S.team.includes(b[0])?1:0)-(S.team.includes(a[0])?1:0))||(lvd(b[0]).l-lvd(a[0]).l)).slice(0,200);
+  q.innerHTML='<div class="buse-h"><span class="iico">'+itemIco(useId,40)+'</span><b>'+it[1]+' ×'+S.bag[useId]+'</b><button class="alt" id="buClose">✕ Cerrar</button></div><small class="mut">Nueva naturaleza: <b>'+NAT[ni][0]+'</b> ('+natTxt(ni)+')</small>'+
+    '<div class="bul">'+L.map(p=>{const n=p[0],cur=natOf(n);return '<button class="bunit" data-mint="'+esc(n)+'"'+(cur===ni?' disabled':'')+'>'+ico(p,30)+'<span><b>'+esc(nk(n))+(S.team.includes(n)?' ⭐':'')+'</b> <small>Nv'+lvd(n).l+' · ahora '+NAT[cur][0]+(cur===ni?' (ya la tiene)':'')+'</small></span></button>'}).join("")+'</div><small id="buMsg" class="mut">'+(msg||"")+'</small>'}catch(e){console.error(e)}}}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-mint]");if(!b||!useId||!/^mint\d+$/.test(useId))return;if(fcd){toast("Termina el combate primero.");return}
+  const n=b.dataset.mint,ni=+useId.slice(4);if(!(S.bag[useId]>0)||!S.owned[n])return;S.nat=S.nat||{};S.nat[n]=ni;S.bag[useId]--;save();snd("lvl");render();useUI("🌿 "+nk(n)+" ahora tiene naturaleza "+NAT[ni][0]+".")});
+Object.keys(NAT).forEach(i=>{const N=NAT[i];HIMG["mint"+i]=N[1]==="atk"?"adamant-mint":N[1]==="def"?"bold-mint":N[1]==="spe"?"jolly-mint":"serious-mint"});
+// ================= corrección puntual: Guantes de entrenador =================
+// las partidas que llegaron al nivel 30 o más por un fallo (imposible jugando normal) pasan al nivel 8, una sola vez
+setInterval(()=>{try{if(!S||S.glFix8||fcd)return;if((S.cl|0)>=30){S.cl=8;window._fk=null}S.glFix8=1;save();render()}catch(e){}},3000);

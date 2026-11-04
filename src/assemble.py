@@ -295,6 +295,10 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-11-04b",at:"2026-11-04T10:18",t:"🔧 Arreglos/Mejoras",l:[
+"💎 Movimientos Z exclusivos: Hiperplancha Oscura de Incineroar (con Lariat Oscuro), Pikavoltio Letal de Pikachu, Somanta Amistosa de Mimikyu, Estruendo Implacable de Kommo-o y muchos más. Consigue su cristal en Aventura → Dominantes.",
+"🌿 Nuevas Mentas en la tienda: cambian la naturaleza de un Pokémon, como en los juegos.",
+"🔧 Corregido el nivel de los Guantes de entrenador de las partidas afectadas por un fallo."]},
 {v:"2026-11-04a",at:"2026-11-04T08:13",t:"🔧 Arreglos/Mejoras",l:[
 "🛒 Tienda de mejoras: compra ×1, ×10, ×50 o el máximo que puedas pagar. Los Guantes de entrenador tienen nivel máximo 30.",
 "💬 Chat: responde a un mensaje (↩️) y menciona a otros jugadores con @apodo, también en los privados. Te avisaremos cuando te mencionen.",

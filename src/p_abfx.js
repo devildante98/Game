@@ -248,6 +248,7 @@ function axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint){axS
     if(me.ab===170&&!me.it&&tm.it&&tm.ab!==60){me.it=tm.it;tm.it="";axSay(push,i,me,"¡{w} le ha robado el objeto a {o}!",T)}
     if(me.ab===1&&!acted[tg]&&tm.ab!==39&&rng()<.1)E.sd[tg].v.fl=1}
   if(me.gmx&&GMX[me.gmx]&&ty===GMX[me.gmx][0]&&tot)axGmax(E,i,tg,me,tm,push,rng);
+  if(mv.zxe&&typeof zxEffect==="function")zxEffect(E,i,tg,me,tm,mv,push,rng);
   if(fainted&&me.mh>0){if([153,224,264,265,266,267].includes(me.ab)){axSay(push,i,me,"¡{a} de {w} se ha activado!");beStat(E,i,[["atk",1]],push)}
     if(me.ab===210&&!me.bb){me.bb=1;axSay(push,i,me,"¡{w} se ha fortalecido gracias a {a}!")}}})}
 // ---------- al entrar y al salir del combate ----------

@@ -61,12 +61,12 @@ function beUse(E,i,a,rng,push,acted,faint){
   if(v.fl){v.fl=0;push({k:"flinch",s:i,n:me.p[0]});if(me.ab===80)beStat(E,i,[["spe",1]],push);return}
   if(v.cnf>0){v.cnf--;if(!v.cnf)push({k:"cnfend",s:i,n:me.p[0]});else{push({k:"cnf",s:i,n:me.p[0]});if(rng()<1/3){const d=Math.max(1,Math.round(me.ma*40/45*STG(v.st.atk)*(.85+rng()*.15)));me.mh=Math.max(0,me.mh-d);push({k:"cnfhit",s:i,n:me.p[0],d:d});faint(i);return}}}
   if(me.sts==="par"&&rng()<.25){push({k:"par",s:i,n:me.p[0]});return}
-  let zf=0;{const zq=String(a).match(/^z(\d)(t\d)?$/);if(zq){a="m"+zq[1]+(zq[2]||"");zf=1}}
+  let zf=0;{const zq=String(a).match(/^([zx])(\d)(t\d)?$/);if(zq){a="m"+zq[2]+(zq[3]||"");zf=zq[1]}}
   const q=String(a).match(/^(?:m(\d)|st)(?:t(\d))?$/);if(!q)return;
   let mv,k=-1;const allOut=me.pp.every(x=>x<=0);
   if(q[1]==null){if(!allOut)return;mv=STRUG}
   else{k=+q[1];mv=me.m[k];if(!mv)return;if(me.pp[k]<=0){if(!allOut)return;mv=STRUG;k=-1}}
-  if(zf&&mv&&mv.cl>0&&typeof zMove==="function"){mv=zMove(mv);push({k:"zpow",s:i,n:me.p[0]})}
+  if(zf&&mv&&mv.cl>0&&typeof zMove==="function"){mv=zf==="x"&&typeof zxMove==="function"?zxMove(me,mv):zMove(mv);push({k:"zpow",s:i,n:me.p[0]})}
   if(k>=0){me.pp[k]--;if(me.pp[k]>0&&axFoesL(E,i).some(o=>o.m.ab===46))me.pp[k]--}
   if(!mv.prot)v.pc=0;
   push({k:"use",s:i,n:me.p[0],mv:mv.id});
@@ -95,12 +95,12 @@ function beUse(E,i,a,rng,push,acted,faint){
   {const ty0=mv.typeless?"normal":axTy(me,mv),ta=axMB(me)?0:tm.ab;if(tg!==i&&!mv.fixed&&!mv.flv&&((ty0==="ground"&&ta===26)||(ty0==="water"&&ta===11)||(ty0==="electric"&&ta===10)||(ty0==="fire"&&ta===18))){let hl=0;if(ta!==26&&ta!==18&&tm.mh<tm.mx){const b=tm.mh;tm.mh=Math.min(tm.mx,tm.mh+Math.max(1,Math.round(tm.mx/4)));hl=tm.mh-b}if(ta===18)tm.ffire=1;push({k:"abil",s:tg,n:tm.p[0],ab:ta,imm:1,h:hl});return}}
   if(tg!==i&&axImm(E,i,tg,me,tm,mv,push,rng))return;
   let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}if(mv.hits&&me.ab===92)hits=mv.hits[1];
-  const ty=mv.typeless?"normal":axTy(me,mv),special=mv.fixed||mv.flv||mv.half,e=mv.typeless||special?1:axEff(E,me,tm,ty,effP(ty,tm.p)),stab=!mv.typeless&&(stabP(ty,me.p)||[168,236,121,225].includes(me.ab))?(me.ab===91?2:1.5):1,pb=me.ab===185&&hits===1&&!mv.hits&&!special,h0=tm.mh;if(pb)hits=2;
+  const ty=mv.typeless?"normal":axTy(me,mv),special=mv.fixed||mv.flv||mv.half||mv.pct,e=mv.typeless||special?1:axEff(E,me,tm,ty,effP(ty,tm.p)),stab=!mv.typeless&&(stabP(ty,me.p)||[168,236,121,225].includes(me.ab))?(me.ab===91?2:1.5):1,pb=me.ab===185&&hits===1&&!mv.hits&&!special,h0=tm.mh;if(pb)hits=2;
   if(!mv.typeless&&tg!==i&&(special?axEff(E,me,tm,ty,effP(ty,tm.p)):e)===0){push({k:"noaff",s:tg,n:tm.p[0]});return}
   let tot=0,nh=0,crit=0;
   for(let h=0;h<hits&&tm.mh>0;h++){
     let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
-    if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));
+    if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
     else{let am=tm.ab===109&&!axMB(me)?1:STG(v.st.atk),dm=me.ab===109?1:STG(ts.v.st.def);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
       d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/(tm.nd||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
     if(cr)crit++;

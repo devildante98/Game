@@ -1,6 +1,6 @@
 # ===================== novedades: ficha, naturalezas, objetos equipables, guardería, safari, torre, expediciones, salón de la fama y regalos =====================
 _gi=H.index('<script type="text/plain" id="game">');_ge=H.index('</script>',_gi)
-H=H[:_ge]+open(W+'p_new.js',encoding='utf-8').read()+'\n'+open(W+'p_chat.js',encoding='utf-8').read()+'\n'+open(W+'p_mini.js',encoding='utf-8').read()+'\n'+open(W+'p_mini2.js',encoding='utf-8').read().replace('__WEIGHTS__',open(W+'p_weights.json').read())+'\n'+open(W+'p_fossil.js',encoding='utf-8').read()+'\n'+open(W+'p_extra.js',encoding='utf-8').read()+'\n'+open(W+'p_raid.js',encoding='utf-8').read()+'\n'+open(W+'p_market.js',encoding='utf-8').read()+'\n'+open(W+'p_supreme.js',encoding='utf-8').read()+'\n'+open(W+'p_upd.js',encoding='utf-8').read().replace('__EGG__',open(W+'p_egg.json',encoding='utf-8').read())+'\n'+open(W+'p_explore.js',encoding='utf-8').read()+'\n'+open(W+'p_mgrank.js',encoding='utf-8').read()+'\n'+open(W+'p_abil.js',encoding='utf-8').read().replace('__ABIL__',open(W+'p_abil.json',encoding='utf-8').read())+'\n'+open(W+'p_abfx.js',encoding='utf-8').read()+'\n'+open(W+'p_dbl.js',encoding='utf-8').read()+'\n'+open(W+'p_ext3.js',encoding='utf-8').read()+'\n'+open(W+'p_mod.js',encoding='utf-8').read()+'\n'+open(W+'p_pwa.js',encoding='utf-8').read()+'\n'+open(W+'p_tut.js',encoding='utf-8').read()+'\n'+H[_ge:]
+H=H[:_ge]+open(W+'p_new.js',encoding='utf-8').read()+'\n'+open(W+'p_chat.js',encoding='utf-8').read()+'\n'+open(W+'p_mini.js',encoding='utf-8').read()+'\n'+open(W+'p_mini2.js',encoding='utf-8').read().replace('__WEIGHTS__',open(W+'p_weights.json').read())+'\n'+open(W+'p_fossil.js',encoding='utf-8').read()+'\n'+open(W+'p_extra.js',encoding='utf-8').read()+'\n'+open(W+'p_raid.js',encoding='utf-8').read()+'\n'+open(W+'p_market.js',encoding='utf-8').read()+'\n'+open(W+'p_supreme.js',encoding='utf-8').read()+'\n'+open(W+'p_upd.js',encoding='utf-8').read().replace('__EGG__',open(W+'p_egg.json',encoding='utf-8').read())+'\n'+open(W+'p_explore.js',encoding='utf-8').read()+'\n'+open(W+'p_mgrank.js',encoding='utf-8').read()+'\n'+open(W+'p_abil.js',encoding='utf-8').read().replace('__ABIL__',open(W+'p_abil.json',encoding='utf-8').read())+'\n'+open(W+'p_abfx.js',encoding='utf-8').read()+'\n'+open(W+'p_dbl.js',encoding='utf-8').read()+'\n'+open(W+'p_ext3.js',encoding='utf-8').read()+'\n'+open(W+'p_mod.js',encoding='utf-8').read()+'\n'+open(W+'p_pwa.js',encoding='utf-8').read()+'\n'+open(W+'p_tut.js',encoding='utf-8').read()+'\n'+open(W+'p_game.js',encoding='utf-8').read()+'\n'+H[_ge:]
 # ---- Firestore: regalos entre amigos (colección gifts) ----
 rep('trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),','''trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),
     gfWatch(cb){S.onSnapshot(S.query(S.collection(db,"gifts"),S.where("to","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
@@ -798,7 +798,7 @@ H=H[:_ai]+'''<div id="auth">
     MOTES=[];for(var i=0;i<30;i++)MOTES.push({x:rnd()*W,y:H*(.3+rnd()*.7),v:4+rnd()*8,a:rnd()*6});
     BL=[];var n=Math.round(W/5);for(var i=0;i<n;i++)BL.push({x:i*5+rnd()*5,h:H*(.03+rnd()*.06),c:["#3c7c2a","#4f9a36","#5aa83c","#2f6a22"][Math.floor(rnd()*4)],ph:rnd()*6,w:1.5+rnd()*2});
     cv("pcCloud");cv("pcFront")}
-  var last=0;function frame(t){requestAnimationFrame(frame);if(document.hidden||$i("auth").hidden)return;if(t-last<33)return;var dt=Math.min(.1,(t-last)/1000);last=t;
+  var last=0;function frame(t){requestAnimationFrame(frame);if(document.hidden||($i("auth").hidden&&!window.pcLive))return;if(t-last<(window.pcLive?45:33))return;var dt=Math.min(.1,(t-last)/1000);last=t;
     var g=$i("pcCloud").getContext("2d");g.clearRect(0,0,W,H);CL.forEach(function(c){c.x+=c.v*dt;if(c.x>W+20)c.x=-c.c.width;g.globalAlpha=c.a;g.drawImage(c.c,c.x,c.y)});g.globalAlpha=1;
     g.strokeStyle="rgba(40,50,70,.75)";g.lineWidth=1.6;BIRDS.forEach(function(b){b.x+=b.v*dt;b.ph+=dt*7;if(b.x>W+40){b.x=-40-Math.random()*W*.5;b.y=H*(.1+Math.random()*.25)}var f=Math.sin(b.ph)*4*b.s,s=7*b.s;g.beginPath();g.moveTo(b.x-s,b.y-f);g.quadraticCurveTo(b.x-s*.4,b.y-s*.3,b.x,b.y);g.quadraticCurveTo(b.x+s*.4,b.y-s*.3,b.x+s,b.y-f);g.stroke()});
     var f=$i("pcFront").getContext("2d");f.clearRect(0,0,W,H);
@@ -887,3 +887,9 @@ rep('#welc,#newsM,#privM{',r'''#auth{background:#8cc4f2!important;overflow:hidde
 @media (prefers-reduced-motion:reduce){.pcmon,.pcball,.pcplay,.pclogo h1 span{animation:none!important}}
 #welc,#newsM,#privM{''')
 rep('#welc,#newsM,#privM{','#pkv{z-index:100!important}\n#gacOut .card[data-pn]{cursor:zoom-in}\n#welc,#newsM,#privM{')
+
+# ===== modo juego =====
+rep('#welc,#newsM,#privM{',open(W+'p_game.css',encoding='utf-8').read()+'\n#welc,#newsM,#privM{')
+rep('const sg=SG[O.song]||SG[0],sd=60/sg.bpm/4','const sg=SG[gmSongI()]||SG[0],sd=60/sg.bpm/4')
+rep('mtrack=buildTrack(SG[O.song]||SG[0])','mtrack=buildTrack(SG[gmSongI()]||SG[0])')
+rep('family=Pixelify+Sans:wght@500;700&display=swap','family=Fredoka:wght@400;500;600;700&family=Pixelify+Sans:wght@500;700&display=swap')

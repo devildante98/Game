@@ -4,8 +4,8 @@
 // =====================================================================================
 // ---------- dos mejoras nuevas en la tienda ----------
 G.push(["Estadio Pokémon",400000,250],["Laboratorio del Profesor",6000000,1000]);GI.push("🏟️","🔬");
-// las dos últimas mejoras suben de precio más rápido (×1,18 y ×1,40)
-const GGR=[1.15,1.15,1.15,1.15,1.15,1.18,1.40];
+// las dos últimas mejoras suben de precio más rápido (×1,18 y ×1,25)
+const GGR=[1.15,1.15,1.15,1.15,1.15,1.18,1.25];
 gc=i=>Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,S.g[i]||0));
 function gPad(){S.g=S.g||[];while(S.g.length<G.length)S.g.push(0)}
 gPad();

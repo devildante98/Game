@@ -68,9 +68,11 @@ function beUse(E,i,a,rng,push,acted,faint){
   if(k>=0){me.pp[k]--;if(me.pp[k]>0&&axFoesL(E,i).some(o=>o.m.ab===46))me.pp[k]--}
   if(!mv.prot)v.pc=0;
   push({k:"use",s:i,n:me.p[0],mv:mv.id});
+  if((mv.id==="252"||mv.id==="660")&&(sd.v.tn|0)>0){push({k:"fail",s:i});return}
   let tg=i;
   if(!mv.tself){const fo=beFoes(E,i).filter(j=>!E.sd[j].out&&beAct(E.sd[j]).mh>0);tg=q[2]!=null&&fo.includes(+q[2])?+q[2]:fo[0];if(tg==null){push({k:"none",s:i});return}}
   const ts=E.sd[tg],tm=beAct(ts);
+  if(mv.id==="389"&&tg!==i){const q=String((E._acts||{})[tg]||"").match(/^m(\d)/),tmv=q?tm.m[+q[1]]:null;if(acted[tg]||!tmv||tmv.cl===0){push({k:"fail",s:i});return}}
   if(tg!==i&&ts.v.prot&&!(me.ab===260&&mv.cl===1)){push({k:"blocked",s:tg,n:tm.p[0]});return}
   const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g};
   if(mv.cl===0){
@@ -83,6 +85,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     if(mv.heal){const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.round(me.mx*mv.heal/100));push({k:"heal",s:i,n:me.p[0],h:me.mh-b});did=true}
     if(mv.ail)did=beAil(E,tg,mv.ail,push,rng,true,i)||did;
     if(mv.ch.length&&rng()*100<mv.sc)did=beStat(E,mv.self?i:tg,mv.ch,push,mv.self?undefined:i)||did;
+    if(mv.id==="575"&&did)sd.piv=1;
     if(!did&&!mv.heal)push({k:"noeff",s:i});
     return;
   }
@@ -100,6 +103,7 @@ function beUse(E,i,a,rng,push,acted,faint){
       d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/(tm.nd||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
     if(cr)crit++;
     if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
+    if(mv.id==="206"&&d>=tm.mh&&tm.mh>1)d=tm.mh-1;
     let sash=0;if(tm.it==="sash"&&!tm.ius&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;tm.ius=1;sash=1}
     else if(tm.ab===5&&!axMB(me)&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;sash=3}
     else if(tm.bud&&!tm.bud2&&tm.mh>1&&d>=tm.mh&&rng()<.25){d=tm.mh-1;tm.bud2=1;sash=2}
@@ -113,6 +117,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     else if((ta===9||ta===38||ta===49||ta===27)&&!me.sts&&rng()<.3){const a2=ta===9?"par":ta===38?"psn":ta===49?"brn":["psn","par","slp"][Math.floor(rng()*3)];push({k:"abil",s:tg,n:tm.p[0],ab:ta});beAil(E,i,a2,push,rng,false,tg)}}
   if(me.it==="shell"&&tot&&me.mh>0&&me.mh<me.mx){me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot/8)));push({k:"item",s:i,n:me.p[0],it:"shell"})}
   if(me.it==="lorb"&&tot&&me.mh>0&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/10)));push({k:"item",s:i,n:me.p[0],it:"lorb"})}
+  if(["369","521","812"].includes(mv.id)&&me.mh>0)sd.piv=1;
   faint(tg);if(tg!==i)beBerry(E,tg,push);beBerry(E,i,push);axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint);
   if(tm.mh>0&&!axNoSec(me,tm)){
     if(mv.ail&&rng()*100<mv.ailc*axSec(me))beAil(E,tg,mv.ail,push,rng,false,i);
@@ -125,7 +130,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   faint(i);
 }
 function beTurn(E,acts,rng){
-  const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)},N=E.sd.length,acted={};
+  const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)},N=E.sd.length,acted={};E._acts=acts;
   const pri=i=>{const a=acts[i]||"x";if(a==="ff")return 9;if(/^s\d$/.test(a))return 8;if(a==="x")return 7;if(a==="d")return 6;const k=String(a).match(/^m(\d)/),sd=E.sd[i];const mv=k?beAct(sd).m[+k[1]]:null;return mv?mv.pr:0};
   if(!E.abi){E.abi=1;E.fcl=E.sd.reduce((a,s)=>a+s.t.filter(x=>x.mh<=0).length,0);E.sd.forEach((s,i)=>{if(!s.out)beEnter(E,i,push)})}
   const sp=E.sd.map(s=>s.out?0:beSpd(s,rng,E)),qc=[];
@@ -148,6 +153,7 @@ function beTurn(E,acts,rng){
     if(m.mh>0&&m.it==="left"&&m.mh<m.mx){m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.floor(m.mx/16)));push({k:"item",s:i,n:m.p[0],it:"left"})}
     axEnd(E,i,push,rng,faint);beBerry(E,i,push)}
   axField(E,push);
+  E.sd.forEach(s2=>{if(s2.piv){s2.piv=0;if(!s2.out&&!s2.need&&beAct(s2).mh>0&&s2.t.some((x,k)=>k!==s2.ai&&x.mh>0))s2.need=1}});
   for(let i=0;i<N;i++){const sd=E.sd[i];if(sd.out||sd.need)continue;if(beAct(sd).mh<=0){faint(i);if(sd.t.some(x=>x.mh>0))sd.need=1;else{sd.out=1;push({k:"out",s:i})}}}
   beOver(E,push);E.turn++;return ev;
 }
@@ -155,8 +161,8 @@ function beSwap(E,acts){
   const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)};
   E.sd.forEach((sd,i)=>{if(!sd.need)return;const a=acts[i]||"";
     if(a==="ff"){sd.t.forEach(x=>{x.mh=0;x.fd=1});sd.out=1;sd.need=0;push({k:"ff",s:i});return}
-    let k=/^s\d$/.test(a)?+a[1]:-1;if(!(sd.t[k]&&sd.t[k].mh>0))k=sd.t.findIndex(x=>x.mh>0);
-    const om=beAct(sd),old=om.p[0];axLeave(E,i,om);sd.ai=k;sd.v=beVol();sd.need=0;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old,forced:1});beEnter(E,i,push);axRecv(E,i,om,push)});
+    const cur=beAct(sd).mh>0;let k=/^s\d$/.test(a)?+a[1]:-1;if(!(sd.t[k]&&sd.t[k].mh>0&&!(cur&&k===sd.ai)))k=sd.t.findIndex((x,j)=>x.mh>0&&!(cur&&j===sd.ai));if(k<0){sd.need=0;return}
+    const om=beAct(sd),old=om.p[0];axLeave(E,i,om);sd.ai=k;sd.v=beVol();sd.need=0;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old,forced:cur?0:1});beEnter(E,i,push);if(!cur)axRecv(E,i,om,push)});
   beOver(E,push);return ev;
 }
 // IA de los rivales: prefiere los movimientos mas utiles, con algo de azar
@@ -165,7 +171,7 @@ function aiPick(E,i){
   const fo=beFoes(E,i).filter(j=>!E.sd[j].out&&beAct(E.sd[j]).mh>0);if(!fo.length)return "x";
   const tsd=E.sd[fo[0]],t=beAct(tsd),ok=m.m.map((mv,k)=>({mv:mv,k:k})).filter(o=>m.pp[o.k]>0);
   if(!ok.length)return "st";
-  const sc=ok.map(o=>{const mv=o.mv;
+  const sc=ok.map(o=>{const mv=o.mv;if((mv.id==="252"||mv.id==="660")&&(sd.v.tn|0)>0)return 1;
     if(mv.cl===0){if(mv.heal||mv.rest)return m.mh<m.mx*.4?140:3;if(mv.prot)return 14;if(mv.ail)return t.sts||(mv.ail==="cnf"&&tsd.v.cnf)?2:40;if(mv.ch.length){const s=mv.self?sd.v.st[mv.ch[0][0]]:tsd.v.st[mv.ch[0][0]];return Math.abs(s)>=2?3:22}return 4}
     return (mv.fixed||mv.flv||mv.half?55:mv.pw*(mv.hits?(mv.hits[0]+mv.hits[1])/2:1))*effP(mv.t,t.p)*(stabP(mv.t,m.p)?1.5:1)*(mv.ac?mv.ac/100:1)+8});
   const tot=sc.reduce((a,b)=>a+b*b,0);let r=Math.random()*tot;
@@ -508,7 +514,7 @@ async function sAfter(){
   E.sd[1].t.forEach(t=>{if(t.mh<=0&&!t.xg){t.xg=1;B.xpPool=(B.xpPool||0)+Math.round((15+t.l*6)*WW[t.p[2]]*.6)}});
   if(E.over!=null)return finish(E.over===0?"win":"lose");
   const acts=["",""];
-  if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex(x=>x.mh>0);
+  if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex((x,k)=>x.mh>0&&k!==E.sd[1].ai);
   if(E.sd[0].need)acts[0]=await askSwitch(0);
   if(acts[0]||acts[1]){await bePlay(beSwap(E,acts));if(E.over!=null)return finish(E.over===0?"win":"lose")}
   B.busy=false;setMenu(true);

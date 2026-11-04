@@ -152,7 +152,7 @@ function pvMenu(){
   const alive=side.t.map((t,i)=>({t:t,i:i})).filter(x=>x.t.mh>0&&x.i!==side.ai);
   const claim=D.waitSince&&Date.now()-D.waitSince>90000?'<button data-pv="claim">Reclamar victoria (rival inactivo)</button>':"";
   if(swap){
-    if(side.need&&mine==null){box.textContent="Elige tu siguiente Pokémon:";m.innerHTML=swGrid(side.t.map((t,i)=>t.mh>0?swCard(t,'data-pv="s'+i+'"',false,""):"").join(""));return}
+    if(side.need&&mine==null){box.textContent="Elige tu siguiente Pokémon:";m.innerHTML=swGrid(side.t.map((t,i)=>t.mh>0&&!(i===side.ai&&beAct(side).mh>0)?swCard(t,'data-pv="s'+i+'"',false,""):"").join(""));return}
     box.textContent="Esperando a que "+D.oppNick+" elija su siguiente Pokémon…";m.innerHTML=claim;return;
   }
   if(mine!=null){box.textContent="Esperando la elección de "+D.oppNick+"…";m.innerHTML=claim;return}
@@ -415,7 +415,7 @@ function dvMenu(req,acts){
   const foesAlive=dvFoes(me).filter(i=>!E.sd[i].out&&beAct(E.sd[i]).mh>0);
   if(!req.includes(me)){t=side.out?"Ya no te quedan Pokémon. Esperando a que termine el combate… ("+waitN.join(", ")+")":"Esperando a: "+waitN.join(", ")+"…";h=claimable?'<button data-dv="claim">Reclamar victoria (rivales inactivos)</button>':""}
   else if(r.hist[key]!=null){t="Esperando a: "+waitN.join(", ")+"…";h=claimable?'<button data-dv="claim">Reclamar victoria (rivales inactivos)</button>':""}
-  else if(side.need){t="Elige tu siguiente Pokémon:";h=swGrid(side.t.map((x,i)=>x.mh>0?swCard(x,'data-dv="s'+i+'"',false,""):"").join(""))}
+  else if(side.need){t="Elige tu siguiente Pokémon:";h=swGrid(side.t.map((x,i)=>x.mh>0&&!(i===side.ai&&beAct(side).mh>0)?swCard(x,'data-dv="s'+i+'"',false,""):"").join(""))}
   else{
     const pm=beAct(side);
     if(r.sub==="sw"){t="¿A qué Pokémon cambias?";h=swGrid(side.t.map((x,i)=>swCard(x,'data-dv="s'+i+'"',i===side.ai||x.mh<=0,i===side.ai?"En combate":x.mh<=0?"Debilitado":"")).join(""))+'<button data-dv="back">Atrás</button>'}

@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793774851">
+<meta name="game-build" content="1793774951">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -2928,9 +2928,11 @@ function beUse(E,i,a,rng,push,acted,faint){
   if(k>=0){me.pp[k]--;if(me.pp[k]>0&&axFoesL(E,i).some(o=>o.m.ab===46))me.pp[k]--}
   if(!mv.prot)v.pc=0;
   push({k:"use",s:i,n:me.p[0],mv:mv.id});
+  if((mv.id==="252"||mv.id==="660")&&(sd.v.tn|0)>0){push({k:"fail",s:i});return}
   let tg=i;
   if(!mv.tself){const fo=beFoes(E,i).filter(j=>!E.sd[j].out&&beAct(E.sd[j]).mh>0);tg=q[2]!=null&&fo.includes(+q[2])?+q[2]:fo[0];if(tg==null){push({k:"none",s:i});return}}
   const ts=E.sd[tg],tm=beAct(ts);
+  if(mv.id==="389"&&tg!==i){const q=String((E._acts||{})[tg]||"").match(/^m(\d)/),tmv=q?tm.m[+q[1]]:null;if(acted[tg]||!tmv||tmv.cl===0){push({k:"fail",s:i});return}}
   if(tg!==i&&ts.v.prot&&!(me.ab===260&&mv.cl===1)){push({k:"blocked",s:tg,n:tm.p[0]});return}
   const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g};
   if(mv.cl===0){
@@ -2943,6 +2945,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     if(mv.heal){const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.round(me.mx*mv.heal/100));push({k:"heal",s:i,n:me.p[0],h:me.mh-b});did=true}
     if(mv.ail)did=beAil(E,tg,mv.ail,push,rng,true,i)||did;
     if(mv.ch.length&&rng()*100<mv.sc)did=beStat(E,mv.self?i:tg,mv.ch,push,mv.self?undefined:i)||did;
+    if(mv.id==="575"&&did)sd.piv=1;
     if(!did&&!mv.heal)push({k:"noeff",s:i});
     return;
   }
@@ -2960,6 +2963,7 @@ function beUse(E,i,a,rng,push,acted,faint){
       d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/(tm.nd||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
     if(cr)crit++;
     if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
+    if(mv.id==="206"&&d>=tm.mh&&tm.mh>1)d=tm.mh-1;
     let sash=0;if(tm.it==="sash"&&!tm.ius&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;tm.ius=1;sash=1}
     else if(tm.ab===5&&!axMB(me)&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;sash=3}
     else if(tm.bud&&!tm.bud2&&tm.mh>1&&d>=tm.mh&&rng()<.25){d=tm.mh-1;tm.bud2=1;sash=2}
@@ -2973,6 +2977,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     else if((ta===9||ta===38||ta===49||ta===27)&&!me.sts&&rng()<.3){const a2=ta===9?"par":ta===38?"psn":ta===49?"brn":["psn","par","slp"][Math.floor(rng()*3)];push({k:"abil",s:tg,n:tm.p[0],ab:ta});beAil(E,i,a2,push,rng,false,tg)}}
   if(me.it==="shell"&&tot&&me.mh>0&&me.mh<me.mx){me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot/8)));push({k:"item",s:i,n:me.p[0],it:"shell"})}
   if(me.it==="lorb"&&tot&&me.mh>0&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/10)));push({k:"item",s:i,n:me.p[0],it:"lorb"})}
+  if(["369","521","812"].includes(mv.id)&&me.mh>0)sd.piv=1;
   faint(tg);if(tg!==i)beBerry(E,tg,push);beBerry(E,i,push);axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint);
   if(tm.mh>0&&!axNoSec(me,tm)){
     if(mv.ail&&rng()*100<mv.ailc*axSec(me))beAil(E,tg,mv.ail,push,rng,false,i);
@@ -2985,7 +2990,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   faint(i);
 }
 function beTurn(E,acts,rng){
-  const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)},N=E.sd.length,acted={};
+  const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)},N=E.sd.length,acted={};E._acts=acts;
   const pri=i=>{const a=acts[i]||"x";if(a==="ff")return 9;if(/^s\d$/.test(a))return 8;if(a==="x")return 7;if(a==="d")return 6;const k=String(a).match(/^m(\d)/),sd=E.sd[i];const mv=k?beAct(sd).m[+k[1]]:null;return mv?mv.pr:0};
   if(!E.abi){E.abi=1;E.fcl=E.sd.reduce((a,s)=>a+s.t.filter(x=>x.mh<=0).length,0);E.sd.forEach((s,i)=>{if(!s.out)beEnter(E,i,push)})}
   const sp=E.sd.map(s=>s.out?0:beSpd(s,rng,E)),qc=[];
@@ -3008,6 +3013,7 @@ function beTurn(E,acts,rng){
     if(m.mh>0&&m.it==="left"&&m.mh<m.mx){m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.floor(m.mx/16)));push({k:"item",s:i,n:m.p[0],it:"left"})}
     axEnd(E,i,push,rng,faint);beBerry(E,i,push)}
   axField(E,push);
+  E.sd.forEach(s2=>{if(s2.piv){s2.piv=0;if(!s2.out&&!s2.need&&beAct(s2).mh>0&&s2.t.some((x,k)=>k!==s2.ai&&x.mh>0))s2.need=1}});
   for(let i=0;i<N;i++){const sd=E.sd[i];if(sd.out||sd.need)continue;if(beAct(sd).mh<=0){faint(i);if(sd.t.some(x=>x.mh>0))sd.need=1;else{sd.out=1;push({k:"out",s:i})}}}
   beOver(E,push);E.turn++;return ev;
 }
@@ -3015,8 +3021,8 @@ function beSwap(E,acts){
   const ev=[],push=o=>{o.snap=beSnap(E);ev.push(o)};
   E.sd.forEach((sd,i)=>{if(!sd.need)return;const a=acts[i]||"";
     if(a==="ff"){sd.t.forEach(x=>{x.mh=0;x.fd=1});sd.out=1;sd.need=0;push({k:"ff",s:i});return}
-    let k=/^s\d$/.test(a)?+a[1]:-1;if(!(sd.t[k]&&sd.t[k].mh>0))k=sd.t.findIndex(x=>x.mh>0);
-    const om=beAct(sd),old=om.p[0];axLeave(E,i,om);sd.ai=k;sd.v=beVol();sd.need=0;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old,forced:1});beEnter(E,i,push);axRecv(E,i,om,push)});
+    const cur=beAct(sd).mh>0;let k=/^s\d$/.test(a)?+a[1]:-1;if(!(sd.t[k]&&sd.t[k].mh>0&&!(cur&&k===sd.ai)))k=sd.t.findIndex((x,j)=>x.mh>0&&!(cur&&j===sd.ai));if(k<0){sd.need=0;return}
+    const om=beAct(sd),old=om.p[0];axLeave(E,i,om);sd.ai=k;sd.v=beVol();sd.need=0;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old,forced:cur?0:1});beEnter(E,i,push);if(!cur)axRecv(E,i,om,push)});
   beOver(E,push);return ev;
 }
 // IA de los rivales: prefiere los movimientos mas utiles, con algo de azar
@@ -3025,7 +3031,7 @@ function aiPick(E,i){
   const fo=beFoes(E,i).filter(j=>!E.sd[j].out&&beAct(E.sd[j]).mh>0);if(!fo.length)return "x";
   const tsd=E.sd[fo[0]],t=beAct(tsd),ok=m.m.map((mv,k)=>({mv:mv,k:k})).filter(o=>m.pp[o.k]>0);
   if(!ok.length)return "st";
-  const sc=ok.map(o=>{const mv=o.mv;
+  const sc=ok.map(o=>{const mv=o.mv;if((mv.id==="252"||mv.id==="660")&&(sd.v.tn|0)>0)return 1;
     if(mv.cl===0){if(mv.heal||mv.rest)return m.mh<m.mx*.4?140:3;if(mv.prot)return 14;if(mv.ail)return t.sts||(mv.ail==="cnf"&&tsd.v.cnf)?2:40;if(mv.ch.length){const s=mv.self?sd.v.st[mv.ch[0][0]]:tsd.v.st[mv.ch[0][0]];return Math.abs(s)>=2?3:22}return 4}
     return (mv.fixed||mv.flv||mv.half?55:mv.pw*(mv.hits?(mv.hits[0]+mv.hits[1])/2:1))*effP(mv.t,t.p)*(stabP(mv.t,m.p)?1.5:1)*(mv.ac?mv.ac/100:1)+8});
   const tot=sc.reduce((a,b)=>a+b*b,0);let r=Math.random()*tot;
@@ -3368,7 +3374,7 @@ async function sAfter(){
   E.sd[1].t.forEach(t=>{if(t.mh<=0&&!t.xg){t.xg=1;B.xpPool=(B.xpPool||0)+Math.round((15+t.l*6)*WW[t.p[2]]*.6)}});
   if(E.over!=null)return finish(E.over===0?"win":"lose");
   const acts=["",""];
-  if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex(x=>x.mh>0);
+  if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex((x,k)=>x.mh>0&&k!==E.sd[1].ai);
   if(E.sd[0].need)acts[0]=await askSwitch(0);
   if(acts[0]||acts[1]){await bePlay(beSwap(E,acts));if(E.over!=null)return finish(E.over===0?"win":"lose")}
   B.busy=false;setMenu(true);
@@ -4621,7 +4627,7 @@ function pvMenu(){
   const alive=side.t.map((t,i)=>({t:t,i:i})).filter(x=>x.t.mh>0&&x.i!==side.ai);
   const claim=D.waitSince&&Date.now()-D.waitSince>90000?'<button data-pv="claim">Reclamar victoria (rival inactivo)</button>':"";
   if(swap){
-    if(side.need&&mine==null){box.textContent="Elige tu siguiente Pokémon:";m.innerHTML=swGrid(side.t.map((t,i)=>t.mh>0?swCard(t,'data-pv="s'+i+'"',false,""):"").join(""));return}
+    if(side.need&&mine==null){box.textContent="Elige tu siguiente Pokémon:";m.innerHTML=swGrid(side.t.map((t,i)=>t.mh>0&&!(i===side.ai&&beAct(side).mh>0)?swCard(t,'data-pv="s'+i+'"',false,""):"").join(""));return}
     box.textContent="Esperando a que "+D.oppNick+" elija su siguiente Pokémon…";m.innerHTML=claim;return;
   }
   if(mine!=null){box.textContent="Esperando la elección de "+D.oppNick+"…";m.innerHTML=claim;return}
@@ -4884,7 +4890,7 @@ function dvMenu(req,acts){
   const foesAlive=dvFoes(me).filter(i=>!E.sd[i].out&&beAct(E.sd[i]).mh>0);
   if(!req.includes(me)){t=side.out?"Ya no te quedan Pokémon. Esperando a que termine el combate… ("+waitN.join(", ")+")":"Esperando a: "+waitN.join(", ")+"…";h=claimable?'<button data-dv="claim">Reclamar victoria (rivales inactivos)</button>':""}
   else if(r.hist[key]!=null){t="Esperando a: "+waitN.join(", ")+"…";h=claimable?'<button data-dv="claim">Reclamar victoria (rivales inactivos)</button>':""}
-  else if(side.need){t="Elige tu siguiente Pokémon:";h=swGrid(side.t.map((x,i)=>x.mh>0?swCard(x,'data-dv="s'+i+'"',false,""):"").join(""))}
+  else if(side.need){t="Elige tu siguiente Pokémon:";h=swGrid(side.t.map((x,i)=>x.mh>0&&!(i===side.ai&&beAct(side).mh>0)?swCard(x,'data-dv="s'+i+'"',false,""):"").join(""))}
   else{
     const pm=beAct(side);
     if(r.sub==="sw"){t="¿A qué Pokémon cambias?";h=swGrid(side.t.map((x,i)=>swCard(x,'data-dv="s'+i+'"',i===side.ai||x.mh<=0,i===side.ai?"En combate":x.mh<=0?"Debilitado":"")).join(""))+'<button data-dv="back">Atrás</button>'}
@@ -5785,7 +5791,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793774851";
+const GAME_B="1793774951";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

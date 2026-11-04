@@ -794,3 +794,32 @@ function bwTick(t){requestAnimationFrame(bwTick);const w=document.querySelector(
   if(img&&!BW.pm)img.style.transform=face>0?"scaleX(-1)":"";
   if(sh){const k=1+ty/40;sh.style.transform="scale("+k.toFixed(2)+")";sh.style.opacity=String(Math.max(.4,k))}}
 requestAnimationFrame(bwTick);
+
+// ================= PVP: modo Clásico (sin megas, Dinamax ni Z) y modo Libre (con todo) =================
+const pvMd=()=>S.pvMode==="l"?"l":"c";
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-pvmd]");if(!b)return;if(PV.st!=="idle"){toast("Cancela tu reto antes de cambiar de modo.");return}S.pvMode=b.dataset.pvmd;save();snd("ui");pvPub();pvRender()});
+{const _pc=pvChallenge;pvChallenge=function(peer){const o=pvOthers().find(p=>p.peer===peer);if(o&&(o.presence.pvp.md==="l"?"l":"c")!==pvMd()){toast("Ese jugador está en el modo "+(o.presence.pvp.md==="l"?"Libre":"Clásico")+". Cambia de modo para retarle.");return false}return _pc.apply(this,arguments)}}
+// formas disponibles del Pokémon activo (las que tienes en la colección)
+function pvFormsOf(sd){const m=beAct(sd),own=(sd.fo&&sd.fo[sd.ai])||[],base=(m.p0||m.p)[0];return {mega:(FORMS[base]||[]).filter(f=>f[1]==="mega").map((f,k)=>[f[0],k]).filter(f=>own.includes(f[0])),gmax:(FORMS[base]||[]).find(f=>f[1]==="gmax"&&own.includes(f[0]))}}
+function pvZOk(m,mv){if(!mv||mv.cl<=0)return "";if(/^z_/.test(m.it||"")&&mv.t===m.it.slice(2))return "z";if(/^zx_/.test(m.it||"")&&typeof zxFor==="function"){const z=zxFor(m);if(z&&mv.n===z[1])return "x"}return ""}
+function pvFreeBtns(side,pm){if(!D||!D.E||!D.E.free||!pm||pm.mh<=0)return "";let h="";
+  if(!side.fu&&!pm.dmx&&!pm.p0){const F=pvFormsOf(side);F.mega.forEach(f=>{h+='<button class="frmb mega'+(D.pre==="M"+f[1]?" on":"")+'" data-pv="fM'+f[1]+'">🧬 Megaevolucionar'+(F.mega.length>1?' ('+esc(f[0].slice(-1))+')':'')+'</button>'});
+    h+=F.gmax?'<button class="frmb gmax'+(D.pre==="G"?" on":"")+'" data-pv="fG">🔴 Gigamax</button>':'<button class="frmb dmax'+(D.pre==="D"?" on":"")+'" data-pv="fD">🔴 Dinamax</button>'}
+  if(!side.zu&&pm.m.some((mv,k)=>pm.pp[k]>0&&pvZOk(pm,mv)))h+='<button class="zbtn'+(D.zm?" on":"")+'" data-pv="zm">💎 Movimiento Z</button>';
+  if(D.pre)h='<small class="pvpre">✨ '+(D.pre[0]==="M"?"Megaevolucionará":D.pre==="G"?"Se gigamaxizará":"Se dinamaxizará")+' antes de atacar: elige un ataque.</small>'+h;
+  return h}
+{const _pm=pvMenu;pvMenu=function(){_pm.apply(this,arguments);try{if(!D||!D.E||!D.zm||!D.E.free)return;const E=D.E,side=E.sd[pvMy()],pm=beAct(side),m=$("menu");if(!m.querySelector('[data-pv="zm"]'))return;
+  m.innerHTML=pm.m.map((mv,k)=>{const z=pvZOk(pm,mv);if(!z||pm.pp[k]<=0)return "";const Z=z==="x"?zxMove(pm,mv):zMove(mv);return '<button class="mvb zmv" data-pv="'+z+k+'" style="--tc:'+(TC[mv.t]||"#999")+'">💎 '+esc(Z.n)+'<small>desde '+esc(mv.n)+(Z.pw?' · Poder '+Z.pw:'')+'</small></button>'}).join("")+'<button data-pv="zm">Volver</button>'}catch(e){console.error(e)}}}
+// motor: las transformaciones y los Z van como acciones, así los dos jugadores calculan lo mismo
+{const _bt=beTurn;beTurn=function(E,acts,rng){if(!E.pvp)return _bt.apply(this,arguments);
+  const pre=[];acts=acts.map((a,i)=>{let s=String(a==null?"":a);const sd=E.sd[i];if(!sd||sd.out)return a;const m=beAct(sd);
+    const q=s.match(/^([MGD])(\d?)\|(.+)$/);if(q){s=q[3];if(E.free&&!sd.fu&&m&&m.mh>0&&!m.p0){const F=pvFormsOf(sd);let np=null,kind="";
+      if(q[1]==="M"){const f=F.mega.find(f=>f[1]===(+q[2]||0));if(f){np=PM[f[0]];kind="mega"}}else if(q[1]==="G"){if(F.gmax){np=PM[F.gmax[0]];kind="gmax"}}else{np=m.p;kind="dmax"}
+      if(np){sd.fu=1;pre.push([i,kind,np,m.p[0]])}}}
+    const z=s.match(/^([zx])(\d)(t\d)?$/);if(z){const mv=m&&m.m[+z[2]];if(!E.free||sd.zu||!m||pvZOk(m,mv)!==z[1])s="m"+z[2]+(z[3]||"");else sd.zu=1}
+    return s});
+  const ev0=[];pre.forEach(([i,kind,np,base])=>{const m=beAct(E.sd[i]);if(kind==="mega")formApply(m,np,1,1.12);else{formApply(m,np,2,1.35);m.dmx=1;E.sd[i].dmx=3;if(kind==="gmax"&&typeof GMX!=="undefined"&&GMX[np[0]])m.gmx=np[0]}ev0.push({k:"form",s:i,kind:kind,n:base,f:np[0],snap:beSnap(E)})});
+  const ev=_bt.call(this,E,acts,rng);
+  E.sd.forEach((sd,i)=>{if(sd.dmx>0&&--sd.dmx<=0){const m=sd.t.find(t=>t.dmx);if(m){formRevert(m);ev.push({k:"dmxend",s:i,n:m.p[0],snap:beSnap(E)})}}});
+  return ev0.concat(ev)}}
+{const _pa=pvAct;pvAct=function(a){if(D&&!/\|/.test(String(a))){D.pre="";D.zm=0}return _pa.apply(this,arguments)}}

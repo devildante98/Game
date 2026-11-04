@@ -5,7 +5,7 @@ const pvClean=t=>Array.from(String(t==null?"":t).replace(/[\u0000-\u001F\u007F-\
 const PVP_CAP=5000000;
 const pvDay=()=>{const d=today();if(!S.pvd||S.pvd.d!==d)S.pvd={d:d,t:0};return S.pvd};
 const pvHash=str=>{let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
-const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,m:moveIds(n).slice(),sh:S.shiny&&S.shiny[n]>0?1:0,nt:natOf(n),it:heldOf(n),ab:abOf(n)}));
+const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,m:moveIds(n).slice(),sh:S.shiny&&S.shiny[n]>0?1:0,nt:natOf(n),it:heldOf(n),ab:abOf(n),f:(typeof FORMS!=="undefined"&&FORMS[n]||[]).filter(f=>S.owned[f[0]]>0).map(f=>f[0])}));
 function pvOkTeam(t){return Array.isArray(t)&&t.length>=1&&t.length<=6&&t.every(x=>x&&typeof x.n==="string"&&PM[x.n]&&Number.isInteger(x.l)&&x.l>=1&&x.l<=100&&Array.isArray(x.m)&&x.m.length>=1&&x.m.length<=4&&x.m.every(id=>typeof id==="string"&&MVD[id])&&new Set(x.m).size===x.m.length)&&new Set(t.map(x=>x.n)).size===t.length}
 const pvMk=team=>team.map(x=>{const m=beMon(PM[x.n],x.l,null,x.m);m.sh=x.sh?1:0;monX(m,Number.isInteger(x.nt)&&x.nt>=0&&x.nt<NAT.length?x.nt:0,HOLDK[x.it]?x.it:"");m.ab=abValid(x.n,x.ab)?x.ab:abDefault(PM[x.n]);return m});
 const gdBadge=g=>g&&typeof g==="object"&&g.t?'<span class="gtag" title="Gremio '+esc(g.t)+'">'+esc(String(g.i||"🛡️").slice(0,4))+' '+esc(String(g.t).slice(0,4))+'</span>':"";
@@ -13,7 +13,7 @@ const gdBadge=g=>g&&typeof g==="object"&&g.t?'<span class="gtag" title="Gremio '
 const pvMe=()=>PR&&PR.peers().find(p=>p.sameTab);
 const pvOthers=()=>PR?PR.peers().filter(p=>!p.isMe&&p.kind==="viewer"&&p.presence&&p.presence.pvp&&p.presence.pvp.v===3):[];
 function pvPub(){if(!PR)return;if(!nickOk()){PR.presence({pvp:null}).catch(()=>{});return}
-  PR.presence({pvp:{v:3,prs:PRS(),n:pvClean(pvNick()),tr:trEnc(myLook()),gd:myGuildBadge(),tm:pvTeamData().map(x=>({n:x.n,l:x.l})),st:PV.st,ch:PV.ch,ok:PV.ok,no:PV.no,inv:PV.inv}}).catch(()=>{})}
+  PR.presence({pvp:{v:3,prs:PRS(),n:pvClean(pvNick()),tr:trEnc(myLook()),gd:myGuildBadge(),tm:pvTeamData().map(x=>({n:x.n,l:x.l})),st:PV.st,ch:PV.ch,ok:PV.ok,no:PV.no,inv:PV.inv,md:pvMd()}}).catch(()=>{})}
 function pvMsg(t){$("pvIn").innerHTML='<small class="mut">'+esc(t)+'</small>'}
 const _seenInv={};
 function pvIncoming(){
@@ -40,9 +40,10 @@ function pvRender(){
   if(PV.st==="idle")inc.ch.forEach(p=>{h+='<div class="lgnow"><b>⚔️ '+esc(pvClean(p.presence.pvp.n))+' te reta a un duelo</b>'+(fcd?'<small class="mut">Termina tu combate actual (pulsa «Volver») para poder aceptar.</small>':'')+'<div class="lgbtn"><button class="red" data-pvacc="'+esc(p.peer)+'"'+(fcd?' disabled':'')+'>Aceptar</button><button class="alt" data-pvno="'+esc(p.peer)+'">Rechazar</button></div></div>'});
   if(PV.st==="idle")inc.inv.forEach(p=>{h+='<div class="lgnow"><b>👥 '+esc(pvClean(p.presence.pvp.n))+' te invita a su sala 2 vs 2</b><div class="lgbtn"><button class="red" data-r2inv="'+esc(p.presence.pvp.inv.code)+'"'+(fcd?' disabled':'')+'>Unirse a la sala '+esc(p.presence.pvp.inv.code)+'</button></div></div>'});
   if(PV.st==="wait"){const o=PV.ch&&others.find(p=>p.peer===PV.ch.to);h+='<div class="lgnow"><b>Reto enviado a '+esc(o?pvClean(o.presence.pvp.n):"otro jugador")+'…</b><small class="mut">Esperando respuesta (30 s).</small><div class="lgbtn"><button class="alt" data-pvcancel="1">Cancelar</button></div></div>'}
+  h='<div class="pvmode"><b>Modo de PVP:</b><button class="'+(pvMd()==="c"?"on":"alt")+'" data-pvmd="c">⚔️ Clásico<small>Sin megas, Dinamax ni movimientos Z</small></button><button class="'+(pvMd()==="l"?"on":"alt")+'" data-pvmd="l">🧬 Libre<small>Con megaevoluciones, Dinamax/Gigamax y movimientos Z</small></button><small class="mut">Solo puedes retar a jugadores que estén en tu mismo modo.</small></div>'+h;
   $("pvIn").innerHTML=h;
   {const c=$("pvCnt");if(c)c.textContent=others.length?others.length+(others.length===1?" jugador":" jugadores"):"Nadie más ahora"}
-  $("pvList").innerHTML=others.length?others.map(p=>{const v=p.presence.pvp,busy=v.st==="duel",fr=isFriend(p.peer);return '<div class="pvrow"><span class="pvav">'+trImg(trDec(v.tr),"f","i")+'</span><b class="plink" data-prof="'+esc(p.peer)+'">'+esc(pvClean(v.n))+(v.prs?' 🌟'+(v.prs|0):'')+(fr?' <small title="Amigo">👥</small>':'')+' '+gdBadge(v.gd)+'</b><span class="pvtm">'+(Array.isArray(v.tm)?v.tm.filter(x=>x&&PM[x.n]).slice(0,6).map(x=>'<span title="'+esc(x.n)+' Nv'+(+x.l||1)+'">'+ico(PM[x.n],26)+'</span>').join(""):"")+'</span><small class="mut">'+(busy?"En duelo":v.st==="wait"?"Retando…":v.st==="room"?"En sala 2 vs 2":"Libre")+'</small>'+(fr||!window.FB?'':frPend(p.peer)?'<button class="alt" disabled title="Solicitud de amistad enviada">📨</button>':'<button class="alt" data-fradd="'+esc(pvClean(v.n))+'" title="Enviar solicitud de amistad">+👥</button>')+'<button data-pvch="'+esc(p.peer)+'"'+((PV.st!=="idle"||busy||v.st!=="idle"||!tm.length||fcd)?' disabled':'')+'>⚔️ Retar</button></div>'}).join(""):'<small class="mut">Ahora mismo no hay otros jugadores. Comparte el enlace de la página para que alguien se conecte.</small>';
+  $("pvList").innerHTML=others.length?others.map(p=>{const v=p.presence.pvp,busy=v.st==="duel",fr=isFriend(p.peer);return '<div class="pvrow"><span class="pvav">'+trImg(trDec(v.tr),"f","i")+'</span><b class="plink" data-prof="'+esc(p.peer)+'">'+esc(pvClean(v.n))+(v.prs?' 🌟'+(v.prs|0):'')+(fr?' <small title="Amigo">👥</small>':'')+' '+gdBadge(v.gd)+'</b><span class="pvtm">'+(Array.isArray(v.tm)?v.tm.filter(x=>x&&PM[x.n]).slice(0,6).map(x=>'<span title="'+esc(x.n)+' Nv'+(+x.l||1)+'">'+ico(PM[x.n],26)+'</span>').join(""):"")+'</span><small class="mut">'+(busy?"En duelo":v.st==="wait"?"Retando…":v.st==="room"?"En sala 2 vs 2":"Libre")+'</small>'+(fr||!window.FB?'':frPend(p.peer)?'<button class="alt" disabled title="Solicitud de amistad enviada">📨</button>':'<button class="alt" data-fradd="'+esc(pvClean(v.n))+'" title="Enviar solicitud de amistad">+👥</button>')+(v.md==="l"?'<span class="pvmt l" title="Modo Libre">🧬 Libre</span>':'<span class="pvmt" title="Modo Clásico">⚔️ Clásico</span>')+'<button data-pvch="'+esc(p.peer)+'"'+((PV.st!=="idle"||busy||v.st!=="idle"||!tm.length||fcd||(v.md==="l"?"l":"c")!==pvMd())?' disabled title="'+((v.md==="l"?"l":"c")!==pvMd()?'Está en otro modo de PVP':'')+'"':'')+'>⚔️ Retar</button></div>'}).join(""):'<small class="mut">Ahora mismo no hay otros jugadores. Comparte el enlace de la página para que alguien se conecte.</small>';
   if(PV.st==="wait"&&PV.ch&&me){
     const acc=others.find(p=>{const o=p.presence.pvp.ok;return o&&o.from===me.peer&&o.room===PV.ch.room});
     const rej=others.find(p=>{const n=p.presence.pvp.no;return n&&n.from===me.peer&&n.room===PV.ch.room&&Date.now()-(n.t||0)<10000});
@@ -53,12 +54,12 @@ function pvRender(){
 }
 function pvChallenge(peer){
   const me=pvMe();if(!me||PV.st!=="idle"||!pvTeamData().length||fcd)return false;
-  PV.st="wait";PV.t0=Date.now();PV.ch={to:peer,room:"d"+Math.floor(Math.random()*1e9).toString(36)+Date.now().toString(36),seed:Math.floor(Math.random()*2147483647),t:Date.now()};PV.ok=null;pvPub();pvRender();return true;
+  PV.st="wait";PV.t0=Date.now();PV.dmd=pvMd();PV.ch={md:PV.dmd,to:peer,room:"d"+Math.floor(Math.random()*1e9).toString(36)+Date.now().toString(36),seed:Math.floor(Math.random()*2147483647),t:Date.now()};PV.ok=null;pvPub();pvRender();return true;
 }
 function pvAccept(peer){
   const o=pvOthers().find(p=>p.peer===peer);if(!o||PV.st!=="idle"||fcd)return;
   const c=o.presence.pvp.ch;if(!c||typeof c.room!=="string"||!/^[a-z0-9][a-z0-9_.-]{0,47}$/.test(c.room))return;
-  PV.st="duel";PV.ok={from:peer,room:c.room};PV.no=null;pvPub();pvStart("B",c.room,c.seed|0);
+  PV.dmd=c.md==="l"?"l":"c";PV.st="duel";PV.ok={from:peer,room:c.room};PV.no=null;pvPub();pvStart("B",c.room,c.seed|0);
 }
 function pvDecline(peer){const o0=pvOthers().find(p=>p.peer===peer),rm=o0&&o0.presence.pvp.ch?o0.presence.pvp.ch.room:"";PV.no={from:peer,room:rm,t:Date.now()};pvPub();setTimeout(()=>{PV.no=null;pvPub()},8000);pvRender()}
 // ---- duelo 1 vs 1 (misma arena, motor y animaciones que los combates normales) ----
@@ -68,7 +69,7 @@ const pvMy=()=>D.role==="A"?0:1;
 async function pvStart(role,room,seed){
   PV.st="duel";pvPub();
   let DR;try{DR=await PR.join(room)}catch(e){PV.st="idle";PV.ch=null;PV.ok=null;pvPub();pvMsg("No se pudo entrar en la sala del duelo.");return}
-  D={role:role,room:room,DR:DR,seed:seed,hist:{},E:null,playing:false,ready:false,over:false,t0:Date.now(),lastSeen:Date.now(),sw:false,waitSince:0,base:{v:3,n:pvClean(pvNick()),r:role,tr:trEnc(myLook()),team:pvTeamData()}};
+  D={role:role,room:room,DR:DR,seed:seed,hist:{},E:null,playing:false,ready:false,over:false,t0:Date.now(),lastSeen:Date.now(),sw:false,waitSince:0,base:{v:3,md:PV.dmd||"c",n:pvClean(pvNick()),r:role,tr:trEnc(myLook()),team:pvTeamData()}};
   fcd=true;updTeam();
   const a=$("arena");$("pvDuel").appendChild(a);a.hidden=false;arenaReset();
   $("pvLobby").hidden=true;$("pvDuel").hidden=false;$("pvVs").textContent="Duelo online";
@@ -99,7 +100,8 @@ function pvTick(){
   if(!D.E){
     if(op&&pvOkTeam(op.team)&&pvOkTeam(D.base.team)){
       const mine=D.base.team,theirs=op.team,tA=D.role==="A"?mine:theirs,tB=D.role==="A"?theirs:mine;
-      D.E=beNew([beSide(pvMk(tA)),beSide(pvMk(tB))],[[0],[1]],D.seed);
+      D.E=beNew([beSide(pvMk(tA)),beSide(pvMk(tB))],[[0],[1]],D.seed);D.E.pvp=1;D.E.free=D.base.md==="l"&&op.md==="l"?1:0;
+      [tA,tB].forEach((tm,i)=>{D.E.sd[i].fo=tm.map(x=>Array.isArray(x.f)?x.f.filter(f=>typeof f==="string"&&PM[f]):[])});
       D.oppNick=pvClean(op.n);D.oppTr=typeof op.tr==="string"?op.tr:"";$("pvVs").textContent=pvClean(D.base.n)+" ⚔️ "+D.oppNick;
       pvBegin();
     }else if(Date.now()-D.t0>25000)pvEnd("timeout");
@@ -159,7 +161,7 @@ function pvMenu(){
   const pm=beAct(side),foe=beAct(E.sd[1-me]);
   if(D.sw){m.innerHTML=swGrid(side.t.map((t,i)=>swCard(t,'data-pv="s'+i+'"',i===side.ai||t.mh<=0,i===side.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-pv="back">Atrás</button>';return}
   box.textContent="¿Qué hará "+pm.p[0]+"?";
-  m.innerHTML=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-pv="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-pv="m'+i+'"',foe,pm)).join(""))+'<button data-pv="d">🛡️ Defensa</button><button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-pv="sw"'+(alive.length?'':' disabled')+'>🔁 Equipo</button><button data-pv="ff">🏳️ Huir</button>';
+  m.innerHTML=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-pv="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-pv="m'+i+'"',foe,pm)).join(""))+pvFreeBtns(side,pm)+'<button data-pv="d">🛡️ Defensa</button><button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-pv="sw"'+(alive.length?'':' disabled')+'>🔁 Equipo</button><button data-pv="ff">🏳️ Huir</button>';
 }
 function pvEnd(r){
   if(!D||D.over)return;
@@ -197,6 +199,10 @@ $("menu").addEventListener("click",e=>{
   if(v==="back"){snd("ui");D.sw=false;pvMenu();return}
   if(v==="claim"){pvEnd("left");return}
   if(v==="ff"){askOk("¿Seguro que quieres huir del duelo? Contará como derrota.").then(o=>{if(o)$("pvFf").click()});return}
+  if(/^f[MGD]\d?$/.test(v)){snd("ui");D.pre=D.pre===v.slice(1)?"":v.slice(1);D.zm=0;pvMenu();return}
+  if(v==="zm"){snd("ui");D.zm=!D.zm;pvMenu();return}
+  if(/^[zx][0-3]$/.test(v)){D.zm=0;D.pre="";pvAct(v);return}
+  if(/^(m[0-3]|st)$/.test(v)&&D.pre){const p=D.pre;D.pre="";pvAct(p+"|"+v);return}
   if(/^(m[0-3]|d|st|s[0-5])$/.test(v))pvAct(v);
 });
 $("pvFf").onclick=()=>{if(R2&&R2.E){askOk("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados.").then(o=>{if(o)dvAct("ff")});return}if(!D||D.over)return;D.base.ff=1;pvDPub();setTimeout(()=>pvEnd("self"),250)};

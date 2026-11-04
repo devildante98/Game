@@ -249,6 +249,10 @@ async function bePlay(ev){
         else await say("¡"+an+" de "+who+" se ha activado!");
         break}
       case "msg":bePaint(e.snap);await say(e.t);break;
+      case "form":{setSpr(i,e.snap);bePaint(e.snap);const el=$(sl.sp);
+        if(e.kind==="mega"){snd("flash");if(!hubCalm()){const g=document.createElement("div");g.className="megafx";$("arena").querySelector(".bt").appendChild(g);await g.animate([{opacity:0,transform:"scale(.2)"},{opacity:1,transform:"scale(1)",offset:.5},{opacity:0,transform:"scale(1.6)"}],{duration:1200,easing:"ease-out"}).finished;g.remove()}snd("lvl");await say("¡"+who+" ha megaevolucionado en "+e.f+"!")}
+        else{if(el)el.classList.add("dmax");snd("lvl");await say("¡"+who+" se ha "+(e.kind==="gmax"?"gigamaxizado":"dinamaxizado")+"! Durante 3 turnos tiene el doble de PS.")}break}
+      case "dmxend":{setSpr(i,e.snap);bePaint(e.snap);const el=$(sl.sp);if(el)el.classList.remove("dmax");await say("¡La energía Dinamax de "+who+" se ha agotado!");break}
       case "zpow":snd("flash");if(!hubCalm()){const g=document.createElement("div");g.className="zfx";$("arena").querySelector(".bt").appendChild(g);await g.animate([{opacity:0,transform:"scale(.3)"},{opacity:1,transform:"scale(1)",offset:.5},{opacity:0,transform:"scale(1.5)"}],{duration:1000,easing:"ease-out"}).finished;g.remove()}await say("¡"+who+" libera todo su poder Z!");break;
       case "theal":snd("heal");await fxHeal(sl.sp);bePaint(e.snap);await say("¡"+(B.trainerName||B.trainer||"El rival")+" ha usado una Hiperpoción! ¡"+who+" ha recuperado PS!");break;
       case "noaff":snd("miss");await say("No afecta a "+who+"...");break;

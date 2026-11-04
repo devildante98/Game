@@ -41,7 +41,7 @@ async function modUI(force){
 document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("#modPB button");if(!b||!MOD.admin)return;const d=b.dataset;
   try{
     if(d.mdm){const r=(MOD.reports||[]).find(x=>x.id===d.mdm);if(r&&r.key){const [tp,id]=r.key==="global"?["global","global"]:r.key.split(":");await window.FB.chDel(tp,id,r.mid).catch(()=>{})}await window.FB.reportDel(d.mdm);toast("🗑️ Mensaje borrado")}
-    else if(d.mban){const h=+d.mbt,why=prompt("Motivo (lo verá el jugador):",h?"Mal comportamiento en el chat":"Trampas o abuso")||"";await window.FB.banSet(d.mban,{n:String(d.mbn||"").slice(0,30),until:h?Date.now()+h*36e5:0,all:d.mball?1:0,why:why.slice(0,80),by:window.FB.uid(),at:Date.now()});toast(h?"🔇 Jugador silenciado":"⛔ Jugador expulsado")}
+    else if(d.mban){const h=+d.mbt,why=await askText("Motivo (lo verá el jugador):",h?"Mal comportamiento en el chat":"Trampas o abuso")||"";await window.FB.banSet(d.mban,{n:String(d.mbn||"").slice(0,30),until:h?Date.now()+h*36e5:0,all:d.mball?1:0,why:why.slice(0,80),by:window.FB.uid(),at:Date.now()});toast(h?"🔇 Jugador silenciado":"⛔ Jugador expulsado")}
     else if(d.mrd){await window.FB.reportDel(d.mrd);toast("✅ Reporte descartado")}
     else if(d.munb){await window.FB.banDel(d.munb);toast("Sanción quitada")}
   }catch(x){toast("No se ha podido completar ("+((x&&x.code)||"error")+")")}
@@ -50,7 +50,7 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
 function modRankBtns(){if(!MOD.admin)return;document.querySelectorAll(".tourl .tourr").forEach(r=>{if(r.querySelector(".modrk"))return;const p=r.querySelector("[data-prof]");if(!p)return;const b=document.createElement("button");b.className="modrk alt mini";b.textContent="🗑️";b.title="Quitar de la clasificación (moderación)";b.dataset.mrk=p.dataset.prof;r.appendChild(b)})}
 setInterval(()=>{try{modRankBtns()}catch(e){}},1500);
 document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("[data-mrk]");if(!b||!MOD.admin)return;const u=b.dataset.mrk,box=b.closest("#mgrPB")?"mgr":"tour";
-  if(!confirm("¿Quitar a este jugador de esta clasificación?"))return;const w=tourWeek(),key=box==="mgr"?MGR_KEY(w,MGR.g):w;
+  if(!await askOk("¿Quitar a este jugador de esta clasificación?"))return;const w=tourWeek(),key=box==="mgr"?MGR_KEY(w,MGR.g):w;
   try{await window.FB.tourDel(key,u);toast("🗑️ Quitado de la clasificación");if(box==="mgr"){MGR.at[MGR.g]=0;mgrUI(true)}else{TR_.at=0;await tourLoad(true);mgUI()}}catch(x){toast("No se ha podido quitar ("+((x&&x.code)||"error")+")")}});
 // ---- expulsados: fuera de clasificaciones ----
 {const _ts=tourSubmit;tourSubmit=function(id,sc){if(banActive(MOD.ban)&&MOD.ban.all)return "";return _ts(id,sc)}}

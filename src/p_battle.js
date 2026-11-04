@@ -583,7 +583,7 @@ async function turn(k){
     B.busy=true;setMenu(false);
     // contra entrenadores no se puede huir, pero sí rendirse (cuenta como derrota)
     if(B.trainer){const why=B.league?" Quedarás eliminado de la "+LEAGUES[B.league.li].n+".":B.tower?" Se acabará tu racha en la Torre Batalla.":"";
-      if(!confirm("¿Seguro que quieres rendirte? El combate contará como derrota."+why)){B.busy=false;setMenu(true);return}
+      if(!await askOk("¿Seguro que quieres rendirte? El combate contará como derrota."+why)){B.busy=false;setMenu(true);return}
       B.ff=true;snd("flee");await say("¡Te has rendido!");return finish("lose")}
     {const tp=axTrapped();if(tp){await say(tp);B.busy=false;setMenu(true);return}}
     syncPP();saveHp();snd("flee");await say("¡Has huido sin problemas!");B.busy=false;$("menu").innerHTML='<button data-k="9">Volver</button>';return;

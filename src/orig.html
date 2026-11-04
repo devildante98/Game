@@ -884,12 +884,12 @@ function newGame(prs,seed){
   if(prs>=4){S.bag.mb=1;S.bag.cand=5}
   buildBag();save();$("out").innerHTML="";$("msg").textContent="";_qk="";_qn=null;window._dk="";render();
 }
-$("reset").onclick=()=>{
+$("reset").onclick=async()=>{
   if(achAllDone()){
-    if(!confirm("🌟 ¡Has conseguido todos los logros!\n\nSi reinicias ahora empezarás de cero, pero subirás a PRESTIGIO "+(PRS()+1)+" con estas ventajas:\n• "+prsPerks(PRS()+1).join("\n• ")+"\n\nAdemás, tendrás logros nuevos y distintos. ¿Reiniciar con prestigio?"))return;
+    if(!await askOk("🌟 ¡Has conseguido todos los logros!\n\nSi reinicias ahora empezarás de cero, pero subirás a PRESTIGIO "+(PRS()+1)+" con estas ventajas:\n• "+prsPerks(PRS()+1).join("\n• ")+"\n\nAdemás, tendrás logros nuevos y distintos. ¿Reiniciar con prestigio?"))return;
     newGame(PRS()+1,Math.floor(Math.random()*2147483646)+1);snd("lvl");toast("🌟 ¡Has alcanzado el Prestigio "+PRS()+"!"+(typeof trPrsItems==="function"&&trPrsItems(PRS()).length?" Nueva ropa en Tu entrenador: "+trPrsItems(PRS()).join(", ")+".":""));
   }else{
-    if(!confirm("⚠️ ¡ATENCIÓN! Todavía no has conseguido todos los logros (te faltan "+achLeft()+" niveles de logro).\n\nSi reinicias la partida ahora PERDERÁS TODO tu progreso (Pokémon, tickets, niveles, objetos...) y NO conseguirás ningún nivel de prestigio ni ninguna ventaja.\n\n¿Seguro que quieres borrarlo todo?"))return;
+    if(!await askOk("⚠️ ¡ATENCIÓN! Todavía no has conseguido todos los logros (te faltan "+achLeft()+" niveles de logro).\n\nSi reinicias la partida ahora PERDERÁS TODO tu progreso (Pokémon, tickets, niveles, objetos...) y NO conseguirás ningún nivel de prestigio ni ninguna ventaja.\n\n¿Seguro que quieres borrarlo todo?"))return;
     newGame(PRS(),S.prsSeed);
   }
 };
@@ -2133,10 +2133,10 @@ $("menu").addEventListener("click",e=>{
   if(v==="sw"){snd("ui");D.sw=true;pvMenu();return}
   if(v==="back"){snd("ui");D.sw=false;pvMenu();return}
   if(v==="claim"){pvEnd("left");return}
-  if(v==="ff"){if(confirm("¿Seguro que quieres huir del duelo? Contará como derrota."))$("pvFf").click();return}
+  if(v==="ff"){askOk("¿Seguro que quieres huir del duelo? Contará como derrota.").then(o=>{if(o)$("pvFf").click()});return}
   if(/^(m[0-3]|d|st|s[0-5])$/.test(v))pvAct(v);
 });
-$("pvFf").onclick=()=>{if(R2&&R2.st){if(confirm("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados."))dvAct("ff");return}if(!D||D.over)return;D.base.ff=1;pvDPub();setTimeout(()=>pvEnd("self"),250)};
+$("pvFf").onclick=()=>{if(R2&&R2.st){askOk("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados.").then(o=>{if(o)dvAct("ff")});return}if(!D||D.over)return;D.base.ff=1;pvDPub();setTimeout(()=>pvEnd("self"),250)};
 $("pvList").addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.dataset.pvch)pvChallenge(b.dataset.pvch)});
 $("pvIn").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.pvacc)pvAccept(b.dataset.pvacc);else if(b.dataset.pvno)pvDecline(b.dataset.pvno);else if(b.dataset.pvcancel){PV.st="idle";PV.ch=null;pvPub();pvRender()}});
 // ---- apodos unicos (registro en la nube) ----
@@ -2494,7 +2494,7 @@ $("menu").addEventListener("click",e=>{
   if(v==="claim"){dvEnd(dvSide(R2.me));return}
   if(v==="sw"){snd("ui");R2.sub="sw";dvTick();return}
   if(v==="back"){snd("ui");R2.sub="";dvTick();return}
-  if(v==="ff"){if(confirm("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados."))dvAct("ff");return}
+  if(v==="ff"){askOk("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados.").then(o=>{if(o)dvAct("ff")});return}
   if(v.slice(0,3)==="pk:"){
     const mk=v.slice(3),pm=R2.st.P[R2.me].t[R2.st.P[R2.me].ai],mv=mk==="st"?STRUG:pm.m[+mk.slice(1)];
     const foes=dvFoes(R2.me).filter(i=>!R2.st.out[i]&&R2.st.P[i].t[R2.st.P[i].ai].hp>0);
@@ -3086,7 +3086,7 @@ $("sugGo").onclick=async()=>{
 $("sugRe").onclick=sugLoad;
 $("sugList").addEventListener("click",async e=>{
   const b=e.target.closest("button");if(!b||!b.dataset.sd||!window.sugDel)return;
-  if(!confirm("¿Borrar esta sugerencia?"))return;
+  if(!await askOk("¿Borrar esta sugerencia?"))return;
   try{await window.sugDel(b.dataset.sd)}catch(x){}
   sugLoad();
 });

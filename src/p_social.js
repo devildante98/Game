@@ -175,16 +175,16 @@ document.addEventListener("click",async e=>{
       else{await window.FB.gRequest(d.gj,nick);gMsg("📨 Solicitud enviada. El líder del gremio tiene que aceptarla.");S.greq=d.gj;save();gReqWatch(d.gj);await gRefresh()}
       return;
     }
-    if(b.id==="gdLeave"){if(!confirm("¿Seguro que quieres salir del gremio?"))return;await window.FB.gLeave(GS.gid,!!GS.doc&&GS.doc.sub===window.FB.uid());S.gid=null;save();gWatch(null);gRefresh();return}
-    if(b.id==="gdDis"){if(!confirm("¿Seguro que quieres DISOLVER el gremio? Todos los miembros lo perderán y no se devuelven los tickets."))return;await window.FB.gDisband(GS.gid);S.gid=null;save();gWatch(null);gRefresh();return}
+    if(b.id==="gdLeave"){if(!await askOk("¿Seguro que quieres salir del gremio?"))return;await window.FB.gLeave(GS.gid,!!GS.doc&&GS.doc.sub===window.FB.uid());S.gid=null;save();gWatch(null);gRefresh();return}
+    if(b.id==="gdDis"){if(!await askOk("¿Seguro que quieres DISOLVER el gremio? Todos los miembros lo perderán y no se devuelven los tickets."))return;await window.FB.gDisband(GS.gid);S.gid=null;save();gWatch(null);gRefresh();return}
     if(b.id==="gdEdit"){const g=GS.doc;GE=Object.assign({},GE,{name:g.name,tag:g.tag,icon:g.icon|0,s:(g.fl||{}).s|0,p:(g.fl||{}).p|0,c1:(g.fl||{}).c1|0,c2:(g.fl||{}).c2|0,c3:(g.fl||{}).c3|0,desc:g.desc||"",open:g.open?1:0});GS.editing=!GS.editing;gUI(true);return}
     if(b.id==="geCancel"){GS.editing=false;gUI(true);return}
     if(b.id==="geSave"){geRead();if(!gTagOk(GE.tag)){gMsg("Las siglas deben tener de 2 a 4 letras o números.");return}if(S.t<GUILD_EDIT)return;await window.FB.gEdit(GS.gid,{tag:GE.tag,icon:GE.icon,fl:{s:GE.s,p:GE.p,c1:GE.c1,c2:GE.c2,c3:GE.c3},desc:GE.desc.trim(),open:!!GE.open});S.t-=GUILD_EDIT;save();GS.editing=false;toast("🎨 Gremio actualizado");return}
     if(d.gacc){const r=GS.doc.req[d.gacc];await window.FB.gAccept(GS.gid,d.gacc,r?r.n:"");gAnnounce(GS.gid,r?r.n:"",pvNick());return}
     if(d.grej){await window.FB.gReject(GS.gid,d.grej);return}
-    if(d.gk){if(!confirm("¿Expulsar a este miembro del gremio?"))return;await window.FB.gKick(GS.gid,d.gk,GS.doc.sub===d.gk);return}
-    if(d.gt){if(!confirm("¿Nombrar líder a este miembro? Tú pasarás a ser un miembro normal."))return;await window.FB.gTransfer(GS.gid,d.gt,GS.doc.sub===d.gt);return}
-    if(d.gsub){if(!confirm("¿Nombrar sublíder a este miembro? Podrá aceptar y rechazar solicitudes para unirse, pero nada más."+(GS.doc.sub?" El sublíder actual dejará de serlo.":"")))return;await window.FB.gSetSub(GS.gid,d.gsub);toast("⭐ Nuevo sublíder nombrado.");return}
+    if(d.gk){if(!await askOk("¿Expulsar a este miembro del gremio?"))return;await window.FB.gKick(GS.gid,d.gk,GS.doc.sub===d.gk);return}
+    if(d.gt){if(!await askOk("¿Nombrar líder a este miembro? Tú pasarás a ser un miembro normal."))return;await window.FB.gTransfer(GS.gid,d.gt,GS.doc.sub===d.gt);return}
+    if(d.gsub){if(!await askOk("¿Nombrar sublíder a este miembro? Podrá aceptar y rechazar solicitudes para unirse, pero nada más."+(GS.doc.sub?" El sublíder actual dejará de serlo.":"")))return;await window.FB.gSetSub(GS.gid,d.gsub);toast("⭐ Nuevo sublíder nombrado.");return}
     if(d.gunsub){await window.FB.gSetSub(GS.gid,"");toast("Has quitado el cargo de sublíder.");return}
     if(d.gfr){frSend(d.gfr,b);return}
   }catch(x){gMsg(x&&x.code==="exists"?"❌ Ya existe un gremio con ese nombre. Elige otro.":"No se pudo completar ("+((x&&x.code)||"error")+").");gUI(true)}

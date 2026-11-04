@@ -196,10 +196,10 @@ $("menu").addEventListener("click",e=>{
   if(v==="sw"){snd("ui");D.sw=true;pvMenu();return}
   if(v==="back"){snd("ui");D.sw=false;pvMenu();return}
   if(v==="claim"){pvEnd("left");return}
-  if(v==="ff"){if(confirm("¿Seguro que quieres huir del duelo? Contará como derrota."))$("pvFf").click();return}
+  if(v==="ff"){askOk("¿Seguro que quieres huir del duelo? Contará como derrota.").then(o=>{if(o)$("pvFf").click()});return}
   if(/^(m[0-3]|d|st|s[0-5])$/.test(v))pvAct(v);
 });
-$("pvFf").onclick=()=>{if(R2&&R2.E){if(confirm("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados."))dvAct("ff");return}if(!D||D.over)return;D.base.ff=1;pvDPub();setTimeout(()=>pvEnd("self"),250)};
+$("pvFf").onclick=()=>{if(R2&&R2.E){askOk("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados.").then(o=>{if(o)dvAct("ff")});return}if(!D||D.over)return;D.base.ff=1;pvDPub();setTimeout(()=>pvEnd("self"),250)};
 $("pvList").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.pvch)pvChallenge(b.dataset.pvch);else if(b.dataset.fradd)frSend(b.dataset.fradd,b)});
 $("pvIn").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.pvacc)pvAccept(b.dataset.pvacc);else if(b.dataset.pvno)pvDecline(b.dataset.pvno);else if(b.dataset.r2inv)r2Open(b.dataset.r2inv,false);else if(b.dataset.pvcancel){PV.st="idle";PV.ch=null;pvPub();pvRender()}});
 // ---- apodos unicos (registro en la nube) ----
@@ -456,7 +456,7 @@ $("menu").addEventListener("click",e=>{
   if(v==="claim"){dvEnd(R2.me<2?0:1);return}
   if(v==="sw"){snd("ui");R2.sub="sw";R2._m="";dvTick();return}
   if(v==="back"){snd("ui");R2.sub="";R2._m="";dvTick();return}
-  if(v==="ff"){if(confirm("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados."))dvAct("ff");return}
+  if(v==="ff"){askOk("¿Seguro que quieres abandonar el combate 2 vs 2? Tus Pokémon contarán como debilitados.").then(o=>{if(o)dvAct("ff")});return}
   if(v.slice(0,3)==="pk:"){
     const mk=v.slice(3),side=R2.E.sd[R2.me],pm=beAct(side),mv=mk==="st"?STRUG:pm.m[+mk.slice(1)];
     const foes=dvFoes(R2.me).filter(i=>!R2.E.sd[i].out&&beAct(R2.E.sd[i]).mh>0);

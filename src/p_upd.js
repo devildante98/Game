@@ -117,7 +117,7 @@ $("sugRe").onclick=()=>sugLoad();
 $("sugList").addEventListener("click",async e=>{
   const v=e.target.closest("[data-sgv]");if(v){e.preventDefault();const u=v.querySelector("img").src;nxModal('<img class="sugbig" src="'+u+'" alt="Foto adjunta"><button id="sgOk">Cerrar</button>');$("sgOk").onclick=nxModalClose;return}
   const b=e.target.closest("[data-sdi]");if(!b||!window.sugImgDel)return;
-  if(!confirm("¿Borrar las fotos de esta sugerencia? El texto se conserva."))return;
+  if(!await askOk("¿Borrar las fotos de esta sugerencia? El texto se conserva."))return;
   b.disabled=true;try{await window.sugImgDel(b.dataset.sdi)}catch(x){toast("No se han podido borrar las fotos ("+((x&&x.code)||"error")+").")}
   sugLoad();
 });
@@ -164,7 +164,7 @@ document.addEventListener("click",async e=>{
   if(b.dataset.mys==="re"){snd("ui");mySugUI(true);return}
   if(b.dataset.mys==="new"){snd("ui");hubOpen("mas","sugP");setTimeout(()=>{try{$("sugT").focus()}catch(x){}},200);return}
   const id=b.dataset.mysc,s=(Array.isArray(MYSUG)?MYSUG:[]).find(x=>x.id===id);if(!s||s.st==="done")return;
-  if(!confirm("¿Cancelar esta sugerencia? Se borrará y el desarrollador ya no la verá."))return;
+  if(!await askOk("¿Cancelar esta sugerencia? Se borrará y el desarrollador ya no la verá."))return;
   b.disabled=true;try{await window.sugDel(id);toast("✖ Sugerencia cancelada.");MYSUG=MYSUG.filter(x=>x.id!==id);mySugUI(false)}catch(x){toast("No se ha podido cancelar ("+((x&&x.code)||"error")+").");b.disabled=false}
 });
 // después de enviar, la lista se refresca; y avisa si el desarrollador ha respondido
@@ -225,26 +225,26 @@ function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=e
     (cur.length?sec(ev.n+' · ¡solo hasta el '+ev.b[1]+' '+MESES[ev.b[0]-1]+'!',cur,""):'<p class="mut">Ahora mismo no hay ningún evento de temporada. Lo próximo aparecerá con el siguiente evento.</p>')+
     sec("🛍️ Catálogo",cat,"")+sec("🎁 Tus artículos de temporada",mine,"")+sec("📅 Próximamente en otros eventos",soon,"soon");
 }
-document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
+document.addEventListener("click",async e=>{const t=e.target;if(!t.closest)return;
   const a=t.closest("[data-trshop]");if(a){e.preventDefault();snd("ui");hubOpen("trn","trShopP");return}
   const w=t.closest("#trShopPB [data-tsw]");if(w){const[k,v]=w.dataset.tsw.split(":");trSet(k,+v);snd("ui");trShopUI();toast("👕 ¡Te queda genial!");return}
   const tw=t.closest("#trShopPB [data-tiw]");if(tw){if(!trOwn("ti",tw.dataset.tiw))return;shwGet().tit=tw.dataset.tiw;save();snd("ui");trShopUI();toast("🏷️ ¡Título cambiado!");return}
   const tb=t.closest("#trShopPB [data-tib]");if(tb){const it=TITLE_SHOP.find(x=>x[0]===tb.dataset.tib),ev=evNow();if(!it||trOwn("ti",it[0]))return;
     if(it[3]&&(!ev||ev.n!==it[3])){toast("Este título solo se vende durante "+it[3]+".");return}
     if(S.t<it[2]){toast("Te faltan "+fmt(it[2]-S.t)+" 🎟️.");return}
-    if(!confirm("¿Comprar el título «"+it[1]+"» por "+fmt(it[2])+" 🎟️?"))return;
+    if(!await askOk("¿Comprar el título «"+it[1]+"» por "+fmt(it[2])+" 🎟️?"))return;
     S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn["ti:"+it[0]]=1;shwGet().tit=it[0];save();render();snd("lvl");toast("🏷️ ¡Has comprado el título «"+it[1]+"»! Ya lo luces en tu vitrina y tu perfil.");trShopUI();return}
   const cq=t.closest("#trShopPB [data-cbq]");if(cq){S.card=Object.assign({},S.card,{[cq.dataset.cbq]:""});save();snd("ui");trShopUI();return}
   const cw=t.closest("#trShopPB [data-cbw]");if(cw){const[k,id]=cw.dataset.cbw.split(":");if(!trOwn(k,id))return;S.card=Object.assign({},S.card,{[k]:id});save();snd("ui");trShopUI();toast("🖼️ ¡Tarjeta actualizada!");return}
   const cb=t.closest("#trShopPB [data-cbb]");if(cb){const[k,id]=cb.dataset.cbb.split(":"),it=cardIt(k,id),ev=evNow();if(!it||trOwn(k,id))return;
     if(it[3]&&(!ev||ev.n!==it[3])){toast("Esto solo se vende durante "+it[3]+".");return}
     if(S.t<it[2]){toast("Te faltan "+fmt(it[2]-S.t)+" 🎟️.");return}
-    if(!confirm("¿Comprar «"+it[1]+"» por "+fmt(it[2])+" 🎟️?"))return;
+    if(!await askOk("¿Comprar «"+it[1]+"» por "+fmt(it[2])+" 🎟️?"))return;
     S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn[k+":"+id]=1;S.card=Object.assign({},S.card,{[k]:id});save();render();snd("lvl");toast("🛍️ ¡Has comprado «"+it[1]+"» en la Tienda de Evento! Ya está en tu tarjeta.");trShopUI();return}
   const b=t.closest("#trShopPB [data-tsb]");if(b){const[k,v0]=b.dataset.tsb.split(":"),v=+v0,it=trShopIt(k,v),ev=evNow();if(!it||trOwn(k,v))return;
     if(it[3]&&(!ev||ev.n!==it[3])){toast("Esta prenda solo se vende durante "+it[3]+".");return}
     if(S.t<it[2]){toast("Te faltan "+fmt(it[2]-S.t)+" 🎟️.");return}
-    const o=TRO.find(x=>x[0]===k);if(!confirm("¿Comprar «"+o[2][v]+"» por "+fmt(it[2])+" 🎟️?"))return;
+    const o=TRO.find(x=>x[0]===k);if(!await askOk("¿Comprar «"+o[2][v]+"» por "+fmt(it[2])+" 🎟️?"))return;
     S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn[k+":"+v]=1;trSet(k,v);save();render();snd("lvl");toast("🛍️ ¡Has comprado «"+o[2][v]+"» en la Tienda de Evento! Ya la llevas puesta.");trShopUI()}
 });
 // la tarjeta se publica con el perfil
@@ -660,7 +660,7 @@ document.addEventListener("click",async e=>{const t=e.target;if(!t.closest)retur
   const num=id=>{const v=($(id)||{}).value;return v===""||v==null?null:Math.max(0,Math.floor(+v))};
   const fx={t:num("fxT"),cl:num("fxCl"),g:G.map((g,i)=>num("fxG"+i)),msg:String(($("fxM")||{}).value||"").slice(0,300),at:Date.now(),n:b.dataset.fixn};
   if(fx.t==null&&fx.cl==null&&fx.g.every(x=>x==null)){toast("Pon al menos un máximo.");return}
-  if(!confirm("¿Aplicar esta corrección a "+b.dataset.fixn+"? Se aplicará la próxima vez que entre."))return;
+  if(!await askOk("¿Aplicar esta corrección a "+b.dataset.fixn+"? Se aplicará la próxima vez que entre."))return;
   b.disabled=true;try{await window.FB.fixSet(b.dataset.fixgo,fx);toast("🛠️ Corrección guardada para "+b.dataset.fixn+". Se aplicará cuando entre.")}catch(x){toast("No se ha podido guardar ("+((x&&x.code)||"error")+"). ¿Has añadido la regla «fixes» en Firebase?");b.disabled=false}});
 // el jugador: al entrar comprueba si tiene una corrección pendiente (1 lectura por sesión)
 let _fixChk=0;
@@ -710,11 +710,11 @@ function bldHTML(n){const b=bldGet(n),mvs=x=>(x.mv||[]).map(id=>MVD[id]?MVD[id].
     (b.l.length<BLDMAX?'<button class="bldnew" data-bldn="1">＋ Nuevo set</button>':'')+'</div></div>'}
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;
   const d=document.createElement("div");d.className="fichr bldr";d.dataset.bn=n;d.dataset.bs=sh?1:0;d.innerHTML=bldHTML(n);const st=w.querySelector(".fstatr");if(st)st.before(d);else w.appendChild(d)}catch(e){console.error(e)}}}
-document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;const r=t.closest(".bldr");if(!r)return;const n=r.dataset.bn,sh=r.dataset.bs==="1",re=()=>{try{updTeam();render()}catch(x){}pkView(n,sh)};
+document.addEventListener("click",async e=>{const t=e.target;if(!t.closest)return;const r=t.closest(".bldr");if(!r)return;const n=r.dataset.bn,sh=r.dataset.bs==="1",re=()=>{try{updTeam();render()}catch(x){}pkView(n,sh)};
   let q=t.closest("[data-bldu]");if(q){if(bldBusy())return;bldSwitch(n,+q.dataset.bldu);re();return}
   q=t.closest("[data-bldn]");if(q){if(bldBusy())return;const k=bldNew(n);if(k>=0){bldSwitch(n,k,1);save();snd("lvl");toast("🆕 Nuevo set para "+nk(n)+": ya está en uso.")}re();return}
-  q=t.closest("[data-bldr]");if(q){const b=bldGet(n),x=b.l[+q.dataset.bldr];const nm=prompt("Nombre del set:",x.nm);if(nm&&nm.trim()){x.nm=nm.trim().slice(0,20);save()}re();return}
-  q=t.closest("[data-bldd]");if(q){if(bldBusy())return;const b=bldGet(n),x=b.l[+q.dataset.bldd];if(!confirm("¿Eliminar el set «"+x.nm+"»? Su objeto vuelve a la Mochila."))return;bldDel(n,+q.dataset.bldd);save();snd("ui");re()}});
+  q=t.closest("[data-bldr]");if(q){const b=bldGet(n),x=b.l[+q.dataset.bldr];const nm=await askText("Nombre del set:",x.nm,{max:20});if(nm&&nm.trim()){x.nm=nm.trim().slice(0,20);save()}re();return}
+  q=t.closest("[data-bldd]");if(q){if(bldBusy())return;const b=bldGet(n),x=b.l[+q.dataset.bldd];if(!await askOk("¿Eliminar el set «"+x.nm+"»? Su objeto vuelve a la Mochila."))return;bldDel(n,+q.dataset.bldd);save();snd("ui");re()}});
 // los sets de equipo recuerdan qué set usa cada Pokémon
 {const bmap=team=>{const o={};(team||[]).forEach(n=>{if(n&&S.bld&&S.bld[n]&&S.bld[n].l.length>1)o[n]=S.bld[n].a});return o};
   const wrapSave=id=>{const el=$(id);if(!el||!el.onclick)return;const _o=el.onclick;el.onclick=function(){const L0=(S.sets||[]).length,i=+$("setSel").value;_o.apply(this,arguments);try{const st=id==="setNew"?(S.sets.length>L0?S.sets[S.sets.length-1]:null):S.sets[i];if(st){st.bld=bmap(st.team);save()}}catch(x){}}};

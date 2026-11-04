@@ -3,3 +3,16 @@ const GD={"MV":[[1,"Destructor","n",40,100,35,0,1,"c",""],[3,"Doble Bofetón","n
 // rarezas corregidas (una preevolucion nunca es mas rara que su evolucion) y orden de la Pokedex nacional
 P.forEach(p=>{const r=GD.RD[p[0]];if(r){p[2]=r[1];p[4]=r[0];p[5]=r[2]}else{p[4]=9999;p[5]=0}});
 P.sort((a,b)=>a[4]-b[4]||a[5]-b[5]);
+
+// ventanas emergentes propias (sustituyen a alert/confirm/prompt del navegador)
+function uiDlg(msg,o){o=o||{};return new Promise(res=>{const M=document.createElement("div");M.className="uidlg";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");
+  M.innerHTML='<div class="uidbox"><p></p>'+(o.inp!=null?'<input class="uidin" maxlength="'+(o.max||60)+'" aria-label="Respuesta">':'')+'<div class="uidb">'+(o.alert?'':'<button class="alt" data-u="0">'+(o.no||"Cancelar")+'</button>')+'<button class="'+(o.danger?'red':'')+'" data-u="1">'+(o.yes||"Aceptar")+'</button></div></div>';
+  M.querySelector("p").textContent=String(msg);const inp=M.querySelector(".uidin");if(inp)inp.value=o.inp;
+  const done=v=>{M.remove();document.removeEventListener("keydown",kd,true);res(v)};
+  const ok=()=>done(o.inp!=null?inp.value:o.alert?undefined:true),no=()=>done(o.inp!=null?null:o.alert?undefined:false);
+  const kd=e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();no()}else if(e.key==="Enter"){e.preventDefault();e.stopPropagation();ok()}};
+  document.addEventListener("keydown",kd,true);
+  M.addEventListener("click",e=>{e.stopPropagation();const b=e.target.closest("[data-u]");if(b)(b.dataset.u==="1"?ok:no)();else if(e.target===M)no()});
+  document.body.appendChild(M);setTimeout(()=>{const f=inp||M.querySelector('[data-u="1"]');f.focus();if(inp)inp.select()},30)})}
+const askOk=(m,o)=>uiDlg(m,o),askText=(m,d,o)=>uiDlg(m,Object.assign({inp:d==null?"":String(d)},o)),askInfo=(m,o)=>uiDlg(m,Object.assign({alert:1},o));
+window.alert=m=>{askInfo(m)};

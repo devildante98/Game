@@ -108,11 +108,11 @@ function mtList(){const L=$("bmL");if(!L||!useId||!/^mt/.test(useId))return;cons
       (knows?'<small class="mut">✅ Ya conoce este movimiento.</small>':'<div class="mtmv">'+(ids.length<4?'<button class="red mini" data-mtl="'+esc(n)+'" data-mtk="-1">➕ Aprenderlo (hueco libre)</button>':'<small class="mut">Elige qué movimiento olvida:</small>')+
       ids.map((x,k)=>{const o=MVD[x];return o?'<button class="alt mini mtfor" data-mtl="'+esc(n)+'" data-mtk="'+k+'" style="--tc:'+(TC[o.t]||"#999")+'">🔁 Olvidar '+esc(o.n)+'</button>':''}).join("")+'</div>')+'</div>'}).join("")+(own.length>60?'<small class="mut">Hay más: usa el buscador.</small>':''):
     '<small class="mut">Ninguno de tus Pokémon puede aprender esta MT'+(q?' con ese nombre':'')+'.</small>'}
-$("buse").addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-mtl]");if(!b||!useId||!/^mt/.test(useId))return;
+$("buse").addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("[data-mtl]");if(!b||!useId||!/^mt/.test(useId))return;
   if(fcd){toast("Termina el combate antes de enseñar movimientos.");return}
   const n=b.dataset.mtl,k=+b.dataset.mtk,mid=useId.slice(2),m=MVD[mid];if(!m||!(S.bag[useId]>0)||!mtOk(n,mid))return;
   const ids=moveIds(n).slice();if(ids.includes(mid))return;
-  if(k>=0&&!confirm("¿"+nk(n)+" olvidará "+MVD[ids[k]].n+" para aprender "+m.n+"?"))return;
+  if(k>=0&&!await askOk("¿"+nk(n)+" olvidará "+MVD[ids[k]].n+" para aprender "+m.n+"?"))return;
   if(k<0)ids.push(mid);else{const old=ids[k];ids[k]=mid;if(S.pp&&S.pp[n])delete S.pp[n][old]}
   S.mv[n]=ids;S.bag[useId]=Math.max(0,(S.bag[useId]|0)-1);save();snd("lvl");toast("💿 ¡"+nk(n)+" ha aprendido "+m.n+"!");
   _bk="";useUI("");render()});

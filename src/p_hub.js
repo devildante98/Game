@@ -269,10 +269,10 @@ function trSetsUI(){
 }
 const _trUIBase=trUI;
 trUI=function(){_trUIBase();trSetsUI()};
-document.addEventListener("click",e=>{
+document.addEventListener("click",async e=>{
   const t=e.target;if(!t.closest||!t.closest("#trSets"))return;
-  const del=t.closest("[data-tsd]");if(del){const i=+del.dataset.tsd;if(!confirm("¿Borrar el conjunto "+(i+1)+"?"))return;S.trSets[i]=null;TRSEL=i;save();snd("ui");trSetsUI();return}
-  if(t.closest("#trSave")){const i=TRSEL|0,had=S.trSets[i];if(had&&had!==trEnc(myLook())&&!confirm("La ranura "+(i+1)+" ya tiene un conjunto. ¿Sustituirlo por tu aspecto actual?"))return;
+  const del=t.closest("[data-tsd]");if(del){const i=+del.dataset.tsd;if(!await askOk("¿Borrar el conjunto "+(i+1)+"?"))return;S.trSets[i]=null;TRSEL=i;save();snd("ui");trSetsUI();return}
+  if(t.closest("#trSave")){const i=TRSEL|0,had=S.trSets[i];if(had&&had!==trEnc(myLook())&&!await askOk("La ranura "+(i+1)+" ya tiene un conjunto. ¿Sustituirlo por tu aspecto actual?"))return;
     S.trSets[i]=trEnc(myLook());save();snd("lvl");toast("💾 Conjunto guardado en la ranura "+(i+1)+".");const nx=S.trSets.findIndex(x=>!x);trSetsUI();
     const s=document.querySelector('#trSets [data-ts="'+i+'"]');if(s)s.animate([{transform:"scale(1.15)"},{transform:"none"}],{duration:300});return}
   const sl=t.closest("[data-ts]");if(sl){const i=+sl.dataset.ts,e2=S.trSets[i];TRSEL=i;

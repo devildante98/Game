@@ -736,6 +736,24 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;cons
     const lv=Math.max(((ro.lv||{}).l)||1,((rn.lv||{}).l)||1),L=[ro.lv,rn.lv].find(x=>x&&x.l===lv);evoPut(b,ro);S.lv[b]=Object.assign({},L||{l:lv,x:0});
     bldNew(b,{nat:rn.nat|0,held:rn.held||"",abil:null,mv:(rn.mv||[]).slice(),ppu:bldCp(rn.ppu)||null},"Evolucionado");save();M.remove();snd("lvl");toast("✅ Te quedas con los dos: el nuevo está en los sets de "+b+".");try{render();updTeam()}catch(x){}},true)}catch(x){console.error(x)}}}
 
+// ================= compañero: animaciones reales de PMDCollab (caminar, quieto, dormir, saltar en 8 direcciones) =================
+const PMDU="https://raw.githubusercontent.com/PMDCollab/SpriteCollab/master/sprite/",PMDC={};
+const PMDF={"Mega Charizard X":"0006/0001","Mega Alakazam":"0065/0001","Mega Slowbro":"0080/0002","Mega Gengar":"0094/0001","Mega Kangaskhan":"0115/0001","Mega Aerodactyl":"0142/0001","Mega Mewtwo Y":"0150/0002","Mega Steelix":"0208/0001","Mega Houndoom":"0229/0001","Mega Tyranitar":"0248/0001","Mega Sceptile":"0254/0001","Mega Gardevoir":"0282/0001","Mega Sableye":"0302/0001","Mega Mawile":"0303/0001","Mega Medicham":"0308/0001","Mega Manectric":"0310/0001","Mega Sharpedo":"0319/0001","Mega Camerupt":"0323/0001","Mega Altaria":"0334/0001","Mega Banette":"0354/0001","Mega Absol":"0359/0001","Mega Glalie":"0362/0001","Mega Latias":"0380/0001","Mega Latios":"0381/0001","Mega Rayquaza":"0384/0001","Mega Lopunny":"0428/0001","Mega Lucario":"0448/0001","Mega Gallade":"0475/0001","Mega Diancie":"0719/0001","Primal Kyogre":"0382/0001","Primal Groudon":"0383/0001","Alolan Rattata":"0019/0001","Alolan Raticate":"0020/0001","Alolan Raichu":"0026/0001","Alolan Sandshrew":"0027/0001","Alolan Sandslash":"0028/0001","Alolan Vulpix":"0037/0001","Alolan Ninetales":"0038/0001","Alolan Diglett":"0050/0001","Alolan Dugtrio":"0051/0001","Alolan Meowth":"0052/0001","Alolan Persian":"0053/0001","Alolan Geodude":"0074/0001","Alolan Graveler":"0075/0001","Alolan Golem":"0076/0001","Alolan Grimer":"0088/0001","Alolan Muk":"0089/0001","Alolan Exeggutor":"0103/0001","Alolan Marowak":"0105/0001","Galarian Meowth":"0052/0002","Galarian Ponyta":"0077/0001","Galarian Rapidash":"0078/0001","Galarian Slowpoke":"0079/0001","Galarian Slowbro":"0080/0001","Galarian Slowking":"0199/0001","Galarian Weezing":"0110/0001","Galarian Articuno":"0144/0001","Galarian Zapdos":"0145/0001","Galarian Moltres":"0146/0001","Galarian Corsola":"0222/0001","Galarian Zigzagoon":"0263/0001","Galarian Linoone":"0264/0001","Galarian Darumaka":"0554/0001","Galarian Yamask":"0562/0001","Hisuian Growlithe":"0058/0001","Hisuian Arcanine":"0059/0001","Hisuian Voltorb":"0100/0001","Hisuian Electrode":"0101/0001","Hisuian Typhlosion":"0157/0001","Hisuian Qwilfish":"0211/0001","Hisuian Sneasel":"0215/0001","Hisuian Samurott":"0503/0001","Hisuian Lilligant":"0549/0001","Hisuian Zorua":"0570/0001","Hisuian Zoroark":"0571/0001","Hisuian Braviary":"0628/0001","Hisuian Sliggoo":"0705/0001","Hisuian Goodra":"0706/0001","Hisuian Avalugg":"0713/0001","Hisuian Decidueye":"0724/0001","Paldean Wooper":"0194/0002","Deoxys Attack Forme":"0386/0001","Deoxys Defense Forme":"0386/0002","Deoxys Speed Forme":"0386/0003","Wormadam Trash Cloak":"0413/0002","Shaymin Sky Forme":"0492/0001","Giratina Origin Forme":"0487/0001","Dialga Origin Forme":"0483/0001","Palkia Origin Forme":"0484/0001","Rotom Heat":"0479/0001","Rotom Wash":"0479/0002","Rotom Frost":"0479/0003","Rotom Fan":"0479/0004","Rotom Mow":"0479/0005","Castform Sunny":"0351/0001","Castform Rainy":"0351/0002","Castform Snowy":"0351/0003","Darmanitan Zen Mode":"0555/0001","Landorus Therian Forme":"0645/0001","Enamorus Therian Forme":"0905/0001","Black Kyurem":"0646/0001","White Kyurem":"0646/0002","Meloetta Pirouette Form":"0648/0001","Aegislash Blade Forme":"0681/0001","Zygarde 10% Forme":"0718/0001","Zygarde Complete Forme":"0718/0002","Hoopa Unbound":"0720/0001","Lycanroc Midnight":"0745/0001","Lycanroc Dusk":"0745/0002","Oricorio Sensu":"0741/0003","Wishiwashi School":"0746/0001","Ultra Necrozma":"0800/0003","Morpeko Hangry":"0877/0001","Crowned Zacian":"0888/0001","Crowned Zamazenta":"0889/0001","Eternamax Eternatus":"0890/0001","Urshifu Rapid Strike":"0892/0001","Bloodmoon Ursaluna":"0901/0001","Ogerpon Wellspring Mask":"1017/0005","Ogerpon Hearthflame Mask":"1017/0006","Ogerpon Cornerstone Mask":"1017/0007","Terapagos Terastal Form":"1024/0001","Palafin Hero Form":"0964/0001","Mimikyu Busted Form":"0778/0001","Tatsugiri Stretchy Form":"0978/0001","Galarian Darmanitan":"0555/0002","Paldean Tauros":"0128/0001","Paldean Tauros Aqua":"0128/0003","Paldean Tauros Blaze":"0128/0002","Keldeo Resolute Form":"0647","Meowstic Female":"0678","Indeedee Female":"0876","Basculegion Female":"0902","Toxtricity Low Key":"0849"};let _pmdR=null;
+const pmdId=n=>{const d=window._dexN&&window._dexN[n];if(d&&window._spr&&window._spr[n]===d&&d<=1025)return String(d).padStart(4,"0");
+  if(!_pmdR){_pmdR={};const R=window._ren||{};Object.keys(PMDF).forEach(k=>{_pmdR[R[k]||k]=PMDF[k]})}return _pmdR[n]||null};
+function pmdLoad(n,sh){const id=pmdId(n);if(!id)return Promise.resolve(null);const key=id+(sh?"s":"");if(PMDC[key])return PMDC[key];
+  return PMDC[key]=(async()=>{try{const sp=id.split("/"),base=PMDU+sp[0]+"/"+(sh?(sp[1]||"0000")+"/0001/":sp[1]?sp[1]+"/":"");const r=await fetch(base+"AnimData.xml");if(!r.ok)throw 0;
+    const x=new DOMParser().parseFromString(await r.text(),"text/xml"),A={};
+    x.querySelectorAll("Anim").forEach(a=>{const g=t=>{const e=a.querySelector(t);return e?e.textContent.trim():null};A[g("Name")]={copy:g("CopyOf"),fw:+g("FrameWidth"),fh:+g("FrameHeight"),d:[...a.querySelectorAll("Duration")].map(e=>+e.textContent*1000/60)}});
+    const get=nm=>{let a=A[nm],k=0;while(a&&a.copy&&k++<6){nm=a.copy;a=A[nm]}return a&&a.fw&&a.d.length?Object.assign({nm:nm},a):null};
+    const out={};for(const nm of["Walk","Idle","Sleep","Hop"]){const a=get(nm);if(!a)continue;const img=new Image();img.crossOrigin="anonymous";img.src=base+a.nm+"-Anim.png";await img.decode();
+      a.W=img.naturalWidth;a.H=img.naturalHeight;a.rows=Math.max(1,Math.round(a.H/a.fh));a.url=img.src;a.T=a.d.reduce((u,v)=>u+v,0);
+      const c=document.createElement("canvas");c.width=a.fw;c.height=a.fh;const g2=c.getContext("2d");g2.drawImage(img,0,0,a.fw,a.fh,0,0,a.fw,a.fh);
+      let top=a.fh,bot=0;try{const px=g2.getImageData(0,0,a.fw,a.fh).data;for(let y=0;y<a.fh;y++)for(let q=0;q<a.fw;q++)if(px[(y*a.fw+q)*4+3]>20){if(y<top)top=y;if(y>bot)bot=y}}catch(e){top=0;bot=a.fh-1}
+      a.top=top;a.bot=bot;out[nm]=a}
+    if(!out.Walk)throw 0;out.Idle=out.Idle||out.Walk;const h=Math.max(8,out.Idle.bot-out.Idle.top+1);out.sc=Math.min(3,Math.max(1,Math.round(62/h*2)/2));return out}
+  catch(e){if(sh)return pmdLoad(n,false);return null}})()}
+function pmdFrame(t,a){let m=t%a.T;for(let i=0;i<a.d.length;i++){if(m<a.d[i])return i;m-=a.d[i]}return 0}
 // ================= compañero: paseo natural (mira hacia donde camina, se para, salta, se duerme…) =================
 const BW={w:null};
 function bwSay(w,txt,ms){const s=document.createElement("span");s.className="bwfx";s.textContent=txt;w.appendChild(s);s.animate([{transform:"translate(-50%,0) scale(.6)",opacity:0},{transform:"translate(-50%,-14px) scale(1)",opacity:1,offset:.25},{transform:"translate(-50%,-30px) scale(1)",opacity:0}],{duration:ms||1400}).onfinish=()=>s.remove()}
@@ -749,10 +767,12 @@ function bwPick(t,W){const r=Math.random(),sw=84;
 function bwTick(t){requestAnimationFrame(bwTick);const w=document.querySelector("#budC .bcwalk");
   if(!w||!w.isConnected||!w.offsetParent){BW.w=null;return}
   const f=w.parentNode,W=f.clientWidth,spr=w.querySelector(".bcspr"),img=spr&&spr.querySelector("img"),sh=w.querySelector(".bcshadow");if(!spr)return;
-  if(BW.w!==w){BW.w=w;BW.x=Math.max(0,W*.5-42);BW.y=4;BW.dir=-1;BW.st="idle";BW.until=t+800;BW.last=t;BW.ph=0;w.style.left="0";w.style.animation="none";spr.style.animation="none";
+  if(BW.w!==w){BW.w=w;BW.x=Math.max(0,W*.5-42);BW.y=4;BW.dir=-1;BW.st="idle";BW.until=t+800;BW.last=t;BW.ph=0;BW.pm=null;BW.at=0;BW.an="";w.style.left="0";w.style.animation="none";spr.style.animation="none";
+    {const b=S.buddy;if(b){const ww=w;pmdLoad(b.n,!!(S.shiny&&S.shiny[b.n]>0)).then(d=>{if(!d||BW.w!==ww)return;BW.pm=d;const im=spr.querySelector("img");if(im)im.style.display="none";
+      spr.style.width="84px";spr.style.height="84px";const el=document.createElement("div");el.className="bwpmd";spr.appendChild(el);BW.el=el;BW.an=""})}}
     w.addEventListener("click",()=>{if(BW.st==="sleep")bwSay(w,"❗",900);BW.st="hop";BW.t0=performance.now();BW.until=BW.t0+520;BW.hops=2})}
   const dt=Math.min(60,t-BW.last);BW.last=t;
-  if(typeof hubCalm==="function"&&hubCalm()){w.style.transform="translate("+BW.x+"px,0)";spr.style.transform="";if(img)img.style.transform="";return}
+  const calm=typeof hubCalm==="function"&&hubCalm();if(calm&&!BW.pm){w.style.transform="translate("+BW.x+"px,0)";spr.style.transform="";if(img)img.style.transform="";return}if(calm){BW.st="idle";BW.until=t+500}
   if(BW.st==="walk"){const dx=BW.tx-BW.x;BW.dir=dx>0?1:-1;const st=Math.min(Math.abs(dx),BW.spd*dt);BW.x+=BW.dir*st;BW.y+=(BW.ty-BW.y)*Math.min(1,dt/600);BW.ph+=dt*BW.spd*.45;
     if(Math.abs(dx)<1){BW.st="idle";BW.until=t+700+Math.random()*1800}}
   else if(t>BW.until)bwPick(t,W);
@@ -763,9 +783,14 @@ function bwTick(t){requestAnimationFrame(bwTick);const w=document.querySelector(
   else if(BW.st==="look"){face=((t-BW.t0)%1400)<700?-1:1;sy=1+Math.sin(t/420)*.02}
   else if(BW.st==="sleep"){sy=.94+Math.sin(t/700)*.03;rot=-4;if(t-(BW.zz||0)>1600){BW.zz=t;bwSay(w,"💤",1600)}}
   else{sy=1+Math.sin(t/420)*.025}
+  if(BW.pm&&BW.el){const P=BW.pm,nm=BW.st==="walk"?"Walk":BW.st==="sleep"&&P.Sleep?"Sleep":BW.st==="hop"&&P.Hop?"Hop":"Idle",a=P[nm]||P.Idle;
+    if(nm!==BW.an){BW.an=nm;BW.at=0;const sc=P.sc;BW.el.style.cssText="width:"+a.fw*sc+"px;height:"+a.fh*sc+"px;bottom:"+(-(a.fh-1-a.bot)*sc)+"px;background-image:url("+a.url+");background-size:"+a.W*sc+"px "+a.H*sc+"px"}
+    BW.at+=calm?0:dt*(nm==="Walk"?Math.max(.7,BW.spd*28):1);
+    const row=a.rows<8?0:BW.st==="walk"||BW.st==="hop"?(BW.dir>0?2:6):BW.st==="look"?(face>0?1:7):BW.st==="sleep"?0:(BW.dir>0?1:7),fr=pmdFrame(BW.at,a);
+    BW.el.style.backgroundPosition=(-fr*a.fw*P.sc)+"px "+(-row*a.fh*P.sc)+"px";rot=0;sx=1;sy=1;if(BW.st==="walk")ty=0}
   const depth=1-BW.y/90;
   w.style.transform="translate("+BW.x.toFixed(1)+"px,"+(-BW.y).toFixed(1)+"px) scale("+depth.toFixed(3)+")";w.style.zIndex=String(20-Math.round(BW.y));
   spr.style.transform="translateY("+ty.toFixed(1)+"px) rotate("+rot.toFixed(1)+"deg) scale("+sx.toFixed(3)+","+sy.toFixed(3)+")";
-  if(img)img.style.transform=face>0?"scaleX(-1)":"";
+  if(img&&!BW.pm)img.style.transform=face>0?"scaleX(-1)":"";
   if(sh){const k=1+ty/40;sh.style.transform="scale("+k.toFixed(2)+")";sh.style.opacity=String(Math.max(.4,k))}}
 requestAnimationFrame(bwTick);

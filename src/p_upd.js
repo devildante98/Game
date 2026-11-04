@@ -480,3 +480,29 @@ updShop=function(){
   set("bcl",-1,S.cl|0);G.forEach((g,i)=>set("bg"+i,i,S.g[i]||0));
   const q=$("shopQ");if(q)q.querySelectorAll("[data-shq]").forEach(b=>b.classList.toggle("on",b.dataset.shq===SHQ))};
 shopWire();try{updShop()}catch(e){}
+// ================= evoluciones: si ya tenías esa especie, eliges con cuál te quedas =================
+// el juego guarda un solo registro por especie (nivel, movimientos, naturaleza, habilidad, objeto, mote…)
+const EVK=["lv","mv","ml","pp","ppu","hp","nat","abil","held","mote"];
+const evoRec=n=>{const r={};EVK.forEach(k=>{const o=S[k];if(o&&o[n]!=null)r[k]=JSON.parse(JSON.stringify(o[n]))});return r};
+function evoPut(n,r){EVK.forEach(k=>{S[k]=S[k]||{};if(r[k]!=null)S[k][n]=JSON.parse(JSON.stringify(r[k]));else delete S[k][n]})}
+{const _ea=evoApply;evoApply=function(a,b){
+  const had=S.owned[b]>0&&S.lv&&S.lv[b],ra=evoRec(a),rb=had?evoRec(b):null;
+  const r=_ea.apply(this,arguments);
+  try{
+    // naturaleza, habilidad, objeto y mote pasan a la evolución (antes se quedaban en la forma anterior)
+    const nr=Object.assign({},evoRec(b));["nat","held","mote"].forEach(k=>{if(ra[k]!=null&&(!had||nr[k]==null))nr[k]=ra[k]});
+    if(!had){evoPut(b,Object.assign(nr,{abil:undefined}));if(ra.held!=null)S.held[b]=ra.held}
+    ["nat","abil","held","mote"].forEach(k=>{if(S[k])delete S[k][a]});save();
+    if(had)evoChoose(a,b,Object.assign({},ra,{abil:undefined}),rb);
+  }catch(e){console.error(e)}
+  return r}}
+function evoChoose(a,b,rn,ro){
+  const mv=r=>(r.mv||[]).map(id=>MVD[id]?MVD[id].n:"").filter(Boolean).join(", ")||"—",nat=r=>r.nat!=null&&NAT[r.nat]?NAT[r.nat][0]:"—";
+  const card=(k,t,r)=>'<button class="evcc" data-evc="'+k+'"><b>'+t+'</b><span>Nv'+((r.lv||{}).l||1)+' · '+nat(r)+(r.mote?' · «'+esc(r.mote)+'»':'')+'</span><small>'+esc(mv(r))+'</small></button>';
+  const M=document.createElement("div");M.id="evcM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");
+  M.innerHTML='<div class="jbox"><h3>🧬 Ya tenías un '+esc(b)+'</h3><p>Solo puedes tener un registro de cada especie. ¿Con cuál te quedas? El otro se suma como copia.</p><div class="evcg">'+
+    card("old",esc(b)+" que ya tenías",ro)+card("new",esc(b)+" recién evolucionado (antes "+esc(a)+")",rn)+'</div></div>';
+  document.body.appendChild(M);
+  M.addEventListener("click",e=>{const c=e.target.closest("[data-evc]");if(!c)return;const keep=c.dataset.evc==="new"?rn:ro,drop=c.dataset.evc==="new"?ro:rn;
+    if(drop.held&&drop.held!==keep.held){S.bag[drop.held]=(S.bag[drop.held]||0)+1}
+    evoPut(b,keep);save();M.remove();snd("ui");toast("✅ Te quedas con "+b+" Nv"+((keep.lv||{}).l||1)+".");try{render();updTeam()}catch(x){}})}

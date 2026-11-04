@@ -89,8 +89,8 @@ function chRender(keep){
   const k=chKey();chSub(k);const list=(CH.msgs[k]||[]).filter(m=>!chMuted(m.u));
   const atB=L.scrollHeight-L.scrollTop-L.clientHeight<60;
   L.innerHTML=list.length?list.map((m,i)=>{if(m.sys)return '<div class="chsys"><span>'+esc(m.t||"")+'</span><small>'+chTime(m.at)+'</small></div>';const mine=m.u===me,prev=list[i-1],grp=prev&&prev.u===m.u&&!prev.sys&&(m.at-prev.at)<120e3;
-    const body=(m.inv?chInvHTML(m,mine):'')+(m.img?chImgHTML(m):'')+((m.img||m.inv)&&!m.t?'':(m.p&&PM[m.p.n]?'<div class="chpkm '+PM[m.p.n][2]+(m.p.s?' shiny':'')+'">'+ico(PM[m.p.n],56,false,!!m.p.s)+'<div><b>'+(m.p.s?"✨ ":"")+esc(m.p.k||m.p.n)+'</b><small>'+(m.p.k?esc(m.p.n)+' · ':'')+'Nv'+(m.p.l|0)+' · '+STAR[PM[m.p.n][2]]+'</small></div></div>'+(m.t?'<p>'+esc(m.t)+'</p>':''):'<p>'+esc(m.t||"")+'</p>'));
-    return '<div class="chm'+(mine?' me':'')+(grp?' grp':'')+'">'+(mine||grp?'':'<span class="chav" data-prof="'+esc(m.u)+'">'+chAv(m.tr)+'</span>')+'<div class="chbub">'+(grp||mine?'':'<div class="chn"><b class="plink" data-prof="'+esc(m.u)+'">'+(m.cr>=1&&m.cr<=3?'<span class="chcr" title="'+["Campeón","Subcampeón","Podio"][m.cr-1]+' del torneo semanal">'+["👑","🥈","🥉"][m.cr-1]+'</span> ':'')+esc(pvClean(m.n||"Entrenador"))+'</b>'+(m.g?' <span class="gtag">'+esc(String(m.g).slice(0,4))+'</span>':'')+'</div>')+body+'<small class="cht">'+chTime(m.at)+(mine?' <button class="chdel" data-chdel="'+esc(m.id)+'" title="Borrar mensaje" aria-label="Borrar mensaje">🗑️</button>':' <button class="chmute" data-chmute="'+esc(m.u)+'" data-chmn="'+esc(pvClean(m.n||""))+'" title="Silenciar a este jugador" aria-label="Silenciar">🔇</button> <button class="chmute" data-chrep="'+esc(m.id)+'" title="Reportar este mensaje" aria-label="Reportar">🚩</button>'+((typeof MOD!=="undefined"&&MOD.admin)?' <button class="chmute" data-chadel="'+esc(m.id)+'" title="Borrar (moderación)">🗑️</button>':''))+'</small></div></div>'}).join(""):'<p class="chempty">'+(CH.msgs[k]?'Todavía no hay mensajes. ¡Saluda! 👋':'Cargando mensajes…')+'</p>';
+    const body=(m.rp&&m.rp.id?chQuote(m.rp):'')+(m.inv?chInvHTML(m,mine):'')+(m.img?chImgHTML(m):'')+((m.img||m.inv)&&!m.t?'':(m.p&&PM[m.p.n]?'<div class="chpkm '+PM[m.p.n][2]+(m.p.s?' shiny':'')+'">'+ico(PM[m.p.n],56,false,!!m.p.s)+'<div><b>'+(m.p.s?"✨ ":"")+esc(m.p.k||m.p.n)+'</b><small>'+(m.p.k?esc(m.p.n)+' · ':'')+'Nv'+(m.p.l|0)+' · '+STAR[PM[m.p.n][2]]+'</small></div></div>'+(m.t?'<p>'+chTxt(m.t)+'</p>':''):'<p>'+chTxt(m.t||"")+'</p>'));
+    return '<div class="chm'+(mine?' me':'')+(grp?' grp':'')+(chMent(m)?' chment':'')+'" data-mid="'+esc(m.id||"")+'">'+(mine||grp?'':'<span class="chav" data-prof="'+esc(m.u)+'">'+chAv(m.tr)+'</span>')+'<div class="chbub">'+(grp||mine?'':'<div class="chn"><b class="plink" data-prof="'+esc(m.u)+'">'+(m.cr>=1&&m.cr<=3?'<span class="chcr" title="'+["Campeón","Subcampeón","Podio"][m.cr-1]+' del torneo semanal">'+["👑","🥈","🥉"][m.cr-1]+'</span> ':'')+esc(pvClean(m.n||"Entrenador"))+'</b>'+(m.g?' <span class="gtag">'+esc(String(m.g).slice(0,4))+'</span>':'')+'</div>')+body+'<small class="cht">'+chTime(m.at)+' <button class="chmute" data-chrp="'+esc(m.id||"")+'" title="Responder" aria-label="Responder">↩️</button>'+(mine?' <button class="chdel" data-chdel="'+esc(m.id)+'" title="Borrar mensaje" aria-label="Borrar mensaje">🗑️</button>':' <button class="chmute" data-chmute="'+esc(m.u)+'" data-chmn="'+esc(pvClean(m.n||""))+'" title="Silenciar a este jugador" aria-label="Silenciar">🔇</button> <button class="chmute" data-chrep="'+esc(m.id)+'" title="Reportar este mensaje" aria-label="Reportar">🚩</button>'+((typeof MOD!=="undefined"&&MOD.admin)?' <button class="chmute" data-chadel="'+esc(m.id)+'" title="Borrar (moderación)">🗑️</button>':''))+'</small></div></div>'}).join(""):'<p class="chempty">'+(CH.msgs[k]?'Todavía no hay mensajes. ¡Saluda! 👋':'Cargando mensajes…')+'</p>';
   if(!keep||atB)L.scrollTop=L.scrollHeight;
   if(list.length)chSeenSet(k,list[list.length-1].at);chBtn();chTabs();
 }
@@ -108,6 +108,8 @@ async function chSend(pk){
   if(now-CH.last<CH_WAIT){chFlash("Espera un momento antes de enviar otro mensaje.");return}
   CH.last=now;
   const d={u:me,n:pvClean(pvNick()).slice(0,30),cr:typeof myCrown==="function"?myCrown():0,tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",t:pk?"":t,at:now};
+  if(CH.rp&&CH.rp.k===k){d.rp={id:CH.rp.id,n:CH.rp.n,t:CH.rp.t}}CH.rp=null;chRpUI();
+  if(!pk){const mn=chMentUids(t);if(mn.length)d.mn=mn}
   if(pk){const sh=S.shiny&&S.shiny[pk]>0;d.p={n:pk,l:lvd(pk).l,s:sh?1:0,k:S.mote&&S.mote[pk]?String(S.mote[pk]).slice(0,12):""}}
   const [tp,id]=k==="global"?["global","global"]:k.split(":");
   if(!pk)i.value="";
@@ -258,3 +260,34 @@ setInterval(()=>{try{if(!CH.pvInvAt||Date.now()-CH.pvInvAt>INV_TTL.pvp){CH.pvInv
 
 // quien envió un Duelo de siluetas por el chat acepta solo el primero que le llegue en 10 minutos
 {const _da=duAsk;duAsk=function(d){if(CH.duInvAt&&Date.now()-CH.duInvAt<INV_TTL.du&&!DU.cur&&!fcd){CH.duInvAt=0;toast("❓ ¡"+pvClean(d.an||"Alguien")+" ha aceptado tu reto de siluetas!");chToggle(false);duAccept(d);return}return _da.apply(this,arguments)}}
+
+// ================= chat: responder a mensajes y mencionar a jugadores (@apodo) =================
+const chNm=x=>pvClean(x||"").toLowerCase();
+function chKnown(){const o={};const add=(u,n)=>{n=pvClean(n||"");if(u&&n&&n!=="Entrenador")o[n.toLowerCase()]={u:u,n:n}};
+  Object.values(CH.msgs||{}).forEach(l=>(l||[]).forEach(m=>{if(!m.sys)add(m.u,m.n)}));
+  Object.keys(FR.l||{}).forEach(u=>add(u,typeof frName==="function"?frName(u):FR.l[u].n));
+  try{pvOthers().forEach(p=>{if(p.presence&&p.presence.pvp)add(p.peer,p.presence.pvp.n)})}catch(e){}
+  try{const mb=(GS.doc&&GS.doc.members)||{};Object.keys(mb).forEach(u=>add(u,mb[u].n))}catch(e){}
+  const me=chMe();Object.keys(o).forEach(k=>{if(o[k].u===me)delete o[k]});return o}
+function chMentUids(t){const K=chKnown(),out=[];String(t).replace(/@([^\s@,.!?¿¡:;]{2,16})/g,(x,n)=>{const r=K[n.toLowerCase()];if(r&&!out.includes(r.u))out.push(r.u);return x});return out.slice(0,5)}
+const chMent=m=>Array.isArray(m.mn)&&m.mn.includes(chMe())&&m.u!==chMe();
+function chTxt(t){return esc(t).replace(/@([^\s@,.!?¿¡:;&<]{2,16})/g,'<b class="chat-at">@$1</b>')}
+function chQuote(r){return '<div class="chq" data-chq="'+esc(r.id)+'"><b>↩️ '+esc(pvClean(r.n||"Entrenador"))+'</b><small>'+esc(String(r.t||"").slice(0,80))+'</small></div>'}
+function chRpUI(){let b=$("chRp");const f=$("chF");if(!f)return;if(!b){b=document.createElement("div");b.id="chRp";f.before(b)}
+  b.hidden=!CH.rp;b.innerHTML=CH.rp?'<span>↩️ Respondiendo a <b>'+esc(CH.rp.n)+'</b>: '+esc(CH.rp.t)+'</span><button type="button" data-chrpx="1" aria-label="Cancelar respuesta">✕</button>':''}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
+  const r=t.closest("[data-chrp]");if(r){const k=chKey(),m=(CH.msgs[k]||[]).find(x=>x.id===r.dataset.chrp);if(!m)return;
+    CH.rp={k:k,id:m.id,n:pvClean(m.n||"Entrenador"),t:String(m.t||(m.img?"📷 Foto":m.p?"🔵 "+m.p.n:m.inv?"✉️ Invitación":"")).slice(0,60)};chRpUI();
+    const i=$("chI");if(i){if(m.u!==chMe()&&!i.value.includes("@"+CH.rp.n))i.value="@"+CH.rp.n+" "+i.value;i.focus()}return}
+  if(t.closest("[data-chrpx]")){CH.rp=null;chRpUI();return}
+  const q=t.closest("[data-chq]");if(q){const el=document.querySelector('#chL [data-mid="'+CSS.escape(q.dataset.chq)+'"]');if(el){el.scrollIntoView({block:"center",behavior:"smooth"});el.classList.remove("chflash");void el.offsetWidth;el.classList.add("chflash")}else toast("Ese mensaje ya no está en el chat.");return}
+  const s=t.closest("[data-chat]");if(s){const i=$("chI");if(!i)return;i.value=i.value.replace(/@([^\s@]*)$/,"@"+s.dataset.chat+" ");$("chAt").hidden=true;i.focus()}});
+// sugerencias al escribir @
+document.addEventListener("input",e=>{if(e.target.id!=="chI")return;const i=e.target,m=i.value.slice(0,i.selectionStart).match(/@([^\s@]*)$/);let b=$("chAt");
+  if(!m){if(b)b.hidden=true;return}const f=$("chF");if(!b){b=document.createElement("div");b.id="chAt";f.before(b)}
+  const q=m[1].toLowerCase(),L=Object.values(chKnown()).filter(x=>x.n.toLowerCase().startsWith(q)).slice(0,6);
+  b.hidden=!L.length;b.innerHTML=L.map(x=>'<button type="button" data-chat="'+esc(x.n)+'">@'+esc(x.n)+'</button>').join("")});
+// aviso cuando alguien te menciona (en cualquier chat, también en los privados)
+const CH_MT0=Date.now();
+{const _om=chOnMsgs;chOnMsgs=function(k){_om.apply(this,arguments);try{CH.mnSeen=CH.mnSeen||{};const me=chMe();(CH.msgs[k]||[]).forEach(m=>{if(m.at>CH_MT0&&!CH.mnSeen[m.id]&&chMent(m)){CH.mnSeen[m.id]=1;
+  const where=k==="global"?"el chat global":k.startsWith("g:")?"el chat del gremio":"un mensaje privado";if(!(CH.open&&k===chKey()))toast("📣 "+pvClean(m.n||"Alguien")+" te ha mencionado en "+where+": «"+String(m.t||"").slice(0,60)+"»");snd("pop")}})}catch(e){}}}

@@ -735,3 +735,37 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;cons
   M.addEventListener("click",e=>{const c=e.target.closest("[data-evb]");if(!c||c.disabled)return;e.stopImmediatePropagation();
     const lv=Math.max(((ro.lv||{}).l)||1,((rn.lv||{}).l)||1),L=[ro.lv,rn.lv].find(x=>x&&x.l===lv);evoPut(b,ro);S.lv[b]=Object.assign({},L||{l:lv,x:0});
     bldNew(b,{nat:rn.nat|0,held:rn.held||"",abil:null,mv:(rn.mv||[]).slice(),ppu:bldCp(rn.ppu)||null},"Evolucionado");save();M.remove();snd("lvl");toast("✅ Te quedas con los dos: el nuevo está en los sets de "+b+".");try{render();updTeam()}catch(x){}},true)}catch(x){console.error(x)}}}
+
+// ================= compañero: paseo natural (mira hacia donde camina, se para, salta, se duerme…) =================
+const BW={w:null};
+function bwSay(w,txt,ms){const s=document.createElement("span");s.className="bwfx";s.textContent=txt;w.appendChild(s);s.animate([{transform:"translate(-50%,0) scale(.6)",opacity:0},{transform:"translate(-50%,-14px) scale(1)",opacity:1,offset:.25},{transform:"translate(-50%,-30px) scale(1)",opacity:0}],{duration:ms||1400}).onfinish=()=>s.remove()}
+function bwPick(t,W){const r=Math.random(),sw=84;
+  if(BW.st==="sleep"&&Math.random()<.5){BW.st="idle";BW.until=t+1200;bwSay(BW.w,"❗",900);return}
+  if(r<.5){BW.st="walk";BW.tx=Math.max(0,Math.min(W-sw,BW.x+(Math.random()<.5?-1:1)*(40+Math.random()*W*.5)));if(BW.tx<=2||BW.tx>=W-sw-2)BW.tx=Math.random()*(W-sw);BW.ty=Math.random()*10;BW.spd=.035+Math.random()*.03}
+  else if(r<.62){BW.st="hop";BW.t0=t;BW.until=t+520;BW.hops=1+(Math.random()<.4?1:0)}
+  else if(r<.78){BW.st="look";BW.t0=t;BW.until=t+1400+Math.random()*1200}
+  else if(r<.92){BW.st="idle";BW.until=t+1500+Math.random()*2500;if(Math.random()<.3)bwSay(BW.w,["♪","💭","✨","❤️"][Math.floor(Math.random()*4)])}
+  else{BW.st="sleep";BW.until=t+6000+Math.random()*6000;BW.zz=0}}
+function bwTick(t){requestAnimationFrame(bwTick);const w=document.querySelector("#budC .bcwalk");
+  if(!w||!w.isConnected||!w.offsetParent){BW.w=null;return}
+  const f=w.parentNode,W=f.clientWidth,spr=w.querySelector(".bcspr"),img=spr&&spr.querySelector("img"),sh=w.querySelector(".bcshadow");if(!spr)return;
+  if(BW.w!==w){BW.w=w;BW.x=Math.max(0,W*.5-42);BW.y=4;BW.dir=-1;BW.st="idle";BW.until=t+800;BW.last=t;BW.ph=0;w.style.left="0";w.style.animation="none";spr.style.animation="none";
+    w.addEventListener("click",()=>{if(BW.st==="sleep")bwSay(w,"❗",900);BW.st="hop";BW.t0=performance.now();BW.until=BW.t0+520;BW.hops=2})}
+  const dt=Math.min(60,t-BW.last);BW.last=t;
+  if(typeof hubCalm==="function"&&hubCalm()){w.style.transform="translate("+BW.x+"px,0)";spr.style.transform="";if(img)img.style.transform="";return}
+  if(BW.st==="walk"){const dx=BW.tx-BW.x;BW.dir=dx>0?1:-1;const st=Math.min(Math.abs(dx),BW.spd*dt);BW.x+=BW.dir*st;BW.y+=(BW.ty-BW.y)*Math.min(1,dt/600);BW.ph+=dt*BW.spd*.45;
+    if(Math.abs(dx)<1){BW.st="idle";BW.until=t+700+Math.random()*1800}}
+  else if(t>BW.until)bwPick(t,W);
+  BW.x=Math.max(0,Math.min(W-84,BW.x));
+  let ty=0,rot=0,sx=1,sy=1,face=BW.dir;
+  if(BW.st==="walk"){ty=-Math.abs(Math.sin(BW.ph))*5;rot=Math.sin(BW.ph)*4;sy=1-Math.abs(Math.cos(BW.ph))*.04}
+  else if(BW.st==="hop"){const p=Math.min(1,(t-BW.t0)/520);ty=-Math.sin(p*Math.PI)*20;sy=p<.12||p>.88?.9:1.05;sx=2-sy;if(p>=1){if(--BW.hops>0){BW.t0=t;BW.until=t+520}else{BW.st="idle";BW.until=t+900}}}
+  else if(BW.st==="look"){face=((t-BW.t0)%1400)<700?-1:1;sy=1+Math.sin(t/420)*.02}
+  else if(BW.st==="sleep"){sy=.94+Math.sin(t/700)*.03;rot=-4;if(t-(BW.zz||0)>1600){BW.zz=t;bwSay(w,"💤",1600)}}
+  else{sy=1+Math.sin(t/420)*.025}
+  const depth=1-BW.y/90;
+  w.style.transform="translate("+BW.x.toFixed(1)+"px,"+(-BW.y).toFixed(1)+"px) scale("+depth.toFixed(3)+")";w.style.zIndex=String(20-Math.round(BW.y));
+  spr.style.transform="translateY("+ty.toFixed(1)+"px) rotate("+rot.toFixed(1)+"deg) scale("+sx.toFixed(3)+","+sy.toFixed(3)+")";
+  if(img)img.style.transform=face>0?"scaleX(-1)":"";
+  if(sh){const k=1+ty/40;sh.style.transform="scale("+k.toFixed(2)+")";sh.style.opacity=String(Math.max(.4,k))}}
+requestAnimationFrame(bwTick);

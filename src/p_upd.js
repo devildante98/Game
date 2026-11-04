@@ -458,3 +458,25 @@ function megaDup(n){if(!isMegaF(n))return null;S.owned[n]=Math.max(1,(S.owned[n]
   if(Math.random()<.5){const q=1+(Math.random()<.35?1:0);S.bag.cand=(S.bag.cand||0)+q;MDUP.c+=q;return -q}
   const t=Math.round(Math.max(5000,cost(1,false)*5));MDUP.t+=t;return t}
 {const _pu=pull;pull=function(){MDUP={c:0,t:0};const r=_pu.apply(this,arguments);if(MDUP.c||MDUP.t){const c=MDUP.c,t=MDUP.t;setTimeout(()=>toast("🔑 Megas/Gigamax repetidas convertidas en: "+[c?c+" Caramelo"+(c>1?"s":"")+" Raro"+(c>1?"s":""):"",t?fmt(t)+" 🎟️":""].filter(Boolean).join(" y ")+"."),1800)}return r}}
+// ================= tienda de mejoras: comprar ×1, ×10, ×50 o el máximo =================
+// Guantes de entrenador: nivel máximo 30 (cada nivel duplica los tickets por toque; más allá el juego se rompe)
+const GLMAX=30;
+if((S.cl|0)>GLMAX){S.cl=GLMAX;save()}
+let SHQ=(()=>{try{return localStorage.getItem("pg_shq")||"1"}catch(e){return "1"}})();
+function shopN(i){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?Math.round(25*Math.pow(3,lv0+k)):Math.ceil(G[i][1]*Math.pow(1.15,lv0+k));
+  const mx=SHQ==="max",lim=mx?100000:+SHQ;let n=0,c=0;
+  while(n<lim){if(i<0&&lv0+n>=GLMAX)break;const u=unit(n);if(mx&&c+u>S.t){if(!n)c=u;break}c+=u;n++}
+  return [n,c]}
+function shopBuy(i){if(i<0&&(S.cl|0)>=GLMAX)return;const [n,c]=shopN(i);if(!n||S.t<c)return;S.t-=c;if(i<0)S.cl=(S.cl|0)+n;else S.g[i]=(S.g[i]|0)+n;window._gk=null;save();render()}
+function shopWire(){const sh=$("shop");if(!sh)return;
+  if(!$("shopQ")){const q=document.createElement("div");q.id="shopQ";q.innerHTML='<small>Comprar:</small>'+["1","10","50","max"].map(v=>'<button type="button" data-shq="'+v+'">'+(v==="max"?"Máx":"×"+v)+'</button>').join("");sh.before(q);
+    q.addEventListener("click",e=>{const b=e.target.closest("[data-shq]");if(!b)return;SHQ=b.dataset.shq;try{localStorage.setItem("pg_shq",SHQ)}catch(x){}snd("ui");updShop()})}
+  const bc=$("bcl");if(bc)bc.onclick=()=>shopBuy(-1);G.forEach((g,i)=>{const b=$("bg"+i);if(b)b.onclick=()=>shopBuy(i)})}
+{const _bs=buildShop;buildShop=function(){_bs.apply(this,arguments);shopWire()}}
+updShop=function(){
+  if((S.cl|0)>GLMAX){S.cl=GLMAX;window._fk=null;save()}
+  const set=(id,i,lv)=>{const e=$(id);if(!e)return;const [n,c]=shopN(i),full=i<0&&lv>=GLMAX;
+    $(id+"q").textContent="Nv "+lv+(full?" · MÁX":"");$(id+"c").textContent=full?"Nivel máximo":"🎟️ "+fmt(c)+(n>1?" (×"+n+")":SHQ!=="1"&&n===1?" (×1)":"");e.disabled=full||!n||S.t<c};
+  set("bcl",-1,S.cl|0);G.forEach((g,i)=>set("bg"+i,i,S.g[i]||0));
+  const q=$("shopQ");if(q)q.querySelectorAll("[data-shq]").forEach(b=>b.classList.toggle("on",b.dataset.shq===SHQ))};
+shopWire();try{updShop()}catch(e){}

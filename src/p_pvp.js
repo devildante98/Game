@@ -13,7 +13,7 @@ const gdBadge=g=>g&&typeof g==="object"&&g.t?'<span class="gtag" title="Gremio '
 const pvMe=()=>PR&&PR.peers().find(p=>p.sameTab);
 const pvOthers=()=>PR?PR.peers().filter(p=>!p.isMe&&p.kind==="viewer"&&p.presence&&p.presence.pvp&&p.presence.pvp.v===3):[];
 function pvPub(){if(!PR)return;if(!nickOk()){PR.presence({pvp:null}).catch(()=>{});return}
-  PR.presence({pvp:{v:3,prs:PRS(),n:pvClean(pvNick()),tr:trEnc(myLook()),gd:myGuildBadge(),tm:pvTeamData().map(x=>({n:x.n,l:x.l})),st:PV.st,ch:PV.ch,ok:PV.ok,no:PV.no,inv:PV.inv,md:pvMd()}}).catch(()=>{})}
+  PR.presence({pvp:{v:3,prs:PRS(),n:pvClean(pvNick()),tr:trEnc(myLook()),gd:myGuildBadge(),tm:pvTeamData().map(x=>({n:x.n,l:x.l})),st:PV.st,ch:PV.ch,ok:PV.ok,no:PV.no,inv:PV.inv,md:pvMd(),lt:PV.lt||null}}).catch(()=>{})}
 function pvMsg(t){$("pvIn").innerHTML='<small class="mut">'+esc(t)+'</small>'}
 const _seenInv={};
 function pvIncoming(){

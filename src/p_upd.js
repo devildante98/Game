@@ -907,3 +907,68 @@ function wxNewT(tr,W,H){const R=Math.random,y=H*(.55+R()*.45);
 {const _say=say;say=function(t){try{const s=String(t);for(const k in AXWX){if(s===AXWX[k][0])wxSet(k,WXV.tr);else if(s===AXWX[k][1])wxSet("",WXV.tr)}for(const k in AXTR){if(s===AXTR[k][0])wxSet(WXV.t,k);else if(s===AXTR[k][1])wxSet(WXV.t,"")}}catch(e){}return _say.apply(this,arguments)}}
 {const _bp=bePlay;bePlay=async function(){const r=await _bp.apply(this,arguments);wxSync();return r}}
 {const _ar=arenaReset;arenaReset=function(){wxSet("","");return _ar.apply(this,arguments)}}
+
+// ================= intercambio en directo (como en los juegos): invitación, sala con los dos jugadores y confirmación =================
+let LT={st:"idle"};const _ltSeen={};
+const ltMe=()=>window.FB&&window.FB.uid?window.FB.uid():null;
+const ltOk=r=>r&&typeof r.n==="string"&&PM[r.n]&&Number.isInteger(r.l)&&r.l>=1&&r.l<=100;
+function ltModal(h){let M=$("ltM");if(!M){M=document.createElement("div");M.id="ltM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");document.body.appendChild(M)}M.hidden=!h;if(h!=null)M.innerHTML='<div class="jbox ltbox">'+h+'</div>';return M}
+function ltReset(msg){try{if(LT.iv)clearInterval(LT.iv);if(LT.un)LT.un();if(LT.R)LT.R.leave()}catch(e){}LT={st:"idle"};PV.lt=null;try{pvPub()}catch(e){}ltModal(null);if(msg)toast(msg);try{frUI()}catch(e){}}
+function ltInvite(uid,n){if(!PR||LT.st!=="idle"||fcd)return;const o=pvOthers().find(p=>p.peer===uid);if(!o){toast(n+" ya no está conectado.");return}
+  LT={st:"inv",to:uid,n:n,room:"lt"+Math.floor(Math.random()*1e9).toString(36)+Date.now().toString(36),t:Date.now()};PV.lt={to:uid,room:LT.room,t:LT.t};pvPub();snd("ui");
+  ltModal('<h2>📡 Llamando a '+esc(n)+'…</h2><p class="tpulse">Esperando a que acepte el intercambio.</p><div class="jrow"><button class="alt" data-ltx="1">Cancelar</button></div>')}
+async function ltEnter(room,uid,n){LT={st:"room",room:room,uid:uid,n:n,sel:null,ok:null,go:null,q:"",t0:Date.now(),seen:Date.now()};
+  try{LT.R=await PR.join(room)}catch(e){ltReset("No se pudo entrar en la sala de intercambio.");return}
+  ltPub();LT.un=LT.R.onPeers(()=>ltTick());LT.iv=setInterval(ltTick,500);snd("lvl");ltRender()}
+const ltRec=n=>n&&S.owned[n]>0?{n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0}:null;
+function ltPub(){if(!LT.R)return;LT.R.presence({lt:{v:1,n:pvClean(pvNick()),sel:ltRec(LT.sel),ok:LT.ok,go:LT.go}}).catch(()=>{})}
+const ltPeer=()=>{if(!LT.R)return null;const p=LT.R.peers().find(x=>!x.isMe&&x.presence&&x.presence.lt&&x.presence.lt.v===1);return p?p.presence.lt:null};
+function ltRender(){if(LT.st!=="room")return;const o=ltPeer(),mine=ltRec(LT.sel),theirs=o&&ltOk(o.sel)?o.sel:null,q=nrm(LT.q||"");
+  const L=trOwnList().filter(p=>!q||nrm(p[0]).includes(q)).sort((a,b)=>lvd(b[0]).l-lvd(a[0]).l||WW[b[2]]-WW[a[2]]).slice(0,240);
+  const okMe=!!LT.ok,okThem=!!(o&&o.ok&&theirs&&o.ok.n===theirs.n);
+  const h='<h2>🔄 Sala de intercambio</h2><p class="mut">Estás con <b>'+esc(LT.n)+'</b>'+(o?' · 🟢 en la sala':' · ⏳ entrando…')+'</p>'+
+    '<div class="tvs">'+trCard(mine,"Tú ofreces",mine?"":"Elige uno abajo").replace('class="tcard','class="tcard'+(okMe?' ltok':''))+'<div class="tarrow"><span>⇄</span></div>'+trCard(theirs,esc(LT.n)+" ofrece",o?"Está eligiendo…":"").replace('class="tcard','class="tcard'+(okThem?' ltok':''))+'</div>'+
+    '<div class="ltst"><span class="'+(okMe?'on':'')+'">'+(okMe?'✅ Tú: listo':'Tú: eligiendo')+'</span><span class="'+(okThem?'on':'')+'">'+(okThem?'✅ '+esc(LT.n)+': listo':esc(LT.n)+': eligiendo')+'</span></div>'+
+    (okMe?'':'<div class="tfil"><input id="ltq" placeholder="Buscar en tu colección..." value="'+esc(LT.q||"")+'"></div><div class="tgrid">'+L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;return '<button class="tcell '+p[2]+(LT.sel===p[0]?' sel':'')+(sh?' shiny':'')+'" data-ltp="'+esc(p[0])+'">'+ico(p,56,false,sh)+'<b>'+esc(p[0])+'</b><small>Nv'+lvd(p[0]).l+(S.owned[p[0]]>1?' · ×'+S.owned[p[0]]:'')+'</small></button>'}).join("")+'</div>')+
+    '<div class="jrow">'+(okMe?'<button class="alt" data-ltu="1">✏️ Cambiar mi Pokémon</button>':'<button class="red" data-ltc="1"'+(mine&&theirs?'':' disabled')+'>✅ Confirmar intercambio</button>')+'<button class="alt" data-ltx="1">Salir de la sala</button></div>'+
+    '<small class="mut">Cuando los dos confirméis, se hará el intercambio. Si el otro cambia de Pokémon, tendrás que volver a confirmar.</small>';
+  const M=ltModal(h),g=M.querySelector(".tgrid");if(g&&LT.gs)g.scrollTop=LT.gs;const i=$("ltq");if(i){i.oninput=e=>{LT.q=e.target.value;const c=e.target.selectionStart;ltRender();const n=$("ltq");n.focus();n.setSelectionRange(c,c)}}}
+async function ltDo(mine,theirs){LT.st="busy";clearInterval(LT.iv);const n=LT.n;
+  const rec=pkTake(mine.n);if(!rec){ltReset("Ya no tienes ese Pokémon.");return}
+  stt().trade=(stt().trade||0)+1;save();ltModal(null);
+  try{await trAnim(rec,theirs,n)}catch(e){}await pkGive(theirs,true);if(window.cloudFlush)window.cloudFlush(true);render();
+  setTimeout(()=>ltReset(),1500)}
+function ltTick(){
+  if(LT.st==="room"){const o=ltPeer();if(o)LT.seen=Date.now();
+    if(!o&&Date.now()-LT.seen>8000&&Date.now()-LT.t0>8000){ltReset("🔄 "+LT.n+" ha salido de la sala de intercambio.");return}
+    const theirs=o&&ltOk(o.sel)?o.sel:null,mine=ltRec(LT.sel);
+    // si el otro cambia de Pokémon, mi confirmación deja de valer
+    if(LT.ok&&(!theirs||LT.ok.t!==theirs.n||!mine||LT.ok.n!==mine.n)){LT.ok=null;LT.go=null;ltPub()}
+    const okThem=o&&o.ok&&theirs&&o.ok.n===theirs.n&&mine&&o.ok.t===mine.n;
+    if(LT.ok&&okThem&&!LT.go){LT.go={a:mine.n,b:theirs.n};ltPub()}
+    if(LT.go&&!okThem){LT.go=null;ltPub()}
+    if(LT.go&&o&&o.go&&o.go.a===LT.go.b&&o.go.b===LT.go.a){ltDo(mine,theirs);return}
+    const k=JSON.stringify([o,LT.sel,LT.ok,LT.go]);if(k!==LT.k){LT.k=k;ltRender()}return}
+  if(!PR)return;const me=ltMe();if(!me)return;
+  if(LT.st==="inv"){const p=pvOthers().find(x=>x.peer===LT.to),lt=p&&p.presence.pvp.lt;
+    if(lt&&lt.acc&&lt.acc.from===me&&lt.acc.room===LT.room){PV.lt=null;pvPub();ltEnter(LT.room,LT.to,LT.n);return}
+    if(lt&&lt.no&&lt.no.from===me&&lt.no.room===LT.room){ltReset("🔄 "+LT.n+" no puede intercambiar ahora.");return}
+    if(Date.now()-LT.t>30000||!p){ltReset("🔄 "+LT.n+" no ha respondido.");return}return}
+  if(LT.st==="ask"){const p=pvOthers().find(x=>x.peer===LT.from),lt=p&&p.presence.pvp.lt;if(!lt||!lt.to||lt.room!==LT.room){ltReset(LT.n+" ha cancelado la invitación.")}return}
+  if(LT.st!=="idle")return;
+  const inv=pvOthers().find(p=>{const lt=p.presence.pvp.lt;return lt&&lt.to===me&&typeof lt.room==="string"&&/^lt[a-z0-9]{4,40}$/.test(lt.room)&&Date.now()-(lt.t||0)<30000&&!_ltSeen[lt.room]});
+  if(inv){const lt=inv.presence.pvp.lt,n=pvClean(inv.presence.pvp.n);_ltSeen[lt.room]=1;
+    if(fcd||D||R2){PV.lt={no:{from:inv.peer,room:lt.room},t:Date.now()};pvPub();setTimeout(()=>{if(LT.st==="idle"){PV.lt=null;pvPub()}},8000);toast("🔄 "+n+" quería intercambiar contigo, pero estás en un combate.");return}
+    LT={st:"ask",from:inv.peer,n:n,room:lt.room};snd("lvl");
+    ltModal('<h2>📡 ¡'+esc(n)+' quiere intercambiar!</h2><div class="ltav">'+trImg(trDec(inv.presence.pvp.tr),"f","w")+'</div><p>'+esc(n)+' te invita a una sala de intercambio ahora mismo. ¿Quieres entrar?</p><div class="jrow"><button class="red" data-lta="1">✅ Sí, vamos</button><button class="alt" data-ltn="1">No, ahora no</button></div>')}}
+setInterval(()=>{try{ltTick()}catch(e){console.error(e)}},700);
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
+  const iv=t.closest("[data-ltr]");if(iv){ltInvite(iv.dataset.ltr,iv.dataset.ltn);return}
+  if(!t.closest("#ltM"))return;
+  if(t.closest("[data-ltx]")){snd("ui");ltReset(LT.st==="inv"?"Invitación cancelada.":"Has salido de la sala de intercambio.");return}
+  if(t.closest("[data-lta]")&&LT.st==="ask"){const a=LT;PV.lt={acc:{from:a.from,room:a.room},t:Date.now()};pvPub();ltEnter(a.room,a.from,a.n);return}
+  if(t.closest("[data-ltn]")&&LT.st==="ask"){PV.lt={no:{from:LT.from,room:LT.room},t:Date.now()};pvPub();const r=LT.room;LT={st:"idle"};ltModal(null);setTimeout(()=>{if(LT.st==="idle"&&PV.lt&&PV.lt.no&&PV.lt.no.room===r){PV.lt=null;pvPub()}},8000);return}
+  if(LT.st!=="room")return;
+  const p=t.closest("[data-ltp]");if(p){const g=$("ltM").querySelector(".tgrid");LT.gs=g?g.scrollTop:0;LT.sel=p.dataset.ltp;LT.ok=null;LT.go=null;snd("ui");try{cry(LT.sel)}catch(x){}ltPub();ltRender();return}
+  if(t.closest("[data-ltc]")){const o=ltPeer(),th=o&&ltOk(o.sel)?o.sel:null;if(!LT.sel||!th)return;LT.ok={n:LT.sel,t:th.n};snd("lvl");ltPub();ltRender();return}
+  if(t.closest("[data-ltu]")){LT.ok=null;LT.go=null;ltPub();ltRender();return}});

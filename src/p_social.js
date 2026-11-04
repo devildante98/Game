@@ -49,7 +49,7 @@ function frUI(){
       '<button data-fr2="'+esc(u)+'"'+(o&&!R2&&!fcd&&PV.st==="idle"?'':' disabled')+' title="Crear una sala 2 vs 2 e invitarle">👥 2vs2</button>'+
       (window.FB&&window.FB.gfSend?'<button class="'+(gfSentToday(u)?'alt':'')+'" data-gfs="'+esc(u)+'"'+(gfSentToday(u)?' disabled title="Ya le has enviado un regalo hoy"':' title="Enviar un regalo"')+'>'+(gfSentToday(u)?'✅':'🎁')+'</button>':'')+
       (window.FB&&window.FB.chSend?'<button class="alt" data-frmsg="'+esc(u)+'" title="Enviar un mensaje privado">💬</button>':'')+
-      '<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Proponer un intercambio">🔄</button><button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
+      (o?'<button data-ltr="'+esc(u)+'" data-ltn="'+esc(n)+'" title="Intercambiar en directo, como en los juegos"'+(fcd||(typeof LT!=="undefined"&&LT.st!=="idle")?' disabled':'')+'>🔄 Intercambiar</button>':'<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Dejarle una oferta de intercambio (está desconectado)">🔄</button>')+'<button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
   box.innerHTML=h;$("frCnt").textContent=ids.length+" amigo"+(ids.length===1?"":"s")+" · "+ids.filter(u=>on[u]).length+" conectados";
   const n=FR.inc.length;if($("navfr"))$("navfr").hidden=!n,$("navfr").textContent=n;
 }

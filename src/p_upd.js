@@ -558,8 +558,8 @@ const zPow=p=>{p=p||60;return p<=55?100:p<=65?120:p<=75?140:p<=85?160:p<=95?175:
 function zMove(mv){if(!mv)return mv;return Object.assign({},mv,{id:"z:"+mv.id,n:ZN[mv.t]||"Movimiento Z",pw:mv.fixed||mv.flv||mv.half?150:zPow(mv.pw),ac:0,ailc:0,fl:0,ch:[],sc:0,hits:null,rec:0,drain:0,kami:0,rech:0,fixed:0,flv:0,half:0,z:1})}
 Object.assign(HIMG,{z_normal:"normalium-z",z_fire:"firium-z",z_water:"waterium-z",z_electric:"electrium-z",z_grass:"grassium-z",z_ice:"icium-z",z_fighting:"fightinium-z",z_poison:"poisonium-z",z_ground:"groundium-z",z_flying:"flyinium-z",z_psychic:"psychium-z",z_bug:"buginium-z",z_rock:"rockium-z",z_ghost:"ghostium-z",z_dragon:"dragonium-z",z_dark:"darkinium-z",z_steel:"steelium-z",z_fairy:"fairium-z"});
 // los cristales Z no se venden en la tienda
-{const _bb=buildBag;buildBag=function(){_bb.apply(this,arguments);try{ITEMS.forEach((it,i)=>{if(/^z_/.test(it[0])){const e=$("bq"+i);const r=e&&e.closest(".row");if(r)r.hidden=true}})}catch(e){}}}
-try{ITEMS.forEach((it,i)=>{if(/^z_/.test(it[0])){const e=$("bq"+i);const r=e&&e.closest(".row");if(r)r.hidden=true}})}catch(e){}
+{const _bb=buildBag;buildBag=function(){_bb.apply(this,arguments);try{ITEMS.forEach((it,i)=>{if(/^zx?_/.test(it[0])||!(it[2]>0)){const e=$("bq"+i),b=$("bb"+i);const r=e&&e.closest(".row");if(r)r.hidden=true;if(b){b.onclick=null;b.disabled=true}}})}catch(e){}}}
+try{ITEMS.forEach((it,i)=>{if(/^zx?_/.test(it[0])||!(it[2]>0)){const e=$("bq"+i),b=$("bb"+i);const r=e&&e.closest(".row");if(r)r.hidden=true;if(b){b.onclick=null;b.disabled=true}}})}catch(e){}
 // botón «Movimiento Z» en combate (una vez por combate)
 function zOpts(){if(!B||B.mode!=="s"||B.zUsed||!B.E)return [];const m=beAct(B.E.sd[0]);if(!m||m.mh<=0||!/^z_/.test(m.it||""))return [];const t=m.it.slice(2);
   return m.m.map((mv,k)=>({mv:mv,k:k})).filter(o=>o.mv&&o.mv.cl>0&&o.mv.t===t&&m.pp[o.k]>0)}

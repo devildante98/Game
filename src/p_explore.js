@@ -187,21 +187,45 @@ function exUI(){const b=$("explPB");if(!b)return;
   if(!b.querySelector("canvas")){b.innerHTML='<div class="exwrap"><div class="exscr"><canvas id="exCv" width="960" height="640" tabindex="0" aria-label="Mapa de exploración"></canvas><div id="exDlg" class="exdlg" hidden></div>'+
     '<button class="exfsb" id="exFs" type="button" title="Pantalla completa" aria-label="Pantalla completa"></button>'+
     '<div class="extitle" id="exTitle"><div class="exlogo"><small>POKE GACHA ONLINE</small><b>EXPLORACIÓN</b><i>Rutas, hierba alta y entrenadores</i></div><div class="exhero"><canvas id="exHero" width="96" height="48"></canvas></div>'+
-    '<button class="red exstart" id="exGo" type="button">▶ Iniciar</button><small class="exwhere" id="exWhere"></small><small class="exhint">Flechas o WASD para moverte · Mayús para correr · Espacio para hablar</small></div></div>'+
+    '<button class="red exstart" id="exGo" type="button">▶ Iniciar</button><small class="exwhere" id="exWhere"></small><small class="exhint" id="exHint"></small><button class="alt exctlb" type="button" data-exctl="1">⌨️ Controles</button></div>'+
+    '<div class="exctl" id="exCtl" hidden></div><button class="exfsb exkb" type="button" data-exctl="1" title="Controles" aria-label="Controles">⌨️</button></div>'+
     '<div class="expad"><div class="exdp"><button data-exd="u" aria-label="Arriba">▲</button><button data-exd="l" aria-label="Izquierda">◀</button><button data-exd="r" aria-label="Derecha">▶</button><button data-exd="d" aria-label="Abajo">▼</button></div><div class="exab"><button data-exa="b" class="alt" aria-label="Correr">B<small>Correr</small></button><button data-exa="a" aria-label="Hablar">A<small>Hablar</small></button></div></div></div>'+
-    '<small class="mut">Muévete con las flechas o WASD (Mayús para correr) y habla o recoge con Espacio/Intro. En el móvil usa la cruceta.</small>';
+    '<small class="mut exkeys" id="exKeys"></small>';
     EX.cv=$("exCv");wirePad(b)}
-  EX.cv=$("exCv");if(EX.resume){EX.resume=false;EX.title=false}else if(!EX.on)EX.title=true;exTitleUI();exStart();if(EX.pend.length){exSay(EX.pend.shift())}}
+  exKeysTxt();EX.cv=$("exCv");if(EX.resume){EX.resume=false;EX.title=false}else if(!EX.on)EX.title=true;exTitleUI();exStart();if(EX.pend.length){exSay(EX.pend.shift())}}
 function wirePad(b){b.querySelectorAll("[data-exd]").forEach(bt=>{const d=bt.dataset.exd,on=e=>{e.preventDefault();EX.keys={};EX.keys[d]=1},off=e=>{e.preventDefault();delete EX.keys[d]};
     bt.addEventListener("pointerdown",on);bt.addEventListener("pointerup",off);bt.addEventListener("pointerleave",off);bt.addEventListener("pointercancel",off)});
   const A=b.querySelector('[data-exa="a"]'),Bt=b.querySelector('[data-exa="b"]');A.addEventListener("click",e=>{e.preventDefault();exInteract()});Bt.addEventListener("click",e=>{e.preventDefault();EX.run=!EX.run;Bt.classList.toggle("on",EX.run)});
   $("exDlg").addEventListener("click",()=>exDlgNext());$("exGo").addEventListener("click",exGo);$("exFs").addEventListener("click",exFsToggle);exFsIcon();EX.cv.addEventListener("click",()=>{if(EX.dlg)exDlgNext()})}
-const EXK={ArrowUp:"u",ArrowDown:"d",ArrowLeft:"l",ArrowRight:"r",w:"u",s:"d",a:"l",d:"r",W:"u",S:"d",A:"l",D:"r"};
+// ---------- teclas configurables ----------
+const EXKB0={u:["ArrowUp","w"],d:["ArrowDown","s"],l:["ArrowLeft","a"],r:["ArrowRight","d"],b:["Shift","x"],a:[" ","Enter"]};
+const EXKN={u:"Arriba",d:"Abajo",l:"Izquierda",r:"Derecha",b:"Correr (mantener)",a:"Hablar / leer / recoger"};
+const exKB=()=>{const k=S.exKeys&&typeof S.exKeys==="object"?S.exKeys:{};const o={};for(const a in EXKB0)o[a]=Array.isArray(k[a])?k[a].slice(0,2):EXKB0[a].slice();return o};
+const exKN=k=>k.length===1?k.toLowerCase():k;
+const exKName=k=>!k?"—":({" ":"Espacio",Enter:"Intro",Shift:"Mayús",Control:"Ctrl",Alt:"Alt",ArrowUp:"↑",ArrowDown:"↓",ArrowLeft:"←",ArrowRight:"→",Tab:"Tab",Backspace:"Retroceso",Escape:"Esc"}[k]||(k.length===1?k.toUpperCase():k));
+function exAct(k){k=exKN(k);const kb=exKB();for(const a in kb)if(kb[a].some(x=>exKN(x)===k))return a;return null}
+function exKeysTxt(){const kb=exKB(),f=a=>kb[a].filter(Boolean).map(exKName).join(" / "),mv=["u","l","d","r"].map(a=>exKName(kb[a][0])).join("")==="↑←↓→"?"Flechas"+(kb.u[1]==="w"?" o WASD":""):["u","l","d","r"].map(a=>exKName(kb[a][0])).join(" ");
+  const t="⌨️ Moverse: "+mv+" · Correr: "+f("b")+" · Hablar: "+f("a")+" · Pantalla completa: botón ⛶ (Esc para salir)";const e=$("exKeys");if(e)e.textContent=t;
+  const h=$("exHint");if(h)h.textContent=matchMedia("(hover:hover) and (pointer:fine)").matches?"Moverse: "+mv+" · Correr: "+f("b")+" · Hablar: "+f("a"):"Usa la cruceta para moverte, B para correr y A para hablar"}
+function exCtlUI(){const box=$("exCtl");if(!box)return;const kb=exKB(),bd=EX.bind;
+  box.innerHTML='<div class="exctlin"><h3>⌨️ Controles del teclado</h3><small class="mut">Pulsa en una tecla para cambiarla y después pulsa la nueva. Cada acción puede tener dos teclas.</small><div class="exctlg">'+
+    Object.keys(EXKB0).map(a=>'<b>'+EXKN[a]+'</b>'+[0,1].map(i=>'<button type="button" class="'+(bd&&bd.a===a&&bd.i===i?'on':'alt')+'" data-exkb="'+a+':'+i+'">'+(bd&&bd.a===a&&bd.i===i?'Pulsa una tecla…':esc(exKName(kb[a][i])))+'</button>').join("")).join("")+
+    '</div><div class="jrow"><button class="alt" type="button" data-exkr="1">↺ Restablecer</button><button class="red" type="button" data-exkc="1">Listo</button></div><small class="mut">Esc cancela el cambio. Supr borra la tecla.</small></div>'}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
+  if(t.closest("[data-exctl]")){const c=$("exCtl");if(!c)return;c.hidden=!c.hidden;EX.bind=null;exCtlUI();snd("ui");return}
+  const k=t.closest("[data-exkb]");if(k){const[a,i]=k.dataset.exkb.split(":");EX.bind={a:a,i:+i};exCtlUI();return}
+  if(t.closest("[data-exkr]")){delete S.exKeys;save();EX.bind=null;exCtlUI();exKeysTxt();snd("ui");return}
+  if(t.closest("[data-exkc]")){$("exCtl").hidden=true;EX.bind=null;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(x){}}});
 document.addEventListener("keydown",e=>{if(!EX.on)return;const t=e.target;if(t&&/INPUT|TEXTAREA|SELECT/.test(t.tagName))return;
-  if(EX.title){if(e.key==="Enter"||e.key===" "){e.preventDefault();exGo()}return}
-  if(EXK[e.key]){e.preventDefault();EX.keys={};EX.keys[EXK[e.key]]=1;return}if(e.key==="Shift")EX.keys.b=1;
-  if(e.key===" "||e.key==="Enter"||e.key==="z"||e.key==="Z"){e.preventDefault();exInteract()}});
-document.addEventListener("keyup",e=>{if(!EX.on)return;if(EXK[e.key])delete EX.keys[EXK[e.key]];if(e.key==="Shift")delete EX.keys.b});
+  if(EX.bind){e.preventDefault();e.stopPropagation();const{a,i}=EX.bind;EX.bind=null;if(e.key!=="Escape"){const kb=exKB(),nk=e.key==="Delete"?"":e.key;
+      if(nk)for(const x in kb)kb[x]=kb[x].map(q=>exKN(q)===exKN(nk)?"":q);kb[a][i]=nk;S.exKeys=kb;save();exKeysTxt();snd("lvl")}exCtlUI();return}
+  if($("exCtl")&&!$("exCtl").hidden){if(e.key==="Escape"){$("exCtl").hidden=true;e.preventDefault()}return}
+  const act=exAct(e.key);
+  if(EX.title){if(act==="a"||e.key==="Enter"){e.preventDefault();exGo()}return}
+  if(act==="u"||act==="d"||act==="l"||act==="r"){e.preventDefault();EX.keys={};if(EX.keys.b0)EX.keys.b=1;EX.keys[act]=1;if(EX.runHeld)EX.keys.b=1;return}
+  if(act==="b"){e.preventDefault();EX.runHeld=true;EX.keys.b=1;return}
+  if(act==="a"){e.preventDefault();exInteract()}},true);
+document.addEventListener("keyup",e=>{if(!EX.on)return;const act=exAct(e.key);if(act&&act!=="a"&&act!=="b")delete EX.keys[act];if(act==="b"){EX.runHeld=false;delete EX.keys.b}});
 setInterval(()=>{if(!EX.on&&EX.cv&&EX.cv.isConnected&&EX.cv.offsetParent&&!fcd)exStart()},800);
 
 // ================= gráficos del mapa al estilo de los juegos: pixel art con bordes, relieve y objetos con profundidad =================

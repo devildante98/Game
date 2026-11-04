@@ -687,3 +687,51 @@ helpHTML=function(){const keys=Object.keys(TIPO);
     if(me.length||op.length)h+='<h5>Este combate</h5>'+op.map(m=>prow("Rival:",m)).join("")+me.map(m=>prow("Tu",m)).join("")}
    else if(typeof B!=="undefined"&&B&&B.op&&B.me)h+='<h5>Este combate</h5>'+prow("Rival:",{p:B.op})+prow("Tu",{p:B.me})}catch(e){}
   return h+'<h5>Todos los tipos</h5>'+keys.map(trow).join("")};
+
+// ================= sets de cada Pokémon: naturaleza, objeto, habilidad y movimientos intercambiables =================
+// S.bld[n]={a:set activo,l:[{nm,nat,held,abil,mv,ppu}]}. El set activo vive en S.nat/S.held/S.abil/S.mv/S.ppu (lo que usa el resto del juego).
+const BLDMAX=4;
+const bldCp=o=>o==null?o:JSON.parse(JSON.stringify(o));
+const bldSnap=n=>({nat:natOf(n),held:heldOf(n),abil:S.abil&&S.abil[n]!=null?S.abil[n]:null,mv:moveIds(n).slice(),ppu:bldCp(S.ppu&&S.ppu[n])||null});
+function bldGet(n){S.bld=S.bld||{};let b=S.bld[n];if(!b||!Array.isArray(b.l)||!b.l.length){b=S.bld[n]={a:0,l:[Object.assign({nm:"Set 1"},bldSnap(n))]}}if(!(b.a>=0&&b.a<b.l.length))b.a=0;return b}
+function bldStore(n){const b=bldGet(n),nm=b.l[b.a].nm;b.l[b.a]=Object.assign({nm:nm},bldSnap(n))}
+function bldLoad(n,x){S.nat=S.nat||{};S.held=S.held||{};S.abil=S.abil||{};S.ppu=S.ppu||{};
+  S.nat[n]=x.nat|0;if(x.held&&HOLDK[x.held])S.held[n]=x.held;else delete S.held[n];if(x.abil!=null)S.abil[n]=x.abil;else delete S.abil[n];
+  S.mv[n]=(Array.isArray(x.mv)&&x.mv.length&&x.mv.every(id=>MVD[id]))?x.mv.slice():defMoves(n,lvd(n).l);if(x.ppu)S.ppu[n]=bldCp(x.ppu);else delete S.ppu[n];if(S.pp)delete S.pp[n]}
+const bldBusy=()=>{if(typeof fcd!=="undefined"&&fcd){toast("Termina el combate antes de cambiar de set.");return true}return false};
+function bldSwitch(n,k,quiet){const b=bldGet(n);if(!b.l[k]||k===b.a)return false;bldStore(n);b.a=k;bldLoad(n,b.l[k]);if(typeof _hbk!=="undefined")_hbk="";if(!quiet){save();snd("ui");toast("🔁 "+nk(n)+" usa ahora «"+b.l[k].nm+"»")}return true}
+function bldNew(n,x,nm){const b=bldGet(n);if(b.l.length>=BLDMAX){toast("Máximo "+BLDMAX+" sets por Pokémon.");return -1}bldStore(n);
+  let q=1;while(b.l.some(x=>x.nm==="Set "+q))q++;b.l.push(Object.assign({nm:nm||("Set "+q)},x||{nat:natOf(n),held:"",abil:null,mv:defMoves(n,lvd(n).l),ppu:null}));return b.l.length-1}
+function bldDel(n,k){const b=bldGet(n);if(b.l.length<2||!b.l[k])return;if(k===b.a)bldSwitch(n,k===0?1:0,1);const x=b.l[k];if(x.held)S.bag[x.held]=(S.bag[x.held]||0)+1;b.l.splice(k,1);if(b.a>k)b.a--;if(b.l.length===1)b.l[0].nm=b.l[0].nm||"Set 1"}
+function bldHTML(n){const b=bldGet(n),mvs=x=>(x.mv||[]).map(id=>MVD[id]?MVD[id].n:"").filter(Boolean).join(", ")||"—";
+  return '<span>Sets</span><div class="bldw"><small class="mut">Cada set guarda su naturaleza, objeto, habilidad y movimientos. Cámbialo para usar este Pokémon de otra forma en otro equipo. Un set nuevo empieza con los movimientos básicos de su nivel: los demás tendrás que enseñárselos con MT o el recordador.</small><div class="bldl">'+
+    b.l.map((x,i)=>{const on=i===b.a,X=on?bldSnap(n):x,it=X.held&&ITEMS.find(q=>q[0]===X.held);return '<div class="bldc'+(on?" on":"")+'"><b>'+esc(x.nm)+(on?' <i>✓ En uso</i>':'')+'</b><small>🌿 '+esc((NAT[X.nat|0]||NAT[0])[0])+' · ✨ '+esc(abName(X.abil!=null&&abValid(n,X.abil)?X.abil:(on?abOf(n):abDefault(PM[n]))))+(it?' · 🎒 '+esc(it[1]):'')+'</small><small>⚔️ '+esc(mvs(X))+'</small><div class="bldb">'+
+      (on?'':'<button data-bldu="'+i+'">Usar</button>')+'<button class="alt" data-bldr="'+i+'">✏️</button>'+(b.l.length>1?'<button class="alt" data-bldd="'+i+'">🗑️</button>':'')+'</div></div>'}).join("")+
+    (b.l.length<BLDMAX?'<button class="bldnew" data-bldn="1">＋ Nuevo set</button>':'')+'</div></div>'}
+{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;
+  const d=document.createElement("div");d.className="fichr bldr";d.dataset.bn=n;d.dataset.bs=sh?1:0;d.innerHTML=bldHTML(n);const st=w.querySelector(".fstatr");if(st)st.before(d);else w.appendChild(d)}catch(e){console.error(e)}}}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;const r=t.closest(".bldr");if(!r)return;const n=r.dataset.bn,sh=r.dataset.bs==="1",re=()=>{try{updTeam();render()}catch(x){}pkView(n,sh)};
+  let q=t.closest("[data-bldu]");if(q){if(bldBusy())return;bldSwitch(n,+q.dataset.bldu);re();return}
+  q=t.closest("[data-bldn]");if(q){if(bldBusy())return;const k=bldNew(n);if(k>=0){bldSwitch(n,k,1);save();snd("lvl");toast("🆕 Nuevo set para "+nk(n)+": ya está en uso.")}re();return}
+  q=t.closest("[data-bldr]");if(q){const b=bldGet(n),x=b.l[+q.dataset.bldr];const nm=prompt("Nombre del set:",x.nm);if(nm&&nm.trim()){x.nm=nm.trim().slice(0,20);save()}re();return}
+  q=t.closest("[data-bldd]");if(q){if(bldBusy())return;const b=bldGet(n),x=b.l[+q.dataset.bldd];if(!confirm("¿Eliminar el set «"+x.nm+"»? Su objeto vuelve a la Mochila."))return;bldDel(n,+q.dataset.bldd);save();snd("ui");re()}});
+// los sets de equipo recuerdan qué set usa cada Pokémon
+{const bmap=team=>{const o={};(team||[]).forEach(n=>{if(n&&S.bld&&S.bld[n]&&S.bld[n].l.length>1)o[n]=S.bld[n].a});return o};
+  const wrapSave=id=>{const el=$(id);if(!el||!el.onclick)return;const _o=el.onclick;el.onclick=function(){const L0=(S.sets||[]).length,i=+$("setSel").value;_o.apply(this,arguments);try{const st=id==="setNew"?(S.sets.length>L0?S.sets[S.sets.length-1]:null):S.sets[i];if(st){st.bld=bmap(st.team);save()}}catch(x){}}};
+  wrapSave("setNew");wrapSave("setUpd");
+  const el=$("setLoad");if(el&&el.onclick){const _o=el.onclick;el.onclick=function(){const st=(S.sets||[])[+$("setSel").value];if(st&&st.bld&&Object.keys(st.bld).length&&bldBusy())return;_o.apply(this,arguments);
+    try{if(st&&st.bld){let c=0;for(const n in st.bld)if(S.owned[n]>0&&S.bld&&S.bld[n]&&bldSwitch(n,st.bld[n]|0,1))c++;if(c){save();updTeam();setMsg("Equipo «"+st.name+"» cargado con los sets de cada Pokémon.")}}}catch(x){console.error(x)}}}}
+// al evolucionar, los sets pasan a la evolución
+{const _ea=evoApply;evoApply=function(a,b){const had=S.owned[b]>0&&S.lv&&S.lv[b],ba=S.bld&&S.bld[a];
+  if(ba){try{bldStore(a)}catch(x){}}
+  const r=_ea.apply(this,arguments);
+  try{if(ba){const others=ba.l.filter((x,i)=>i!==ba.a);delete S.bld[a];
+    if(!had&&others.length){const nb=bldGet(b);others.forEach(x=>{if(nb.l.length<BLDMAX)nb.l.push(x);else if(x.held)S.bag[x.held]=(S.bag[x.held]||0)+1})}
+    else others.forEach(x=>{if(x.held)S.bag[x.held]=(S.bag[x.held]||0)+1});save()}}catch(x){console.error(x)}
+  return r}}
+// al elegir entre la versión antigua y la nueva, también puedes quedarte con las dos (la nueva como set)
+{const _ec=evoChoose;evoChoose=function(a,b,rn,ro){_ec.apply(this,arguments);try{const M=$("evcM");if(!M)return;const g=M.querySelector(".evcg");const full=bldGet(b).l.length>=BLDMAX;
+  g.insertAdjacentHTML("beforeend",'<button class="evcc evcb" data-evb="1"'+(full?' disabled':'')+'><b>🔁 Quedarme con los dos</b><span>El que ya tenías sigue en uso y el recién evolucionado se guarda como un set nuevo</span><small>'+(full?'Ya tiene '+BLDMAX+' sets: borra alguno desde la ficha':'Nivel: el más alto de los dos')+'</small></button>');
+  M.addEventListener("click",e=>{const c=e.target.closest("[data-evb]");if(!c||c.disabled)return;e.stopImmediatePropagation();
+    const lv=Math.max(((ro.lv||{}).l)||1,((rn.lv||{}).l)||1),L=[ro.lv,rn.lv].find(x=>x&&x.l===lv);evoPut(b,ro);S.lv[b]=Object.assign({},L||{l:lv,x:0});
+    bldNew(b,{nat:rn.nat|0,held:rn.held||"",abil:null,mv:(rn.mv||[]).slice(),ppu:bldCp(rn.ppu)||null},"Evolucionado");save();M.remove();snd("lvl");toast("✅ Te quedas con los dos: el nuevo está en los sets de "+b+".");try{render();updTeam()}catch(x){}},true)}catch(x){console.error(x)}}}

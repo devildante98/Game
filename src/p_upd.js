@@ -823,3 +823,44 @@ function pvFreeBtns(side,pm){if(!D||!D.E||!D.E.free||!pm||pm.mh<=0)return "";let
   E.sd.forEach((sd,i)=>{if(sd.dmx>0&&--sd.dmx<=0){const m=sd.t.find(t=>t.dmx);if(m){formRevert(m);ev.push({k:"dmxend",s:i,n:m.p[0],snap:beSnap(E)})}}});
   return ev0.concat(ev)}}
 {const _pa=pvAct;pvAct=function(a){if(D&&!/\|/.test(String(a))){D.pre="";D.zm=0}return _pa.apply(this,arguments)}}
+
+// ================= máquina de gacha: palanca, bolas que caen según su rareza y apertura =================
+const GBR={C:"C",R:"R",E:"E",M:"E",L:"L"};
+const gbHTML=(r,c)=>'<i class="gb gb'+(GBR[r]||"C")+(c?" "+c:"")+'"></i>';
+function gmFill(){const g=document.querySelector("#gmach .gmballs");if(!g||g.childElementCount)return;const L=["C","R","C","E","C","R","L","C","R","C","E","C","R","C","C"],P=[[8,96],[40,104],[72,108],[104,104],[132,94],[20,64],[54,72],[88,74],[118,62],[30,32],[64,40],[98,36],[128,30],[48,8],[86,6]];
+  g.innerHTML=L.map((r,i)=>gbHTML(r).replace('class="gb','style="left:'+P[i][0]+'px;top:'+P[i][1]+'px" class="gb')).join("")}
+setTimeout(gmFill,300);
+function gachaShow(res,n,best,back,sup,RC){
+  gmFill();const out=$("out"),M=$("gmach"),calm=typeof hubCalm==="function"&&hubCalm(),stage=$("stage");
+  const cards=res.map(x=>cardHTML(x[0],x[1],x[2],n===1,x[3])),anySh=res.some(x=>x[3]);
+  const cnt={};res.forEach(x=>{const r=x[0][2];cnt[r]=(cnt[r]||0)+1});const nn=res.filter(x=>x[1]).length;
+  const sum=n>=100?["C","R","E","M","L"].filter(r=>cnt[r]).map(r=>({C:"Común",R:"Raro",E:"Épico",M:"Forma especial",L:"Legendario"}[r])+" ×"+cnt[r]).join(" · ")+(nn?" · ¡"+nn+" nuevos!":"")+(anySh?" · ✨ "+res.filter(x=>x[3]).length+" variocolor":""):"";
+  out.className="results"+(n>=100?" x100":n===1?" one":"");
+  const flash=c=>{const f=$("flash");f.style.background="radial-gradient(circle,"+c+",transparent 70%)";f.classList.remove("go");void f.offsetWidth;f.classList.add("go")};
+  const end=()=>{PT.forEach(clearTimeout);PT=[];SK=null;$("skip").hidden=true;if(M)M.classList.remove("spin","pull","chute");
+    if(sum&&!out.querySelector(".gsum"))out.insertAdjacentHTML("afterbegin",'<div class="gsum">'+esc(sum)+'</div>');
+    $("msg").textContent=(anySh?"✨ ¡VARIOCOLOR! ":"")+(best==="L"?"¡LEGENDARIO! ":best==="M"?"¡FORMA ESPECIAL! ":best==="E"?"¡Épico! ":"")+(back?"Repetidos devueltos: +"+fmt(back)+" 🎟️":"");busy=false;render()};
+  SK=()=>{out.innerHTML=res.map((x,i)=>'<div class="slot">'+cards[i]+'</div>').join("");snd("rev",anySh&&best!=="L"?"S":best);end()};
+  $("skip").hidden=!O.skip||!!O.askip;
+  if(O.askip||calm||!M){SK();return}
+  out.innerHTML="";M.classList.toggle("sup",!!sup);M.classList.remove("pull","spin","chute");void M.offsetWidth;M.classList.add("pull","spin");snd("click");
+  const big=n>=100,step=big?16:n>1?190:0,t0=720;
+  res.forEach((x,i)=>tm(()=>{const s=document.createElement("div");s.className="slot";s.innerHTML=gbHTML(x[0][2],"drop"+(x[3]?" shiny":"")+(n===1?" big":""));
+    s.firstChild.style.setProperty("--dx",(Math.random()*60-30).toFixed(0)+"px");out.appendChild(s);
+    if(!big||i%10===0){snd(big?"pop":"ui");M.classList.remove("chute");void M.offsetWidth;M.classList.add("chute")}},t0+i*step));
+  const t1=t0+res.length*step+(big?350:550),lv=({C:0,R:1,E:2,M:2,L:3})[best];
+  tm(()=>{M.classList.remove("spin");
+    // tensión: las bolas mejores tiemblan antes de abrirse
+    out.querySelectorAll(".gb").forEach((b,i)=>{if(({C:0,R:1,E:2,M:2,L:3})[res[i][0][2]]>=2||n===1)b.classList.add("wob")});
+    if(lv>=2){snd("buff");flash(RC[best])}
+    if(best==="L"){snd("lvl");const r=document.createElement("div");r.className="grays";stage.appendChild(r);setTimeout(()=>r.remove(),1900);stage.animate([{transform:"translate(0,0)"},{transform:"translate(-6px,2px)"},{transform:"translate(6px,-2px)"},{transform:"translate(0,0)"}],{duration:420})}
+  },t1);
+  const t2=t1+(lv>=2||n===1?900:250),rs=big?14:n>1?300:0;
+  tm(()=>{if(n===1&&lv>=2)cry(res[0][0][0]);snd("rev",anySh&&best!=="L"?"S":best);
+    const sl=out.querySelectorAll(".slot");
+    res.forEach((x,i)=>tm(()=>{const b=sl[i]&&sl[i].querySelector(".gb");if(b){b.classList.remove("wob");b.classList.add("open")}
+      tm(()=>{if(!sl[i])return;sl[i].innerHTML=cards[i];const c=sl[i].querySelector(".card");if(c)c.classList.add("pop");
+        if(!big||x[0][2]==="L"||x[3]){if(x[3])flash("#fff6a0");else if("CREML".indexOf(x[0][2])>1)flash(RC[x[0][2]])}
+        if(!big&&n>1)snd("rev",x[3]&&x[0][2]!=="L"?"S":x[0][2])},big?40:240)},i*rs));
+    tm(end,res.length*rs+(big?300:500))},t2);
+}

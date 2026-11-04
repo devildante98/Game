@@ -193,8 +193,12 @@ function gmInit(){
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GM.scr&&gmOn()&&!document.querySelector("#gacM:not([hidden]),#uiDlg:not([hidden]),#pkv:not([hidden])")){gmClose()}});
   $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const f=$("fx"),r=f.getBoundingClientRect(),b=$("train").getBoundingClientRect();
     gmSparks(f,(e.clientX||b.left+b.width/2)-r.left,(e.clientY||b.top+b.height/2)-r.top,6);const tr=$("gTr");if(tr){tr.classList.remove("gjump");void tr.offsetWidth;tr.classList.add("gjump")}});
+  // gacha: barra de garantía; combate: botón de filtros y barra de combatir fija
+  {const gv=document.querySelector("#stage>.gview");if(gv&&!$("gPity")){gv.insertAdjacentHTML("afterend",'<div id="gPity" class="gmo"><span class="gpi">'+gI("medal",30)+'</span><div class="gpt"><b>Épico o mejor garantizado</b><i><u id="gPityB"></u></i></div><em><b id="gPityN">30</b><small>tiradas</small></em></div>');}
+   const rt=document.querySelector("#stage>p.rates");if(rt)rt.classList.add("ghelp");
+   const fg=$("fgo");if(fg){fg.parentNode.classList.add("gfight");const fs=$("fsel"),fa=fs&&fs.querySelector(".actions");if(fa&&!$("gFilt")){fa.insertAdjacentHTML("beforebegin",'<button id="gFilt" class="gmo gfilt">🔍 Filtros y sets de equipo <i>▾</i></button>');$("gFilt").onclick=()=>{snd("ui");fs.classList.toggle("gopen")}}}}
   // el combate se abre solo cuando empieza una batalla
-  const ar=$("arena");if(ar)new MutationObserver(()=>{if(!gmOn()||ar.hidden)return;const p=ar.closest("#batP,#pvpP");if(p&&(p.id==="batP"||($("pvpP")&&$("pvpP").dataset.duel))&&GM.scr!=="batP")gmOpen("batP",1)}).observe(ar,{attributes:true,attributeFilter:["hidden"]});
+  const ar=$("arena");if(ar)new MutationObserver(()=>{document.body.classList.toggle("gbat",!ar.hidden&&!!ar.closest("#gScr"));if(!gmOn()||ar.hidden)return;const p=ar.closest("#batP,#pvpP");if(p&&(p.id==="batP"||($("pvpP")&&$("pvpP").dataset.duel))&&GM.scr!=="batP")gmOpen("batP",1);if(GM.scr==="batP")setTimeout(()=>{try{ar._siv({block:"start"})}catch(e){}},60)}).observe(ar,{attributes:true,attributeFilter:["hidden"]});
   const pd=$("pvDuel");if(pd)new MutationObserver(()=>{if(!gmOn())return;const p=$("pvpP");if(p&&p.dataset.duel&&pd.querySelector("#arena")){gmOpen("batP",1);$("batP").after(p);setTimeout(()=>{try{p._siv({block:"start"})}catch(e){}},60)}}).observe(pd,{childList:true});
   gmApply();gmLoad();
   let lt=0;const loop=t=>{requestAnimationFrame(loop);if(document.hidden||!gmOn())return;gmTown(t);if(t-lt>120){lt=t;gmTop()}};requestAnimationFrame(loop);
@@ -220,10 +224,10 @@ function gmOpen(id,auto){
   const B=$("gScrB");B.appendChild(P);if(id==="batP"&&$("pvpP")&&$("pvpP").dataset.duel)P.after($("pvpP"));
   gmHelpMark(B);B.scrollTop=0;const was=M.hidden;M.hidden=false;if(was&&!hubCalm()){M.classList.remove("in");void M.offsetWidth;M.classList.add("in")}
   try{if(id==="shopP"||id==="stage")render()}catch(e){}
-  gmMusic(D.mus);gmNav()}
+  gmMusic(D.mus);gmNav();const a2=$("arena");document.body.classList.toggle("gbat",!!a2&&!a2.hidden&&!!a2.closest("#gScr"))}
 function gmPark(){const id=GM.scr;if(!id)return;const P=$(id),m=GM.ph[id];if(P&&m&&m.parentNode)m.parentNode.insertBefore(P,m.nextSibling);
   const pv=$("pvpP");if(pv&&pv.parentNode===$("gScrB")){if(pv.dataset.duel)$("batP").after(pv);else try{hubPark("pvpP")}catch(e){}}}
-function gmClose(silent){if(!GM.scr){if(!silent)gmNav();return}gmPark();GM.scr=null;GM.auto=0;$("gScr").hidden=true;if(!silent)gmMusic(null);gmNav()}
+function gmClose(silent){document.body.classList.remove("gbat");if(!GM.scr){if(!silent)gmNav();return}gmPark();GM.scr=null;GM.auto=0;$("gScr").hidden=true;if(!silent)gmMusic(null);gmNav()}
 {const _ho=hubOpen;hubOpen=function(k,tab){if(gmOn()&&GM.scr)gmClose(1);const r=_ho.apply(this,arguments);try{if(gmOn()&&GM.init){gmHelpMark($("hubB"));gmMusic(GMMUS[HB.t]!=null?GMMUS[HB.t]:null);gmNav()}}catch(e){}return r}}
 {const _hc=hubClose;hubClose=function(){const r=_hc.apply(this,arguments);try{if(gmOn()&&GM.init){if(!GM.scr)gmMusic(null);gmNav()}}catch(e){}return r}}
 {const _s=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(o){
@@ -265,6 +269,7 @@ function gmTop(){
   try{const m=medCount()+"/8";if($("gMedN").textContent!==m)$("gMedN").textContent=m}catch(e){}
   try{const s=String(strkNow());if($("gStkN").textContent!==s)$("gStkN").textContent=s}catch(e){}
   try{const pm=$("passMini"),q=pm&&pm.textContent.match(/Nv\s*(\d+)\s*\/\s*(\d+)/);if(q){const s="Nv "+q[1];if($("gPassN").textContent!==s)$("gPassN").textContent=s;const bi=pm.querySelector(".pmbar i");$("gPassB").style.width=bi?bi.style.width||"0%":(q[1]/q[2]*100)+"%"}}catch(e){}
+  try{if(GM.scr==="stage"){const pm=+(($("pityM")||{}).textContent)||30,pv=+(($("pity")||{}).textContent)||0,left=Math.max(0,pm-pv);$("gPityN").textContent=left;$("gPityB").style.width=Math.min(100,pv/pm*100)+"%";$("gPity").classList.toggle("gnear",left<=5)}}catch(e){}
   try{const nk=S.nick?String(S.nick).slice(0,18):"Entrenador";if($("gNick").textContent!==nk)$("gNick").textContent=nk}catch(e){}
   try{const cv=parseFloat(($("cpsv")||{}).textContent)||0,cb=$("gCombo");if(cv>=1){$("gCmb").textContent=cv.toFixed(1);if(!cb.classList.contains("on"))cb.classList.add("on");cb.classList.toggle("hot",cv>=6)}else cb.classList.remove("on","hot")}catch(e){}
   try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr)tr.innerHTML=trImg(myLook(),"f","i")}}catch(e){}

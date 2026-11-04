@@ -800,7 +800,7 @@ const pvMd=()=>S.pvMode==="l"?"l":"c";
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-pvmd]");if(!b)return;if(PV.st!=="idle"){toast("Cancela tu reto antes de cambiar de modo.");return}S.pvMode=b.dataset.pvmd;save();snd("ui");pvPub();pvRender()});
 {const _pc=pvChallenge;pvChallenge=function(peer){const o=pvOthers().find(p=>p.peer===peer);if(o&&(o.presence.pvp.md==="l"?"l":"c")!==pvMd()){toast("Ese jugador está en el modo "+(o.presence.pvp.md==="l"?"Libre":"Clásico")+". Cambia de modo para retarle.");return false}return _pc.apply(this,arguments)}}
 // formas disponibles del Pokémon activo (las que tienes en la colección)
-function pvFormsOf(sd){const m=beAct(sd),own=(sd.fo&&sd.fo[sd.ai])||[],base=(m.p0||m.p)[0];return {mega:(FORMS[base]||[]).filter(f=>f[1]==="mega").map((f,k)=>[f[0],k]).filter(f=>own.includes(f[0])),gmax:(FORMS[base]||[]).find(f=>f[1]==="gmax"&&own.includes(f[0]))}}
+function pvFormsOf(sd){const m=beAct(sd),own=((sd.fo&&sd.fo[sd.ai])||[]).concat((m.p0||m.p)[0]==="Rayquaza"&&(m.m||[]).some(x=>x&&x.id==="620")?["Mega-Rayquaza"]:[]),base=(m.p0||m.p)[0];return {mega:(FORMS[base]||[]).filter(f=>f[1]==="mega").map((f,k)=>[f[0],k]).filter(f=>own.includes(f[0])),gmax:(FORMS[base]||[]).find(f=>f[1]==="gmax"&&own.includes(f[0]))}}
 function pvZOk(m,mv){if(!mv||mv.cl<=0)return "";if(/^z_/.test(m.it||"")&&mv.t===m.it.slice(2))return "z";if(/^zx_/.test(m.it||"")&&typeof zxFor==="function"){const z=zxFor(m);if(z&&mv.n===z[1])return "x"}return ""}
 function pvFreeBtns(side,pm){if(!D||!D.E||!D.E.free||!pm||pm.mh<=0)return "";let h="";
   if(!side.fu&&!pm.dmx&&!pm.p0){const F=pvFormsOf(side);F.mega.forEach(f=>{h+='<button class="frmb mega'+(D.pre==="M"+f[1]?" on":"")+'" data-pv="fM'+f[1]+'">🧬 Megaevolucionar'+(F.mega.length>1?' ('+esc(f[0].slice(-1))+')':'')+'</button>'});
@@ -976,3 +976,11 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
   const p=t.closest("[data-ltp]");if(p){const g=$("ltM").querySelector(".tgrid");LT.gs=g?g.scrollTop:0;LT.sel=p.dataset.ltp;LT.ok=null;LT.go=null;snd("ui");try{cry(LT.sel)}catch(x){}ltPub();ltRender();return}
   if(t.closest("[data-ltc]")){const o=ltPeer(),th=o&&ltOk(o.sel)?o.sel:null;if(!LT.sel||!th)return;LT.ok={n:LT.sel,t:th.n};snd("lvl");ltPub();ltRender();return}
   if(t.closest("[data-ltu]")){LT.ok=null;LT.go=null;ltPub();ltRender();return}});
+
+// ================= objetos nuevos: Hierba Blanca y semillas de campo =================
+{const _bs=beStat;beStat=function(E,j,ch,push,src,tag){const r=_bs.apply(this,arguments);try{const sd=E.sd[j],m=beAct(sd);
+  if(m&&m.it==="wherb"&&!m.ius&&m.mh>0&&Object.keys(sd.v.st).some(k=>sd.v.st[k]<0)){m.ius=1;Object.keys(sd.v.st).forEach(k=>{if(sd.v.st[k]<0)sd.v.st[k]=0});push({k:"item",s:j,n:m.p[0],it:"wherb"})}}catch(e){}return r}}
+function seedCheck(E,push){try{const tr=typeof axTr==="function"?axTr(E):"";if(!tr)return;const SD={electric:["eseed","def"],grassy:["gseed","def"],misty:["mseed","spd"],psychic:["pseed","spd"]}[tr];if(!SD)return;
+  E.sd.forEach((sd,j)=>{if(sd.out)return;const m=beAct(sd);if(m&&m.mh>0&&m.it===SD[0]&&!m.ius){m.ius=1;push({k:"item",s:j,n:m.p[0],it:"seed"});beStat(E,j,[[SD[1],1]],push,undefined,"it")}})}catch(e){}}
+{const _bt=beTurn;beTurn=function(E){const ev=_bt.apply(this,arguments);const push=o=>{o.snap=beSnap(E);ev.push(o)};seedCheck(E,push);return ev}}
+{const _be=beEnter;beEnter=function(E,i,push){const r=_be.apply(this,arguments);seedCheck(E,push);return r}}

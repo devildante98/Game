@@ -65,13 +65,14 @@ function exBlocked(x,y){const c=exAt(x,y);if(EXBLK.includes(c))return true;if(EX
 const EXDIR={u:[0,-1],d:[0,1],l:[-1,0],r:[1,0]};
 // ---------- bucle ----------
 function exStart(){const st=exSt();if(!EX.cv)return;EX.on=true;if(EX.map!==st.m||!EX.grid)exLoad(st.m,st.x,st.y,st.f);exFollower();if(!EX.raf)EX.raf=requestAnimationFrame(exLoop)}
-function exStop(){EX.on=false;if(EX.raf)cancelAnimationFrame(EX.raf);EX.raf=0;EX.keys={}}
+function exStop(){EX.on=false;if(EX.raf)cancelAnimationFrame(EX.raf);EX.raf=0;EX.keys={};EX.kst=[]}
 function exLoop(ts){EX.raf=0;if(!EX.on||!EX.cv||!EX.cv.isConnected||!EX.cv.offsetParent){EX.on=false;return}
   const dt=Math.min(50,ts-(EX.t||ts));EX.t=ts;exUpdate(dt,ts);exDraw(ts);EX.raf=requestAnimationFrame(exLoop)}
-function exKeyDir(){const k=EX.keys;return k.u?"u":k.d?"d":k.l?"l":k.r?"r":null}
+function exKeyDir(){const k=EX.kst||[];return k[0]||null}// manda la primera dirección que sigue pulsada
 function exUpdate(dt,ts){if(EX.title)return;EX.npcs.forEach(n=>{if(n.mv)exNpcStep(n,dt)});
   if(EX.trans){EX.trans.t+=dt;if(EX.trans.t>=EX.trans.d){const f=EX.trans.done;EX.trans=null;f&&f()}return}
   if(EX.walkTo){exNpcWalk(dt);return}
+  if(EX.alert){if(EX.mv){EX.mv.t+=dt;const p=Math.min(1,EX.mv.t/EX.mv.d);EX.px=EX.mv.x0+(EX.x-EX.mv.x0)*p;EX.py=EX.mv.y0+(EX.y-EX.mv.y0)*p;if(p>=1){EX.mv=null;EX.px=EX.x;EX.py=EX.y}}return}
   if(EX.dlg)return;
   exNpcAI(dt,ts);
   let carry=0,flow=false;
@@ -81,7 +82,7 @@ function exUpdate(dt,ts){if(EX.title)return;EX.npcs.forEach(n=>{if(n.mv)exNpcSte
   // girar en el sitio solo si estabas parado (andando, cambias de dirección sin frenar)
   if(EX.f!==d&&!flow&&!EX.turned){EX.f=d;EX.turned=ts;return}if(!flow&&EX.turned&&ts-EX.turned<90)return;EX.turned=0;
   const[dx,dy]=EXDIR[d],nx=EX.x+dx,ny=EX.y+dy;EX.f=d;
-  if(exBlocked(nx,ny)){const c=exAt(nx,ny);if((c==="I"||c==="H")&&(!EX.bump||ts-EX.bump>600)){EX.bump=ts;EX.keys={};exInteract();return}if(!EX.bump||ts-EX.bump>350){EX.bump=ts;snd("ui")}EX.dist=0;return}
+  if(exBlocked(nx,ny)){const c=exAt(nx,ny);if((c==="I"||c==="H")&&(!EX.bump||ts-EX.bump>600)){EX.bump=ts;EX.keys={};EX.kst=[];exInteract();return}if(!EX.bump||ts-EX.bump>350){EX.bump=ts;snd("ui")}EX.dist=0;return}
   EX.trail.unshift({x:EX.x,y:EX.y});EX.trail.length=3;
   EX.mv={x0:EX.x,y0:EX.y,t:carry,d:EX.keys.b||EX.run?130:240};EX.mvRun=EX.mv.d<150;EX.x=nx;EX.y=ny;EX.step=(EX.step||0)+1}
 function exArrive(){const st=exSt();exStepFx(EX.x,EX.y,EX.f,EX.mvRun);st.x=EX.x;st.y=EX.y;st.f=EX.f;EX.steps++;if(EX.steps%20===0)save();
@@ -94,11 +95,13 @@ function exArrive(){const st=exSt();exStepFx(EX.x,EX.y,EX.f,EX.mvRun);st.x=EX.x;
 function exStepBack(){const t=EX.trail[0];if(t){EX.x=t.x;EX.y=t.y;EX.px=t.x;EX.py=t.y}EX.f={u:"d",d:"u",l:"r",r:"l"}[EX.f]}
 // ---------- entrenadores que te ven ----------
 function exNpcSight(){for(const n of EX.npcs){if(n.beat)continue;const[dx,dy]=EXDIR[n.f];for(let i=1;i<=n.sight;i++){const x=n.px+dx*i,y=n.py+dy*i;if(exBlocked(x,y)&&!(x===EX.x&&y===EX.y))break;
-    if(x===EX.x&&y===EX.y){EX.alert={n:n,t0:performance.now()};snd("lvl");EX.keys={};setTimeout(()=>{EX.alert=null;EX.walkTo={n:n,tx:EX.x-dx,ty:EX.y-dy,t:0}},700);return true}}}return false}
-function exNpcWalk(dt){const w=EX.walkTo,n=w.n;if(n.mv)return;if(n.px===w.tx&&n.py===w.ty){EX.walkTo=null;EX.f={u:"d",d:"u",l:"r",r:"l"}[n.f];exSay([n.n+":","«"+n.txt+"»"],()=>exTrainerBattle(n));return}
+    if(x===EX.x&&y===EX.y){const tx=EX.x-dx,ty=EX.y-dy;EX.alert={n:n,t0:performance.now()};snd("lvl");EX.keys={};EX.kst=[];setTimeout(()=>{EX.alert=null;EX.walkTo={n:n,tx:tx,ty:ty,t:0,st:0}},700);return true}}}return false}
+function exNpcWalk(dt){const w=EX.walkTo,n=w.n;if(n.mv)return;const[ddx,ddy]=EXDIR[n.f],nx=n.px+ddx,ny=n.py+ddy;
+  // llega a tu lado, o algo le corta el paso: te habla desde donde esté (nunca se queda esperando)
+  if((n.px===w.tx&&n.py===w.ty)||Math.abs(n.px-EX.x)+Math.abs(n.py-EX.y)<=1||(nx===EX.x&&ny===EX.y)||exBlocked(nx,ny)||++w.st>14){EX.walkTo=null;EX.f={u:"d",d:"u",l:"r",r:"l"}[n.f];exSay([n.n+":","«"+n.txt+"»"],()=>exTrainerBattle(n));return}
   const[dx,dy]=EXDIR[n.f];n.mv={x0:n.px,y0:n.py,t:0,d:230};n.px+=dx;n.py+=dy;n.step=(n.step||0)+1}
 // ---------- diálogos ----------
-function exSay(lines,cb){EX.dlg={l:lines,i:0,c:0,cb:cb};EX.keys={}}
+function exSay(lines,cb){EX.dlg={l:lines,i:0,c:0,cb:cb};EX.keys={};EX.kst=[]}
 function exDlgNext(){const d=EX.dlg;if(!d)return;const t=d.l[d.i];if(d.c<t.length){d.c=t.length;return}d.i++;d.c=0;snd("ui");if(d.i>=d.l.length){EX.dlg=null;d.cb&&d.cb()}}
 function exInteract(){if(EX.dlg){exDlgNext();return}if(EX.mv||EX.trans)return;const[dx,dy]=EXDIR[EX.f],x=EX.x+dx,y=EX.y+dy,c=exAt(x,y);
   const n=EX.npcs.find(q=>q.px===x&&q.py===y);if(n){n.f={u:"d",d:"u",l:"r",r:"l"}[EX.f];if(n.beat)exSay([n.n+":","«¡Qué buen combate! Sigue entrenando, que se nota que tus Pokémon te quieren.»"]);else{exSay([n.n+":","«"+n.txt+"»"],()=>exTrainerBattle(n))}return}
@@ -109,7 +112,7 @@ function exLoot(){const r=Math.random();return r<.3?"pot":r<.5?"sb":r<.65?"ub":r
 // ---------- combates ----------
 function exTeamOk(){const L=(S.team||[]).filter(n=>n&&S.owned[n]);return L.length&&L.some(n=>S.hp[n]!==0)}
 function exEncounter(){if(!exTeamOk()){exSay(["¡Algo se mueve en la hierba!","…pero tus Pokémon están demasiado cansados para luchar. Cúralos en el Centro Pokémon."]);return}
-  EX.keys={};snd("wild");EX.trans={t:0,d:1300,k:"wild",done:()=>exBattle(null)}}
+  EX.keys={};EX.kst=[];snd("wild");EX.trans={t:0,d:1300,k:"wild",done:()=>exBattle(null)}}
 function exTrainerBattle(n){if(!exTeamOk()){exSay(["Tus Pokémon están debilitados. ¡Vuelve cuando estén curados!"]);return}
   const names=(S.team||[]).filter(x=>x&&S.owned[x]),lead=Math.min(...names.map(x=>lvd(x).l)),cap=lvCap(),lv=Math.max(2,Math.min(cap,lead))-1;
   const team=n.t.filter(x=>PM[x]).map((x,i)=>mkEnemy(stageFor(PM[x],clampL(lv+i))||PM[x],clampL(lv+i)));
@@ -193,7 +196,7 @@ function exUI(){const b=$("explPB");if(!b)return;
     '<small class="mut exkeys" id="exKeys"></small>';
     EX.cv=$("exCv");wirePad(b)}
   exKeysTxt();EX.cv=$("exCv");if(EX.resume){EX.resume=false;EX.title=false}else if(!EX.on)EX.title=true;exTitleUI();exStart();if(EX.pend.length){exSay(EX.pend.shift())}}
-function wirePad(b){b.querySelectorAll("[data-exd]").forEach(bt=>{const d=bt.dataset.exd,on=e=>{e.preventDefault();EX.keys={};EX.keys[d]=1},off=e=>{e.preventDefault();delete EX.keys[d]};
+function wirePad(b){b.querySelectorAll("[data-exd]").forEach(bt=>{const d=bt.dataset.exd,on=e=>{e.preventDefault();EX.kst=[d]},off=e=>{e.preventDefault();EX.kst=(EX.kst||[]).filter(x=>x!==d)};
     bt.addEventListener("pointerdown",on);bt.addEventListener("pointerup",off);bt.addEventListener("pointerleave",off);bt.addEventListener("pointercancel",off)});
   const A=b.querySelector('[data-exa="a"]'),Bt=b.querySelector('[data-exa="b"]');A.addEventListener("click",e=>{e.preventDefault();exInteract()});Bt.addEventListener("click",e=>{e.preventDefault();EX.run=!EX.run;Bt.classList.toggle("on",EX.run)});
   $("exDlg").addEventListener("click",()=>exDlgNext());$("exGo").addEventListener("click",exGo);$("exFs").addEventListener("click",exFsToggle);exFsIcon();EX.cv.addEventListener("click",()=>{if(EX.dlg)exDlgNext()})}
@@ -222,10 +225,10 @@ document.addEventListener("keydown",e=>{if(!EX.on)return;const t=e.target;if(t&&
   if($("exCtl")&&!$("exCtl").hidden){if(e.key==="Escape"){$("exCtl").hidden=true;e.preventDefault()}return}
   const act=exAct(e.key);
   if(EX.title){if(act==="a"||e.key==="Enter"){e.preventDefault();exGo()}return}
-  if(act==="u"||act==="d"||act==="l"||act==="r"){e.preventDefault();EX.keys={};if(EX.keys.b0)EX.keys.b=1;EX.keys[act]=1;if(EX.runHeld)EX.keys.b=1;return}
+  if(act==="u"||act==="d"||act==="l"||act==="r"){e.preventDefault();EX.kst=EX.kst||[];if(!EX.kst.includes(act))EX.kst.push(act);if(EX.runHeld)EX.keys.b=1;return}
   if(act==="b"){e.preventDefault();EX.runHeld=true;EX.keys.b=1;return}
   if(act==="a"){e.preventDefault();exInteract()}},true);
-document.addEventListener("keyup",e=>{if(!EX.on)return;const act=exAct(e.key);if(act&&act!=="a"&&act!=="b")delete EX.keys[act];if(act==="b"){EX.runHeld=false;delete EX.keys.b}});
+document.addEventListener("keyup",e=>{if(!EX.on)return;const act=exAct(e.key);if(act&&act!=="a"&&act!=="b")EX.kst=(EX.kst||[]).filter(x=>x!==act);if(act==="b"){EX.runHeld=false;delete EX.keys.b}});
 setInterval(()=>{if(!EX.on&&EX.cv&&EX.cv.isConnected&&EX.cv.offsetParent&&!fcd)exStart()},800);
 
 // ================= gráficos del mapa al estilo de los juegos: pixel art con bordes, relieve y objetos con profundidad =================
@@ -475,3 +478,5 @@ function exFsExit(keepDoc){const w=document.querySelector(".exwrap");if(!EX.fs)r
 function exFsPark(on){if(on){if(EX.fs){EX.fsBack=true;exFsExit(true)}}else if(EX.fsBack){EX.fsBack=false;setTimeout(()=>{exFsEnter()},350)}}
 document.addEventListener("fullscreenchange",()=>{if(EX.fs&&!exFsDoc()&&!EX.fsBack)exFsExit(true)});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&EX.fs){exFsExit()}});
+
+addEventListener("blur",()=>{EX.kst=[];if(EX.keys)delete EX.keys.b;EX.runHeld=false});

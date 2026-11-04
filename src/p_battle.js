@@ -66,6 +66,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   let mv,k=-1;const allOut=me.pp.every(x=>x<=0);
   if(q[1]==null){if(!allOut)return;mv=STRUG}
   else{k=+q[1];mv=me.m[k];if(!mv)return;if(me.pp[k]<=0){if(!allOut)return;mv=STRUG;k=-1}}
+  if(me.it==="avest"&&mv&&mv.cl===0){push({k:"item",s:i,n:me.p[0],it:"avest"});return}
   if(zf&&mv&&mv.cl>0&&typeof zMove==="function"){mv=zf==="x"&&typeof zxMove==="function"?zxMove(me,mv):zMove(mv);push({k:"zpow",s:i,n:me.p[0]})}
   if(k>=0){me.pp[k]--;if(me.pp[k]>0&&axFoesL(E,i).some(o=>o.m.ab===46))me.pp[k]--}
   if(!mv.prot)v.pc=0;
@@ -102,7 +103,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
     else{const phy=mv.cl!==2;let am=tm.ab===109&&!axMB(me)?1:STG(phy?v.st.atk:v.st.spa),dm=me.ab===109?1:STG(phy?ts.v.st.def:ts.v.st.spd);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
-      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1))*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
+      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1))*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
     if(cr)crit++;
     if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
     if(mv.id==="206"&&d>=tm.mh&&tm.mh>1)d=tm.mh-1;
@@ -192,7 +193,7 @@ const ART={atk:"El Ataque",def:"La Defensa",spa:"El Ataque Especial",spd:"La Def
 const AILM={par:w=>"¡"+w+" está paralizado! Quizás no pueda moverse.",slp:w=>"¡"+w+" se ha dormido!",psn:w=>"¡"+w+" ha sido envenenado!",tox:w=>"¡"+w+" ha sido gravemente envenenado!",brn:w=>"¡"+w+" se ha quemado!",frz:w=>"¡"+w+" se ha congelado!",cnf:w=>"¡"+w+" se encuentra confuso!"};
 const beWho=(i,n)=>B&&B.who?B.who(i,n):n;
 const snapMon=(sn,i)=>B.E.sd[i].t[sn.ai[i]];
-const ITMSG={left:["h",w=>"¡"+w+" ha recuperado algunos PS gracias a sus Restos!"],lorb:["d",w=>"¡"+w+" ha perdido PS por culpa de la Vidasfera!"],sash:["",w=>"¡"+w+" ha aguantado el golpe gracias a su Banda Focus!"],sitrus:["h",w=>"¡"+w+" se ha comido su Baya Zidra y ha recuperado PS!"],lum:["h",w=>"¡"+w+" se ha comido su Baya Ziuela y se ha curado!"],shell:["h",w=>"¡"+w+" ha recuperado PS gracias a su Campana Concha!"],qclaw:["",w=>"¡La Garra Rápida de "+w+" le permite actuar primero!"]};
+const ITMSG={wherb:["",w=>"¡"+w+" ha recuperado sus características gracias a la Hierba Blanca!"],avest:["",w=>"¡"+w+" lleva un Chaleco Asalto y no puede usar movimientos de estado!"],seed:["",w=>"¡La semilla de "+w+" ha reaccionado al campo!"],left:["h",w=>"¡"+w+" ha recuperado algunos PS gracias a sus Restos!"],lorb:["d",w=>"¡"+w+" ha perdido PS por culpa de la Vidasfera!"],sash:["",w=>"¡"+w+" ha aguantado el golpe gracias a su Banda Focus!"],sitrus:["h",w=>"¡"+w+" se ha comido su Baya Zidra y ha recuperado PS!"],lum:["h",w=>"¡"+w+" se ha comido su Baya Ziuela y se ha curado!"],shell:["h",w=>"¡"+w+" ha recuperado PS gracias a su Campana Concha!"],qclaw:["",w=>"¡La Garra Rápida de "+w+" le permite actuar primero!"]};
 function setSpr(i,sn){
   const sl=B.SL[i];if(!sl)return;const m=snapMon(sn||beSnap(B.E),i),e=$(sl.sp);
   e.innerHTML=ico(m.p,92,sl.back,m.sh);e.className="spr";e.style.transform="";e.style.filter="drop-shadow(0 0 12px "+GLW[m.p[2]]+")";

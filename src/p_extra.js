@@ -5,13 +5,13 @@
 
 // ================= MEGAEVOLUCIÓN, GIGAMAX Y DINAMAX =================
 const FORMS={};// base -> [[nombre de la forma, "mega"|"gmax"]]
-P.forEach(p=>{if(p[2]!=="M")return;let b=null,k="";const n=p[0];
+P.forEach(p=>{if(p[2]!=="M"&&!/^Mega-| Gigamax$/.test(p[0]))return;let b=null,k="";const n=p[0];
   if(/^Mega-/.test(n)){b=n.replace(/^Mega-/,"").replace(/ [XY]$/,"");k="mega"}else if(/ Gigamax$/.test(n)){b=n.replace(/ Gigamax$/,"");k="gmax"}
   if(b&&PM[b])(FORMS[b]=FORMS[b]||[]).push([n,k])});
-const formsOwned=(base,k)=>(FORMS[base]||[]).filter(f=>f[1]===k&&S.owned[f[0]]>0);
+const formsOwned=(base,k,m)=>(FORMS[base]||[]).filter(f=>f[1]===k&&(S.owned[f[0]]>0||(f[0]==="Mega-Rayquaza"&&m&&(m.m||[]).some(x=>x&&x.id==="620"))));
 function formBtns(){
   if(!B||B.mode!=="s"||B.formUsed)return "";const m=beAct(B.E.sd[0]);if(!m||m.mh<=0)return "";const base=(m.p0||m.p)[0];
-  const mg=formsOwned(base,"mega"),gm=formsOwned(base,"gmax");let h="";
+  const mg=formsOwned(base,"mega",m),gm=formsOwned(base,"gmax");let h="";
   mg.forEach(f=>{h+='<button class="frmb mega" data-k="mega:'+esc(f[0])+'">🧬 Megaevolucionar'+(mg.length>1?' ('+esc(f[0].slice(-1))+')':'')+'</button>'});
   if(gm.length)h+='<button class="frmb gmax" data-k="gmax:'+esc(gm[0][0])+'">🔴 Gigamax</button>';
   else h+='<button class="frmb dmax" data-k="dmax">🔴 Dinamax</button>';
@@ -27,7 +27,7 @@ async function formDo(k){
   if(!B||B.mode!=="s"||B.busy||B.formUsed)return;const sd=B.E.sd[0],m=beAct(sd);if(!m||m.mh<=0)return;
   const [kind,fname]=k.split(":");const base=m.p[0];B.busy=true;setMenu(false);B.formUsed=1;
   const sp=$("msp");
-  if(kind==="mega"){const np=PM[fname];if(!np||!(S.owned[fname]>0)){B.busy=false;setMenu(true);return}
+  if(kind==="mega"){const np=PM[fname];if(!np||!(S.owned[fname]>0||(fname==="Mega-Rayquaza"&&(m.m||[]).some(x=>x&&x.id==="620")))){B.busy=false;setMenu(true);return}
     await say("¡"+nk(base)+" está reaccionando a la Piedra Activadora!");snd("flash");
     if(!hubCalm()){const g=document.createElement("div");g.className="megafx";$("arena").querySelector(".bt").appendChild(g);await g.animate([{opacity:0,transform:"scale(.2)"},{opacity:1,transform:"scale(1)",offset:.5},{opacity:0,transform:"scale(1.6)"}],{duration:1200,easing:"ease-out"}).finished;g.remove()}
     formApply(m,np,1,1.12);setSpr(0);bePaint();snd("lvl");await say("¡"+nk(base)+" ha megaevolucionado en "+fname+"!");

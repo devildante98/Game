@@ -14,6 +14,12 @@ const HOLD=[
  ["scope","Periscopio",700000,"Duplica la probabilidad de asestar golpes críticos"],
  ["shell","Campana Concha",800000,"Recupera 1/8 del daño que causa con sus ataques"],
  ["lucky","Huevo Suerte",1000000,"Gana un 50% más de experiencia en los combates"],
+ ["wherb","Hierba Blanca",600000,"Si le bajan alguna característica, la recupera al momento (una vez por combate)"],
+ ["avest","Chaleco Asalto",1300000,"Aumenta un 50% su Defensa Especial, pero no puede usar movimientos de estado"],
+ ["eseed","Semilla Electro",500000,"Con campo eléctrico sube su Defensa (una vez por combate)"],
+ ["gseed","Semilla Hierba",500000,"Con campo de hierba sube su Defensa (una vez por combate)"],
+ ["mseed","Semilla Bruma",500000,"Con campo de niebla sube su Defensa Especial (una vez por combate)"],
+ ["pseed","Semilla Psique",500000,"Con campo psíquico sube su Defensa Especial (una vez por combate)"],
  ["z_normal","Normastal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Normal (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
  ["z_fire","Pirostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Fuego (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
  ["z_water","Hidrostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Agua (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
@@ -47,7 +53,7 @@ const HOLD=[
  ["zx_tapu","Tapustal Z",0,"Cristal Z exclusivo de los Tapus: le permite usar su movimiento Z propio una vez por combate (si conoce su movimiento característico)"],
  ["zx_mew","Mewstal Z",0,"Cristal Z exclusivo de Mew: le permite usar su movimiento Z propio una vez por combate (si conoce su movimiento característico)"],
  ["zx_unec","Ultranecrostal Z",0,"Cristal Z exclusivo de Ultra-Necrozma: le permite usar su movimiento Z propio una vez por combate (si conoce su movimiento característico)"]];
-const HIMG={left:"leftovers",lorb:"life-orb",sash:"focus-sash",sitrus:"sitrus-berry",lum:"lum-berry",qclaw:"quick-claw",scope:"scope-lens",shell:"shell-bell",lucky:"lucky-egg"};
+const HIMG={left:"leftovers",lorb:"life-orb",sash:"focus-sash",sitrus:"sitrus-berry",lum:"lum-berry",qclaw:"quick-claw",scope:"scope-lens",shell:"shell-bell",lucky:"lucky-egg",wherb:"white-herb",avest:"assault-vest",eseed:"electric-seed",gseed:"grassy-seed",mseed:"misty-seed",pseed:"psychic-seed"};
 const HOLDK={};HOLD.forEach(h=>{HOLDK[h[0]]=h;ITEMS.push([h[0],h[1],h[2],0,0,0,h[3]+". Se equipa desde la Mochila o desde la ficha del Pokémon","hold"])});
 // ================= naturalezas: +10% en una estadística y -10% en otra (el Ataque y el Ataque Especial son la misma aquí, igual que la Defensa y la Defensa Especial) =================
 const NAT=[["Fuerte"],["Huraña","atk","def"],["Audaz","atk","spe"],["Firme","atk","spa"],["Pícara","atk","spd"],["Osada","def","atk"],["Dócil"],["Plácida","def","spe"],["Agitada","def","spa"],["Floja","def","spd"],["Miedosa","spe","atk"],["Activa","spe","def"],["Seria"],["Alegre","spe","spa"],["Ingenua","spe","spd"],["Modesta","spa","atk"],["Afable","spa","def"],["Mansa","spa","spe"],["Tímida"],["Alocada","spa","spd"],["Serena","spd","atk"],["Amable","spd","def"],["Grosera","spd","spe"],["Cauta","spd","spa"],["Rara"]];

@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793775809">
+<meta name="game-build" content="1793775867">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -5824,7 +5824,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793775809";
+const GAME_B="1793775867";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8762,6 +8762,19 @@ const BIG_OV=["nxM","evo","jack","jlv","lrnM","evcM"];
 setInterval(()=>{BIG_OV.forEach(id=>{const el=$(id);if(!el||el._bw)return;el._bw=1;new MutationObserver(()=>{if(!el.hidden)bigFree()}).observe(el,{attributes:true,attributeFilter:["hidden"]});if(!el.hidden)bigFree()})},500);
 new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1&&BIG_OV.includes(n.id)&&!n.hidden)bigFree()}))).observe(document.body,{childList:true});
 
+// ================= sugerencias (administrador): en tiempo real y el estado se guarda al cambiarlo =================
+let SUGW=null,SUGC=null,SUGP=false;
+function sugRefresh(){const a=document.activeElement;if(a&&a.closest&&a.closest("#sugList")&&/TEXTAREA|INPUT|SELECT/.test(a.tagName)){SUGP=true;return}SUGP=false;try{sugLoad()}catch(e){}}
+function sugWatchStart(){if(SUGW||!window.sugWatch||!(typeof MOD!=="undefined"&&MOD.admin))return;
+  if(!window._sugL0){window._sugL0=window.sugList;window.sugList=async()=>SUGC||window._sugL0()}
+  SUGW=window.sugWatch(l=>{if(l===null){SUGC=null;return}SUGC=l;sugRefresh()})||null}
+setInterval(sugWatchStart,2000);
+document.addEventListener("focusout",e=>{if(SUGP&&e.target.closest&&e.target.closest("#sugList"))setTimeout(()=>{if(SUGP)sugRefresh()},200)});
+// cambiar el estado lo guarda al momento (la respuesta se sigue guardando con su botón)
+document.addEventListener("change",async e=>{const sel=e.target.closest&&e.target.closest("#sugList [data-sst]");if(!sel||!window.sugUpd)return;const w=sel.closest("[data-sid]");
+  try{await window.sugUpd(w.dataset.sid,{st:sel.value});toast("💾 Estado guardado: "+SUGST[sel.value][0]+" "+SUGST[sel.value][1])}catch(x){toast("No se ha podido guardar ("+((x&&x.code)||"error")+").")}
+  sel.blur()});
+
 // =====================================================================================
 // CLASIFICACIÓN SEMANAL DE CADA MINIJUEGO (Firestore: tours/{semana_juego}/s/{uid})
 // Cada lunes los 10 mejores de cada minijuego reciben premio
@@ -9626,6 +9639,7 @@ async function main(){
   window.sugSend=async(text,nick,imgs)=>{if(!uid)throw {code:"sin-cuenta"};const d={uid:uid,name:cu?label(cu):"",nick:String(nick||"").slice(0,40),text:String(text).slice(0,1000),at:Date.now()};if(Array.isArray(imgs)&&imgs.length){d.imgs=imgs.slice(0,3);d.nimg=d.imgs.length}await S.addDoc(S.collection(db,"suggestions"),d)};
   window.sugImgDel=async id=>{await S.updateDoc(S.doc(db,"suggestions",id),{imgs:S.deleteField()})};
   window.sugList=async()=>{if(!uid)throw {code:"sin-cuenta"};const sn=await S.getDocs(S.query(S.collection(db,"suggestions"),S.orderBy("at","desc"),S.limit(300)));return sn.docs.map(d=>Object.assign({},d.data(),{id:d.id}))};
+  window.sugWatch=cb=>{if(!uid)return null;return S.onSnapshot(S.query(S.collection(db,"suggestions"),S.orderBy("at","desc"),S.limit(300)),sn=>cb(sn.docs.map(d=>Object.assign({},d.data(),{id:d.id}))),()=>cb(null))};
   window.sugDel=async id=>{await S.deleteDoc(S.doc(db,"suggestions",id))};
   // cada jugador puede leer y cancelar las suyas; el administrador cambia el estado y responde
   window.sugMine=async()=>{if(!uid)throw {code:"sin-cuenta"};const sn=await S.getDocs(S.query(S.collection(db,"suggestions"),S.where("uid","==",uid),S.limit(100)));return sn.docs.map(d=>Object.assign({},d.data(),{id:d.id})).sort((a,b)=>(b.at||0)-(a.at||0))};

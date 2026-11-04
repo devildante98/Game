@@ -536,3 +536,16 @@ function bigFree(){try{if(typeof bigMode!=="undefined"&&bigMode)bigSet("")}catch
 const BIG_OV=["nxM","evo","jack","jlv","lrnM","evcM"];
 setInterval(()=>{BIG_OV.forEach(id=>{const el=$(id);if(!el||el._bw)return;el._bw=1;new MutationObserver(()=>{if(!el.hidden)bigFree()}).observe(el,{attributes:true,attributeFilter:["hidden"]});if(!el.hidden)bigFree()})},500);
 new MutationObserver(ms=>ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1&&BIG_OV.includes(n.id)&&!n.hidden)bigFree()}))).observe(document.body,{childList:true});
+
+// ================= sugerencias (administrador): en tiempo real y el estado se guarda al cambiarlo =================
+let SUGW=null,SUGC=null,SUGP=false;
+function sugRefresh(){const a=document.activeElement;if(a&&a.closest&&a.closest("#sugList")&&/TEXTAREA|INPUT|SELECT/.test(a.tagName)){SUGP=true;return}SUGP=false;try{sugLoad()}catch(e){}}
+function sugWatchStart(){if(SUGW||!window.sugWatch||!(typeof MOD!=="undefined"&&MOD.admin))return;
+  if(!window._sugL0){window._sugL0=window.sugList;window.sugList=async()=>SUGC||window._sugL0()}
+  SUGW=window.sugWatch(l=>{if(l===null){SUGC=null;return}SUGC=l;sugRefresh()})||null}
+setInterval(sugWatchStart,2000);
+document.addEventListener("focusout",e=>{if(SUGP&&e.target.closest&&e.target.closest("#sugList"))setTimeout(()=>{if(SUGP)sugRefresh()},200)});
+// cambiar el estado lo guarda al momento (la respuesta se sigue guardando con su botón)
+document.addEventListener("change",async e=>{const sel=e.target.closest&&e.target.closest("#sugList [data-sst]");if(!sel||!window.sugUpd)return;const w=sel.closest("[data-sid]");
+  try{await window.sugUpd(w.dataset.sid,{st:sel.value});toast("💾 Estado guardado: "+SUGST[sel.value][0]+" "+SUGST[sel.value][1])}catch(x){toast("No se ha podido guardar ("+((x&&x.code)||"error")+").")}
+  sel.blur()});

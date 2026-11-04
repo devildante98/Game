@@ -638,3 +638,35 @@ Object.keys(NAT).forEach(i=>{const N=NAT[i];HIMG["mint"+i]=N[1]==="atk"?"adamant
 // ================= corrección puntual: Guantes de entrenador =================
 // las partidas que llegaron al nivel 30 o más por un fallo (imposible jugando normal) pasan al nivel 8, una sola vez
 setInterval(()=>{try{if(!S||S.glFix8||fcd)return;if((S.cl|0)>=30){S.cl=8;window._fk=null}S.glFix8=1;save();render()}catch(e){}},3000);
+// ================= MODERACIÓN: corregir la partida de un jugador =================
+// El administrador fija desde el perfil del jugador un máximo de tickets y de niveles de la tienda de mejoras;
+// se aplica (una sola vez) la próxima vez que ese jugador entra en el juego.
+{const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;d.eco={t:Math.floor(S.t||0),cl:S.cl|0,g:(S.g||[]).map(x=>x|0)};return d}}
+{const _op=openProf;openProf=async function(uid,dIn,tgt){const r=await _op.apply(this,arguments);try{
+  const me=window.FB&&window.FB.uid?window.FB.uid():null;if(!(typeof MOD!=="undefined"&&MOD.admin)||!uid||uid===me||!window.FB||!window.FB.fixSet)return r;
+  const box=tgt||$("profB");if(!box||box.querySelector(".fixbox"))return r;let d=dIn;if(!d)try{d=await window.FB.rankGet(uid)}catch(e){}
+  const eco=(d&&d.eco)||null,nm=pvClean((d&&d.n)||"Jugador");
+  const row=(lab,id,cur)=>'<label><span>'+lab+'</span><input type="number" min="0" id="'+id+'" placeholder="sin cambios"><small>ahora: '+(cur==null?'?':fmt(cur))+'</small></label>';
+  box.insertAdjacentHTML("beforeend",'<div class="fixbox"><button class="alt" data-fixo="1">🛠️ Corregir partida (moderación)</button><div class="fixf" hidden>'+
+    '<p class="mut">Pon un <b>máximo</b> en lo que quieras corregir (si ya tiene menos, no se toca). Se aplicará la próxima vez que <b>'+esc(nm)+'</b> entre en el juego. Datos de su última partida guardada'+(eco?'':' (todavía no disponibles: aparecerán cuando vuelva a guardar)')+'.</p>'+
+    row("🎟️ Tickets","fxT",eco&&eco.t)+row("🥊 Guantes de entrenador","fxCl",eco&&eco.cl)+G.map((g,i)=>row(GI[i]+" "+g[0],"fxG"+i,eco&&eco.g?eco.g[i]:null)).join("")+
+    '<label class="fxm"><span>Mensaje para el jugador</span><textarea id="fxM" rows="2" maxlength="300">Tu partida se ha corregido por un fallo de los Guantes de entrenador.</textarea></label>'+
+    '<div class="jrow"><button class="red" data-fixgo="'+esc(uid)+'" data-fixn="'+esc(nm)+'">💾 Aplicar corrección</button></div></div></div>')}catch(e){console.error(e)}return r}}
+document.addEventListener("click",async e=>{const t=e.target;if(!t.closest)return;
+  const o=t.closest("[data-fixo]");if(o){const f=o.parentNode.querySelector(".fixf");f.hidden=!f.hidden;return}
+  const b=t.closest("[data-fixgo]");if(!b||!(typeof MOD!=="undefined"&&MOD.admin))return;
+  const num=id=>{const v=($(id)||{}).value;return v===""||v==null?null:Math.max(0,Math.floor(+v))};
+  const fx={t:num("fxT"),cl:num("fxCl"),g:G.map((g,i)=>num("fxG"+i)),msg:String(($("fxM")||{}).value||"").slice(0,300),at:Date.now(),n:b.dataset.fixn};
+  if(fx.t==null&&fx.cl==null&&fx.g.every(x=>x==null)){toast("Pon al menos un máximo.");return}
+  if(!confirm("¿Aplicar esta corrección a "+b.dataset.fixn+"? Se aplicará la próxima vez que entre."))return;
+  b.disabled=true;try{await window.FB.fixSet(b.dataset.fixgo,fx);toast("🛠️ Corrección guardada para "+b.dataset.fixn+". Se aplicará cuando entre.")}catch(x){toast("No se ha podido guardar ("+((x&&x.code)||"error")+"). ¿Has añadido la regla «fixes» en Firebase?");b.disabled=false}});
+// el jugador: al entrar comprueba si tiene una corrección pendiente (1 lectura por sesión)
+let _fixChk=0;
+async function fixCheck(){if(_fixChk||!window.FB||!window.FB.fixGet||!window.FB.uid||!window.FB.uid())return;_fixChk=1;let fx=null;try{fx=await window.FB.fixGet()}catch(e){return}
+  if(!fx||!(fx.at>(S.fixAt||0)))return;
+  const ch=[];if(fx.t!=null&&S.t>fx.t){ch.push("🎟️ Tickets: "+fmt(S.t)+" → "+fmt(fx.t));S.t=fx.t}
+  if(fx.cl!=null&&(S.cl|0)>fx.cl){ch.push("🥊 Guantes: Nv"+S.cl+" → Nv"+fx.cl);S.cl=fx.cl;window._fk=null}
+  (fx.g||[]).forEach((v,i)=>{if(v!=null&&G[i]&&(S.g[i]|0)>v){ch.push(GI[i]+" "+G[i][0]+": "+fmt(S.g[i])+" → "+fmt(v));S.g[i]=v}});window._gk=null;
+  S.fixAt=fx.at;save();try{if(window.cloudFlush)window.cloudFlush(true)}catch(e){}try{await window.FB.fixDel()}catch(e){}render();
+  nxModal('<div class="hofb">🛠️</div><h3>Tu partida se ha corregido</h3><p>'+esc(fx.msg||"El equipo del juego ha corregido tu partida.")+'</p>'+(ch.length?'<ul class="fixl">'+ch.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':'<p class="mut">No ha hecho falta cambiar nada.</p>')+'<button id="fixOk">Entendido</button>');$("fixOk").onclick=nxModalClose}
+setInterval(()=>{try{fixCheck()}catch(e){}},4000);

@@ -465,7 +465,7 @@ function megaDup(n){if(!isMegaF(n))return null;S.owned[n]=Math.max(1,(S.owned[n]
 const GLMAX=30;
 if((S.cl|0)>GLMAX){S.cl=GLMAX;save()}
 let SHQ=(()=>{try{return localStorage.getItem("pg_shq")||"1"}catch(e){return "1"}})();
-function shopN(i){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?Math.round(25*Math.pow(3,lv0+k)):Math.ceil(G[i][1]*Math.pow(1.15,lv0+k));
+function shopN(i){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?Math.round(25*Math.pow(3,lv0+k)):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
   const mx=SHQ==="max",lim=mx?100000:+SHQ;let n=0,c=0;
   while(n<lim){if(i<0&&lv0+n>=GLMAX)break;const u=unit(n);if(mx&&c+u>S.t){if(!n)c=u;break}c+=u;n++}
   return [n,c]}

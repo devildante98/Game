@@ -84,7 +84,7 @@ const axLive=E=>E.sd.map((s,i)=>({i:i,m:beAct(s),s:s})).filter(o=>!o.s.out&&o.m&
 const axHas=(E,ab)=>axLive(E).some(o=>o.m.ab===ab);
 const axAllies=(E,i)=>{const ti=beTeamOf(E,i);return axLive(E).filter(o=>o.i!==i&&beTeamOf(E,o.i)===ti).map(o=>o.m)};
 const axFoesL=(E,i)=>axLive(E).filter(o=>beTeamOf(E,o.i)!==beTeamOf(E,i));
-const axMB=me=>!!me&&[104,163,164].includes(me.ab);
+const axMB=me=>!!me&&([104,163,164].includes(me.ab)||!!(me.gmx&&GMX[me.gmx]&&GMX[me.gmx][2]==="mb"));
 const axWx=E=>E.wx&&!axHas(E,13)&&!axHas(E,76)?E.wx.t:"";
 const axTr=E=>E.tr?E.tr.t:"";
 const axSay=(push,s,m,t,o,x)=>push(Object.assign({k:"abil",s:s,n:m.p[0],ab:m.ab,t:t},o!=null?{o:o.i,on:o.m.p[0]}:{},x||{}));
@@ -145,6 +145,7 @@ function axDmg(E,i,tg,me,tm,mv,ty,e,acted){return axSafe(()=>{
   if(wx==="rain"){if(ty==="water")k*=1.5;if(ty==="fire")k*=.5}if(wx==="sun"){if(ty==="fire")k*=1.5;if(ty==="water")k*=.5}
   if(wx==="snow"&&ph&&tys(tm.p).includes("ice"))k*=.67;if(wx==="sand"&&sp&&tys(tm.p).includes("rock"))k*=.67;
   if(tr==="electric"&&ty==="electric")k*=1.3;if(tr==="grassy"&&ty==="grass")k*=1.3;if(tr==="psychic"&&ty==="psychic")k*=1.3;if(tr==="misty"&&ty==="dragon")k*=.5;
+  if(d===900)k*=.5;if(a===900&&(ty==="dragon"||ty==="poison"))k*=1.3;
   if(d===85&&ty==="fire")k*=.5;if(d===87&&ty==="fire")k*=1.25;if(d===199&&ty==="fire")k*=.5;if(d===169&&ph)k*=.5;if(d===218){if(ph)k*=.5;if(ty==="fire")k*=2}if(d===246&&sp)k*=.5;
   if((d===111||d===116||d===232)&&e>1)k*=.75;if(d===231&&tm.mh>=tm.mx)k*=.5;if(d===63&&tm.sts&&ph)k*=.67;if(d===179&&tr==="grassy"&&ph)k*=.67;if(d===272&&ty==="ghost")k*=.5;if(d===134&&ph)k*=.85;
   if(d===208&&tm.mh>tm.mx/4)k*=.7;if(d===197&&tm.mh>tm.mx/2)k*=.6;if(d===149&&!tm.ilu)k*=.5;if(d===244&&AXR.sound.test(nm))k*=.5;if(d===132)k*=.9;
@@ -246,6 +247,7 @@ function axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint){axS
     if(me.ab===302&&!tm.sts&&rng()<.3)beAil(E,tg,"tox",push,rng,false,i);
     if(me.ab===170&&!me.it&&tm.it&&tm.ab!==60){me.it=tm.it;tm.it="";axSay(push,i,me,"¡{w} le ha robado el objeto a {o}!",T)}
     if(me.ab===1&&!acted[tg]&&tm.ab!==39&&rng()<.1)E.sd[tg].v.fl=1}
+  if(me.gmx&&GMX[me.gmx]&&ty===GMX[me.gmx][0]&&tot)axGmax(E,i,tg,me,tm,push,rng);
   if(fainted&&me.mh>0){if([153,224,264,265,266,267].includes(me.ab)){axSay(push,i,me,"¡{a} de {w} se ha activado!");beStat(E,i,[["atk",1]],push)}
     if(me.ab===210&&!me.bb){me.bb=1;axSay(push,i,me,"¡{w} se ha fortalecido gracias a {a}!")}}})}
 // ---------- al entrar y al salir del combate ----------
@@ -287,6 +289,7 @@ function axEnd(E,i,push,rng,faint){axSafe(()=>{const sd=E.sd[i],m=beAct(sd);sd.v
   if(wx==="sand"&&!ty.some(t=>["rock","ground","steel"].includes(t))&&![8,146,159,142,98].includes(a)){axHurt(m,1/16);axSay(push,i,m,"¡La tormenta de arena zarandea a {w}!",null,{dm:1});faint(i)}
   if(wx==="snow"&&!ty.includes("ice")&&![81,115,142,98].includes(a)&&m.mh>0){axHurt(m,1/16);axSay(push,i,m,"¡La nieve golpea a {w}!",null,{dm:1});faint(i)}
   if(m.mh<=0)return;
+  if(a===900)hl(1/16,"¡La energía Dinamax Infinito regenera a {w}!");
   if(a===44&&wx==="rain")hl(1/16,"¡{w} recupera PS con la lluvia!");if(a===115&&wx==="snow")hl(1/16,"¡{w} recupera PS con la nieve!");
   if(a===87&&wx==="rain")hl(1/8,"¡{w} recupera PS con la lluvia!");if((a===87||a===94)&&wx==="sun"&&a!==98)hu(1/8,"¡El sol abrasa a {w}!");
   if(m.mh<=0)return;
@@ -301,6 +304,7 @@ function axEnd(E,i,push,rng,faint){axSafe(()=>{const sd=E.sd[i],m=beAct(sd);sd.v
 function axField(E,push){axSafe(()=>{
   if(E.wx){if(E.wx.pr){if(!axHas(E,E.wx.pr)){push({k:"msg",t:AXWX[E.wx.t][1]});E.wx=null}}else if(--E.wx.n<=0){push({k:"msg",t:AXWX[E.wx.t][1]});E.wx=null}}
   if(E.tr&&--E.tr.n<=0){push({k:"msg",t:AXTR[E.tr.t][1]});E.tr=null}
+  axGres(E,push);
   const fc=E.sd.reduce((a,s)=>a+s.t.filter(x=>x.mh<=0).length,0),df=fc-(E.fcl|0);E.fcl=fc;
   if(df>0)axLive(E).forEach(o=>{if(o.m.ab===220){axSay(push,o.i,o.m,"¡{a} de {w} se ha activado!");beStat(E,o.i,[["atk",df]],push)}});
   if(!axHas(E,256))axGasOff(E)})}
@@ -312,3 +316,33 @@ function axTrapped(){return axSafe(()=>{if(!B||!B.E||B.trainer)return "";const m
     if(t.ab===53&&Math.random()<.3){const L=["pot","pot","pb","pb","sb","eter","rev","spot"];id=Math.random()<.05?"cand":L[Math.floor(Math.random()*L.length)]}
     else if(t.ab===118&&Math.random()<.4)id="pot";else if(t.ab===237&&Math.random()<.4)id=Math.random()<.25?"sb":"pb";
     if(id){const it=ITEMS.find(x=>x[0]===id);if(!it)continue;S.bag[id]=(S.bag[id]||0)+1;save();await say("¡"+t.p[0]+" ha encontrado "+it[1]+" gracias a "+abName(t.ab)+"!")}}}}catch(e){console.error(e)}}}
+
+// ================= Gigamax: ataques G-Max con efecto especial =================
+// [tipo, nombre del ataque G-Max, efecto, descripción]
+const GMX={"Venusaur Gigamax":["grass","Gigalianas","res6","daña cada turno a los rivales que no sean de tipo Planta"],"Charizard Gigamax":["fire","Gigallamarada","res6","daña cada turno a los rivales que no sean de tipo Fuego"],
+ "Blastoise Gigamax":["water","Gigacañonazo","res6","daña cada turno a los rivales que no sean de tipo Agua"],"Butterfree Gigamax":["bug","Gigapolvo Aturdidor","bef","envenena, paraliza o duerme al rival"],
+ "Pikachu Gigamax":["electric","Gigatronada","par","paraliza al rival"],"Meowth Gigamax":["normal","Gigamonedas","cnf","confunde al rival"],"Machamp Gigamax":["fighting","Gigagolpe Final","atk","sube el Ataque"],
+ "Gengar Gigamax":["ghost","Gigaaparición","spe2","baja mucho la Velocidad del rival"],"Kingler Gigamax":["water","Gigaespuma","spe2","baja mucho la Velocidad del rival"],"Lapras Gigamax":["ice","Gigaresonancia","def2","sube mucho la Defensa"],
+ "Eevee Gigamax":["normal","Gigaencanto","cnf","confunde al rival"],"Snorlax Gigamax":["normal","Gigarreciclaje","rep","recupera la baya consumida"],"Garbodor Gigamax":["poison","Gigapestilencia","psn","envenena al rival"],
+ "Melmetal Gigamax":["steel","Gigafundición","atkd","baja el Ataque del rival"],"Rillaboom Gigamax":["grass","Gigatamborazo","mb","ignora las habilidades del rival"],"Cinderace Gigamax":["fire","Gigabalón Ígneo","mb","ignora las habilidades del rival"],
+ "Inteleon Gigamax":["water","Gigaferrotiro","mb","ignora las habilidades del rival"],"Corviknight Gigamax":["flying","Gigahuracán","clr","anula las mejoras del rival"],"Orbeetle Gigamax":["bug","Gigagravedad","eva2","baja mucho la Evasión del rival"],
+ "Drednaw Gigamax":["water","Gigarrocas","res8a","deja rocas que dañan al rival cada turno"],"Coalossal Gigamax":["rock","Gigarroca Ígnea","res6r","daña cada turno a los rivales que no sean de tipo Roca"],"Flapple Gigamax":["grass","Gigacorrosión","eva1","baja la Evasión del rival"],
+ "Appletun Gigamax":["grass","Giganéctar","swt","cura sus problemas de estado y recupera PS"],"Sandaconda Gigamax":["ground","Gigatormenta Arena","res8a","atrapa al rival en arena que le daña cada turno"],"Toxtricity Gigamax":["electric","Gigadescarga","psp","envenena o paraliza al rival"],
+ "Centiskorch Gigamax":["fire","Gigacienpiés","res8a","envuelve al rival en llamas que le dañan cada turno"],"Hatterene Gigamax":["psychic","Gigacastigo","cnf","confunde al rival"],"Grimmsnarl Gigamax":["dark","Gigasopor","slp","puede dormir al rival"],
+ "Alcremie Gigamax":["fairy","Gigacrema","hea","recupera PS"],"Copperajah Gigamax":["steel","Gigarrevuelta","res8a","deja púas de acero que dañan al rival cada turno"],"Duraludon Gigamax":["steel","Gigadesgaste","ppd","quita PP a los movimientos del rival"],
+ "Urshifu Gigamax":["fighting","Gigapuñetazo","oneblow","atraviesa las protecciones"]};
+function axGmax(E,i,tg,me,tm,push,rng){axSafe(()=>{const g=GMX[me.gmx],x=g[2],O={i:tg,m:tm},al=tm.mh>0;axSay(push,i,me,"✨ ¡"+g[1]+"!");
+  const res=(fr,ex)=>{E.gres=(E.gres||[]).filter(r=>!(r.s===beTeamOf(E,tg)&&r.g===g[1]));E.gres.push({s:beTeamOf(E,tg),n:4,fr:fr,x:ex,g:g[1]})};
+  if(x==="res6")res(1/6,g[0]);else if(x==="res6r")res(1/6,"rock");else if(x==="res8a")res(1/8,"");
+  else if(!al){}
+  else if(x==="bef")beAil(E,tg,["psn","par","slp"][Math.floor(rng()*3)],push,rng,false,i);else if(x==="par")beAil(E,tg,"par",push,rng,false,i);else if(x==="psn")beAil(E,tg,"psn",push,rng,false,i);
+  else if(x==="psp")beAil(E,tg,rng()<.5?"psn":"par",push,rng,false,i);else if(x==="cnf")beAil(E,tg,"cnf",push,rng,false,i);else if(x==="slp"){if(rng()<.5)beAil(E,tg,"slp",push,rng,false,i)}
+  else if(x==="spe2")beStat(E,tg,[["spe",-2]],push,i);else if(x==="atkd")beStat(E,tg,[["atk",-1]],push,i);else if(x==="eva2")beStat(E,tg,[["eva",-2]],push,i);else if(x==="eva1")beStat(E,tg,[["eva",-1]],push,i);
+  else if(x==="clr"){const v=E.sd[tg].v.st;Object.keys(v).forEach(k=>{if(v[k]>0)v[k]=0});axSay(push,tg,tm,"¡Se han anulado las mejoras de {w}!")}
+  else if(x==="ppd"){tm.pp=tm.pp.map(p=>Math.max(0,p-2));axSay(push,tg,tm,"¡{w} ha perdido PP!")}
+  if(x==="atk")beStat(E,i,[["atk",1]],push);else if(x==="def2")beStat(E,i,[["def",2]],push);
+  else if(x==="rep"&&me.ius){me.ius=0;axSay(push,i,me,"¡{w} ha recuperado su baya!")}
+  else if(x==="swt"){if(me.sts){me.sts="";me.slp=0;me.tox=0}axHeal(me,1/6);axSay(push,i,me,"¡{w} se ha recuperado!",null,{hl:1})}
+  else if(x==="hea"){axHeal(me,1/6);axSay(push,i,me,"¡{w} se ha recuperado!",null,{hl:1})}})}
+function axGres(E,push){axSafe(()=>{(E.gres||[]).forEach(r=>{axLive(E).forEach(o=>{if(beTeamOf(E,o.i)!==r.s||(r.x&&tys(o.m.p).includes(r.x)))return;axHurt(o.m,r.fr);axSay(push,o.i,o.m,"¡"+r.g+" daña a {w}!",null,{dm:1})});r.n--});E.gres=(E.gres||[]).filter(r=>r.n>0)})}
+ABD.n[900]="Dinamax Infinito";ABDESC[900]="Recibe la mitad de daño, sus ataques Dragón y Veneno son más fuertes y se regenera cada turno";

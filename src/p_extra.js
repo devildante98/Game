@@ -22,7 +22,7 @@ function formApply(m,np,hpMul,atkMul){
   const r=m.mx>0?m.mh/m.mx:1,nt=NAT[m.nt|0]||NAT[0],f=nt[1]==="atk"?1.1:nt[2]==="atk"?.9:1;
   m.p=np;m.mx=Math.round(stH(np,m.l)*hpMul);m.mh=Math.max(1,Math.round(r*m.mx));m.ma=stA(np,m.l)*f*atkMul;
 }
-function formRevert(m){if(!m||!m.p0)return;const r=m.mx>0?m.mh/m.mx:1;m.p=m.p0;m.mx=m.mx0;m.ma=m.ma0;m.mh=m.mh>0?Math.max(1,Math.round(r*m.mx)):0;delete m.p0;delete m.mx0;delete m.ma0;m.dmx=0}
+function formRevert(m){if(!m||!m.p0)return;const r=m.mx>0?m.mh/m.mx:1;m.p=m.p0;m.mx=m.mx0;m.ma=m.ma0;m.mh=m.mh>0?Math.max(1,Math.round(r*m.mx)):0;delete m.p0;delete m.mx0;delete m.ma0;m.dmx=0;delete m.gmx}
 async function formDo(k){
   if(!B||B.mode!=="s"||B.busy||B.formUsed)return;const sd=B.E.sd[0],m=beAct(sd);if(!m||m.mh<=0)return;
   const [kind,fname]=k.split(":");const base=m.p[0];B.busy=true;setMenu(false);B.formUsed=1;
@@ -34,8 +34,9 @@ async function formDo(k){
   }else{
     const np=kind==="gmax"?PM[fname]:m.p;
     await say("¡"+nk(base)+" está "+(kind==="gmax"?"gigamaxizándose":"dinamaxizándose")+"!");snd("flash");
-    formApply(m,np,2,1.35);m.dmx=1;B.dmx=3;setSpr(0);bePaint();if(sp)sp.classList.add("dmax");snd("lvl");
+    formApply(m,np,2,1.35);m.dmx=1;B.dmx=3;if(kind==="gmax"&&typeof GMX!=="undefined"&&GMX[fname])m.gmx=fname;setSpr(0);bePaint();if(sp)sp.classList.add("dmax");snd("lvl");
     await say("¡"+(kind==="gmax"?fname:nk(base)+" Dinamax")+"! Durante 3 turnos tiene el doble de PS y ataca con más fuerza.");
+    if(m.gmx){const g=GMX[m.gmx];await say("✨ Sus ataques de tipo "+TIPO[g[0]]+" serán "+g[1]+": "+g[3]+".")}
   }
   B.busy=false;setMenu(true);
 }

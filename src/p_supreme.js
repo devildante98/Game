@@ -33,6 +33,7 @@ async function supDo(fname){
   if(!hubCalm()){const bt=$("arena").querySelector(".bt"),g=document.createElement("div");g.className="supfx";bt.appendChild(g);
     await g.animate([{opacity:0,transform:"scale(.1) rotate(0deg)"},{opacity:1,transform:"scale(1.1) rotate(180deg)",offset:.55},{opacity:0,transform:"scale(1.8) rotate(360deg)"}],{duration:1500,easing:"ease-out"}).finished;g.remove()}
   formApply(m,np,1.25,1.3);m.sup=1;setSpr(0);bePaint();snd("lvl");await say("¡"+nk(base)+" se ha transformado en "+fname+"! Su poder es abrumador.");
+  if(fname==="Eternatus Dinamax Infinito"){m.ab=900;await say("✨ ¡"+fname+" desata su habilidad Dinamax Infinito!")}
   B.busy=false;setMenu(true);
 }
 {const _t=turn;turn=async function(k){if(typeof k==="string"&&k.slice(0,4)==="sup:")return supDo(k.slice(4));return _t.apply(this,arguments)}}

@@ -73,7 +73,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   if(!mv.tself){const fo=beFoes(E,i).filter(j=>!E.sd[j].out&&beAct(E.sd[j]).mh>0);tg=q[2]!=null&&fo.includes(+q[2])?+q[2]:fo[0];if(tg==null){push({k:"none",s:i});return}}
   const ts=E.sd[tg],tm=beAct(ts);
   if(mv.id==="389"&&tg!==i){const q=String((E._acts||{})[tg]||"").match(/^m(\d)/),tmv=q?tm.m[+q[1]]:null;if(acted[tg]||!tmv||tmv.cl===0){push({k:"fail",s:i});return}}
-  if(tg!==i&&ts.v.prot&&!(me.ab===260&&mv.cl===1)){push({k:"blocked",s:tg,n:tm.p[0]});return}
+  if(tg!==i&&ts.v.prot&&!(me.ab===260&&mv.cl===1)&&!(me.gmx&&GMX[me.gmx]&&GMX[me.gmx][2]==="oneblow")){push({k:"blocked",s:tg,n:tm.p[0]});return}
   const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g};
   if(mv.cl===0){
     if(mv.prot){if(v.pc&&rng()>=1/Math.pow(3,v.pc)){v.pc=0;push({k:"fail",s:i});return}v.prot=1;v.pc++;push({k:"prot",s:i,n:me.p[0]});return}

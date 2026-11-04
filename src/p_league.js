@@ -114,7 +114,7 @@ async function startBattle(cfg){
   const cap=lvCap(),lead=Math.min(team.find(t=>t.mh>0).l,cap),wl=cap<100?Math.min(lead,cap-2):lead;
   let eteam,trainer=null,league=null,tsrc=null;
   if(cfg&&cfg.eteam){eteam=cfg.eteam;trainer=cfg.trainer;league=cfg.league||null;tsrc=cfg.tsrc}
-  else if(Math.random()<.18){
+  else if(!(cfg&&cfg.wild)&&Math.random()<.18){
     const tr=TRAINERS[Math.floor(Math.random()*TRAINERS.length)];trainer=tr[0];tsrc={k:tr[3],n:tr[0]};
     eteam=tr[1].filter(n=>PM[n]).map((n,i)=>mkEnemy(PM[n],clampL(lead+Math.floor(Math.random()*6)-3+tr[2]+i)));
   }else{

@@ -50,15 +50,15 @@ const HOLD=[
 const HIMG={left:"leftovers",lorb:"life-orb",sash:"focus-sash",sitrus:"sitrus-berry",lum:"lum-berry",qclaw:"quick-claw",scope:"scope-lens",shell:"shell-bell",lucky:"lucky-egg"};
 const HOLDK={};HOLD.forEach(h=>{HOLDK[h[0]]=h;ITEMS.push([h[0],h[1],h[2],0,0,0,h[3]+". Se equipa desde la Mochila o desde la ficha del Pokémon","hold"])});
 // ================= naturalezas: +10% en una estadística y -10% en otra (el Ataque y el Ataque Especial son la misma aquí, igual que la Defensa y la Defensa Especial) =================
-const NAT=[["Fuerte"],["Huraña","atk","def"],["Audaz","atk","spe"],["Firme"],["Pícara","atk","def"],["Osada","def","atk"],["Dócil"],["Plácida","def","spe"],["Agitada","def","atk"],["Floja"],["Miedosa","spe","atk"],["Activa","spe","def"],["Seria"],["Alegre","spe","atk"],["Ingenua","spe","def"],["Modesta"],["Afable","atk","def"],["Mansa","atk","spe"],["Tímida"],["Alocada","atk","def"],["Serena","def","atk"],["Amable"],["Grosera","def","spe"],["Cauta","def","atk"],["Rara"]];
-const NSTAT={atk:"Ataque",def:"Defensa",spe:"Velocidad"};
+const NAT=[["Fuerte"],["Huraña","atk","def"],["Audaz","atk","spe"],["Firme","atk","spa"],["Pícara","atk","spd"],["Osada","def","atk"],["Dócil"],["Plácida","def","spe"],["Agitada","def","spa"],["Floja","def","spd"],["Miedosa","spe","atk"],["Activa","spe","def"],["Seria"],["Alegre","spe","spa"],["Ingenua","spe","spd"],["Modesta","spa","atk"],["Afable","spa","def"],["Mansa","spa","spe"],["Tímida"],["Alocada","spa","spd"],["Serena","spd","atk"],["Amable","spd","def"],["Grosera","spd","spe"],["Cauta","spd","spa"],["Rara"]];
+const NSTAT={atk:"Ataque",def:"Defensa",spa:"Ataque Especial",spd:"Defensa Especial",spe:"Velocidad"};
 function natOf(n){S.nat=S.nat||{};if(S.nat[n]==null){if(!(S.owned&&S.owned[n]>0))return 0;S.nat[n]=Math.floor(Math.random()*NAT.length)}return S.nat[n]|0}
 const natTxt=i=>{const N=NAT[i]||NAT[0];return N[1]?"+10% "+NSTAT[N[1]]+" · −10% "+NSTAT[N[2]]:"Neutra: no cambia ninguna estadística"};
 // Mentas (como en Espada y Escudo): cambian la naturaleza de un Pokémon
 const MINTS=NAT.map((N,i)=>[N,i]).filter(x=>x[0][1]||x[0][0]==="Seria");
 MINTS.forEach(([N,i])=>ITEMS.push(["mint"+i,"Menta "+N[0],400000,0,0,0,"Cambia la naturaleza de un Pokémon a "+N[0]+" ("+natTxt(i)+")","mint"]));
 const heldOf=n=>{const h=S.held&&S.held[n];return h&&HOLDK[h]?h:""};
-function monX(m,nt,it){const N=NAT[nt]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1;m.nt=nt|0;m.ma*=f("atk");m.nd=f("def");m.ns=f("spe");m.it=it||"";return m}
+function monX(m,nt,it){const N=NAT[nt]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1;m.nt=nt|0;m.na=f("atk");m.nsa=f("spa");m.nd=f("def");m.nsd=f("spd");m.ns=f("spe");m.it=it||"";return m}
 
 // ================= MT: discos que enseñan un movimiento fuera de combate (un solo uso). it[7]="mt" =================
 // compatibilidad oficial (aprendizaje por MT o por nivel en cualquier juego, PokeAPI): un bit por Pokémon, en el orden de P

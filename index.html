@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793785141">
+<meta name="game-build" content="1793785761">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -2071,6 +2071,8 @@ function mvParse(r){
   return m;
 }
 GD.MV.forEach(r=>{const m=mvParse(r);MVD[m.id]=m;MVX.push(m)});
+// Ataque Especial y Defensa Especial separados del Ataque y la Defensa (datos oficiales de PokeAPI)
+{const STCH={"51":[["spd",-1]],"74":[["atk",1],["spa",1]],"94":[["spd",-1]],"133":[["spd",2]],"246":[["atk",1],["def",1],["spa",1],["spd",1],["spe",1]],"247":[["spd",-1]],"254":[["def",1],["spd",1]],"260":[["spa",1]],"268":[["spd",1]],"294":[["spa",3]],"295":[["spd",-1]],"296":[["spa",-1]],"313":[["spd",-2]],"315":[["spa",-2]],"319":[["spd",-2]],"322":[["def",1],["spd",1]],"347":[["spa",1],["spd",1]],"354":[["spa",-2]],"370":[["def",-1],["spd",-1]],"405":[["spd",-1]],"411":[["spd",-1]],"412":[["spd",-1]],"414":[["spd",-1]],"417":[["spa",2]],"430":[["spd",-1]],"437":[["spa",-2]],"445":[["spa",-2]],"451":[["spa",1]],"455":[["def",1],["spd",1]],"465":[["spd",-2]],"483":[["spa",1],["spd",1],["spe",1]],"491":[["spd",-2]],"504":[["def",-1],["spd",-1],["atk",2],["spa",2],["spe",2]],"522":[["spa",-1]],"526":[["atk",1],["spa",1]],"552":[["spa",1]],"555":[["spa",-1]],"557":[["def",-1],["spd",-1],["spe",-1]],"563":[["atk",1],["spa",1]],"568":[["atk",-1],["spa",-1]],"575":[["atk",-1],["spa",-1]],"585":[["spa",-1]],"590":[["spa",-1]],"595":[["spa",-1]],"597":[["spd",1]],"598":[["spa",-2]],"599":[["atk",-1],["spa",-1],["spe",-1]],"601":[["spa",2],["spd",2],["spe",2]],"602":[["def",1],["spd",1]],"620":[["def",-1],["spd",-1]],"674":[["atk",1],["spa",1]],"705":[["spa",-2]],"715":[["atk",-1],["spa",-1]],"748":[["atk",1],["def",1],["spa",1],["spd",1],["spe",1]],"775":[["atk",1],["def",1],["spa",1],["spd",1],["spe",1]],"777":[["atk",2],["spa",2]],"787":[["spd",-1]],"789":[["spa",-1]],"806":[["spa",-1]],"855":[["spd",-2]],"868":[["atk",2],["spa",2],["spe",2]],"871":[["spa",1]],"874":[["spa",-1]],"890":[["def",-1],["spd",-1]],"905":[["spa",1]]};Object.keys(STCH).forEach(id=>{const m=MVD[id];if(m&&m.ch.length)m.ch=STCH[id].map(x=>[x[0],x[1]])})}
 const STRUG={id:"forc",n:"Forcejeo",t:"normal",pw:50,ac:0,pp:1,pr:0,cl:1,fx:"c",ch:[],rec:25,typeless:1};
 const MVI=id=>id==="forc"?STRUG:String(id).slice(0,3)==="zx:"&&typeof zxById==="function"?zxById(String(id).slice(3)):String(id).slice(0,2)==="z:"&&typeof zMove==="function"?zMove(MVD[String(id).slice(2)]):MVD[id];
 // aprendizaje por nivel (como en los juegos): [[nivel, id], ...]
@@ -2121,7 +2123,7 @@ const ppLow=n=>moves(PM[n]).some(m=>ppCur(n,m.id)<ppMax(n,m.id));
 // objetos de PP: one = un solo movimiento, amt = PP que recupera
 const PPI={eter:{one:1,amt:10},meter:{one:1,amt:999},elix:{amt:10},melix:{amt:999}};
 const mname=mv=>mv.n;
-const STN={atk:"Ataque",def:"Defensa",spe:"Velocidad",acc:"Precisión",eva:"Evasión"};
+const STN={atk:"Ataque",def:"Defensa",spa:"Ataque Especial",spd:"Defensa Especial",spe:"Velocidad",acc:"Precisión",eva:"Evasión"};
 const AILN={par:"paralizar",slp:"dormir",frz:"congelar",brn:"quemar",psn:"envenenar",tox:"envenenar gravemente",cnf:"confundir"};
 const CLN=["Estado","Físico","Especial"];
 function mvEff(m){
@@ -2217,15 +2219,15 @@ const HOLD=[
 const HIMG={left:"leftovers",lorb:"life-orb",sash:"focus-sash",sitrus:"sitrus-berry",lum:"lum-berry",qclaw:"quick-claw",scope:"scope-lens",shell:"shell-bell",lucky:"lucky-egg"};
 const HOLDK={};HOLD.forEach(h=>{HOLDK[h[0]]=h;ITEMS.push([h[0],h[1],h[2],0,0,0,h[3]+". Se equipa desde la Mochila o desde la ficha del Pokémon","hold"])});
 // ================= naturalezas: +10% en una estadística y -10% en otra (el Ataque y el Ataque Especial son la misma aquí, igual que la Defensa y la Defensa Especial) =================
-const NAT=[["Fuerte"],["Huraña","atk","def"],["Audaz","atk","spe"],["Firme"],["Pícara","atk","def"],["Osada","def","atk"],["Dócil"],["Plácida","def","spe"],["Agitada","def","atk"],["Floja"],["Miedosa","spe","atk"],["Activa","spe","def"],["Seria"],["Alegre","spe","atk"],["Ingenua","spe","def"],["Modesta"],["Afable","atk","def"],["Mansa","atk","spe"],["Tímida"],["Alocada","atk","def"],["Serena","def","atk"],["Amable"],["Grosera","def","spe"],["Cauta","def","atk"],["Rara"]];
-const NSTAT={atk:"Ataque",def:"Defensa",spe:"Velocidad"};
+const NAT=[["Fuerte"],["Huraña","atk","def"],["Audaz","atk","spe"],["Firme","atk","spa"],["Pícara","atk","spd"],["Osada","def","atk"],["Dócil"],["Plácida","def","spe"],["Agitada","def","spa"],["Floja","def","spd"],["Miedosa","spe","atk"],["Activa","spe","def"],["Seria"],["Alegre","spe","spa"],["Ingenua","spe","spd"],["Modesta","spa","atk"],["Afable","spa","def"],["Mansa","spa","spe"],["Tímida"],["Alocada","spa","spd"],["Serena","spd","atk"],["Amable","spd","def"],["Grosera","spd","spe"],["Cauta","spd","spa"],["Rara"]];
+const NSTAT={atk:"Ataque",def:"Defensa",spa:"Ataque Especial",spd:"Defensa Especial",spe:"Velocidad"};
 function natOf(n){S.nat=S.nat||{};if(S.nat[n]==null){if(!(S.owned&&S.owned[n]>0))return 0;S.nat[n]=Math.floor(Math.random()*NAT.length)}return S.nat[n]|0}
 const natTxt=i=>{const N=NAT[i]||NAT[0];return N[1]?"+10% "+NSTAT[N[1]]+" · −10% "+NSTAT[N[2]]:"Neutra: no cambia ninguna estadística"};
 // Mentas (como en Espada y Escudo): cambian la naturaleza de un Pokémon
 const MINTS=NAT.map((N,i)=>[N,i]).filter(x=>x[0][1]||x[0][0]==="Seria");
 MINTS.forEach(([N,i])=>ITEMS.push(["mint"+i,"Menta "+N[0],400000,0,0,0,"Cambia la naturaleza de un Pokémon a "+N[0]+" ("+natTxt(i)+")","mint"]));
 const heldOf=n=>{const h=S.held&&S.held[n];return h&&HOLDK[h]?h:""};
-function monX(m,nt,it){const N=NAT[nt]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1;m.nt=nt|0;m.ma*=f("atk");m.nd=f("def");m.ns=f("spe");m.it=it||"";return m}
+function monX(m,nt,it){const N=NAT[nt]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1;m.nt=nt|0;m.na=f("atk");m.nsa=f("spa");m.nd=f("def");m.nsd=f("spd");m.ns=f("spe");m.it=it||"";return m}
 
 // ================= MT: discos que enseñan un movimiento fuera de combate (un solo uso). it[7]="mt" =================
 // compatibilidad oficial (aprendizaje por MT o por nivel en cualquier juego, PokeAPI): un bit por Pokémon, en el orden de P
@@ -2542,7 +2544,7 @@ async function fxProt(id,c){if(!O.fx||!$(id))return;c=c||"#7fe0ff";const p=pos(i
     const g=x.createRadialGradient(p.x,p.y,r*.55,p.x,p.y,r);g.addColorStop(0,"rgba(0,0,0,0)");g.addColorStop(.8,c+"55");g.addColorStop(1,c);x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,r,0,6.283);x.fill();
     x.strokeStyle=c;x.lineWidth=1.2;x.globalAlpha=e*.55;for(let i=-3;i<=3;i++)for(let j=-3;j<=3;j++){const hx=p.x+i*r*.3+(j%2?r*.15:0),hy=p.y+j*r*.26;if(Math.hypot(hx-p.x,hy-p.y)>r*.88)continue;x.beginPath();for(let k=0;k<6;k++){const a=k*Math.PI/3;x.lineTo(hx+Math.cos(a)*r*.15,hy+Math.sin(a)*r*.15)}x.closePath();x.stroke()}
     const sw=(u*2)%1;x.globalAlpha=e*.6;x.strokeStyle="#ffffff";x.lineWidth=3;x.beginPath();x.arc(p.x,p.y,r,-Math.PI/2+sw*6.283,-Math.PI/2+sw*6.283+.7);x.stroke()})}
-const STC={atk:"#ff5a4a",def:"#4f9dff",spe:"#ff7ad0",acc:"#2fe0b0",eva:"#c9a0ff"};
+const STC={atk:"#ff5a4a",def:"#4f9dff",spa:"#ff9a3c",spd:"#6be0ff",spe:"#ff7ad0",acc:"#2fe0b0",eva:"#c9a0ff"};
 async function fxStat(id,s,up){if(!O.fx||!$(id))return;const c=up?(STC[s]||"#ff8a3a"):"#5aa0ff",p=pos(id),hw=Math.max(28,p.w*.3);
   fxTint(id,up?"brightness(1.25) drop-shadow(0 0 10px "+c+")":"brightness(.75) saturate(.6)",900);
   for(let i=0;i<18;i++)pxAdd({x:p.x+fxR(-hw,hw),y:up?p.y+p.h*.3:p.y-p.h*.35,vy:up?fxR(-170,-90):fxR(90,170),sh:"glow",c:up?[c,"#ffffff"]:["#ffffff",c],add:1,sz:fxR(4,8),life:fxR(.5,.8),dl:i*.03,fi:.15});
@@ -2972,7 +2974,7 @@ document.addEventListener("keyup",e=>{if(window._sp&&(e.key===" "||e.code==="Spa
 const STG=s=>s>=0?(2+s)/2:2/(2-s),STG3=s=>s>=0?(3+s)/3:3/(3-s);
 const STS={par:["PAR","#d4a800"],slp:["DOR","#7d7da0"],psn:["ENV","#a040c0"],tox:["ENV+","#6e1590"],brn:["QUE","#e05020"],frz:["CON","#2ea0d0"]};
 function beMon(p,l,mh,ids,pps){const mx=stH(p,l),m=ids.map(MVI).filter(x=>x);return{p:p,l:l,mx:mx,mh:mh==null?mx:Math.max(0,Math.min(mh,mx)),ma:stA(p,l),m:m,pp:pps&&pps.length===m.length?pps.slice():m.map(x=>x.pp),sts:"",slp:0,tox:0}}
-const beVol=()=>({st:{atk:0,def:0,spe:0,acc:0,eva:0},cnf:0,prot:0,pc:0,fl:0,g:0,rech:0});
+const beVol=()=>({st:{atk:0,def:0,spa:0,spd:0,spe:0,acc:0,eva:0},cnf:0,prot:0,pc:0,fl:0,g:0,rech:0});
 function beSide(t){const ai=Math.max(0,t.findIndex(x=>x.mh>0));if(t[ai])t[ai].played=1;return{t:t,ai:ai,v:beVol(),out:t.every(x=>x.mh<=0)?1:0,need:0}}
 const beNew=(sides,teams,seed)=>({sd:sides,tm:teams,turn:1,seed:seed||1,over:null});
 const beAct=sd=>sd.t[sd.ai];
@@ -3055,8 +3057,8 @@ function beUse(E,i,a,rng,push,acted,faint){
   for(let h=0;h<hits&&tm.mh>0;h++){
     let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
-    else{let am=tm.ab===109&&!axMB(me)?1:STG(v.st.atk),dm=me.ab===109?1:STG(ts.v.st.def);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
-      d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/(tm.nd||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
+    else{const phy=mv.cl!==2;let am=tm.ab===109&&!axMB(me)?1:STG(phy?v.st.atk:v.st.spa),dm=me.ab===109?1:STG(phy?ts.v.st.def:ts.v.st.spd);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
+      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1))*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
     if(cr)crit++;
     if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
     if(mv.id==="206"&&d>=tm.mh&&tm.mh>1)d=tm.mh-1;
@@ -3142,7 +3144,7 @@ function aiPick(E,i){
 // ======================================================================
 const SL_ME={sp:"msp",n:"mn",l:"ml",h:"mh",hp:"mhp",st:"mst",i:"mi",pt:"pty",back:1};
 const SL_OP={sp:"osp",n:"on",l:"ol",h:"oh",hp:"ohp",st:"ost",i:"oi",pt:"oparty",tn:"otn"};
-const ART={atk:"El Ataque",def:"La Defensa",spe:"La Velocidad",acc:"La Precisión",eva:"La Evasión"};
+const ART={atk:"El Ataque",def:"La Defensa",spa:"El Ataque Especial",spd:"La Defensa Especial",spe:"La Velocidad",acc:"La Precisión",eva:"La Evasión"};
 const AILM={par:w=>"¡"+w+" está paralizado! Quizás no pueda moverse.",slp:w=>"¡"+w+" se ha dormido!",psn:w=>"¡"+w+" ha sido envenenado!",tox:w=>"¡"+w+" ha sido gravemente envenenado!",brn:w=>"¡"+w+" se ha quemado!",frz:w=>"¡"+w+" se ha congelado!",cnf:w=>"¡"+w+" se encuentra confuso!"};
 const beWho=(i,n)=>B&&B.who?B.who(i,n):n;
 const snapMon=(sn,i)=>B.E.sd[i].t[sn.ai[i]];
@@ -3912,7 +3914,7 @@ async function startBattle(cfg){
   if(trainer){const k=cfg&&cfg.eteam?1.2:1.1,ka=cfg&&cfg.eteam?1.15:1.08;eteam.forEach(m=>{m.mx=Math.round(m.mx*k);m.mh=m.mx;m.ma*=ka})}
   const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);E.ai=trainer?"hard":"";
   // Pokémon dominante: aura que sube sus características y más PS
-  if(cfg&&cfg.totem){const t=E.sd[1],m=beAct(t);m.mx=Math.round(m.mx*1.5);m.mh=m.mx;t.v.st.atk=1;t.v.st.def=1;t.v.st.spe=1;E.ai="hard"}
+  if(cfg&&cfg.totem){const t=E.sd[1],m=beAct(t);m.mx=Math.round(m.mx*1.5);m.mh=m.mx;t.v.st.atk=1;t.v.st.def=1;t.v.st.spa=1;t.v.st.spd=1;t.v.st.spe=1;E.ai="hard"}
   B={mode:"s",E:E,me:0,SL:[SL_ME,SL_OP],trainer:trainer,tsrc:tsrc,league:league,gym:cfg&&cfg.gym!=null?cfg.gym:null,zone:cfg&&cfg.eteam?null:zoneCur(),xpPool:0,busy:true,choose:null,item:null,showOpp:!!trainer,
     tower:cfg&&cfg.tower?1:0,totem:cfg&&cfg.totem||null,tHeal:!trainer?0:cfg&&cfg.gym!=null?2:league?3:cfg&&cfg.tower?1:1,
     who:(i,n)=>i===0?(typeof nk==="function"?nk(n):n):(trainer?n+" de "+trainer:cfg&&cfg.totem?n+" dominante":n+" salvaje"),mine:i=>i===0,onSend:sSend};
@@ -5770,6 +5772,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-11-04c",at:"2026-11-04T10:50",t:"🔧 Arreglos/Mejoras",l:["Ataque Especial y Defensa Especial ahora son características separadas del Ataque y la Defensa, como en la saga","Los movimientos especiales usan el Ataque Especial del atacante y la Defensa Especial del rival; los físicos, el Ataque y la Defensa","Movimientos como Paz Mental, Maquinación, Psíquico o Bola Sombra suben o bajan ahora la característica especial correcta","Naturalezas oficiales: Modesta, Firme, Serena, Cauta, etc. afectan ahora al Ataque Especial o a la Defensa Especial","Hay nuevas Mentas para las naturalezas especiales y la ficha del Pokémon muestra las 5 características","Habilidades como Tenacidad, Relincho Negro o Medicina Extraña también tienen en cuenta las características especiales"]},
 {v:"2026-11-04b",at:"2026-11-04T10:18",t:"🔧 Arreglos/Mejoras",l:[
 "💎 Movimientos Z exclusivos: Hiperplancha Oscura de Incineroar (con Lariat Oscuro), Pikavoltio Letal de Pikachu, Somanta Amistosa de Mimikyu, Estruendo Implacable de Kommo-o y muchos más. Consigue su cristal en Aventura → Dominantes.",
 "🌿 Nuevas Mentas en la tienda: cambian la naturaleza de un Pokémon, como en los juegos.",
@@ -5922,7 +5925,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793785141";
+const GAME_B="1793785761";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7863,7 +7866,7 @@ function formBtns(){
 function formApply(m,np,hpMul,atkMul){
   if(!m.p0)m.p0=m.p,m.mx0=m.mx,m.ma0=m.ma;
   const r=m.mx>0?m.mh/m.mx:1,nt=NAT[m.nt|0]||NAT[0],f=nt[1]==="atk"?1.1:nt[2]==="atk"?.9:1;
-  m.p=np;m.mx=Math.round(stH(np,m.l)*hpMul);m.mh=Math.max(1,Math.round(r*m.mx));m.ma=stA(np,m.l)*f*atkMul;
+  m.p=np;m.mx=Math.round(stH(np,m.l)*hpMul);m.mh=Math.max(1,Math.round(r*m.mx));m.ma=stA(np,m.l)*atkMul;
 }
 function formRevert(m){if(!m||!m.p0)return;const r=m.mx>0?m.mh/m.mx:1;m.p=m.p0;m.mx=m.mx0;m.ma=m.ma0;m.mh=m.mh>0?Math.max(1,Math.round(r*m.mx)):0;delete m.p0;delete m.mx0;delete m.ma0;m.dmx=0;delete m.gmx}
 async function formDo(k){
@@ -8178,7 +8181,7 @@ function rdMeUI(){const m=RD.team[RD.ai],box=$("rdMe");if(!box)return;
 function rdAttack(k){
   if(RD.phase!=="fight"||RD.out||!RD.d)return;const now=Date.now();if(now<(RD.d.go||0)||now<RD.cd)return;const m=RD.team[RD.ai];if(!m||m.mh<=0)return;
   const mv=k>=0?m.m[k]:{n:"Placaje",pw:40,t:"normal",cl:1},foe=PM[RD.d.boss],e=mv.typeless?1:effP(mv.t,foe),stab=stabP(mv.t,m.p)?1.5:1,cr=Math.random()<(m.it==="scope"?.12:.06);
-  const dmg=Math.max(1,Math.round(m.ma*(mv.pw||40)/45*e*stab*(.85+Math.random()*.15)*(cr?1.5:1)*(m.it==="lorb"?1.3:1)*2.2));
+  const dmg=Math.max(1,Math.round(m.ma*(mv.cl===2?(m.nsa||1):(m.na||1))*(mv.pw||40)/45*e*stab*(.85+Math.random()*.15)*(cr?1.5:1)*(m.it==="lorb"?1.3:1)*2.2));
   RD.acc+=dmg;RD.cd=now+Math.max(650,900+(mv.pw||40)*3);snd("hit",e);
   const bs=$("rdBoss");if(bs&&!hubCalm()){bs.animate([{transform:"translateX(0)",filter:"brightness(1)"},{transform:"translateX(-8px)",filter:"brightness(2.2)"},{transform:"translateX(6px)"},{transform:"none",filter:"brightness(1)"}],{duration:300});const r=bs.getBoundingClientRect();mgPop(r.left+r.width/2+Math.random()*80-40,r.top+r.height/3,(cr?"¡Crítico! ":"")+fmt(dmg),e>1?"#ffd35c":e<1?"#9aa":"#fff")}
   $("rdMsg").textContent=nk(m.p[0])+" usa "+mv.n+(e>1?". ¡Es súper eficaz!":e<1?". No es muy eficaz…":"");
@@ -8757,14 +8760,16 @@ document.addEventListener("click",e=>{const f=e.target.closest&&e.target.closest
 {const _pc=pkClose;pkClose=function(){const r=_pc.apply(this,arguments);try{tmCards()}catch(e){}return r}}
 // ================= ficha: estadísticas del Pokémon =================
 function fstatHTML(n){const p=PM[n];if(!p)return "";const l=lvd(n).l,N=NAT[natOf(n)]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1,
-  hp=stH(p,l),atk=Math.round(stA(p,l)*f("atk")),spe=Math.round((l+WW[p[2]]*4)*f("spe")),df=f("def"),
+  hp=stH(p,l),atk=Math.round(stA(p,l)*f("atk")),spa=Math.round(stA(p,l)*f("spa")),sdf=f("spd"),spe=Math.round((l+WW[p[2]]*4)*f("spe")),df=f("def"),
   mxH=stH(["","","L"],100),mxA=Math.round(stA(["","","L"],100)*1.1),mxS=Math.round((100+16)*1.1),
   arr=k=>N[1]===k?' <i class="fsup">▲10%</i>':N[2]===k?' <i class="fsdn">▼10%</i>':'',
   bar=(v,m,c)=>'<span class="fsb"><i style="width:'+Math.min(100,v/m*100).toFixed(1)+'%;background:'+c+'"></i></span>';
   return '<span>Estadísticas</span><div class="fstat">'+
     '<div><b>❤️ PS</b><span>'+hp+'</span>'+bar(hp,mxH,"#3ecf5a")+'</div>'+
     '<div><b>⚔️ Ataque</b><span>'+atk+arr("atk")+'</span>'+bar(atk,mxA,"#ff6b5a")+'</div>'+
+    '<div><b>✨ Ataque Esp.</b><span>'+spa+arr("spa")+'</span>'+bar(spa,mxA,"#ff9a3c")+'</div>'+
     '<div><b>🛡️ Defensa</b><span>'+(df>1?'Alta':df<1?'Baja':'Normal')+arr("def")+'</span>'+bar(df,1.1,"#5aa0ff")+'</div>'+
+    '<div><b>🔰 Defensa Esp.</b><span>'+(sdf>1?'Alta':sdf<1?'Baja':'Normal')+arr("spd")+'</span>'+bar(sdf,1.1,"#6be0ff")+'</div>'+
     '<div><b>💨 Velocidad</b><span>'+spe+arr("spe")+'</span>'+bar(spe,mxS,"#ffcc33")+'</div>'+
     '<small class="mut">Dependen de la rareza ('+({C:"Común",R:"Raro",E:"Épico",M:"Forma especial",L:"Legendario"}[p[2]]||"")+'), el nivel y la naturaleza ('+esc(N[0])+'). Suben al subir de nivel.</small></div>'}
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;
@@ -8960,7 +8965,7 @@ function zxById(k){const z=ZX[k];if(!z)return null;const b=MVX.find(m=>m.n===z[1
 function zxMove(me,mv){const k=String(me.it||"").replace(/^zx_/,"");return zxById(k)||zMove(mv)}
 function zxEffect(E,i,tg,me,tm,mv,push,rng){axSafe(()=>{const x=mv.zxe;
   if(x==="par"&&tm.mh>0)beAil(E,tg,"par",push,rng,false,i);
-  else if(x==="allup")beStat(E,i,[["atk",1],["def",1],["spe",1]],push);
+  else if(x==="allup")beStat(E,i,[["atk",1],["def",1],["spa",1],["spd",1],["spe",1]],push);
   else if(x==="terr")axTrSet(E,"psychic",5,push);
   else if(x==="clrTr"&&E.tr){E.tr=null;push({k:"msg",t:"¡El campo ha desaparecido!"})}
   else if(x==="steal"){const fv=E.sd[tg].v.st,up=Object.keys(fv).filter(s=>fv[s]>0).map(s=>[s,fv[s]]);if(up.length){up.forEach(q=>{fv[q[0]]=0});axSay(push,i,me,"¡{w} ha robado las mejoras de {o}!",{i:tg,m:tm});beStat(E,i,up,push)}}})}
@@ -8992,7 +8997,7 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
     '<div class="bul">'+L.map(p=>{const n=p[0],cur=natOf(n);return '<button class="bunit" data-mint="'+esc(n)+'"'+(cur===ni?' disabled':'')+'>'+ico(p,30)+'<span><b>'+esc(nk(n))+(S.team.includes(n)?' ⭐':'')+'</b> <small>Nv'+lvd(n).l+' · ahora '+NAT[cur][0]+(cur===ni?' (ya la tiene)':'')+'</small></span></button>'}).join("")+'</div><small id="buMsg" class="mut">'+(msg||"")+'</small>'}catch(e){console.error(e)}}}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-mint]");if(!b||!useId||!/^mint\d+$/.test(useId))return;if(fcd){toast("Termina el combate primero.");return}
   const n=b.dataset.mint,ni=+useId.slice(4);if(!(S.bag[useId]>0)||!S.owned[n])return;S.nat=S.nat||{};S.nat[n]=ni;S.bag[useId]--;save();snd("lvl");render();useUI("🌿 "+nk(n)+" ahora tiene naturaleza "+NAT[ni][0]+".")});
-Object.keys(NAT).forEach(i=>{const N=NAT[i];HIMG["mint"+i]=N[1]==="atk"?"adamant-mint":N[1]==="def"?"bold-mint":N[1]==="spe"?"jolly-mint":"serious-mint"});
+Object.keys(NAT).forEach(i=>{const N=NAT[i];HIMG["mint"+i]=N[1]==="atk"?"adamant-mint":N[1]==="def"?"bold-mint":N[1]==="spa"?"modest-mint":N[1]==="spd"?"calm-mint":N[1]==="spe"?"jolly-mint":"serious-mint"});
 // ================= corrección puntual: Guantes de entrenador =================
 // las partidas que llegaron al nivel 30 o más por un fallo (imposible jugando normal) pasan al nivel 8, una sola vez
 setInterval(()=>{try{if(!S||S.glFix8||fcd)return;if((S.cl|0)>=30){S.cl=8;window._fk=null}S.glFix8=1;save();render()}catch(e){}},3000);
@@ -9164,7 +9169,7 @@ Object.assign(ABDESC,{
  158:"Sus movimientos de estado tienen prioridad",159:"En una tormenta de arena, sus ataques Roca, Tierra y Acero son más fuertes",161:"Con la mitad de PS o menos entra en Modo Daruma y pega más fuerte",162:"Él y sus aliados son más precisos",
  163:"Sus ataques ignoran las habilidades defensivas del rival",164:"Sus ataques ignoran las habilidades defensivas del rival",165:"Él y sus aliados no pueden ser confundidos",166:"Protege a los Pokémon de tipo Planta de bajadas de características y estados",
  167:"Al comer una baya recupera además PS",168:"Todos sus ataques reciben la bonificación de su propio tipo",169:"Recibe la mitad de daño de los ataques físicos",170:"Al golpear roba el objeto del rival si no tiene ninguno",
- 171:"Inmune a bolas y bombas",172:"Si un rival le baja una característica, su Ataque sube mucho",173:"Los mordiscos son más fuertes",174:"Sus ataques de tipo Normal pasan a ser Hielo y más fuertes",175:"Él y sus aliados no pueden dormirse",
+ 171:"Inmune a bolas y bombas",172:"Si un rival le baja una característica, su Ataque Especial sube mucho",173:"Los mordiscos son más fuertes",174:"Sus ataques de tipo Normal pasan a ser Hielo y más fuertes",175:"Él y sus aliados no pueden dormirse",
  176:"Cambia a su forma ofensiva al atacar y pega más fuerte",177:"Con los PS al máximo, sus ataques Volador tienen prioridad",178:"Los ataques de pulso y aura son más fuertes",179:"En campo de hierba recibe menos daño físico",
  180:"Al comer su baya recupera además algunos PS",181:"Sus ataques físicos son más fuertes",182:"Sus ataques de tipo Normal pasan a ser Hada y más fuertes",183:"Quien le golpee físicamente pierde Velocidad",
  184:"Sus ataques de tipo Normal pasan a ser Volador y más fuertes",185:"Sus ataques golpean dos veces (el segundo, más flojo)",186:"Potencia los ataques Siniestro de todos",187:"Potencia los ataques Hada de todos",
@@ -9188,7 +9193,7 @@ Object.assign(ABDESC,{
  253:"Quien le golpee físicamente pierde PS",254:"Quien le golpee físicamente intercambia la habilidad con él",255:"Sus ataques físicos son más fuertes",256:"Mientras está en combate, las habilidades de los rivales no tienen efecto",
  257:"Él y sus aliados no pueden ser envenenados",258:"Cambia de humor cada turno: sus ataques son más fuertes",259:"A veces ataca el primero (30%)",260:"Sus ataques físicos atraviesan las protecciones",
  261:"Al entrar anula los cambios de características de los rivales",262:"Sus ataques de tipo Eléctrico son más fuertes",263:"Sus ataques de tipo Dragón son más fuertes",264:"Al debilitar a un rival sube su Ataque",
- 265:"Al debilitar a un rival sube su Ataque",266:"Los rivales no pueden comer bayas; al debilitar a un rival sube su Ataque",267:"Los rivales no pueden comer bayas; al debilitar a un rival sube su Ataque",
+ 265:"Al debilitar a un rival sube su Ataque Especial",266:"Los rivales no pueden comer bayas; al debilitar a un rival sube su Ataque",267:"Los rivales no pueden comer bayas; al debilitar a un rival sube su Ataque Especial",
  268:"Quien le golpee físicamente pasa a tener Olor Persistente",269:"Al recibir un golpe crea un campo de hierba",270:"Si le golpea el fuego sube su Ataque; no puede quemarse",271:"Al bajar de la mitad de PS sube su Ataque y su Velocidad, pero baja su Defensa",
  272:"No sufre problemas de estado y resiste los ataques Fantasma",273:"El fuego no le afecta y sube mucho su Defensa",274:"Los ataques de viento no le afectan y suben su Ataque",275:"Intimidación le sube el Ataque en vez de bajarlo",
  276:"Sus ataques de tipo Roca son más fuertes",277:"Si le golpea un ataque de viento, se carga: su siguiente ataque eléctrico es el doble de fuerte",278:"Al volver al combate tras retirarse, se transforma y pega mucho más fuerte",
@@ -9335,7 +9340,7 @@ function axStatPre(E,j,ch,push,src,tag){return axSafe(()=>{
   if(m.ab===126)L=L.map(q=>[q[0],-q[1]]);if(m.ab===86)L=L.map(q=>[q[0],q[1]*2]);
   return L},ch)}
 function axStatPost(E,j,ch,push,src,tag){axSafe(()=>{const m=beAct(E.sd[j]);if(m.mh<=0)return;const foe=src!=null&&src!==j;
-  if(foe&&ch.some(q=>q[1]<0)&&(m.ab===128||m.ab===172)&&tag!=="ab"){axSay(push,j,m,"¡{a} de {w} se ha activado!");beStat(E,j,[["atk",2]],push,undefined,"ab")}
+  if(foe&&ch.some(q=>q[1]<0)&&(m.ab===128||m.ab===172)&&tag!=="ab"){axSay(push,j,m,"¡{a} de {w} se ha activado!");beStat(E,j,[[m.ab===172?"spa":"atk",2]],push,undefined,"ab")}
   if(!foe&&tag!=="copy"&&ch.some(q=>q[1]>0)){const up=ch.filter(q=>q[1]>0);axFoesL(E,j).forEach(o=>{if(o.m.ab===290||o.m.ab===216){axSay(push,o.i,o.m,"¡{a} de {w} copia la mejora!");beStat(E,o.i,up,push,undefined,"copy")}})}})}
 // ---------- después de golpear ----------
 function axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint){axSafe(()=>{
@@ -9374,7 +9379,7 @@ function axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint){axS
     if(me.ab===1&&!acted[tg]&&tm.ab!==39&&rng()<.1)E.sd[tg].v.fl=1}
   if(me.gmx&&GMX[me.gmx]&&ty===GMX[me.gmx][0]&&tot)axGmax(E,i,tg,me,tm,push,rng);
   if(mv.zxe&&typeof zxEffect==="function")zxEffect(E,i,tg,me,tm,mv,push,rng);
-  if(fainted&&me.mh>0){if([153,224,264,265,266,267].includes(me.ab)){axSay(push,i,me,"¡{a} de {w} se ha activado!");beStat(E,i,[["atk",1]],push)}
+  if(fainted&&me.mh>0){if([153,224,264,265,266,267].includes(me.ab)){axSay(push,i,me,"¡{a} de {w} se ha activado!");beStat(E,i,[[me.ab===265||me.ab===267?"spa":"atk",1]],push)}
     if(me.ab===210&&!me.bb){me.bb=1;axSay(push,i,me,"¡{w} se ha fortalecido gracias a {a}!")}}})}
 // ---------- al entrar y al salir del combate ----------
 function axGasIn(E,i){axSafe(()=>{const m=beAct(E.sd[i]);if(m&&m.ab&&m.ab!==256&&!m.ab0&&axFoesL(E,i).some(o=>o.m.ab===256)){m.ab0=m.ab;m.ab=0}})}
@@ -9387,7 +9392,7 @@ function axEnter(E,i,push,rec){axSafe(()=>{const sd=E.sd[i],m=beAct(sd);if(!m||m
   if(a===13||a===76)axSay(push,i,m,"¡Los efectos del tiempo atmosférico han desaparecido!");
   if(a===306&&(E.wx||E.tr)){E.wx=null;E.tr=null;axSay(push,i,m,"¡{w} ha borrado el tiempo atmosférico y los campos!")}
   if(a===88)st([["atk",1]],"¡{a} de {w} se ha activado!");if(a===234&&!m.ei){m.ei=1;st([["atk",1]],"¡{a} de {w} se ha activado!")}if(a===235&&!m.ei){m.ei=1;st([["def",1]],"¡{a} de {w} se ha activado!")}
-  if(a===279)st([["def",1],["spe",1]],"¡{a} de {w} se ha activado!");if(a===294)st([["atk",1]],"¡{a} de {w} se ha activado!");if(a===304)st([["def",1]],"¡{w} ha cambiado a su Forma Teracristal!");
+  if(a===279)st([["def",1],["spd",1],["spe",1]],"¡{a} de {w} se ha activado!");if(a===294)st([["atk",1]],"¡{a} de {w} se ha activado!");if(a===304)st([["def",1]],"¡{w} ha cambiado a su Forma Teracristal!");
   if(a===46)axSay(push,i,m,"¡{w} ejerce presión!");if([127,266,267].includes(a))axSay(push,i,m,"¡Los rivales están tan nerviosos que no pueden comer bayas!");
   if(axMB(m))axSay(push,i,m,"¡{w} rompe moldes!");if(a===186)axSay(push,i,m,"¡{w} irradia un aura oscura!");if(a===187)axSay(push,i,m,"¡{w} irradia un aura feérica!");if(a===188)axSay(push,i,m,"¡{w} invierte las auras!");
   if(a===119)F.forEach(o=>{const it=o.m.it&&ITEMS.find(x=>x[0]===o.m.it);axSay(push,i,m,it?"¡{w} cachea a {o} y descubre su "+it[1]+"!":"¡{w} cachea a {o}: no lleva ningún objeto!",o)});
@@ -9397,8 +9402,8 @@ function axEnter(E,i,push,rec){axSafe(()=>{const sd=E.sd[i],m=beAct(sd);if(!m||m
   if(a===150&&!rec){const o=F[0];if(o){sd.v.st=Object.assign({},E.sd[o.i].v.st);if(o.m.ab&&o.m.ab!==150)m.ab=o.m.ab;axSay(push,i,m,"¡{w} se ha transformado en {o}!",o);if(m.ab===22)beIntim(E,i,push);if(m.ab!==150)axEnter(E,i,push,1)}}
   if(a===256){axSay(push,i,m,"¡Un gas reactivo se extiende por el terreno de combate!");F.forEach(o=>{if(!o.m.ab0&&o.m.ab){o.m.ab0=o.m.ab;o.m.ab=0}})}
   if(a===300){axSay(push,i,m,"¡{w} desprende un néctar muy dulce!");F.forEach(o=>beStat(E,o.i,[["eva",-1]],push,i))}
-  if(a===261){axSay(push,i,m,"¡{w} administra una medicina extraña!");F.forEach(o=>{E.sd[o.i].v.st={atk:0,def:0,spe:0,acc:0,eva:0}})}
-  if(a===251){axSay(push,i,m,"¡{w} ha limpiado las barreras de los rivales!");F.forEach(o=>{const v=E.sd[o.i].v.st;v.def=Math.min(0,v.def);v.eva=Math.min(0,v.eva)})}
+  if(a===261){axSay(push,i,m,"¡{w} administra una medicina extraña!");F.forEach(o=>{E.sd[o.i].v.st={atk:0,def:0,spa:0,spd:0,spe:0,acc:0,eva:0}})}
+  if(a===251){axSay(push,i,m,"¡{w} ha limpiado las barreras de los rivales!");F.forEach(o=>{const v=E.sd[o.i].v.st;v.def=Math.min(0,v.def);v.spd=Math.min(0,v.spd|0);v.eva=Math.min(0,v.eva)})}
   if(a===301){const al=axAllies(E,i).find(x=>x.mh<x.mx),t=al||m;if(t.mh<t.mx){axHeal(t,al?.25:.125);axSay(push,i,m,"¡{w} ofrece un té y recupera fuerzas!",null,{hl:1})}}
   if(a===278&&m.zh&&!m.hero){m.hero=1;axSay(push,i,m,"¡{w} se ha transformado en su forma heroica!")}
   if(a===103&&m.it){m.itz=m.it;m.it="";axSay(push,i,m,"¡{w} no sabe usar su objeto!")}})}
@@ -9422,7 +9427,7 @@ function axEnd(E,i,push,rng,faint){axSafe(()=>{const sd=E.sd[i],m=beAct(sd);sd.v
   if(tr==="grassy"&&m.mh<m.mx)hl(1/16,"¡La hierba cura a {w}!");
   if(m.sts&&((a===93&&wx==="rain")||(a===61&&rng()<1/3)||(a===131&&rng()<.3))){m.sts="";m.slp=0;m.tox=0;axSay(push,i,m,"¡{a} de {w} le ha curado su problema de estado!")}
   if(a===131){const al=axAllies(E,i).find(x=>x.sts);if(al&&rng()<.3){al.sts="";al.slp=0;al.tox=0;axSay(push,i,m,"¡{w} ha curado a su aliado!")}}
-  if(a===141){const ks=["atk","def","spe","acc","eva"],up=ks.filter(x=>sd.v.st[x]<6);if(up.length){const u=up[Math.floor(rng()*up.length)],dn=ks.filter(x=>x!==u&&sd.v.st[x]>-6);
+  if(a===141){const ks=["atk","def","spa","spd","spe","acc","eva"],up=ks.filter(x=>sd.v.st[x]<6);if(up.length){const u=up[Math.floor(rng()*up.length)],dn=ks.filter(x=>x!==u&&sd.v.st[x]>-6);
     axSay(push,i,m,"¡{a} de {w} se ha activado!");beStat(E,i,dn.length?[[u,2],[dn[Math.floor(rng()*dn.length)],-1]]:[[u,2]],push)}}
   if(a===123)axFoesL(E,i).forEach(o=>{if(o.m.sts==="slp"){axHurt(o.m,1/8);axSay(push,i,m,"¡{o} tiene pesadillas por {a} de {w}!",o,{});faint(o.i)}});
   if(a===139&&m.it==="sitrus"&&m.ius&&(wx==="sun"||rng()<.5)){m.ius=0;axSay(push,i,m,"¡{w} ha recogido otra baya!")}

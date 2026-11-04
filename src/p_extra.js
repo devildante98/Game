@@ -20,7 +20,7 @@ function formBtns(){
 function formApply(m,np,hpMul,atkMul){
   if(!m.p0)m.p0=m.p,m.mx0=m.mx,m.ma0=m.ma;
   const r=m.mx>0?m.mh/m.mx:1,nt=NAT[m.nt|0]||NAT[0],f=nt[1]==="atk"?1.1:nt[2]==="atk"?.9:1;
-  m.p=np;m.mx=Math.round(stH(np,m.l)*hpMul);m.mh=Math.max(1,Math.round(r*m.mx));m.ma=stA(np,m.l)*f*atkMul;
+  m.p=np;m.mx=Math.round(stH(np,m.l)*hpMul);m.mh=Math.max(1,Math.round(r*m.mx));m.ma=stA(np,m.l)*atkMul;
 }
 function formRevert(m){if(!m||!m.p0)return;const r=m.mx>0?m.mh/m.mx:1;m.p=m.p0;m.mx=m.mx0;m.ma=m.ma0;m.mh=m.mh>0?Math.max(1,Math.round(r*m.mx)):0;delete m.p0;delete m.mx0;delete m.ma0;m.dmx=0;delete m.gmx}
 async function formDo(k){

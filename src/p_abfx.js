@@ -39,7 +39,7 @@ Object.assign(ABDESC,{
  158:"Sus movimientos de estado tienen prioridad",159:"En una tormenta de arena, sus ataques Roca, Tierra y Acero son más fuertes",161:"Con la mitad de PS o menos entra en Modo Daruma y pega más fuerte",162:"Él y sus aliados son más precisos",
  163:"Sus ataques ignoran las habilidades defensivas del rival",164:"Sus ataques ignoran las habilidades defensivas del rival",165:"Él y sus aliados no pueden ser confundidos",166:"Protege a los Pokémon de tipo Planta de bajadas de características y estados",
  167:"Al comer una baya recupera además PS",168:"Todos sus ataques reciben la bonificación de su propio tipo",169:"Recibe la mitad de daño de los ataques físicos",170:"Al golpear roba el objeto del rival si no tiene ninguno",
- 171:"Inmune a bolas y bombas",172:"Si un rival le baja una característica, su Ataque sube mucho",173:"Los mordiscos son más fuertes",174:"Sus ataques de tipo Normal pasan a ser Hielo y más fuertes",175:"Él y sus aliados no pueden dormirse",
+ 171:"Inmune a bolas y bombas",172:"Si un rival le baja una característica, su Ataque Especial sube mucho",173:"Los mordiscos son más fuertes",174:"Sus ataques de tipo Normal pasan a ser Hielo y más fuertes",175:"Él y sus aliados no pueden dormirse",
  176:"Cambia a su forma ofensiva al atacar y pega más fuerte",177:"Con los PS al máximo, sus ataques Volador tienen prioridad",178:"Los ataques de pulso y aura son más fuertes",179:"En campo de hierba recibe menos daño físico",
  180:"Al comer su baya recupera además algunos PS",181:"Sus ataques físicos son más fuertes",182:"Sus ataques de tipo Normal pasan a ser Hada y más fuertes",183:"Quien le golpee físicamente pierde Velocidad",
  184:"Sus ataques de tipo Normal pasan a ser Volador y más fuertes",185:"Sus ataques golpean dos veces (el segundo, más flojo)",186:"Potencia los ataques Siniestro de todos",187:"Potencia los ataques Hada de todos",
@@ -63,7 +63,7 @@ Object.assign(ABDESC,{
  253:"Quien le golpee físicamente pierde PS",254:"Quien le golpee físicamente intercambia la habilidad con él",255:"Sus ataques físicos son más fuertes",256:"Mientras está en combate, las habilidades de los rivales no tienen efecto",
  257:"Él y sus aliados no pueden ser envenenados",258:"Cambia de humor cada turno: sus ataques son más fuertes",259:"A veces ataca el primero (30%)",260:"Sus ataques físicos atraviesan las protecciones",
  261:"Al entrar anula los cambios de características de los rivales",262:"Sus ataques de tipo Eléctrico son más fuertes",263:"Sus ataques de tipo Dragón son más fuertes",264:"Al debilitar a un rival sube su Ataque",
- 265:"Al debilitar a un rival sube su Ataque",266:"Los rivales no pueden comer bayas; al debilitar a un rival sube su Ataque",267:"Los rivales no pueden comer bayas; al debilitar a un rival sube su Ataque",
+ 265:"Al debilitar a un rival sube su Ataque Especial",266:"Los rivales no pueden comer bayas; al debilitar a un rival sube su Ataque",267:"Los rivales no pueden comer bayas; al debilitar a un rival sube su Ataque Especial",
  268:"Quien le golpee físicamente pasa a tener Olor Persistente",269:"Al recibir un golpe crea un campo de hierba",270:"Si le golpea el fuego sube su Ataque; no puede quemarse",271:"Al bajar de la mitad de PS sube su Ataque y su Velocidad, pero baja su Defensa",
  272:"No sufre problemas de estado y resiste los ataques Fantasma",273:"El fuego no le afecta y sube mucho su Defensa",274:"Los ataques de viento no le afectan y suben su Ataque",275:"Intimidación le sube el Ataque en vez de bajarlo",
  276:"Sus ataques de tipo Roca son más fuertes",277:"Si le golpea un ataque de viento, se carga: su siguiente ataque eléctrico es el doble de fuerte",278:"Al volver al combate tras retirarse, se transforma y pega mucho más fuerte",
@@ -210,7 +210,7 @@ function axStatPre(E,j,ch,push,src,tag){return axSafe(()=>{
   if(m.ab===126)L=L.map(q=>[q[0],-q[1]]);if(m.ab===86)L=L.map(q=>[q[0],q[1]*2]);
   return L},ch)}
 function axStatPost(E,j,ch,push,src,tag){axSafe(()=>{const m=beAct(E.sd[j]);if(m.mh<=0)return;const foe=src!=null&&src!==j;
-  if(foe&&ch.some(q=>q[1]<0)&&(m.ab===128||m.ab===172)&&tag!=="ab"){axSay(push,j,m,"¡{a} de {w} se ha activado!");beStat(E,j,[["atk",2]],push,undefined,"ab")}
+  if(foe&&ch.some(q=>q[1]<0)&&(m.ab===128||m.ab===172)&&tag!=="ab"){axSay(push,j,m,"¡{a} de {w} se ha activado!");beStat(E,j,[[m.ab===172?"spa":"atk",2]],push,undefined,"ab")}
   if(!foe&&tag!=="copy"&&ch.some(q=>q[1]>0)){const up=ch.filter(q=>q[1]>0);axFoesL(E,j).forEach(o=>{if(o.m.ab===290||o.m.ab===216){axSay(push,o.i,o.m,"¡{a} de {w} copia la mejora!");beStat(E,o.i,up,push,undefined,"copy")}})}})}
 // ---------- después de golpear ----------
 function axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint){axSafe(()=>{
@@ -249,7 +249,7 @@ function axAfterHit(E,i,tg,me,tm,mv,ty,tot,e,crit,h0,k,push,rng,acted,faint){axS
     if(me.ab===1&&!acted[tg]&&tm.ab!==39&&rng()<.1)E.sd[tg].v.fl=1}
   if(me.gmx&&GMX[me.gmx]&&ty===GMX[me.gmx][0]&&tot)axGmax(E,i,tg,me,tm,push,rng);
   if(mv.zxe&&typeof zxEffect==="function")zxEffect(E,i,tg,me,tm,mv,push,rng);
-  if(fainted&&me.mh>0){if([153,224,264,265,266,267].includes(me.ab)){axSay(push,i,me,"¡{a} de {w} se ha activado!");beStat(E,i,[["atk",1]],push)}
+  if(fainted&&me.mh>0){if([153,224,264,265,266,267].includes(me.ab)){axSay(push,i,me,"¡{a} de {w} se ha activado!");beStat(E,i,[[me.ab===265||me.ab===267?"spa":"atk",1]],push)}
     if(me.ab===210&&!me.bb){me.bb=1;axSay(push,i,me,"¡{w} se ha fortalecido gracias a {a}!")}}})}
 // ---------- al entrar y al salir del combate ----------
 function axGasIn(E,i){axSafe(()=>{const m=beAct(E.sd[i]);if(m&&m.ab&&m.ab!==256&&!m.ab0&&axFoesL(E,i).some(o=>o.m.ab===256)){m.ab0=m.ab;m.ab=0}})}
@@ -262,7 +262,7 @@ function axEnter(E,i,push,rec){axSafe(()=>{const sd=E.sd[i],m=beAct(sd);if(!m||m
   if(a===13||a===76)axSay(push,i,m,"¡Los efectos del tiempo atmosférico han desaparecido!");
   if(a===306&&(E.wx||E.tr)){E.wx=null;E.tr=null;axSay(push,i,m,"¡{w} ha borrado el tiempo atmosférico y los campos!")}
   if(a===88)st([["atk",1]],"¡{a} de {w} se ha activado!");if(a===234&&!m.ei){m.ei=1;st([["atk",1]],"¡{a} de {w} se ha activado!")}if(a===235&&!m.ei){m.ei=1;st([["def",1]],"¡{a} de {w} se ha activado!")}
-  if(a===279)st([["def",1],["spe",1]],"¡{a} de {w} se ha activado!");if(a===294)st([["atk",1]],"¡{a} de {w} se ha activado!");if(a===304)st([["def",1]],"¡{w} ha cambiado a su Forma Teracristal!");
+  if(a===279)st([["def",1],["spd",1],["spe",1]],"¡{a} de {w} se ha activado!");if(a===294)st([["atk",1]],"¡{a} de {w} se ha activado!");if(a===304)st([["def",1]],"¡{w} ha cambiado a su Forma Teracristal!");
   if(a===46)axSay(push,i,m,"¡{w} ejerce presión!");if([127,266,267].includes(a))axSay(push,i,m,"¡Los rivales están tan nerviosos que no pueden comer bayas!");
   if(axMB(m))axSay(push,i,m,"¡{w} rompe moldes!");if(a===186)axSay(push,i,m,"¡{w} irradia un aura oscura!");if(a===187)axSay(push,i,m,"¡{w} irradia un aura feérica!");if(a===188)axSay(push,i,m,"¡{w} invierte las auras!");
   if(a===119)F.forEach(o=>{const it=o.m.it&&ITEMS.find(x=>x[0]===o.m.it);axSay(push,i,m,it?"¡{w} cachea a {o} y descubre su "+it[1]+"!":"¡{w} cachea a {o}: no lleva ningún objeto!",o)});
@@ -272,8 +272,8 @@ function axEnter(E,i,push,rec){axSafe(()=>{const sd=E.sd[i],m=beAct(sd);if(!m||m
   if(a===150&&!rec){const o=F[0];if(o){sd.v.st=Object.assign({},E.sd[o.i].v.st);if(o.m.ab&&o.m.ab!==150)m.ab=o.m.ab;axSay(push,i,m,"¡{w} se ha transformado en {o}!",o);if(m.ab===22)beIntim(E,i,push);if(m.ab!==150)axEnter(E,i,push,1)}}
   if(a===256){axSay(push,i,m,"¡Un gas reactivo se extiende por el terreno de combate!");F.forEach(o=>{if(!o.m.ab0&&o.m.ab){o.m.ab0=o.m.ab;o.m.ab=0}})}
   if(a===300){axSay(push,i,m,"¡{w} desprende un néctar muy dulce!");F.forEach(o=>beStat(E,o.i,[["eva",-1]],push,i))}
-  if(a===261){axSay(push,i,m,"¡{w} administra una medicina extraña!");F.forEach(o=>{E.sd[o.i].v.st={atk:0,def:0,spe:0,acc:0,eva:0}})}
-  if(a===251){axSay(push,i,m,"¡{w} ha limpiado las barreras de los rivales!");F.forEach(o=>{const v=E.sd[o.i].v.st;v.def=Math.min(0,v.def);v.eva=Math.min(0,v.eva)})}
+  if(a===261){axSay(push,i,m,"¡{w} administra una medicina extraña!");F.forEach(o=>{E.sd[o.i].v.st={atk:0,def:0,spa:0,spd:0,spe:0,acc:0,eva:0}})}
+  if(a===251){axSay(push,i,m,"¡{w} ha limpiado las barreras de los rivales!");F.forEach(o=>{const v=E.sd[o.i].v.st;v.def=Math.min(0,v.def);v.spd=Math.min(0,v.spd|0);v.eva=Math.min(0,v.eva)})}
   if(a===301){const al=axAllies(E,i).find(x=>x.mh<x.mx),t=al||m;if(t.mh<t.mx){axHeal(t,al?.25:.125);axSay(push,i,m,"¡{w} ofrece un té y recupera fuerzas!",null,{hl:1})}}
   if(a===278&&m.zh&&!m.hero){m.hero=1;axSay(push,i,m,"¡{w} se ha transformado en su forma heroica!")}
   if(a===103&&m.it){m.itz=m.it;m.it="";axSay(push,i,m,"¡{w} no sabe usar su objeto!")}})}
@@ -297,7 +297,7 @@ function axEnd(E,i,push,rng,faint){axSafe(()=>{const sd=E.sd[i],m=beAct(sd);sd.v
   if(tr==="grassy"&&m.mh<m.mx)hl(1/16,"¡La hierba cura a {w}!");
   if(m.sts&&((a===93&&wx==="rain")||(a===61&&rng()<1/3)||(a===131&&rng()<.3))){m.sts="";m.slp=0;m.tox=0;axSay(push,i,m,"¡{a} de {w} le ha curado su problema de estado!")}
   if(a===131){const al=axAllies(E,i).find(x=>x.sts);if(al&&rng()<.3){al.sts="";al.slp=0;al.tox=0;axSay(push,i,m,"¡{w} ha curado a su aliado!")}}
-  if(a===141){const ks=["atk","def","spe","acc","eva"],up=ks.filter(x=>sd.v.st[x]<6);if(up.length){const u=up[Math.floor(rng()*up.length)],dn=ks.filter(x=>x!==u&&sd.v.st[x]>-6);
+  if(a===141){const ks=["atk","def","spa","spd","spe","acc","eva"],up=ks.filter(x=>sd.v.st[x]<6);if(up.length){const u=up[Math.floor(rng()*up.length)],dn=ks.filter(x=>x!==u&&sd.v.st[x]>-6);
     axSay(push,i,m,"¡{a} de {w} se ha activado!");beStat(E,i,dn.length?[[u,2],[dn[Math.floor(rng()*dn.length)],-1]]:[[u,2]],push)}}
   if(a===123)axFoesL(E,i).forEach(o=>{if(o.m.sts==="slp"){axHurt(o.m,1/8);axSay(push,i,m,"¡{o} tiene pesadillas por {a} de {w}!",o,{});faint(o.i)}});
   if(a===139&&m.it==="sitrus"&&m.ius&&(wx==="sun"||rng()<.5)){m.ius=0;axSay(push,i,m,"¡{w} ha recogido otra baya!")}

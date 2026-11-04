@@ -399,14 +399,16 @@ document.addEventListener("click",e=>{const f=e.target.closest&&e.target.closest
 {const _pc=pkClose;pkClose=function(){const r=_pc.apply(this,arguments);try{tmCards()}catch(e){}return r}}
 // ================= ficha: estadísticas del Pokémon =================
 function fstatHTML(n){const p=PM[n];if(!p)return "";const l=lvd(n).l,N=NAT[natOf(n)]||NAT[0],f=k=>N[1]===k?1.1:N[2]===k?.9:1,
-  hp=stH(p,l),atk=Math.round(stA(p,l)*f("atk")),spe=Math.round((l+WW[p[2]]*4)*f("spe")),df=f("def"),
+  hp=stH(p,l),atk=Math.round(stA(p,l)*f("atk")),spa=Math.round(stA(p,l)*f("spa")),sdf=f("spd"),spe=Math.round((l+WW[p[2]]*4)*f("spe")),df=f("def"),
   mxH=stH(["","","L"],100),mxA=Math.round(stA(["","","L"],100)*1.1),mxS=Math.round((100+16)*1.1),
   arr=k=>N[1]===k?' <i class="fsup">▲10%</i>':N[2]===k?' <i class="fsdn">▼10%</i>':'',
   bar=(v,m,c)=>'<span class="fsb"><i style="width:'+Math.min(100,v/m*100).toFixed(1)+'%;background:'+c+'"></i></span>';
   return '<span>Estadísticas</span><div class="fstat">'+
     '<div><b>❤️ PS</b><span>'+hp+'</span>'+bar(hp,mxH,"#3ecf5a")+'</div>'+
     '<div><b>⚔️ Ataque</b><span>'+atk+arr("atk")+'</span>'+bar(atk,mxA,"#ff6b5a")+'</div>'+
+    '<div><b>✨ Ataque Esp.</b><span>'+spa+arr("spa")+'</span>'+bar(spa,mxA,"#ff9a3c")+'</div>'+
     '<div><b>🛡️ Defensa</b><span>'+(df>1?'Alta':df<1?'Baja':'Normal')+arr("def")+'</span>'+bar(df,1.1,"#5aa0ff")+'</div>'+
+    '<div><b>🔰 Defensa Esp.</b><span>'+(sdf>1?'Alta':sdf<1?'Baja':'Normal')+arr("spd")+'</span>'+bar(sdf,1.1,"#6be0ff")+'</div>'+
     '<div><b>💨 Velocidad</b><span>'+spe+arr("spe")+'</span>'+bar(spe,mxS,"#ffcc33")+'</div>'+
     '<small class="mut">Dependen de la rareza ('+({C:"Común",R:"Raro",E:"Épico",M:"Forma especial",L:"Legendario"}[p[2]]||"")+'), el nivel y la naturaleza ('+esc(N[0])+'). Suben al subir de nivel.</small></div>'}
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||isSup(n))return;const w=document.querySelector("#pkv .fich");if(!w)return;
@@ -602,7 +604,7 @@ function zxById(k){const z=ZX[k];if(!z)return null;const b=MVX.find(m=>m.n===z[1
 function zxMove(me,mv){const k=String(me.it||"").replace(/^zx_/,"");return zxById(k)||zMove(mv)}
 function zxEffect(E,i,tg,me,tm,mv,push,rng){axSafe(()=>{const x=mv.zxe;
   if(x==="par"&&tm.mh>0)beAil(E,tg,"par",push,rng,false,i);
-  else if(x==="allup")beStat(E,i,[["atk",1],["def",1],["spe",1]],push);
+  else if(x==="allup")beStat(E,i,[["atk",1],["def",1],["spa",1],["spd",1],["spe",1]],push);
   else if(x==="terr")axTrSet(E,"psychic",5,push);
   else if(x==="clrTr"&&E.tr){E.tr=null;push({k:"msg",t:"¡El campo ha desaparecido!"})}
   else if(x==="steal"){const fv=E.sd[tg].v.st,up=Object.keys(fv).filter(s=>fv[s]>0).map(s=>[s,fv[s]]);if(up.length){up.forEach(q=>{fv[q[0]]=0});axSay(push,i,me,"¡{w} ha robado las mejoras de {o}!",{i:tg,m:tm});beStat(E,i,up,push)}}})}
@@ -634,7 +636,7 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
     '<div class="bul">'+L.map(p=>{const n=p[0],cur=natOf(n);return '<button class="bunit" data-mint="'+esc(n)+'"'+(cur===ni?' disabled':'')+'>'+ico(p,30)+'<span><b>'+esc(nk(n))+(S.team.includes(n)?' ⭐':'')+'</b> <small>Nv'+lvd(n).l+' · ahora '+NAT[cur][0]+(cur===ni?' (ya la tiene)':'')+'</small></span></button>'}).join("")+'</div><small id="buMsg" class="mut">'+(msg||"")+'</small>'}catch(e){console.error(e)}}}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-mint]");if(!b||!useId||!/^mint\d+$/.test(useId))return;if(fcd){toast("Termina el combate primero.");return}
   const n=b.dataset.mint,ni=+useId.slice(4);if(!(S.bag[useId]>0)||!S.owned[n])return;S.nat=S.nat||{};S.nat[n]=ni;S.bag[useId]--;save();snd("lvl");render();useUI("🌿 "+nk(n)+" ahora tiene naturaleza "+NAT[ni][0]+".")});
-Object.keys(NAT).forEach(i=>{const N=NAT[i];HIMG["mint"+i]=N[1]==="atk"?"adamant-mint":N[1]==="def"?"bold-mint":N[1]==="spe"?"jolly-mint":"serious-mint"});
+Object.keys(NAT).forEach(i=>{const N=NAT[i];HIMG["mint"+i]=N[1]==="atk"?"adamant-mint":N[1]==="def"?"bold-mint":N[1]==="spa"?"modest-mint":N[1]==="spd"?"calm-mint":N[1]==="spe"?"jolly-mint":"serious-mint"});
 // ================= corrección puntual: Guantes de entrenador =================
 // las partidas que llegaron al nivel 30 o más por un fallo (imposible jugando normal) pasan al nivel 8, una sola vez
 setInterval(()=>{try{if(!S||S.glFix8||fcd)return;if((S.cl|0)>=30){S.cl=8;window._fk=null}S.glFix8=1;save();render()}catch(e){}},3000);

@@ -30,6 +30,8 @@ function mvParse(r){
   return m;
 }
 GD.MV.forEach(r=>{const m=mvParse(r);MVD[m.id]=m;MVX.push(m)});
+// Ataque Especial y Defensa Especial separados del Ataque y la Defensa (datos oficiales de PokeAPI)
+{const STCH=__STCH__;Object.keys(STCH).forEach(id=>{const m=MVD[id];if(m&&m.ch.length)m.ch=STCH[id].map(x=>[x[0],x[1]])})}
 const STRUG={id:"forc",n:"Forcejeo",t:"normal",pw:50,ac:0,pp:1,pr:0,cl:1,fx:"c",ch:[],rec:25,typeless:1};
 const MVI=id=>id==="forc"?STRUG:String(id).slice(0,3)==="zx:"&&typeof zxById==="function"?zxById(String(id).slice(3)):String(id).slice(0,2)==="z:"&&typeof zMove==="function"?zMove(MVD[String(id).slice(2)]):MVD[id];
 // aprendizaje por nivel (como en los juegos): [[nivel, id], ...]
@@ -80,7 +82,7 @@ const ppLow=n=>moves(PM[n]).some(m=>ppCur(n,m.id)<ppMax(n,m.id));
 // objetos de PP: one = un solo movimiento, amt = PP que recupera
 const PPI={eter:{one:1,amt:10},meter:{one:1,amt:999},elix:{amt:10},melix:{amt:999}};
 const mname=mv=>mv.n;
-const STN={atk:"Ataque",def:"Defensa",spe:"Velocidad",acc:"Precisión",eva:"Evasión"};
+const STN={atk:"Ataque",def:"Defensa",spa:"Ataque Especial",spd:"Defensa Especial",spe:"Velocidad",acc:"Precisión",eva:"Evasión"};
 const AILN={par:"paralizar",slp:"dormir",frz:"congelar",brn:"quemar",psn:"envenenar",tox:"envenenar gravemente",cnf:"confundir"};
 const CLN=["Estado","Físico","Especial"];
 function mvEff(m){

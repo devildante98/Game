@@ -9,7 +9,7 @@ parts = []
 parts += seg(1, 695)
 parts += [rd('p_data.js')]
 parts += seg(696, 903)
-parts += [rd('p_moves.js').replace('__T2__', open(W + 'p_t2.json', encoding='utf-8').read())]
+parts += [rd('p_moves.js').replace('__T2__', open(W + 'p_t2.json', encoding='utf-8').read()).replace('__STCH__', open(W + 'p_stch.json', encoding='utf-8').read())]
 parts += seg(933, 940)
 parts += [rd('p_items.js').replace('__MT__', open(W + 'p_mt.json', encoding='utf-8').read())]
 parts += seg(941, 1076)
@@ -295,6 +295,7 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-11-04c",at:"2026-11-04T10:50",t:"🔧 Arreglos/Mejoras",l:["Ataque Especial y Defensa Especial ahora son características separadas del Ataque y la Defensa, como en la saga","Los movimientos especiales usan el Ataque Especial del atacante y la Defensa Especial del rival; los físicos, el Ataque y la Defensa","Movimientos como Paz Mental, Maquinación, Psíquico o Bola Sombra suben o bajan ahora la característica especial correcta","Naturalezas oficiales: Modesta, Firme, Serena, Cauta, etc. afectan ahora al Ataque Especial o a la Defensa Especial","Hay nuevas Mentas para las naturalezas especiales y la ficha del Pokémon muestra las 5 características","Habilidades como Tenacidad, Relincho Negro o Medicina Extraña también tienen en cuenta las características especiales"]},
 {v:"2026-11-04b",at:"2026-11-04T10:18",t:"🔧 Arreglos/Mejoras",l:[
 "💎 Movimientos Z exclusivos: Hiperplancha Oscura de Incineroar (con Lariat Oscuro), Pikavoltio Letal de Pikachu, Somanta Amistosa de Mimikyu, Estruendo Implacable de Kommo-o y muchos más. Consigue su cristal en Aventura → Dominantes.",
 "🌿 Nuevas Mentas en la tienda: cambian la naturaleza de un Pokémon, como en los juegos.",

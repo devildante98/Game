@@ -18,7 +18,7 @@ document.addEventListener("keyup",e=>{if(window._sp&&(e.key===" "||e.code==="Spa
 const STG=s=>s>=0?(2+s)/2:2/(2-s),STG3=s=>s>=0?(3+s)/3:3/(3-s);
 const STS={par:["PAR","#d4a800"],slp:["DOR","#7d7da0"],psn:["ENV","#a040c0"],tox:["ENV+","#6e1590"],brn:["QUE","#e05020"],frz:["CON","#2ea0d0"]};
 function beMon(p,l,mh,ids,pps){const mx=stH(p,l),m=ids.map(MVI).filter(x=>x);return{p:p,l:l,mx:mx,mh:mh==null?mx:Math.max(0,Math.min(mh,mx)),ma:stA(p,l),m:m,pp:pps&&pps.length===m.length?pps.slice():m.map(x=>x.pp),sts:"",slp:0,tox:0}}
-const beVol=()=>({st:{atk:0,def:0,spe:0,acc:0,eva:0},cnf:0,prot:0,pc:0,fl:0,g:0,rech:0});
+const beVol=()=>({st:{atk:0,def:0,spa:0,spd:0,spe:0,acc:0,eva:0},cnf:0,prot:0,pc:0,fl:0,g:0,rech:0});
 function beSide(t){const ai=Math.max(0,t.findIndex(x=>x.mh>0));if(t[ai])t[ai].played=1;return{t:t,ai:ai,v:beVol(),out:t.every(x=>x.mh<=0)?1:0,need:0}}
 const beNew=(sides,teams,seed)=>({sd:sides,tm:teams,turn:1,seed:seed||1,over:null});
 const beAct=sd=>sd.t[sd.ai];
@@ -101,8 +101,8 @@ function beUse(E,i,a,rng,push,acted,faint){
   for(let h=0;h<hits&&tm.mh>0;h++){
     let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
-    else{let am=tm.ab===109&&!axMB(me)?1:STG(v.st.atk),dm=me.ab===109?1:STG(ts.v.st.def);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
-      d=Math.max(1,Math.round(me.ma*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/(tm.nd||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
+    else{const phy=mv.cl!==2;let am=tm.ab===109&&!axMB(me)?1:STG(phy?v.st.atk:v.st.spa),dm=me.ab===109?1:STG(phy?ts.v.st.def:ts.v.st.spd);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
+      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1))*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
     if(cr)crit++;
     if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
     if(mv.id==="206"&&d>=tm.mh&&tm.mh>1)d=tm.mh-1;
@@ -188,7 +188,7 @@ function aiPick(E,i){
 // ======================================================================
 const SL_ME={sp:"msp",n:"mn",l:"ml",h:"mh",hp:"mhp",st:"mst",i:"mi",pt:"pty",back:1};
 const SL_OP={sp:"osp",n:"on",l:"ol",h:"oh",hp:"ohp",st:"ost",i:"oi",pt:"oparty",tn:"otn"};
-const ART={atk:"El Ataque",def:"La Defensa",spe:"La Velocidad",acc:"La Precisión",eva:"La Evasión"};
+const ART={atk:"El Ataque",def:"La Defensa",spa:"El Ataque Especial",spd:"La Defensa Especial",spe:"La Velocidad",acc:"La Precisión",eva:"La Evasión"};
 const AILM={par:w=>"¡"+w+" está paralizado! Quizás no pueda moverse.",slp:w=>"¡"+w+" se ha dormido!",psn:w=>"¡"+w+" ha sido envenenado!",tox:w=>"¡"+w+" ha sido gravemente envenenado!",brn:w=>"¡"+w+" se ha quemado!",frz:w=>"¡"+w+" se ha congelado!",cnf:w=>"¡"+w+" se encuentra confuso!"};
 const beWho=(i,n)=>B&&B.who?B.who(i,n):n;
 const snapMon=(sn,i)=>B.E.sd[i].t[sn.ai[i]];

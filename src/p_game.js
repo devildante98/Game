@@ -39,12 +39,12 @@ function gmSparks(host,x,y,n,big){if(hubCalm())return;const cols=["#fff","#fff59
     const a=Math.random()*Math.PI*2,d=(big?60:30)+Math.random()*(big?90:45);
     s.animate([{transform:"translate(-50%,-50%) scale(.4)",opacity:1},{transform:"translate(calc(-50% + "+(Math.cos(a)*d).toFixed(0)+"px),calc(-50% + "+(Math.sin(a)*d-12).toFixed(0)+"px)) scale(1) rotate("+(Math.random()*300|0)+"deg)",opacity:0}],{duration:450+Math.random()*300,easing:"cubic-bezier(.1,.7,.3,1)"}).onfinish=()=>s.remove()}}
 // ---------- edificios del pueblo en pixel art ----------
-const GBN=["Casa del entrenador","Granja de Miltank","Centro Pokémon","Guardería","Liga Pokémon","Estadio Pokémon","Laboratorio del Profesor"];
+const GBN=["Entrenadores","Granja de Miltank","Centro Pokémon","Guardería","Liga Pokémon","Estadio Pokémon","Laboratorio del Profesor"];
 const gbTier=n=>n<=0?0:n<10?1:n<25?2:n<50?3:n<100?4:5;
 function gbDk(h,f){const n=parseInt(h.slice(1),16);let r=n>>16,g=n>>8&255,b=n&255;r=Math.round(r*f);g=Math.round(g*f);b=Math.round(b*f);const c=v=>Math.max(0,Math.min(255,v)).toString(16).padStart(2,"0");return"#"+c(r)+c(g)+c(b)}
 function gbCanvas(k,t){
-  const ink="#2b2440",dk=gbDk,LIT=[],meta={};let W=t?[0,48,54,60,66,74][t]:42,H=t?Math.round(W*.86):38;
-  if(t&&k===5)W+=16;if(t&&k===1&&t>=3)W+=12;if(t&&k===4)H+=6;if(t&&k===6&&t>=4)W+=12;
+  const ink="#2b2440",dk=gbDk,LIT=[],meta={};if(!t)t=1;let W=[0,48,54,60,66,74][t],H=Math.round(W*.86);
+  if(k===0)H=Math.round(W*.62);if(k===1)W+=22;if(k===5)W+=16;if(k===1&&t>=3)W+=12;if(t&&k===4)H+=6;if(t&&k===6&&t>=4)W+=12;
   const c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
   const R=(x,y,w,h,col)=>{if(w<=0||h<=0)return;g.fillStyle=col;g.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))};
   const B=(x,y,w,h,col)=>{R(x,y,w,h,ink);R(x+1,y+1,w-2,h-2,col)};
@@ -61,20 +61,21 @@ function gbCanvas(k,t){
   const flag=(x,y,col)=>{R(x,y,1,10,ink);R(x+1,y,6,4,col);R(x+1,y+3,6,1,dk(col,.7));R(x+1,y,6,1,dk(col,1.25))};
   const pot=(x,y)=>{R(x,y,4,2,"#c8643a");R(x,y-2,1,2,"#3f9a42");R(x+2,y-3,1,3,"#3f9a42");R(x,y-3,1,1,"#ff6fa0");R(x+2,y-4,1,1,"#ffd23f");R(x+3,y-2,1,1,"#ff6fa0")};
   R(2,H-2,W-4,2,"rgba(20,40,20,.28)");
-  if(!t){// solar en venta
-    R(4,H-10,W-8,7,"#a87e50");R(5,H-11,W-10,1,"#c49a68");for(let i=0;i<18;i++)R(6+((i*7)%(W-13)),H-9+((i*3)%5),2,1,i%2?"#86603a":"#d0a874");
-    [4,W-6].forEach(x=>{R(x,H-15,2,8,"#8a5a2a");R(x,H-15,2,1,"#c99a62")});R(4,H-13,W-8,1,"#e8e0d0");R(4,H-11,W-8,1,"#e8e0d0");
-    R(W/2-1,H-26,2,16,"#7a5230");B(W/2-11,H-33,22,11,"#e8b878");R(W/2-10,H-32,20,1,"#f6d49c");R(W/2-10,H-24,20,1,"#b8884a");
-    R(W/2-1,H-31,3,1,ink);R(W/2+1,H-30,1,2,ink);R(W/2,H-28,1,1,ink);R(W/2,H-26,1,1,ink);
-    R(7,H-6,3,3,"#ff8a1e");R(8,H-8,1,2,"#ff8a1e");R(7,H-5,3,1,"#fff");c._lit=null;return c}
+  if(!t)t=1;
   const m=3,base=H-3;
-  if(k===0){// casa del entrenador
-    const rh=Math.round(H*.44),wy=3+rh-3;if(t>=3){B(W-m-12,0,7,9,"#a49a90");R(W-m-11,1,5,1,"#c8beb4");R(W-m-12,0,7,2,"#7a706a");meta.smk=[W-m-8.5,0]}
-    wall(m+1,wy,W-2*m-2,base-wy,"#f6ecd2");roof(m-2,3,W-2*m+4,rh,"#e0533f");
-    door(Math.round(W*.28),base-12,8,12);const fl=t>=4?2:1;
-    for(let f=0;f<fl;f++){const y=base-12-f*10;win(Math.round(W*.56),y,10,7);if(W>56)win(Math.round(W*.80)-4,y,7,7);if(f)win(Math.round(W*.25),y,9,7)}
-    if(t>=2)pot(m+3,base-1);if(t>=5){pot(Math.round(W*.56)+1,base-14+12);R(W-m-6,base-8,3,6,"#3a6ad8");R(W-m-6,base-8,3,1,"#6a9af0")}
-  }else if(k===1){// granja
+  if(k===0){// campo de entrenamiento: pista de combate con vallas
+    for(let x=1;x<W-1;x+=4){R(x,1,1,7,"#8a5a2a");R(x,1,1,1,"#c99a62")}R(0,3,W,1,"#c99a62");R(0,6,W,1,"#c99a62");
+    R(1,8,W-2,base-8,"#5aa83c");R(1,8,W-2,1,"#7ad06a");
+    const cx=4,cy=11,cw=W-8,ch=base-cy-2;R(cx,cy,cw,ch,"#e6c48a");for(let i=0;i<cw*ch/14;i++)R(cx+((i*13)%cw),cy+((i*7)%ch),1,1,"#d4ae72");
+    R(cx+1,cy+1,cw-2,1,"#fff");R(cx+1,cy+ch-2,cw-2,1,"#fff");R(cx+1,cy+1,1,ch-2,"#fff");R(cx+cw-2,cy+1,1,ch-2,"#fff");R(cx+Math.floor(cw/2),cy+1,1,ch-2,"#fff");
+    const bx=cx+Math.floor(cw/2),by=cy+Math.floor(ch/2);C(bx,by,4,"#fff");C(bx,by,3,"#ee3b4b",-1);C(bx,by,3,"#fff",1);R(bx-3,by,7,1,ink);R(bx,by,1,1,ink);
+    if(t>=3){B(1,base-6,8,4,"#3a6ad8");R(2,base-6,6,1,"#6a9af0");B(W-9,base-6,8,4,"#e8414f");R(W-8,base-6,6,1,"#ff7a84")}
+    if(t>=4){flag(1,0,"#3a6ad8");flag(W-8,0,"#e8414f")}
+    if(t>=5){R(Math.round(W/2)-2,0,5,3,"#ffc83a");R(Math.round(W/2)-1,3,3,2,"#c98a00")}
+  }else if(k===1){// granja con cercado
+    const PW=22;R(0,base-14,PW+2,12,"#6cc048");R(0,base-14,PW+2,1,"#8ad866");for(let i=0;i<10;i++)R(2+((i*7)%PW),base-12+((i*5)%9),1,1,"#4f9a36");
+    for(let x=0;x<=PW;x+=5){R(x,base-11,2,10,"#f4f0e6");R(x+1,base-11,1,10,"#c8c0b0")}R(0,base-9,PW+2,1,"#f4f0e6");R(0,base-5,PW+2,1,"#f4f0e6");R(0,base-14,PW+2,1,"rgba(0,0,0,0)");
+    const li=LIT.length;g.save();g.translate(PW,0);W-=PW;
     const bw=t>=3?W-12:W,rh=Math.round(H*.38),wy=3+rh-3;
     if(t>=3){const sx=bw-1;B(sx,9,12,base-9,"#d4d9e2");R(sx+1,10,2,base-11,"#eef2f8");R(sx+9,10,2,base-11,"#aab1be");for(let y=13;y<base;y+=4)R(sx+1,y,10,1,"#b8bfcc");C(sx+6,9,6,ink,-1);C(sx+6,9,5,"#9aa4b8",-1);R(sx+3,5,3,1,"#e8eef8")}
     wall(m,wy,bw-2*m,base-wy,"#c8412f");R(m+1,wy+1,bw-2*m-2,1,"#fff");R(m+1,wy+1,1,base-wy-2,"#fff");R(bw-m-2,wy+1,1,base-wy-2,"#fff");
@@ -84,6 +85,7 @@ function gbCanvas(k,t){
     if(t>=2){B(1,base-7,9,7,"#e8c34a");R(2,base-5,7,1,"#c9a030");R(2,base-3,7,1,"#c9a030");R(2,base-6,7,1,"#f6dc7a")}
     if(t>=4)for(let x=1;x<W-1;x+=4){R(x,base-6,1,6,"#f4f0e6");R(x,base-5,4,1,"#f4f0e6");R(x,base-2,4,1,"#f4f0e6")}
     if(t>=5){C(Math.round(bw/2),6,3,"#ff9ac2");R(Math.round(bw/2)-1,5,1,1,"#fff")}
+    g.restore();W+=PW;for(let q=li;q<LIT.length;q++)LIT[q][0]+=PW;
   }else if(k===2){// centro pokémon
     const rh=Math.round(H*.38),wy=3+rh-3;
     if(t>=4){wall(m-1,wy+3,9,base-wy-3,"#fbf6ee");wall(W-m-8,wy+3,9,base-wy-3,"#fbf6ee");win(m+1,wy+7,5,5);win(W-m-6,wy+7,5,5)}
@@ -129,7 +131,7 @@ function gbCanvas(k,t){
     if(t>=5){C(lw-7,base-12,5,ink);C(lw-7,base-12,4,"#3f9a42");R(lw-8,base-7,2,5,"#7a5230")}
   }
   // versión de noche con las ventanas encendidas
-  if(LIT.length){const n=document.createElement("canvas");n.width=W;n.height=H;const q=n.getContext("2d");q.drawImage(c,0,0);q.fillStyle="rgba(20,24,60,.35)";q.fillRect(0,0,W,H);
+  if(LIT.length){const n=document.createElement("canvas");n.width=W;n.height=H;const q=n.getContext("2d");q.drawImage(c,0,0);q.globalCompositeOperation="source-atop";q.fillStyle="rgba(20,24,60,.35)";q.fillRect(0,0,W,H);q.globalCompositeOperation="source-over";
     LIT.forEach(r=>{q.fillStyle="#ffcf5a";q.fillRect(r[0],r[1],r[2],r[3]);q.fillStyle="#fff1b0";q.fillRect(r[0],r[1],r[2],Math.max(1,Math.floor(r[3]/2)))});c._lit=n}
   c._meta=meta;return c}
 // decoración entre los edificios
@@ -176,7 +178,10 @@ function gmInit(){
   gmEl("div","gSideR","gside",SR.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   const orb=farm.querySelector(".orb");if(orb){gmEl("div","gRays","",'',orb);gmEl("div","gPed","",'<i></i>',orb);gmEl("div","gTr","",'',orb);gmEl("div","gBud","",'',orb);gmEl("i","gGround","",'',orb)}
   gmEl("div","gCombo","",'<b id="gCmb">0</b><small>clics/s</small>',farm);
+  gmEl("button","gTL","gtar",'‹',farm);gmEl("button","gTR","gtar",'›',farm);
   gmEl("div","gTown","",'<div class="gtrack" id="gTrack"><div class="gpath"></div><div class="gbs" id="gBs"></div><div class="gwks" id="gWks"></div></div>',farm);
+  $("gTown").addEventListener("scroll",gmTownArr,{passive:true});addEventListener("resize",()=>setTimeout(gmTownArr,300));
+  $("gTL").onclick=()=>{snd("ui");$("gTown").scrollBy({left:-$("gTown").clientWidth*.7,behavior:"smooth"})};$("gTR").onclick=()=>{snd("ui");$("gTown").scrollBy({left:$("gTown").clientWidth*.7,behavior:"smooth"})};
   // ayuda (?) también en las ventanas del menú
   const hx=$("hubX");if(hx&&!$("hubQ")){const q=document.createElement("button");q.id="hubQ";q.className="gmo ghq";q.setAttribute("aria-label","Ayuda");q.innerHTML=gI("help",24);hx.parentNode.insertBefore(q,hx);q.onclick=()=>gmHelpT()}
   // opciones nuevas en Ajustes
@@ -284,21 +289,35 @@ function gmBudTick(dt){const B=GM.bud;if(!B||!B.pm||!B.el)return;const P=B.pm,a=
   B.at+=hubCalm()?0:dt;const fr=pmdFrame(B.at,a);B.el.style.backgroundPosition=(-fr*a.fw*B.sc).toFixed(0)+"px 0px"}
 // ---------- el pueblo: edificios que crecen, Pokémon paseando y tickets saliendo ----------
 const GDEC=[["tree","lamp"],["bush","flow"],["tree2"],["lamp","flow"],["pine","bush"],["tree","lamp"],["flow","pine"],["tree2","lamp"]];
-function gmTownBuild(){const box=$("gBs");if(!box)return;const sc=innerWidth>=900&&innerHeight>=700?3:innerWidth<700?1.5:2,k=(S.g||[]).map(gbTier).join(",")+"|"+(S.g||[]).join(",")+"|"+sc+"|"+Math.round(innerWidth/40);if(k===GM.town)return;const ps=sc>=3?2:sc;
-  const old=GM.tier.slice();GM.town=k;const pv=document.querySelector("#gTrack .gpath");if(pv){pv.style.backgroundImage="url("+gbPathURL()+")";pv.style.backgroundSize=(48*ps)+"px "+(20*ps)+"px";pv.style.height=(20*ps)+"px";$("gTown").style.setProperty("--gpb",(20*ps-8)+"px")}
-  const dec=i=>'<span class="gdecs">'+GDEC[i%GDEC.length].map(d=>'<span class="gdec" data-d="'+d+'"></span>').join("")+'</span>';
-  box.innerHTML=dec(7)+G.map((g,i)=>{const n=S.g[i]||0,t=gbTier(n);return '<button class="gbld'+(t?"":" glock")+'" data-gb="'+i+'" title="'+esc(GBN[i]||g[0])+'"><span class="gbc"></span><span class="gbl">'+(t?'<i>'+"★".repeat(t)+'</i>Nv '+fmt(n):'🔒 '+fmt(gc(i)))+'</span></button>'+dec(i)}).join("");
-  box.querySelectorAll(".gdec").forEach(el=>{const c=gdCanvas(el.dataset.d);c.style.width=c.width*sc+"px";c.style.height=c.height*sc+"px";el.appendChild(c);if(el.dataset.d==="lamp")el.classList.add("glamp")});
-  box.querySelectorAll(".gbld").forEach((el,i)=>{const t=gbTier(S.g[i]||0),c=gbCanvas(i,t),bc=el.querySelector(".gbc");c.style.width=c.width*sc+"px";c.style.height=c.height*sc+"px";bc.appendChild(c);
-    if(c._lit){const n=c._lit;n.className="gnt";n.style.width=c.style.width;n.style.height=c.style.height;bc.appendChild(n)}
-    if(c._meta&&c._meta.smk){const sm=document.createElement("i");sm.className="gsmk";sm.style.left=(c._meta.smk[0]*sc)+"px";sm.style.top=(c._meta.smk[1]*sc)+"px";sm.innerHTML="<b></b><b></b><b></b>";bc.appendChild(sm)}
-    if(old.length&&t>(old[i]||0)){el.classList.add("gnew");setTimeout(()=>{const r=el.getBoundingClientRect(),f=$("gTown").getBoundingClientRect();gmSparks($("gTown"),r.left-f.left+$("gTown").scrollLeft+r.width/2,r.top-f.top+r.height/2,14,1);try{snd("lvl")}catch(e){}},50)}});
-  GM.tier=(S.g||[]).map(gbTier);GM.tw=[];gmWalkers();
-  // si el pueblo no cabe, quita decoración poco a poco
+const GBS=["Entrenadores","Granja Miltank","Centro Pokémon","Guardería","Liga Pokémon","Estadio","Laboratorio"];
+// Pokémon y entrenadores que dan vida a cada mejora: [nombre, x en %, desde el nivel de estrellas]
+const GBP={1:[["Miltank",12,1],["Miltank",4,3],["Miltank",19,5]],2:[["Chansey",80,2]],3:[["Togepi",82,2],["Pichu",90,4],["Cleffa",74,5]],6:[["Porygon",86,3]]};
+function gmTrLooks(){if(!GM.trl){GM.trl=[];for(let i=0;i<5;i++){try{GM.trl.push(trRandom())}catch(e){}}}return GM.trl}
+function gmTownBuild(){const box=$("gBs");if(!box)return;const sc0=innerWidth>=900&&innerHeight>=700?3:innerWidth<700?1.5:2,k=(S.g||[]).map(gbTier).join(",")+"|"+(S.g||[]).join(",")+"|"+sc0+"|"+Math.round(innerWidth/40);if(k===GM.town)return;
+  const old=GM.tier.slice();GM.town=k;
   const fit=()=>$("gTrack").scrollWidth<=$("gTown").clientWidth+2;
-  if(!fit())box.querySelectorAll(".gdecs .gdec:nth-child(2)").forEach(e=>e.remove());
-  if(!fit())box.querySelectorAll(".gdecs:nth-of-type(2n)").forEach(e=>e.remove());
-  if(!fit())box.querySelectorAll(".gdecs").forEach((e,i)=>{if(i)e.remove()})}
+  const build=sc=>{const ps=sc>=3?2:sc,pv=document.querySelector("#gTrack .gpath");if(pv){pv.style.backgroundImage="url("+gbPathURL()+")";pv.style.backgroundSize=(48*ps)+"px "+(20*ps)+"px";pv.style.height=(20*ps)+"px";$("gTown").style.setProperty("--gpb",(20*ps+2)+"px");$("gTown").style.setProperty("--gph",(20*ps)+"px")}
+    const dec=i=>'<span class="gdecs">'+GDEC[i%GDEC.length].map(d=>'<span class="gdec" data-d="'+d+'"></span>').join("")+'</span>';
+    box.innerHTML=dec(7)+G.map((g,i)=>{const n=S.g[i]||0,t=gbTier(n);return '<button class="gbld'+(t?"":" glock")+'" data-gb="'+i+'" title="'+esc(g[0])+'"><span class="gbc"></span><span class="gbl"><b>'+esc(GBS[i]||g[0])+'</b><em>'+(t?'<i>'+"★".repeat(t)+'</i> Nv '+fmt(n):'🔒 '+fmt(gc(i)))+'</em></span></button>'+dec(i)}).join("");
+    box.querySelectorAll(".gdec").forEach(el=>{const c=gdCanvas(el.dataset.d);c.style.width=c.width*sc+"px";c.style.height=c.height*sc+"px";el.appendChild(c);if(el.dataset.d==="lamp")el.classList.add("glamp")});
+    box.querySelectorAll(".gbld").forEach((el,i)=>{const n=S.g[i]||0,t=gbTier(n),c=gbCanvas(i,t),bc=el.querySelector(".gbc");c.style.width=c.width*sc+"px";c.style.height=c.height*sc+"px";bc.appendChild(c);
+      if(c._lit){const nc=c._lit;nc.className="gnt";nc.style.width=c.style.width;nc.style.height=c.style.height;bc.appendChild(nc)}
+      if(c._meta&&c._meta.smk){const sm=document.createElement("i");sm.className="gsmk";sm.style.left=(c._meta.smk[0]*sc)+"px";sm.style.top=(c._meta.smk[1]*sc)+"px";sm.innerHTML="<b></b><b></b><b></b>";bc.appendChild(sm)}
+      let ov="";
+      if(i===0){const L=gmTrLooks(),cnt=t?Math.min(5,t):1,X=[50,24,76,37,63],th=Math.round(30*sc),tw=Math.round(th*TW/TH);
+        for(let q=0;q<cnt&&q<L.length;q++)ov+='<span class="gsp gtrn" style="left:'+X[q]+'%;bottom:'+Math.round((3+(q%2)*2)*sc)+'px;width:'+tw+'px;height:'+th+'px;animation-delay:-'+(q*0.7)+'s"><img src="'+trURL(L[q],"f",q%2?"w":"i")+'" alt=""></span>'}
+      (GBP[i]||[]).forEach(p=>{if(Math.max(1,t)>=p[2]&&PM[p[0]]){const z=Math.round((i===1?17:14)*sc);ov+='<span class="gsp gpk" style="left:'+(i===1?(p[1]/c.width*100):p[1])+'%;bottom:'+Math.round(2*sc)+'px">'+ico(PM[p[0]],z)+'</span>'}});
+      if(!t)ov+='<span class="glk">🔒</span>';
+      if(ov)bc.insertAdjacentHTML("beforeend",ov);
+      if(old.length&&t>(old[i]||0)){el.classList.add("gnew");setTimeout(()=>{const r=el.getBoundingClientRect(),f=$("gTown").getBoundingClientRect();gmSparks($("gTown"),r.left-f.left+$("gTown").scrollLeft+r.width/2,r.top-f.top+r.height/2,14,1);try{snd("lvl")}catch(e){}},50)}});
+    // si el pueblo no cabe, quita decoración poco a poco
+    if(!fit())box.querySelectorAll(".gdecs .gdec:nth-child(2)").forEach(e=>e.remove());
+    if(!fit())box.querySelectorAll(".gdecs:nth-of-type(2n)").forEach(e=>e.remove());
+    if(!fit())box.querySelectorAll(".gdecs").forEach((e,i)=>{if(i)e.remove()})};
+  // en pantallas grandes reduce el tamaño hasta que quepan todas las mejoras
+  let sc=sc0;build(sc);while(!fit()&&sc>2&&innerWidth>=700){sc-=.5;build(sc)}
+  GM.tier=(S.g||[]).map(gbTier);GM.tw=[];gmWalkers();gmTownArr()}
+function gmTownArr(){const t=$("gTown");if(!t)return;const f=$("farm");f.classList.toggle("gsl",t.scrollLeft>4);f.classList.toggle("gsr",t.scrollLeft+t.clientWidth<t.scrollWidth-4)}
 function gmWalkers(){const w=$("gWks");if(!w)return;let pool=[];try{pool=(S.team||[]).filter(n=>n&&S.owned[n]>0&&PM[n]);const all=Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]);for(let i=0;i<8&&all.length;i++)pool.push(all[Math.floor(Math.random()*all.length)])}catch(e){}
   const own=(S.g||[]).reduce((a,n)=>a+(n>0?1:0),0),N=Math.min(pool.length,own?2+own:1);if(GM.tw.length===N)return;
   w.innerHTML="";GM.tw=[];const tw=$("gTrack").scrollWidth||innerWidth;

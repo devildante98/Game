@@ -589,3 +589,7 @@ rep("const keys=Object.keys(TIPO),weak=d=>keys.filter(a=>adv(a,d)),res=d=>keys.f
 rep("""'</div><div>Resiste (×0,5): '+(res(t).map(typeChip).join("")||'<small>ninguno</small>')+'</div></div>';""","""'</div><div>Resiste (×0,5): '+(res(t).map(typeChip).join("")||'<small>ninguno</small>')+'</div>'+(imm(t).length?'<div>Inmune (×0): '+imm(t).map(typeChip).join("")+'</div>':'')+'</div>';""")
 rep("Un ataque hace ×2 contra un tipo débil y ×0,5 si el rival lo resiste.","Tabla oficial: ×2 contra un tipo débil, ×0,5 si lo resiste y ×0 si es inmune. Con dos tipos se multiplican (×4, ×¼…).")
 rep('#welc,#newsM,#privM{','#shopQ{display:flex;align-items:center;gap:6px;margin:0 0 8px;flex-wrap:wrap}\n#shopQ small{color:var(--mute);font-weight:700;margin-right:2px}\n#shopQ button{padding:5px 12px;border-radius:99px;font-size:.82rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);min-height:0}\n#shopQ button.on{background:#13a37f;color:#fff;border-color:#13a37f}\n#welc,#newsM,#privM{')
+# clasificación: empates con el mismo puesto (1, 2, 2, 4…) y «Tu posición» coherente con la lista
+rep("""(md[i]||"#"+(i+1))""","""(md[rkR(c.rows,i)-1]||"#"+rkR(c.rows,i))""")
+rep("""'<div class="rkme">Tu posición: <b>#'+c.pos+'</b>""","""'<div class="rkme">Tu posición: <b>#'+rkMine(c,me)+'</b>""")
+rep("function rkUI(){","const rkR=(rows,i)=>rows[i].v==null?i+1:1+rows.filter(x=>x.v>rows[i].v).length;\nconst rkMine=(c,me)=>{const i=c.rows.findIndex(r=>r.id===me);return i>=0?rkR(c.rows,i):c.pos};\nfunction rkUI(){")

@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793775062">
+<meta name="game-build" content="1793775104">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -5795,7 +5795,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793775062";
+const GAME_B="1793775104";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -5847,6 +5847,8 @@ async function rkLoad(force){
   }catch(e){RK.err=(e&&e.code)||"error"}
   RK.busy=false;rkUI();
 }
+const rkR=(rows,i)=>rows[i].v==null?i+1:1+rows.filter(x=>x.v>rows[i].v).length;
+const rkMine=(c,me)=>{const i=c.rows.findIndex(r=>r.id===me);return i>=0?rkR(c.rows,i):c.pos};
 function rkUI(){
   $("rkTabs").innerHTML=RKC.map(c=>'<button class="'+(RK.tab===c[0]?"on":"alt")+'" data-rk="'+c[0]+'">'+c[1]+'</button>').join("");
   const box=$("rkBox");
@@ -5854,7 +5856,7 @@ function rkUI(){
   if(RK.err){box.innerHTML='<small class="mut">No se pudo cargar la clasificación ('+esc(RK.err)+'). Si pone «permission-denied», añade en Firestore las reglas de «ranks».</small>';return}
   const c=RK.cache[RK.tab];if(!c){box.innerHTML='<small class="mut">'+(RK.busy?"Cargando…":"Pulsa «Actualizar» para ver la clasificación.")+'</small>';return}
   const lab=RKC.find(x=>x[0]===RK.tab)[2],me=window.FB.uid(),md=["🥇","🥈","🥉"];
-  box.innerHTML=(c.pos?'<div class="rkme">Tu posición: <b>#'+c.pos+'</b> · '+fmt(c.mine||0)+' '+lab+'</div>':'')+(c.rows.length?'<div class="frl">'+c.rows.map((r,i)=>'<div class="pvrow rkrow'+(r.id===me||(RK.tab==="guild"&&r.id===S.gid)?' rkmine':'')+'"><b class="rkpos">'+(md[i]||"#"+(i+1))+'</b>'+(RK.tab==="guild"?gFlag(r.fl,r.gi,40):'<span class="pvav">'+trImg(trDec(r.tr),"f","i")+'</span>')+'<b style="flex:1"'+(RK.tab==="guild"?'':' class="plink" data-prof="'+esc(r.id)+'"')+'>'+esc(RK.tab==="guild"?r.n:pvClean(r.n))+' '+(r.g?'<span class="gtag">'+esc(String(r.g).slice(0,4))+'</span>':'')+'</b><span class="rkv">'+fmt(r.v)+' <small>'+lab+'</small></span></div>').join("")+'</div>':'<small class="mut">Todavía no hay nadie en esta clasificación.</small>')+(RK.busy?'<small class="mut">Actualizando…</small>':'');
+  box.innerHTML=(c.pos?'<div class="rkme">Tu posición: <b>#'+rkMine(c,me)+'</b> · '+fmt(c.mine||0)+' '+lab+'</div>':'')+(c.rows.length?'<div class="frl">'+c.rows.map((r,i)=>'<div class="pvrow rkrow'+(r.id===me||(RK.tab==="guild"&&r.id===S.gid)?' rkmine':'')+'"><b class="rkpos">'+(md[rkR(c.rows,i)-1]||"#"+rkR(c.rows,i))+'</b>'+(RK.tab==="guild"?gFlag(r.fl,r.gi,40):'<span class="pvav">'+trImg(trDec(r.tr),"f","i")+'</span>')+'<b style="flex:1"'+(RK.tab==="guild"?'':' class="plink" data-prof="'+esc(r.id)+'"')+'>'+esc(RK.tab==="guild"?r.n:pvClean(r.n))+' '+(r.g?'<span class="gtag">'+esc(String(r.g).slice(0,4))+'</span>':'')+'</b><span class="rkv">'+fmt(r.v)+' <small>'+lab+'</small></span></div>').join("")+'</div>':'<small class="mut">Todavía no hay nadie en esta clasificación.</small>')+(RK.busy?'<small class="mut">Actualizando…</small>':'');
 }
 $("rkTabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||!b.dataset.rk)return;RK.tab=b.dataset.rk;snd("ui");rkLoad(false)});
 $("rkRe").onclick=()=>rkLoad(true);

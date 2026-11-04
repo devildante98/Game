@@ -800,7 +800,7 @@ const pvMd=()=>S.pvMode==="l"?"l":"c";
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-pvmd]");if(!b)return;if(PV.st!=="idle"){toast("Cancela tu reto antes de cambiar de modo.");return}S.pvMode=b.dataset.pvmd;save();snd("ui");pvPub();pvRender()});
 {const _pc=pvChallenge;pvChallenge=function(peer){const o=pvOthers().find(p=>p.peer===peer);if(o&&(o.presence.pvp.md==="l"?"l":"c")!==pvMd()){toast("Ese jugador está en el modo "+(o.presence.pvp.md==="l"?"Libre":"Clásico")+". Cambia de modo para retarle.");return false}return _pc.apply(this,arguments)}}
 // formas disponibles del Pokémon activo (las que tienes en la colección)
-function pvFormsOf(sd){const m=beAct(sd),own=((sd.fo&&sd.fo[sd.ai])||[]).concat((m.p0||m.p)[0]==="Rayquaza"&&(m.m||[]).some(x=>x&&x.id==="620")?["Mega-Rayquaza"]:[]),base=(m.p0||m.p)[0];return {mega:(FORMS[base]||[]).filter(f=>f[1]==="mega").map((f,k)=>[f[0],k]).filter(f=>own.includes(f[0])),gmax:(FORMS[base]||[]).find(f=>f[1]==="gmax"&&own.includes(f[0]))}}
+function pvFormsOf(sd){const m=beAct(sd),own=((sd.fo&&sd.fo[sd.ai])||[]).filter(f=>f!=="Mega-Rayquaza"),base=(m.p0||m.p)[0];return {mega:(FORMS[base]||[]).filter(f=>f[1]==="mega").map((f,k)=>[f[0],k]).filter(f=>own.includes(f[0])),gmax:(FORMS[base]||[]).find(f=>f[1]==="gmax"&&own.includes(f[0]))}}
 function pvZOk(m,mv){if(!mv||mv.cl<=0)return "";if(/^z_/.test(m.it||"")&&mv.t===m.it.slice(2))return "z";if(/^zx_/.test(m.it||"")&&typeof zxFor==="function"){const z=zxFor(m);if(z&&mv.n===z[1])return "x"}return ""}
 function pvFreeBtns(side,pm){if(!D||!D.E||!D.E.free||!pm||pm.mh<=0)return "";let h="";
   if(!side.fu&&!pm.dmx&&!pm.p0){const F=pvFormsOf(side);F.mega.forEach(f=>{h+='<button class="frmb mega'+(D.pre==="M"+f[1]?" on":"")+'" data-pv="fM'+f[1]+'">🧬 Megaevolucionar'+(F.mega.length>1?' ('+esc(f[0].slice(-1))+')':'')+'</button>'});
@@ -986,3 +986,9 @@ function seedCheck(E,push){try{const tr=typeof axTr==="function"?axTr(E):"";if(!
 {const _be=beEnter;beEnter=function(E,i,push){const r=_be.apply(this,arguments);seedCheck(E,push);return r}}
 // apodo para el saludo de la portada
 setInterval(()=>{try{if(S&&S.nick)localStorage.setItem("pgcNick",String(S.nick).slice(0,20))}catch(e){}},15000);
+
+// ================= Rayquaza megaevoluciona al usar Ascenso Draco (como en los juegos) =================
+{const _bu=beUse;beUse=function(E,i,a,rng,push,acted,faint){try{const sd=E.sd[i],m=beAct(sd),q=String(a||"").match(/^[zx]?m?(\d)/),mv=q&&m?m.m[+q[1]]:null;
+  if(mv&&mv.id==="620"&&m.mh>0&&m.p[0]==="Rayquaza"&&!m.p0&&!sd.fu&&PM["Mega-Rayquaza"]&&(!E.pvp||E.free)&&!(typeof B!=="undefined"&&B&&B.E===E&&B.formUsed)){
+    sd.fu=1;if(typeof B!=="undefined"&&B&&B.E===E)B.formUsed=1;formApply(m,PM["Mega-Rayquaza"],1,1.12);push({k:"form",s:i,kind:"mega",n:"Rayquaza",f:"Mega-Rayquaza",snap:beSnap(E)})}}catch(e){console.error(e)}
+  return _bu.apply(this,arguments)}}

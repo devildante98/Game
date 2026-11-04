@@ -864,3 +864,46 @@ function gachaShow(res,n,best,back,sup,RC){
         if(!big&&n>1)snd("rev",x[3]&&x[0][2]!=="L"?"S":x[0][2])},big?40:240)},i*rs));
     tm(end,res.length*rs+(big?300:500))},t2);
 }
+
+// ================= clima y campos visibles en combate =================
+const WXV={t:"",tr:"",raf:0,p:[],cv:null,last:0};
+function wxSet(t,tr){if(t===WXV.t&&tr===WXV.tr)return;WXV.t=t;WXV.tr=tr;WXV.p=[];const bt=document.querySelector("#arena .bt");if(!bt)return;
+  let o=bt.querySelector(".wxfx");if(!o){o=document.createElement("div");o.className="wxfx";o.innerHTML='<canvas></canvas>';bt.insertBefore(o,bt.querySelector("#oi"))}
+  o.className="wxfx"+(t?" w-"+t:"")+(tr?" t-"+tr:"");WXV.cv=o.querySelector("canvas");if((t||tr)&&!WXV.raf)WXV.raf=requestAnimationFrame(wxDraw)}
+function wxSync(){try{const E=typeof B!=="undefined"&&B&&B.E;wxSet(E?axWx(E):"",E?axTr(E):"")}catch(e){}}
+function wxDraw(ts){WXV.raf=0;const cv=WXV.cv;if(!cv||!cv.isConnected||(!WXV.t&&!WXV.tr))return;const r=cv.getBoundingClientRect();if(!r.width){WXV.raf=requestAnimationFrame(wxDraw);return}
+  const W=Math.round(r.width),H=Math.round(r.height);if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H}
+  const g=cv.getContext("2d"),dt=Math.min(.05,(ts-(WXV.last||ts))/1000);WXV.last=ts;g.clearRect(0,0,W,H);const P=WXV.p,t=WXV.t,calm=typeof hubCalm==="function"&&hubCalm();
+  if(calm){return}
+  const want=t==="rain"?140:t==="snow"?90:t==="sand"?160:t==="wind"?40:t==="sun"?18:0,trw=WXV.tr==="electric"?10:WXV.tr==="grassy"?24:WXV.tr==="misty"?30:WXV.tr==="psychic"?22:0;
+  while(P.filter(p=>!p.tr).length<want)P.push(wxNew(t,W,H,true));while(P.filter(p=>p.tr).length<trw)P.push(wxNewT(WXV.tr,W,H,true));
+  for(let i=P.length-1;i>=0;i--){const p=P[i];p.x+=p.vx*dt;p.y+=p.vy*dt;p.a+=dt;if(p.wb)p.x+=Math.sin(p.a*p.wb)*20*dt;
+    if(p.y>H+20||p.x<-60||p.x>W+60||(p.life&&p.a>p.life)){P[i]=p.tr?wxNewT(WXV.tr,W,H):wxNew(t,W,H);continue}
+    g.globalAlpha=p.al*(p.life?Math.sin(Math.PI*p.a/p.life):1);
+    if(p.k==="rain"){g.strokeStyle="#cfe8ff";g.lineWidth=1.5;g.beginPath();g.moveTo(p.x,p.y);g.lineTo(p.x-p.vx*.025,p.y-p.vy*.025);g.stroke()}
+    else if(p.k==="snow"){g.fillStyle="#fff";g.beginPath();g.arc(p.x,p.y,p.s,0,7);g.fill()}
+    else if(p.k==="sand"){g.fillStyle=p.c;g.fillRect(p.x,p.y,p.s,p.s*.7)}
+    else if(p.k==="wind"){g.strokeStyle="#ffffff";g.lineWidth=2;g.beginPath();g.moveTo(p.x,p.y);g.quadraticCurveTo(p.x-40,p.y-6,p.x-90,p.y);g.stroke()}
+    else if(p.k==="sun"){g.fillStyle="#fff6c0";g.beginPath();g.arc(p.x,p.y,p.s,0,7);g.fill()}
+    else if(p.k==="spark"){g.strokeStyle="#ffe94a";g.lineWidth=2;g.beginPath();g.moveTo(p.x,p.y);g.lineTo(p.x+5,p.y-7);g.lineTo(p.x+1,p.y-7);g.lineTo(p.x+6,p.y-14);g.stroke()}
+    else if(p.k==="leaf"){g.fillStyle=p.c;g.beginPath();g.ellipse(p.x,p.y,p.s,p.s*.5,p.a*2,0,7);g.fill()}
+    else if(p.k==="mist"){const gr=g.createRadialGradient(p.x,p.y,0,p.x,p.y,p.s);gr.addColorStop(0,"rgba(255,190,230,.5)");gr.addColorStop(1,"rgba(255,190,230,0)");g.fillStyle=gr;g.fillRect(p.x-p.s,p.y-p.s,p.s*2,p.s*2)}
+    else if(p.k==="psy"){g.strokeStyle="#d58bff";g.lineWidth=2;g.beginPath();g.arc(p.x,p.y,p.s*(1+p.a),0,7);g.stroke()}}
+  g.globalAlpha=1;WXV.raf=requestAnimationFrame(wxDraw)}
+function wxNew(t,W,H,init){const R=Math.random,y0=init?R()*H:-10;
+  if(t==="rain")return {k:"rain",x:R()*(W+80),y:y0,vx:-140,vy:700+R()*300,al:.55,a:0};
+  if(t==="snow")return {k:"snow",x:R()*W,y:y0,vx:-15+R()*30,vy:35+R()*45,s:1.5+R()*2.5,wb:1+R()*2,al:.85,a:R()*6};
+  if(t==="sand")return {k:"sand",x:init?R()*W:-10,y:R()*H,vx:260+R()*200,vy:20+R()*30,s:2+R()*3,c:["#d9b46a","#c99a52","#e8cf98"][Math.floor(R()*3)],al:.75,a:0};
+  if(t==="wind")return {k:"wind",x:init?R()*W:-20,y:R()*H*.8,vx:380+R()*200,vy:0,al:.35,a:0};
+  if(t==="sun")return {k:"sun",x:R()*W,y:R()*H,vx:0,vy:-8,s:1.5+R()*2.5,al:.9,a:0,life:2+R()*2};
+  return {k:"none",x:0,y:H+99,vx:0,vy:0,al:0,a:0}}
+function wxNewT(tr,W,H){const R=Math.random,y=H*(.55+R()*.45);
+  if(tr==="electric")return {tr:1,k:"spark",x:R()*W,y:y,vx:0,vy:0,al:1,a:0,life:.25+R()*.3};
+  if(tr==="grassy")return {tr:1,k:"leaf",x:R()*W,y:y,vx:-10+R()*20,vy:-20-R()*20,s:3+R()*2,c:R()<.5?"#6fd16a":"#3fae4a",al:.9,a:0,life:2+R()*2,wb:2};
+  if(tr==="misty")return {tr:1,k:"mist",x:R()*W,y:y,vx:-8+R()*16,vy:-5,s:30+R()*40,al:.8,a:0,life:3+R()*3};
+  if(tr==="psychic")return {tr:1,k:"psy",x:R()*W,y:y,vx:0,vy:-6,s:6+R()*8,al:.7,a:0,life:1.2+R()};
+  return {tr:1,k:"none",x:0,y:H+99,vx:0,vy:0,al:0,a:0}}
+// aparece cuando sale el mensaje del clima (así coincide con la animación) y se sincroniza al acabar cada turno
+{const _say=say;say=function(t){try{const s=String(t);for(const k in AXWX){if(s===AXWX[k][0])wxSet(k,WXV.tr);else if(s===AXWX[k][1])wxSet("",WXV.tr)}for(const k in AXTR){if(s===AXTR[k][0])wxSet(WXV.t,k);else if(s===AXTR[k][1])wxSet(WXV.t,"")}}catch(e){}return _say.apply(this,arguments)}}
+{const _bp=bePlay;bePlay=async function(){const r=await _bp.apply(this,arguments);wxSync();return r}}
+{const _ar=arenaReset;arenaReset=function(){wxSet("","");return _ar.apply(this,arguments)}}

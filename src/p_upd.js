@@ -984,3 +984,5 @@ function seedCheck(E,push){try{const tr=typeof axTr==="function"?axTr(E):"";if(!
   E.sd.forEach((sd,j)=>{if(sd.out)return;const m=beAct(sd);if(m&&m.mh>0&&m.it===SD[0]&&!m.ius){m.ius=1;push({k:"item",s:j,n:m.p[0],it:"seed"});beStat(E,j,[[SD[1],1]],push,undefined,"it")}})}catch(e){}}
 {const _bt=beTurn;beTurn=function(E){const ev=_bt.apply(this,arguments);const push=o=>{o.snap=beSnap(E);ev.push(o)};seedCheck(E,push);return ev}}
 {const _be=beEnter;beEnter=function(E,i,push){const r=_be.apply(this,arguments);seedCheck(E,push);return r}}
+// apodo para el saludo de la portada
+setInterval(()=>{try{if(S&&S.nick)localStorage.setItem("pgcNick",String(S.nick).slice(0,20))}catch(e){}},15000);

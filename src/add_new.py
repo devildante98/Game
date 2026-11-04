@@ -705,3 +705,101 @@ rep('  const app=A.initializeApp(cfg),auth=F.getAuth(app),db=S.getFirestore(app)
       else if(paused){paused=false;subs.forEach(s=>{if(!s.dead&&!s.u){try{s.u=os(...s.a)}catch(e){}}})}});
     S=Object.assign({},S,{onSnapshot:W})}
   const app=A.initializeApp(cfg),auth=F.getAuth(app),db=S.getFirestore(app);''')
+# ===== portada nueva =====
+_ai=H.index('<div id="auth">');_aj=H.index('<div id="acct" hidden>')
+H=H[:_ai]+'''<div id="auth">
+  <div class="pcbg" aria-hidden="true"><div class="pcsun"></div><div class="pccl c1"></div><div class="pccl c2"></div><div class="pccl c3"></div><div class="pchill h1"></div><div class="pchill h2"></div><div class="pcgrass"></div><div class="pcpar" id="pcPar"></div><div class="pcballs" id="pcBalls"></div></div>
+  <form id="aform">
+    <div class="pclogo"><div class="pcball"><i></i></div><h1><span>POKE GACHA</span><b>ONLINE</b></h1><p class="pctag">¡Colecciona, combate y explora!</p></div>
+    <div class="pcfeat"><span>🎰 Gacha</span><span>⚔️ PVP</span><span>🗺️ Exploración</span><span>🏆 Liga</span><span>👥 Gremios</span></div>
+    <p class="pchi" id="pcHi" hidden></p>
+    <button type="button" class="pcplay" id="pcPlay">▶ JUGAR</button>
+    <div class="pcopts" id="pcOpts" hidden>
+      <button type="button" class="pcg" id="agoogle"><svg viewBox="0 0 48 48" width="22" height="22" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Continuar con Google</button>
+      <div class="pcor"><span>o entra con tu usuario</span></div>
+      <input id="aemail" type="text" placeholder="Usuario o correo electrónico" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      <input id="apass" type="password" placeholder="Contraseña (mín. 6 caracteres)" autocomplete="current-password" required>
+      <button type="submit" id="alogin">Entrar</button>
+      <div class="pcrow"><button type="button" class="alt" id="areg">Crear cuenta</button><button type="button" class="alt" id="areset">Olvidé mi contraseña</button></div>
+      <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
+    </div>
+    <p id="amsg" role="alert">Comprobando sesión…</p>
+    <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
+  </form>
+</div>
+<script>
+(function(){
+  var $i=function(x){return document.getElementById(x)};
+  // saludo si ya has jugado en este navegador
+  try{var nk=localStorage.getItem("pgcNick");if(nk){var h=$i("pcHi");h.textContent="¡Hola de nuevo, "+nk+"! 👋";h.hidden=false}}catch(e){}
+  $i("pcPlay").addEventListener("click",function(){var o=$i("pcOpts");o.hidden=false;this.hidden=true;try{$i("agoogle").focus()}catch(e){}});
+  // si se piden los datos (por ejemplo, un error al entrar) se despliegan las opciones
+  new MutationObserver(function(){var m=$i("amsg");if(m&&m.textContent&&!/Comprobando/.test(m.textContent)&&$i("pcOpts").hidden&&/rror|incorrect|no existe|contraseña|cuenta/i.test(m.textContent)){$i("pcOpts").hidden=false;$i("pcPlay").hidden=true}}).observe($i("amsg"),{childList:true,characterData:true,subtree:true});
+  // desfile de Pokémon caminando por la hierba
+  var MON=["pikachu","charmander","bulbasaur","squirtle","eevee","jigglypuff","psyduck","snorlax","gengar","lucario","togepi","piplup","chikorita","cyndaquil","totodile","mudkip","torchic","treecko","riolu","sylveon","umbreon","espeon","dragonite","lapras","mew","celebi","vulpix","growlithe","meowth","togekiss","pachirisu","oshawott","snivy","tepig","froakie","fennekin","chespin","rowlet","litten","popplio","sobble","scorbunny","grookey","sprigatito","fuecoco","quaxly","gardevoir","garchomp","arcanine","charizard"];
+  var par=$i("pcPar"),busy=0;
+  function walker(){if(document.hidden||!par.isConnected||$i("auth").hidden)return;if(busy>=5)return;busy++;
+    var n=MON[Math.floor(Math.random()*MON.length)],sh=Math.random()<.08,d=document.createElement("div"),img=new Image(),dur=14+Math.random()*10,lane=Math.random();
+    d.className="pcmon"+(sh?" sh":"");d.style.bottom=(4+lane*8)+"%";d.style.zIndex=String(10-Math.round(lane*5));d.style.setProperty("--s",(2-lane*.6).toFixed(2));d.style.animationDuration=dur+"s";
+    img.alt="";img.src="https://play.pokemonshowdown.com/sprites/"+(sh?"gen5ani-shiny":"gen5ani")+"/"+n+".gif";img.onerror=function(){d.remove();busy--};d.appendChild(img);par.appendChild(d);
+    setTimeout(function(){d.remove();busy--},dur*1000)}
+  walker();setTimeout(walker,1500);setInterval(walker,3200);
+  // Poké Balls flotando
+  var bl=$i("pcBalls"),C=["","sb","ub","mb"];for(var i=0;i<9;i++){var b=document.createElement("i");b.className="pcfb "+C[i%4];b.style.left=(Math.random()*96)+"%";b.style.animationDuration=(14+Math.random()*12)+"s";b.style.animationDelay=(-Math.random()*20)+"s";b.style.setProperty("--z",(.5+Math.random()*.7).toFixed(2));bl.appendChild(b)}
+})();
+</script>
+'''+H[_aj:]
+rep('#welc,#newsM,#privM{',r'''#auth{background:linear-gradient(#4fa8ff 0%,#8ccfff 45%,#cdeeff 70%,#bfe8a8 70.1%,#86c860 100%)!important;overflow:hidden}
+.pcbg{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.pcsun{position:absolute;right:9%;top:7%;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,#fffbe0 0 40%,#ffe58a 60%,rgba(255,229,138,0) 72%);animation:pcsun 6s ease-in-out infinite}
+@keyframes pcsun{50%{transform:scale(1.07)}}
+.pccl{position:absolute;height:36px;width:150px;background:#fff;border-radius:40px;opacity:.9;filter:drop-shadow(0 4px 0 rgba(120,170,220,.35));animation:pccl linear infinite}
+.pccl:before,.pccl:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.pccl:before{width:70px;height:60px;left:22px;top:-28px}.pccl:after{width:54px;height:46px;left:76px;top:-18px}
+.pccl.c1{top:12%;animation-duration:70s;animation-delay:-10s}.pccl.c2{top:24%;transform:scale(.7);animation-duration:95s;animation-delay:-50s}.pccl.c3{top:6%;transform:scale(.55);animation-duration:120s;animation-delay:-80s}
+@keyframes pccl{from{left:-220px}to{left:110%}}
+.pchill{position:absolute;bottom:22%;border-radius:50% 50% 0 0;background:#6cbf4c}
+.pchill.h1{left:-10%;width:70%;height:22%;background:linear-gradient(#7fd05a,#5aa83a)}.pchill.h2{right:-15%;width:75%;height:17%;background:linear-gradient(#94dc6e,#6cbf4c)}
+.pcgrass{position:absolute;left:0;right:0;bottom:0;height:24%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 22px,transparent 22px 44px),linear-gradient(#88d070,#5aa83a)}
+.pcgrass:before{content:"";position:absolute;left:0;right:0;top:-8px;height:12px;background:radial-gradient(circle at 8px 12px,#88d070 7px,transparent 7.5px) 0 0/16px 12px repeat-x}
+.pcpar{position:absolute;inset:0}
+.pcmon{position:absolute;right:-140px;animation:pcwalk linear forwards}
+.pcmon img{display:block;transform:scale(var(--s,1));transform-origin:50% 100%;image-rendering:pixelated;animation:pchop .45s ease-in-out infinite alternate;filter:drop-shadow(0 6px 3px rgba(0,0,0,.18))}
+.pcmon.sh img{filter:drop-shadow(0 0 8px #fff6a0) drop-shadow(0 6px 3px rgba(0,0,0,.18))}
+@keyframes pcwalk{to{right:110%}}
+@keyframes pchop{to{translate:0 -4px}}
+.pcballs{position:absolute;inset:0}
+.pcfb{position:absolute;bottom:-60px;width:34px;height:34px;border-radius:50%;opacity:.55;transform:scale(var(--z,1));background:radial-gradient(circle at 50% 50%,#fff 0 13%,#222 13% 21%,transparent 21%),linear-gradient(#e83a50 0 44%,#222 44% 56%,#f4f4f8 56%);animation:pcfloat linear infinite}
+.pcfb.sb{background:radial-gradient(circle at 50% 50%,#fff 0 13%,#222 13% 21%,transparent 21%),linear-gradient(#2f7de1 0 44%,#222 44% 56%,#f4f4f8 56%)}
+.pcfb.ub{background:radial-gradient(circle at 50% 50%,#fff 0 13%,#222 13% 21%,transparent 21%),linear-gradient(90deg,transparent 18%,#f5c400 18% 30%,transparent 30% 70%,#f5c400 70% 82%,transparent 82%) 0 0/100% 44% no-repeat,linear-gradient(#2d2d2d 0 44%,#222 44% 56%,#f4f4f8 56%)}
+.pcfb.mb{background:radial-gradient(circle at 50% 50%,#fff 0 13%,#222 13% 21%,transparent 21%),linear-gradient(#8a3fd0 0 44%,#222 44% 56%,#f4f4f8 56%)}
+@keyframes pcfloat{from{bottom:-60px;rotate:0deg}to{bottom:110%;rotate:360deg}}
+#auth form#aform{position:relative;z-index:5;max-width:430px;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:4px solid #fff;border-radius:26px;box-shadow:0 0 0 4px #e83a50,0 20px 50px rgba(20,40,90,.35);padding:22px 22px 16px;gap:12px;color:#1c1f3a}
+.pclogo{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pcball{width:64px;height:64px;border-radius:50%;border:4px solid #222;background:linear-gradient(#ff5a6a 0,#e83a50 46%,#222 46% 54%,#fff 54%);position:relative;animation:pcspin 4s cubic-bezier(.6,0,.3,1) infinite;box-shadow:inset -6px -6px 0 rgba(0,0,0,.12)}
+.pcball i{position:absolute;left:50%;top:50%;width:18px;height:18px;margin:-9px;border-radius:50%;background:#fff;border:4px solid #222;box-shadow:0 0 10px #fff}
+@keyframes pcspin{0%,60%{transform:rotate(0)}75%{transform:rotate(-25deg)}85%{transform:rotate(20deg)}100%{transform:rotate(0)}}
+#auth .pclogo h1{display:flex;flex-direction:column;align-items:center;line-height:.95;margin:4px 0 0;font-size:inherit}
+.pclogo h1 span{font-size:2.3rem;font-weight:900;letter-spacing:2px;color:#ffd23f;-webkit-text-stroke:2px #1c2a6a;text-shadow:0 4px 0 #1c2a6a,0 7px 0 rgba(0,0,0,.25);background:linear-gradient(100deg,#ffd23f 40%,#fff6c0 50%,#ffd23f 60%) 0 0/300% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:pcshine 4s linear infinite}
+.pclogo h1 b{font-size:1.25rem;font-weight:900;letter-spacing:8px;color:#e83a50;margin-top:6px;text-shadow:0 2px 0 #fff}
+@keyframes pcshine{0%{background-position:100% 0}60%,100%{background-position:-100% 0}}
+.pctag{margin:2px 0 0;font-weight:800;color:#3a4a8a}
+.pcfeat{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.pcfeat span{font-size:.75rem;font-weight:800;padding:4px 10px;border-radius:99px;background:#eef3ff;color:#2a3a7a;border:2px solid #c8d6ff}
+.pchi{margin:0;text-align:center;font-weight:900;color:#0e7f63}
+#auth .pcplay{font-size:1.5rem;font-weight:900;letter-spacing:2px;padding:16px;border-radius:18px;background:linear-gradient(#ff5a6a,#e83a50);color:#fff;border:none;box-shadow:0 6px 0 #9a1a2a,0 10px 20px rgba(232,58,80,.35);animation:pcpulse 1.4s ease-in-out infinite}
+#auth .pcplay:active{transform:translateY(4px);box-shadow:0 2px 0 #9a1a2a}
+@keyframes pcpulse{50%{transform:scale(1.04)}}
+.pcopts{display:flex;flex-direction:column;gap:9px;animation:pcin .3s ease-out}
+.pcopts[hidden]{display:none}
+@keyframes pcin{from{opacity:0;transform:translateY(-8px)}}
+#auth .pcg{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;color:#1c1f3a;border:2px solid #dadce0;font-weight:800;padding:12px}
+.pcor{display:flex;align-items:center;gap:8px;color:#6a7090;font-size:.8rem;font-weight:700}
+.pcor:before,.pcor:after{content:"";flex:1;height:2px;background:#dfe3f0}
+.pcrow{display:flex;gap:8px}.pcrow button{flex:1;font-size:.85rem;padding:9px 6px}
+#auth .pclink{background:none;border:none;color:#3a4a8a;text-decoration:underline;font-size:.82rem;font-weight:700;padding:4px}
+#auth #amsg{margin:0;text-align:center;font-size:.85rem}
+#aform .afan{color:#5a6080}
+@media (max-width:520px){.pclogo h1 span{font-size:1.85rem}.pcball{width:52px;height:52px}#auth form#aform{padding:16px 16px 12px}#auth .pcplay{font-size:1.3rem;padding:13px}.pcfeat span{font-size:.68rem;padding:3px 8px}}
+@media (prefers-reduced-motion:reduce){.pccl,.pcmon,.pcfb,.pcball,.pcplay,.pclogo h1 span{animation:none!important}}
+#welc,#newsM,#privM{''')

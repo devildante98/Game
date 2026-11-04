@@ -150,7 +150,7 @@ function mgOpen(id){
   m.hidden=false;m.querySelector(".mgx").onclick=mgClose;
   const left=mgLeft(id),best=mgState().best[id]|0;
   $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+g.ic+'</div><h3>'+g.n+'</h3><p>'+g.d+'</p><div class="mginf"><span>🏆 Récord: <b>'+fmt(best)+'</b></span><span>🎁 Partidas con premio hoy: <b>'+left+'/'+MG_DAY+'</b></span></div><button class="red big" id="mgGo">▶ ¡Jugar!</button>'+(typeof mgHow==="function"?mgHow(g.id):"")+(left?'':'<small class="mut">Hoy ya has ganado todos los premios de este minijuego, pero puedes seguir jugando para batir tu récord.</small>')+'</div>';
-  $("mgGo").onclick=()=>{snd("ui");g.start($("mgB"),mgEnd)};
+  $("mgGo").onclick=()=>{snd("ui");MG.t0=Date.now();g.start($("mgB"),mgEnd)};
   m.querySelector(".mgw").animate([{transform:"scale(.85)",opacity:0},{transform:"none",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.9,.3,1.2)"});
 }
 function mgClose(){mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
@@ -163,12 +163,13 @@ function mgEnd(score){
   if(g.after)extra=g.after(score,!!rw)||"";
   if(typeof tourSubmit==="function")try{extra+=tourSubmit(g.id,score)||""}catch(e){}
   if(typeof mgrSubmit==="function")try{extra+=mgrSubmit(g.id,score)||""}catch(e){}
-  qEv("mg");save();render();
+  // las misiones y el pase de temporada solo cuentan partidas jugadas de verdad (con puntos y al menos 10 s)
+  if(score>0&&Date.now()-(MG.t0||0)>=10000)qEv("mg");save();render();
   if(rec){snd("lvl");setTimeout(()=>snd("win"),400);mgConfetti()}else snd("win");
   $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+(rec?"🏆":g.ic)+'</div><h3>'+(rec?"¡Nuevo récord!":"¡Partida terminada!")+'</h3><div class="mgfinal">'+fmt(score)+'<small>puntos</small></div>'+
     (rw?'<p>Premio: <b>'+rwTxt(rw)+'</b></p>':'<p class="mut">'+(score>0?'Hoy ya no quedan premios en este minijuego.':'¡Sin puntos esta vez!')+'</p>')+extra+
     '<div class="mginf"><span>🏆 Récord: <b>'+fmt(st.best[g.id]|0)+'</b></span><span>🎁 Premios hoy: <b>'+mgLeft(g.id)+'/'+MG_DAY+'</b></span></div><div class="mgbtns"><button class="red big" id="mgAg">🔁 Otra vez</button><button class="alt" id="mgBk">Volver a los minijuegos</button></div></div>';
-  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
+  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;MG.t0=Date.now();g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("mgM");if(m&&!m.hidden)mgClose()}});
 

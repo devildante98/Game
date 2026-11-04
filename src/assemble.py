@@ -295,6 +295,23 @@ NEWS = '''// ================= novedades =================
 // La hora es FIJA: solo se pone una nueva cuando se publica una actualización grande (no cambia con cada retoque).
 // Cada jugador la verá en pantalla la próxima vez que entre. Las novedades desaparecen solas cuando pasa una semana.
 const NEWS=[
+{v:"2026-11-04a",at:"2026-11-04T08:13",t:"🔧 Arreglos/Mejoras",l:[
+"🛒 Tienda de mejoras: compra ×1, ×10, ×50 o el máximo que puedas pagar. Los Guantes de entrenador tienen nivel máximo 30.",
+"💬 Chat: responde a un mensaje (↩️) y menciona a otros jugadores con @apodo, también en los privados. Te avisaremos cuando te mencionen.",
+"✨ Gigamax: cada forma Gigamax tiene su ataque G-Max con un efecto especial (Gigallamarada, Gigatronada…). Eternatus Dinamax Infinito tiene su propia habilidad.",
+"⚔️ Movimientos como en los juegos: Ida y Vuelta, Voltiocambio, Viraje y Última Palabra cambian de Pokémon; Sorpresa solo funciona en el primer turno; Golpe Bajo falla si el rival no ataca; Falso Tortazo nunca debilita.",
+"🔢 Tabla de tipos oficial con inmunidades (Normal/Lucha no afectan a Fantasma, Tierra no afecta a Volador, Eléctrico no afecta a Tierra…).",
+"🏆 Clasificación: los empates comparten puesto y «Tu posición» coincide con la lista.",
+"🧬 Evoluciones: si ya tenías esa especie, eliges con cuál te quedas. La naturaleza, el objeto y el mote pasan a la evolución.",
+"💿 Tienda de MT con todas las MT de la saga (240), como Falso Tortazo.",
+"🧠 Recordador de movimientos y movimientos huevo, desde la ficha de cada Pokémon.",
+"🏅 Gimnasios: los Líderes cambian de región con cada prestigio (Kanto, Johto, Hoenn, Sinnoh, Teselia, Kalos) y sus Pokémon tienen la evolución que corresponde a su nivel.",
+"💪 Combates contra entrenadores más difíciles, como en los juegos: eligen mejor sus ataques, usan Hiperpociones y sus Pokémon están mejor entrenados.",
+"💎 Nuevo: movimientos Z con cristales Z y Pokémon dominantes con aura (Aventura → Dominantes). ¡De regalo, un Normastal Z!",
+"🏛️ El Salón de la Fama, las evoluciones y los premios ya se ven al terminar un combate en modo ventana o pantalla completa.",
+"🦴 Excavación y Cazafósiles: la cuadrícula ya no se agranda ni deja tesoros fuera de la pantalla.",
+"🎯 Minijuegos: las misiones y el pase de temporada solo cuentan partidas jugadas de verdad.",
+"💡 Sugerencias: el estado de cada sugerencia se actualiza al momento."]},
 {v:"2026-10-31e",at:"2026-10-31T15:16",t:"⚖️ Ajustes de equilibrio y mejoras",l:[
 "⚖️ Las recompensas de los logros son más bajas para que el progreso tenga más mérito.",
 "📈 Los Caramelos Raros enseñan al momento los movimientos nuevos (si ya conoce 4, eliges cuál olvidar).",

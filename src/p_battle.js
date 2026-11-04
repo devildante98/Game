@@ -282,8 +282,11 @@ function xpBar(){
   $("xb").style.width=(d.l>=100?100:Math.min(100,d.x/nd*100))+"%";
   $("xt").textContent="Exp "+(d.l>=100?"máx.":Math.min(d.x,nd)+"/"+nd);
 }
-function effTag(mv,foe){if(!foe||mv.cl===0||mv.typeless||mv.fixed||mv.flv||mv.half)return"";const e=effP(mv.t,foe.p);return e>=4?' · <b class="ef2">×4</b>':e>1?' · <b class="ef2">×2</b>':e<=.25?' · <b class="ef5">×¼</b>':e<1?' · <b class="ef5">×½</b>':""}
-function mvBtn(mv,pp,mx,attr,foe){return '<button class="mvb" '+attr+(pp<=0?' disabled':'')+' style="--tc:'+(TC[mv.t]||"#999")+'" title="'+esc(mvDesc(mv))+'"><span>'+esc(mv.n)+'</span><small>'+EM[mv.t]+' '+TIPO[mv.t]+' · PP '+pp+'/'+mx+effTag(mv,foe)+'</small></button>'}
+function effCalc(mv,foe,me){let ty=mv.typeless?"normal":mv.t;const E=typeof B!=="undefined"&&B&&B.E||null;try{if(me)ty=axTy(me,mv)}catch(x){}let e=effP(ty,foe.p);try{if(me)e=axEff(E,me,foe,ty,e)}catch(x){}
+  let mb=0;try{mb=me&&axMB(me)}catch(x){}const a=mb?0:foe.ab;
+  if((ty==="ground"&&(a===26||a===297))||(ty==="water"&&(a===11||a===87||a===114))||(ty==="electric"&&(a===10||a===31||a===78))||(ty==="fire"&&(a===18||a===273))||(ty==="grass"&&a===157)||(a===25&&e<=1))e=0;return e}
+function effTag(mv,foe,me){if(!foe||mv.cl===0||mv.typeless||mv.fixed||mv.flv||mv.half)return"";const e=effCalc(mv,foe,me);return e===0?' · <b class="ef0">No afecta</b>':e>=4?' · <b class="ef2">×4</b>':e>1?' · <b class="ef2">×2</b>':e<=.25?' · <b class="ef5">×¼</b>':e<1?' · <b class="ef5">×½</b>':""}
+function mvBtn(mv,pp,mx,attr,foe,me){return '<button class="mvb" '+attr+(pp<=0?' disabled':'')+' style="--tc:'+(TC[mv.t]||"#999")+'" title="'+esc(mvDesc(mv))+'"><span>'+esc(mv.n)+'</span><small>'+EM[mv.t]+' '+TIPO[mv.t]+' · PP '+pp+'/'+mx+effTag(mv,foe,me)+'</small></button>'}
 // tarjeta de Pokémon para elegir a quién sacar (igual que en el selector de equipo: sprite animado, tipo, nivel y PS)
 function swCard(t,attr,dis,tag){const p=t.p,n=p[0],sh=!!(S.shiny&&S.shiny[n]>0),hp=Math.max(0,t.mh),k=t.mx?hp/t.mx:0,col=k>.5?"#3ecf8e":k>.2?"#ffd35c":"#e63950";
   return '<button class="swc '+p[2]+(hp<=0?' ko':'')+(tag?' tg':'')+'" '+attr+(dis?' disabled':'')+'><span class="swspr">'+ico(p,64,false,sh)+'</span><span class="swt"><b>'+(sh?"✨ ":"")+esc(typeof nk==="function"?nk(n):n)+'</b><small>Nv'+t.l+' · '+(STAR[p[2]]||"")+'</small><small>'+tyTxt(p)+'</small><span class="swhp"><i style="width:'+(k*100).toFixed(1)+'%;background:'+col+'"></i></span><small>PS '+hp+'/'+t.mx+(t.sts&&STS[t.sts]?' · '+STS[t.sts][0]:'')+'</small></span>'+(tag?'<i class="swtag">'+tag+'</i>':'')+'</button>'}
@@ -291,7 +294,7 @@ const swGrid=h=>'<div class="swgrid">'+h+'</div>';
 function setMenu(v){
   if(!B||B.mode!=="s")return;
   let h="";const sd=B.E.sd[0],m=beAct(sd),foe=beAct(B.E.sd[1]);
-  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
+  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe,m)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
   else if(v==="bag")h=ITEMS.filter(it=>S.bag[it[0]]>0&&!it[7]&&!["cand","ppup","ppmax"].includes(it[0])).map(it=>'<button data-k="i:'+it[0]+'">'+it[1]+' ×'+S.bag[it[0]]+'</button>').join("")+'<button data-k="main">Atrás</button>';
   else if(v==="team")h=swGrid(sd.t.map((t,i)=>swCard(t,'data-k="s:'+i+'"',i===sd.ai||t.mh<=0,i===sd.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-k="main">Atrás</button>';
   else if(v==="tgt"){

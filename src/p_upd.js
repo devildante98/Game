@@ -675,3 +675,15 @@ setInterval(()=>{try{fixCheck()}catch(e){}},4000);
 // ================= cristales Z: icono oficial de la mochila (repositorio pokesprite) =================
 function zImgErr(el){if(!el.dataset.r){el.dataset.r=1;el.src=el.src.replace("https://cdn.jsdelivr.net/gh/msikma/pokesprite@master/","https://raw.githubusercontent.com/msikma/pokesprite/master/");return}const s=document.createElement("span");s.textContent="💎";s.style.fontSize=Math.round((+el.dataset.s||32)*.6)+"px";el.replaceWith(s)}
 {const _ii=itemIco;itemIco=function(id,s,noImg){if(/^zx?_/.test(String(id))&&HIMG[id]&&!noImg)return '<img class="pk item zitem" src="https://cdn.jsdelivr.net/gh/msikma/pokesprite@master/items/z-crystals/'+HIMG[id]+'--bag.png" width="'+s+'" height="'+s+'" alt="" loading="lazy" data-s="'+s+'" onerror="zImgErr(this)">';return _ii.apply(this,arguments)}}
+
+// Ayuda de tipos: debilidades reales con los dos tipos del Pokémon (×4, ×2, ×½, ×¼, ×0)
+helpHTML=function(){const keys=Object.keys(TIPO);
+  const grp=(p,ab)=>{const g={4:[],2:[],.5:[],.25:[],0:[]};keys.forEach(a=>{let e=effP(a,p);if(ab&&((a==="ground"&&(ab===26||ab===297))||(a==="water"&&[11,87,114].includes(ab))||(a==="electric"&&[10,31,78].includes(ab))||(a==="fire"&&[18,273].includes(ab))||(a==="grass"&&ab===157)))e=0;if(e in g)g[e].push(a)});return g};
+  const line=(t,l)=>l.length?'<div>'+t+': '+l.map(typeChip).join("")+'</div>':'';
+  const prow=(label,m)=>{if(!m||!m.p)return "";const g=grp(m.p,m.ab),an=m.ab&&typeof abName==="function"&&abName(m.ab);return '<div class="hlprow"><b>'+label+' '+esc(m.p[0])+' '+tys(m.p).map(typeChip).join("")+'</b>'+line("Muy débil a (×4)",g[4])+line("Débil a (×2)",g[2])+line("Resiste (×½)",g[.5])+line("Resiste mucho (×¼)",g[.25])+line("No le afecta (×0)",g[0])+(g[0].length&&m.ab&&[26,297,11,87,114,10,31,78,18,273,157].includes(m.ab)?'<small class="mut">Incluye la inmunidad de su habilidad'+(an?' ('+esc(an)+')':'')+'</small>':'')+'</div>'};
+  const trow=t=>{const g=grp([" ",t]);return '<div class="hlprow"><b>'+typeChip(t)+'</b>'+line("Débil a (×2)",g[2])+line("Resiste (×½)",g[.5])+line("No le afecta (×0)",g[0])+'</div>'};
+  let h='<button id="hlpx" aria-label="Cerrar ayuda" style="float:right;padding:2px 10px">✕</button><h4>Ventajas de tipo</h4><small style="color:var(--mute)">Tabla oficial: ×2 contra un tipo débil, ×½ si lo resiste y ×0 si es inmune. Con dos tipos se multiplican (×4, ×¼…).</small>';
+  try{if(typeof B!=="undefined"&&B&&B.E&&B.E.sd){const sd=B.E.sd,me=[],op=[];sd.forEach((x,i)=>{const m=beAct(x);if(!m||m.mh<=0)return;(beTeamOf(B.E,i)===beTeamOf(B.E,0)?me:op).push(m)});
+    if(me.length||op.length)h+='<h5>Este combate</h5>'+op.map(m=>prow("Rival:",m)).join("")+me.map(m=>prow("Tu",m)).join("")}
+   else if(typeof B!=="undefined"&&B&&B.op&&B.me)h+='<h5>Este combate</h5>'+prow("Rival:",{p:B.op})+prow("Tu",{p:B.me})}catch(e){}
+  return h+'<h5>Todos los tipos</h5>'+keys.map(trow).join("")};

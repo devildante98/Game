@@ -506,3 +506,26 @@ function evoChoose(a,b,rn,ro){
   M.addEventListener("click",e=>{const c=e.target.closest("[data-evc]");if(!c)return;const keep=c.dataset.evc==="new"?rn:ro,drop=c.dataset.evc==="new"?ro:rn;
     if(drop.held&&drop.held!==keep.held){S.bag[drop.held]=(S.bag[drop.held]||0)+1}
     evoPut(b,keep);save();M.remove();snd("ui");toast("✅ Te quedas con "+b+" Nv"+((keep.lv||{}).l||1)+".");try{render();updTeam()}catch(x){}})}
+
+// ================= recordador de movimientos y movimientos huevo =================
+// Desde la ficha: recuerda movimientos de nivel (también los de sus formas anteriores) y aprende movimientos huevo.
+const EGG=__EGG__;
+const PREVO={};Object.keys(GD.EV).forEach(a=>GD.EV[a].forEach(e=>{if(!PREVO[e[0]])PREVO[e[0]]=a}));
+const prevos=n=>{const o=[];let x=PREVO[n],k=0;while(x&&k++<4){o.push(x);x=PREVO[x]}return o};
+const REM_COST={lv:5000,egg:25000};
+function remList(n){const l=lvd(n).l,known=moveIds(n),out=new Map();
+  [n].concat(prevos(n)).forEach(sp=>learn(sp).forEach(x=>{if(x[0]<=l&&!known.includes(x[1])&&MVD[x[1]]&&!out.has(x[1]))out.set(x[1],"lv")}));
+  [n].concat(prevos(n)).forEach(sp=>(EGG[sp]||[]).forEach(id=>{if(!known.includes(id)&&MVD[id]&&!out.has(id))out.set(id,"egg")}));
+  return [...out].map(([id,k])=>({id:id,k:k,m:MVD[id]})).sort((a,b)=>(a.k===b.k?0:a.k==="lv"?-1:1)||a.m.t.localeCompare(b.m.t)||(b.m.pw||0)-(a.m.pw||0))}
+function remOpen(n){const L=remList(n);let M=$("remM");if(M)M.remove();M=document.createElement("div");M.id="remM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");
+  const row=x=>{const c=Math.round(REM_COST[x.k]);return '<button class="remb" data-rem="'+x.id+'" data-rk="'+x.k+'" style="--tc:'+(TC[x.m.t]||"#999")+'"'+(S.t<c?' disabled':'')+'><b>'+esc(x.m.n)+'</b><small>'+EM[x.m.t]+' '+TIPO[x.m.t]+(x.m.cl?' · Poder '+(x.m.pw||"—"):' · Estado')+' · '+(x.k==="egg"?'🥚 Huevo':'📘 Nivel')+'</small><em>🎟️ '+fmt(c)+'</em></button>'};
+  M.innerHTML='<div class="jbox"><div class="remh"><h3>🧠 Recordador de movimientos</h3><button class="alt" data-remx="1">✕</button></div><p class="mut">'+esc(nk(n))+' puede recordar los movimientos que ya podría saber por su nivel (también los de sus formas anteriores) y aprender sus <b>movimientos huevo</b>.</p>'+
+    (L.length?'<div class="remg">'+L.map(row).join("")+'</div>':'<small class="mut">No hay movimientos que recordar ahora mismo.</small>')+'</div>';
+  document.body.appendChild(M);
+  M.addEventListener("click",async e=>{if(e.target===M||e.target.closest("[data-remx]")){M.remove();return}const b=e.target.closest("[data-rem]");if(!b||b.disabled)return;
+    if(fcd){toast("Termina el combate primero.");return}const id=b.dataset.rem,c=Math.round(REM_COST[b.dataset.rk]),mv=MVD[id];if(S.t<c)return;
+    const ids=moveIds(n).slice();let k=-1;if(ids.length>=4){M.hidden=true;k=await lrnAsk(n,mv,ids);M.hidden=false;if(k<0){toast(nk(n)+" no ha aprendido "+mv.n+".");return}}
+    S.t-=c;if(k<0)ids.push(id);else{const old=ids[k];ids[k]=id;if(S.pp&&S.pp[n])delete S.pp[n][old]}S.mv[n]=ids;save();snd("lvl");toast("🧠 ¡"+nk(n)+" ha aprendido "+mv.n+"!");
+    M.remove();render();try{fichaRefresh(n)}catch(x){}})}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-remo]");if(!b)return;snd("ui");remOpen(b.dataset.remo)});
+{const _fm=fmovHTML;fmovHTML=function(n){const h=_fm(n);if(!h||isMegaF(n))return h;const k=remList(n).length;return h.replace(/<\/div>$/,'<button type="button" class="alt mini remopen" data-remo="'+esc(n)+'">🧠 Recordar movimientos'+(k?' ('+k+')':'')+'</button></div>')}}

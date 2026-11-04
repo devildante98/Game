@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793825072">
+<meta name="game-build" content="1793825818">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -1591,6 +1591,8 @@ body.exfsOn #navb,body.exfsOn #fsb{display:none!important}
 #gacOut .card[data-pn]{cursor:zoom-in}
 /* ================= modo juego ================= */
 body:not(.gm) .gmo{display:none!important}
+/* el diseño clásico conserva su letra de siempre (la tipografía nueva es solo del modo juego) */
+body:not(.gm){font-family:"Trebuchet MS",system-ui,sans-serif}
 body.gm{--gtop:66px;--gnav:76px;--gsafe:env(safe-area-inset-bottom,0px);--gtown:200px;overflow:hidden!important;height:100dvh;overscroll-behavior:none}
 @media (max-width:700px){body.gm{--gtop:58px;--gnav:66px;--gtown:132px}}
 @media (max-height:620px){body.gm{--gtown:112px}}
@@ -1952,7 +1954,7 @@ body.gm #fists i svg{width:30px;height:30px;filter:drop-shadow(0 2px 0 rgba(0,0,
 #gScr .gbtn button{position:relative;z-index:1;margin:0 12px!important;min-height:64px;border-radius:14px!important;border:3px solid #0f173a!important;box-shadow:inset 0 3px 0 rgba(255,255,255,.5),0 4px 0 #0f173a!important;font-size:1.15rem!important;font-weight:900!important;color:#fff!important;text-shadow:0 2px 0 rgba(0,0,0,.35);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:transform .08s}
 #gScr #p1,#gScr #p10,#gScr #p100{background:linear-gradient(#fff,#ffe4e6 50%,#ffc8cd)!important;color:#b82a3a!important;text-shadow:none}
 #gScr #ps,#gScr #ps10,#gScr #ps100{background:linear-gradient(#fff,#fff3cc 50%,#ffe08a)!important;color:#8a5200!important;text-shadow:none}
-#p1{grid-column:1;grid-row:2}#p10{grid-column:1;grid-row:3}#p100{grid-column:1;grid-row:4}#ps{grid-column:2;grid-row:2}#ps10{grid-column:2;grid-row:3}#ps100{grid-column:2;grid-row:4}
+#gScr #p1{grid-column:1;grid-row:2}#gScr #p10{grid-column:1;grid-row:3}#gScr #p100{grid-column:1;grid-row:4}#gScr #ps{grid-column:2;grid-row:2}#gScr #ps10{grid-column:2;grid-row:3}#gScr #ps100{grid-column:2;grid-row:4}
 #gScr .gbtn button small{display:inline-flex;align-items:center;gap:3px;padding:2px 10px;border-radius:999px;background:rgba(15,23,58,.85);color:#fff;font-size:.78rem;font-weight:800}
 #gScr .gbtn button:hover:not(:disabled){transform:translateY(-2px)}
 #gScr .gbtn button:active:not(:disabled){transform:translateY(3px);box-shadow:inset 0 3px 0 rgba(255,255,255,.5),0 1px 0 #0f173a!important}
@@ -6828,7 +6830,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793825072";
+const GAME_B="1793825818";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

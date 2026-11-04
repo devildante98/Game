@@ -235,7 +235,7 @@ function pkView(n,sh){
   if(O.cry!==0)setTimeout(()=>{try{cry(n)}catch(e){}},200);
 }
 function pkClose(){const m=$("pkv");if(m)m.hidden=true}
-document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest("#out .card[data-pn]");if(c){snd("ui");pkView(c.dataset.pn,c.dataset.sh==="1")}});
+document.addEventListener("click",e=>{const c=e.target.closest&&e.target.closest("#out .card[data-pn],#gacOut .card[data-pn]");if(c){snd("ui");pkView(c.dataset.pn,c.dataset.sh==="1")}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("pkv");if(m&&!m.hidden)pkClose()}});
 // ---- con los Ajustes o la ficha de Pokémon abiertos también se pausan las animaciones de detrás ----
 (function(){const ids=["optp","pkv"],upd=()=>document.body.classList.toggle("modalon",ids.some(i=>{const e=$(i);return e&&!e.hidden}));

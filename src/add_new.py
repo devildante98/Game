@@ -886,3 +886,4 @@ rep('#welc,#newsM,#privM{',r'''#auth{background:#8cc4f2!important;overflow:hidde
 .pcmus.on{animation:pcpulse 1.2s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){.pcmon,.pcball,.pcplay,.pclogo h1 span{animation:none!important}}
 #welc,#newsM,#privM{''')
+rep('#welc,#newsM,#privM{','#pkv{z-index:100!important}\n#gacOut .card[data-pn]{cursor:zoom-in}\n#welc,#newsM,#privM{')

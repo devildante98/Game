@@ -124,9 +124,11 @@ async function startBattle(cfg){
   // dificultad como en los juegos: los entrenadores tienen Pokémon mejor entrenados (Líderes, Liga y Torre más aún)
   if(trainer){const k=cfg&&cfg.eteam?1.2:1.1,ka=cfg&&cfg.eteam?1.15:1.08;eteam.forEach(m=>{m.mx=Math.round(m.mx*k);m.mh=m.mx;m.ma*=ka})}
   const E=beNew([beSide(team),beSide(eteam)],[[0],[1]]);E.ai=trainer?"hard":"";
+  // Pokémon dominante: aura que sube sus características y más PS
+  if(cfg&&cfg.totem){const t=E.sd[1],m=beAct(t);m.mx=Math.round(m.mx*1.5);m.mh=m.mx;t.v.st.atk=1;t.v.st.def=1;t.v.st.spe=1;E.ai="hard"}
   B={mode:"s",E:E,me:0,SL:[SL_ME,SL_OP],trainer:trainer,tsrc:tsrc,league:league,gym:cfg&&cfg.gym!=null?cfg.gym:null,zone:cfg&&cfg.eteam?null:zoneCur(),xpPool:0,busy:true,choose:null,item:null,showOpp:!!trainer,
-    tower:cfg&&cfg.tower?1:0,tHeal:!trainer?0:cfg&&cfg.gym!=null?2:league?3:cfg&&cfg.tower?1:1,
-    who:(i,n)=>i===0?(typeof nk==="function"?nk(n):n):(trainer?n+" de "+trainer:n+" salvaje"),mine:i=>i===0,onSend:sSend};
+    tower:cfg&&cfg.tower?1:0,totem:cfg&&cfg.totem||null,tHeal:!trainer?0:cfg&&cfg.gym!=null?2:league?3:cfg&&cfg.tower?1:1,
+    who:(i,n)=>i===0?(typeof nk==="function"?nk(n):n):(trainer?n+" de "+trainer:cfg&&cfg.totem?n+" dominante":n+" salvaje"),mine:i=>i===0,onSend:sSend};
   $("fsel").hidden=true;$("arena").hidden=false;arenaReset();
   $("hlpp").hidden=true;$("otn").textContent=trainer?"👤 "+trainer:"";
   if(O.bigmode&&!bigMode)bigSet(O.bigmode);

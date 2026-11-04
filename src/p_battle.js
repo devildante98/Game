@@ -61,10 +61,12 @@ function beUse(E,i,a,rng,push,acted,faint){
   if(v.fl){v.fl=0;push({k:"flinch",s:i,n:me.p[0]});if(me.ab===80)beStat(E,i,[["spe",1]],push);return}
   if(v.cnf>0){v.cnf--;if(!v.cnf)push({k:"cnfend",s:i,n:me.p[0]});else{push({k:"cnf",s:i,n:me.p[0]});if(rng()<1/3){const d=Math.max(1,Math.round(me.ma*40/45*STG(v.st.atk)*(.85+rng()*.15)));me.mh=Math.max(0,me.mh-d);push({k:"cnfhit",s:i,n:me.p[0],d:d});faint(i);return}}}
   if(me.sts==="par"&&rng()<.25){push({k:"par",s:i,n:me.p[0]});return}
+  let zf=0;{const zq=String(a).match(/^z(\d)(t\d)?$/);if(zq){a="m"+zq[1]+(zq[2]||"");zf=1}}
   const q=String(a).match(/^(?:m(\d)|st)(?:t(\d))?$/);if(!q)return;
   let mv,k=-1;const allOut=me.pp.every(x=>x<=0);
   if(q[1]==null){if(!allOut)return;mv=STRUG}
   else{k=+q[1];mv=me.m[k];if(!mv)return;if(me.pp[k]<=0){if(!allOut)return;mv=STRUG;k=-1}}
+  if(zf&&mv&&mv.cl>0&&typeof zMove==="function"){mv=zMove(mv);push({k:"zpow",s:i,n:me.p[0]})}
   if(k>=0){me.pp[k]--;if(me.pp[k]>0&&axFoesL(E,i).some(o=>o.m.ab===46))me.pp[k]--}
   if(!mv.prot)v.pc=0;
   push({k:"use",s:i,n:me.p[0],mv:mv.id});
@@ -247,6 +249,7 @@ async function bePlay(ev){
         else await say("¡"+an+" de "+who+" se ha activado!");
         break}
       case "msg":bePaint(e.snap);await say(e.t);break;
+      case "zpow":snd("flash");if(!hubCalm()){const g=document.createElement("div");g.className="zfx";$("arena").querySelector(".bt").appendChild(g);await g.animate([{opacity:0,transform:"scale(.3)"},{opacity:1,transform:"scale(1)",offset:.5},{opacity:0,transform:"scale(1.5)"}],{duration:1000,easing:"ease-out"}).finished;g.remove()}await say("¡"+who+" libera todo su poder Z!");break;
       case "theal":snd("heal");await fxHeal(sl.sp);bePaint(e.snap);await say("¡"+(B.trainerName||B.trainer||"El rival")+" ha usado una Hiperpoción! ¡"+who+" ha recuperado PS!");break;
       case "noaff":snd("miss");await say("No afecta a "+who+"...");break;
       case "rech":await say("¡"+who+" necesita recuperarse!");break;
@@ -410,7 +413,8 @@ async function sIntro(){
   else{
     const os=$("osp"),oi=$("oi");os.style.opacity=1;oi.style.opacity=1;snd("wild");cry(op[0]);
     if(O.intro){os.animate([{translate:"260px 0",filter:"brightness(0)"},{translate:"0 0",filter:"brightness(0)",offset:.8},{translate:"0 0",filter:"brightness(1)"}],{duration:900,easing:"ease-out"});oi.animate([{translate:"-260px 0"},{translate:"0 0"}],{duration:800,easing:"ease-out"})}
-    await say("¡Un "+op[0]+" salvaje apareció!");
+    await say(B.totem?"¡Ha aparecido "+op[0]+" dominante!":"¡Un "+op[0]+" salvaje apareció!");
+    if(B.totem){snd("flash");$("osp").classList.add("totem");await say("¡"+op[0]+" está envuelto en un aura! ¡Sus características han aumentado!")}
     if(beAct(B.E.sd[1]).sh){snd("lvl");burst("✨",pos("osp"),12,80,28);await say("✨ ¡Es un Pokémon VARIOCOLOR! ¡No lo dejes escapar!")}
   }
   await playerThrow(me,"msp","mi");
@@ -567,6 +571,7 @@ async function turn(k){
     const id=k.slice(2),it=ITEMS.find(i=>i[0]===id);
     if(!(S.bag[id]>0))return;
     if(!it[3]){B.item=id;setMenu("tgt");return}
+    if(B.totem){B.busy=true;setMenu(false);await say("¡No puedes capturar a un Pokémon dominante!");B.busy=false;setMenu(true);return}
     if(B.trainer){B.busy=true;setMenu(false);await say("¡No puedes capturar a los Pokémon de otro entrenador!");B.busy=false;setMenu(true);return}
     {const wm=beAct(B.E.sd[1]),cap=lvCap();if(wm.l>cap){B.busy=true;setMenu(false);await say("¡"+wm.p[0]+" (Nv"+wm.l+") es demasiado fuerte! Solo puedes capturar Pokémon hasta el Nv"+cap+". "+capWhy());B.busy=false;setMenu(true);return}}
     return ball(id,it);

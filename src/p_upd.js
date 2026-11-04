@@ -549,3 +549,41 @@ document.addEventListener("focusout",e=>{if(SUGP&&e.target.closest&&e.target.clo
 document.addEventListener("change",async e=>{const sel=e.target.closest&&e.target.closest("#sugList [data-sst]");if(!sel||!window.sugUpd)return;const w=sel.closest("[data-sid]");
   try{await window.sugUpd(w.dataset.sid,{st:sel.value});toast("💾 Estado guardado: "+SUGST[sel.value][0]+" "+SUGST[sel.value][1])}catch(x){toast("No se ha podido guardar ("+((x&&x.code)||"error")+").")}
   sel.blur()});
+// ================= MOVIMIENTOS Z Y POKÉMON DOMINANTES =================
+const ZN={normal:"Carrera Arrolladora",fire:"Hecatombe Pírica",water:"Hidrovórtice Abisal",electric:"Gigavoltio Destructor",grass:"Megatón Floral",ice:"Glaciación Apocalíptica",fighting:"Ráfaga Demoledora",poison:"Diluvio Corrosivo",
+  ground:"Barrena Telúrica",flying:"Picado Supersónico",psychic:"Disruptor Psíquico",bug:"Guadaña Sedosa",rock:"Aplastamiento Gaia",ghost:"Presa Espectral",dragon:"Dracoaliento Devastador",dark:"Agujero Negro Aniquilador",steel:"Embestida Metálica",fairy:"Arrumaco Sideral"};
+const zPow=p=>{p=p||60;return p<=55?100:p<=65?120:p<=75?140:p<=85?160:p<=95?175:p<=100?180:p<=110?185:p<=125?190:p<=130?195:200};
+function zMove(mv){if(!mv)return mv;return Object.assign({},mv,{id:"z:"+mv.id,n:ZN[mv.t]||"Movimiento Z",pw:mv.fixed||mv.flv||mv.half?150:zPow(mv.pw),ac:0,ailc:0,fl:0,ch:[],sc:0,hits:null,rec:0,drain:0,kami:0,rech:0,fixed:0,flv:0,half:0,z:1})}
+Object.assign(HIMG,{z_normal:"normalium-z",z_fire:"firium-z",z_water:"waterium-z",z_electric:"electrium-z",z_grass:"grassium-z",z_ice:"icium-z",z_fighting:"fightinium-z",z_poison:"poisonium-z",z_ground:"groundium-z",z_flying:"flyinium-z",z_psychic:"psychium-z",z_bug:"buginium-z",z_rock:"rockium-z",z_ghost:"ghostium-z",z_dragon:"dragonium-z",z_dark:"darkinium-z",z_steel:"steelium-z",z_fairy:"fairium-z"});
+// los cristales Z no se venden en la tienda
+{const _bb=buildBag;buildBag=function(){_bb.apply(this,arguments);try{ITEMS.forEach((it,i)=>{if(/^z_/.test(it[0])){const e=$("bq"+i);const r=e&&e.closest(".row");if(r)r.hidden=true}})}catch(e){}}}
+try{ITEMS.forEach((it,i)=>{if(/^z_/.test(it[0])){const e=$("bq"+i);const r=e&&e.closest(".row");if(r)r.hidden=true}})}catch(e){}
+// botón «Movimiento Z» en combate (una vez por combate)
+function zOpts(){if(!B||B.mode!=="s"||B.zUsed||!B.E)return [];const m=beAct(B.E.sd[0]);if(!m||m.mh<=0||!/^z_/.test(m.it||""))return [];const t=m.it.slice(2);
+  return m.m.map((mv,k)=>({mv:mv,k:k})).filter(o=>o.mv&&o.mv.cl>0&&o.mv.t===t&&m.pp[o.k]>0)}
+{const _sm=setMenu;setMenu=function(v){_sm.apply(this,arguments);try{if(v===true&&zOpts().length){const mn=$("menu");if(mn&&!mn.querySelector('[data-k="zmenu"]'))mn.insertAdjacentHTML("beforeend",'<button data-k="zmenu" class="zbtn">💎 Movimiento Z</button>')}}catch(e){}}}
+{const _t=turn;turn=async function(k){if(typeof k==="string"){
+    if(k==="zmenu"){const L=zOpts();$("menu").innerHTML=L.map(o=>{const z=zMove(o.mv);return '<button class="mvb zmv" data-k="z'+o.k+'" style="--tc:'+(TC[o.mv.t]||"#999")+'">💎 '+esc(z.n)+'<small>desde '+esc(o.mv.n)+' · Poder '+z.pw+'</small></button>'}).join("")+'<button data-k="zback">Volver</button>';return}
+    if(k==="zback"){setMenu(true);return}
+    if(/^z\d$/.test(k)){if(!zOpts().some(o=>"z"+o.k===k))return;B.zUsed=1;return sTurn(k)}}
+  return _t.apply(this,arguments)}}
+// ---- Pokémon dominantes: uno por tipo, se puede retar a cada uno una vez al día; el primero de cada tipo da su cristal Z ----
+const TOTEM={normal:"Gumshoos",fire:"Salazzle",water:"Araquanid",electric:"Togedemaru",grass:"Lurantis",ice:"Crabominable",fighting:"Hariyama",poison:"Toxapex",ground:"Mudsdale",flying:"Toucannon",psychic:"Oranguru",bug:"Vikavolt",rock:"Lycanroc",ghost:"Mimikyu",dragon:"Kommo-o",dark:"Absol",steel:"Scizor",fairy:"Ribombee"};
+const totSp=t=>{let n=TOTEM[t];if(PM[n])return PM[n];return P.filter(p=>tys(p).includes(t)&&p[2]!=="L"&&p[2]!=="M"&&!isMegaF(p[0])).sort((a,b)=>WW[b[2]]-WW[a[2]])[0]};
+const totSt=()=>{S.tot=S.tot||{d:"",w:{},z:{}};if(S.tot.d!==today()){S.tot.d=today();S.tot.w={}}return S.tot};
+const totLv=()=>clampL(Math.min(lvCap(),Math.max(10,leadLevel()))+3);
+nxPanel("totP","🌟 Pokémon dominantes","Pokémon especialmente poderosos rodeados de un aura que aumenta sus características. Véncelos para conseguir el cristal Z de su tipo.");
+{const g=HUB.find(x=>x.k==="adv");if(g&&!g.tabs.some(t=>t[0]==="totP"))g.tabs.push(["totP","Dominantes"]);HUBP.totP="adv";HUBR.totP=()=>totUI()}
+function totUI(){const b=$("totPB");if(!b)return;const st=totSt();
+  if(!st.gift){st.gift=1;S.bag.z_normal=(S.bag.z_normal|0)+1;save();toast("🎁 ¡Regalo: Normastal Z! Equípaselo a un Pokémon que sepa un ataque de tipo Normal.")}
+  const L=leadLevel(),zl=Object.keys(ZN);
+  b.innerHTML='<p class="mut">💎 <b>Movimientos Z</b>: equipa un cristal Z (desde la ficha o la Mochila) a un Pokémon que sepa un ataque de ese tipo. En combate aparecerá el botón «💎 Movimiento Z»: un ataque muchísimo más fuerte que no falla (una vez por combate).</p>'+
+    '<div class="totg">'+zl.map(t=>{const p0=totSp(t);if(!p0)return "";const p=stageFor(p0,totLv());const won=!!(st.z&&st.z[t]),done=!!st.w[t],zi="z_"+t,it=ITEMS.find(x=>x[0]===zi);
+      return '<div class="totc" style="--tc:'+(TC[t]||"#999")+'"><span class="totsp">'+ico(p,64)+'</span><div><b>'+esc(p[0])+' dominante</b><small>'+EM[t]+' '+TIPO[t]+' · Nv'+totLv()+'</small><small>'+(won?'✅ '+esc(it?it[1]:"Cristal")+' conseguido':'🎁 Premio: '+esc(it?it[1]:"Cristal Z"))+' · tienes ×'+(S.bag[zi]|0)+'</small></div><button data-tot="'+t+'"'+(done||fcd?' disabled':'')+'>'+(done?'✔️ Mañana':'⚔️ Retar')+'</button></div>'}).join("")+'</div>'}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tot]");if(!b)return;const t=b.dataset.tot,p=totSp(t);if(!p||fcd)return;
+  if(!(S.team||[]).some(n=>n&&S.owned[n]&&S.hp[n]!==0)){toast("Necesitas un equipo con al menos un Pokémon con PS.");return}
+  const L=totLv();startBattle({eteam:[mkEnemy(stageFor(p,L),L)],trainer:null,totem:t})});
+{const _ab=afterBattle;afterBattle=async function(res){await _ab(res);try{if(B&&B.totem){const t=B.totem,st=totSt();st.w[t]=1;
+  if(res==="win"){if(!st.z[t]){st.z[t]=1;S.bag["z_"+t]=(S.bag["z_"+t]|0)+1;const it=ITEMS.find(x=>x[0]==="z_"+t);snd("lvl");await say("💎 ¡Has conseguido "+(it?it[1]:"un cristal Z")+"!")}
+    else{const rw={t:150000,it:{cand:1}};grant(rw);await say("🎁 ¡El Pokémon dominante te deja "+rwTxt(rw)+"!")}}
+  save()}}catch(e){console.error(e)}}}

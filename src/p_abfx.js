@@ -309,7 +309,7 @@ function axField(E,push){axSafe(()=>{
   if(df>0)axLive(E).forEach(o=>{if(o.m.ab===220){axSay(push,o.i,o.m,"¡{a} de {w} se ha activado!");beStat(E,o.i,[["atk",df]],push)}});
   if(!axHas(E,256))axGasOff(E)})}
 // ---------- fuera del motor: huir y objetos al ganar ----------
-function axTrapped(){return axSafe(()=>{if(!B||!B.E||B.trainer)return "";const me=beAct(B.E.sd[0]),fo=beAct(B.E.sd[1]);if(!me||!fo||fo.mh<=0||me.ab===50)return "";
+function axTrapped(){return axSafe(()=>{if(B&&B.totem)return "¡No puedes huir de un Pokémon dominante!";if(!B||!B.E||B.trainer)return "";const me=beAct(B.E.sd[0]),fo=beAct(B.E.sd[1]);if(!me||!fo||fo.mh<=0||me.ab===50)return "";
   const t=tys(me.p);if(fo.ab===23||(fo.ab===71&&!t.includes("flying")&&me.ab!==26)||(fo.ab===42&&t.includes("steel")))return "¡No puedes huir! "+abName(fo.ab)+" de "+fo.p[0]+" salvaje te lo impide.";return ""},"")}
 {const _ab=afterBattle;afterBattle=async function(res){await _ab(res);try{if((res==="win"||res==="cap")&&B&&B.mode==="s"&&B.E){
   for(const t of B.E.sd[0].t){if(!t.played||t.mh<=0||!S.owned[t.p[0]])continue;let id=null;

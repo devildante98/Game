@@ -13,7 +13,25 @@ const HOLD=[
  ["qclaw","Garra Rápida",700000,"A veces (20%) le permite atacar primero"],
  ["scope","Periscopio",700000,"Duplica la probabilidad de asestar golpes críticos"],
  ["shell","Campana Concha",800000,"Recupera 1/8 del daño que causa con sus ataques"],
- ["lucky","Huevo Suerte",1000000,"Gana un 50% más de experiencia en los combates"]];
+ ["lucky","Huevo Suerte",1000000,"Gana un 50% más de experiencia en los combates"],
+ ["z_normal","Normastal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Normal (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_fire","Pirostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Fuego (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_water","Hidrostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Agua (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_electric","Electrostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Eléctrico (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_grass","Fitostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Planta (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_ice","Glaciastal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Hielo (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_fighting","Luchastal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Lucha (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_poison","Toxistal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Veneno (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_ground","Geostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Tierra (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_flying","Aerostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Volador (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_psychic","Psicostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Psíquico (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_bug","Insectostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Bicho (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_rock","Litostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Roca (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_ghost","Espectrostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Fantasma (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_dragon","Dracostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Dragón (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_dark","Nictostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Siniestro (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_steel","Metalostal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Acero (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"],
+ ["z_fairy","Feeristal Z",0,"Permite usar una vez por combate el movimiento Z de tipo Hada (si conoce un ataque de ese tipo). Se consigue venciendo a Pokémon dominantes"]];
 const HIMG={left:"leftovers",lorb:"life-orb",sash:"focus-sash",sitrus:"sitrus-berry",lum:"lum-berry",qclaw:"quick-claw",scope:"scope-lens",shell:"shell-bell",lucky:"lucky-egg"};
 const HOLDK={};HOLD.forEach(h=>{HOLDK[h[0]]=h;ITEMS.push([h[0],h[1],h[2],0,0,0,h[3]+". Se equipa desde la Mochila o desde la ficha del Pokémon","hold"])});
 // ================= naturalezas: +10% en una estadística y -10% en otra (el Ataque y el Ataque Especial son la misma aquí, igual que la Defensa y la Defensa Especial) =================

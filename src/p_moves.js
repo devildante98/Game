@@ -31,7 +31,7 @@ function mvParse(r){
 }
 GD.MV.forEach(r=>{const m=mvParse(r);MVD[m.id]=m;MVX.push(m)});
 const STRUG={id:"forc",n:"Forcejeo",t:"normal",pw:50,ac:0,pp:1,pr:0,cl:1,fx:"c",ch:[],rec:25,typeless:1};
-const MVI=id=>id==="forc"?STRUG:MVD[id];
+const MVI=id=>id==="forc"?STRUG:String(id).slice(0,2)==="z:"&&typeof zMove==="function"?zMove(MVD[String(id).slice(2)]):MVD[id];
 // aprendizaje por nivel (como en los juegos): [[nivel, id], ...]
 const _ls={};
 function learnRaw(n){

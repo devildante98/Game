@@ -95,3 +95,18 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 
 // la barra clásica de medallas no se actualiza mientras dura un combate de Exploración
 {const _h=hudUI;hudUI=function(){if(XGSW)return;return _h.apply(this,arguments)}}
+// ---------- las zonas se abren al avanzar la historia (como en los juegos: siempre hay Pokémon de tu nivel) ----------
+const XGGATE={ruta:[2,"La Profesora Vega te está esperando en su laboratorio. ¡Ve a verla antes de salir del pueblo!"],
+  bosque:[3,"Un vecino te detiene: «Dicen que en el bosque hay gente rara… Ayuda primero a Lía en la Ruta 1.»"],
+  cueva:[4,"Un montañero te detiene: «La Cueva Roca es muy peligrosa para tu nivel. Entrena primero en el Bosque Verde.»"],
+  playa:[5,"Un socorrista te detiene: «La Playa Coral está cerrada por ahora. Dicen que el Equipo Ocaso anda por la Cueva Roca…»"],
+  cima:[6,"Un guarda te detiene: «Solo se puede subir a la Cima Aurora cuando la Profesora Vega lo autorice.»"],
+  glaciar:[13,"La entrada está cubierta de nieve. Habla primero con la gente de Pueblo Nevado."],pico_e:[14,"Una pared de hielo bloquea la subida. Explora primero la Caverna Glaciar."],
+  crater:[18,"Hace demasiado calor para entrar. Habla primero con la gente de Villa Volcán."],cumbre:[19,"Las rocas ardientes bloquean el paso. Explora primero el Cráter."],
+  torre:[22,"La puerta de la torre está cerrada con un candado eléctrico. Habla con quien te espera en Ciudad Trueno."]};
+const xgOpen=m=>{const g=XGGATE[m];return !g||(stSt().s|0)>=g[0]};
+{const _a=exArrive;exArrive=function(){if(!EX.cut&&EX.M&&EX.M.w){const w=EX.M.w[exAt(EX.x,EX.y)];
+    if(w&&!xgOpen(w.to)){const st=exSt();snd("ui");exSay([XGGATE[w.to][1]],()=>{exStepBack();st.x=EX.x;st.y=EX.y;st.f=EX.f});return}}
+  return _a.apply(this,arguments)}}
+// si tu partida de Exploración está en una zona que todavía no te toca, vuelves a Pueblo Brisa
+{const _g=exGo;exGo=function(){const r=_g.apply(this,arguments);try{if(!xgOpen(exSt().m)&&(stSt().s|0)>0){exLoad("centro",7,6,"u");setTimeout(()=>{if(!EX.cut&&!EX.dlg)exSay(["Vuelves al Centro Pokémon de Pueblo Brisa para seguir tu aventura desde aquí."])},700)}}catch(e){console.error(e)}return r}}

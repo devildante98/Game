@@ -442,3 +442,43 @@ body.gm #fists i svg{width:30px;height:30px;filter:drop-shadow(0 2px 0 rgba(0,0,
   body.gbat #gScr .hubh{display:none}body.gbat #gScr{padding:4px}body.gbat #gScr .hubb{padding:8px}
   #gScr #fmsg{font-size:.9rem;min-height:0!important;padding:8px 12px!important}
 }
+/* ===== arreglos: selector de zona legible, sets con aire, cuenta y rendimiento ===== */
+#gScr #zoneSel,#gScr #zoneSel option{color:#1b2340!important;background-color:#fff!important}
+#gScr #zoneSel option:checked{background-color:#dfe6ff!important}
+#gScr #fsel.gopen>#sets{display:flex!important;flex-direction:column;gap:12px}
+#gScr #sets{padding:16px!important;border-radius:18px!important;border:2px solid rgba(27,35,64,.2)!important;background:var(--panel)!important;box-shadow:0 4px 0 rgba(27,35,64,.15)}
+#gScr #sets .sets-row{display:flex!important;flex-wrap:wrap;gap:10px!important;align-items:center;margin:0!important}
+#gScr #sets .sets-row>b{flex:0 0 auto;margin-right:4px}
+#gScr #sets .sets-row select,#gScr #sets .sets-row input{flex:1 1 220px;min-width:0;padding:10px 12px}
+#gScr #sets .sets-row button{flex:0 0 auto;padding:10px 16px!important}
+#gScr #setPrev{display:flex!important;flex-wrap:wrap;gap:8px!important;align-items:center;padding:8px 10px;border-radius:12px;background:rgba(27,35,64,.06)}
+#gScr #fsel.gopen>.actions:not(.gfight){display:flex!important;flex-wrap:wrap;gap:10px!important}
+#gScr #fsel>.actions:not(.gfight)>*{flex:1 1 180px;min-width:0}
+/* Guardar y Salir: en la barra superior (ordenador) y siempre en Ajustes */
+body.gm #acct{top:calc(16px + env(safe-area-inset-top,0px))!important;left:auto!important;right:158px;z-index:62;background:rgba(6,10,34,.55)!important;border:2px solid rgba(255,255,255,.25)!important;color:#fff;max-width:none!important}
+body.gm #acct #aname{display:none}
+@media (max-width:1180px){body.gm .gpass{display:none!important}}
+@media (max-width:860px){body.gm #acct{display:none!important}}
+.gacc{display:flex;flex-direction:column;gap:8px;padding:12px;margin-bottom:6px;border-radius:14px;background:rgba(19,163,127,.12);border:2px solid rgba(19,163,127,.35)}
+.gacc[hidden]{display:none!important}
+.gacc>div{display:flex;gap:8px;flex-wrap:wrap}
+.gacc button{flex:1}
+/* rendimiento */
+body.gm #pcFront{display:none}
+#gTod{mix-blend-mode:normal!important}
+body[data-tod=dawn] #gTod{opacity:1;background:linear-gradient(rgba(255,150,110,.22),rgba(255,210,170,.12) 60%,rgba(255,220,190,.08))}
+body[data-tod=dusk] #gTod{opacity:1;background:linear-gradient(rgba(255,110,70,.3),rgba(255,150,100,.2) 45%,rgba(130,70,140,.25))}
+body[data-tod=night] #gTod{opacity:1;background:linear-gradient(rgba(10,14,50,.62),rgba(20,28,80,.5) 50%,rgba(30,40,90,.45))}
+#gStars{mix-blend-mode:normal;animation:gtw2 4s ease-in-out infinite alternate}
+@keyframes gtw2{to{opacity:.55}}
+body[data-tod=night] #gStars{opacity:1}
+#gRays,#gNav .gbig .gni:before,#gScr #stage>.gview:before,.glr,#fists{will-change:transform}
+body.gm #train{filter:none}
+body.gm:not(.gmhome) #farm *,body.gm:not(.gmhome) #farm,body.gm:not(.gmhome) #gStars{animation-play-state:paused!important}
+/* animaciones ligeras: sin giros ni rebotes continuos, menos efectos */
+body.glite #gRays,body.glite #gNav .gbig .gni:before,body.glite #gScr #stage>.gview:before,body.glite #fists,body.glite #gStars,body.glite .gbd,body.glite #train,body.glite .gtrn img,body.glite .gpk img,body.glite #gTr img,body.glite #gBud img,body.glite .gsmk,body.glite #gScr #fgo,body.glite #gScr #menu>.frmb,body.glite #gNav .gbig .gni,body.glite #gPed i,body.glite .gtar{animation:none!important}
+body.glite .gsmk{display:none}
+body.glite .gbld canvas,body.glite .gsp img,body.glite .gwki{filter:none!important}
+.gacc{margin:4px 0 12px}
+.gacc button{min-height:44px;font-weight:800!important;border-radius:12px!important}
+#gOut{background:#e8414f!important;color:#fff!important}

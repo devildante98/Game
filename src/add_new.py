@@ -907,3 +907,6 @@ rep('<link rel="preconnect" href="https://fonts.googleapis.com">','<script>try{i
  'if(localStorage.getItem("gacha-rescue"))document.addEventListener("DOMContentLoaded",function(){var a=document.getElementById("alocal");if(!a)return;var n=document.createElement("p");n.className="rescn";'+
  'n.textContent="✅ Ha llegado tu partida sin cuenta de la dirección antigua. Pulsa «Jugar sin cuenta» para cargarla.";a.parentNode.insertBefore(n,a.nextSibling)})}catch(e){}</script>\n<link rel="preconnect" href="https://fonts.googleapis.com">')
 rep('#welc,#newsM,#privM{','.rescn{margin:8px auto 0;max-width:420px;padding:8px 12px;border-radius:12px;background:#e6fff2;border:2px solid #1fa36a;color:#0d5a39;font-weight:800;font-size:.85rem;text-align:center;line-height:1.35}\n#welc,#newsM,#privM{')
+
+# ===== buscadores: título descriptivo y dirección principal =====
+rep('<title>Poke Gacha Online · Gacha</title>','<title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>\n<link rel="canonical" href="https://pokegachaonline.es/">')

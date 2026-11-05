@@ -10,7 +10,23 @@ const effP=(a,p)=>tys(p).reduce((m,t)=>m*typeEff(a,t),1),stabP=(t,p)=>tys(p).inc
 const tyNm=p=>tys(p).map(t=>TIPO[t]).join(" / "),tyTxt=p=>tys(p).map(t=>EM[t]+" "+TIPO[t]).join(" · ");
 const WW={C:1,R:2,E:3,L:4},HPM={C:90,R:120,E:150,L:180},ATK={C:15,R:20,E:25,L:30};
 const lvd=n=>S.lv[n]||(S.lv[n]={l:1,x:0});
-const stH=(p,l)=>HPM[p[2]]+(l-1)*8,stA=(p,l)=>ATK[p[2]]+(l-1)*1.5,need=l=>25*l;
+// ===== estadísticas base oficiales de cada especie: [PS, Ataque, Defensa, At. Esp., Def. Esp., Velocidad] =====
+const BSD=__BSTATS__;
+// media de cada rareza (por si alguna forma no tuviera datos)
+const BSR={C:[50,56,53,49,50,51],R:[72,80,76,71,73,70],E:[86,97,88,88,86,76],M:[79,109,96,96,90,82],L:[95,110,98,107,98,97]};
+const bsOf=p=>(p&&BSD[p[0]])||BSR[p&&p[2]]||BSR.R;
+// para el combate, cada estadística se acerca a la media de su rareza conservando el 80% de la diferencia oficial:
+// así un Pokémon medio de cada rareza rinde como antes, pero Snorlax tiene muchísimos PS, Jolteon es rapidísimo, Shuckle aguanta como nadie…
+const _bsE={};
+const bsE=p=>{const k=p&&p[0]||"?";let e=_bsE[k];if(e)return e;const b=bsOf(p),m=BSR[p&&p[2]]||BSR.R,s=m.reduce((a,x)=>a+x,0),T=450+.3*(s-450);e=_bsE[k]=b.map((x,i)=>Math.max(10,m[i]*T/s+.8*(x-m[i])));return e};
+const bsK=l=>.174+.0138*(l-1);
+const bsHP=(p,l)=>{const b=Math.max(20,bsE(p)[0]);return Math.round(1.75*b+4+(l-1)*8*(b+80)/155)};
+const bsSt=(p,l,i)=>(bsE(p)[i]+30)*bsK(l);
+// ataque especial respecto al físico, y multiplicador de daño según la defensa del que recibe el golpe
+const bsSR=p=>{const b=bsE(p);return (b[3]+30)/(b[1]+30)};
+const bsDF=(p,phy)=>100/(bsE(p)[phy?2:4]+30);
+const bsSpe=p=>bsOf(p)[5]/6;
+const stH=(p,l)=>bsHP(p,l),stA=(p,l)=>bsSt(p,l,1),need=l=>25*l;
 // ================= movimientos originales de la saga (datos de PokeAPI) =================
 // cada movimiento: tipo, potencia, precision, PP, prioridad, clase (0 estado, 1 fisico, 2 especial) y efectos
 const TL={n:"normal",f:"fire",w:"water",g:"grass",e:"electric",p:"psychic",h:"ghost",d:"dragon",b:"bug",x:"poison",r:"rock",o:"ground",t:"fighting",y:"fairy",i:"ice",a:"flying",s:"steel",k:"dark"};

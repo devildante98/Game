@@ -25,7 +25,7 @@ const beAct=sd=>sd.t[sd.ai];
 const beTeamOf=(E,i)=>E.tm.findIndex(t=>t.includes(i));
 const beFoes=(E,i)=>{const ti=beTeamOf(E,i);return E.tm.filter((t,k)=>k!==ti).reduce((a,b)=>a.concat(b),[])};
 const beSnap=E=>({ai:E.sd.map(s=>s.ai),hp:E.sd.map(s=>s.t.map(x=>Math.max(0,x.mh))),st:E.sd.map(s=>s.t.map(x=>x.sts))});
-const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+WW[m.p[2]]*4)*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(E?axSpdK(s,E):1)+rng()*3};
+const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+bsSpe(m.p))*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(E?axSpdK(s,E):1)+rng()*3};
 // habilidades: multiplicadores de daño e Intimidación
 function abAtk(me,mv,ty){const a=me.ab;let k=1;if(!a)return 1;
   if(me.mh<=me.mx/3&&((a===65&&ty==="grass")||(a===66&&ty==="fire")||(a===67&&ty==="water")||(a===68&&ty==="bug")))k*=1.5;
@@ -59,7 +59,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   if(me.sts==="slp"){if(me.slp>0){me.slp-=me.ab===48?2:1;push({k:"slp",s:i,n:me.p[0]});return}me.sts="";push({k:"wake",s:i,n:me.p[0]})}
   if(me.sts==="frz"){if(rng()<.2){me.sts="";push({k:"thaw",s:i,n:me.p[0]})}else{push({k:"frz",s:i,n:me.p[0]});return}}
   if(v.fl){v.fl=0;push({k:"flinch",s:i,n:me.p[0]});if(me.ab===80)beStat(E,i,[["spe",1]],push);return}
-  if(v.cnf>0){v.cnf--;if(!v.cnf)push({k:"cnfend",s:i,n:me.p[0]});else{push({k:"cnf",s:i,n:me.p[0]});if(rng()<1/3){const d=Math.max(1,Math.round(me.ma*40/45*STG(v.st.atk)*(.85+rng()*.15)));me.mh=Math.max(0,me.mh-d);push({k:"cnfhit",s:i,n:me.p[0],d:d});faint(i);return}}}
+  if(v.cnf>0){v.cnf--;if(!v.cnf)push({k:"cnfend",s:i,n:me.p[0]});else{push({k:"cnf",s:i,n:me.p[0]});if(rng()<1/3){const d=Math.max(1,Math.round(me.ma*bsDF(me.p,true)*40/45*STG(v.st.atk)*(.85+rng()*.15)));me.mh=Math.max(0,me.mh-d);push({k:"cnfhit",s:i,n:me.p[0],d:d});faint(i);return}}}
   if(me.sts==="par"&&rng()<.25){push({k:"par",s:i,n:me.p[0]});return}
   let zf=0;{const zq=String(a).match(/^([zx])(\d)(t\d)?$/);if(zq){a="m"+zq[2]+(zq[3]||"");zf=zq[1]}}
   const q=String(a).match(/^(?:m(\d)|st)(?:t(\d))?$/);if(!q)return;
@@ -103,7 +103,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
     else{const phy=mv.cl!==2;let am=tm.ab===109&&!axMB(me)?1:STG(phy?v.st.atk:v.st.spa),dm=me.ab===109?1:STG(phy?ts.v.st.def:ts.v.st.spd);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
-      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1))*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
+      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1)*bsSR(me.p))*bsDF(tm.p,phy)*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
     if(cr)crit++;
     if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
     if(mv.id==="206"&&d>=tm.mh&&tm.mh>1)d=tm.mh-1;

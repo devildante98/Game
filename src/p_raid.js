@@ -73,7 +73,7 @@ function rdMeUI(){const m=RD.team[RD.ai],box=$("rdMe");if(!box)return;
 function rdAttack(k){
   if(RD.phase!=="fight"||RD.out||!RD.d)return;const now=Date.now();if(now<(RD.d.go||0)||now<RD.cd)return;const m=RD.team[RD.ai];if(!m||m.mh<=0)return;
   const mv=k>=0?m.m[k]:{n:"Placaje",pw:40,t:"normal",cl:1},foe=PM[RD.d.boss],e=mv.typeless?1:effP(mv.t,foe),stab=stabP(mv.t,m.p)?1.5:1,cr=Math.random()<(m.it==="scope"?.12:.06);
-  const dmg=Math.max(1,Math.round(m.ma*(mv.cl===2?(m.nsa||1):(m.na||1))*(mv.pw||40)/45*e*stab*(.85+Math.random()*.15)*(cr?1.5:1)*(m.it==="lorb"?1.3:1)*2.2));
+  const dmg=Math.max(1,Math.round(m.ma*(mv.cl===2?(m.nsa||1)*bsSR(m.p):(m.na||1))*bsDF(foe,mv.cl!==2)*(mv.pw||40)/45*e*stab*(.85+Math.random()*.15)*(cr?1.5:1)*(m.it==="lorb"?1.3:1)*2.2*1.1));
   RD.acc+=dmg;RD.cd=now+Math.max(650,900+(mv.pw||40)*3);snd("hit",e);
   const bs=$("rdBoss");if(bs&&!hubCalm()){bs.animate([{transform:"translateX(0)",filter:"brightness(1)"},{transform:"translateX(-8px)",filter:"brightness(2.2)"},{transform:"translateX(6px)"},{transform:"none",filter:"brightness(1)"}],{duration:300});const r=bs.getBoundingClientRect();mgPop(r.left+r.width/2+Math.random()*80-40,r.top+r.height/3,(cr?"¡Crítico! ":"")+fmt(dmg),e>1?"#ffd35c":e<1?"#9aa":"#fff")}
   $("rdMsg").textContent=nk(m.p[0])+" usa "+mv.n+(e>1?". ¡Es súper eficaz!":e<1?". No es muy eficaz…":"");

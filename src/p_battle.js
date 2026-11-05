@@ -283,6 +283,10 @@ async function bePlay(ev){
 // ======================================================================
 // COMBATE NORMAL (salvaje, entrenador o Liga)
 // ======================================================================
+// el Pokémon capturado conserva la vida que tenía (en proporción a su vida máxima, que se conoce al acabar el combate)
+function capKeepHp(n,f){f=Math.max(0,Math.min(1,f||0));if(f>=1)return;const xg=typeof XGSW!=="undefined"&&!!XGSW;let t=0;
+  const iv=setInterval(()=>{if(++t>400){clearInterval(iv);return}if(fcd||(typeof XGSW!=="undefined"&&!!XGSW!==xg&&!xg)||(xg&&typeof XGSW!=="undefined"&&XGSW))return;clearInterval(iv);
+    try{const D=xg?S.xg:S;if(!D)return;const L=(D.lv&&D.lv[n]&&D.lv[n].l)||1;D.hp=D.hp||{};D.hp[n]=Math.max(1,Math.round(f*stH(PM[n],L)));save()}catch(e){}},300)}
 function saveHp(){if(!B||B.mode!=="s")return;B.E.sd[0].t.forEach(t=>{S.hp[(t.p0||t.p)[0]]=Math.max(0,Math.min(t.mh,t.mx))});save()}
 function syncPP(){if(!B||B.mode!=="s")return;B.E.sd[0].t.forEach(t=>t.m.forEach((mv,k)=>{if(mv.id!=="forc")ppSet((t.p0||t.p)[0],mv.id,t.pp[k])}))}
 const myAct=()=>beAct(B.E.sd[B.me||0]);
@@ -564,7 +568,7 @@ async function ball(id,it){
   const sm=say("¡Lanzas una "+it[1]+"!");await catchFx(id,nsh,ok);await sm;
   if(ok){
     const isNew=!hasP(o[0]);
-    if(!S.owned[o[0]]){(S.balls=S.balls||{})[o[0]]=id;(S.when=S.when||{})[o[0]]=Date.now()}
+    if(!S.owned[o[0]]){(S.balls=S.balls||{})[o[0]]=id;(S.when=S.when||{})[o[0]]=Date.now();capKeepHp(o[0],m.mh/m.mx)}
     S.owned[o[0]]=(S.owned[o[0]]||0)+1;qEv("cap");if(isNew)qEv("new");
     if(m.sh){S.shiny=S.shiny||{};S.shiny[o[0]]=(S.shiny[o[0]]||0)+1;qEv("shiny")}
     snd("capok");await say("¡Has capturado a "+(m.sh?"un "+o[0]+" ✨ variocolor":o[0])+"!"+(isNew?" ¡Nuevo en tu Pokédex!":""));

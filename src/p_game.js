@@ -217,7 +217,7 @@ function gmInit(){
 }
 function gmLite(){const on=!!(O.lite||GM.liteAuto||hubCalm());document.body.classList.toggle("glite",on);window.pcPause=on||!document.body.classList.contains("gmhome");GM.tw.length&&on&&GM.tw.splice(3).forEach(o=>o.e.remove())}
 function gmApply(){
-  const on=gmOn()&&GM.init;document.body.classList.toggle("gm",!!on);window.pcLive=on?1:0;
+  const on=gmOn()&&GM.init;document.body.classList.toggle("gm",!!on);document.documentElement.classList.remove("gmpre");window.pcLive=on?1:0;
   if(!on){gmClose(1);GM.song=null}
   else{GM.town="";try{dispatchEvent(new Event("resize"))}catch(e){}}
 }
@@ -350,7 +350,7 @@ function gmTown(t){const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$(
     const b=document.querySelector('.gbld[data-gb="'+i+'"]');if(!b)return;const amt=ws[i]*PMUL()*1.4,s=document.createElement("span");s.className="gpop";s.innerHTML="+"+gmK(amt)+" "+gI("ticket",16);
     s.style.left=(b.offsetLeft+b.offsetWidth/2)+"px";s.style.top=(b.offsetTop+8)+"px";$("gBs").appendChild(s);setTimeout(()=>s.remove(),1500)}}
 // arranca cuando la partida está cargada
-{const iv=setInterval(()=>{try{if(!GM.init&&$("auth")&&$("auth").hidden&&$("hubM")&&typeof S!=="undefined"&&S&&S.owned&&$("farm")){clearInterval(iv);gmInit()}}catch(e){}},250)}
+{const iv=setInterval(()=>{try{if(!GM.init&&$("auth")&&$("auth").hidden&&$("hubM")&&typeof S!=="undefined"&&S&&S.owned&&$("farm")){clearInterval(iv);gmInit()}}catch(e){}},50)}
 // ---------- el tutorial de los jugadores nuevos abre la sección de cada paso ----------
 {const _ts=tutStep;tutStep=function(){const r=_ts.apply(this,arguments);try{if(gmOn()&&GM.init&&TS.i>=0&&TS.i<TUT.length){const s=TUT[TS.i];if(s.el==="#navb")s.el="#gnavb";
   const el=document.querySelector(s.el),pan=el&&el.closest&&el.closest("#stage,#batP,#shopP,#earnP");

@@ -893,3 +893,7 @@ rep('#welc,#newsM,#privM{',open(W+'p_game.css',encoding='utf-8').read()+'\n#welc
 rep('const sg=SG[O.song]||SG[0],sd=60/sg.bpm/4','const sg=SG[gmSongI()]||SG[0],sd=60/sg.bpm/4')
 rep('mtrack=buildTrack(SG[O.song]||SG[0])','mtrack=buildTrack(SG[gmSongI()]||SG[0])')
 rep('family=Pixelify+Sans:wght@500;700&display=swap','family=Fredoka:wght@400;500;600;700&family=Pixelify+Sans:wght@500;700&display=swap')
+
+# ===== modo juego: tapa el diseño clásico desde el primer momento (sin parpadeo antes de la pantalla de carga) =====
+rep('<link rel="preconnect" href="https://fonts.googleapis.com">','<script>try{var _o=JSON.parse(localStorage.getItem("gacha-opts")||"{}");if(!_o.classic)document.documentElement.classList.add("gmpre")}catch(e){document.documentElement.classList.add("gmpre")}setTimeout(function(){document.documentElement.classList.remove("gmpre")},15000)</script><link rel="preconnect" href="https://fonts.googleapis.com">')
+rep('#welc,#newsM,#privM{','html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}\nhtml.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}\n#welc,#newsM,#privM{')

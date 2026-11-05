@@ -277,7 +277,7 @@ function gmTop(){
   const el=$("gTkN"),txt=gmK(Math.abs(v-GM.disp)<.05?v:GM.disp);if(el.textContent!==txt){el.textContent=txt;$("gTk").title=fmt(v)+" tickets"}
   if(d>Math.max(50,v*.05)&&!GM.bump){GM.bump=1;const p=$("gTk");p.classList.remove("gup");void p.offsetWidth;p.classList.add("gup");setTimeout(()=>GM.bump=0,600)}
   let tp=0;try{tp=tps()}catch(e){}const ts=tp>0?"+"+gmK(tp)+"/s":"";if($("gTps").textContent!==ts)$("gTps").textContent=ts;
-  try{const m=medCount()+"/8";if($("gMedN").textContent!==m)$("gMedN").textContent=m}catch(e){}
+  try{const m=(typeof XGSW!=="undefined"&&XGSW?Object.keys(XGSW.med||{}).filter(k=>XGSW.med[k]).length:medCount())+"/8";if($("gMedN").textContent!==m)$("gMedN").textContent=m}catch(e){}
   try{const s=String(strkNow());if($("gStkN").textContent!==s)$("gStkN").textContent=s}catch(e){}
   try{const pm=$("passMini"),q=pm&&pm.textContent.match(/Nv\s*(\d+)\s*\/\s*(\d+)/);if(q){const s="Nv "+q[1];if($("gPassN").textContent!==s)$("gPassN").textContent=s;const bi=pm.querySelector(".pmbar i");$("gPassB").style.width=bi?bi.style.width||"0%":(q[1]/q[2]*100)+"%"}}catch(e){}
   try{if(GM.scr==="stage"){const pm=+(($("pityM")||{}).textContent)||30,pv=+(($("pity")||{}).textContent)||0,left=Math.max(0,pm-pv);$("gPityN").textContent=left;$("gPityB").style.width=Math.min(100,pv/pm*100)+"%";$("gPity").classList.toggle("gnear",left<=5)}}catch(e){}

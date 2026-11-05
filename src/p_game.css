@@ -534,3 +534,16 @@ body.glite .gbld canvas,body.glite .gsp img,body.glite .gwki{filter:none!importa
 /* el desfile de Pokémon de la portada no sigue andando por el fondo del juego */
 body.gm #gBg .pcpar{display:none!important}
 .gfin .gfoa{display:block;width:100%;margin:8px 0 10px;font-size:1rem;font-weight:800}
+/* equipo de Exploración */
+.exscr .exteamb{right:110px!important;font-size:1.2rem}
+.exteam{position:absolute;inset:6%;z-index:9;overflow:auto;padding:14px;border-radius:16px;background:#fff;color:#2b2440;border:4px solid #2b2440;box-shadow:0 0 0 3px #fff,0 8px 0 3px #2b2440;display:flex;flex-direction:column;gap:8px}
+.exteam[hidden]{display:none}
+.xgh{display:flex;align-items:center;justify-content:space-between;gap:10px}.xgh b{font-size:1.05rem}
+.xgs{margin-top:6px}
+.xgl{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.xgc{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px!important;border-radius:12px!important;border:2px solid rgba(43,36,64,.2)!important;background:#f4f6ff!important;color:#2b2440!important;min-width:0!important;cursor:pointer}
+.xgc.on{border-color:#3ecf8e!important;background:#eafff4!important}
+.xgc img{width:48px!important;height:48px!important;margin:0!important;object-fit:contain}
+.xgc b{font-size:.8rem}.xgc small{font-size:.7rem;color:#6a7090}
+.xgc i{display:block;width:80%;height:5px;border-radius:4px;background:rgba(0,0,0,.12);overflow:hidden}.xgc u{display:block;height:100%;text-decoration:none}
+.xgb{display:flex;flex-wrap:wrap;gap:6px}.xgb span{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:9px;background:#f4f6ff;font-size:.8rem}

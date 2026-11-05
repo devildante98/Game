@@ -65,7 +65,7 @@ async function sBattle(cfg,kind){
   if(cfg.cap&&(S.owned[cfg.cap]||0)>own0)return "cap";
   if(EX.map!==m0)return null;// tus Pokémon se debilitaron y has vuelto al Centro Pokémon
   return b.win?true:false}
-const sTr=(names,b,nm,look)=>({eteam:sTeam(names,b),trainer:nm,tsrc:{k:exTrKey(nm),n:nm}});
+const sTr=(names,b,nm,look)=>({eteam:sTeam(names,typeof ROLE==="function"?ROLE(nm):b),trainer:nm,tsrc:{k:exTrKey(nm),n:nm}});
 // elección con botones (por ejemplo, el Pokémon inicial)
 function sChoice(title,opts){return new Promise(res=>{const box=$("exCh");if(!box){res(0);return}EX.choice=1;
   box.innerHTML='<b>'+esc(title)+'</b><div>'+opts.map((o,i)=>'<button type="button" data-ch="'+i+'"'+(i?'':' class="on"')+'>'+(o.img||"")+'<span>'+esc(o.t)+'</span>'+(o.s?'<small>'+esc(o.s)+'</small>':'')+'</button>').join("")+'</div>';box.hidden=false;
@@ -99,7 +99,7 @@ function stHeal(){const N=(S.team||[]).filter(n=>n&&S.owned[n]);N.forEach(n=>{de
 const STARTERS=[["Bulbasaur","Planta"],["Charmander","Fuego"],["Squirtle","Agua"]],RIVAL_OF={Bulbasaur:"Charmander",Charmander:"Squirtle",Squirtle:"Bulbasaur"};
 STX.lab1=()=>stRun(async()=>{const v=stN("vega");await sSay(S_("Profesora Vega","¡Ah, ya estás aquí! Te doy la bienvenida al laboratorio. Soy la Profesora Vega.","Estudio la Piedra Aurora, una roca antiquísima de la región de Alba.","Según las leyendas, si se le devuelven sus tres Escamas, el guardián de la región despierta junto al lago de la Cima Aurora.","Hace unos días, un grupo que se hace llamar Equipo Ocaso empezó a buscar esas Escamas por todas partes…","Necesito a alguien valiente que vigile las rutas y me cuente lo que vea. ¡Y he pensado en ti!","Para el viaje quiero regalarte un compañero. Elige uno de estos tres Pokémon."));
   const i=await sChoice("Elige tu compañero de viaje",STARTERS.map(s=>({t:s[0],s:s[1],img:ico(PM[s[0]],56)})));
-  const st=STARTERS[i][0],lv=Math.max(5,Math.min(15,sLv(0)));stSt().f.st=st;stSt().f.rv=RIVAL_OF[st];giveMon(st,lv);stTeamAdd(st);save();snd("capok");
+  const st=STARTERS[i][0],lv=Math.max(5,Math.min(15,sLv(0)));stSt().f.st=st;stSt().f.rv=RIVAL_OF[st];xgGive(st,lv);snd("capok");
   await sSay(["¡Has recibido a "+st+" (Nv. "+lv+")!",st+" se ha unido a tu equipo."]);
   snd("ui");const d=sAdd("dani",7,9,"u","Dani",STO_L.dani);await sW(300);sFaceTo(d);
   await sSay(S_("Dani","¡Profe! ¡Perdón, perdón, me he dormido!","¿Eh? ¿Ya has elegido? Entonces yo me quedo con "+stSt().f.rv+". ¡Le tengo ventaja al tuyo!"));
@@ -111,7 +111,7 @@ STX.lab1=()=>stRun(async()=>{const v=stN("vega");await sSay(S_("Profesora Vega",
   await sSay(S_("Profesora Vega","¡Qué combate más emocionante! Se nota que vais a ser buenos rivales.","Mi ayudante, Lía, ha salido hacia la Ruta 1. Sal del pueblo por el este y búscala, por favor.","¡Y toma esto para el camino!"));
   await sSay(["¡Recibes "+sGive({t:5000,it:{pb:10}})+"!"]);
   await sSay(S_("Dani","¡Yo me voy por mi cuenta! ¡Nos vemos!"));await sFade("fade",350);sDel("dani");snd("ui");await sFade("fadein",350);sStep(2)});
-STX.vega=()=>stRun(async()=>{const s=stSt().s;const L={2:"Lía está en la Ruta 1, al este del pueblo. ¡Ve a buscarla!",3:"Lía me ha contado lo de la ruta… El Equipo Ocaso se ha metido en el Bosque Verde. ¡Ten mucho cuidado!",4:"Si ese grupo busca las Escamas, irán a la Cueva Roca. Necesitarás 1 medalla de gimnasio para entrar.",5:"¡La última Escama está en la Playa Coral! Para llegar necesitas 2 medallas de gimnasio.",6:"¡El guardián ha volado a la Cima Aurora! El camino sale del norte del pueblo. Hacen falta 3 medallas.",7:"¡El guardián te espera junto al lago de la Cima!",9:"Gracias a ti, la Piedra Aurora vuelve a estar a salvo. ¡Sigue completando tu Pokédex!"};
+STX.vega=()=>stRun(async()=>{const s=stSt().s;const L={2:"Lía está en la Ruta 1, al este del pueblo. ¡Ve a buscarla!",3:"Lía me ha contado lo de la ruta… El Equipo Ocaso se ha metido en el Bosque Verde. ¡Ten mucho cuidado!",4:"Si ese grupo busca las Escamas, irán a la Cueva Roca.",5:"¡La última Escama está en la Playa Coral!",6:"¡El guardián ha volado a la Cima Aurora! El camino sale del norte del pueblo.",7:"¡El guardián te espera junto al lago de la Cima!",9:"Gracias a ti, la Piedra Aurora vuelve a estar a salvo. ¡Sigue completando tu Pokédex!"};
   await sSay(S_("Profesora Vega",L[s]||"¡Sigue así!"))});
 STX.lia=()=>stRun(async()=>{await sSay(S_("Lía","Estoy apuntando todo lo que el Equipo Ocaso hace por la región.","Por lo que he visto, su líder se llama Noctis… y su mano derecha es la comandante Bruma."))});
 // --- capítulo 1: Ruta 1 ---
@@ -141,7 +141,7 @@ STX.bruma3=()=>stRun(async()=>{const b=stN("bruma");await sApproach(b);
   if(!r){if(r===false)await sSay(S_("Bruma","Hmpf. Lo sabía. Vuelve a casa, aquí no pintas nada."));return}
   await sSay(S_("Bruma","…Interesante. Tienes más talento del que parece.","Pero da igual. La segunda Escama está escondida en lo más profundo de la Cueva Roca.","Cuando tengamos las tres, el cielo de Alba se teñirá de ocaso para siempre… ¡y el guardián obedecerá a Noctis!"));
   await sFlash(2);sDel("bruma");await sSay(["Bruma desaparece entre una nube de humo morado…","¡Recibes "+sGive({t:15000,it:{cand:2}})+"!"]);
-  await sSay(["Los Pokémon del bosque salen de sus escondites. ¡Parecen muy contentos!","Ahora el Equipo Ocaso irá a la Cueva Roca, al norte de la Ruta 1 (hace falta 1 medalla de gimnasio)."]);sStep(4)});
+  await sSay(["Los Pokémon del bosque salen de sus escondites. ¡Parecen muy contentos!","Ahora el Equipo Ocaso irá a la Cueva Roca, al norte de la Ruta 1."]);sStep(4)});
 // --- capítulo 3: Cueva Roca ---
 STX.bruma4=()=>stRun(async()=>{const b=stN("bruma");await sApproach(b);
   await sSay(S_("Bruma","¡Otra vez tú! ¿Es que no te cansas nunca?","La Escama Celeste está aquí mismo, en este altar. ¡No dejaré que me la quites!"));
@@ -153,7 +153,7 @@ STX.bruma4=()=>stRun(async()=>{const b=stN("bruma");await sApproach(b);
   const d=sAdd("dani",14,14,"u","Dani",STO_L.dani);snd("ui");await sSay(S_("Dani","¡Eh! ¡Por fin te encuentro!"));await sApproach(d);
   await sSay(S_("Dani","La Profe me lo ha contado todo. ¡Has plantado cara al Equipo Ocaso tú solo!","Antes de seguir… ¡quiero ver cuánto has mejorado! ¡Combate!"));
   const r2=await sBattle(sTr(["Pidgey","Abra",stSt().f.rv],1,"Dani",STO_L.dani));
-  await sSay(S_("Dani",...(r2?["¡Increíble! Cada vez eres más fuerte… ¡Me has dejado sin palabras!"]:["¡Esta vez he ganado yo! Pero no te desanimes, ¿eh?"]),"Yo voy a avisar a la Profe. Noctis te espera en la Playa Coral, al sur de la Ruta 1. ¡Necesitarás 2 medallas!"));
+  await sSay(S_("Dani",...(r2?["¡Increíble! Cada vez eres más fuerte… ¡Me has dejado sin palabras!"]:["¡Esta vez he ganado yo! Pero no te desanimes, ¿eh?"]),"Yo voy a avisar a la Profe. Noctis te espera en la Playa Coral, al sur de la Ruta 1. ¡Prepárate bien!"));
   await sWalkN(d,"dd");sDel("dani");sStep(5)});
 // --- capítulo 4: Playa Coral ---
 STX.noctis5=()=>stRun(async()=>{const n=stN("noctis");await sApproach(n);
@@ -165,7 +165,7 @@ STX.noctis5=()=>stRun(async()=>{const n=stN("noctis");await sApproach(n);
   await sSay(["¡Un rugido enorme recorre toda la playa!","¡Un Pokémon rojo y blanco cruza el cielo a toda velocidad hacia el norte!"]);
   await sSay(S_("Noctis","¡El guardián ha despertado! ¡Ha volado hacia la Cima Aurora!","Te espero allí arriba. Esta vez no habrá nadie que me detenga."));
   await sFlash(2);sDel("noctis");await sSay(["¡Recibes "+sGive({t:40000,it:{cand:2}})+"!"]);
-  await sSay(["La Cima Aurora está al norte de Pueblo Brisa. Para subir hacen falta 3 medallas de gimnasio.","¡Prepara bien a tu equipo!"]);sStep(6)});
+  await sSay(["La Cima Aurora está al norte de Pueblo Brisa.","¡Prepara bien a tu equipo!"]);sStep(6)});
 // --- capítulo 5: Cima Aurora ---
 STX.bruma6=()=>stRun(async()=>{const b=stN("bruma");await sApproach(b);
   await sSay(S_("Bruma","Has llegado hasta aquí… Esta es tu última oportunidad de dar media vuelta.","¡No permitiré que estropees el plan de Noctis!"));
@@ -187,8 +187,7 @@ STX.latias=inner=>{const go=async()=>{
   const r=await sBattle({eteam:[m],cap:"Latias"},"wild");
   if(r===null)return;
   if(r===false){await sSay(["Latias vuelve a volar sobre el lago. Te sigue observando…","(Cura a tu equipo y vuelve a acercarte al altar.)"]);return}
-  if(r!=="cap"){giveMon("Latias",m.l);save()}
-  stTeamAdd("Latias");await sSay(["Latias se acerca y apoya la cabeza en tu hombro.","¡Latias se ha unido a ti! ¡Ahora es tu compañera!","Vuelve a Pueblo Brisa y cuéntaselo todo a la Profesora Vega."]);sStep(8)};
+  if(r!=="cap")xgGive("Latias",m.l);else stTeamAdd("Latias");await sSay(["Latias se acerca y apoya la cabeza en tu hombro.","¡Latias se ha unido a ti! ¡Ahora es tu compañera!","Vuelve a Pueblo Brisa y cuéntaselo todo a la Profesora Vega."]);sStep(8)};
   return inner?go():stRun(go)};
 // --- epílogo ---
 STX.lab8=()=>stRun(async()=>{await sCard(6);const v=stN("vega");const d=sAdd("dani",8,6,"l","Dani",STO_L.dani);

@@ -70,7 +70,7 @@ const TMP_NM="Recluta del Equipo Tempestad";
   stSt().f[id]=1;await sSay(S_("Recluta","¡Uf! ¡Me retiro antes de que llegue el Doctor!"));await sSay(["¡Recibes "+sGive({t:9000})+"!"]);await sFlash(1);sDel(id);save()})}}
 // ---------- el epílogo de Alba engancha con el Acto II ----------
 STX.act2=()=>stRun(async()=>{
-  await sSay(S_("Profesora Vega","¡Ah, menos mal que vienes! Acabo de hablar con un colega de la región de Escarcha.","Allí lleva días nevando sin parar… y en Brasa los volcanes rugen como nunca. En Tormenta, los rayos no paran.","Un grupo llamado Equipo Tempestad, dirigido por un tal Doctor Ícaro, quiere capturar a las tres aves legendarias para controlar el clima de todo el mundo.","Tu experiencia con el Equipo Ocaso es justo lo que necesitamos. ¿Nos ayudas?","El marinero del muelle de la Playa Coral te llevará a Escarcha. Allí necesitarás al menos 4 medallas de gimnasio."));
+  await sSay(S_("Profesora Vega","¡Ah, menos mal que vienes! Acabo de hablar con un colega de la región de Escarcha.","Allí lleva días nevando sin parar… y en Brasa los volcanes rugen como nunca. En Tormenta, los rayos no paran.","Un grupo llamado Equipo Tempestad, dirigido por un tal Doctor Ícaro, quiere capturar a las tres aves legendarias para controlar el clima de todo el mundo.","Tu experiencia con el Equipo Ocaso es justo lo que necesitamos. ¿Nos ayudas?","El marinero del muelle de la Playa Coral te llevará a Escarcha."));
   await sSay(["¡Recibes "+sGive({t:60000,it:{ub:10,hpot:5}})+"!"]);sStep(10)});
 {const _t=stTalk;stTalk=function(n){const s=stSt().s,id=n.sid,m=EX.map;
   if(id==="vega"&&s===9)return STX.act2();
@@ -138,12 +138,12 @@ STX.gelida14=()=>stRun(async()=>{const g=stN("gelida");await sApproach(g);
   const r=await sBattle(sTr(["Weavile","Glalie","Lapras","Abomasnow","Froslass"],7,"Comandante Gélida",STO_L.gelida));if(!r){if(r===false)await sSay(S_("Gélida","El invierno siempre gana."));return}
   await sSay(S_("Gélida","¡No puede ser! ¡La máquina…!"));snd("wild");await sFlash(4);
   await sSay(["¡La máquina de Gélida estalla en mil copos de nieve!","Articuno se libera y desciende despacio frente a ti…"]);await sSay(S_("Gélida","El Doctor Ícaro no me lo perdonará… ¡Esto no ha terminado!"));sDel("gelida");
-  await stBird("Articuno",8,15)});
+  await stBird("Articuno",6,15)});
 // combate contra el ave legendaria (se puede capturar; si la vences, también se une a ti)
 async function stBird(nm,b,next){await sSay(["¡"+nm+" te mira fijamente y se prepara para ponerte a prueba!"]);
   const m=mkEnemy(PM[nm],clampL(sLv(b)));m.mx=Math.round(m.mx*1.3);m.mh=m.mx;const r=await sBattle({eteam:[m],cap:nm},"wild");if(r===null)return;
   if(r===false){await sSay([nm+" vuelve a volar en círculos sobre ti… Cura a tu equipo y vuelve a acercarte."]);return}
-  if(r!=="cap"){giveMon(nm,m.l);save()}stTeamAdd(nm);
+  if(r!=="cap")xgGive(nm,m.l);else stTeamAdd(nm);
   await sSay(["¡"+nm+" se ha unido a ti!","¡Recibes también "+sGive({t:next===15?80000:next===20?120000:160000,it:{mb:1}})+"!"]);sStep(next)}
 // ---------- ACTO III · Brasa ----------
 STX.pb16=()=>stRun(async()=>{const b=stN("bruma");if(!b)return;await sApproach(b);
@@ -165,7 +165,7 @@ STX.ascua19=()=>stRun(async()=>{const a=stN("ascua");await sApproach(a);
   const r=await sBattle(sTr(["Houndoom","Magmortar","Camerupt","Arcanine","Salazzle"],9,"Comandante Ascua",STO_L.ascua));if(!r){if(r===false)await sSay(S_("Ascua","¡Las llamas nunca se apagan!"));return}
   await sSay(S_("Ascua","¿Cómo…? ¡La jaula de fuego se está rompiendo!"));snd("wild");await sFlash(4);
   await sSay(["¡Moltres despliega sus alas en llamas y rompe la jaula!","El ave de fuego se posa frente a ti…"]);await sSay(S_("Ascua","¡El Doctor Ícaro tiene la última ave en la Torre Relámpago! ¡No podrás con él!"));sDel("ascua");
-  await stBird("Moltres",10,20)});
+  await stBird("Moltres",6,20)});
 // ---------- ACTO IV · Tormenta ----------
 STX.ct21=()=>stRun(async()=>{const n=stN("noctis");if(!n)return;await sApproach(n);
   await sSay(S_("Noctis","Volvemos a vernos. Tranquilidad: ya no soy tu enemigo.","Después de lo de Alba, decidí recorrer el mundo para entender lo que hice. Y aquí descubrí al Doctor Ícaro.","Era mi maestro. Él me enseñó a querer controlarlo todo… Por eso sé que no se detendrá.","Está en la Torre Relámpago, al norte de la Ruta 4. Usa la energía de Zapdos para alimentar sus máquinas.","Llévate esto. Y… gracias por enseñarme otro camino."));
@@ -182,7 +182,7 @@ STX.icaro22=()=>stRun(async()=>{const f=stSt().f;if(!f.ga||!f.as){await sSay(S_(
   const r=await sBattle(sTr(["Magnezone","Electivire","Ampharos","Rotom","Luxray","Porygon-Z"],12,"Doctor Ícaro",STO_L.icaro));if(!r){if(r===false)await sSay(S_("Doctor Ícaro","La razón está de mi lado. Vuelve cuando lo entiendas."));return}
   await sSay(S_("Doctor Ícaro","…Tus Pokémon luchan por ti sin que los controles. Confían en ti.","Quizá eso es lo que yo nunca entendí."));snd("wild");await sFlash(5);
   await sSay(["¡Las máquinas de la torre chisporrotean y se apagan una a una!","Zapdos, libre por fin, llena la sala de electricidad…"]);sDel("icaro");sStep(23);await sW(200);await STX.zap(true)});
-STX.zap=inner=>{const go=async()=>{const s0=stSt().s;await stBird("Zapdos",12,24);if(stSt().s===24&&s0===23)await stFinale()};return inner?go():stRun(go)};
+STX.zap=inner=>{const go=async()=>{const s0=stSt().s;await stBird("Zapdos",6,24);if(stSt().s===24&&s0===23)await stFinale()};return inner?go():stRun(go)};
 async function stFinale(){await sCard(17);
   const d=sAdd("dani",8,12,"u","Dani",STO_L.dani),n=sAdd("noctis",11,12,"u","Noctis",STO_L.noctis),b=sAdd("bruma",10,12,"u","Bruma",STO_L.bruma);
   await sSay(S_("Dani","¡Lo has conseguido! ¡Las tres aves son libres!"),...S_("Noctis","El Doctor Ícaro se ha entregado. Dice que quiere ayudar a predecir el clima… sin controlarlo."),...S_("Bruma","Gélida y Ascua también. Parece que todos hemos aprendido algo de ti."));
@@ -194,7 +194,7 @@ async function stCredits2(){const box=$("exEnd");if(!box)return;snd("win");
   box.hidden=false;await new Promise(r=>{$("exEndX").onclick=()=>{box.hidden=true;snd("ui");r()}})}
 // acercarse al ave cuando volviste después de perder
 {const _a=exArrive;exArrive=function(){const s=stSt().s;
-  if(!EX.cut){const B={pico_e:[14,14,8,"Articuno",8,15],cumbre:[19,14,8,"Moltres",10,20]}[EX.map];
+  if(!EX.cut){const B={pico_e:[14,14,8,"Articuno",6,15],cumbre:[19,14,8,"Moltres",6,20]}[EX.map];
     if(B&&s===B[0]&&EX.x===B[1]&&EX.y===B[2]){const st=exSt();st.x=EX.x;st.y=EX.y;st.f=EX.f;EX.f="u";return stRun(()=>stBird(B[3],B[4],B[5]))}
     if(EX.map==="torre"&&s===23&&EX.y<=4){const st=exSt();st.x=EX.x;st.y=EX.y;st.f=EX.f;return STX.zap()}}
   return _a.apply(this,arguments)}}

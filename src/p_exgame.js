@@ -84,10 +84,10 @@ function xgPanel(){const box=$("exTeam");if(!box)return;const d=xgRun(()=>{const
       '<b class="xgs">🎒 Mochila</b><div class="xgb">'+(bag.length?bag.slice().sort((a,b)=>xgCat(a)-xgCat(b)||IN(a).localeCompare(IN(b),"es")).map(k=>'<div class="xgit" data-xgi="'+esc(k)+'" title="'+esc(((ITEMS.find(i=>i[0]===k)||[])[6])||"")+'"><span class="xgii">'+(typeof itemIco==="function"?itemIco(k,44):"")+'</span><b>'+esc(IN(k))+'</b><small>×'+S.bag[k]+'</small></div>').join(""):'<small class="mut">Vacía. Compra objetos en las Tiendas Pokémon o búscalos por las rutas.</small>')+'</div>'+
       '<small class="mut">Los Pokémon, la mochila y los niveles de Exploración son independientes de tu colección del juego. Lo que captures aquí se queda aquí.</small>'});
   box.innerHTML=d;box.hidden=false;$("xgX").onclick=()=>{box.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xg]");if(!b)return;const n=b.dataset.xg;
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xgt]");if(!b)return;const n=b.dataset.xgt;
   xgRun(()=>{S.team=(S.team||[]).map(x=>x&&S.owned[x]?x:"");while(S.team.length<6)S.team.push("");const i=S.team.indexOf(n),cnt=S.team.filter(x=>x).length;
     if(i>=0){if(cnt<=1){toast("Necesitas al menos un Pokémon en el equipo.");return}S.team.splice(i,1);S.team.push("")}else{const j=S.team.indexOf("");if(j<0){toast("Tu equipo ya tiene 6 Pokémon.");return}S.team[j]=n}
-    S.team=S.team.filter(x=>x).concat(["","","","","",""]).slice(0,6);save()});snd("ui");xgPanel()});
+    S.team=S.team.filter(x=>x).concat(["","","","","",""]).slice(0,6);save()});snd("ui");if(typeof xfOpen==="function"&&XF.n===n)xfOpen(n);else xgPanel()});
 {const _x=exUI;exUI=function(){const r=_x.apply(this,arguments);const sc=document.querySelector("#explPB .exscr");
   if(sc&&!$("exTeam")){sc.insertAdjacentHTML("beforeend",'<div id="exTeam" class="exteam" hidden></div><button type="button" class="exfsb exteamb" id="exTeamB" title="Tu equipo de Exploración" aria-label="Equipo">🎒</button>');$("exTeamB").onclick=()=>{snd("ui");xgPanel()}}
   return r}}

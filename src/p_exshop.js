@@ -113,3 +113,32 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
 // Esc: cierra la tienda
 window.addEventListener("keydown",e=>{if(e.key==="Escape"&&XSH.open){e.preventDefault();e.stopPropagation();xsClose()}},true);
 setInterval(()=>{if(XSH.open){EX.keys={};EX.kst=[]}},100);
+
+// ================= ficha técnica de los Pokémon de Exploración =================
+const XF={n:null,msg:""};
+function xfOpen(n){const box=$("exTeam");if(!box)return;XF.n=n;XU.id=null;
+  const h=xgRun(()=>{if(!(S.owned[n]>0)||!PM[n])return null;const p=PM[n],d=lvd(n),l=d.l,mx=stH(p,l),hp=S.hp[n]===undefined?mx:Math.max(0,Math.min(mx,S.hp[n])),f=hp/mx,
+      nx=l<100?need(l):0,xf=nx?Math.min(1,(d.x||0)/nx):1,inT=(S.team||[]).includes(n),sh=!!(S.shiny&&S.shiny[n]>0),N=NAT[natOf(n)]||NAT[0],ab=abOf(n),held=heldOf(n),mote=(S.mote&&S.mote[n])||"";
+    const mv=moveIds(n).map(id=>{const m=MVD[id];if(!m)return "";const CL=["💫 Estado","💥 Físico","🔮 Especial"][m.cl]||"";
+      return '<div class="xfmv" style="--tc:'+(TC[m.t]||"#999")+'"><b>'+esc(m.n)+'</b><small>'+EM[m.t]+' '+TIPO[m.t]+' · '+CL+(m.pw?' · Pot. '+m.pw:'')+(m.ac?' · Prec. '+m.ac+'%':'')+'</small><i>PP '+ppCur(n,id)+'/'+ppMax(n,id)+'</i></div>'}).join("");
+    return '<div class="xgh"><b>📋 Ficha de '+esc(nk(n))+'</b><button type="button" class="alt" data-xfb="1">Volver</button></div>'+(XF.msg?'<div class="xsmsg">'+esc(XF.msg)+'</div>':'')+
+      '<div class="xfw"><div class="xfl"><div class="xfspr '+p[2]+'">'+icoHD(p,120,false,sh)+'</div>'+
+        '<b class="xfn">'+(sh?"✨ ":"")+esc(nk(n))+'</b>'+(mote?'<small class="mut">'+esc(n)+'</small>':'')+'<span class="xfty">'+tyTxt(p)+'</span><span class="xflv">Nv '+l+'</span>'+
+        '<div class="xfbar"><small>PS '+hp+' / '+mx+'</small><i><u style="width:'+Math.round(f*100)+'%;background:'+(f>.5?"#3ecf8e":f>.2?"#ffd35c":"#e63950")+'"></u></i></div>'+
+        '<div class="xfbar"><small>'+(nx?'Exp. '+fmt(d.x||0)+' / '+fmt(nx):'Nivel máximo')+'</small><i><u style="width:'+Math.round(xf*100)+'%;background:#4aa3ff"></u></i></div>'+
+        '<button type="button" class="'+(inT?'alt':'red')+' xfteam" data-xgt="'+esc(n)+'">'+(inT?'Sacar del equipo':'➕ Meter en el equipo')+'</button></div>'+
+      '<div class="xfr"><div class="xfrow"><span>Mote</span><div class="xfin"><input id="xfMote" maxlength="12" placeholder="'+esc(n)+'" value="'+esc(mote)+'"><button type="button" data-xfm="1">Guardar</button></div></div>'+
+        '<div class="xfrow"><span>Naturaleza</span><div><b>'+N[0]+'</b> <small class="mut">'+natTxt(natOf(n))+'</small></div></div>'+
+        '<div class="xfrow"><span>Habilidad</span><div><b>'+esc(abName(ab))+'</b>'+(typeof ABDESC!=="undefined"&&ABDESC[ab]?' <small class="mut">'+esc(ABDESC[ab])+'</small>':'')+'</div></div>'+
+        '<div class="xfrow"><span>Objeto</span><div>'+(held?itemIco(held,24)+' <b>'+esc(IN(held))+'</b> <button type="button" class="alt mini" data-xfh="1">Quitar</button>':'<small class="mut">No lleva ningún objeto. Equípalo desde la mochila.</small>')+'</div></div>'+
+        '<div class="xfrow xfst xf1"><div>'+(typeof fstatHTML==="function"?fstatHTML(n):'')+'</div></div>'+
+        '<div class="xfrow"><span>Movimientos</span><div class="xfmvs">'+mv+'</div></div></div></div>'});
+  if(!h){XF.n=null;xgPanel();return}box.innerHTML=h;box.hidden=false;box.scrollTop=0}
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#exTeam [data-xg],#exTeam [data-xfb],#exTeam [data-xfm],#exTeam [data-xfh]");if(!t)return;e.stopPropagation();const d=t.dataset;snd("ui");
+  if(d.xg){XF.msg="";xfOpen(d.xg);return}
+  if(d.xfb){XF.n=null;XF.msg="";xgPanel();return}
+  const n=XF.n;if(!n)return;
+  if(d.xfm){const v=String(($("xfMote")||{}).value||"").trim().slice(0,12);xgRun(()=>{S.mote=S.mote||{};if(v&&v!==n)S.mote[n]=v;else delete S.mote[n]});save();XF.msg=v&&v!==n?"Ahora se llama «"+v+"».":"Mote quitado.";xfOpen(n);return}
+  if(d.xfh){xgRun(()=>{const h=S.held&&S.held[n];if(h){delete S.held[n];S.bag[h]=(S.bag[h]||0)+1;XF.msg=IN(h)+" vuelve a la mochila."}});save();xfOpen(n)}},true);
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target&&e.target.id==="xfMote"){e.preventDefault();e.stopPropagation();const b=document.querySelector('#exTeam [data-xfm]');b&&b.click()}},true);
+{const _p=xgPanel;xgPanel=function(){XF.n=null;const r=_p.apply(this,arguments);try{const box=$("exTeam");if(box&&!box.querySelector(".xghint"))box.querySelector(".xgl")&&box.querySelector(".xgl").insertAdjacentHTML("beforebegin",'<small class="mut xghint">Toca un Pokémon para ver su ficha.</small>')}catch(e){}return r}}

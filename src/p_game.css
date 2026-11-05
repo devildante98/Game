@@ -627,3 +627,23 @@ body.gm #gBg .pcpar{display:none!important}
 .xgit .xuse{margin:2px 0 0!important;padding:4px 14px!important;font-size:.78rem!important;width:100%}
 .xgin{font-style:normal;font-size:.7rem;color:#8a86a8;margin-top:2px}
 @media (max-width:700px){.xgb{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}.xgii{width:44px;height:44px}.xgii img,.xgii svg{width:36px!important;height:36px!important}}
+
+/* ficha técnica de Exploración */
+.xfw{display:grid;grid-template-columns:220px minmax(0,1fr);gap:14px;align-items:start}
+.xfl{display:flex;flex-direction:column;align-items:center;gap:5px;background:#f4f6ff;border:2px solid #dfe3f6;border-radius:16px;padding:12px 10px}
+.xfspr{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#fff 0,#eef2ff 60%,#dfe5ff 100%);display:flex;align-items:center;justify-content:center;border:3px solid #dfe3f6}
+.xfspr img{max-width:140px;max-height:140px}
+.xfn{font-size:1.15rem;font-weight:900;color:#1c1424}.xfty{font-size:.82rem;color:#3a4a8a;font-weight:700}.xflv{font-weight:900;background:#2b2440;color:#fff;border-radius:999px;padding:1px 10px;font-size:.8rem}
+.xfbar{width:100%}.xfbar small{font-size:.72rem;color:#5b6390;font-weight:700}.xfbar i{display:block;height:8px;border-radius:999px;background:#dfe3f6;overflow:hidden}.xfbar u{display:block;height:100%}
+.xfteam{width:100%;margin-top:4px}
+.xfr{display:flex;flex-direction:column;gap:8px;min-width:0;color:#1c1424}
+.xfrow{display:grid;grid-template-columns:100px minmax(0,1fr);gap:8px;align-items:start;background:#fff;border:2px solid #e6e8f6;border-radius:12px;padding:7px 10px}
+.xfrow>span{font-weight:900;font-size:.8rem;color:#5b6390;padding-top:2px}
+.xfin{display:flex;gap:6px}.xfin input{flex:1;min-width:0;padding:6px 10px;border-radius:10px;border:2px solid #dfe3f6;font:inherit}
+.xfmvs{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px}
+.xfmv{border-left:5px solid var(--tc);background:#f7f8ff;border-radius:10px;padding:5px 8px;display:flex;flex-direction:column}
+.xfmv b{font-size:.88rem}.xfmv small{font-size:.7rem;color:#5b6390}.xfmv i{font-style:normal;font-size:.72rem;font-weight:800;color:#3a4a8a}
+.xghint{display:block;margin:-4px 0 6px}
+.xgl .xgc{cursor:pointer}
+@media (max-width:700px){.xfw{grid-template-columns:1fr}.xfrow{grid-template-columns:1fr}.xfspr{width:110px;height:110px}.xfspr img{max-width:100px;max-height:100px}}
+.xfrow.xf1{grid-template-columns:1fr}

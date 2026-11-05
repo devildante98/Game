@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793905231">
+<meta name="game-build" content="1793906631">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2227,6 +2227,26 @@ body.gm #gBg .pcpar{display:none!important}
 .xgin{font-style:normal;font-size:.7rem;color:#8a86a8;margin-top:2px}
 @media (max-width:700px){.xgb{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}.xgii{width:44px;height:44px}.xgii img,.xgii svg{width:36px!important;height:36px!important}}
 
+/* ficha técnica de Exploración */
+.xfw{display:grid;grid-template-columns:220px minmax(0,1fr);gap:14px;align-items:start}
+.xfl{display:flex;flex-direction:column;align-items:center;gap:5px;background:#f4f6ff;border:2px solid #dfe3f6;border-radius:16px;padding:12px 10px}
+.xfspr{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,#fff 0,#eef2ff 60%,#dfe5ff 100%);display:flex;align-items:center;justify-content:center;border:3px solid #dfe3f6}
+.xfspr img{max-width:140px;max-height:140px}
+.xfn{font-size:1.15rem;font-weight:900;color:#1c1424}.xfty{font-size:.82rem;color:#3a4a8a;font-weight:700}.xflv{font-weight:900;background:#2b2440;color:#fff;border-radius:999px;padding:1px 10px;font-size:.8rem}
+.xfbar{width:100%}.xfbar small{font-size:.72rem;color:#5b6390;font-weight:700}.xfbar i{display:block;height:8px;border-radius:999px;background:#dfe3f6;overflow:hidden}.xfbar u{display:block;height:100%}
+.xfteam{width:100%;margin-top:4px}
+.xfr{display:flex;flex-direction:column;gap:8px;min-width:0;color:#1c1424}
+.xfrow{display:grid;grid-template-columns:100px minmax(0,1fr);gap:8px;align-items:start;background:#fff;border:2px solid #e6e8f6;border-radius:12px;padding:7px 10px}
+.xfrow>span{font-weight:900;font-size:.8rem;color:#5b6390;padding-top:2px}
+.xfin{display:flex;gap:6px}.xfin input{flex:1;min-width:0;padding:6px 10px;border-radius:10px;border:2px solid #dfe3f6;font:inherit}
+.xfmvs{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:6px}
+.xfmv{border-left:5px solid var(--tc);background:#f7f8ff;border-radius:10px;padding:5px 8px;display:flex;flex-direction:column}
+.xfmv b{font-size:.88rem}.xfmv small{font-size:.7rem;color:#5b6390}.xfmv i{font-style:normal;font-size:.72rem;font-weight:800;color:#3a4a8a}
+.xghint{display:block;margin:-4px 0 6px}
+.xgl .xgc{cursor:pointer}
+@media (max-width:700px){.xfw{grid-template-columns:1fr}.xfrow{grid-template-columns:1fr}.xfspr{width:110px;height:110px}.xfspr img{max-width:100px;max-height:100px}}
+.xfrow.xf1{grid-template-columns:1fr}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -2291,7 +2311,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.10.5</small>
+    <small class="pcver">Versión 6.11</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -6909,8 +6929,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.10.5";
+const GAME_VER="6.11";
 const NEWS=[
+{v:"2026-11-05n",ver:"6.11",at:"2026-11-05T20:23",t:"📋 Ficha técnica en Exploración",l:["En el panel 🎒 de Exploración, toca cualquier Pokémon para ver su ficha completa","Verás su nivel, PS, experiencia, tipos, naturaleza, habilidad, objeto equipado, estadísticas con sus valores base y movimientos con potencia, precisión y PP","Desde la ficha puedes ponerle un mote, quitarle el objeto y meterlo o sacarlo del equipo","La mochila de Exploración también se ve ahora con tarjetas grandes y ordenada por tipo"]},
 {v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},
 {v:"2026-11-05l",ver:"6.9",at:"2026-11-05T16:35",t:"🛒 Tiendas Pokémon en Exploración",l:["Cada pueblo tiene ahora su Tienda Pokémon (el edificio de tejado azul). Habla con el dependiente para comprar y vender","Cada tienda tiene su propio surtido, que mejora región a región: Poké Balls, pociones, Revivir, Éter y Elixires, piedras evolutivas, MT del tipo de la zona y objetos equipables","Al vender te dan la mitad de su precio. Se paga con tickets y lo comprado va a tu mochila de Exploración","Nuevo: en la mochila 🎒 de Exploración puedes usar pociones, Revivir, Éter, piedras evolutivas y MT fuera de los combates","La tecla Esc ya no te saca de la pantalla completa: ahora cierra la tienda, la mochila y los menús como el del Centro Pokémon"]},
 {v:"2026-11-05k",ver:"6.8",at:"2026-11-05T16:11",t:"⭐ Experiencia como en los juegos",l:["La experiencia que gana cada Pokémon ahora depende de la diferencia de nivel con el rival, con la fórmula de los juegos","Un Pokémon de nivel bajo que derrota a uno más fuerte gana mucha más experiencia: un Nv 1 que vence a un Nv 5 gana casi el doble que un Nv 5","Si tu Pokémon es muy superior al rival, apenas gana experiencia","En los combates contra entrenadores se calcula con el nivel de cada Pokémon rival derrotado"]},
@@ -7094,7 +7115,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793905231";
+const GAME_B="1793906631";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11699,10 +11720,10 @@ function xgPanel(){const box=$("exTeam");if(!box)return;const d=xgRun(()=>{const
       '<b class="xgs">🎒 Mochila</b><div class="xgb">'+(bag.length?bag.slice().sort((a,b)=>xgCat(a)-xgCat(b)||IN(a).localeCompare(IN(b),"es")).map(k=>'<div class="xgit" data-xgi="'+esc(k)+'" title="'+esc(((ITEMS.find(i=>i[0]===k)||[])[6])||"")+'"><span class="xgii">'+(typeof itemIco==="function"?itemIco(k,44):"")+'</span><b>'+esc(IN(k))+'</b><small>×'+S.bag[k]+'</small></div>').join(""):'<small class="mut">Vacía. Compra objetos en las Tiendas Pokémon o búscalos por las rutas.</small>')+'</div>'+
       '<small class="mut">Los Pokémon, la mochila y los niveles de Exploración son independientes de tu colección del juego. Lo que captures aquí se queda aquí.</small>'});
   box.innerHTML=d;box.hidden=false;$("xgX").onclick=()=>{box.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xg]");if(!b)return;const n=b.dataset.xg;
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xgt]");if(!b)return;const n=b.dataset.xgt;
   xgRun(()=>{S.team=(S.team||[]).map(x=>x&&S.owned[x]?x:"");while(S.team.length<6)S.team.push("");const i=S.team.indexOf(n),cnt=S.team.filter(x=>x).length;
     if(i>=0){if(cnt<=1){toast("Necesitas al menos un Pokémon en el equipo.");return}S.team.splice(i,1);S.team.push("")}else{const j=S.team.indexOf("");if(j<0){toast("Tu equipo ya tiene 6 Pokémon.");return}S.team[j]=n}
-    S.team=S.team.filter(x=>x).concat(["","","","","",""]).slice(0,6);save()});snd("ui");xgPanel()});
+    S.team=S.team.filter(x=>x).concat(["","","","","",""]).slice(0,6);save()});snd("ui");if(typeof xfOpen==="function"&&XF.n===n)xfOpen(n);else xgPanel()});
 {const _x=exUI;exUI=function(){const r=_x.apply(this,arguments);const sc=document.querySelector("#explPB .exscr");
   if(sc&&!$("exTeam")){sc.insertAdjacentHTML("beforeend",'<div id="exTeam" class="exteam" hidden></div><button type="button" class="exfsb exteamb" id="exTeamB" title="Tu equipo de Exploración" aria-label="Equipo">🎒</button>');$("exTeamB").onclick=()=>{snd("ui");xgPanel()}}
   return r}}
@@ -12066,6 +12087,35 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
 // Esc: cierra la tienda
 window.addEventListener("keydown",e=>{if(e.key==="Escape"&&XSH.open){e.preventDefault();e.stopPropagation();xsClose()}},true);
 setInterval(()=>{if(XSH.open){EX.keys={};EX.kst=[]}},100);
+
+// ================= ficha técnica de los Pokémon de Exploración =================
+const XF={n:null,msg:""};
+function xfOpen(n){const box=$("exTeam");if(!box)return;XF.n=n;XU.id=null;
+  const h=xgRun(()=>{if(!(S.owned[n]>0)||!PM[n])return null;const p=PM[n],d=lvd(n),l=d.l,mx=stH(p,l),hp=S.hp[n]===undefined?mx:Math.max(0,Math.min(mx,S.hp[n])),f=hp/mx,
+      nx=l<100?need(l):0,xf=nx?Math.min(1,(d.x||0)/nx):1,inT=(S.team||[]).includes(n),sh=!!(S.shiny&&S.shiny[n]>0),N=NAT[natOf(n)]||NAT[0],ab=abOf(n),held=heldOf(n),mote=(S.mote&&S.mote[n])||"";
+    const mv=moveIds(n).map(id=>{const m=MVD[id];if(!m)return "";const CL=["💫 Estado","💥 Físico","🔮 Especial"][m.cl]||"";
+      return '<div class="xfmv" style="--tc:'+(TC[m.t]||"#999")+'"><b>'+esc(m.n)+'</b><small>'+EM[m.t]+' '+TIPO[m.t]+' · '+CL+(m.pw?' · Pot. '+m.pw:'')+(m.ac?' · Prec. '+m.ac+'%':'')+'</small><i>PP '+ppCur(n,id)+'/'+ppMax(n,id)+'</i></div>'}).join("");
+    return '<div class="xgh"><b>📋 Ficha de '+esc(nk(n))+'</b><button type="button" class="alt" data-xfb="1">Volver</button></div>'+(XF.msg?'<div class="xsmsg">'+esc(XF.msg)+'</div>':'')+
+      '<div class="xfw"><div class="xfl"><div class="xfspr '+p[2]+'">'+icoHD(p,120,false,sh)+'</div>'+
+        '<b class="xfn">'+(sh?"✨ ":"")+esc(nk(n))+'</b>'+(mote?'<small class="mut">'+esc(n)+'</small>':'')+'<span class="xfty">'+tyTxt(p)+'</span><span class="xflv">Nv '+l+'</span>'+
+        '<div class="xfbar"><small>PS '+hp+' / '+mx+'</small><i><u style="width:'+Math.round(f*100)+'%;background:'+(f>.5?"#3ecf8e":f>.2?"#ffd35c":"#e63950")+'"></u></i></div>'+
+        '<div class="xfbar"><small>'+(nx?'Exp. '+fmt(d.x||0)+' / '+fmt(nx):'Nivel máximo')+'</small><i><u style="width:'+Math.round(xf*100)+'%;background:#4aa3ff"></u></i></div>'+
+        '<button type="button" class="'+(inT?'alt':'red')+' xfteam" data-xgt="'+esc(n)+'">'+(inT?'Sacar del equipo':'➕ Meter en el equipo')+'</button></div>'+
+      '<div class="xfr"><div class="xfrow"><span>Mote</span><div class="xfin"><input id="xfMote" maxlength="12" placeholder="'+esc(n)+'" value="'+esc(mote)+'"><button type="button" data-xfm="1">Guardar</button></div></div>'+
+        '<div class="xfrow"><span>Naturaleza</span><div><b>'+N[0]+'</b> <small class="mut">'+natTxt(natOf(n))+'</small></div></div>'+
+        '<div class="xfrow"><span>Habilidad</span><div><b>'+esc(abName(ab))+'</b>'+(typeof ABDESC!=="undefined"&&ABDESC[ab]?' <small class="mut">'+esc(ABDESC[ab])+'</small>':'')+'</div></div>'+
+        '<div class="xfrow"><span>Objeto</span><div>'+(held?itemIco(held,24)+' <b>'+esc(IN(held))+'</b> <button type="button" class="alt mini" data-xfh="1">Quitar</button>':'<small class="mut">No lleva ningún objeto. Equípalo desde la mochila.</small>')+'</div></div>'+
+        '<div class="xfrow xfst xf1"><div>'+(typeof fstatHTML==="function"?fstatHTML(n):'')+'</div></div>'+
+        '<div class="xfrow"><span>Movimientos</span><div class="xfmvs">'+mv+'</div></div></div></div>'});
+  if(!h){XF.n=null;xgPanel();return}box.innerHTML=h;box.hidden=false;box.scrollTop=0}
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#exTeam [data-xg],#exTeam [data-xfb],#exTeam [data-xfm],#exTeam [data-xfh]");if(!t)return;e.stopPropagation();const d=t.dataset;snd("ui");
+  if(d.xg){XF.msg="";xfOpen(d.xg);return}
+  if(d.xfb){XF.n=null;XF.msg="";xgPanel();return}
+  const n=XF.n;if(!n)return;
+  if(d.xfm){const v=String(($("xfMote")||{}).value||"").trim().slice(0,12);xgRun(()=>{S.mote=S.mote||{};if(v&&v!==n)S.mote[n]=v;else delete S.mote[n]});save();XF.msg=v&&v!==n?"Ahora se llama «"+v+"».":"Mote quitado.";xfOpen(n);return}
+  if(d.xfh){xgRun(()=>{const h=S.held&&S.held[n];if(h){delete S.held[n];S.bag[h]=(S.bag[h]||0)+1;XF.msg=IN(h)+" vuelve a la mochila."}});save();xfOpen(n)}},true);
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target&&e.target.id==="xfMote"){e.preventDefault();e.stopPropagation();const b=document.querySelector('#exTeam [data-xfm]');b&&b.click()}},true);
+{const _p=xgPanel;xgPanel=function(){XF.n=null;const r=_p.apply(this,arguments);try{const box=$("exTeam");if(box&&!box.querySelector(".xghint"))box.querySelector(".xgl")&&box.querySelector(".xgl").insertAdjacentHTML("beforebegin",'<small class="mut xghint">Toca un Pokémon para ver su ficha.</small>')}catch(e){}return r}}
 
 // ================= mudanza a pokegachaonline.es: aviso para las partidas sin cuenta =================
 const MV_DOM="pokegachaonline.es";

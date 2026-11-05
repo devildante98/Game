@@ -21,9 +21,9 @@ function mvShowOld(){mvSet("gacha-mv-seen",mvToday());const n=Object.keys(S.owne
      {t:"Entendido",cls:"alt"}])}
 function mvShowNew(){mvSet("gacha-mv-new","1");
   mvModal('<b class="mvt">👋 ¡Te damos la bienvenida a '+MV_DOM+'!</b>'+
-    '<p>¿Ya jugabas en la dirección antigua (devildante98.github.io) <b>sin cuenta</b>? Si exportaste tu partida allí, impórtala ahora y sigue donde lo dejaste.</p>'+
+    '<p>¿Ya jugabas en la dirección antigua (devildante98.github.io) <b>sin cuenta</b>? Abre la <b>página de rescate</b> en el mismo navegador donde jugabas y tu partida llegará aquí sola. Si la exportaste a un archivo, también puedes importarla.</p>'+
     '<p class="mvs">Si jugabas con cuenta no tienes que hacer nada: inicia sesión y tu progreso estará aquí.</p>',
-    [{t:"⬆️ Importar partida",fn:()=>{const f=document.getElementById("clFile");if(f)f.click()}},{t:"Empezar de cero",cls:"alt"}])}
+    [{t:"💾 Página de rescate",fn:()=>{location.href="https://devildante98.github.io/rescate/"}},{t:"⬆️ Importar archivo",cls:"alt",fn:()=>{const f=document.getElementById("clFile");if(f)f.click()}},{t:"Empezar de cero",cls:"alt"}])}
 function mvCheck(){if(window.__KEY||typeof S==="undefined"||!S||mvGet("gacha-rescue")||mvRescBusy)return false;
   if(mvOld()){if(mvBusy())return false;if(mvGet("gacha-mv-exp")||mvGet("gacha-mv-seen")===mvToday())return true;mvShowOld();return true}
   const fresh=!Object.keys(S.owned||{}).length&&!(S.pulls||S.np||S.sp);if(!fresh||mvGet("gacha-mv-new"))return true;const L=document.getElementById("gLoad");if(document.querySelector(".uidlg")||(L&&!L.hidden&&L.offsetParent!==null))return false;mvShowNew();return true}

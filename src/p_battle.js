@@ -191,7 +191,7 @@ const SL_ME={sp:"msp",n:"mn",l:"ml",h:"mh",hp:"mhp",st:"mst",i:"mi",pt:"pty",bac
 const SL_OP={sp:"osp",n:"on",l:"ol",h:"oh",hp:"ohp",st:"ost",i:"oi",pt:"oparty",tn:"otn"};
 const ART={atk:"El Ataque",def:"La Defensa",spa:"El Ataque Especial",spd:"La Defensa Especial",spe:"La Velocidad",acc:"La Precisión",eva:"La Evasión"};
 const AILM={par:w=>"¡"+w+" está paralizado! Quizás no pueda moverse.",slp:w=>"¡"+w+" se ha dormido!",psn:w=>"¡"+w+" ha sido envenenado!",tox:w=>"¡"+w+" ha sido gravemente envenenado!",brn:w=>"¡"+w+" se ha quemado!",frz:w=>"¡"+w+" se ha congelado!",cnf:w=>"¡"+w+" se encuentra confuso!"};
-const beWho=(i,n)=>B&&B.who?B.who(i,n):n;
+const beWho=(i,n)=>B&&B.who?B.who(i,n):(B&&(B.mine?B.mine(i):i===0)&&typeof nk==="function"?nk(n):n);
 const snapMon=(sn,i)=>B.E.sd[i].t[sn.ai[i]];
 const ITMSG={wherb:["",w=>"¡"+w+" ha recuperado sus características gracias a la Hierba Blanca!"],avest:["",w=>"¡"+w+" lleva un Chaleco Asalto y no puede usar movimientos de estado!"],seed:["",w=>"¡La semilla de "+w+" ha reaccionado al campo!"],left:["h",w=>"¡"+w+" ha recuperado algunos PS gracias a sus Restos!"],lorb:["d",w=>"¡"+w+" ha perdido PS por culpa de la Vidasfera!"],sash:["",w=>"¡"+w+" ha aguantado el golpe gracias a su Banda Focus!"],sitrus:["h",w=>"¡"+w+" se ha comido su Baya Zidra y ha recuperado PS!"],lum:["h",w=>"¡"+w+" se ha comido su Baya Ziuela y se ha curado!"],shell:["h",w=>"¡"+w+" ha recuperado PS gracias a su Campana Concha!"],qclaw:["",w=>"¡La Garra Rápida de "+w+" le permite actuar primero!"]};
 function setSpr(i,sn){
@@ -201,7 +201,7 @@ function setSpr(i,sn){
 function bePaint(sn){
   if(!B||!B.SL)return;sn=sn||beSnap(B.E);B.snap=sn;
   B.SL.forEach((sl,i)=>{if(!sl)return;const sd=B.E.sd[i],a=sn.ai[i],m=sd.t[a];if(!m)return;
-    $(sl.n).textContent=B.mode==="s"&&i===0&&typeof nk==="function"?nk(m.p[0]):m.p[0];$(sl.l).textContent=STAR[m.p[2]]+" "+tyNm(m.p)+" Nv"+m.l;
+    $(sl.n).textContent=(B.mine?B.mine(i):i===0)&&typeof nk==="function"?nk(m.p[0]):m.p[0];$(sl.l).textContent=STAR[m.p[2]]+" "+tyNm(m.p)+" Nv"+m.l;
     const hp=Math.max(0,sn.hp[i][a]),pc=hp/m.mx,bar=$(sl.h);bar.style.width=pc*100+"%";bar.style.background=pc>.5?"#3ecf5a":pc>.2?"#f5c400":"#e63950";
     const st=sn.st[i][a];
     if(sl.st){const e=$(sl.st);e.textContent=st?STS[st][0]:"";e.style.background=st?STS[st][1]:"";e.hidden=!st}
@@ -380,7 +380,7 @@ async function playerIn(){
 }
 async function playerThrow(m,sid,iid){
   const p=$("psp"),L=myLook(),img=p.querySelector("img");
-  const sp=say("¡Adelante, "+m.p[0]+"!");
+  const sp=say("¡Adelante, "+(typeof nk==="function"?nk(m.p[0]):m.p[0])+"!");
   if(img&&O.intro&&O.fx){img.classList.remove("pidle");const s=pxSpd();
     img.src=trURL(L,"b","t");p.animate([{translate:"0 0"},{translate:"-6px 2px"}],{duration:180/s,fill:"forwards"});await sleep(170);
     img.src=trURL(L,"b","m");await sleep(100);img.src=trURL(L,"b","u");snd("throw");
@@ -510,10 +510,10 @@ async function askSwitch(i){
 }
 async function sSend(e){
   if(e.s===0){
-    if(!e.forced){await say("¡Vuelve "+e.old+"!");await pbRecall("msp")}
+    if(!e.forced){await say("¡Vuelve "+(typeof nk==="function"?nk(e.old):e.old)+"!");await pbRecall("msp")}
     $("msp").style.opacity=0;setSpr(0,e.snap);bePaint(e.snap);xpBar();$("msp").style.opacity=0;
     if(!$("hlpp").hidden)$("hlpp").innerHTML=helpHTML();
-    const sp=say("¡Adelante, "+e.n+"!");await sendOut(PM[e.n]);await sp;
+    const sp=say("¡Adelante, "+(typeof nk==="function"?nk(e.n):e.n)+"!");await sendOut(PM[e.n]);await sp;
   }else{
     $("osp").style.opacity=0;setSpr(1,e.snap);bePaint(e.snap);$("osp").style.opacity=0;
     await trainerSendOut(false,null,null,e.n);

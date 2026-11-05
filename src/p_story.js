@@ -98,15 +98,17 @@ function stHeal(){const N=(S.team||[]).filter(n=>n&&S.owned[n]);N.forEach(n=>{de
 // --- laboratorio: el Pokémon inicial y el primer combate contra Dani ---
 const STARTERS=[["Bulbasaur","Planta"],["Charmander","Fuego"],["Squirtle","Agua"]],RIVAL_OF={Bulbasaur:"Charmander",Charmander:"Squirtle",Squirtle:"Bulbasaur"};
 STX.lab1=()=>stRun(async()=>{const v=stN("vega");await sSay(S_("Profesora Vega","¡Ah, ya estás aquí! Te doy la bienvenida al laboratorio. Soy la Profesora Vega.","Estudio la Piedra Aurora, una roca antiquísima de la región de Alba.","Según las leyendas, si se le devuelven sus tres Escamas, el guardián de la región despierta junto al lago de la Cima Aurora.","Hace unos días, un grupo que se hace llamar Equipo Ocaso empezó a buscar esas Escamas por todas partes…","Necesito a alguien valiente que vigile las rutas y me cuente lo que vea. ¡Y he pensado en ti!","Para el viaje quiero regalarte un compañero. Elige uno de estos tres Pokémon."));
-  const i=await sChoice("Elige tu compañero de viaje",STARTERS.map(s=>({t:s[0],s:s[1],img:ico(PM[s[0]],56)})));
-  const st=STARTERS[i][0],lv=Math.max(5,Math.min(15,sLv(0)));stSt().f.st=st;stSt().f.rv=RIVAL_OF[st];xgGive(st,lv);snd("capok");
-  await sSay(["¡Has recibido a "+st+" (Nv. "+lv+")!",st+" se ha unido a tu equipo."]);
+  // el Pokémon inicial se elige una sola vez (si la escena se repite, ya lo tienes)
+  if(!stSt().f.st){const i=await sChoice("Elige tu compañero de viaje",STARTERS.map(s=>({t:s[0],s:s[1],img:ico(PM[s[0]],56)})));
+    const st=STARTERS[i][0],lv=5;stSt().f.st=st;stSt().f.rv=RIVAL_OF[st];xgGive(st,lv);save();snd("capok");
+    await sSay(["¡Has recibido a "+st+" (Nv. "+lv+")!",st+" se ha unido a tu equipo."])}
+  else await sSay(S_("Profesora Vega","Veo que "+stSt().f.st+" y tú ya os lleváis de maravilla."));
   snd("ui");const d=sAdd("dani",7,9,"u","Dani",STO_L.dani);await sW(300);sFaceTo(d);
   await sSay(S_("Dani","¡Profe! ¡Perdón, perdón, me he dormido!","¿Eh? ¿Ya has elegido? Entonces yo me quedo con "+stSt().f.rv+". ¡Le tengo ventaja al tuyo!"));
   await sApproach(d);
   await sSay(S_("Dani","¡Vamos a probarlos ahora mismo! ¡Combate!"));
-  const r=await sBattle(sTr([stSt().f.rv],0,"Dani",STO_L.dani));
-  if(r===null){await sSay(S_("Dani","Vaya, tu equipo no está para combates. ¡Cúralo y volvemos a intentarlo!"));sDel("dani");return}
+  stHeal();EX.noFaint=1;let r;try{r=await sBattle(sTr([stSt().f.rv],0,"Dani",STO_L.dani))}finally{EX.noFaint=0}
+  if(r===null)r=false;stHeal();// como en los juegos: el primer combate no se pierde nada, y la Profesora cura a tu Pokémon
   await sSay(S_("Dani",...(r?["¡¿Qué?! ¡He perdido! Bueno… ¡la próxima vez te ganaré seguro!"]:["¡Toma ya! ¡He ganado! No te preocupes, es tu primer combate."])));
   await sSay(S_("Profesora Vega","¡Qué combate más emocionante! Se nota que vais a ser buenos rivales.","Mi ayudante, Lía, ha salido hacia la Ruta 1. Sal del pueblo por el este y búscala, por favor.","¡Y toma esto para el camino!"));
   await sSay(["¡Recibes "+sGive({t:5000,it:{pb:10}})+"!"]);

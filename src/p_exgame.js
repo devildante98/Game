@@ -110,3 +110,15 @@ const xgOpen=m=>{const g=XGGATE[m];return !g||(stSt().s|0)>=g[0]};
   return _a.apply(this,arguments)}}
 // si tu partida de Exploración está en una zona que todavía no te toca, vuelves a Pueblo Brisa
 {const _g=exGo;exGo=function(){const r=_g.apply(this,arguments);try{if(!xgOpen(exSt().m)&&(stSt().s|0)>0){exLoad("centro",7,6,"u");setTimeout(()=>{if(!EX.cut&&!EX.dlg)exSay(["Vuelves al Centro Pokémon de Pueblo Brisa para seguir tu aventura desde aquí."])},700)}}catch(e){console.error(e)}return r}}
+// ---------- el primer combate contra Dani no te manda al Centro si pierdes ----------
+{const _f=exFaint;exFaint=function(){if(EX.noFaint){EX.noFaint=0;return}return _f.apply(this,arguments)}}
+// ---------- en Exploración los rivales usan exactamente el nivel de la historia (sin el refuerzo de los combates normales) ----------
+{const _sb=startBattle;startBattle=function(cfg){if(XGSW&&cfg&&cfg.eteam&&cfg.trainer){cfg.eteam.forEach(m=>{m.mx=Math.max(1,Math.round(m.mx/1.2));m.mh=m.mx;m.ma/=1.15})}
+  const pr=_sb.apply(this,arguments);try{if(XGSW&&B&&B.E&&(stSt().s|0)<=3)B.E.ai=""}catch(e){}return pr}}
+// ---------- nunca dos veces el mismo Pokémon en el equipo ----------
+{const _ta=stTeamAdd;stTeamAdd=function(n){return xgRun(()=>{if((S.team||[]).includes(n))return;return _ta(n)})}}
+// ---------- arreglo de partidas afectadas: al principio de la historia solo te quedas con tu inicial ----------
+function xgFix1(){const X=xgData();if(X.fix1)return;X.fix1=1;const t=stSt(),s=t.s|0,st=t.f&&t.f.st;if(!st||s>2)return;
+  xgRun(()=>{const best=Math.max(5,...Object.keys(S.lv).filter(n=>S.owned[n]>0).map(n=>lvd(n).l));const keepLv=S.lv[st]||{l:best,x:0};
+    Object.keys(S.owned).forEach(n=>{if(n!==st)delete S.owned[n]});S.owned[st]=1;S.lv={};S.lv[st]=keepLv.l>=5?keepLv:{l:5,x:0};S.hp={};S.pp={};S.team=[st,"","","","",""]});save()}
+{const _g=exGo;exGo=function(){try{xgFix1()}catch(e){console.error(e)}return _g.apply(this,arguments)}}

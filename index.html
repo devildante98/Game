@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793868044">
+<meta name="game-build" content="1793868763">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -6964,7 +6964,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793868044";
+const GAME_B="1793868763";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -10999,15 +10999,17 @@ function stHeal(){const N=(S.team||[]).filter(n=>n&&S.owned[n]);N.forEach(n=>{de
 // --- laboratorio: el Pokémon inicial y el primer combate contra Dani ---
 const STARTERS=[["Bulbasaur","Planta"],["Charmander","Fuego"],["Squirtle","Agua"]],RIVAL_OF={Bulbasaur:"Charmander",Charmander:"Squirtle",Squirtle:"Bulbasaur"};
 STX.lab1=()=>stRun(async()=>{const v=stN("vega");await sSay(S_("Profesora Vega","¡Ah, ya estás aquí! Te doy la bienvenida al laboratorio. Soy la Profesora Vega.","Estudio la Piedra Aurora, una roca antiquísima de la región de Alba.","Según las leyendas, si se le devuelven sus tres Escamas, el guardián de la región despierta junto al lago de la Cima Aurora.","Hace unos días, un grupo que se hace llamar Equipo Ocaso empezó a buscar esas Escamas por todas partes…","Necesito a alguien valiente que vigile las rutas y me cuente lo que vea. ¡Y he pensado en ti!","Para el viaje quiero regalarte un compañero. Elige uno de estos tres Pokémon."));
-  const i=await sChoice("Elige tu compañero de viaje",STARTERS.map(s=>({t:s[0],s:s[1],img:ico(PM[s[0]],56)})));
-  const st=STARTERS[i][0],lv=Math.max(5,Math.min(15,sLv(0)));stSt().f.st=st;stSt().f.rv=RIVAL_OF[st];xgGive(st,lv);snd("capok");
-  await sSay(["¡Has recibido a "+st+" (Nv. "+lv+")!",st+" se ha unido a tu equipo."]);
+  // el Pokémon inicial se elige una sola vez (si la escena se repite, ya lo tienes)
+  if(!stSt().f.st){const i=await sChoice("Elige tu compañero de viaje",STARTERS.map(s=>({t:s[0],s:s[1],img:ico(PM[s[0]],56)})));
+    const st=STARTERS[i][0],lv=5;stSt().f.st=st;stSt().f.rv=RIVAL_OF[st];xgGive(st,lv);save();snd("capok");
+    await sSay(["¡Has recibido a "+st+" (Nv. "+lv+")!",st+" se ha unido a tu equipo."])}
+  else await sSay(S_("Profesora Vega","Veo que "+stSt().f.st+" y tú ya os lleváis de maravilla."));
   snd("ui");const d=sAdd("dani",7,9,"u","Dani",STO_L.dani);await sW(300);sFaceTo(d);
   await sSay(S_("Dani","¡Profe! ¡Perdón, perdón, me he dormido!","¿Eh? ¿Ya has elegido? Entonces yo me quedo con "+stSt().f.rv+". ¡Le tengo ventaja al tuyo!"));
   await sApproach(d);
   await sSay(S_("Dani","¡Vamos a probarlos ahora mismo! ¡Combate!"));
-  const r=await sBattle(sTr([stSt().f.rv],0,"Dani",STO_L.dani));
-  if(r===null){await sSay(S_("Dani","Vaya, tu equipo no está para combates. ¡Cúralo y volvemos a intentarlo!"));sDel("dani");return}
+  stHeal();EX.noFaint=1;let r;try{r=await sBattle(sTr([stSt().f.rv],0,"Dani",STO_L.dani))}finally{EX.noFaint=0}
+  if(r===null)r=false;stHeal();// como en los juegos: el primer combate no se pierde nada, y la Profesora cura a tu Pokémon
   await sSay(S_("Dani",...(r?["¡¿Qué?! ¡He perdido! Bueno… ¡la próxima vez te ganaré seguro!"]:["¡Toma ya! ¡He ganado! No te preocupes, es tu primer combate."])));
   await sSay(S_("Profesora Vega","¡Qué combate más emocionante! Se nota que vais a ser buenos rivales.","Mi ayudante, Lía, ha salido hacia la Ruta 1. Sal del pueblo por el este y búscala, por favor.","¡Y toma esto para el camino!"));
   await sSay(["¡Recibes "+sGive({t:5000,it:{pb:10}})+"!"]);
@@ -11566,6 +11568,18 @@ const xgOpen=m=>{const g=XGGATE[m];return !g||(stSt().s|0)>=g[0]};
   return _a.apply(this,arguments)}}
 // si tu partida de Exploración está en una zona que todavía no te toca, vuelves a Pueblo Brisa
 {const _g=exGo;exGo=function(){const r=_g.apply(this,arguments);try{if(!xgOpen(exSt().m)&&(stSt().s|0)>0){exLoad("centro",7,6,"u");setTimeout(()=>{if(!EX.cut&&!EX.dlg)exSay(["Vuelves al Centro Pokémon de Pueblo Brisa para seguir tu aventura desde aquí."])},700)}}catch(e){console.error(e)}return r}}
+// ---------- el primer combate contra Dani no te manda al Centro si pierdes ----------
+{const _f=exFaint;exFaint=function(){if(EX.noFaint){EX.noFaint=0;return}return _f.apply(this,arguments)}}
+// ---------- en Exploración los rivales usan exactamente el nivel de la historia (sin el refuerzo de los combates normales) ----------
+{const _sb=startBattle;startBattle=function(cfg){if(XGSW&&cfg&&cfg.eteam&&cfg.trainer){cfg.eteam.forEach(m=>{m.mx=Math.max(1,Math.round(m.mx/1.2));m.mh=m.mx;m.ma/=1.15})}
+  const pr=_sb.apply(this,arguments);try{if(XGSW&&B&&B.E&&(stSt().s|0)<=3)B.E.ai=""}catch(e){}return pr}}
+// ---------- nunca dos veces el mismo Pokémon en el equipo ----------
+{const _ta=stTeamAdd;stTeamAdd=function(n){return xgRun(()=>{if((S.team||[]).includes(n))return;return _ta(n)})}}
+// ---------- arreglo de partidas afectadas: al principio de la historia solo te quedas con tu inicial ----------
+function xgFix1(){const X=xgData();if(X.fix1)return;X.fix1=1;const t=stSt(),s=t.s|0,st=t.f&&t.f.st;if(!st||s>2)return;
+  xgRun(()=>{const best=Math.max(5,...Object.keys(S.lv).filter(n=>S.owned[n]>0).map(n=>lvd(n).l));const keepLv=S.lv[st]||{l:best,x:0};
+    Object.keys(S.owned).forEach(n=>{if(n!==st)delete S.owned[n]});S.owned[st]=1;S.lv={};S.lv[st]=keepLv.l>=5?keepLv:{l:5,x:0};S.hp={};S.pp={};S.team=[st,"","","","",""]});save()}
+{const _g=exGo;exGo=function(){try{xgFix1()}catch(e){console.error(e)}return _g.apply(this,arguments)}}
 
 // =====================================================================================
 // CLASIFICACIÓN SEMANAL DE CADA MINIJUEGO (Firestore: tours/{semana_juego}/s/{uid})

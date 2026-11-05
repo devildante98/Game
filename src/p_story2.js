@@ -49,15 +49,15 @@ const SAILOR={playa:[6,16],pe:[13,16],pb:[13,16],ct:[15,20]};
 {const _n=stNPCs;stNPCs=function(m){const L=_n(m),s=stSt().s,f=stSt().f;const P=(id,x,y,fc,n,look,o)=>L.push(Object.assign({sid:id,x:x,y:y,f:fc,n:n,look:look,t:[],sight:0,txt:"",id:"sto:"+m+":"+id,story:1,still:1,beat:true,px:x,py:y,f0:fc},o||{}));
   if(/^centro_/.test(m))P("enf",7,2,"d","Enfermera",STO_L.enf);
   if(SAILOR[m]&&(m!=="playa"||s>=10))P("marin",SAILOR[m][0],SAILOR[m][1],"u","Marinero",STO_L.marin);
-  if(m==="pe"){if(s===11){P("dani",14,8,"d","Dani",STO_L.dani);if(!f.e1)P("e1",17,10,"l","Recluta",STO_L.temp)}P("v4",8,12,"r","Pescador",STO_L.v3)}
-  if(m==="pn"){P("nivea",10,7,"d","Anciana Nívea",STO_L.nivea);if(s===12)P("dani",8,9,"r","Dani",STO_L.dani)}
+  if(m==="pe"){if(s===11){P("dani",14,8,"d","Dani",STO_L.dani);if(!f.e1)P("e1",17,9,"l","Recluta",STO_L.temp,{sight:4})}P("v4",8,12,"r","Pescador",STO_L.v3)}
+  if(m==="pn"){P("nivea",10,7,"d","Anciana Nívea",STO_L.nivea);if(s===12)P("dani",13,4,"d","Dani",STO_L.dani,{sight:3})}
   if(m==="glaciar"&&s===13){if(!f.e2)P("e2",12,13,"r","Recluta",STO_L.temp,{sight:4});if(!f.e3)P("e3",17,9,"l","Recluta",STO_L.temp,{sight:4});P("gelida",14,6,"d","Gélida",STO_L.gelida,{sight:4})}
   if(m==="pico_e"&&s===14)P("gelida",14,9,"d","Gélida",STO_L.gelida,{sight:3});
-  if(m==="pb"){if(s===16)P("bruma",14,8,"d","Bruma",STO_L.bruma);P("v5",16,13,"r","Bañista",STO_L.v1)}
-  if(m==="vv"){P("ald",10,7,"d","Aldeano",STO_L.aldeano);if(s===17)P("dani",8,9,"r","Dani",STO_L.dani)}
+  if(m==="pb"){if(s===16)P("bruma",13,7,"d","Bruma",STO_L.bruma,{sight:3});P("v5",16,13,"r","Bañista",STO_L.v1)}
+  if(m==="vv"){P("ald",10,7,"d","Aldeano",STO_L.aldeano);if(s===17)P("dani",13,4,"d","Dani",STO_L.dani,{sight:3})}
   if(m==="crater"&&s===18){if(!f.f2)P("f2",12,13,"r","Recluta",STO_L.temp,{sight:4});if(!f.f3)P("f3",17,9,"l","Recluta",STO_L.temp,{sight:4});P("ascua",14,6,"d","Ascua",STO_L.ascua,{sight:4})}
   if(m==="cumbre"&&s===19)P("ascua",14,9,"d","Ascua",STO_L.ascua,{sight:3});
-  if(m==="ct"){if(s===21)P("noctis",14,10,"d","Noctis",STO_L.noctis);P("v6",22,17,"l","Electricista",STO_L.v2)}
+  if(m==="ct"){if(s===21)P("noctis",15,9,"d","Noctis",STO_L.noctis,{sight:2});P("v6",22,17,"l","Electricista",STO_L.v2)}
   if(m==="torre"&&s===22){if(!f.t1)P("t1",4,10,"r","Recluta",STO_L.temp,{sight:5});if(!f.t2)P("t2",15,10,"l","Recluta",STO_L.temp,{sight:5});if(!f.ga)P("gelida",8,7,"r","Gélida",STO_L.gelida,{sight:2});if(!f.as)P("ascua",11,8,"l","Ascua",STO_L.ascua,{sight:2});P("icaro",9,4,"d","Doctor Ícaro",STO_L.icaro,{sight:2})}
   return L}}
 Object.assign(GRUNT_TXT,{e1:["¡Este puerto ya es del Equipo Tempestad! ¡Largo!"],e2:["¡El frío no nos detendrá! ¡Tú tampoco!"],e3:["¡La comandante Gélida está a punto de terminar su trabajo!"],f2:["¡Aquí dentro hace un calor horrible… y tú lo vas a pasar peor!"],f3:["¡El comandante Ascua no quiere visitas!"],t1:["¡La torre es propiedad del Doctor Ícaro!"],t2:["¡Cuando tengamos las tres aves, el clima será nuestro!"]});
@@ -93,12 +93,7 @@ STX.act2=()=>stRun(async()=>{
   return _t(n)}}
 {const _en=stEnter;stEnter=function(m){const s=stSt().s;if(EX.cut||EX.title)return;
   if(/^centro/.test(m)){stSt().lc=m;save()}
-  if(m==="pe"&&s===11)return STX.pe11();
-  if(m==="pn"&&s===12)return STX.pn12();
-  if(m==="pb"&&s===16)return STX.pb16();
-  if(m==="vv"&&s===17)return STX.vv17();
-  if(m==="ct"&&s===21)return STX.ct21();
-  const cs={glaciar:[13,9],pico_e:[14,10],crater:[18,13],cumbre:[19,14],torre:[22,16]}[m];if(cs&&s===cs[0]&&!stSt().f["c"+cs[1]]){stSt().f["c"+cs[1]]=1;save();return stRun(()=>sCard(cs[1]))}
+  const cs={pn:[12,8],vv:[17,12],glaciar:[13,9],pico_e:[14,10],crater:[18,13],cumbre:[19,14],torre:[22,16]}[m];if(cs&&s===cs[0]&&!stSt().f["c"+cs[1]]){stSt().f["c"+cs[1]]=1;save();return stRun(()=>sCard(cs[1]))}
   return _en(m)}}
 // si te debilitas, vuelves al último Centro Pokémon que visitaste
 exFaint=function(){const st=exSt(),c=stSt().lc&&EXM[stSt().lc]?stSt().lc:"centro";st.m=c;st.x=7;st.y=6;st.f="u";EX.map=null;EX.pend.push(["¡Tus Pokémon se han debilitado!","Vuelves corriendo al "+EXM[c].n+"… Habla con la enfermera para curarlos."])};
@@ -113,7 +108,7 @@ STX.sailor=()=>stRun(async()=>{const s=stSt().s,cur=EX.map,opts=REG.filter(r=>r.
   await sSay(S_("Marinero","¡Leven anclas! ¡Rumbo a "+r.n.split(" · ")[0]+"!"));snd("ui");await sFade("fade",500);
   const card=$("exCard");if(card){card.innerHTML='<small>⚓ Viaje en barco</small><b>'+esc(r.n.split(" · ")[0])+'</b>';card.hidden=false;card.classList.remove("in");void card.offsetWidth;card.classList.add("in")}
   await sW(1600);if(card)card.hidden=true;exLoad(r.m,r.x,r.y,"u");EX.banner=null;exFollowerReset();await sFade("fadein",600);
-  const nx={esc:[10,11,7],bra:[15,16,11],tor:[20,21,15]}[r.k];if(nx&&s===nx[0]){sStep(nx[1]);await sCard(nx[2]);setTimeout(()=>stEnter(r.m),60)}});
+  const nx={esc:[10,11,7],bra:[15,16,11],tor:[20,21,15]}[r.k];if(nx&&s===nx[0]){sStep(nx[1]);await sCard(nx[2])}});
 // ---------- ACTO II · Escarcha ----------
 STX.pe11=()=>stRun(async()=>{const d=stN("dani"),e=stN("e1");if(!d)return;
   await sSay(S_("Dani","¡Eh! ¡Por aquí! La Profe me pidió que te acompañara.","Pero mira eso… ¡un recluta del Equipo Tempestad está asustando a los pescadores!"));
@@ -122,7 +117,7 @@ STX.pe11=()=>stRun(async()=>{const d=stN("dani"),e=stN("e1");if(!d)return;
   await sApproach(d);await sSay(S_("Dani","¿Has oído? ¡La Caverna Glaciar! Está al norte de Pueblo Nevado, al otro lado de la Ruta 2.","Dicen que allí arriba, en el Pico Escarcha, vive Articuno, el ave de hielo.","¡Vamos a Pueblo Nevado! Te espero allí."));
   await sSay(["¡Recibes "+sGive({t:20000,it:{sb:10}})+"!"]);await sFade("fade",300);sDel("dani");await sFade("fadein",300);sStep(12)});
 STX.nivea=()=>stRun(async()=>{const s=stSt().s;await sSay(S_("Anciana Nívea",s<14?"Las leyendas dicen que Articuno aparece ante quienes se pierden en la nieve… para guiarles a casa.":"El ave de hielo vuela feliz otra vez. Pueblo Nevado nunca olvidará lo que hiciste."))});
-STX.pn12=()=>stRun(async()=>{await sCard(8);const n=stN("nivea"),d=stN("dani");
+STX.pn12=()=>stRun(async()=>{const n=stN("nivea"),d=stN("dani");
   await sSay(S_("Anciana Nívea","Así que eres tú la persona de la que habla todo el mundo… Soy Nívea, la más anciana de Pueblo Nevado.","Una mujer de capa gris, Gélida, entró ayer en la Caverna Glaciar con una máquina enorme.","Si atrapan a Articuno, esta nevada no acabará jamás. Por favor, protégelo."));
   if(d){await sApproach(d);await sSay(S_("Dani","¡Antes de entrar en la cueva quiero comprobar que estás en forma! ¡Combate!"));
     const r=await sBattle(sTr(["Pidgeotto","Kadabra","Eevee",stSt().f.rv||"Charmander"],5,"Dani",STO_L.dani));
@@ -149,7 +144,7 @@ async function stBird(nm,b,next){await sSay(["¡"+nm+" te mira fijamente y se pr
 STX.pb16=()=>stRun(async()=>{const b=stN("bruma");if(!b)return;await sApproach(b);
   await sSay(S_("Bruma","¡Vaya! Mira quién ha venido hasta Brasa.","Desde que se disolvió el Equipo Ocaso, ayudo a vigilar los volcanes. Y el Equipo Tempestad está aquí también.","Su comandante, Ascua, ha entrado en el Cráter, al norte de Villa Volcán. Quiere atrapar a Moltres, el ave de fuego.","Toma esto. Considéralo una disculpa por todo lo de Alba."));
   await sSay(["¡Recibes "+sGive({t:40000,it:{rev:3,cand:3}})+"!"]);await sSay(S_("Bruma","Sigue la Ruta 3 Ceniza hacia el este. ¡Suerte!"));await sFade("fade",300);sDel("bruma");await sFade("fadein",300);sStep(17)});
-STX.vv17=()=>stRun(async()=>{await sCard(12);const d=stN("dani");
+STX.vv17=()=>stRun(async()=>{const d=stN("dani");
   await sSay(S_("Aldeano","¡Cuidado! El volcán no para de rugir desde que esos de capa gris entraron en el Cráter."));
   if(d){await sApproach(d);await sSay(S_("Dani","¡He llegado en el barco de la tarde! No pensarías que te iba a dejar sin rival, ¿no?","¡Combate antes del cráter!"));
     const r=await sBattle(sTr(["Pidgeot","Alakazam","Dragonair","Eevee",stSt().f.rv||"Charmander"],7,"Dani",STO_L.dani));

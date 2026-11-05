@@ -23,7 +23,7 @@ function stNPCs(m){const s=stSt().s,f=stSt().f,L=[];const P=(id,x,y,fc,n,look,o)
   if(m==="lab"){P("vega",7,3,"d","Profesora Vega",STO_L.vega);if(s>=3&&s<9)P("lia",12,4,"l","Lía",STO_L.lia)}
   if(m==="centro")P("enf",7,2,"d","Enfermera",STO_L.enf);
   if(m==="pueblo"){P("v1",9,7,"l","Vecina",STO_L.v1);P("v2",11,14,"l","Niño",STO_L.v2);P("v3",20,12,"l","Abuelo",STO_L.v3);if(s>=9)P("dani",10,10,"d","Dani",STO_L.dani)}
-  if(m==="ruta"&&s===2){P("lia",4,16,"r","Lía",STO_L.lia);P("g1",6,15,"l","Recluta",STO_L.ocaso)}
+  if(m==="ruta"&&s===2){P("lia",18,7,"d","Lía",STO_L.lia);P("g1",18,8,"l","Recluta",STO_L.ocaso,{sight:4})}
   if(m==="bosque"&&s===3){if(!f.g3a)P("g3a",5,8,"d","Recluta",STO_L.ocaso,{sight:3});if(!f.g3b)P("g3b",17,12,"r","Recluta",STO_L.ocaso,{sight:3});P("bruma",22,7,"u","Bruma",STO_L.bruma,{sight:2})}
   if(m==="cueva"&&s===4){if(!f.g4c)P("g4c",12,12,"r","Recluta",STO_L.ocaso,{sight:4});if(!f.g4d)P("g4d",17,8,"l","Recluta",STO_L.ocaso,{sight:4});P("bruma",14,6,"d","Bruma",STO_L.bruma,{sight:4})}
   if(m==="playa"&&s===5){if(!f.g5e)P("g5e",14,5,"u","Recluta",STO_L.ocaso,{sight:2});if(!f.g5f)P("g5f",10,8,"r","Recluta",STO_L.ocaso,{sight:4});P("noctis",13,12,"u","Noctis",STO_L.noctis,{sight:3})}
@@ -117,18 +117,18 @@ STX.vega=()=>stRun(async()=>{const s=stSt().s;const L={2:"Lía está en la Ruta 
   await sSay(S_("Profesora Vega",L[s]||"¡Sigue así!"))});
 STX.lia=()=>stRun(async()=>{await sSay(S_("Lía","Estoy apuntando todo lo que el Equipo Ocaso hace por la región.","Por lo que he visto, su líder se llama Noctis… y su mano derecha es la comandante Bruma."))});
 // --- capítulo 1: Ruta 1 ---
-STX.ruta2=()=>stRun(async()=>{if(!stSt().f.c1){stSt().f.c1=1;await sCard(1)}const l=stN("lia"),g=stN("g1");if(!g)return;
+STX.ruta2=()=>stRun(async()=>{const l=stN("lia"),g=stN("g1");if(!g)return;
   await sSay(S_("Lía","¡Socorro! ¡Ese tipo quiere llevarse a los Pokémon que estaba estudiando!"));
   await sSay(S_("Recluta","¡Apártate! El Equipo Ocaso necesita la energía de todos los Pokémon de la región.","¿Y tú quién eres? ¿Vienes a molestar? ¡Pues te enseñaré lo que es bueno!"));
   await sApproach(g);
   const r=await sBattle(sTr(["Zubat","Rattata"],0,"Recluta del Equipo Ocaso",STO_L.ocaso));
   if(!r){if(r===false)await sSay(S_("Recluta","¡Ja! Vuelve cuando seas más fuerte."));return}
   await sSay(S_("Recluta","¡No puede ser! ¡La comandante Bruma me va a castigar!","¡Me largo al Bosque Verde con los demás!"));
-  snd("ui");await sWalkN(g,"rrrr");sDel("g1");
+  snd("ui");await sFlash(1);sDel("g1");
   sFaceTo(l);await sApproach(l);
   await sSay(S_("Lía","¡Gracias! Soy Lía, la ayudante de la Profesora Vega.","El Equipo Ocaso está capturando Pokémon en el Bosque Verde, al este de esta ruta.","Toma, seguro que te vienen bien."));
   await sSay(["¡Recibes "+sGive({t:5000,it:{sb:5}})+"!"]);
-  await sSay(S_("Lía","Yo voy a avisar a la Profesora. ¡Ten cuidado en el bosque!"));await sWalkN(l,"lll");sDel("lia");sStep(3)});
+  await sSay(S_("Lía","Yo voy a avisar a la Profesora. ¡Ten cuidado en el bosque!"));await sFade("fade",300);sDel("lia");await sFade("fadein",300);sStep(3)});
 // --- capítulo 2: Bosque Verde ---
 const GRUNT_TXT={g3a:["¡Alto ahí! Nadie entra en el bosque mientras trabajamos."],g3b:["¿Otra vez tú? ¡Los Pokémon de este bosque son nuestros!"],g4c:["¡Shhh! Estamos buscando algo muy valioso en esta cueva."],g4d:["¡La comandante dijo que no dejáramos pasar a nadie!"],g5e:["¡La playa está cerrada por orden del Equipo Ocaso!"],g5f:["¡El jefe Noctis está ocupado! ¡Fuera de aquí!"],g6g:["¡El amanecer eterno… digo, el ocaso eterno está a punto de llegar!"],g6h:["¡No subirás a la cima mientras yo esté aquí!"]};
 const GRUNT_TEAM={g3a:["Ekans","Zubat"],g3b:["Koffing","Grimer"],g4c:["Houndour","Sableye"],g4d:["Zubat","Murkrow"],g5e:["Carvanha","Murkrow"],g5f:["Houndour","Grimer","Zubat"],g6g:["Zorua","Pawniard"],g6h:["Skorupi","Carvanha","Zubat"]};
@@ -234,8 +234,7 @@ function stTalk(n){const s=stSt().s,id=n.sid;
 // al entrar en un mapa
 function stEnter(m){const s=stSt().s;if(EX.cut||EX.title)return;
   if(m==="lab"&&s===1)return STX.lab1();if(m==="lab"&&s===8)return STX.lab8();
-  if(m==="ruta"&&s===2)return STX.ruta2();
-  const cs={bosque:[3,2],cueva:[4,3],playa:[5,4],cima:[6,5]}[m];if(cs&&s===cs[0]&&!stSt().f["c"+cs[1]]){stSt().f["c"+cs[1]]=1;save();stRun(()=>sCard(cs[1]))}}
+  const cs={ruta:[2,1],bosque:[3,2],cueva:[4,3],playa:[5,4],cima:[6,5]}[m];if(cs&&s===cs[0]&&!stSt().f["c"+cs[1]]){stSt().f["c"+cs[1]]=1;save();stRun(()=>sCard(cs[1]))}}
 // el personaje de la historia te ve
 function stSight(){if(EX.cut)return false;for(const n of EX.npcs){if(!n.story||!n.sight)continue;const[dx,dy]=EXDIR[n.f];
   for(let i=1;i<=n.sight;i++){const x=n.px+dx*i,y=n.py+dy*i;if(x===EX.x&&y===EX.y){stRun(async()=>{await sAlert(n)}).then(()=>stTalk(n));return true}if(EXBLK.includes(exAt(x,y))||EX.npcs.some(q=>q!==n&&q.px===x&&q.py===y))break}}return false}

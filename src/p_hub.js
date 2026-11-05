@@ -291,7 +291,10 @@ ico=function(p,s,back,sh){
 };
 function icoHD(p,s,back,sh){window._wantHD=1;try{return ico(p,s,back,sh)}finally{window._wantHD=0}}
 function icoHDErr(el){
-  if(!el.dataset.r){el.dataset.r=1;el.src=SPRU2+"other/home/"+(el.dataset.sh?"shiny/":"")+el.dataset.i+".png";return}
+  const r=+el.dataset.r||0,f=(el.dataset.sh?"shiny/":"")+el.dataset.i+".png";el.dataset.r=r+1;
+  // a veces el servidor de imágenes falla un momento: se reintenta en el otro servidor y después con una pequeña espera
+  if(r===0){el.src=SPRU2+"other/home/"+f;return}
+  if(r<4){setTimeout(()=>{if(el.isConnected)el.src=(r%2?SPRU:SPRU2)+"other/home/"+f+"?r="+r},r*1200);return}
   const p=PM[el.dataset.n];if(!p){el.remove();return}const t=document.createElement("div");t.innerHTML=_icoBase(p,+el.dataset.s,false,!!el.dataset.sh);if(t.firstChild)el.replaceWith(t.firstChild);
 }
 // el fondo decorativo sigue con los sprites clásicos (son muchos y pequeños)

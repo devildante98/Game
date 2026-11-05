@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.5";
+const GAME_VER="6.5.1";
 const NEWS=[
 {v:"2026-11-05g",ver:"6.5",at:"2026-11-05T13:18",t:"📨 Avisos de solicitudes al momento",l:["Cuando alguien te reta a un duelo PVP, te invita a una sala 2 vs 2, te envía una solicitud de amistad o te invita por mensaje privado (duelo de siluetas, incursión o gremio), aparece una ventana para aceptar o rechazar al instante","Si eres líder o sublíder de un gremio, también te avisa cuando alguien pide unirse","Si estás en mitad de un combate, la ventana espera a que termine. Si la solicitud caduca o la cancelan, se cierra sola","«Más tarde» la deja pendiente en Social o en el chat para responder cuando quieras"]},
 {v:"2026-11-05f",ver:"6.4",at:"2026-11-05T11:19",t:"🗺️ Minimapa y mapa de la región",l:["Exploración tiene minimapa: la zona en pequeño con tu posición, los entrenadores que te quedan por vencer, las salidas y lo que ves en pantalla. Tócalo para ampliarlo o ocúltalo con el botón 🧭 (tecla M)","Nuevo botón 🗺️ (tecla N): el mapa de las cuatro regiones con todos sus pueblos, rutas, cuevas y cimas, unidos por caminos y por las rutas en barco","Toca cualquier lugar del mapa para ver el nivel de sus Pokémon salvajes, cuántos entrenadores has vencido hoy y si tiene Centro Pokémon","Los lugares a los que aún no puedes ir aparecen como ??? hasta que avances en la historia"]},

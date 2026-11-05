@@ -593,3 +593,8 @@ body.gm #gBg .pcpar{display:none!important}
 @keyframes rqin{from{transform:scale(.85);opacity:0}}
 @keyframes rqbob{50%{transform:translateY(-4px) rotate(-6deg)}}
 @media (prefers-reduced-motion:reduce){.rqbox,.rqic{animation:none}}
+/* pase diario: premios nuevos */
+.bpd span .ski,.bpd span .skt{display:inline-flex;align-items:center;gap:1px}
+.bpd span .skt{flex-direction:column;font-size:1rem;line-height:1}
+.bpd span .skt b{font-size:.58rem;font-weight:900;color:#c48a00}
+.bpss{display:inline-block;margin-left:6px;padding:2px 9px;border-radius:999px;background:linear-gradient(#ffe680,#ffb020);color:#2b2440;font-size:.7rem;font-weight:900;vertical-align:middle;letter-spacing:.2px}

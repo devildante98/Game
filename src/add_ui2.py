@@ -20,10 +20,10 @@ function strkUI(){
   const cyc=Math.floor(Math.max(0,(claimed?n:n)-1)/30),start=cyc*30+1,key=n+":"+claimed+":"+(S.sk&&S.sk.best)+":"+start;if(key===_sk)return;_sk=key;
   const nx=claimed?n+1:n+1;
   const cell=d=>{const r=strkRw(d),c=((d-1)%30)+1,big=c%7===0||c===30,got=d<=n&&(d<n||claimed),cur=d===nx&&!claimed;
-    return '<div class="bpd'+(got?' got':'')+(cur?' now':'')+(big?' bpk':'')+(c===30?' fin':'')+'"><small>Día '+d+'</small><span>'+Object.keys(r).map(k=>itemIco(k==="evo"?"fire-stone":k,c===30?30:24)+(r[k]>1?'<b>×'+r[k]+'</b>':'')).join("")+'</span>'+(got?'<i>✔</i>':cur?'<em>¡HOY!</em>':'')+'</div>'};
-  $("strk").innerHTML='<div class="bph"><h2>🔥 Pase diario</h2><div class="bpn"><b>'+n+'</b><small>día'+(n===1?"":"s")+' seguidos</small></div></div>'+
+    return '<div class="bpd'+(got?' got':'')+(cur?' now':'')+(big?' bpk':'')+(c===30?' fin':'')+'"><small>Día '+d+'</small><span>'+Object.keys(r).map(k=>strkIco(k,r[k],c===30?30:24)).join("")+'</span>'+(got?'<i>✔</i>':cur?'<em>¡HOY!</em>':'')+'</div>'};
+  $("strk").innerHTML='<div class="bph"><h2>🔥 Pase diario <small class="bpss">Temporada '+(cyc+1)+(cyc>=4?' · máxima':'')+'</small></h2><div class="bpn"><b>'+n+'</b><small>día'+(n===1?"":"s")+' seguidos</small></div></div>'+
     '<div class="bar bpbar"><i style="width:'+Math.min(100,((n-cyc*30)-(claimed?0:0))/30*100)+'%"></i></div>'+
-    '<small class="mut">Reclama el regalo cada día sin fallar para avanzar. Cada 7 días cae un Caramelo Raro y el día 30 una Master Ball; después el pase vuelve a empezar. Si te saltas un día, la racha vuelve a 1.'+(S.sk&&S.sk.best?' Tu mejor racha: '+S.sk.best+' días.':'')+'</small>'+
+    '<small class="mut">Reclama el regalo cada día sin fallar para avanzar. Cada semana los premios son mejores, los días 7, 14, 21 y 28 son especiales y el día 30 hay un gran premio. Al completarlo empieza una temporada nueva con premios todavía más grandes. Si te saltas un día, la racha vuelve a 1.'+(S.sk&&S.sk.best?' Tu mejor racha: '+S.sk.best+' días.':'')+'</small>'+
     '<div class="bpgrid">'+Array.from({length:30},(_,i)=>cell(start+i)).join("")+'</div>'+
     '<div class="jrow">'+(claimed?'<button class="alt" data-bpc="1">✔ Ya has reclamado hoy · vuelve mañana</button>':'<button class="red" data-bpg="1">🎁 Reclamar día '+nx+' (+'+fmt(gift())+' 🎟️)</button>')+'<button class="alt" data-bpc="1">Cerrar</button></div>';
 }

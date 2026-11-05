@@ -22,8 +22,24 @@ rep('<div><small>Regalo diario (sube cada día)</small><button id="daily">Reclam
 rep('''$("daily").onclick=()=>{if(S.daily===today())return;S.daily=today();const gf=gift();S.t+=gf;S.dg=(S.dg||0)+1;qEv("daily");save();render();$("msg").textContent="¡+"+gf+" 🎟️ de regalo diario! Mañana será mayor."};''',
 '''// racha de dias seguidos: premios extra que crecen (cada 7 dias un Caramelo Raro, el dia 30 una Master Ball) y el ciclo vuelve a empezar
 const yday=()=>new Date(Date.now()-864e5).toISOString().slice(0,10);
-const STRK_W=[{pb:3},{pot:2},{sb:5},{eter:2},{ub:2},{hpot:2},{cand:1}];
-const strkRw=d=>{const c=((d-1)%30)+1;return c===30?{mb:1,cand:2}:c===28?{cand:2,evo:1}:c===21?{cand:2,ub:3}:c===14?{cand:1,ub:3,evo:1}:STRK_W[(c-1)%7]};
+// pase de 30 días: cada semana mejor que la anterior, días grandes el 7, 14, 21 y 28 y gran premio el 30.
+// Al completarlo empieza una temporada nueva con premios más grandes (hasta la temporada 5).
+// t = tickets extra (cada punto = 20 % del regalo diario) · evo = piedra evolutiva · mint = menta · hold = objeto equipable
+const STRK_T=[{pb:5},{pot:3},{t:1},{sb:5},{eter:2,cand:1},{t:2},{ub:3,cand:2},
+  {sb:8},{hpot:3},{t:3},{ppup:1,cand:1},{ub:5},{t:4},{cand:3,evo:1,hold:1},
+  {ub:6},{mrev:2,cand:1},{t:5},{mint:1},{ub:8},{t:6,cand:2},{cand:4,evo:1,ppmax:1},
+  {ub:10},{t:7},{hold:1,cand:2},{mint:1,ppup:2},{t:8,ub:5},{cand:5},{mb:1,evo:2},{t:10,cand:3},{mb:1,cand:6,hold:1,t:15}];
+const strkSeason=d=>Math.floor((Math.max(1,d)-1)/30);
+const strkRw=d=>{const c=((d-1)%30)+1,ss=Math.min(4,strkSeason(d)),m=1+ss*.5,r={},b=STRK_T[c-1];
+  for(const k in b)r[k]=k==="mb"||k==="mint"||k==="hold"||k==="ppmax"?b[k]+(ss>=2?1:0):Math.max(1,Math.round(b[k]*m));
+  if(ss>=3&&c===30)r.mb=(r.mb||0)+1;return r};
+const strkTk=k=>Math.round(gift()*.2*k);
+const STRK_N={t:"tickets extra",evo:"Piedra evolutiva",mint:"Menta",hold:"Objeto equipable"};
+const strkOk=(k,i)=>i[7]===k&&(k!=="evo"||/stone/.test(i[0]))&&(k!=="hold"||!/^z/.test(i[0]));
+const strkPick=k=>{const L=ITEMS.filter(i=>strkOk(k,i));return L.length?L[Math.floor(Math.random()*L.length)][0]:null};
+function strkIco(k,n,sz){if(k==="t")return '<span class="skt" title="'+fmt(strkTk(n))+' tickets extra">🎟️<b>+'+fmt(strkTk(n))+'</b></span>';
+  const rep=k==="evo"?"fire-stone":k==="mint"||k==="hold"?(ITEMS.find(i=>strkOk(k,i))||[k])[0]:k;
+  return '<span class="ski" title="'+esc(STRK_N[k]||IN(k))+(n>1?" ×"+n:"")+'">'+itemIco(rep,sz)+(n>1?'<b>×'+n+'</b>':'')+'</span>'}
 const strkNow=()=>S.sk&&(S.sk.last===today()||S.sk.last===yday())?S.sk.n:0;
 let _sk="";
 function strkUI(){
@@ -36,7 +52,9 @@ $("daily").onclick=()=>{
   S.sk=S.sk||{n:0};S.sk.n=S.sk.last===yday()?S.sk.n+1:1;S.sk.last=today();S.sk.best=Math.max(S.sk.best||0,S.sk.n);
   S.daily=today();const gf=gift();S.t+=gf;S.dg=(S.dg||0)+1;qEv("daily");
   const rw=strkRw(S.sk.n),got=[];
-  Object.keys(rw).forEach(k=>{let id=k;if(k==="evo"){const ev=ITEMS.filter(i=>i[7]==="evo"&&/stone/.test(i[0]));id=ev[Math.floor(Math.random()*ev.length)][0]}S.bag[id]=(S.bag[id]||0)+rw[k];got.push(rw[k]+" "+IN(id))});
+  Object.keys(rw).forEach(k=>{if(k==="t"){const tk=strkTk(rw.t);S.t+=tk;got.push("+"+fmt(tk)+" 🎟️ extra");return}
+    if(k==="evo"||k==="mint"||k==="hold"){for(let i=0;i<rw[k];i++){const id=strkPick(k);if(!id)continue;S.bag[id]=(S.bag[id]||0)+1;got.push(IN(id))}return}
+    S.bag[k]=(S.bag[k]||0)+rw[k];got.push(rw[k]+" "+IN(k))});
   save();render();snd("win");
   $("msg").textContent="¡+"+fmt(gf)+" 🎟️ de regalo diario! Mañana será mayor.";
   toast("🔥 ¡Racha de "+S.sk.n+" día"+(S.sk.n===1?"":"s")+"! +"+fmt(gf)+" 🎟️ y "+got.join(", "));

@@ -500,7 +500,10 @@ async function finish(res){
     if(rw===33550336)await jackpotLevel();
     const amt=B.trainer?Math.round((B.xpPool||0)*1.2):Math.round((15+om.l*6)*WW[o[2]]*.6*(res==="cap"?.5:1));
     const ups=[];
-    for(const t of E.sd[0].t)if(t.played&&t.mh>0){if(await gainXp(t.p,t.it==="lucky"?Math.round(amt*1.5):amt))ups.push(t.p[0])}
+    // como en los juegos: cuanto más bajo es tu Pokémon respecto al rival, más experiencia gana (y casi nada si es muy superior)
+    const xpFac=(L,Lp)=>Math.pow((2*L+10)/(L+Lp+10),2.5);
+    const xpOf=t=>B.trainer&&B.xpL&&B.xpL.length?Math.round(B.xpL.reduce((a,[b,l])=>a+b*xpFac(l,t.l),0)*1.2):Math.round(amt*xpFac(om.l,t.l));
+    for(const t of E.sd[0].t)if(t.played&&t.mh>0){const a=Math.max(1,xpOf(t));if(await gainXp(t.p,t.it==="lucky"?Math.round(a*1.5):a))ups.push(t.p[0])}
     for(const n of ups){if(S.owned[n]&&evoLvReady(n).length)await evoPrompt(n,evoLvReady(n))}
     if(B.league&&res==="win")await leagueWin();
     if(B.gym!=null&&res==="win")await gymWin(B.gym);
@@ -536,7 +539,7 @@ async function sTurn(act){
 }
 async function sAfter(){
   const E=B.E;syncPP();
-  E.sd[1].t.forEach(t=>{if(t.mh<=0&&!t.xg){t.xg=1;B.xpPool=(B.xpPool||0)+Math.round((15+t.l*6)*WW[t.p[2]]*.6)}});
+  E.sd[1].t.forEach(t=>{if(t.mh<=0&&!t.xg){t.xg=1;const xb=Math.round((15+t.l*6)*WW[t.p[2]]*.6);B.xpPool=(B.xpPool||0)+xb;(B.xpL=B.xpL||[]).push([xb,t.l])}});
   if(E.over!=null)return finish(E.over===0?"win":"lose");
   const acts=["",""];
   if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex((x,k)=>x.mh>0&&k!==E.sd[1].ai);

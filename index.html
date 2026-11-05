@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793890912">
+<meta name="game-build" content="1793891465">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2262,7 +2262,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.7.4</small>
+    <small class="pcver">Versión 6.8</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -4477,7 +4477,10 @@ async function finish(res){
     if(rw===33550336)await jackpotLevel();
     const amt=B.trainer?Math.round((B.xpPool||0)*1.2):Math.round((15+om.l*6)*WW[o[2]]*.6*(res==="cap"?.5:1));
     const ups=[];
-    for(const t of E.sd[0].t)if(t.played&&t.mh>0){if(await gainXp(t.p,t.it==="lucky"?Math.round(amt*1.5):amt))ups.push(t.p[0])}
+    // como en los juegos: cuanto más bajo es tu Pokémon respecto al rival, más experiencia gana (y casi nada si es muy superior)
+    const xpFac=(L,Lp)=>Math.pow((2*L+10)/(L+Lp+10),2.5);
+    const xpOf=t=>B.trainer&&B.xpL&&B.xpL.length?Math.round(B.xpL.reduce((a,[b,l])=>a+b*xpFac(l,t.l),0)*1.2):Math.round(amt*xpFac(om.l,t.l));
+    for(const t of E.sd[0].t)if(t.played&&t.mh>0){const a=Math.max(1,xpOf(t));if(await gainXp(t.p,t.it==="lucky"?Math.round(a*1.5):a))ups.push(t.p[0])}
     for(const n of ups){if(S.owned[n]&&evoLvReady(n).length)await evoPrompt(n,evoLvReady(n))}
     if(B.league&&res==="win")await leagueWin();
     if(B.gym!=null&&res==="win")await gymWin(B.gym);
@@ -4513,7 +4516,7 @@ async function sTurn(act){
 }
 async function sAfter(){
   const E=B.E;syncPP();
-  E.sd[1].t.forEach(t=>{if(t.mh<=0&&!t.xg){t.xg=1;B.xpPool=(B.xpPool||0)+Math.round((15+t.l*6)*WW[t.p[2]]*.6)}});
+  E.sd[1].t.forEach(t=>{if(t.mh<=0&&!t.xg){t.xg=1;const xb=Math.round((15+t.l*6)*WW[t.p[2]]*.6);B.xpPool=(B.xpPool||0)+xb;(B.xpL=B.xpL||[]).push([xb,t.l])}});
   if(E.over!=null)return finish(E.over===0?"win":"lose");
   const acts=["",""];
   if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex((x,k)=>x.mh>0&&k!==E.sd[1].ai);
@@ -6877,8 +6880,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.7.4";
+const GAME_VER="6.8";
 const NEWS=[
+{v:"2026-11-05k",ver:"6.8",at:"2026-11-05T16:11",t:"⭐ Experiencia como en los juegos",l:["La experiencia que gana cada Pokémon ahora depende de la diferencia de nivel con el rival, con la fórmula de los juegos","Un Pokémon de nivel bajo que derrota a uno más fuerte gana mucha más experiencia: un Nv 1 que vence a un Nv 5 gana casi el doble que un Nv 5","Si tu Pokémon es muy superior al rival, apenas gana experiencia","En los combates contra entrenadores se calcula con el nivel de cada Pokémon rival derrotado"]},
 {v:"2026-11-05j",ver:"6.7",at:"2026-11-05T15:25",t:"🦊 La habilidad Ilusión ya funciona",l:["Zorua y Zoroark entran al combate disfrazados del último Pokémon sano de su equipo: se ven con su nombre, su aspecto y sus tipos, y hasta la eficacia de tus ataques te engaña","Por dentro siguen siendo ellos: usan sus propios movimientos, estadísticas y tipos","La ilusión se rompe en cuanto reciben daño directo de un ataque. El veneno, las quemaduras, Drenadoras o el clima no la rompen","Si se retiran y vuelven a salir, se disfrazan de nuevo"]},
 {v:"2026-11-05i",ver:"6.6.2",at:"2026-11-05T14:26",t:"📢 ¡Estrenamos dirección: pokegachaonline.es!",l:["Poke Gacha Online ya tiene su propia dirección: pokegachaonline.es. ¡Guárdala en favoritos!","🔐 Si juegas con cuenta, entra e inicia sesión: tu progreso te espera","💾 Si jugabas sin cuenta, abre devildante98.github.io/rescate en el mismo navegador donde jugabas para llevarte tu partida","La dirección antigua te trae aquí automáticamente"]},
 {v:"2026-11-05h",ver:"6.6",at:"2026-11-05T13:45",t:"🔥 Pase diario renovado",l:["Los premios del Pase diario mejoran cada semana: más Poké Balls, Super y Ultra Balls, Caramelos Raros, tickets extra, piedras evolutivas, Mentas, objetos equipables, Más PP y Revivir máximo","Los días 7, 14, 21 y 28 son especiales, y el día 28 ya trae una Master Ball","El día 30 hay un gran premio: Master Ball, 6 Caramelos Raros, un objeto equipable y un montón de tickets","Al completar los 30 días empieza una temporada nueva con premios más grandes, hasta la temporada 5. ¡No pierdas la racha!"]},
@@ -7059,7 +7063,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793890912";
+const GAME_B="1793891465";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

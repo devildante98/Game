@@ -12,10 +12,10 @@ function exMiniBase(){const M=EX.M;if(!M||!EX.grid)return null;const S=EXMM.S,H=
   (M.bld||[]).forEach(b=>{try{const im=xBld(b),k=S/32;g.drawImage(im,b.x*S,(b.y+b.h)*S-im.height*k,im.width*k,im.height*k)}catch(e){}});
   return c}
 function exMiniUI(){const sc=(EX.cv&&EX.cv.closest(".exscr"))||document.querySelector("#explPB .exscr");if(!sc)return null;let w=$("exMini");if(w&&!sc.contains(w)){sc.appendChild(w);["exMiniB","exWmB"].forEach(i=>{const e=$(i);if(e)sc.appendChild(e)})}
-  if(!w){sc.insertAdjacentHTML("beforeend",'<div id="exMini" class="exmini" hidden title="Minimapa (tecla M) · tócalo para ampliarlo"><canvas id="exMiniCv"></canvas><b id="exMiniN"></b></div>'+
-      '<button type="button" class="exfsb exmmb" id="exMiniB" title="Mostrar u ocultar el minimapa (tecla M)" aria-label="Minimapa">🧭</button><button type="button" class="exfsb exwmb" id="exWmB" title="Mapa de la región (tecla N)" aria-label="Mapa de la región">🗺️</button>');
+  if(!w){sc.insertAdjacentHTML("beforeend",'<div id="exMini" class="exmini" hidden title="Minimapa · tócalo para ampliarlo"><canvas id="exMiniCv"></canvas><b id="exMiniN"></b></div>'+
+      '<button type="button" class="exfsb exmmb" id="exMiniB" title="Mostrar u ocultar el minimapa" aria-label="Minimapa">🧭</button><button type="button" class="exfsb exwmb" id="exWmB" title="Mapa de la región" aria-label="Mapa de la región">🗺️</button>');
     w=$("exMini");w.addEventListener("click",e=>{e.stopPropagation();EXMM.big=!EXMM.big;snd("ui");exMiniDraw(true)});
-    $("exMiniB").addEventListener("click",e=>{e.stopPropagation();exMiniToggle()});$("exWmB").addEventListener("click",e=>{e.stopPropagation();if(EX.dlg||EX.cut||EX.trans)return;wmShow()})}
+    $("exMiniB").addEventListener("click",e=>{e.stopPropagation();exMiniToggle()});$("exWmB").addEventListener("click",e=>{e.stopPropagation();if(EX.dlg||EX.cut||EX.trans)return;wmShow()});setTimeout(()=>{try{exKeysTxt()}catch(e){}},0)}
   return w}
 function exMiniToggle(){EXMM.on=!EXMM.on;EXMM.big=false;try{localStorage.setItem("exmm",EXMM.on?"1":"0")}catch(e){}snd("ui");exMiniDraw(true);try{EX.cv.focus({preventScroll:true})}catch(e){}}
 function exMiniDraw(force){const w=exMiniUI();if(!w)return;const bt=$("exMiniB");if(bt)bt.classList.toggle("on",EXMM.on);
@@ -37,7 +37,6 @@ function exMiniDraw(force){const w=exMiniUI();if(!w)return;const bt=$("exMiniB")
   // tú (parpadea suavemente)
   const a=.6+.4*Math.sin(now/220);dot(EX.px,EX.py,Math.max(3,Z*.42)*(1+.18*a),"#ff3a3a","#fff")}
 {const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{if(ts-EXMM.t>90){EXMM.t=ts;exMiniDraw()}}catch(e){}return r}}
-document.addEventListener("keydown",e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;if((e.key==="m"||e.key==="M")&&EX.on&&!EX.title&&!/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||"")){if(!EX.cv||!EX.cv.isConnected||EX.cv.offsetParent===null)return;const kb=exKB();if(Object.values(kb).some(a=>a.some(k=>exKN(k)==="m")))return;exMiniToggle()}});
 // ================= mapa de la región (todas las islas, pueblos y rutas) =================
 const WM_R={alba:{n:"Región de Alba",c:"#86cf6a",d:"#3f7d3a",tx:300,ty:612},esc:{n:"Región de Escarcha",c:"#e9f3ff",d:"#7f9cc4",tx:258,ty:28},bra:{n:"Región de Brasa",c:"#b98a6c",d:"#6a3f2c",tx:742,ty:28},tor:{n:"Región de Tormenta",c:"#8f8ac0",d:"#3f3a6e",tx:742,ty:612}};
 // k: mapa · r: región · t: tipo (town/route/cave/peak/forest/beach/tower) · x,y: posición en el dibujo
@@ -119,6 +118,33 @@ function wmShow(){let o=$("wmO");const host=document.fullscreenElement&&document
   o.hidden=false;WM.open=true;EX.keys={};EX.kst=[];if(!WM.raf)WM.raf=requestAnimationFrame(wmLoop);snd("ui")}
 function wmHide(){const o=$("wmO");if(o)o.hidden=true;WM.open=false;try{EX.cv.focus({preventScroll:true})}catch(e){}}
 // mientras el mapa está abierto no se mueve el personaje
-window.addEventListener("keydown",e=>{if(!WM.open)return;if(e.key==="Escape"||e.key==="n"||e.key==="N"){e.preventDefault();e.stopPropagation();wmHide();return}e.stopPropagation()},true);
+window.addEventListener("keydown",e=>{if(!WM.open)return;if(e.key==="Escape"||exAct(e.key)==="wm"){e.preventDefault();e.stopPropagation();wmHide();return}e.stopPropagation()},true);
 setInterval(()=>{if(WM.open){EX.keys={};EX.kst=[]}},100);
-document.addEventListener("keydown",e=>{if(WM.open||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;if((e.key==="n"||e.key==="N")&&EX.on&&!EX.title&&!EX.dlg&&!EX.cut&&!/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||"")){if(!EX.cv||!EX.cv.isConnected||EX.cv.offsetParent===null)return;const kb=exKB();if(Object.values(kb).some(a=>a.some(k=>exKN(k)==="n")))return;wmShow()}});
+
+// ================= atajos de teclado configurables: minimapa, mapa, equipo/mochila y controles =================
+Object.assign(EXKB0,{mm:["m",""],wm:["n",""],bag:["i",""],ctl:["c",""]});
+Object.assign(EXKN,{mm:"Mostrar u ocultar el minimapa",wm:"Mapa de la región",bag:"Equipo y mochila",ctl:"Controles"});
+const EXSC={mm:"exMiniB",wm:"exWmB",bag:"exTeamB"};
+function exBagToggle(){const b=$("exTeam");if(!b)return;if(!b.hidden){b.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}else{snd("ui");xgPanel()}}
+function exCtlToggle(){const c=$("exCtl");if(!c)return;c.hidden=!c.hidden;EX.bind=null;exCtlUI();snd("ui");if(c.hidden)try{EX.cv.focus({preventScroll:true})}catch(e){}}
+document.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind||WM.open||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;
+  const t=e.target;if(t&&/INPUT|TEXTAREA|SELECT/.test(t.tagName))return;if(!EX.cv||!EX.cv.isConnected||EX.cv.offsetParent===null)return;
+  const ctlOpen=$("exCtl")&&!$("exCtl").hidden;
+  const a=exAct(e.key);if(!a||!(a in EXSC)&&a!=="ctl")return;e.preventDefault();
+  if(a==="ctl"){exCtlToggle();return}
+  if(ctlOpen)return;
+  if(a==="mm"){exMiniToggle();return}
+  if(EX.dlg||EX.cut||EX.trans)return;
+  if(a==="wm"){const b=$("exTeam");if(b)b.hidden=true;wmShow();return}
+  if(a==="bag")exBagToggle()});
+// los textos de ayuda y los botones muestran la tecla que tenga asignada cada persona
+{const _k=exKeysTxt;exKeysTxt=function(){const r=_k.apply(this,arguments);try{const kb=exKB(),f=a=>kb[a].filter(Boolean).map(exKName).join(" / ")||"sin tecla";
+  const e=$("exKeys");
+  if(e)e.textContent=e.textContent.replace(" · Pantalla completa"," · Minimapa: "+f("mm")+" · Mapa: "+f("wm")+" · Equipo y mochila: "+f("bag")+" · Controles: "+f("ctl")+" · Pantalla completa");
+  const T={exMiniB:"Mostrar u ocultar el minimapa",exWmB:"Mapa de la región",exTeamB:"Tu equipo de Exploración"};for(const a in EXSC){const b=$(EXSC[a]);if(b)b.title=T[EXSC[a]]+" ("+f(a)+")"}
+  document.querySelectorAll(".exkb").forEach(b=>b.title="Controles ("+f("ctl")+")");const m=$("exMini");if(m)m.title="Minimapa · tócalo para ampliarlo"}catch(x){}return r}}
+setTimeout(()=>{try{exKeysTxt()}catch(e){}},0);
+// Esc cierra primero lo que esté abierto (controles o equipo/mochila) sin salir de la pantalla completa
+window.addEventListener("keydown",e=>{if(e.key!=="Escape"||!EX.on||EX.bind||WM.open)return;const c=$("exCtl"),b=$("exTeam");
+  if(c&&!c.hidden){e.preventDefault();e.stopPropagation();exCtlToggle();return}
+  if(b&&!b.hidden){e.preventDefault();e.stopPropagation();b.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(x){}}},true);

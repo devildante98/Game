@@ -65,7 +65,7 @@ async function sBattle(cfg,kind){
   if(cfg.cap&&(S.owned[cfg.cap]||0)>own0)return "cap";
   if(EX.map!==m0)return null;// tus Pokémon se debilitaron y has vuelto al Centro Pokémon
   return b.win?true:false}
-const sTr=(names,b,nm,look)=>({eteam:sTeam(names,b),trainer:nm,tsrc:{c:look,n:nm}});
+const sTr=(names,b,nm,look)=>({eteam:sTeam(names,b),trainer:nm,tsrc:{k:exTrKey(nm),n:nm}});
 // elección con botones (por ejemplo, el Pokémon inicial)
 function sChoice(title,opts){return new Promise(res=>{const box=$("exCh");if(!box){res(0);return}EX.choice=1;
   box.innerHTML='<b>'+esc(title)+'</b><div>'+opts.map((o,i)=>'<button type="button" data-ch="'+i+'"'+(i?'':' class="on"')+'>'+(o.img||"")+'<span>'+esc(o.t)+'</span>'+(o.s?'<small>'+esc(o.s)+'</small>':'')+'</button>').join("")+'</div>';box.hidden=false;

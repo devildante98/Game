@@ -114,10 +114,15 @@ function exLoot(){const r=Math.random();return r<.3?"pot":r<.5?"sb":r<.65?"ub":r
 function exTeamOk(){const L=(S.team||[]).filter(n=>n&&S.owned[n]);return L.length&&L.some(n=>S.hp[n]!==0)}
 function exEncounter(){if(!exTeamOk()){exSay(["¡Algo se mueve en la hierba!","…pero tus Pokémon están demasiado cansados para luchar. Cúralos en el Centro Pokémon."]);return}
   EX.keys={};EX.kst=[];snd("wild");EX.trans={t:0,d:1300,k:"wild",done:()=>exBattle(null)}}
+// dibujo de entrenador de los combates normales según la clase de cada personaje
+const EXTRK=[[/^Recluta del Equipo Ocaso/,"galacticgrunt"],[/^Recluta del Equipo Tempestad/,"plasmagrunt"],[/Bruma/,"jupiter"],[/Noctis/,"cyrus"],[/Gélida/,"mars"],[/Ascua/,"saturn"],[/Ícaro/,"colress"],[/^Dani/,"hugh"],
+  [/^Joven/,"youngster"],[/^(Chica|Niña)/,"lass"],[/^Cazabichos/,"bugcatcher-gen4dp"],[/^Exploradora/,"pokemonrangerf"],[/^Nadadora/,"swimmerf"],[/^Nadador/,"swimmer"],[/^Pescador/,"fisherman"],[/^Montañero/,"hiker-gen4"],
+  [/^Karateka/,"blackbelt"],[/^Esquiadora/,"skierf"],[/^(Esquiador|Patinador)/,"skier"],[/^Excursionista/,"picnicker"],[/^Domador/,"firebreather"],[/^(Bombero|Ingeniero)/,"worker"],[/^(Científica|Geóloga)/,"scientistf"],[/^Científico/,"scientist"],[/^Motero/,"biker"]];
+function exTrKey(nm){nm=String(nm||"");for(const r of EXTRK)if(r[0].test(nm))return r[1];const t=TRAINERS[Math.abs(pvHash(nm))%TRAINERS.length];return t?t[3]:"acetrainer"}
 function exTrainerBattle(n){if(!exTeamOk()){exSay(["Tus Pokémon están debilitados. ¡Vuelve cuando estén curados!"]);return}
   const names=(S.team||[]).filter(x=>x&&S.owned[x]),lead=Math.min(...names.map(x=>lvd(x).l)),cap=lvCap(),lv=Math.max(2,Math.min(cap,lead))-1;
   const team=n.t.filter(x=>PM[x]).map((x,i)=>mkEnemy(stageFor(PM[x],clampL(lv+i))||PM[x],clampL(lv+i)));
-  EX.trans={t:0,d:1300,k:"trainer",done:()=>exBattle({eteam:team,trainer:n.n,tsrc:{c:n.look,n:n.n}},n)}}
+  EX.trans={t:0,d:1300,k:"trainer",done:()=>exBattle({eteam:team,trainer:n.n,tsrc:{k:exTrKey(n.n),n:n.n}},n)}}
 async function exBattle(cfg,npc){EX.battle={npc:npc?npc.id:null,win:false,map:EX.map};EX.resume=true;exFsPark(true);exStop();
   const z0=S.zone;S.zone=EX.M.z;try{hubClose()}catch(e){}
   const p=startBattle(cfg||{wild:1});S.zone=z0;await p;

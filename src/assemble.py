@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.4.3";
+const GAME_VER="6.4.4";
 const NEWS=[
 {v:"2026-11-05f",ver:"6.4",at:"2026-11-05T11:19",t:"🗺️ Minimapa y mapa de la región",l:["Exploración tiene minimapa: la zona en pequeño con tu posición, los entrenadores que te quedan por vencer, las salidas y lo que ves en pantalla. Tócalo para ampliarlo o ocúltalo con el botón 🧭 (tecla M)","Nuevo botón 🗺️ (tecla N): el mapa de las cuatro regiones con todos sus pueblos, rutas, cuevas y cimas, unidos por caminos y por las rutas en barco","Toca cualquier lugar del mapa para ver el nivel de sus Pokémon salvajes, cuántos entrenadores has vencido hoy y si tiene Centro Pokémon","Los lugares a los que aún no puedes ir aparecen como ??? hasta que avances en la historia"]},
 {v:"2026-11-05e",ver:"6.3",at:"2026-11-05T10:30",t:"💬 Entrenadores con mucho más que decir",l:["Los entrenadores de Exploración tienen ahora casi 200 frases nuevas, distintas según su clase: jóvenes, cazabichos, nadadores, montañeros, karatekas, esquiadores, científicos, moteros…","Cada vez que entras en una zona, el entrenador te reta con una frase diferente","Al acabar el combate te dicen algo según hayan ganado o perdido","Si les vuelves a hablar después de vencerles, te cuentan curiosidades y consejos"]},

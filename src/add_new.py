@@ -901,3 +901,9 @@ rep('#welc,#newsM,#privM{','html.gmpre body:not(.gm):has(#auth[hidden])::before{
 
 # ===== versión del juego =====
 rep('#welc,#newsM,#privM{','.nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}\n.setver{display:inline-block;margin-left:6px;padding:2px 10px;border-radius:999px;background:var(--line);font-size:.75rem;font-weight:800;vertical-align:middle}\n#auth .pcver{display:block;text-align:center;font-weight:800;color:#3a4a8a;opacity:.8;font-size:.75rem}\n#welc,#newsM,#privM{')
+
+# ===== partida rescatada de la dirección antigua (llega en el enlace: #rescate=...) =====
+rep('<link rel="preconnect" href="https://fonts.googleapis.com">','<script>try{if(location.hash.indexOf("#rescate=")===0){localStorage.setItem("gacha-rescue",location.hash.slice(9));history.replaceState(null,"",location.pathname+location.search)}'+
+ 'if(localStorage.getItem("gacha-rescue"))document.addEventListener("DOMContentLoaded",function(){var a=document.getElementById("alocal");if(!a)return;var n=document.createElement("p");n.className="rescn";'+
+ 'n.textContent="✅ Ha llegado tu partida sin cuenta de la dirección antigua. Pulsa «Jugar sin cuenta» para cargarla.";a.parentNode.insertBefore(n,a.nextSibling)})}catch(e){}</script>\n<link rel="preconnect" href="https://fonts.googleapis.com">')
+rep('#welc,#newsM,#privM{','.rescn{margin:8px auto 0;max-width:420px;padding:8px 12px;border-radius:12px;background:#e6fff2;border:2px solid #1fa36a;color:#0d5a39;font-weight:800;font-size:.85rem;text-align:center;line-height:1.35}\n#welc,#newsM,#privM{')

@@ -161,7 +161,7 @@ function pvMenu(){
   const pm=beAct(side),foe=beAct(E.sd[1-me]);
   if(D.sw){m.innerHTML=swGrid(side.t.map((t,i)=>swCard(t,'data-pv="s'+i+'"',i===side.ai||t.mh<=0,i===side.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-pv="back">Atrás</button>';return}
   box.textContent="¿Qué hará "+pm.p[0]+"?";
-  m.innerHTML=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-pv="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-pv="m'+i+'"',foe,pm)).join(""))+pvFreeBtns(side,pm)+'<button data-pv="d">🛡️ Defensa</button><button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-pv="sw"'+(alive.length?'':' disabled')+'>🔁 Equipo</button><button data-pv="ff">🏳️ Huir</button>';
+  m.innerHTML=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-pv="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-pv="m'+i+'"',foe,pm)).join(""))+pvFreeBtns(side,pm)+'<button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-pv="sw"'+(alive.length?'':' disabled')+'>🔁 Equipo</button><button data-pv="ff">🏳️ Huir</button>';
 }
 function pvEnd(r){
   if(!D||D.over)return;
@@ -429,7 +429,7 @@ function dvMenu(req,acts){
     else{
       t="¿Qué hará "+pm.p[0]+"?";
       const alive=side.t.some((x,i)=>x.mh>0&&i!==side.ai),foe=foesAlive.length?beAct(E.sd[foesAlive[0]]):null;
-      h=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-dv="pk:st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-dv="pk:m'+i+'"',foesAlive.length===1?foe:null,pm)).join(""))+'<button data-dv="d">🛡️ Defensa</button><button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-dv="sw"'+(alive?'':' disabled')+'>🔁 Equipo</button><button data-dv="ff">🏳️ Huir</button>';
+      h=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-dv="pk:st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-dv="pk:m'+i+'"',foesAlive.length===1?foe:null,pm)).join(""))+'<button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-dv="sw"'+(alive?'':' disabled')+'>🔁 Equipo</button><button data-dv="ff">🏳️ Huir</button>';
     }
   }
   if(box.textContent!==t)box.textContent=t;

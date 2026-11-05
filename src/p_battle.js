@@ -308,7 +308,7 @@ const swGrid=h=>'<div class="swgrid">'+h+'</div>';
 function setMenu(v){
   if(!B||B.mode!=="s")return;
   let h="";const sd=B.E.sd[0],m=beAct(sd),foe0=beAct(B.E.sd[1]),fip=beIll(B.E.sd[1],foe0),foe=fip?Object.assign(Object.create(foe0),{p:fip}):foe0;
-  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe,m)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
+  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe,m)).join(""))+'<button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
   else if(v==="bag")h=ITEMS.filter(it=>S.bag[it[0]]>0&&!it[7]&&!["cand","ppup","ppmax"].includes(it[0])).map(it=>'<button data-k="i:'+it[0]+'">'+it[1]+' ×'+S.bag[it[0]]+'</button>').join("")+'<button data-k="main">Atrás</button>';
   else if(v==="team")h=swGrid(sd.t.map((t,i)=>swCard(t,'data-k="s:'+i+'"',i===sd.ai||t.mh<=0,i===sd.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-k="main">Atrás</button>';
   else if(v==="tgt"){

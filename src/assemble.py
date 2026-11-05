@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.8";
+const GAME_VER="6.8.1";
 const NEWS=[
 {v:"2026-11-05k",ver:"6.8",at:"2026-11-05T16:11",t:"⭐ Experiencia como en los juegos",l:["La experiencia que gana cada Pokémon ahora depende de la diferencia de nivel con el rival, con la fórmula de los juegos","Un Pokémon de nivel bajo que derrota a uno más fuerte gana mucha más experiencia: un Nv 1 que vence a un Nv 5 gana casi el doble que un Nv 5","Si tu Pokémon es muy superior al rival, apenas gana experiencia","En los combates contra entrenadores se calcula con el nivel de cada Pokémon rival derrotado"]},
 {v:"2026-11-05j",ver:"6.7",at:"2026-11-05T15:25",t:"🦊 La habilidad Ilusión ya funciona",l:["Zorua y Zoroark entran al combate disfrazados del último Pokémon sano de su equipo: se ven con su nombre, su aspecto y sus tipos, y hasta la eficacia de tus ataques te engaña","Por dentro siguen siendo ellos: usan sus propios movimientos, estadísticas y tipos","La ilusión se rompe en cuanto reciben daño directo de un ataque. El veneno, las quemaduras, Drenadoras o el clima no la rompen","Si se retiran y vuelven a salir, se disfrazan de nuevo"]},

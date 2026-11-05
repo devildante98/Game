@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793891465">
+<meta name="game-build" content="1793892311">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2262,7 +2262,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.8</small>
+    <small class="pcver">Versión 6.8.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -4285,7 +4285,7 @@ const swGrid=h=>'<div class="swgrid">'+h+'</div>';
 function setMenu(v){
   if(!B||B.mode!=="s")return;
   let h="";const sd=B.E.sd[0],m=beAct(sd),foe0=beAct(B.E.sd[1]),fip=beIll(B.E.sd[1],foe0),foe=fip?Object.assign(Object.create(foe0),{p:fip}):foe0;
-  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe,m)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
+  if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe,m)).join(""))+'<button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
   else if(v==="bag")h=ITEMS.filter(it=>S.bag[it[0]]>0&&!it[7]&&!["cand","ppup","ppmax"].includes(it[0])).map(it=>'<button data-k="i:'+it[0]+'">'+it[1]+' ×'+S.bag[it[0]]+'</button>').join("")+'<button data-k="main">Atrás</button>';
   else if(v==="team")h=swGrid(sd.t.map((t,i)=>swCard(t,'data-k="s:'+i+'"',i===sd.ai||t.mh<=0,i===sd.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-k="main">Atrás</button>';
   else if(v==="tgt"){
@@ -5845,7 +5845,7 @@ function pvMenu(){
   const pm=beAct(side),foe=beAct(E.sd[1-me]);
   if(D.sw){m.innerHTML=swGrid(side.t.map((t,i)=>swCard(t,'data-pv="s'+i+'"',i===side.ai||t.mh<=0,i===side.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-pv="back">Atrás</button>';return}
   box.textContent="¿Qué hará "+pm.p[0]+"?";
-  m.innerHTML=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-pv="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-pv="m'+i+'"',foe,pm)).join(""))+pvFreeBtns(side,pm)+'<button data-pv="d">🛡️ Defensa</button><button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-pv="sw"'+(alive.length?'':' disabled')+'>🔁 Equipo</button><button data-pv="ff">🏳️ Huir</button>';
+  m.innerHTML=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-pv="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-pv="m'+i+'"',foe,pm)).join(""))+pvFreeBtns(side,pm)+'<button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-pv="sw"'+(alive.length?'':' disabled')+'>🔁 Equipo</button><button data-pv="ff">🏳️ Huir</button>';
 }
 function pvEnd(r){
   if(!D||D.over)return;
@@ -6113,7 +6113,7 @@ function dvMenu(req,acts){
     else{
       t="¿Qué hará "+pm.p[0]+"?";
       const alive=side.t.some((x,i)=>x.mh>0&&i!==side.ai),foe=foesAlive.length?beAct(E.sd[foesAlive[0]]):null;
-      h=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-dv="pk:st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-dv="pk:m'+i+'"',foesAlive.length===1?foe:null,pm)).join(""))+'<button data-dv="d">🛡️ Defensa</button><button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-dv="sw"'+(alive?'':' disabled')+'>🔁 Equipo</button><button data-dv="ff">🏳️ Huir</button>';
+      h=(pm.pp.every(v=>v<=0)?'<button class="mvb" data-dv="pk:st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':pm.m.map((mv,i)=>mvBtn(mv,pm.pp[i],mv.pp,'data-dv="pk:m'+i+'"',foesAlive.length===1?foe:null,pm)).join(""))+'<button disabled title="En PVP no se pueden usar objetos">🎒 Bolsa</button><button data-dv="sw"'+(alive?'':' disabled')+'>🔁 Equipo</button><button data-dv="ff">🏳️ Huir</button>';
     }
   }
   if(box.textContent!==t)box.textContent=t;
@@ -6880,7 +6880,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.8";
+const GAME_VER="6.8.1";
 const NEWS=[
 {v:"2026-11-05k",ver:"6.8",at:"2026-11-05T16:11",t:"⭐ Experiencia como en los juegos",l:["La experiencia que gana cada Pokémon ahora depende de la diferencia de nivel con el rival, con la fórmula de los juegos","Un Pokémon de nivel bajo que derrota a uno más fuerte gana mucha más experiencia: un Nv 1 que vence a un Nv 5 gana casi el doble que un Nv 5","Si tu Pokémon es muy superior al rival, apenas gana experiencia","En los combates contra entrenadores se calcula con el nivel de cada Pokémon rival derrotado"]},
 {v:"2026-11-05j",ver:"6.7",at:"2026-11-05T15:25",t:"🦊 La habilidad Ilusión ya funciona",l:["Zorua y Zoroark entran al combate disfrazados del último Pokémon sano de su equipo: se ven con su nombre, su aspecto y sus tipos, y hasta la eficacia de tus ataques te engaña","Por dentro siguen siendo ellos: usan sus propios movimientos, estadísticas y tipos","La ilusión se rompe en cuanto reciben daño directo de un ataque. El veneno, las quemaduras, Drenadoras o el clima no la rompen","Si se retiran y vuelven a salir, se disfrazan de nuevo"]},
@@ -7063,7 +7063,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793891465";
+const GAME_B="1793892311";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

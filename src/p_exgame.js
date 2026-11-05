@@ -73,13 +73,15 @@ STX.mama=()=>stRun(async()=>{const s=stSt().s;
   await sSay(S_("Mamá",...ln));if(!xgTeam().length)return;
   await sSay(S_("Mamá","¡Tienes cara de cansancio! Descansa un poco."));await sFade("fade",400);stHeal();await sW(500);await sFade("fadein",500);await sSay(["¡Tus Pokémon se han recuperado por completo!"])});
 // ---------- botón «Equipo» dentro de Exploración ----------
+// orden de la mochila: balls, medicinas, PP, evolución, MT, objetos equipables, mentas y el resto
+function xgCat(k){const it=(typeof ITEMS!=="undefined"&&ITEMS.find(i=>i[0]===k))||[];if(/^(pb|sb|ub|mb)$/.test(k))return 0;if(/^(pot|spot|hpot|mpot|rev|mrev)$/.test(k))return 1;if(/^(eter|meter|elix|melix|ppup|ppmax|cand)$/.test(k))return 2;return {evo:3,mt:4,hold:5,mint:6}[it[7]]??7}
 function xgPanel(){const box=$("exTeam");if(!box)return;const d=xgRun(()=>{const own=Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]),tm=(S.team||[]).filter(n=>n&&S.owned[n]);
     const card=(n,inT)=>{const l=lvd(n).l,mx=stH(PM[n],l),hp=S.hp[n]===undefined?mx:Math.min(mx,S.hp[n]),f=hp/mx;return '<button type="button" class="xgc'+(inT?" on":"")+'" data-xg="'+esc(n)+'">'+ico(PM[n],48,false,!!(S.shiny&&S.shiny[n]>0))+'<b>'+esc(typeof nk==="function"?nk(n):n)+'</b><small>Nv '+l+'</small><i><u style="width:'+Math.round(f*100)+'%;background:'+(f>.5?"#3ecf8e":f>.2?"#ffd35c":"#e63950")+'"></u></i></button>'};
     const bag=Object.keys(S.bag||{}).filter(k=>S.bag[k]>0);
     return '<div class="xgh"><b>🎒 Tu equipo de Exploración</b><button type="button" class="alt" id="xgX">Cerrar</button></div>'+
       (tm.length?'<div class="xgl">'+tm.map(n=>card(n,1)).join("")+'</div>':'<p class="mut">Todavía no tienes Pokémon de Exploración. ¡La Profesora Vega te dará uno en su laboratorio!</p>')+
       (own.length>tm.length?'<b class="xgs">📦 Caja ('+(own.length-tm.length)+')</b><small class="mut">Toca un Pokémon para meterlo o sacarlo del equipo (máximo 6).</small><div class="xgl">'+own.filter(n=>!tm.includes(n)).map(n=>card(n,0)).join("")+'</div>':'')+
-      '<b class="xgs">🎒 Mochila</b><div class="xgb">'+(bag.length?bag.map(k=>'<span>'+(typeof itemIco==="function"?itemIco(k,22):"")+esc(IN(k))+' <b>×'+S.bag[k]+'</b></span>').join(""):'<small class="mut">Vacía. Compra objetos en las Tiendas Pokémon o búscalos por las rutas.</small>')+'</div>'+
+      '<b class="xgs">🎒 Mochila</b><div class="xgb">'+(bag.length?bag.slice().sort((a,b)=>xgCat(a)-xgCat(b)||IN(a).localeCompare(IN(b),"es")).map(k=>'<div class="xgit" data-xgi="'+esc(k)+'" title="'+esc(((ITEMS.find(i=>i[0]===k)||[])[6])||"")+'"><span class="xgii">'+(typeof itemIco==="function"?itemIco(k,44):"")+'</span><b>'+esc(IN(k))+'</b><small>×'+S.bag[k]+'</small></div>').join(""):'<small class="mut">Vacía. Compra objetos en las Tiendas Pokémon o búscalos por las rutas.</small>')+'</div>'+
       '<small class="mut">Los Pokémon, la mochila y los niveles de Exploración son independientes de tu colección del juego. Lo que captures aquí se queda aquí.</small>'});
   box.innerHTML=d;box.hidden=false;$("xgX").onclick=()=>{box.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xg]");if(!b)return;const n=b.dataset.xg;

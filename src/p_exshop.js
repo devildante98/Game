@@ -106,8 +106,8 @@ async function xuApply(n,slot){const id=XU.id,k=xuKind(id);let msg="",evoTo=null
   if(!xgRun(()=>S.bag[id]>0)){XU.id=null;try{xgPanel()}catch(e){}const b=$("exTeam");if(b&&msg)b.insertAdjacentHTML("afterbegin",'<div class="xsmsg">'+esc(msg)+'</div>');XU.msg="";return}
   xuUI()}
 // botón «Usar» en la mochila de Exploración
-{const _p=xgPanel;xgPanel=function(){XU.id=null;XU.msg="";const r=_p.apply(this,arguments);try{const box=$("exTeam");if(box)box.querySelectorAll(".xgb span").forEach(sp=>{const nm=sp.textContent.replace(/×\d+\s*$/,"").trim();
-    const id=xgRun(()=>Object.keys(S.bag||{}).find(k=>S.bag[k]>0&&IN(k)===nm));if(id&&xuKind(id))sp.insertAdjacentHTML("beforeend",' <button type="button" class="mini xuse" data-xuse="'+esc(id)+'">Usar</button>')})}catch(e){}return r}}
+{const _p=xgPanel;xgPanel=function(){XU.id=null;XU.msg="";const r=_p.apply(this,arguments);try{const box=$("exTeam");if(box)box.querySelectorAll(".xgit").forEach(el=>{const id=el.dataset.xgi;
+    if(id&&xuKind(id))el.insertAdjacentHTML("beforeend",'<button type="button" class="mini xuse" data-xuse="'+esc(id)+'">Usar</button>');else el.insertAdjacentHTML("beforeend",'<i class="xgin">'+(/^(pb|sb|ub|mb)$/.test(id)?"En combate":"—")+'</i>')})}catch(e){}return r}}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#exTeam [data-xuse],#exTeam [data-xun],#exTeam [data-xub]");if(!t)return;e.stopPropagation();const d=t.dataset;snd("ui");
   if(d.xuse){XU.id=d.xuse;XU.msg="";xuUI();return}if(d.xub){XU.id=null;xgPanel();return}if(d.xun)xuApply(d.xun,+d.xuk)});
 // Esc: cierra la tienda

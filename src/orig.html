@@ -3204,7 +3204,7 @@ async function main(){
     if(window.__gs&&!started)return;
     if(!u){uid=null;if(started){location.reload();return}g("auth").hidden=false;g("acct").hidden=true;msg("");return}
     uid=u.uid;cu=u;const key="gacha-pkmn-v3-"+uid;
-    try{const sn=await S.getDoc(S.doc(db,"users",uid));if(sn.exists()&&typeof sn.data().data==="string")localStorage.setItem(key,sn.data().data)}
+    try{const sn=await S.getDoc(S.doc(db,"users",uid));if(sn.exists()&&typeof sn.data().data==="string")localStorage.setItem(key,sn.data().data);else if(!sn.exists()&&!localStorage.getItem(key)){try{const L=localStorage.getItem("gacha-pkmn-v3"),d=L&&JSON.parse(L),n=d&&Object.keys(d.owned||{}).length;if(n&&confirm("Tienes una partida sin cuenta en este navegador ("+n+" Pokémon). ¿Quieres pasarla a tu nueva cuenta? Así se guardará en la nube y podrás jugarla desde cualquier sitio."))localStorage.setItem(key,L)}catch(e){}}}
     catch(x){g("auth").hidden=false;msg("No se pudo cargar tu progreso: "+(x.code||x.message));return}
     lobby=new FsRoom(db,uid,["lobby"]);window.claude={use:async n=>n==="room"?lobby:null};
     window.__KEY=key;started=true;

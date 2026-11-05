@@ -568,7 +568,7 @@ async function ball(id,it){
   const sm=say("¡Lanzas una "+it[1]+"!");await catchFx(id,nsh,ok);await sm;
   if(ok){
     const isNew=!hasP(o[0]);
-    if(!S.owned[o[0]]){(S.balls=S.balls||{})[o[0]]=id;(S.when=S.when||{})[o[0]]=Date.now();capKeepHp(o[0],m.mh/m.mx)}
+    if(!S.owned[o[0]]){(S.balls=S.balls||{})[o[0]]=id;(S.when=S.when||{})[o[0]]=Date.now();if(!S.lv[o[0]]||S.lv[o[0]].l<m.l){S.lv[o[0]]={l:Math.max(1,Math.min(100,m.l|0)),x:0};delete S.mv[o[0]];S.ml=S.ml||{};S.ml[o[0]]=S.lv[o[0]].l}capKeepHp(o[0],m.mh/m.mx)}
     S.owned[o[0]]=(S.owned[o[0]]||0)+1;qEv("cap");if(isNew)qEv("new");
     if(m.sh){S.shiny=S.shiny||{};S.shiny[o[0]]=(S.shiny[o[0]]||0)+1;qEv("shiny")}
     snd("capok");await say("¡Has capturado a "+(m.sh?"un "+o[0]+" ✨ variocolor":o[0])+"!"+(isNew?" ¡Nuevo en tu Pokédex!":""));

@@ -155,7 +155,7 @@ function exDraw(ts){const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.hei
     else ents.push({y:y-.001,d:()=>g.drawImage(o,X,Y)})}}
   EX.npcs.forEach(n=>{const q=exNpcPos(n);ents.push({y:q.y,d:()=>exDrawTr(g,n.look,n.f,q.x*EXTL-cx,q.y*EXTL-cy,q.fr,n.beat,false,n.ph)})});
   if(typeof exExtraEnts==="function")exExtraEnts(ents,g,cx,cy,ts);
-  const walking=!!EX.mv,ph=walking?Math.min(1,EX.mv.t/EX.mv.d):0,run=walking&&EX.mv.d<150,sf=walking?(run?[4,5][Math.floor((EX.dist||0)*2)%2]:[1,0,3,0][Math.floor((EX.dist||0)*2)%4]):0;
+  const walking=!!EX.mv,ph=walking?Math.min(1,EX.mv.t/EX.mv.d):0,run=walking&&EX.mv.d<150,sf=walking?(run?4+Math.floor((EX.dist||0)*4)%4:[1,0,3,0][Math.floor((EX.dist||0)*2)%4]):0;
   if(!EX.title)ents.push({y:EX.py,d:()=>exDrawTr(g,trEnc(myLook()),EX.f,EX.px*EXTL-cx,EX.py*EXTL-cy,sf,false,true,0)});
   if(EX.fol&&!EX.title)ents.push({y:exFolPos().y-.01,d:()=>exDrawFol(g,cx,cy,ts)});
   ents.sort((a,b)=>a.y-b.y).forEach(e=>e.d());
@@ -372,12 +372,23 @@ function ovSprite(code){if(OVS[code])return OVS[code];const L=trDec(code),P=(k,i
   const hair=ovHair(L.hs),hat=ovHat(L.hat),girl=L.b===1,skirt=[2,4,9,12,13].includes(L.bot)||[4,23,26].includes(L.top),shorts=[1,7,15].includes(L.bot),dress=[4,23,26].includes(L.top),bag=L.bp>0,longSl=[1,2,5,8,9,11,12,15,16,17,18,19,20,25,27,28].includes(L.top);
   const D=t=>tone(t,2),DD=t=>tone(t,3),Lt=t=>tone(t,0);
   const mk=(dir,fr)=>{const c=xc(32,48),g=c.getContext("2d");
-    // fr 0 quieto · 1 y 3 pasos al andar · 4 y 5 zancadas al correr (más largas, brazos bombeando, cuerpo inclinado y en el aire)
-    const run=fr>=4,step=fr===1||fr===4?1:fr===3||fr===5?-1:0,bob=run?-2:step?-1:0,side=dir==="l",back=dir==="u";const Y=y=>y+bob;
-    const p=(x,y,w,h,col)=>{if(run&&side){if(y<Y(22))x-=2;else if(y<Y(32))x-=1}g.fillStyle=col;g.fillRect(x,y,w,h)};
+    // fr 0 quieto · 1 y 3 pasos al andar · 4-7 ciclo de carrera (4 y 6: apoyo · 5 y 7: vuelo con una rodilla arriba y el talón de la otra pierna atrás)
+    const run=fr>=4,rf=run?fr-4:0,step=run?(rf===0?1:rf===2?-1:0):fr===1?1:fr===3?-1:0,bob=run?(rf%2?-2:-1):step?-1:0,side=dir==="l",back=dir==="u";const Y=y=>y+bob;
+    const p=(x,y,w,h,col)=>{if(run&&side&&y<Y(21))x-=1;g.fillStyle=col;g.fillRect(x,y,w,h)};
+    // segmento grueso entre dos puntos (muslo, espinilla, brazo, antebrazo) para las articulaciones al correr
+    const seg=(x0,y0,x1,y1,w,col)=>{const n=Math.max(Math.abs(x1-x0),Math.abs(y1-y0),1);g.fillStyle=col;for(let k=0;k<=n;k++){const x=Math.round(x0+(x1-x0)*k/n),y=Math.round(y0+(y1-y0)*k/n);g.fillRect(x-(w>>1),Y(y)-(w>>1),w,w)}};
+    // poses de perfil (mirando a la izquierda): [rodilla, pie] de la pierna cercana y de la lejana; [codo, mano] de cada brazo
+    const RUNP=[{nl:[13,37,11,41],fl:[17,37,19,40],na:[18,27,20,25],fa:[12,27,10,25]},
+      {nl:[16,37,19,35],fl:[12,35,13,39],na:[16,28,14,27],fa:[15,28,17,27]},
+      {nl:[17,37,19,40],fl:[13,37,11,41],na:[12,27,10,25],fa:[18,27,20,25]},
+      {nl:[12,35,13,39],fl:[16,37,19,35],na:[15,28,17,27],fa:[16,28,14,27]}][rf];
+    const thighC=skirt?C.sk:C.bc,runLeg=(L,far)=>{const sh=far?D(C.sh):C.sh,sc=far?DD(legC):legC,tc=far?DD(thighC):thighC;
+      seg(15,33,L[0],L[1],3,tc);seg(L[0],L[1],L[2],L[3]-1,3,sc);g.fillStyle=sh;g.fillRect(L[2]-2,Y(L[3])-1,5,3);if(!far){g.fillStyle=Lt(C.sh);g.fillRect(L[2]-2,Y(L[3])-1,5,1)}};
+    const runArm=(A,far)=>{const sl2=longSl?C.tc:C.sk;seg(15,23,A[0],A[1],2,far?D(C.tc):C.tc);seg(A[0],A[1],A[2],A[3],2,far?D(sl2):sl2);g.fillStyle=far?D(C.sk):C.sk;g.fillRect(A[2]-1,Y(A[3])-1,2,2)};
     // ---- piernas y calzado ----
     const legC=skirt||shorts?C.sk:C.bc;
-    if(side){const sr=run?5:3,fx=13-step*sr,bx=16+step*sr;// pierna delantera y trasera
+    if(side&&run){runArm(RUNP.fa,1);runLeg(RUNP.fl,1);runLeg(RUNP.nl,0);if(!skirt&&!shorts)p(12,Y(32),8,3,C.bc)}
+    else if(side){const sr=3,fx=13-step*sr,bx=16+step*sr;// pierna delantera y trasera
       [[bx,DD(legC)],[fx,legC]].forEach(([x,col],i)=>{p(x,Y(34),4,7-(i===0&&step?(run?2:1):0),col);p(x-(i?1:0),Y(40),5,3,i?C.sh:D(C.sh))});
       if(!skirt&&!shorts)p(12,Y(32),8,4,C.bc)}
     else{const lh=step===1?(run?3:2):0,rh=step===-1?(run?3:2):0;
@@ -394,7 +405,8 @@ function ovSprite(code){if(OVS[code])return OVS[code];const L=trDec(code),P=(k,i
     if(bag&&!back&&!side){p(12,Y(22),1,8,D(C.bp));p(19,Y(22),1,8,D(C.bp))}
     // ---- brazos (balanceo al andar) ----
     const sl=longSl?C.tc:C.sk;
-    if(side){const ax=15+step*(run?5:3),ah=run?5:6;p(ax,Y(23),3,ah,sl);p(ax,Y(23),3,3,C.tc);p(ax,Y(23+ah),3,2,C.sk);p(ax+2,Y(23),1,ah,D(sl))}
+    if(side&&run)runArm(RUNP.na,0);
+    else if(side){const ax=15+step*3,ah=6;p(ax,Y(23),3,ah,sl);p(ax,Y(23),3,3,C.tc);p(ax,Y(23+ah),3,2,C.sk);p(ax+2,Y(23),1,ah,D(sl))}
     else{const la=(step===1?-1:step===-1?1:0)*(run?2:1);p(9,Y(23+la),2,6,sl);p(9,Y(23+la),2,3,C.tc);p(9,Y(29+la),2,2,C.sk);p(21,Y(23-la),2,6,sl);p(21,Y(23-la),2,3,C.tc);p(21,Y(29-la),2,2,C.sk);p(22,Y(23-la),1,6,D(sl))}
     // ---- cabeza ----
     const hx=side?9:9,hw=side?13:14;p(hx+1,Y(8),hw-2,14,C.sk);p(hx,Y(9),hw,12,C.sk);p(hx+hw-2,Y(10),2,10,D(C.sk));p(14,Y(21),4,1,D(C.sk));
@@ -431,7 +443,7 @@ function ovSprite(code){if(OVS[code])return OVS[code];const L=trDec(code),P=(k,i
     for(let y=0;y<48;y++)for(let x=0;x<32;x++){if(a(x,y))continue;if(a(x+1,y)||a(x-1,y)||a(x,y+1)||a(x,y-1)){const i=(y*32+x)*4;o[i]=34;o[i+1]=24;o[i+2]=40;o[i+3]=255}}
     id.data.set(o);g.putImageData(id,0,0);
     if(dir!=="r")return c;const m=xc(32,48),q=m.getContext("2d");q.translate(32,0);q.scale(-1,1);q.drawImage(c,0,0);return m};
-  const out={};["d","u","l"].forEach(dr=>{out[dr]=[0,1,2,3,4,5].map(f=>mk(dr,f))});out.r=out.l.map(c=>{const m=xc(32,48),q=m.getContext("2d");q.translate(32,0);q.scale(-1,1);q.drawImage(c,0,0);return m});
+  const out={};["d","u","l"].forEach(dr=>{out[dr]=[0,1,2,3,4,5,6,7].map(f=>mk(dr,f))});out.r=out.l.map(c=>{const m=xc(32,48),q=m.getContext("2d");q.translate(32,0);q.scale(-1,1);q.drawImage(c,0,0);return m});
   return OVS[code]=out}
 // ================= animaciones del mapa =================
 function exNpcPos(n){if(n.mv){const p=Math.min(1,n.mv.t/n.mv.d);return{x:n.mv.x0+(n.px-n.mv.x0)*p,y:n.mv.y0+(n.py-n.mv.y0)*p,fr:p<.55?((n.step||0)%2?1:3):0}}return{x:n.px,y:n.py,fr:0}}

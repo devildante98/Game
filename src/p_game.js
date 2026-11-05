@@ -312,7 +312,7 @@ function gmTrLooks(){if(!GM.trl){GM.trl=[];for(let i=0;i<5;i++){try{GM.trl.push(
 function gmTownBuild(){const box=$("gBs");if(!box)return;const sc0=innerWidth>=900&&innerHeight>=700?3:innerWidth<700?1.5:2,k=(S.g||[]).map(gbTier).join(",")+"|"+(S.g||[]).join(",")+"|"+sc0+"|"+Math.round(innerWidth/40);if(k===GM.town)return;
   const old=GM.tier.slice();GM.town=k;
   const fit=()=>$("gTrack").scrollWidth<=$("gTown").clientWidth+2;
-  const build=sc=>{const ps=sc>=3?2:sc,pv=document.querySelector("#gTrack .gpath");if(pv){pv.style.backgroundImage="url("+gbPathURL()+")";pv.style.backgroundSize=(48*ps)+"px "+(20*ps)+"px";pv.style.height=(20*ps)+"px";$("gTown").style.setProperty("--gpb",(20*ps+2)+"px");$("gTown").style.setProperty("--gph",(20*ps)+"px")}
+  const build=sc=>{GM.sc=sc;const ps=sc>=3?2:sc,pv=document.querySelector("#gTrack .gpath");if(pv){pv.style.backgroundImage="url("+gbPathURL()+")";pv.style.backgroundSize=(48*ps)+"px "+(20*ps)+"px";pv.style.height=(20*ps)+"px";$("gTown").style.setProperty("--gpb",(20*ps+2)+"px");$("gTown").style.setProperty("--gph",(20*ps)+"px")}
     const dec=i=>'<span class="gdecs">'+GDEC[i%GDEC.length].map(d=>'<span class="gdec" data-d="'+d+'"></span>').join("")+'</span>';
     box.innerHTML=dec(7)+G.map((g,i)=>{const n=S.g[i]||0,t=gbTier(n);return '<button class="gbld'+(t?"":" glock")+'" data-gb="'+i+'" title="'+esc(g[0])+'"><span class="gbc"></span><span class="gbl"><b>'+esc(GBS[i]||g[0])+'</b><em>'+(t?'<i>'+"★".repeat(t)+'</i> Nv '+fmt(n):'🔒 '+gmK(gc(i)))+'</em></span></button>'+dec(i)}).join("");
     box.querySelectorAll(".gdec").forEach(el=>{const c=gdCanvas(el.dataset.d);c.style.width=c.width*sc+"px";c.style.height=c.height*sc+"px";el.appendChild(c);if(el.dataset.d==="lamp")el.classList.add("glamp")});
@@ -324,7 +324,7 @@ function gmTownBuild(){const box=$("gBs");if(!box)return;const sc0=innerWidth>=9
         for(let q=0;q<cnt&&q<L.length;q++)ov+='<span class="gsp gtrn" style="left:'+X[q]+'%;bottom:'+Math.round((3+(q%2)*2)*sc)+'px;width:'+tw+'px;height:'+th+'px;animation-delay:-'+(q*0.7)+'s"><img src="'+trURL(L[q],"f",q%2?"w":"i")+'" alt=""></span>'}
       (GBP[i]||[]).forEach(p=>{if(Math.max(1,t)>=p[2]&&PM[p[0]]){const z=Math.round((i===1?17:14)*sc);ov+='<span class="gsp gpk" style="left:'+(i===1?(p[1]/c.width*100):p[1])+'%;bottom:'+Math.round(2*sc)+'px">'+ico(PM[p[0]],z)+'</span>'}});
       if(!t)ov+='<span class="glk">🔒</span>';
-      if(ov)bc.insertAdjacentHTML("beforeend",ov);
+      if(ov){bc.insertAdjacentHTML("beforeend",ov);const K=gmScale();bc.querySelectorAll(".gpk img").forEach(im=>gmSz(im,K.k,K.cap))}
       if(old.length&&t>(old[i]||0)){el.classList.add("gnew");setTimeout(()=>{const r=el.getBoundingClientRect(),f=$("gTown").getBoundingClientRect();gmSparks($("gTown"),r.left-f.left+$("gTown").scrollLeft+r.width/2,r.top-f.top+r.height/2,14,1);try{snd("lvl")}catch(e){}},50)}});
     // si el pueblo no cabe, quita decoración poco a poco
     if(!fit())box.querySelectorAll(".gdecs .gdec:nth-child(2)").forEach(e=>e.remove());
@@ -334,11 +334,15 @@ function gmTownBuild(){const box=$("gBs");if(!box)return;const sc0=innerWidth>=9
   let sc=sc0;build(sc);while(!fit()&&sc>2&&innerWidth>=700){sc-=.5;build(sc)}
   GM.tier=(S.g||[]).map(gbTier);GM.tw=[];gmWalkers();gmTownArr()}
 function gmTownArr(){const t=$("gTown");if(!t)return;const f=$("farm");f.classList.toggle("gsl",t.scrollLeft>4);f.classList.toggle("gsr",t.scrollLeft+t.clientWidth<t.scrollWidth-4)}
+// misma escala para todos los Pokémon del pueblo: cada uno conserva su forma y su tamaño relativo (con un tope de altura)
+function gmSz(img,k,cap){const f=()=>{const nw=img.naturalWidth,nh=img.naturalHeight;if(!nw)return;let w=nw*k,h=nh*k;if(img.classList.contains("gif")===false){w=nw*k*.62;h=nh*k*.62}if(h>cap){w*=cap/h;h=cap}img.style.setProperty("--w",Math.round(w)+"px");img.style.setProperty("--h",Math.round(h)+"px");img.classList.add("gsz")};if(img.complete)f();img.addEventListener("load",f)}
+function gmScale(){const sc=GM.sc||(innerWidth>=900&&innerHeight>=700?3:innerWidth<700?1.5:2);return{k:sc*.145,cap:Math.round(sc*(sc<2?11:12.5))}}
 function gmWalkers(){const w=$("gWks");if(!w)return;let pool=[];try{pool=(S.team||[]).filter(n=>n&&S.owned[n]>0&&PM[n]);const all=Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]);for(let i=0;i<8&&all.length;i++)pool.push(all[Math.floor(Math.random()*all.length)])}catch(e){}
   const own=(S.g||[]).reduce((a,n)=>a+(n>0?1:0),0),N=Math.min(pool.length,own?2+own:1,document.body.classList.contains("glite")?3:99);if(GM.tw.length===N)return;
   w.innerHTML="";GM.tw=[];const tw=$("gTrack").scrollWidth||innerWidth;
   for(let i=0;i<N;i++){const n=pool[i%pool.length],e=document.createElement("div");e.className="gwk";e.innerHTML='<div class="gwki">'+ico(PM[n],40)+'</div>';w.appendChild(e);
-    GM.tw.push({e:e,x:Math.random()*(tw-60),v:(Math.random()<.5?-1:1)*(18+Math.random()*16),wait:Math.random()*2000,y:Math.random()*10})}}
+    const im=e.querySelector("img"),K=gmScale();if(im)gmSz(im,K.k,K.cap);
+    GM.tw.push({e:e,x:Math.random()*(tw-60),v:(Math.random()<.5?-1:1)*(18+Math.random()*16),wait:Math.random()*2000,y:Math.random()*4})}}
 function gmTown(t){const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$("hubM").hidden)return;
   gmTownBuild();gmBudTick(dt);
   const tw=$("gTrack").scrollWidth||innerWidth,calm=hubCalm();

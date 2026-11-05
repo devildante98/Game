@@ -527,3 +527,7 @@ body.glite .gbld canvas,body.glite .gsp img,body.glite .gwki{filter:none!importa
 #gTop .gres{background:linear-gradient(#141c4a,#202c74)!important}
 #gTop .gpn b{text-shadow:0 2px 0 rgba(0,0,0,.35)!important}
 @media (max-width:700px){#gTop .gtk b{font-size:1.08rem!important}#gTop .gtk small{font-size:.62rem!important}}
+/* Pokémon del pueblo: misma escala para todos, apoyados en el suelo */
+.gwki img.gsz,.gpk img.gsz{width:var(--w)!important;height:var(--h)!important;max-width:none!important;max-height:none!important;margin:0!important;object-fit:contain;display:block}
+.gwki{display:flex;align-items:flex-end;justify-content:center}
+.gwk{bottom:4px}

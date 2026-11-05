@@ -382,12 +382,15 @@ function ovSprite(code){if(OVS[code])return OVS[code];const L=trDec(code),P=(k,i
       {nl:[16,37,19,35],fl:[12,35,13,39],na:[16,28,14,27],fa:[15,28,17,27]},
       {nl:[17,37,19,40],fl:[13,37,11,41],na:[12,27,10,25],fa:[18,27,20,25]},
       {nl:[12,35,13,39],fl:[16,37,19,35],na:[15,28,17,27],fa:[16,28,14,27]}][rf];
+    // al andar de perfil: paso corto, talón delante y punta del pie detrás; brazos balanceándose desde el hombro
+    const WALKP=step===1?{nl:[13,37,12,41],fl:[17,37,18,41],na:[16,27,17,30],fa:[14,27,13,30]}:{nl:[17,37,18,41],fl:[13,37,12,41],na:[14,27,13,30],fa:[16,27,17,30]};
     const thighC=skirt?C.sk:C.bc,runLeg=(L,far)=>{const sh=far?D(C.sh):C.sh,sc=far?DD(legC):legC,tc=far?DD(thighC):thighC;
       seg(15,33,L[0],L[1],3,tc);seg(L[0],L[1],L[2],L[3]-1,3,sc);g.fillStyle=sh;g.fillRect(L[2]-2,Y(L[3])-1,5,3);if(!far){g.fillStyle=Lt(C.sh);g.fillRect(L[2]-2,Y(L[3])-1,5,1)}};
     const runArm=(A,far)=>{const sl2=longSl?C.tc:C.sk;seg(15,23,A[0],A[1],2,far?D(C.tc):C.tc);seg(A[0],A[1],A[2],A[3],2,far?D(sl2):sl2);g.fillStyle=far?D(C.sk):C.sk;g.fillRect(A[2]-1,Y(A[3])-1,2,2)};
     // ---- piernas y calzado ----
     const legC=skirt||shorts?C.sk:C.bc;
     if(side&&run){runArm(RUNP.fa,1);runLeg(RUNP.fl,1);runLeg(RUNP.nl,0);if(!skirt&&!shorts)p(12,Y(32),8,3,C.bc)}
+    else if(side&&step){runArm(WALKP.fa,1);runLeg(WALKP.fl,1);runLeg(WALKP.nl,0);if(!skirt&&!shorts)p(12,Y(32),8,3,C.bc)}
     else if(side){const sr=3,fx=13-step*sr,bx=16+step*sr;// pierna delantera y trasera
       [[bx,DD(legC)],[fx,legC]].forEach(([x,col],i)=>{p(x,Y(34),4,7-(i===0&&step?(run?2:1):0),col);p(x-(i?1:0),Y(40),5,3,i?C.sh:D(C.sh))});
       if(!skirt&&!shorts)p(12,Y(32),8,4,C.bc)}
@@ -406,6 +409,7 @@ function ovSprite(code){if(OVS[code])return OVS[code];const L=trDec(code),P=(k,i
     // ---- brazos (balanceo al andar) ----
     const sl=longSl?C.tc:C.sk;
     if(side&&run)runArm(RUNP.na,0);
+    else if(side&&step)runArm(WALKP.na,0);
     else if(side){const ax=15+step*3,ah=6;p(ax,Y(23),3,ah,sl);p(ax,Y(23),3,3,C.tc);p(ax,Y(23+ah),3,2,C.sk);p(ax+2,Y(23),1,ah,D(sl))}
     else{const la=(step===1?-1:step===-1?1:0)*(run?2:1);p(9,Y(23+la),2,6,sl);p(9,Y(23+la),2,3,C.tc);p(9,Y(29+la),2,2,C.sk);p(21,Y(23-la),2,6,sl);p(21,Y(23-la),2,3,C.tc);p(21,Y(29-la),2,2,C.sk);p(22,Y(23-la),1,6,D(sl))}
     // ---- cabeza ----

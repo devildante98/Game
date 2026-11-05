@@ -531,3 +531,5 @@ body.glite .gbld canvas,body.glite .gsp img,body.glite .gwki{filter:none!importa
 .gwki img.gsz,.gpk img.gsz{width:var(--w)!important;height:var(--h)!important;max-width:none!important;max-height:none!important;margin:0!important;object-fit:contain;display:block}
 .gwki{display:flex;align-items:flex-end;justify-content:center}
 .gwk{bottom:4px}
+/* el desfile de Pokémon de la portada no sigue andando por el fondo del juego */
+body.gm #gBg .pcpar{display:none!important}

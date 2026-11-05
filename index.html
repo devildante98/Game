@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793893080">
+<meta name="game-build" content="1793893410">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2281,7 +2281,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.9.1</small>
+    <small class="pcver">Versión 6.10</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -6899,8 +6899,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.9.1";
+const GAME_VER="6.10";
 const NEWS=[
+{v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},
 {v:"2026-11-05l",ver:"6.9",at:"2026-11-05T16:35",t:"🛒 Tiendas Pokémon en Exploración",l:["Cada pueblo tiene ahora su Tienda Pokémon (el edificio de tejado azul). Habla con el dependiente para comprar y vender","Cada tienda tiene su propio surtido, que mejora región a región: Poké Balls, pociones, Revivir, Éter y Elixires, piedras evolutivas, MT del tipo de la zona y objetos equipables","Al vender te dan la mitad de su precio. Se paga con tickets y lo comprado va a tu mochila de Exploración","Nuevo: en la mochila 🎒 de Exploración puedes usar pociones, Revivir, Éter, piedras evolutivas y MT fuera de los combates","La tecla Esc ya no te saca de la pantalla completa: ahora cierra la tienda, la mochila y los menús como el del Centro Pokémon"]},
 {v:"2026-11-05k",ver:"6.8",at:"2026-11-05T16:11",t:"⭐ Experiencia como en los juegos",l:["La experiencia que gana cada Pokémon ahora depende de la diferencia de nivel con el rival, con la fórmula de los juegos","Un Pokémon de nivel bajo que derrota a uno más fuerte gana mucha más experiencia: un Nv 1 que vence a un Nv 5 gana casi el doble que un Nv 5","Si tu Pokémon es muy superior al rival, apenas gana experiencia","En los combates contra entrenadores se calcula con el nivel de cada Pokémon rival derrotado"]},
 {v:"2026-11-05j",ver:"6.7",at:"2026-11-05T15:25",t:"🦊 La habilidad Ilusión ya funciona",l:["Zorua y Zoroark entran al combate disfrazados del último Pokémon sano de su equipo: se ven con su nombre, su aspecto y sus tipos, y hasta la eficacia de tus ataques te engaña","Por dentro siguen siendo ellos: usan sus propios movimientos, estadísticas y tipos","La ilusión se rompe en cuanto reciben daño directo de un ataque. El veneno, las quemaduras, Drenadoras o el clima no la rompen","Si se retiran y vuelven a salir, se disfrazan de nuevo"]},
@@ -7083,7 +7084,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793893080";
+const GAME_B="1793893410";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11936,24 +11937,25 @@ window.addEventListener("keydown",e=>{if(e.key!=="Escape"||!EX.on||EX.bind||WM.o
 // Se paga con tickets; al vender te dan la mitad de su precio. Lo comprado va a la mochila de Exploración.
 const XS_P={pb:500,sb:1500,ub:4000,pot:1500,spot:4000,hpot:9000,mpot:20000,rev:8000,mrev:30000,eter:6000,meter:15000,elix:25000,melix:60000};
 const XS_TOWN={
-  pueblo:{n:"Pueblo Brisa",it:["pb","pot","eter"],st:[],mt:[["normal",2]],hold:0},
-  pe:{n:"Puerto Escarcha",it:["pb","sb","pot","spot","rev","eter"],st:["water-stone"],mt:[["water",3],["ice",2]],hold:0},
-  pn:{n:"Pueblo Nevado",it:["pb","sb","spot","rev","elix"],st:["ice-stone","water-stone"],mt:[["ice",3],["normal",2]],hold:1},
-  pb:{n:"Puerto Brasa",it:["sb","ub","spot","hpot","rev","elix"],st:["fire-stone"],mt:[["fire",3],["ground",2]],hold:2},
-  vv:{n:"Villa Volcán",it:["ub","hpot","mpot","rev","meter","elix"],st:["fire-stone","leaf-stone"],mt:[["fire",2],["rock",2],["fighting",2]],hold:3},
-  ct:{n:"Ciudad Trueno",it:["ub","hpot","mpot","mrev","melix","meter"],st:["thunder-stone","moon-stone","sun-stone"],mt:[["electric",3],["psychic",2],["dark",2]],hold:4}};
+  pueblo:{n:"Pueblo Brisa",it:["pb","pot","spot","rev","eter"],st:["oval-stone"],mt:[["normal",2]],ms:["Protección","Doble Equipo"],hold:["sitrus"],mint:[]},
+  pe:{n:"Puerto Escarcha",it:["pb","sb","pot","spot","rev","eter","elix"],st:["water-stone","ice-stone","kings-rock","deep-sea-tooth","deep-sea-scale"],mt:[["water",3],["ice",2],["flying",1]],ms:["Danza Espada","Descanso"],hold:["sitrus","lum"],mint:["mint3","mint15"]},
+  pn:{n:"Pueblo Nevado",it:["pb","sb","ub","spot","hpot","rev","elix","meter"],st:["ice-stone","dawn-stone","moon-stone","razor-claw","razor-fang","reaper-cloth","soothe-bell"],mt:[["ice",3],["normal",2],["ghost",2]],ms:["Paz Mental","Respiro","Rizo Defensa"],hold:["left","wherb","sitrus"],mint:["mint3","mint15","mint13","mint10"]},
+  pb:{n:"Puerto Brasa",it:["sb","ub","spot","hpot","mpot","rev","elix","meter"],st:["fire-stone","sun-stone","leaf-stone","magmarizer","protector","dragon-scale"],mt:[["fire",3],["ground",2],["poison",2],["bug",1]],ms:["Fuego Fatuo","Tóxico","Corpulencia"],hold:["sash","scope","shell","lum"],mint:["mint3","mint15","mint13","mint10","mint5","mint20"]},
+  vv:{n:"Villa Volcán",it:["ub","hpot","mpot","rev","mrev","elix","meter","melix"],st:["fire-stone","dusk-stone","shiny-stone","leaf-stone","up-grade","dubious-disc","metal-coat","sachet","whipped-dream"],mt:[["fire",2],["rock",2],["fighting",2],["dragon",2]],ms:["Danza Dragón","Pulimento","Afilagarras"],hold:["lorb","qclaw","lucky","left","sash"],mint:["mint3","mint15","mint13","mint10","mint5","mint20","mint1","mint17"]},
+  ct:{n:"Ciudad Trueno",it:["ub","hpot","mpot","mrev","elix","meter","melix"],st:["thunder-stone","moon-stone","sun-stone","dawn-stone","dusk-stone","shiny-stone","electirizer","linking-cord","metal-alloy"],mt:[["electric",3],["psychic",2],["dark",2],["steel",2],["fairy",2],["flying",2]],ms:["Maquinación","Onda Trueno","Agilidad","Amnesia","Defensa Férrea"],hold:["avest","lorb","left","eseed","pseed","gseed","mseed","lucky"],mint:["mint1","mint3","mint5","mint10","mint13","mint15","mint17","mint20","mint23"]}};
 const xsIt=id=>ITEMS.find(i=>i[0]===id);
 const xsMT=id=>/^mt/.test(id)&&MVD[id.slice(2)];
 function xsPrice(id){if(XS_P[id])return XS_P[id];const it=xsIt(id);if(!it)return 0;
-  if(it[7]==="evo")return 30000;if(it[7]==="hold")return 50000;if(it[7]==="mint")return 60000;
+  if(it[7]==="evo")return /stone$/.test(id)?30000:45000;if(it[7]==="hold")return 50000;if(it[7]==="mint")return 60000;
   const m=xsMT(id);if(m)return m.cl===0?20000:15000+400*(m.pw|0);return Math.max(500,Math.round((it[2]||0)*.2))}
 const xsSell=id=>Math.floor(xsPrice(id)/2);
 function xsStock(town){const T=XS_TOWN[town];if(!T)return [];const L=T.it.slice();
-  T.st.forEach(s=>{if(xsIt(s))L.push(s)});
-  // MT del tipo de la zona: las más útiles (potencia media-alta), siempre las mismas en cada tienda
+  T.st.forEach(s=>L.push(s));
+  // MT de ataque del tipo de la zona (las más útiles, potencia media-alta) y MT de estado elegidas
   T.mt.forEach(([ty,n])=>{const mts=ITEMS.filter(i=>i[7]==="mt"&&xsMT(i[0])&&xsMT(i[0]).t===ty&&xsMT(i[0]).cl>0&&(xsMT(i[0]).pw|0)>=55&&(xsMT(i[0]).pw|0)<=110).sort((a,b)=>(xsMT(a[0]).pw|0)-(xsMT(b[0]).pw|0));
     const step=Math.max(1,Math.floor(mts.length/n));for(let k=0;k<n&&k*step<mts.length;k++)L.push(mts[k*step][0])});
-  if(T.hold){const H=ITEMS.filter(i=>i[7]==="hold"&&!/^z/.test(i[0])&&i[0]!=="crys");const seed=pvHash("tienda"+town);for(let k=0;k<T.hold&&H.length;k++)L.push(H[(seed+k*7)%H.length][0])}
+  (T.ms||[]).forEach(nm=>{const it=ITEMS.find(i=>i[7]==="mt"&&xsMT(i[0])&&xsMT(i[0]).n===nm);if(it)L.push(it[0])});
+  (T.hold||[]).forEach(h=>L.push(h));(T.mint||[]).forEach(m=>L.push(m));
   return [...new Set(L)].filter(id=>xsIt(id))}
 const XSH={open:false,town:"",tab:"buy",msg:"",res:null};
 function xsUI(){const box=$("exShop");if(!box)return;const T=XS_TOWN[XSH.town]||{n:""};const bag=xgRun(()=>Object.assign({},S.bag||{}));
@@ -12006,7 +12008,7 @@ STX.dep=()=>stRun(async()=>{const town=(EX.map||"").replace(/^tienda_/,"");
 // ================= usar objetos de la mochila de Exploración (fuera de combate) =================
 const XU={id:null};
 const xuKind=id=>{const it=xsIt(id);if(!it)return null;if(["pot","spot","hpot","mpot"].includes(id))return "heal";if(id==="rev"||id==="mrev")return "rev";if(["eter","meter","elix","melix"].includes(id))return "pp";
-  if(it[7]==="evo")return "evo";if(xsMT(id))return "mt";return null};
+  if(it[7]==="evo")return "evo";if(xsMT(id))return "mt";if(it[7]==="mint")return "mint";if(it[7]==="hold")return "hold";return null};
 function xuTargets(id){return xgRun(()=>{const k=xuKind(id),own=Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]);
   return own.map(n=>{const l=lvd(n).l,mx=stH(PM[n],l),hp=S.hp[n]===undefined?mx:Math.min(mx,S.hp[n]);let ok=false,why="";
     if(k==="heal"){ok=hp>0&&hp<mx;why=hp<=0?"Debilitado":hp>=mx?"PS al máximo":""}
@@ -12014,6 +12016,8 @@ function xuTargets(id){return xgRun(()=>{const k=xuKind(id),own=Object.keys(S.ow
     else if(k==="pp"){ok=true}
     else if(k==="evo"){const e=EVO(n).filter(x=>x[1]==="I"+id);ok=e.length>0;why=ok?"":"No le hace efecto"}
     else if(k==="mt"){const mid=id.slice(2);ok=mtOk(n,mid)&&!moveIds(n).includes(mid);why=moveIds(n).includes(mid)?"Ya lo conoce":"No puede aprenderlo"}
+    else if(k==="mint"){const ni=+id.slice(4),cur=S.nat&&S.nat[n];ok=cur!==ni;why=ok?"":"Ya tiene esa naturaleza"}
+    else if(k==="hold"){const h=S.held&&S.held[n];ok=h!==id;why=ok?(h?"Lleva "+IN(h)+" (se cambia)":""):"Ya lo lleva"}
     return {n,l,hp,mx,ok,why,mv:k==="mt"?moveIds(n).slice():null,inT:(S.team||[]).includes(n)}}).sort((a,b)=>(b.ok-a.ok)||(b.inT-a.inT)||(b.l-a.l))})}
 function xuUI(){const box=$("exTeam");if(!box||!XU.id)return;const id=XU.id,k=xuKind(id),L=xuTargets(id);const have=xgRun(()=>S.bag[id]|0);
   box.innerHTML='<div class="xgh"><b>'+itemIco(id,26)+' Usar '+esc(IN(id))+' <small class="mut">(tienes '+have+')</small></b><button type="button" class="alt" data-xub="1">Volver</button></div>'+
@@ -12028,9 +12032,11 @@ async function xuApply(n,slot){const id=XU.id,k=xuKind(id);let msg="",evoTo=null
     else if(k==="evo"){const e=EVO(n).find(x=>x[1]==="I"+id);if(!e||!PM[e[0]])return;evoTo=e[0];evoApply(n,e[0]);msg="¡"+n+" ha evolucionado a "+e[0]+"!"}
     else if(k==="mt"){const mid=id.slice(2),ids=moveIds(n).slice();if(ids.includes(mid))return;const old=slot>=0?ids[slot]:null;if(slot>=0)ids[slot]=mid;else if(ids.length<4)ids.push(mid);else return;S.mv[n]=ids;if(old&&S.pp&&S.pp[n])delete S.pp[n][old];
       msg="¡"+nk(n)+" ha aprendido "+MVD[mid].n+"!"+(old&&MVD[old]?" (Ha olvidado "+MVD[old].n+")":"")}
+    else if(k==="mint"){S.nat=S.nat||{};S.nat[n]=+id.slice(4);msg="La naturaleza de "+nk(n)+" ahora es "+IN(id).replace(/^Menta /,"")+"."}
+    else if(k==="hold"){S.held=S.held||{};const old=S.held[n];S.held[n]=id;if(old&&old!==id)S.bag[old]=(S.bag[old]||0)+1;msg=nk(n)+" ahora lleva "+IN(id)+(old&&old!==id?" (y "+IN(old)+" vuelve a la mochila)":"")+"."}
     else return;
     S.bag[id]--;if(!S.bag[id])delete S.bag[id]});
-  if(msg){save();snd(k==="evo"?"win":k==="mt"?"lvl":"heal");XU.msg=msg}
+  if(msg){save();snd(k==="evo"?"win":k==="mt"||k==="mint"||k==="hold"?"lvl":"heal");XU.msg=msg}
   if(!xgRun(()=>S.bag[id]>0)){XU.id=null;try{xgPanel()}catch(e){}const b=$("exTeam");if(b&&msg)b.insertAdjacentHTML("afterbegin",'<div class="xsmsg">'+esc(msg)+'</div>');XU.msg="";return}
   xuUI()}
 // botón «Usar» en la mochila de Exploración

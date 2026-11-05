@@ -492,7 +492,7 @@ body.glite .gbld canvas,body.glite .gsp img,body.glite .gwki{filter:none!importa
 /* ===== historia del modo exploración ===== */
 .exdlg.exnmd{padding-top:20px!important}
 .exdlg .exnm{position:absolute;left:14px;top:-14px;padding:3px 12px;border-radius:9px;background:linear-gradient(#ffe680,#ffb020);color:#2b2440;border:2px solid #2b2440;font-size:.85em;font-weight:900;box-shadow:0 2px 0 #2b2440;letter-spacing:.3px}
-.exobj{position:absolute;right:10px;top:10px;z-index:7;max-width:min(320px,52%);padding:6px 11px 7px;border-radius:12px;background:rgba(20,22,48,.78);border:2px solid rgba(255,255,255,.35);color:#fff;pointer-events:none;display:flex;flex-direction:column;gap:2px;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.exobj{position:absolute;right:10px;top:60px;z-index:7;max-width:min(320px,52%);padding:6px 11px 7px;border-radius:12px;background:rgba(20,22,48,.78);border:2px solid rgba(255,255,255,.35);color:#fff;pointer-events:none;display:flex;flex-direction:column;gap:2px;box-shadow:0 3px 0 rgba(0,0,0,.35)}
 .exobj[hidden]{display:none}
 .exobj small{font-size:.66rem;font-weight:800;color:#ffd96a;letter-spacing:.3px}
 .exobj b{font-size:.8rem;font-weight:700;line-height:1.2}

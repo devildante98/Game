@@ -1043,7 +1043,7 @@ function bigZoom(){
 function bigSet(m){
   const a=$("arena");
   if(m==="full"&&a.requestFullscreen){try{a.requestFullscreen().catch(()=>{})}catch(e){}}
-  else if(!m&&document.fullscreenElement&&document.exitFullscreen){try{document.exitFullscreen().catch(()=>{})}catch(e){}}
+  else if(!m&&document.fullscreenElement===a&&document.exitFullscreen){try{document.exitFullscreen().catch(()=>{})}catch(e){}}
   bigMode=m||"";
   a.classList.toggle("bigbat",!!bigMode);a.classList.toggle("win",bigMode==="win");a.classList.toggle("full",bigMode==="full");
   $("bigW").textContent=bigMode==="win"?"✕ Cerrar ventana":"🗖 Ventana";

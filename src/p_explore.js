@@ -132,7 +132,7 @@ async function exBattle(cfg,npc){EX.battle={npc:npc?npc.id:null,win:false,map:EX
 setInterval(()=>{if(EX.battle&&!fcd){const b=EX.battle;EX.battle=null;
   if(b.npc&&b.win){exSt().d.npc[b.npc]=1;const n=EX.npcs.find(q=>q.id===b.npc);if(n)n.beat=true;save()}
   if(!exTeamOk())exFaint();
-  EX.resume=true;hubOpen("adv","explP");exFsPark(false)}},600);
+  EX.resume=true;hubOpen("adv","explP");exFsPark(false)}},120);
 // ---------- compañero que te sigue ----------
 async function exFollower(){const b=S.buddy&&S.owned[S.buddy.n]>0?S.buddy.n:(S.team||[]).find(n=>n&&S.owned[n]);if(!b){EX.fol=null;return}
   if(EX.fol&&EX.fol.n===b)return;EX.fol={n:b,d:null};const d=typeof pmdLoad==="function"?await pmdLoad(b,!!(S.shiny&&S.shiny[b]>0)):null;
@@ -194,7 +194,7 @@ function exDlgDraw(){const box=$("exDlg");if(!box)return;const d=EX.dlg||(EX.pen
 nxPanel("explP","🗺️ Exploración","Vive la historia de la región de Alba: «La leyenda de la Piedra Aurora». Recorre las rutas, plántale cara al Equipo Ocaso y descubre al guardián legendario. En la hierba alta aparecen Pokémon salvajes, los entrenadores te retarán si te ven y hay objetos escondidos que se renuevan cada día.");
 {const g=HUB.find(x=>x.k==="adv");if(g&&!g.tabs.some(t=>t[0]==="explP"))g.tabs.unshift(["explP","Exploración"]);HUBP.explP="adv";HUBR.explP=()=>exUI()}
 function exUI(){const b=$("explPB");if(!b)return;
-  if(!b.querySelector("canvas")){b.innerHTML='<div class="exwrap"><div class="exscr"><canvas id="exCv" width="960" height="640" tabindex="0" aria-label="Mapa de exploración"></canvas><div id="exDlg" class="exdlg" hidden></div>'+
+  if(!b.querySelector("canvas")&&!document.querySelector(".exwrap.exfs")){b.innerHTML='<div class="exwrap"><div class="exscr"><canvas id="exCv" width="960" height="640" tabindex="0" aria-label="Mapa de exploración"></canvas><div id="exDlg" class="exdlg" hidden></div>'+
     '<button class="exfsb" id="exFs" type="button" title="Pantalla completa" aria-label="Pantalla completa"></button>'+
     '<div class="extitle" id="exTitle"><div class="exlogo"><small>POKE GACHA ONLINE</small><b>EXPLORACIÓN</b><i>Rutas, hierba alta y entrenadores</i></div><div class="exhero"><canvas id="exHero" width="96" height="48"></canvas></div>'+
     '<button class="red exstart" id="exGo" type="button">▶ Iniciar</button><small class="exwhere" id="exWhere"></small><small class="exhint" id="exHint"></small><button class="alt exctlb" type="button" data-exctl="1">⌨️ Controles</button></div>'+
@@ -500,7 +500,7 @@ function exFsEnter(){const w=document.querySelector(".exwrap");if(!w||EX.fs)retu
 function exFsExit(keepDoc){const w=document.querySelector(".exwrap");if(!EX.fs)return;EX.fs=false;if(w){w.classList.remove("exfs");if(EX.fsPh&&EX.fsPh.parentNode){EX.fsPh.parentNode.insertBefore(w,EX.fsPh);EX.fsPh.remove()}}document.body.classList.remove("exfsOn");
   if(!keepDoc){try{if(exFsDoc())(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}}exFsIcon()}
 // durante un combate el mapa se aparta (la página sigue en pantalla completa) y vuelve después
-function exFsPark(on){if(on){if(EX.fs){EX.fsBack=true;exFsExit(true)}}else if(EX.fsBack){EX.fsBack=false;setTimeout(()=>{exFsEnter()},350)}}
+function exFsPark(on){if(on){if(EX.fs){EX.fsBack=true;exFsExit(true)}}else if(EX.fsBack){EX.fsBack=false;exFsEnter()}}
 document.addEventListener("fullscreenchange",()=>{if(EX.fs&&!exFsDoc()&&!EX.fsBack)exFsExit(true)});
 // Esc no saca de la pantalla completa: sirve para cerrar menús. En Chrome/Edge se reserva la tecla para el juego (para salir: botón ⛶ o mantener Esc)
 document.addEventListener("fullscreenchange",()=>{try{if(document.fullscreenElement&&EX.fs&&navigator.keyboard&&navigator.keyboard.lock)navigator.keyboard.lock(["Escape"]).catch(()=>{});else if(!document.fullscreenElement&&navigator.keyboard&&navigator.keyboard.unlock)navigator.keyboard.unlock()}catch(e){}});

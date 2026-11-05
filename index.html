@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793895728">
+<meta name="game-build" content="1793905231">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2291,7 +2291,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.10.4</small>
+    <small class="pcver">Versión 6.10.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -3394,7 +3394,7 @@ function bigZoom(){
 function bigSet(m){
   const a=$("arena");
   if(m==="full"&&a.requestFullscreen){try{a.requestFullscreen().catch(()=>{})}catch(e){}}
-  else if(!m&&document.fullscreenElement&&document.exitFullscreen){try{document.exitFullscreen().catch(()=>{})}catch(e){}}
+  else if(!m&&document.fullscreenElement===a&&document.exitFullscreen){try{document.exitFullscreen().catch(()=>{})}catch(e){}}
   bigMode=m||"";
   a.classList.toggle("bigbat",!!bigMode);a.classList.toggle("win",bigMode==="win");a.classList.toggle("full",bigMode==="full");
   $("bigW").textContent=bigMode==="win"?"✕ Cerrar ventana":"🗖 Ventana";
@@ -6909,7 +6909,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.10.4";
+const GAME_VER="6.10.5";
 const NEWS=[
 {v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},
 {v:"2026-11-05l",ver:"6.9",at:"2026-11-05T16:35",t:"🛒 Tiendas Pokémon en Exploración",l:["Cada pueblo tiene ahora su Tienda Pokémon (el edificio de tejado azul). Habla con el dependiente para comprar y vender","Cada tienda tiene su propio surtido, que mejora región a región: Poké Balls, pociones, Revivir, Éter y Elixires, piedras evolutivas, MT del tipo de la zona y objetos equipables","Al vender te dan la mitad de su precio. Se paga con tickets y lo comprado va a tu mochila de Exploración","Nuevo: en la mochila 🎒 de Exploración puedes usar pociones, Revivir, Éter, piedras evolutivas y MT fuera de los combates","La tecla Esc ya no te saca de la pantalla completa: ahora cierra la tienda, la mochila y los menús como el del Centro Pokémon"]},
@@ -7094,7 +7094,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793895728";
+const GAME_B="1793905231";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -10676,7 +10676,7 @@ async function exBattle(cfg,npc){EX.battle={npc:npc?npc.id:null,win:false,map:EX
 setInterval(()=>{if(EX.battle&&!fcd){const b=EX.battle;EX.battle=null;
   if(b.npc&&b.win){exSt().d.npc[b.npc]=1;const n=EX.npcs.find(q=>q.id===b.npc);if(n)n.beat=true;save()}
   if(!exTeamOk())exFaint();
-  EX.resume=true;hubOpen("adv","explP");exFsPark(false)}},600);
+  EX.resume=true;hubOpen("adv","explP");exFsPark(false)}},120);
 // ---------- compañero que te sigue ----------
 async function exFollower(){const b=S.buddy&&S.owned[S.buddy.n]>0?S.buddy.n:(S.team||[]).find(n=>n&&S.owned[n]);if(!b){EX.fol=null;return}
   if(EX.fol&&EX.fol.n===b)return;EX.fol={n:b,d:null};const d=typeof pmdLoad==="function"?await pmdLoad(b,!!(S.shiny&&S.shiny[b]>0)):null;
@@ -10738,7 +10738,7 @@ function exDlgDraw(){const box=$("exDlg");if(!box)return;const d=EX.dlg||(EX.pen
 nxPanel("explP","🗺️ Exploración","Vive la historia de la región de Alba: «La leyenda de la Piedra Aurora». Recorre las rutas, plántale cara al Equipo Ocaso y descubre al guardián legendario. En la hierba alta aparecen Pokémon salvajes, los entrenadores te retarán si te ven y hay objetos escondidos que se renuevan cada día.");
 {const g=HUB.find(x=>x.k==="adv");if(g&&!g.tabs.some(t=>t[0]==="explP"))g.tabs.unshift(["explP","Exploración"]);HUBP.explP="adv";HUBR.explP=()=>exUI()}
 function exUI(){const b=$("explPB");if(!b)return;
-  if(!b.querySelector("canvas")){b.innerHTML='<div class="exwrap"><div class="exscr"><canvas id="exCv" width="960" height="640" tabindex="0" aria-label="Mapa de exploración"></canvas><div id="exDlg" class="exdlg" hidden></div>'+
+  if(!b.querySelector("canvas")&&!document.querySelector(".exwrap.exfs")){b.innerHTML='<div class="exwrap"><div class="exscr"><canvas id="exCv" width="960" height="640" tabindex="0" aria-label="Mapa de exploración"></canvas><div id="exDlg" class="exdlg" hidden></div>'+
     '<button class="exfsb" id="exFs" type="button" title="Pantalla completa" aria-label="Pantalla completa"></button>'+
     '<div class="extitle" id="exTitle"><div class="exlogo"><small>POKE GACHA ONLINE</small><b>EXPLORACIÓN</b><i>Rutas, hierba alta y entrenadores</i></div><div class="exhero"><canvas id="exHero" width="96" height="48"></canvas></div>'+
     '<button class="red exstart" id="exGo" type="button">▶ Iniciar</button><small class="exwhere" id="exWhere"></small><small class="exhint" id="exHint"></small><button class="alt exctlb" type="button" data-exctl="1">⌨️ Controles</button></div>'+
@@ -11044,7 +11044,7 @@ function exFsEnter(){const w=document.querySelector(".exwrap");if(!w||EX.fs)retu
 function exFsExit(keepDoc){const w=document.querySelector(".exwrap");if(!EX.fs)return;EX.fs=false;if(w){w.classList.remove("exfs");if(EX.fsPh&&EX.fsPh.parentNode){EX.fsPh.parentNode.insertBefore(w,EX.fsPh);EX.fsPh.remove()}}document.body.classList.remove("exfsOn");
   if(!keepDoc){try{if(exFsDoc())(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}}exFsIcon()}
 // durante un combate el mapa se aparta (la página sigue en pantalla completa) y vuelve después
-function exFsPark(on){if(on){if(EX.fs){EX.fsBack=true;exFsExit(true)}}else if(EX.fsBack){EX.fsBack=false;setTimeout(()=>{exFsEnter()},350)}}
+function exFsPark(on){if(on){if(EX.fs){EX.fsBack=true;exFsExit(true)}}else if(EX.fsBack){EX.fsBack=false;exFsEnter()}}
 document.addEventListener("fullscreenchange",()=>{if(EX.fs&&!exFsDoc()&&!EX.fsBack)exFsExit(true)});
 // Esc no saca de la pantalla completa: sirve para cerrar menús. En Chrome/Edge se reserva la tecla para el juego (para salir: botón ⛶ o mantener Esc)
 document.addEventListener("fullscreenchange",()=>{try{if(document.fullscreenElement&&EX.fs&&navigator.keyboard&&navigator.keyboard.lock)navigator.keyboard.lock(["Escape"]).catch(()=>{});else if(!document.fullscreenElement&&navigator.keyboard&&navigator.keyboard.unlock)navigator.keyboard.unlock()}catch(e){}});

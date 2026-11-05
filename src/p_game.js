@@ -267,7 +267,7 @@ function gmClick(e){const t=e.target;if(!t.closest||!gmOn())return;
   if(t.closest("#gPass")){const p=$("passMini");if(p)p.click();return}
 }
 // ---------- ayuda: los textos largos se esconden tras el botón (?) ----------
-function gmHelpMark(root){if(!root)return;root.querySelectorAll("p.rates,p.nxi,p.mut,small,.panel>p").forEach(e=>{if(e.dataset.gh)return;e.dataset.gh=1;const t=(e.textContent||"").trim();
+function gmHelpMark(root){if(!root)return;root.querySelectorAll(".panel>p.rates,.panel>p.nxi,.panel>p.mut,.panel>small,.panel>p").forEach(e=>{if(e.dataset.gh)return;e.dataset.gh=1;const t=(e.textContent||"").trim();
   if(t.length>70&&!e.id&&!e.querySelector("[id],button,input,select,a,progress"))e.classList.add("ghelp")})}
 function gmHelpT(){GM.help=!GM.help;document.body.classList.toggle("ghelpon",GM.help);snd("ui")}
 // ---------- barra superior ----------

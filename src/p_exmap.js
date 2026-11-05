@@ -48,7 +48,7 @@ const WM_N=[
   {k:"ct",r:"tor",t:"town",x:640,y:470},{k:"ruta4",r:"tor",t:"route",x:760,y:470},{k:"torre",r:"tor",t:"tower",x:760,y:385}];
 const WM_E=[["pueblo","ruta"],["pueblo","cima"],["ruta","cueva"],["ruta","bosque"],["ruta","playa"],["pe","ruta2"],["ruta2","pn"],["pn","glaciar"],["glaciar","pico_e"],["pb","ruta3"],["ruta3","vv"],["vv","crater"],["crater","cumbre"],["ct","ruta4"],["ruta4","torre"]];
 const WM_SEA=[["playa","pe"],["playa","pb"],["playa","ct"]];
-const WM_IN={casa:"pueblo",lab:"pueblo",centro:"pueblo",centro_pe:"pe",centro_pn:"pn",centro_pb:"pb",centro_vv:"vv",centro_ct:"ct"};
+const WM_IN={casa:"pueblo",lab:"pueblo",centro:"pueblo",centro_pe:"pe",centro_pn:"pn",centro_pb:"pb",centro_vv:"vv",centro_ct:"ct",tienda_pueblo:"pueblo",tienda_pe:"pe",tienda_pn:"pn",tienda_pb:"pb",tienda_vv:"vv",tienda_ct:"ct"};
 const WM_T={town:"Pueblo",route:"Ruta",cave:"Cueva",peak:"Cima",forest:"Bosque",beach:"Playa",tower:"Torre"};
 const WM={open:false,sel:null,raf:0};
 const wmNode=k=>WM_N.find(n=>n.k===k);
@@ -60,9 +60,9 @@ function wmInfo(k){const n=wmNode(k);if(!n)return"";const M=EXM[k]||{},open=wmOp
   const reg=WM_R[n.r].n;if(!open&&!vis){let why="";try{const R=REG.find(q=>q.k===n.r),s=stSt().s|0;if(R&&s<(R.from|0))why="Esta región aún está lejos. Llegarás en barco desde el muelle de la Playa Coral cuando avances en la historia.";else{const g=XGGATE[k];why=g?g[1]:""}}catch(e){}
     return '<b>🔒 ???</b><small>'+esc(reg)+'</small><p>'+esc(why||"Avanza en la historia para llegar hasta aquí.")+'</p>'}
   const z=typeof XGZ!=="undefined"&&XGZ[k],tr=(M.npc||[]).filter(q=>q.t&&q.t.length).length;let beat=0;try{const d=exSt().d.npc;(M.npc||[]).forEach((q,i)=>{if(q.t&&q.t.length&&d[k+":"+i])beat++})}catch(e){}
-  const cen=Object.values(M.w||{}).some(w=>/^centro/.test(w.to));
+  const cen=Object.values(M.w||{}).some(w=>/^centro/.test(w.to)),mart=Object.values(M.w||{}).some(w=>/^tienda/.test(w.to));
   return '<b>'+esc(M.n||k)+(here?' <i class="wmhere">📍 Estás aquí</i>':'')+'</b><small>'+esc(reg)+' · '+WM_T[n.t]+(vis?' · ✓ Visitado':'')+'</small>'+
-    '<p>'+(z?'🌿 Pokémon salvajes: Nv '+z[0]+'–'+z[1]+'<br>':'')+(tr?'🧢 Entrenadores vencidos hoy: '+beat+'/'+tr+'<br>':'')+(cen?'🏥 Centro Pokémon: cura gratis y tienda<br>':'')+(n.t==="beach"?'⛵ Muelle: barco a las demás regiones<br>':'')+(!z&&!tr&&!cen?'Un lugar tranquilo.':'')+'</p>'}
+    '<p>'+(z?'🌿 Pokémon salvajes: Nv '+z[0]+'–'+z[1]+'<br>':'')+(tr?'🧢 Entrenadores vencidos hoy: '+beat+'/'+tr+'<br>':'')+(cen?'🏥 Centro Pokémon: cura gratis<br>':'')+(mart?'🛒 Tienda Pokémon: compra y vende objetos<br>':'')+(n.t==="beach"?'⛵ Muelle: barco a las demás regiones<br>':'')+(!z&&!tr&&!cen?'Un lugar tranquilo.':'')+'</p>'}
 function wmDraw(ts){const cv=$("wmCv");if(!cv)return;const g=cv.getContext("2d"),W=1000,H=640;g.setTransform(cv.width/W,0,0,cv.height/H,0,0);
   // mar
   const sea=g.createLinearGradient(0,0,0,H);sea.addColorStop(0,"#3b78c9");sea.addColorStop(1,"#2a5aa8");g.fillStyle=sea;g.fillRect(0,0,W,H);

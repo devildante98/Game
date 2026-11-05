@@ -73,7 +73,8 @@ function sChoice(title,opts){return new Promise(res=>{const box=$("exCh");if(!bo
   const kd=e=>{const bs=[...box.querySelectorAll("button")],cur=bs.findIndex(b=>b.classList.contains("on")),a=exAct(e.key);
     if(["l","u"].includes(a)||e.key==="ArrowLeft"||e.key==="ArrowUp"){e.preventDefault();e.stopPropagation();bs[cur].classList.remove("on");bs[(cur-1+bs.length)%bs.length].classList.add("on");snd("ui")}
     else if(["r","d"].includes(a)||e.key==="ArrowRight"||e.key==="ArrowDown"){e.preventDefault();e.stopPropagation();bs[cur].classList.remove("on");bs[(cur+1)%bs.length].classList.add("on");snd("ui")}
-    else if(a==="a"||e.key==="Enter"){e.preventDefault();e.stopPropagation();done(cur)}};
+    else if(a==="a"||e.key==="Enter"){e.preventDefault();e.stopPropagation();done(cur)}
+    else if(e.key==="Escape"){e.preventDefault();e.stopPropagation();done(bs.length-1)}};
   document.addEventListener("keydown",kd,true);box.querySelectorAll("button").forEach(b=>b.onclick=()=>done(+b.dataset.ch))})}
 // cartel de capítulo
 async function sCard(k){const c=STO_CH[k],box=$("exCard");if(!box||!c)return;box.innerHTML='<small>'+esc(c.c)+'</small><b>'+esc(c.t)+'</b>';box.hidden=false;box.classList.remove("in");void box.offsetWidth;box.classList.add("in");snd("lvl");await sW(2600);box.hidden=true}

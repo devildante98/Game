@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.3.2";
+const GAME_VER="6.3.3";
 const NEWS=[
 {v:"2026-11-05e",ver:"6.3",at:"2026-11-05T10:30",t:"💬 Entrenadores con mucho más que decir",l:["Los entrenadores de Exploración tienen ahora casi 200 frases nuevas, distintas según su clase: jóvenes, cazabichos, nadadores, montañeros, karatekas, esquiadores, científicos, moteros…","Cada vez que entras en una zona, el entrenador te reta con una frase diferente","Al acabar el combate te dicen algo según hayan ganado o perdido","Si les vuelves a hablar después de vencerles, te cuentan curiosidades y consejos"]},
 {v:"2026-11-05d",ver:"6.2",at:"2026-11-05T09:31",t:"🗺️ Exploración ahora es un modo aparte",l:["Exploración tiene su propia partida: su equipo, sus Pokémon, sus niveles y su mochila. Tu colección del juego no se toca","Empiezas con el Pokémon que eliges en el laboratorio de la Profesora Vega y formas tu equipo capturando Pokémon por las rutas","Los entrenadores de la historia usan sus equipos con niveles fijos, como en los juegos, y cada zona tiene sus niveles de Pokémon salvajes","Nuevo botón 🎒 en Exploración para ver tu equipo, tu caja y tu mochila","Los Centros Pokémon de Exploración curan gratis y venden Poké Balls y Pociones (con tickets). Mamá también cura gratis","Ya no hacen falta medallas del juego para avanzar: se avanza con la historia","Si ya ibas avanzado en la historia, recibes tu inicial y los legendarios que conseguiste al nivel de ese punto"]},

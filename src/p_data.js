@@ -13,6 +13,6 @@ function uiDlg(msg,o){o=o||{};return new Promise(res=>{const M=document.createEl
   const kd=e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();no()}else if(e.key==="Enter"){e.preventDefault();e.stopPropagation();ok()}};
   document.addEventListener("keydown",kd,true);
   M.addEventListener("click",e=>{e.stopPropagation();const b=e.target.closest("[data-u]");if(b)(b.dataset.u==="1"?ok:no)();else if(e.target===M)no()});
-  document.body.appendChild(M);setTimeout(()=>{const f=inp||M.querySelector('[data-u="1"]');f.focus();if(inp)inp.select()},30)})}
+  {const fe=document.fullscreenElement||document.webkitFullscreenElement;(fe&&fe!==document.documentElement&&fe!==document.body?fe:document.body).appendChild(M)}setTimeout(()=>{const f=inp||M.querySelector('[data-u="1"]');f.focus();if(inp)inp.select()},30)})}
 const askOk=(m,o)=>uiDlg(m,o),askText=(m,d,o)=>uiDlg(m,Object.assign({inp:d==null?"":String(d)},o)),askInfo=(m,o)=>uiDlg(m,Object.assign({alert:1},o));
 window.alert=m=>{askInfo(m)};

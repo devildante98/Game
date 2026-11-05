@@ -3122,6 +3122,13 @@ async function main(){
     const u="https://www.gstatic.com/firebasejs/10.14.1";
     [A,F,S]=await Promise.all([import(u+"/firebase-app.js"),import(u+"/firebase-auth.js"),import(u+"/firebase-firestore.js")]);
   }catch(e){msg("No se pudo cargar Firebase (¿sin conexión?). Puedes jugar sin cuenta.");return}
+  // ahorro de lecturas: con la pestaña oculta más de 3 min se pausan todas las escuchas en tiempo real y se reanudan al volver
+  {const S0=S,L=new Set();let paused=false,tm=0;
+    const on=(...a)=>{const r={a:a,u:paused?null:S0.onSnapshot(...a),live:true};L.add(r);return()=>{r.live=false;L.delete(r);try{r.u&&r.u()}catch(e){}r.u=null}};
+    const pause=()=>{if(paused||!document.hidden)return;paused=true;L.forEach(r=>{try{r.u&&r.u()}catch(e){}r.u=null})};
+    const resume=()=>{if(!paused)return;paused=false;L.forEach(r=>{if(r.live&&!r.u)try{r.u=S0.onSnapshot(...r.a)}catch(e){}})};
+    document.addEventListener("visibilitychange",()=>{clearTimeout(tm);if(document.hidden)tm=setTimeout(pause,180000);else resume()});
+    S=Object.assign({},S0,{onSnapshot:on})}
   const app=A.initializeApp(cfg),auth=F.getAuth(app),db=S.getFirestore(app);
   let uid=null,started=false,timer=0,pending=null,lobby=null,cu=null;
   // apodos unicos: nicks/{clave} guarda el uid del dueño

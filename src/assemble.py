@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.9";
+const GAME_VER="6.9.1";
 const NEWS=[
 {v:"2026-11-05l",ver:"6.9",at:"2026-11-05T16:35",t:"🛒 Tiendas Pokémon en Exploración",l:["Cada pueblo tiene ahora su Tienda Pokémon (el edificio de tejado azul). Habla con el dependiente para comprar y vender","Cada tienda tiene su propio surtido, que mejora región a región: Poké Balls, pociones, Revivir, Éter y Elixires, piedras evolutivas, MT del tipo de la zona y objetos equipables","Al vender te dan la mitad de su precio. Se paga con tickets y lo comprado va a tu mochila de Exploración","Nuevo: en la mochila 🎒 de Exploración puedes usar pociones, Revivir, Éter, piedras evolutivas y MT fuera de los combates","La tecla Esc ya no te saca de la pantalla completa: ahora cierra la tienda, la mochila y los menús como el del Centro Pokémon"]},
 {v:"2026-11-05k",ver:"6.8",at:"2026-11-05T16:11",t:"⭐ Experiencia como en los juegos",l:["La experiencia que gana cada Pokémon ahora depende de la diferencia de nivel con el rival, con la fórmula de los juegos","Un Pokémon de nivel bajo que derrota a uno más fuerte gana mucha más experiencia: un Nv 1 que vence a un Nv 5 gana casi el doble que un Nv 5","Si tu Pokémon es muy superior al rival, apenas gana experiencia","En los combates contra entrenadores se calcula con el nivel de cada Pokémon rival derrotado"]},

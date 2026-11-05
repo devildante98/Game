@@ -120,7 +120,7 @@ async function raidUI(force){
 function rdListHTML(){if(!window.FB)return "";if(!RD.list)return '<small class="mut">Cargando…</small>';const now=Date.now(),L=RD.list.filter(d=>d.st==="lobby"&&now-(d.at||0)<10*6e4);
   return L.length?L.map(d=>{const n=Object.keys(d.pl||{}).length,b=PM[d.boss];return '<div class="pvrow rdrow">'+(b?ico(b,40):'')+'<b>'+esc(d.boss)+'</b><small class="mut">de '+esc(pvClean(d.hn||""))+' · '+n+'/'+RD_MAX+'</small><span style="flex:1"></span><button class="red mini" data-rdj="'+esc(d.id)+'"'+(n>=RD_MAX?' disabled':'')+'>Unirse</button></div>'}).join("")+'<button class="alt mini" data-rdr="1">🔄 Actualizar</button>':'<small class="mut">No hay salas abiertas ahora mismo. ¡Crea una y avisa a tus amigos por el chat!</small> <button class="alt mini" data-rdr="1">🔄 Actualizar</button>'}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-rdj],[data-rdr]");if(!b)return;if(b.dataset.rdj)rdJoin(b.dataset.rdj);else raidUI(true)});
-setInterval(()=>{try{if(nxOpen("raidP"))raidUI(false)}catch(e){}},15000);
+setInterval(()=>{try{if(nxOpen("raidP")&&!document.hidden)raidUI(false)}catch(e){}},15000);
 // el chat se puede abrir encima de la incursión para invitar a más gente
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-rdchat]");if(!b||typeof chToggle!=="function")return;snd("ui");
   chToggle(true);if(b.dataset.rdchat==="inv"&&typeof CH!=="undefined"){CH.inv=true;CH.emo=CH.pick=false;try{chPanels()}catch(x){}}});

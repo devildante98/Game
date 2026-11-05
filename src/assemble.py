@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.11";
+const GAME_VER="6.11.1";
 const NEWS=[
 {v:"2026-11-05n",ver:"6.11",at:"2026-11-05T20:23",t:"📋 Ficha técnica en Exploración",l:["En el panel 🎒 de Exploración, toca cualquier Pokémon para ver su ficha completa","Verás su nivel, PS, experiencia, tipos, naturaleza, habilidad, objeto equipado, estadísticas con sus valores base y movimientos con potencia, precisión y PP","Desde la ficha puedes ponerle un mote, quitarle el objeto y meterlo o sacarlo del equipo","La mochila de Exploración también se ve ahora con tarjetas grandes y ordenada por tipo"]},
 {v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},

@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793906631">
+<meta name="game-build" content="1793907907">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2311,7 +2311,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.11</small>
+    <small class="pcver">Versión 6.11.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -4524,7 +4524,7 @@ async function finish(res){
       if(got.length)await say("Botín: "+got.join(", ")+".");
     }
     if(rw===33550336)await jackpotLevel();
-    const amt=B.trainer?Math.round((B.xpPool||0)*1.2):Math.round((15+om.l*6)*WW[o[2]]*.6*(res==="cap"?.5:1));
+    const amt=B.trainer?Math.round((B.xpPool||0)*1.2):Math.round((15+om.l*6)*WW[o[2]]*1.2*(res==="cap"?.5:1));
     const ups=[];
     // como en los juegos: cuanto más bajo es tu Pokémon respecto al rival, más experiencia gana (y casi nada si es muy superior)
     const xpFac=(L,Lp)=>Math.pow((2*L+10)/(L+Lp+10),2.5);
@@ -4565,7 +4565,7 @@ async function sTurn(act){
 }
 async function sAfter(){
   const E=B.E;syncPP();
-  E.sd[1].t.forEach(t=>{if(t.mh<=0&&!t.xg){t.xg=1;const xb=Math.round((15+t.l*6)*WW[t.p[2]]*.6);B.xpPool=(B.xpPool||0)+xb;(B.xpL=B.xpL||[]).push([xb,t.l])}});
+  E.sd[1].t.forEach(t=>{if(t.mh<=0&&!t.xg){t.xg=1;const xb=Math.round((15+t.l*6)*WW[t.p[2]]*1.2);B.xpPool=(B.xpPool||0)+xb;(B.xpL=B.xpL||[]).push([xb,t.l])}});
   if(E.over!=null)return finish(E.over===0?"win":"lose");
   const acts=["",""];
   if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex((x,k)=>x.mh>0&&k!==E.sd[1].ai);
@@ -6929,7 +6929,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.11";
+const GAME_VER="6.11.1";
 const NEWS=[
 {v:"2026-11-05n",ver:"6.11",at:"2026-11-05T20:23",t:"📋 Ficha técnica en Exploración",l:["En el panel 🎒 de Exploración, toca cualquier Pokémon para ver su ficha completa","Verás su nivel, PS, experiencia, tipos, naturaleza, habilidad, objeto equipado, estadísticas con sus valores base y movimientos con potencia, precisión y PP","Desde la ficha puedes ponerle un mote, quitarle el objeto y meterlo o sacarlo del equipo","La mochila de Exploración también se ve ahora con tarjetas grandes y ordenada por tipo"]},
 {v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},
@@ -7115,7 +7115,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793906631";
+const GAME_B="1793907907";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

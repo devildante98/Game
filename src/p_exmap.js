@@ -11,7 +11,7 @@ function exMiniBase(){const M=EX.M;if(!M||!EX.grid)return null;const S=EXMM.S,H=
   // edificios: la misma pieza que en el mapa, reducida
   (M.bld||[]).forEach(b=>{try{const im=xBld(b),k=S/32;g.drawImage(im,b.x*S,(b.y+b.h)*S-im.height*k,im.width*k,im.height*k)}catch(e){}});
   return c}
-function exMiniUI(){const sc=document.querySelector("#explPB .exscr");if(!sc)return null;let w=$("exMini");
+function exMiniUI(){const sc=(EX.cv&&EX.cv.closest(".exscr"))||document.querySelector("#explPB .exscr");if(!sc)return null;let w=$("exMini");if(w&&!sc.contains(w)){sc.appendChild(w);["exMiniB","exWmB"].forEach(i=>{const e=$(i);if(e)sc.appendChild(e)})}
   if(!w){sc.insertAdjacentHTML("beforeend",'<div id="exMini" class="exmini" hidden title="Minimapa (tecla M) · tócalo para ampliarlo"><canvas id="exMiniCv"></canvas><b id="exMiniN"></b></div>'+
       '<button type="button" class="exfsb exmmb" id="exMiniB" title="Mostrar u ocultar el minimapa (tecla M)" aria-label="Minimapa">🧭</button><button type="button" class="exfsb exwmb" id="exWmB" title="Mapa de la región (tecla N)" aria-label="Mapa de la región">🗺️</button>');
     w=$("exMini");w.addEventListener("click",e=>{e.stopPropagation();EXMM.big=!EXMM.big;snd("ui");exMiniDraw(true)});

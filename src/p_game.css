@@ -562,7 +562,7 @@ body.gm #gBg .pcpar{display:none!important}
 @media (max-width:700px){.exmini{max-width:34%;left:6px;top:auto;bottom:6px;padding:3px}.exmini canvas{max-height:90px}.exmini b{display:none}.exmini.big b{display:block}}
 .exwmb{right:210px!important;font-size:1.15rem}
 /* mapa de la región */
-.wmo{position:fixed;inset:0;z-index:2147480000;background:rgba(8,10,34,.72);display:flex;align-items:center;justify-content:center;padding:14px;animation:uidin .15s ease-out}
+.wmo{position:fixed;inset:0;z-index:2147481000;background:rgba(8,10,34,.72);display:flex;align-items:center;justify-content:center;padding:14px;animation:uidin .15s ease-out}
 .wmo[hidden]{display:none}
 .wmbox{width:min(980px,100%);max-height:100%;overflow:auto;background:#1b2350;border:3px solid #0f173a;border-radius:20px;box-shadow:0 6px 0 #0f173a,inset 0 2px 0 rgba(255,255,255,.18);padding:12px;display:flex;flex-direction:column;gap:10px;color:#fff}
 .wmh{display:flex;align-items:center;gap:10px}.wmh b{font-size:1.15rem;font-weight:900;letter-spacing:.3px}.wmh button{margin-left:auto}

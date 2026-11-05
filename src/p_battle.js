@@ -24,7 +24,10 @@ const beNew=(sides,teams,seed)=>({sd:sides,tm:teams,turn:1,seed:seed||1,over:nul
 const beAct=sd=>sd.t[sd.ai];
 const beTeamOf=(E,i)=>E.tm.findIndex(t=>t.includes(i));
 const beFoes=(E,i)=>{const ti=beTeamOf(E,i);return E.tm.filter((t,k)=>k!==ti).reduce((a,b)=>a.concat(b),[])};
-const beSnap=E=>({ai:E.sd.map(s=>s.ai),hp:E.sd.map(s=>s.t.map(x=>Math.max(0,x.mh))),st:E.sd.map(s=>s.t.map(x=>x.sts))});
+// Ilusión (Zorua, Zoroark): al salir toma la apariencia del último Pokémon sano de su equipo; se rompe al recibir daño directo
+function beIll(s,m){if(!s||!m||m.ab!==149||m.illOff||m.mh<=0)return null;
+  if(m.illP===undefined){let k=-1;for(let j=s.t.length-1;j>=0;j--)if(s.t[j]!==m&&s.t[j].mh>0){k=j;break}m.illP=k>=0?s.t[k].p:null}return m.illP}
+const beSnap=E=>({il:E.sd.map(s=>beIll(s,s.t[s.ai])),ai:E.sd.map(s=>s.ai),hp:E.sd.map(s=>s.t.map(x=>Math.max(0,x.mh))),st:E.sd.map(s=>s.t.map(x=>x.sts))});
 const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+bsSpe(m.p))*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(E?axSpdK(s,E):1)+rng()*3};
 // habilidades: multiplicadores de daño e Intimidación
 function abAtk(me,mv,ty){const a=me.ab;let k=1;if(!a)return 1;
@@ -111,7 +114,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     else if(tm.ab===5&&!axMB(me)&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;sash=3}
     else if(tm.bud&&!tm.bud2&&tm.mh>1&&d>=tm.mh&&rng()<.25){d=tm.mh-1;tm.bud2=1;sash=2}
     tm.mh=Math.max(0,tm.mh-d);tot+=d;nh++;
-    push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});if(sash===3)push({k:"abil",s:tg,n:tm.p[0],ab:5});else if(sash)push({k:"item",s:tg,n:tm.p[0],it:sash===2?"bud":"sash"});
+    push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});if(d>0&&tg!==i&&beIll(E.sd[tg],tm)){tm.illOff=1;push({k:"illoff",s:tg,n:tm.p[0]})}if(sash===3)push({k:"abil",s:tg,n:tm.p[0],ab:5});else if(sash)push({k:"item",s:tg,n:tm.p[0],it:sash===2?"bud":"sash"});
   }
   push({k:"after",s:i,tg:tg,e:e,crit:crit,nh:nh});
   if(mv.drain&&tot&&me.mh>0){if(tm.ab===64&&!axMB(me)){me.mh=Math.max(0,me.mh-Math.max(1,Math.round(tot*mv.drain/100)));axSay(push,tg,tm,"¡{o} ha absorbido el lodo de {w} y pierde PS!",{i:i,m:me},{});faint(i)}else{const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100)));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}}
@@ -166,7 +169,7 @@ function beSwap(E,acts){
   E.sd.forEach((sd,i)=>{if(!sd.need)return;const a=acts[i]||"";
     if(a==="ff"){sd.t.forEach(x=>{x.mh=0;x.fd=1});sd.out=1;sd.need=0;push({k:"ff",s:i});return}
     const cur=beAct(sd).mh>0;let k=/^s\d$/.test(a)?+a[1]:-1;if(!(sd.t[k]&&sd.t[k].mh>0&&!(cur&&k===sd.ai)))k=sd.t.findIndex((x,j)=>x.mh>0&&!(cur&&j===sd.ai));if(k<0){sd.need=0;return}
-    const om=beAct(sd),old=om.p[0];axLeave(E,i,om);sd.ai=k;sd.v=beVol();sd.need=0;sd.t[k].played=1;push({k:"send",s:i,n:sd.t[k].p[0],old:old,forced:cur?0:1});beEnter(E,i,push);if(!cur)axRecv(E,i,om,push)});
+    const om=beAct(sd),old=om.p[0];axLeave(E,i,om);sd.ai=k;sd.v=beVol();sd.need=0;sd.t[k].played=1;sd.t[k].illOff=0;sd.t[k].illP=undefined;push({k:"send",s:i,n:sd.t[k].p[0],old:old,forced:cur?0:1});beEnter(E,i,push);if(!cur)axRecv(E,i,om,push)});
   beOver(E,push);return ev;
 }
 // IA de los rivales: prefiere los movimientos mas utiles, con algo de azar
@@ -191,17 +194,18 @@ const SL_ME={sp:"msp",n:"mn",l:"ml",h:"mh",hp:"mhp",st:"mst",i:"mi",pt:"pty",bac
 const SL_OP={sp:"osp",n:"on",l:"ol",h:"oh",hp:"ohp",st:"ost",i:"oi",pt:"oparty",tn:"otn"};
 const ART={atk:"El Ataque",def:"La Defensa",spa:"El Ataque Especial",spd:"La Defensa Especial",spe:"La Velocidad",acc:"La Precisión",eva:"La Evasión"};
 const AILM={par:w=>"¡"+w+" está paralizado! Quizás no pueda moverse.",slp:w=>"¡"+w+" se ha dormido!",psn:w=>"¡"+w+" ha sido envenenado!",tox:w=>"¡"+w+" ha sido gravemente envenenado!",brn:w=>"¡"+w+" se ha quemado!",frz:w=>"¡"+w+" se ha congelado!",cnf:w=>"¡"+w+" se encuentra confuso!"};
-const beWho=(i,n)=>B&&B.who?B.who(i,n):(B&&(B.mine?B.mine(i):i===0)&&typeof nk==="function"?nk(n):n);
+const beWho=(i,n)=>{if(B&&B.snap&&B.snap.il&&B.snap.il[i]){try{if(snapMon(B.snap,i).p[0]===n)n=B.snap.il[i][0]}catch(e){}}return beWho0(i,n)};
+const beWho0=(i,n)=>B&&B.who?B.who(i,n):(B&&(B.mine?B.mine(i):i===0)&&typeof nk==="function"?nk(n):n);
 const snapMon=(sn,i)=>B.E.sd[i].t[sn.ai[i]];
 const ITMSG={wherb:["",w=>"¡"+w+" ha recuperado sus características gracias a la Hierba Blanca!"],avest:["",w=>"¡"+w+" lleva un Chaleco Asalto y no puede usar movimientos de estado!"],seed:["",w=>"¡La semilla de "+w+" ha reaccionado al campo!"],left:["h",w=>"¡"+w+" ha recuperado algunos PS gracias a sus Restos!"],lorb:["d",w=>"¡"+w+" ha perdido PS por culpa de la Vidasfera!"],sash:["",w=>"¡"+w+" ha aguantado el golpe gracias a su Banda Focus!"],sitrus:["h",w=>"¡"+w+" se ha comido su Baya Zidra y ha recuperado PS!"],lum:["h",w=>"¡"+w+" se ha comido su Baya Ziuela y se ha curado!"],shell:["h",w=>"¡"+w+" ha recuperado PS gracias a su Campana Concha!"],qclaw:["",w=>"¡La Garra Rápida de "+w+" le permite actuar primero!"]};
 function setSpr(i,sn){
-  const sl=B.SL[i];if(!sl)return;const m=snapMon(sn||beSnap(B.E),i),e=$(sl.sp);
-  e.innerHTML=ico(m.p,92,sl.back,m.sh);e.className="spr";e.style.transform="";e.style.filter="drop-shadow(0 0 12px "+GLW[m.p[2]]+")";
+  const sl=B.SL[i];if(!sl)return;const sn2=sn||beSnap(B.E),m=snapMon(sn2,i),e=$(sl.sp),ip=sn2.il&&sn2.il[i],pp=ip||m.p;
+  e.innerHTML=ico(pp,92,sl.back,ip?false:m.sh);e.className="spr";e.style.transform="";e.style.filter="drop-shadow(0 0 12px "+GLW[pp[2]]+")";
 }
 function bePaint(sn){
   if(!B||!B.SL)return;sn=sn||beSnap(B.E);B.snap=sn;
-  B.SL.forEach((sl,i)=>{if(!sl)return;const sd=B.E.sd[i],a=sn.ai[i],m=sd.t[a];if(!m)return;
-    $(sl.n).textContent=(B.mine?B.mine(i):i===0)&&typeof nk==="function"?nk(m.p[0]):m.p[0];$(sl.l).textContent=STAR[m.p[2]]+" "+tyNm(m.p)+" Nv"+m.l;
+  B.SL.forEach((sl,i)=>{if(!sl)return;const sd=B.E.sd[i],a=sn.ai[i],m=sd.t[a];if(!m)return;const ip=sn.il&&sn.il[i],pp=ip||m.p;
+    $(sl.n).textContent=(B.mine?B.mine(i):i===0)&&typeof nk==="function"?nk(pp[0]):pp[0];$(sl.l).textContent=STAR[pp[2]]+" "+tyNm(pp)+" Nv"+m.l;
     const hp=Math.max(0,sn.hp[i][a]),pc=hp/m.mx,bar=$(sl.h);bar.style.width=pc*100+"%";bar.style.background=pc>.5?"#3ecf5a":pc>.2?"#f5c400":"#e63950";
     const st=sn.st[i][a];
     if(sl.st){const e=$(sl.st);e.textContent=st?STS[st][0]:"";e.style.background=st?STS[st][1]:"";e.hidden=!st}
@@ -268,6 +272,7 @@ async function bePlay(ev){
       case "cnfend":await say("¡"+who+" ya no está confuso!");break;
       case "par":await fxAil(sl.sp,"par");await say("¡"+who+" está paralizado! ¡No se puede mover!");break;
       case "res":bePaint(e.snap);await fxAil(sl.sp,e.a);await say(e.a==="brn"?"¡"+who+" se resiente de las quemaduras!":"¡El veneno resta PS a "+who+"!");break;
+      case "illoff":{const real=(B.mine?B.mine(i):i===0)&&typeof nk==="function"?nk(e.n):e.n;snd("buff");try{$(sl.sp).animate([{filter:"brightness(3) blur(2px)",opacity:.3},{filter:"none",opacity:1}],{duration:500})}catch(x){}setSpr(i,e.snap);bePaint(e.snap);await say("¡La ilusión se ha desvanecido! ¡Era "+real+"!");break}
       case "faint":bePaint(e.snap);snd("faint");await fxFaint(sl.sp);$(sl.sp).classList.add("faint");await say("¡"+who+" se debilitó!");break;
       case "send":await B.onSend(e);break;
       case "ff":bePaint(e.snap);if(sl.sp)$(sl.sp).classList.add("faint");snd("flee");if(B.onFf)await B.onFf(e);break;
@@ -298,7 +303,7 @@ function swCard(t,attr,dis,tag){const p=t.p,n=p[0],sh=!!(S.shiny&&S.shiny[n]>0),
 const swGrid=h=>'<div class="swgrid">'+h+'</div>';
 function setMenu(v){
   if(!B||B.mode!=="s")return;
-  let h="";const sd=B.E.sd[0],m=beAct(sd),foe=beAct(B.E.sd[1]);
+  let h="";const sd=B.E.sd[0],m=beAct(sd),foe0=beAct(B.E.sd[1]),fip=beIll(B.E.sd[1],foe0),foe=fip?Object.assign(Object.create(foe0),{p:fip}):foe0;
   if(v===true)h=(m.pp.every(x=>x<=0)?'<button class="mvb" data-k="st" style="--tc:#999">Forcejeo<small>¡Sin PP! Ataque desesperado</small></button>':m.m.map((mv,k)=>mvBtn(mv,m.pp[k],ppMax(m.p[0],mv.id),'data-k="m'+k+'"',foe,m)).join(""))+'<button data-k="d">🛡️ Defensa</button><button data-k="b">🎒 Bolsa</button><button data-k="e">🔁 Equipo</button><button data-k="f">'+(B.trainer?'🏳️ Rendirse':'🏃 Huir')+'</button>';
   else if(v==="bag")h=ITEMS.filter(it=>S.bag[it[0]]>0&&!it[7]&&!["cand","ppup","ppmax"].includes(it[0])).map(it=>'<button data-k="i:'+it[0]+'">'+it[1]+' ×'+S.bag[it[0]]+'</button>').join("")+'<button data-k="main">Atrás</button>';
   else if(v==="team")h=swGrid(sd.t.map((t,i)=>swCard(t,'data-k="s:'+i+'"',i===sd.ai||t.mh<=0,i===sd.ai?"En combate":t.mh<=0?"Debilitado":"")).join(""))+'<button data-k="main">Atrás</button>';
@@ -358,7 +363,7 @@ async function popIn(sid,iid,fromRight){
 }
 async function trainerSendOut(first,sid,iid,name,bid){
   sid=sid||"osp";iid=iid||"oi";
-  const m=name||snapMon(B.snap||beSnap(B.E),1).p[0];
+  const m=name||(()=>{const sn=B.snap||beSnap(B.E);return ((sn.il&&sn.il[1])||snapMon(sn,1).p)[0]})();
   const sp=say((B.trainerName||B.trainer)+" envía a "+m+"!");
   if(first)tPose("t");
   snd("throw");await ballArc(first,sid,bid||BALLR[PM[m]?PM[m][2]:"C"]);
@@ -380,7 +385,7 @@ async function playerIn(){
 }
 async function playerThrow(m,sid,iid){
   const p=$("psp"),L=myLook(),img=p.querySelector("img");
-  const sp=say("¡Adelante, "+(typeof nk==="function"?nk(m.p[0]):m.p[0])+"!");
+  const sp=say("¡Adelante, "+(()=>{let n=m.p[0];try{const sn=B.snap||beSnap(B.E),ip=sn.il&&sn.il[0];if(ip&&snapMon(sn,0)===m)n=ip[0]}catch(e){}return typeof nk==="function"?nk(n):n})()+"!");
   if(img&&O.intro&&O.fx){img.classList.remove("pidle");const s=pxSpd();
     img.src=trURL(L,"b","t");p.animate([{translate:"0 0"},{translate:"-6px 2px"}],{duration:180/s,fill:"forwards"});await sleep(170);
     img.src=trURL(L,"b","m");await sleep(100);img.src=trURL(L,"b","u");snd("throw");
@@ -513,10 +518,10 @@ async function sSend(e){
     if(!e.forced){await say("¡Vuelve "+(typeof nk==="function"?nk(e.old):e.old)+"!");await pbRecall("msp")}
     $("msp").style.opacity=0;setSpr(0,e.snap);bePaint(e.snap);xpBar();$("msp").style.opacity=0;
     if(!$("hlpp").hidden)$("hlpp").innerHTML=helpHTML();
-    const sp=say("¡Adelante, "+(typeof nk==="function"?nk(e.n):e.n)+"!");await sendOut(PM[e.n]);await sp;
+    const en=e.snap&&e.snap.il&&e.snap.il[0]?e.snap.il[0][0]:e.n;const sp=say("¡Adelante, "+(typeof nk==="function"?nk(en):en)+"!");await sendOut(PM[en]||PM[e.n]);await sp;
   }else{
     $("osp").style.opacity=0;setSpr(1,e.snap);bePaint(e.snap);$("osp").style.opacity=0;
-    await trainerSendOut(false,null,null,e.n);
+    await trainerSendOut(false,null,null,e.snap&&e.snap.il&&e.snap.il[1]?e.snap.il[1][0]:e.n);
   }
 }
 async function sTurn(act){

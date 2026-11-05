@@ -258,4 +258,4 @@ document.addEventListener("input",e=>{if(e.target&&e.target.id==="refIn")NX.refq
 (function(){try{const c=new URLSearchParams(location.search).get("ref");if(c&&!S.refBy){NX.refq=c.toUpperCase().slice(0,6);setTimeout(()=>{if(!S.refBy&&(S.pulls|0)<400){toast("📨 ¡Te han invitado! Ve a ⚙️ Más → Invitar amigos para recibir tu regalo.")}},4000)}}catch(e){}})();
 // ---- seguridad: ninguna animación puede dejar el combate bloqueado ----
 {const _pd=pxDraw;pxDraw=function(dur,fn,o){const p=_pd(dur,fn,o);return Promise.race([p,new Promise(r=>setTimeout(r,(dur||600)*3+1500))])}}
-{const _pm=pbMaterialize;pbMaterialize=function(sid,sh){return Promise.race([_pm(sid,sh).catch(()=>{}),new Promise(r=>setTimeout(()=>{const e=$(sid);if(e){e.style.opacity=1;e.getAnimations().forEach(a=>{try{a.finish()}catch(x){}})}r()},4000))])}}
+{const _pm=pbMaterialize;pbMaterialize=function(sid,sh){let fin=false;return Promise.race([_pm(sid,sh).catch(()=>{}).then(()=>{fin=true}),new Promise(r=>setTimeout(()=>{if(fin)return r();const e=$(sid);if(e){e.style.opacity=1;e.getAnimations().forEach(a=>{try{a.finish()}catch(x){}})}r()},4000))])}}

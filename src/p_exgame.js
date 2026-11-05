@@ -60,15 +60,12 @@ function xgMigrate(){const X=xgData(),t=stSt();if(X.mig)return;X.mig=1;const s=t
   [["Latias",8,35],["Articuno",15,48],["Moltres",20,58],["Zapdos",24,68]].forEach(L=>{if(s>=L[1])xgGive(L[0],L[2])});
   xgRun(()=>{S.bag.pb=(S.bag.pb||0)+10;S.bag.pot=(S.bag.pot||0)+5});save()}
 {const _g=exGo;exGo=function(){try{xgMigrate()}catch(e){console.error(e)}return _g.apply(this,arguments)}}
-// ---------- Centros Pokémon de Exploración: curan gratis y tienen tienda ----------
+// ---------- Centros Pokémon de Exploración: curan gratis (los objetos se compran en las Tiendas Pokémon) ----------
 const XGSHOP=[["pb",5,2500,"Poké Ball ×5"],["sb",5,7500,"Super Ball ×5"],["ub",5,20000,"Ultra Ball ×5"],["pot",3,4500,"Poción ×3"],["spot",3,12000,"Superpoción ×3"],["rev",1,8000,"Revivir ×1"]];
 STX.enf=()=>stRun(async()=>{await sSay(S_("Enfermera","¡Hola! Te damos la bienvenida al "+(EX.M&&EX.M.n&&EX.M.n!=="Centro Pokémon"?EX.M.n:"Centro Pokémon de Pueblo Brisa")+"."));
-  for(;;){const i=await sChoice("¿En qué podemos ayudarte?",[{t:"Curar a mis Pokémon",s:"Gratis"},{t:"Comprar objetos",s:"Con tickets"},{t:"Nada, gracias"}]);
+  for(;;){const i=await sChoice("¿En qué podemos ayudarte?",[{t:"Curar a mis Pokémon",s:"Gratis"},{t:"Nada, gracias"}]);
     if(i===0){await sSay(S_("Enfermera","¡Muy bien! Deja tus Poké Balls aquí un momento…"));snd("heal");try{healJingle()}catch(e){}await sFade("fade",350);stHeal();await sW(900);await sFade("fadein",450);
       await sSay(S_("Enfermera","¡Tus Pokémon están totalmente recuperados!"));continue}
-    if(i===1){const j=await sChoice("Tienes "+fmt(S.t)+" 🎟️. ¿Qué quieres comprar?",XGSHOP.map(o=>({t:o[3],s:fmt(o[2])+" 🎟️"})).concat([{t:"Volver"}]));const o=XGSHOP[j];if(!o)continue;
-      if(S.t<o[2]){await sSay(S_("Enfermera","Lo siento, no tienes tickets suficientes."));continue}
-      S.t-=o[2];xgRun(()=>{S.bag[o[0]]=(S.bag[o[0]]||0)+o[1]});save();snd("capok");await sSay(["¡Has comprado "+o[3]+"! Lo guardas en la mochila de Exploración."]);continue}
     await sSay(S_("Enfermera","¡Esperamos verte pronto!"));return}});
 // mamá cura gratis siempre
 STX.mama=()=>stRun(async()=>{const s=stSt().s;
@@ -82,7 +79,7 @@ function xgPanel(){const box=$("exTeam");if(!box)return;const d=xgRun(()=>{const
     return '<div class="xgh"><b>🎒 Tu equipo de Exploración</b><button type="button" class="alt" id="xgX">Cerrar</button></div>'+
       (tm.length?'<div class="xgl">'+tm.map(n=>card(n,1)).join("")+'</div>':'<p class="mut">Todavía no tienes Pokémon de Exploración. ¡La Profesora Vega te dará uno en su laboratorio!</p>')+
       (own.length>tm.length?'<b class="xgs">📦 Caja ('+(own.length-tm.length)+')</b><small class="mut">Toca un Pokémon para meterlo o sacarlo del equipo (máximo 6).</small><div class="xgl">'+own.filter(n=>!tm.includes(n)).map(n=>card(n,0)).join("")+'</div>':'')+
-      '<b class="xgs">🎒 Mochila</b><div class="xgb">'+(bag.length?bag.map(k=>'<span>'+(typeof itemIco==="function"?itemIco(k,22):"")+esc(IN(k))+' <b>×'+S.bag[k]+'</b></span>').join(""):'<small class="mut">Vacía. Compra objetos en los Centros Pokémon o búscalos por las rutas.</small>')+'</div>'+
+      '<b class="xgs">🎒 Mochila</b><div class="xgb">'+(bag.length?bag.map(k=>'<span>'+(typeof itemIco==="function"?itemIco(k,22):"")+esc(IN(k))+' <b>×'+S.bag[k]+'</b></span>').join(""):'<small class="mut">Vacía. Compra objetos en las Tiendas Pokémon o búscalos por las rutas.</small>')+'</div>'+
       '<small class="mut">Los Pokémon, la mochila y los niveles de Exploración son independientes de tu colección del juego. Lo que captures aquí se queda aquí.</small>'});
   box.innerHTML=d;box.hidden=false;$("xgX").onclick=()=>{box.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xg]");if(!b)return;const n=b.dataset.xg;

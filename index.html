@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793893410">
+<meta name="game-build" content="1793893528">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2281,7 +2281,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.10</small>
+    <small class="pcver">Versión 6.10.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -6899,7 +6899,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.10";
+const GAME_VER="6.10.1";
 const NEWS=[
 {v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},
 {v:"2026-11-05l",ver:"6.9",at:"2026-11-05T16:35",t:"🛒 Tiendas Pokémon en Exploración",l:["Cada pueblo tiene ahora su Tienda Pokémon (el edificio de tejado azul). Habla con el dependiente para comprar y vender","Cada tienda tiene su propio surtido, que mejora región a región: Poké Balls, pociones, Revivir, Éter y Elixires, piedras evolutivas, MT del tipo de la zona y objetos equipables","Al vender te dan la mitad de su precio. Se paga con tickets y lo comprado va a tu mochila de Exploración","Nuevo: en la mochila 🎒 de Exploración puedes usar pociones, Revivir, Éter, piedras evolutivas y MT fuera de los combates","La tecla Esc ya no te saca de la pantalla completa: ahora cierra la tienda, la mochila y los menús como el del Centro Pokémon"]},
@@ -7084,7 +7084,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793893410";
+const GAME_B="1793893528";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11655,15 +11655,12 @@ function xgMigrate(){const X=xgData(),t=stSt();if(X.mig)return;X.mig=1;const s=t
   [["Latias",8,35],["Articuno",15,48],["Moltres",20,58],["Zapdos",24,68]].forEach(L=>{if(s>=L[1])xgGive(L[0],L[2])});
   xgRun(()=>{S.bag.pb=(S.bag.pb||0)+10;S.bag.pot=(S.bag.pot||0)+5});save()}
 {const _g=exGo;exGo=function(){try{xgMigrate()}catch(e){console.error(e)}return _g.apply(this,arguments)}}
-// ---------- Centros Pokémon de Exploración: curan gratis y tienen tienda ----------
+// ---------- Centros Pokémon de Exploración: curan gratis (los objetos se compran en las Tiendas Pokémon) ----------
 const XGSHOP=[["pb",5,2500,"Poké Ball ×5"],["sb",5,7500,"Super Ball ×5"],["ub",5,20000,"Ultra Ball ×5"],["pot",3,4500,"Poción ×3"],["spot",3,12000,"Superpoción ×3"],["rev",1,8000,"Revivir ×1"]];
 STX.enf=()=>stRun(async()=>{await sSay(S_("Enfermera","¡Hola! Te damos la bienvenida al "+(EX.M&&EX.M.n&&EX.M.n!=="Centro Pokémon"?EX.M.n:"Centro Pokémon de Pueblo Brisa")+"."));
-  for(;;){const i=await sChoice("¿En qué podemos ayudarte?",[{t:"Curar a mis Pokémon",s:"Gratis"},{t:"Comprar objetos",s:"Con tickets"},{t:"Nada, gracias"}]);
+  for(;;){const i=await sChoice("¿En qué podemos ayudarte?",[{t:"Curar a mis Pokémon",s:"Gratis"},{t:"Nada, gracias"}]);
     if(i===0){await sSay(S_("Enfermera","¡Muy bien! Deja tus Poké Balls aquí un momento…"));snd("heal");try{healJingle()}catch(e){}await sFade("fade",350);stHeal();await sW(900);await sFade("fadein",450);
       await sSay(S_("Enfermera","¡Tus Pokémon están totalmente recuperados!"));continue}
-    if(i===1){const j=await sChoice("Tienes "+fmt(S.t)+" 🎟️. ¿Qué quieres comprar?",XGSHOP.map(o=>({t:o[3],s:fmt(o[2])+" 🎟️"})).concat([{t:"Volver"}]));const o=XGSHOP[j];if(!o)continue;
-      if(S.t<o[2]){await sSay(S_("Enfermera","Lo siento, no tienes tickets suficientes."));continue}
-      S.t-=o[2];xgRun(()=>{S.bag[o[0]]=(S.bag[o[0]]||0)+o[1]});save();snd("capok");await sSay(["¡Has comprado "+o[3]+"! Lo guardas en la mochila de Exploración."]);continue}
     await sSay(S_("Enfermera","¡Esperamos verte pronto!"));return}});
 // mamá cura gratis siempre
 STX.mama=()=>stRun(async()=>{const s=stSt().s;
@@ -11677,7 +11674,7 @@ function xgPanel(){const box=$("exTeam");if(!box)return;const d=xgRun(()=>{const
     return '<div class="xgh"><b>🎒 Tu equipo de Exploración</b><button type="button" class="alt" id="xgX">Cerrar</button></div>'+
       (tm.length?'<div class="xgl">'+tm.map(n=>card(n,1)).join("")+'</div>':'<p class="mut">Todavía no tienes Pokémon de Exploración. ¡La Profesora Vega te dará uno en su laboratorio!</p>')+
       (own.length>tm.length?'<b class="xgs">📦 Caja ('+(own.length-tm.length)+')</b><small class="mut">Toca un Pokémon para meterlo o sacarlo del equipo (máximo 6).</small><div class="xgl">'+own.filter(n=>!tm.includes(n)).map(n=>card(n,0)).join("")+'</div>':'')+
-      '<b class="xgs">🎒 Mochila</b><div class="xgb">'+(bag.length?bag.map(k=>'<span>'+(typeof itemIco==="function"?itemIco(k,22):"")+esc(IN(k))+' <b>×'+S.bag[k]+'</b></span>').join(""):'<small class="mut">Vacía. Compra objetos en los Centros Pokémon o búscalos por las rutas.</small>')+'</div>'+
+      '<b class="xgs">🎒 Mochila</b><div class="xgb">'+(bag.length?bag.map(k=>'<span>'+(typeof itemIco==="function"?itemIco(k,22):"")+esc(IN(k))+' <b>×'+S.bag[k]+'</b></span>').join(""):'<small class="mut">Vacía. Compra objetos en las Tiendas Pokémon o búscalos por las rutas.</small>')+'</div>'+
       '<small class="mut">Los Pokémon, la mochila y los niveles de Exploración son independientes de tu colección del juego. Lo que captures aquí se queda aquí.</small>'});
   box.innerHTML=d;box.hidden=false;$("xgX").onclick=()=>{box.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xg]");if(!b)return;const n=b.dataset.xg;

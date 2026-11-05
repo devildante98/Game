@@ -321,16 +321,31 @@ async function gfSend(u){
   if(!window.FB||!window.FB.gfSend)return;if(gfSentToday(u)){toast("Ya le has enviado un regalo hoy.");return}
   try{await window.FB.gfSend(u,pvNick(),today());S.gfs=S.gfs&&S.gfs.d===today()?S.gfs:{d:today(),u:{}};S.gfs.u[u]=1;save();snd("pop");toast("🎁 ¡Regalo enviado!");_frk="";frUI()}catch(e){toast("No se ha podido enviar el regalo. Inténtalo más tarde.")}
 }
+// lo que hay dentro de cada regalo
+function gfRoll(){const r=Math.random(),rw={t:0,it:{}};
+  if(r<.55)rw.t=50000+Math.floor(Math.random()*250000);else if(r<.75)rw.it[Math.random()<.7?"sb":"ub"]=Math.random()<.5?2:1;else if(r<.92){const k=["pot","spot","eter","rev"][Math.floor(Math.random()*4)];rw.it[k]=2}else if(r<.98)rw.it[HOLD[Math.floor(Math.random()*HOLD.length)][0]]=1;else rw.it.cand=1;
+  return rw}
+// abrir todos los regalos de una vez (hasta el límite diario)
+let _gfAll=false;
+async function gfOpenAll(){if(_gfAll)return;S.gfo=S.gfo&&S.gfo.d===today()?S.gfo:{d:today(),n:0};
+  const left=GF_MAX-S.gfo.n;if(left<=0){toast("Ya has abierto "+GF_MAX+" regalos hoy. Los demás te esperan mañana.");return}
+  const L=GF.inc.slice(0,left);if(!L.length)return;_gfAll=true;const tot={t:0,it:{}},from=[];
+  for(const g of L){try{await window.FB.gfDel(g.id)}catch(e){continue}
+    GF.inc=GF.inc.filter(x=>x.id!==g.id);S.gfo.n++;const rw=gfRoll();grant(rw);tot.t+=rw.t||0;Object.keys(rw.it).forEach(k=>tot.it[k]=(tot.it[k]||0)+rw.it[k]);from.push(pvClean(g.fn||"Amigo"))}
+  _gfAll=false;save();render();if(!from.length){toast("No se han podido abrir. Inténtalo más tarde.");return}snd("lvl");
+  const nm=[...new Set(from)];
+  nxModal('<div class="gfbox">🎁</div><h3>¡Has abierto '+from.length+' regalo'+(from.length===1?'':'s')+'!</h3><p>En total había <b>'+rwTxt(tot)+'</b>.</p><small class="mut">De: '+esc(nm.slice(0,8).join(", ")+(nm.length>8?" y "+(nm.length-8)+" más":""))+'</small><small class="mut">Hoy has abierto '+S.gfo.n+'/'+GF_MAX+(GF.inc.length?'. Te quedan '+GF.inc.length+' para mañana.':'.')+' No olvides devolverles el detalle.</small><button id="gfOk">¡Gracias!</button>');
+  $("gfOk").onclick=nxModalClose;$("gfOk").focus();_frk="";frUI()}
 async function gfOpen(id){
   const g=GF.inc.find(x=>x.id===id);if(!g)return;S.gfo=S.gfo&&S.gfo.d===today()?S.gfo:{d:today(),n:0};
   if(S.gfo.n>=GF_MAX){toast("Ya has abierto "+GF_MAX+" regalos hoy. Los demás te esperan mañana.");return}
   try{await window.FB.gfDel(id)}catch(e){toast("No se ha podido abrir. Inténtalo más tarde.");return}
   GF.inc=GF.inc.filter(x=>x.id!==id);S.gfo.n++;
-  const r=Math.random(),rw={t:0,it:{}};
-  if(r<.55)rw.t=50000+Math.floor(Math.random()*250000);else if(r<.75)rw.it[Math.random()<.7?"sb":"ub"]=Math.random()<.5?2:1;else if(r<.92){const k=["pot","spot","eter","rev"][Math.floor(Math.random()*4)];rw.it[k]=2}else if(r<.98)rw.it[HOLD[Math.floor(Math.random()*HOLD.length)][0]]=1;else rw.it.cand=1;
+  const rw=gfRoll();
   grant(rw);save();render();snd("lvl");
   nxModal('<div class="gfbox">🎁</div><h3>Regalo de '+esc(pvClean(g.fn||"un amigo"))+'</h3><p>¡Dentro había <b>'+rwTxt(rw)+'</b>!</p><small class="mut">Hoy has abierto '+S.gfo.n+'/'+GF_MAX+'. No olvides devolverle el detalle.</small><button id="gfOk">¡Gracias!</button>');
   $("gfOk").onclick=nxModalClose;$("gfOk").focus();_frk="";frUI();
 }
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-gfs],[data-gfo],[data-gfall]");if(!b)return;
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-gfs],[data-gfo],[data-gfall],[data-gfoa]");if(!b)return;
+  if(b.dataset.gfoa){gfOpenAll();return}
   if(b.dataset.gfs)gfSend(b.dataset.gfs);else if(b.dataset.gfo)gfOpen(b.dataset.gfo);else if(b.dataset.gfall){const ids=Object.keys(FR.l||{}).filter(u=>!gfSentToday(u));(async()=>{for(const u of ids)await gfSend(u)})()}});

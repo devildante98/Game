@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.7";
+const GAME_VER="6.7.1";
 const NEWS=[
 {v:"2026-11-05j",ver:"6.7",at:"2026-11-05T15:25",t:"🦊 La habilidad Ilusión ya funciona",l:["Zorua y Zoroark entran al combate disfrazados del último Pokémon sano de su equipo: se ven con su nombre, su aspecto y sus tipos, y hasta la eficacia de tus ataques te engaña","Por dentro siguen siendo ellos: usan sus propios movimientos, estadísticas y tipos","La ilusión se rompe en cuanto reciben daño directo de un ataque. El veneno, las quemaduras, Drenadoras o el clima no la rompen","Si se retiran y vuelven a salir, se disfrazan de nuevo"]},
 {v:"2026-11-05i",ver:"6.6.2",at:"2026-11-05T14:26",t:"📢 ¡Estrenamos dirección: pokegachaonline.es!",l:["Poke Gacha Online ya tiene su propia dirección: pokegachaonline.es. ¡Guárdala en favoritos!","🔐 Si juegas con cuenta, entra e inicia sesión: tu progreso te espera","💾 Si jugabas sin cuenta, abre devildante98.github.io/rescate en el mismo navegador donde jugabas para llevarte tu partida","La dirección antigua te trae aquí automáticamente"]},

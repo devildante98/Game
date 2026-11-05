@@ -212,7 +212,7 @@ STX.v1=()=>stRun(async()=>{const s=stSt().s;await sSay(S_("Vecina",s<2?"¡Buenos
 STX.v2=()=>stRun(async()=>{const s=stSt().s;await sSay(S_("Niño",s<5?"En el estanque a veces salta un Magikarp. ¡Yo quiero pescar uno!":s<8?"¡He visto un Pokémon rojo y blanco volando hacia la cima! ¡Era enorme!":"¿Es verdad que Latias es tu amiga? ¡Qué envidia!"))});
 STX.v3=()=>stRun(async()=>{await sSay(S_("Abuelo","Cuando yo era joven, contaban que la Piedra Aurora solo brilla para los corazones sinceros.","Si tus Pokémon se debilitan en una ruta, volverás corriendo al Centro Pokémon de aquí al lado."))});
 STX.enf=()=>stRun(async()=>{const t=stSt(),N=(S.team||[]).filter(n=>n&&S.owned[n]);
-  await sSay(S_("Enfermera","¡Hola! Te damos la bienvenida al Centro Pokémon de Pueblo Brisa."));
+  await sSay(S_("Enfermera","¡Hola! Te damos la bienvenida al "+(EX.M&&EX.M.n&&EX.M.n!=="Centro Pokémon"?EX.M.n:"Centro Pokémon de Pueblo Brisa")+"."));
   const free=t.hd!==today();const i=await sChoice(free?"¿Curar a tus Pokémon? (hoy la primera cura es gratis)":"¿Curar a tus Pokémon por "+fmt(HEAL_COST)+" 🎟️?",[{t:"Sí, por favor"},{t:"No, gracias"}]);
   if(i!==0){await sSay(S_("Enfermera","¡Esperamos verte pronto!"));return}
   if(!free&&S.t<HEAL_COST){await sSay(S_("Enfermera","Lo siento, no tienes tickets suficientes. Hoy ya usaste la cura gratuita (también la de casa)."));return}

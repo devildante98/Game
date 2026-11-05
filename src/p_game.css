@@ -583,3 +583,13 @@ body.gm #gBg .pcpar{display:none!important}
 .mvbox .mvl li{margin:4px 0}
 .mvbox .mvs{font-size:.85rem;opacity:.8}
 .mvbtns{flex-wrap:wrap;gap:8px}
+
+/* ventanas de solicitudes recibidas */
+.rqbox{width:min(460px,100%);animation:rqin .35s cubic-bezier(.3,1.5,.5,1)}
+.rqh{display:flex;gap:14px;align-items:center}
+.rqic{flex:0 0 auto;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.9rem;background:linear-gradient(#ffe680,#ffb020);border:3px solid #2b2440;box-shadow:0 3px 0 #2b2440;animation:rqbob 1.4s ease-in-out infinite}
+.rqh b{display:block;font-size:1.08rem;font-weight:900;line-height:1.25}
+.rqh small{display:block;margin-top:4px;color:var(--mute);font-size:.85rem;line-height:1.35}
+@keyframes rqin{from{transform:scale(.85);opacity:0}}
+@keyframes rqbob{50%{transform:translateY(-4px) rotate(-6deg)}}
+@media (prefers-reduced-motion:reduce){.rqbox,.rqic{animation:none}}

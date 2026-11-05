@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793878679">
+<meta name="game-build" content="1793881111">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Gacha</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmNWQ3MyIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2E1MGYzNSIvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJ0cCIgY3g9Ii4zNSIgY3k9Ii4zIiByPSIuOCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjZmZmM2I4Ii8+PHN0b3Agb2Zmc2V0PSIuNiIgc3RvcC1jb2xvcj0iI2ZmYzIzYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2YwOGEwMCIvPjwvcmFkaWFsR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJidCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NmZDVlZSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE1IiBmaWxsPSJ1cmwoI2JnKSIvPjxnIHRyYW5zZm9ybT0icm90YXRlKC0yNCAzMiAzNCkiPjxwYXRoIGQ9Ik0xMyAzNGExOSAxOSAwIDAgMSAzOCAweiIgZmlsbD0idXJsKCN0cCkiIHN0cm9rZT0iIzJiMWQzYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PHBhdGggZD0iTTEzIDM0YTE5IDE5IDAgMCAwIDM4IDB6IiBmaWxsPSJ1cmwoI2J0KSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTEuNSAzNGg0MSIgc3Ryb2tlPSIjMmIxZDNhIiBzdHJva2Utd2lkdGg9IjQuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMyIDE4LjVsMi4zIDQuNyA1LjIuOC0zLjggMy42LjkgNS4xLTQuNi0yLjQtNC42IDIuNC45LTUuMS0zLjgtMy42IDUuMi0uOHoiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2M4NmEwMCIgc3Ryb2tlLXdpZHRoPSIxLjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48cGF0aCBkPSJNMTkgMjZhMTQgMTQgMCAwIDEgNi03IiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMi42IiBzdHJva2UtbGluZWNhcD0icm91bmQiIGZpbGw9Im5vbmUiIG9wYWNpdHk9Ii44Ii8+PC9nPjxwYXRoIGQ9Ik01MiA2LjVsMS42IDMuNSAzLjguNi0yLjggMi42LjcgMy44LTMuMy0xLjktMy4zIDEuOS43LTMuOC0yLjgtMi42IDMuOC0uNnoiIGZpbGw9IiNmZmUyN2EiIHN0cm9rZT0iIzdhMmEwMCIgc3Ryb2tlLXdpZHRoPSIuOCIvPjxjaXJjbGUgY3g9IjEwIiBjeT0iNTQiIHI9IjIuMiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg1Ii8+PC9zdmc+Cg==">
@@ -2182,6 +2182,16 @@ body.gm #gBg .pcpar{display:none!important}
 .mvbox .mvs{font-size:.85rem;opacity:.8}
 .mvbtns{flex-wrap:wrap;gap:8px}
 
+/* ventanas de solicitudes recibidas */
+.rqbox{width:min(460px,100%);animation:rqin .35s cubic-bezier(.3,1.5,.5,1)}
+.rqh{display:flex;gap:14px;align-items:center}
+.rqic{flex:0 0 auto;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.9rem;background:linear-gradient(#ffe680,#ffb020);border:3px solid #2b2440;box-shadow:0 3px 0 #2b2440;animation:rqbob 1.4s ease-in-out infinite}
+.rqh b{display:block;font-size:1.08rem;font-weight:900;line-height:1.25}
+.rqh small{display:block;margin-top:4px;color:var(--mute);font-size:.85rem;line-height:1.35}
+@keyframes rqin{from{transform:scale(.85);opacity:0}}
+@keyframes rqbob{50%{transform:translateY(-4px) rotate(-6deg)}}
+@media (prefers-reduced-motion:reduce){.rqbox,.rqic{animation:none}}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -2246,7 +2256,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.4.4</small>
+    <small class="pcver">Versión 6.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -6834,8 +6844,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.4.4";
+const GAME_VER="6.5";
 const NEWS=[
+{v:"2026-11-05g",ver:"6.5",at:"2026-11-05T13:18",t:"📨 Avisos de solicitudes al momento",l:["Cuando alguien te reta a un duelo PVP, te invita a una sala 2 vs 2, te envía una solicitud de amistad o te invita por mensaje privado (duelo de siluetas, incursión o gremio), aparece una ventana para aceptar o rechazar al instante","Si eres líder o sublíder de un gremio, también te avisa cuando alguien pide unirse","Si estás en mitad de un combate, la ventana espera a que termine. Si la solicitud caduca o la cancelan, se cierra sola","«Más tarde» la deja pendiente en Social o en el chat para responder cuando quieras"]},
 {v:"2026-11-05f",ver:"6.4",at:"2026-11-05T11:19",t:"🗺️ Minimapa y mapa de la región",l:["Exploración tiene minimapa: la zona en pequeño con tu posición, los entrenadores que te quedan por vencer, las salidas y lo que ves en pantalla. Tócalo para ampliarlo o ocúltalo con el botón 🧭 (tecla M)","Nuevo botón 🗺️ (tecla N): el mapa de las cuatro regiones con todos sus pueblos, rutas, cuevas y cimas, unidos por caminos y por las rutas en barco","Toca cualquier lugar del mapa para ver el nivel de sus Pokémon salvajes, cuántos entrenadores has vencido hoy y si tiene Centro Pokémon","Los lugares a los que aún no puedes ir aparecen como ??? hasta que avances en la historia"]},
 {v:"2026-11-05e",ver:"6.3",at:"2026-11-05T10:30",t:"💬 Entrenadores con mucho más que decir",l:["Los entrenadores de Exploración tienen ahora casi 200 frases nuevas, distintas según su clase: jóvenes, cazabichos, nadadores, montañeros, karatekas, esquiadores, científicos, moteros…","Cada vez que entras en una zona, el entrenador te reta con una frase diferente","Al acabar el combate te dicen algo según hayan ganado o perdido","Si les vuelves a hablar después de vencerles, te cuentan curiosidades y consejos"]},
 {v:"2026-11-05d",ver:"6.2",at:"2026-11-05T09:31",t:"🗺️ Exploración ahora es un modo aparte",l:["Exploración tiene su propia partida: su equipo, sus Pokémon, sus niveles y su mochila. Tu colección del juego no se toca","Empiezas con el Pokémon que eliges en el laboratorio de la Profesora Vega y formas tu equipo capturando Pokémon por las rutas","Los entrenadores de la historia usan sus equipos con niveles fijos, como en los juegos, y cada zona tiene sus niveles de Pokémon salvajes","Nuevo botón 🎒 en Exploración para ver tu equipo, tu caja y tu mochila","Los Centros Pokémon de Exploración curan gratis y venden Poké Balls y Pociones (con tickets). Mamá también cura gratis","Ya no hacen falta medallas del juego para avanzar: se avanza con la historia","Si ya ibas avanzado en la historia, recibes tu inicial y los legendarios que conseguiste al nivel de ese punto"]},
@@ -7012,7 +7023,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793878679";
+const GAME_B="1793881111";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11886,6 +11897,50 @@ async function mvRescue(){if(mvRescBusy||!mvGet("gacha-rescue")||typeof S==="und
     [{t:"✅ Cargar mi partida",fn:()=>{try{localStorage.setItem(KEY,R.txt);localStorage.removeItem("gacha-rescue");mvSet("gacha-mv-new","1")}catch(e){}location.reload()}},
      {t:"Ahora no",cls:"alt",fn:()=>{mvRescBusy=false}},{t:"Descartarla",cls:"alt",fn:()=>{try{localStorage.removeItem("gacha-rescue")}catch(e){}mvRescBusy=false}}]);return true}
 {let t=0;const iv=setInterval(()=>{if(++t>200){clearInterval(iv);return}mvRescue().then(r=>{if(r)clearInterval(iv)})},1500)}
+
+// ================= ventanas emergentes para las solicitudes que te llegan =================
+// Retos PVP, salas 2 vs 2, solicitudes de amistad, solicitudes para entrar en tu gremio e invitaciones por mensaje privado.
+// (Los intercambios ya tienen su propia ventana.) Una ventana cada vez; esperan a que termine el combate.
+const RQ={seen:{},cur:null};
+function rqBusy(){const vis=id=>{const e=document.getElementById(id);return e&&!e.hidden&&e.offsetParent!==null};
+  return (typeof fcd!=="undefined"&&fcd)||!!document.querySelector(".uidlg")||vis("ltM")||vis("trdM")||vis("welc")||vis("tutBox")||vis("gLoad")||(typeof EX!=="undefined"&&EX.cut)||(typeof WM!=="undefined"&&WM.open)}
+function rqItems(){const L=[];const me=window.FB&&window.FB.uid?window.FB.uid():null;if(!me)return L;
+  // retos de duelo PVP y salas 2 vs 2
+  try{if(typeof PR!=="undefined"&&PR&&PV.st==="idle"&&!D&&!R2){const inc=pvIncoming();
+    inc.ch.forEach(p=>{const v=p.presence.pvp,n=pvClean(v.n);L.push({k:"c"+p.peer+(v.ch.room||""),ic:"⚔️",t:"¡"+esc(n)+" te reta a un duelo PVP!",s:"Modo "+(v.ch.md==="l"?"libre (con megas, Dinamax y movimientos Z)":"clásico")+" · con tu equipo de combate",
+      ok:"⚔️ Aceptar duelo",no:"Rechazar",alive:()=>pvIncoming().ch.some(q=>q.peer===p.peer),
+      onOk:()=>{if(!pvTeamData().length){toast("Necesitas un equipo de combate para aceptar.");return}pvAccept(p.peer)},onNo:()=>pvDecline(p.peer)})});
+    inc.inv.forEach(p=>{const v=p.presence.pvp,c=v.inv.code;L.push({k:"i"+p.peer+c,ic:"👥",t:esc(pvClean(v.n))+" te invita a su sala 2 vs 2",s:"Código de sala: <b>"+esc(c)+"</b>",ok:"👥 Unirme",no:"No, gracias",
+      alive:()=>pvIncoming().inv.some(q=>q.peer===p.peer&&q.presence.pvp.inv.code===c),onOk:()=>{try{hubOpen("onl","pvpP")}catch(e){}setTimeout(()=>r2Open(c,false),300)}})})}}catch(e){}
+  // solicitudes de amistad
+  try{if(typeof FR!=="undefined"&&FR.inc)FR.inc.forEach(r=>{const n=pvClean(r.fn);L.push({k:"f"+r.from,ic:"🤝",t:esc(n)+" quiere ser tu amigo",s:"Si aceptas, podréis chatear, enviaros regalos e intercambiar en directo.",ok:"✅ Aceptar",no:"Rechazar",
+    alive:()=>FR.inc.some(q=>q.from===r.from),onOk:async()=>{try{await window.FB.frAccept(r.from,n,pvClean(pvNick()));toast("👥 ¡Ahora eres amigo de "+n+"!")}catch(e){toast("No se ha podido aceptar.")}},
+    onNo:async()=>{try{await window.FB.frDecline(r.from)}catch(e){}}})})}catch(e){}
+  // solicitudes para entrar en tu gremio (si eres líder o sublíder)
+  try{const g=typeof GS!=="undefined"&&GS.doc;if(g&&(g.owner===me||g.sub===me)&&g.req){const full=Object.keys(g.members||{}).length>=GUILD_MAX;
+    Object.keys(g.req).forEach(u=>{const n=pvClean(g.req[u].n||"");L.push({k:"g"+GS.gid+u,ic:"🛡️",t:esc(n)+" quiere unirse a tu gremio",s:esc(g.name||"")+(full?" · ⚠️ El gremio está lleno":""),ok:"✅ Aceptar",no:"Rechazar",okOff:full,
+      alive:()=>!!(GS.doc&&GS.doc.req&&GS.doc.req[u]),onOk:async()=>{try{await window.FB.gAccept(GS.gid,u,n);gAnnounce(GS.gid,n,pvNick())}catch(e){toast("No se ha podido aceptar.")}},
+      onNo:async()=>{try{await window.FB.gReject(GS.gid,u)}catch(e){}}})})}}catch(e){}
+  // invitaciones por mensaje privado (duelo, duelo de siluetas, incursión, gremio, sala 2 vs 2)
+  try{if(typeof CH!=="undefined")Object.keys(CH.msgs).forEach(key=>{if(key.indexOf("d:")!==0)return;(CH.msgs[key]||[]).forEach(m=>{const v=m.inv;if(!v||m.u===me||!m.id)return;
+    if((v.exp||0)<Date.now()||(S.invOk&&S.invOk[m.id])||(S.invNo&&S.invNo[m.id])||(typeof chMuted==="function"&&chMuted(m.u)))return;
+    const n=pvClean(m.n||""),T={pvp:["⚔️","te reta a un duelo PVP","Con tu equipo actual"],du:["❓","te reta a un Duelo de siluetas","8 rondas de «¿Quién es ese Pokémon?» en directo"],raid:["🔴","te invita a una incursión","Contra "+esc(v.boss||"un Pokémon muy fuerte")+" · hasta 4 entrenadores"],
+      guild:["🛡️","te invita a su gremio",esc(v.nm||"")],r2:["👥","te invita a su sala 2 vs 2","Código "+esc(v.code||"")]}[v.k]||["✉️","te ha enviado una invitación",""];
+    L.push({k:"m"+m.id,ic:T[0],t:esc(n)+" "+T[1],s:T[2],ok:"✅ Aceptar",no:"Rechazar",alive:()=>(v.exp||0)>Date.now()&&!(S.invOk&&S.invOk[m.id])&&!(S.invNo&&S.invNo[m.id]),
+      onOk:()=>chInvAccept(m.id),onNo:()=>{S.invNo=S.invNo||{};S.invNo[m.id]=1;save();try{chRender(true)}catch(e){}}})})})}catch(e){}
+  return L}
+function rqShow(it){RQ.seen[it.k]=1;const M=document.createElement("div");M.className="uidlg rqdlg";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");
+  M.innerHTML='<div class="uidbox rqbox"><div class="rqh"><span class="rqic">'+it.ic+'</span><div><b>'+it.t+'</b>'+(it.s?'<small>'+it.s+'</small>':'')+'</div></div>'+
+    '<div class="uidb"><button type="button" class="alt" data-rq="later">Más tarde</button><button type="button" class="alt" data-rq="no">'+it.no+'</button><button type="button" class="red" data-rq="ok"'+(it.okOff?' disabled':'')+'>'+it.ok+'</button></div></div>';
+  const close=()=>{M.remove();document.removeEventListener("keydown",kd,true);clearInterval(iv);RQ.cur=null};
+  const kd=e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();close()}};
+  const iv=setInterval(()=>{let ok=true;try{ok=it.alive()}catch(e){}if(!ok){close();toast(it.ic+" Esa solicitud ya no está disponible.")}},1000);
+  M.addEventListener("click",e=>{e.stopPropagation();const b=e.target.closest("[data-rq]");if(!b){if(e.target===M)close();return}const a=b.dataset.rq;close();snd("ui");
+    try{if(a==="ok")it.onOk&&it.onOk();else if(a==="no")it.onNo&&it.onNo()}catch(x){}});
+  document.addEventListener("keydown",kd,true);
+  (document.fullscreenElement&&document.fullscreenElement!==document.documentElement?document.fullscreenElement:document.body).appendChild(M);
+  RQ.cur=it;snd("lvl");setTimeout(()=>{const f=M.querySelector('[data-rq="ok"]');if(f&&!f.disabled)f.focus()},40)}
+setInterval(()=>{if(RQ.cur||!window.FB||rqBusy())return;let L=[];try{L=rqItems()}catch(e){}const it=L.find(x=>!RQ.seen[x.k]);if(it)rqShow(it)},1500);
 
 // =====================================================================================
 // CLASIFICACIÓN SEMANAL DE CADA MINIJUEGO (Firestore: tours/{semana_juego}/s/{uid})

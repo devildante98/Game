@@ -215,7 +215,7 @@ const exKN=k=>k.length===1?k.toLowerCase():k;
 const exKName=k=>!k?"—":({" ":"Espacio",Enter:"Intro",Shift:"Mayús",Control:"Ctrl",Alt:"Alt",ArrowUp:"↑",ArrowDown:"↓",ArrowLeft:"←",ArrowRight:"→",Tab:"Tab",Backspace:"Retroceso",Escape:"Esc"}[k]||(k.length===1?k.toUpperCase():k));
 function exAct(k){k=exKN(k);const kb=exKB();for(const a in kb)if(kb[a].some(x=>exKN(x)===k))return a;return null}
 function exKeysTxt(){const kb=exKB(),f=a=>kb[a].filter(Boolean).map(exKName).join(" / "),mv=["u","l","d","r"].map(a=>exKName(kb[a][0])).join("")==="↑←↓→"?"Flechas"+(kb.u[1]==="w"?" o WASD":""):["u","l","d","r"].map(a=>exKName(kb[a][0])).join(" ");
-  const t="⌨️ Moverse: "+mv+" · Correr: "+f("b")+" · Hablar: "+f("a")+" · Pantalla completa: botón ⛶ (Esc para salir)";const e=$("exKeys");if(e)e.textContent=t;
+  const t="⌨️ Moverse: "+mv+" · Correr: "+f("b")+" · Hablar: "+f("a")+" · Minimapa: M · Mapa de la región: N · Pantalla completa: botón ⛶ (Esc para salir)";const e=$("exKeys");if(e)e.textContent=t;
   const h=$("exHint");if(h)h.textContent=matchMedia("(hover:hover) and (pointer:fine)").matches?"Moverse: "+mv+" · Correr: "+f("b")+" · Hablar: "+f("a"):"Usa la cruceta para moverte, B para correr y A para hablar"}
 function exCtlUI(){const box=$("exCtl");if(!box)return;const kb=exKB(),bd=EX.bind;
   box.innerHTML='<div class="exctlin"><h3>⌨️ Controles del teclado</h3><small class="mut">Pulsa en una tecla para cambiarla y después pulsa la nueva. Cada acción puede tener dos teclas.</small><div class="exctlg">'+

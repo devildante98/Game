@@ -29,7 +29,8 @@ const G_FOS={id:"fos",n:"Cazafósiles",ic:"🦴",c:"#6b7a3a",d:"Excava una pared
     const must=[fosEnt(pick())];if(Math.random()<.3)must.push(fosEnt(pick()));
     const extra=Math.floor(Math.random()*3),pool=FOSX;
     excRun(B,end,{pool:pool,weights:[3,3,2,1],must:must,want:must.length+extra,art:e=>FOSK[e[0]]?'<span class="exfoss">'+fosIco(e[0],64)+'</span>':exArt(e)});
-    const h=B.querySelector(".whohd span");if(h)h.innerHTML='🦴 Hallazgos: <b id="exF">0</b>/'+(must.length+extra);
+    // el marcador usa los hallazgos que de verdad se han enterrado (a veces no caben todos los que se piden)
+    const h=B.querySelector(".whohd span");if(h)h.innerHTML=h.innerHTML.replace("💎 Tesoros","🦴 Hallazgos");
   },
   after(score,prize){return excAfter(score,prize,"🦴 Hallazgos")}};
 MGS.push(G_FOS);

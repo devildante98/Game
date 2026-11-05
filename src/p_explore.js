@@ -506,3 +506,13 @@ document.addEventListener("fullscreenchange",()=>{if(EX.fs&&!exFsDoc()&&!EX.fsBa
 document.addEventListener("fullscreenchange",()=>{try{if(document.fullscreenElement&&EX.fs&&navigator.keyboard&&navigator.keyboard.lock)navigator.keyboard.lock(["Escape"]).catch(()=>{});else if(!document.fullscreenElement&&navigator.keyboard&&navigator.keyboard.unlock)navigator.keyboard.unlock()}catch(e){}});
 
 addEventListener("blur",()=>{EX.kst=[];if(EX.keys)delete EX.keys.b;EX.runHeld=false});
+
+// ---------- Esc en Exploración: cierra lo que haya abierto en el mapa y no llega a la pantalla de detrás ----------
+window.addEventListener("keydown",e=>{if(e.key!=="Escape"||!EX.cv||!EX.cv.isConnected)return;if(EX.bind)return;
+  const vis=id=>{const el=document.getElementById(id);return el&&!el.hidden};let done=false;
+  if(typeof XSH!=="undefined"&&XSH.open){xsClose();done=true}
+  else if(typeof WM!=="undefined"&&WM.open){wmHide();done=true}
+  else if(vis("exCtl")){$("exCtl").hidden=true;snd("ui");done=true}
+  else if(vis("exTeam")){$("exTeam").hidden=true;snd("ui");done=true}
+  else if(vis("exCh")){const bs=$("exCh").querySelectorAll("button");if(bs.length){bs[bs.length-1].click();done=true}}
+  if(done||EX.fs){e.preventDefault();e.stopImmediatePropagation();try{EX.cv.focus({preventScroll:true})}catch(x){}}},true);

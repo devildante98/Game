@@ -107,14 +107,14 @@ function ckUI(){const w=$("ckl");if(!w)return;const K=ckKeys();
 function ckMsg(t){const m=$("ckmsg");if(m)m.textContent=t}
 function ckInit(){const tm=$("tkmsg");if(!tm||$("ckl"))return;
   const h=document.createElement("div");h.className="ckwrap";
-  h.innerHTML='<b class="cksec">🎮 Teclas de respuesta (minijuegos)</b><div id="ckl" class="ckl"></div><div class="mrow"><button type="button" id="ckreset" class="alt">Restablecer (1, 2, 3, 4)</button></div><small id="ckmsg" class="mut">Toca una casilla y pulsa la tecla que quieras para elegir esa respuesta en «¿Quién es ese Pokémon?» y los demás minijuegos de respuestas. Solo funcionan con el minijuego abierto.</small>';
+  h.innerHTML='<b class="cksec">🎮 Teclas de respuesta (minijuegos)</b><div id="ckl" class="ckl"></div><div class="mrow"><button type="button" id="ckreset" class="alt">Restablecer (1, 2, 3, 4)</button></div><small id="ckmsg" class="mut">Toca una casilla y pulsa la tecla (o un botón del ratón: central, derecho, atrás o adelante) que quieras para elegir esa respuesta en «¿Quién es ese Pokémon?» y los demás minijuegos de respuestas. Solo funcionan con el minijuego abierto.</small>';
   tm.after(h);ckUI();
-  $("ckl").addEventListener("click",e=>{const b=e.target.closest("[data-cks]");if(!b)return;window._ckCap=+b.dataset.cks;ckUI();ckMsg("Pulsa ahora la tecla para la casilla "+(+b.dataset.cks+1)+" (Esc para cancelar)…")});
+  $("ckl").addEventListener("click",e=>{const b=e.target.closest("[data-cks]");if(!b)return;window._ckCap=+b.dataset.cks;ckUI();ckMsg("Pulsa ahora la tecla o el botón del ratón para la casilla "+(+b.dataset.cks+1)+" (Esc para cancelar)…")});
   $("ckreset").onclick=()=>{window._ckCap=null;O.ckeys=CK_DEF.slice();saveO();ckUI();ckMsg("Restablecidas a 1, 2, 3 y 4.")}}
 window.addEventListener("keydown",e=>{if(window._ckCap==null)return;e.preventDefault();e.stopImmediatePropagation();
   const i=window._ckCap,k=String(e.key).toLowerCase();window._ckCap=null;
   if(k==="escape"){ckUI();ckMsg("Cancelado.");return}
-  if(CK_RES.includes(k)||k.length>1&&!/^f\d+$/.test(k)){ckUI();ckMsg("Esa tecla está reservada (Esc, Enter, Espacio, flechas…): elige otra.");return}
+  if(CK_RES.includes(k)||k.length>1&&!/^(f\d+|mouse[1-4])$/.test(k)){ckUI();ckMsg("Esa tecla está reservada (Esc, Enter, Espacio, flechas…): elige otra.");return}
   if((O.tkeys||["u"]).includes(k)){ckUI();ckMsg("Esa tecla ya la usas para tocar la Poké Ball. Elige otra o quítala de allí primero.");return}
   const K=ckKeys().slice(),j=K.indexOf(k);
   if(j>=0&&j!==i){ckUI();ckMsg("Esa tecla ya es la de la casilla "+(j+1)+".");return}
@@ -122,3 +122,32 @@ window.addEventListener("keydown",e=>{if(window._ckCap==null)return;e.preventDef
 // la tecla de la Poké Ball tampoco puede coincidir con las de respuesta
 {const _tc=tkCapture;tkCapture=function(e){const k=String(e.key).toLowerCase();if(k!=="escape"&&ckKeys().includes(k)){window._cap=false;const m=$("tkmsg");if(m)m.textContent="Esa tecla ya la usas para las respuestas de los minijuegos (Ajustes → Controles). Elige otra.";return}return _tc.apply(this,arguments)}}
 setTimeout(ckInit,500);setInterval(ckInit,3000);
+// ---- Espacio (o Enter) para empezar la partida o jugar otra vez ----
+window.addEventListener("keydown",e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey||window._cap||window._ckCap!=null)return;if(e.key!==" "&&e.code!=="Space"&&e.key!=="Enter")return;
+  const M=$("mgM");if(!M||M.hidden)return;const b=$("mgGo")||$("mgAg");if(!b||!b.offsetParent||b.disabled)return;
+  const t=e.target,tg=t&&t.tagName;if(/INPUT|TEXTAREA|SELECT/.test(tg||""))return;
+  e.preventDefault();e.stopImmediatePropagation();b.click()},true);
+{const go=()=>{const b=$("mgGo");if(b&&!b.querySelector(".mgspk")){const s=document.createElement("span");s.className="mgspk";s.textContent="Espacio";b.appendChild(s)}};new MutationObserver(()=>{try{go()}catch(e){}}).observe(document.body,{childList:true,subtree:true})}
+// =====================================================================================
+// BOTONES DEL RATÓN como teclas (Poké Ball y respuestas de minijuegos)
+// Se guardan como «mouse1» (rueda/central), «mouse2» (derecho), «mouse3» (atrás) y «mouse4» (adelante).
+// El clic izquierdo no se puede asignar: es el que se usa para todo lo demás.
+// =====================================================================================
+const MSN={mouse1:"🖱️ Central",mouse2:"🖱️ Derecho",mouse3:"🖱️ Atrás",mouse4:"🖱️ Adelante"};
+{const _tl=tkLabel;tkLabel=function(k){return MSN[k]||_tl(k)}}
+const msKey=e=>e.button>0&&e.button<5?"mouse"+e.button:null;
+const msUsed=k=>(O.tkeys||[]).includes(k)||ckKeys().includes(k);
+// al asignar: el botón del ratón cuenta como una tecla pulsada
+window.addEventListener("mousedown",e=>{const k=msKey(e);if(!k)return;
+  if(window._cap){e.preventDefault();e.stopImmediatePropagation();tkCapture({key:k,preventDefault(){},stopPropagation(){}});return}
+  if(window._ckCap!=null){e.preventDefault();e.stopImmediatePropagation();window.dispatchEvent(new KeyboardEvent("keydown",{key:k}));return}
+  if(!msUsed(k))return;
+  const t=e.target;if(t&&t.closest&&t.closest("input,textarea,select,[contenteditable]"))return;
+  e.preventDefault();
+  // respuestas de minijuego
+  const L=ckBtns();if(L.length){const i=ckKeys().indexOf(k);if(i>=0){const b=L[i];if(b&&!b.disabled){b.click();b.animate([{transform:"scale(.95)"},{transform:"none"}],140)}}return}
+  // tocar la Poké Ball (como con la tecla), fuera de combates y minijuegos
+  if((O.tkeys||[]).includes(k)&&!(typeof kbFight==="function"&&kbFight())){const tr=$("train");if(tr&&(!window._u||Date.now()-window._u>=60)){window._u=Date.now();tr.click();tr.animate([{transform:"scale(.93)"},{transform:"none"}],120)}}},true);
+// que los botones asignados no abran el menú del clic derecho ni vayan atrás/adelante en el navegador
+["mouseup","auxclick"].forEach(t=>window.addEventListener(t,e=>{const k=msKey(e);if(k&&(msUsed(k)||window._cap||window._ckCap!=null)){e.preventDefault();e.stopPropagation()}},true));
+window.addEventListener("contextmenu",e=>{if(msUsed("mouse2")||window._cap||window._ckCap!=null)e.preventDefault()},true);

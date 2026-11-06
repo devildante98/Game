@@ -1055,7 +1055,7 @@ $("bigF").onclick=()=>bigSet(bigMode==="full"?"":"full");
 addEventListener("resize",bigZoom);
 document.addEventListener("fullscreenchange",()=>{if(bigMode==="full"&&!document.fullscreenElement)bigSet("")});
 // ================= tecla configurable de la Pokeball =================
-const tkLabel=k=>k.length===1?k.toUpperCase():({arrowup:"↑",arrowdown:"↓",arrowleft:"←",arrowright:"→"}[k]||k);
+let tkLabel=k=>k.length===1?k.toUpperCase():({arrowup:"↑",arrowdown:"↓",arrowleft:"←",arrowright:"→"}[k]||k);
 function tkUI(){
   O.tkeys=Array.isArray(O.tkeys)&&O.tkeys.length?O.tkeys:["u"];
   $("tkl").innerHTML=O.tkeys.map(k=>'<span class="tkc"><kbd>'+esc(tkLabel(k))+'</kbd><button data-rm="'+esc(k)+'" aria-label="Quitar la tecla '+esc(tkLabel(k))+'">✕</button></span>').join("");
@@ -2809,7 +2809,7 @@ function buildOpts(){
   $("vol").oninput=()=>{O.vol=+$("vol").value;if(mgain)mgain.gain.value=O.vol;saveO()};
   $("optp").addEventListener("change",e=>{const k=e.target.dataset&&e.target.dataset.o;if(k){O[k]=e.target.checked?1:0;saveO();applyO()}});
   O.tkeys=Array.isArray(O.tkeys)&&O.tkeys.length?O.tkeys.slice():["u"];tkUI();
-  $("tkadd").onclick=()=>{window._cap=true;$("tkmsg").textContent="Pulsa ahora la tecla que quieras usar (Esc para cancelar)..."};
+  $("tkadd").onclick=()=>{window._cap=true;$("tkmsg").textContent="Pulsa ahora la tecla o el botón del ratón (central, derecho, atrás o adelante) que quieras usar (Esc para cancelar)..."};
   $("tkreset").onclick=()=>{O.tkeys=["u"];saveO();tkUI();$("tkmsg").textContent="Restablecida a la tecla U."};
   $("tkl").addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.dataset.rm){O.tkeys=O.tkeys.filter(x=>x!==b.dataset.rm);if(!O.tkeys.length)O.tkeys=["u"];saveO();tkUI()}});
   $("bigopt").value=O.bigmode||"";$("bigopt").onchange=()=>{O.bigmode=$("bigopt").value;saveO()};

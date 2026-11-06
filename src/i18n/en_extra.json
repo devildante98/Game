@@ -798,5 +798,13 @@
 "Esa tecla ya la usas para tocar la Poké Ball. Elige otra o quítala de allí primero.": "You already use that key to tap the Poké Ball. Pick another or remove it there first.",
 "Esa tecla ya es la de la casilla {d}.": "That key is already used for slot {d}.",
 "Casilla {d}: tecla {}.": "Slot {d}: key {}.",
-"Esa tecla ya la usas para las respuestas de los minijuegos (Ajustes → Controles). Elige otra.": "You already use that key for minigame answers (Settings → Controls). Pick another."
+"Esa tecla ya la usas para las respuestas de los minijuegos (Ajustes → Controles). Elige otra.": "You already use that key for minigame answers (Settings → Controls). Pick another.",
+"Espacio": "Space",
+"🖱️ Central": "🖱️ Middle",
+"🖱️ Derecho": "🖱️ Right",
+"🖱️ Atrás": "🖱️ Back",
+"🖱️ Adelante": "🖱️ Forward",
+"Toca una casilla y pulsa la tecla (o un botón del ratón: central, derecho, atrás o adelante) que quieras para elegir esa respuesta en «¿Quién es ese Pokémon?» y los demás minijuegos de respuestas. Solo funcionan con el minijuego abierto.": "Tap a slot and press the key (or a mouse button: middle, right, back or forward) you want to pick that answer in “Who's that Pokémon?” and the other answer minigames. They only work while the minigame is open.",
+"Pulsa ahora la tecla o el botón del ratón para la casilla {d} (Esc para cancelar)…": "Now press the key or mouse button for slot {d} (Esc to cancel)…",
+"Pulsa ahora la tecla o el botón del ratón (central, derecho, atrás o adelante) que quieras usar (Esc para cancelar)...": "Now press the key or mouse button (middle, right, back or forward) you want to use (Esc to cancel)..."
 }

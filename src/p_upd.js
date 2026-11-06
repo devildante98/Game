@@ -1068,3 +1068,17 @@ function dxMove(mv,me){if(!mv||mv.cl==null)return mv;const g=me&&me.gmx&&typeof 
 function dxById(s){const [mid,gf]=String(s).split("|"),mv=MVD[mid];return mv?dxMove(mv,{gmx:gf||""}):STRUG}
 // botones de ataque: muestran el Movimiento Dinamax con su potencia
 {const _mb=mvBtn;mvBtn=function(mv,pp,mx,attr,foe,me){if(me&&me.dmx&&mv&&mv.cl!=null){const d=dxMove(mv,me);const h=_mb(d,pp,mx,attr,foe,me);return h.replace('</small></button>',(d.cl?' · Poder '+d.pw:'')+' · desde '+esc(mv.n)+'</small></button>')}return _mb.apply(this,arguments)}}
+// ================= NOMBRES QUE SE MUESTRAN DISTINTOS AL NOMBRE INTERNO =================
+// El nombre interno (el de las partidas guardadas) no cambia; solo lo que se ve en pantalla.
+const DISPN={"Eternatus Dinamax Infinito":"Eternatus Eternamax"};
+(function(){if(window.PGC_LANG==="en")return;const K=Object.keys(DISPN);if(!K.length)return;
+  const RX=new RegExp(K.map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("|"),"g"),fix=s=>s.replace(RX,m=>DISPN[m]),has=s=>!!s&&K.some(k=>s.indexOf(k)>=0);
+  const AT=["title","alt","aria-label","placeholder"];
+  const txt=n=>{if(has(n.data))n.data=fix(n.data)};
+  const el=e=>{AT.forEach(a=>{const v=e.getAttribute&&e.getAttribute(a);if(has(v))e.setAttribute(a,fix(v))})};
+  const walk=r=>{if(r.nodeType===3){txt(r);return}if(r.nodeType!==1||/^(SCRIPT|STYLE|TEXTAREA|INPUT)$/.test(r.tagName))return;el(r);
+    const tw=document.createTreeWalker(r,5);let n;while((n=tw.nextNode())){if(n.nodeType===3)txt(n);else el(n)}};
+  new MutationObserver(ms=>ms.forEach(m=>{if(m.type==="childList")m.addedNodes.forEach(walk);else if(m.type==="characterData")txt(m.target);else el(m.target)})).observe(document.documentElement,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:AT});
+  walk(document.body);
+  try{const P=CanvasRenderingContext2D.prototype;["fillText","strokeText","measureText"].forEach(f=>{const o=P[f];P[f]=function(t){if(typeof t==="string"&&has(t)){const a=[].slice.call(arguments);a[0]=fix(t);return o.apply(this,a)}return o.apply(this,arguments)}})}catch(e){}
+})();

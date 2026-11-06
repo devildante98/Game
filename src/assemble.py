@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.20";
+const GAME_VER="6.20.1";
 const NEWS=[
 {v:"2026-11-06h",ver:"6.20",at:"2026-11-06T20:57",t:"🔴 Movimientos Dinamax",l:["Al dinamaxizar (o gigamaxizar) a tu Pokémon, sus ataques se convierten en Movimientos Dinamax, como en la saga: Maxiataque, Maxignición, Maxichorro, Maxitormenta…","Tienen mucha más potencia (de 90 a 150 según el ataque original; Lucha y Veneno de 70 a 100) y nunca fallan","Los ataques de estado se convierten en Maxibarrera, que te protege ese turno","Con Gigamax, los ataques de su tipo se convierten en su Movimiento Gigamax (Gigallamarada, Gigalianas…) con su efecto especial","En los botones verás el nombre del Movimiento Dinamax, su potencia y de qué ataque viene"]},
 {v:"2026-11-06g",ver:"6.19",at:"2026-11-06T20:53",t:"🔎 Filtros al elegir Pokémon para el equipo",l:["En la ventana «Elige un Pokémon para el equipo» ya puedes filtrar por rareza, tipo y generación, además de buscar por nombre y ordenar","El botón «✖ Quitar filtros» los borra todos de una vez"]},

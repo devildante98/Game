@@ -36,7 +36,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.17"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.17.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -71,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793987867">
+<meta name="game-build" content="1793989785">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2502,7 +2502,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.17</small>
+    <small class="pcver">Versión 6.17.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7132,7 +7132,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.17";
+const GAME_VER="6.17.1";
 const NEWS=[
 {v:"2026-11-06e",ver:"6.16",at:"2026-11-06T15:53",t:"💠 Las formas supremas ya se pueden desbloquear",l:["Giratina y Dialga Forma Origen, Kyurem Blanco y Negro, Mega-Rayquaza, Ultra-Necrozma, Kyogre y Groudon Primigenios y el resto de formas supremas no salen en el gacha","Ahora basta con tener la forma base: llévala a un combate y transfórmala con un Cristal Supremo (el botón 💠 muestra 🔓 si aún no la tienes)","La primera vez que lo hagas, la forma suprema se añade a tu colección","Los Cristales Supremos se consiguen en la Torre Batalla, las incursiones, el torneo, el pase de temporada y la tienda"]},
 {v:"2026-11-06d",ver:"6.15",at:"2026-11-06T12:54",t:"🧩 Dos minijuegos nuevos: Puzle de sprites y Más o menos",l:["🧩 Puzle de sprites: recompón la imagen de un Pokémon intercambiando piezas. Elige 9, 16, 25, 36, 49, 64 o 100 piezas: cuantas más, más puntos","Toca dos piezas o arrastra una encima de otra; las bien colocadas se quedan fijas en verde. Mantén pulsado «Ver la imagen» para mirar el Pokémon","📊 Más o menos: ¿el siguiente Pokémon tiene más o menos Ataque, Velocidad, PS…? Racha hasta el primer fallo (también con las flechas ↑ ↓)","Los dos dan premio, récord, pase de temporada y clasificación semanal, y entran en el Torneo semanal desde la semana que viene"]},
@@ -7323,7 +7323,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793987867";
+const GAME_B="1793989785";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -13333,7 +13333,7 @@ const gmOn=()=>!O.classic;
 if(O.lite===undefined)O.lite=0;
 // números cortos: 1.250 → 1,25K · 3.400.000 → 3,4M (para que nunca ocupen más de la cuenta)
 function gmK(n){n=+n||0;if(Math.abs(n)<1000)return (Math.floor(n*10)/10).toLocaleString("es",{maximumFractionDigits:1});const U=["K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"];let i=-1;while(Math.abs(n)>=1000&&i<U.length-1){n/=1000;i++}
-  const d=Math.abs(n)<10?2:Math.abs(n)<100?1:0,v=Math.floor(n*Math.pow(10,d))/Math.pow(10,d);return v.toLocaleString("es",{maximumFractionDigits:d})+U[i]}
+  const d=Math.abs(n)<10?2:Math.abs(n)<100?1:0,v=Math.floor(n*Math.pow(10,d))/Math.pow(10,d);return v.toLocaleString("es",{maximumFractionDigits:d})+"\u202F"+U[i]}
 const GMSCR={stage:{n:"Gacha",d:"Tiradas y máquina de Poké Balls",i:"gacha",c:"#e8414f",mus:null,nav:"gacha"},batP:{n:"Combate",d:"Combates contra Pokémon salvajes",i:"vs",c:"#2f6fd8",mus:3,nav:"bat"},shopP:{n:"Tienda de mejoras",d:"Mejora tu pueblo para ganar más tickets",i:"shop",c:"#0e9f6e",mus:4,nav:"shop"},earnP:{n:"Premios",d:"Regalo diario, racha y tickets gratis",i:"gift",c:"#e07a00",mus:null,nav:""}};
 // ---------- iconos dibujados (sin emojis) ----------
 const GMK='stroke="#1b2340" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';

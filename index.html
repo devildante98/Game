@@ -6,7 +6,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.14.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.15"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -41,7 +41,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793963816">
+<meta name="game-build" content="1793966048">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2380,6 +2380,33 @@ body.gm #gBg .pcpar{display:none!important}
 .mtwtabs button.on{border-color:#13a37f;background:color-mix(in srgb,#13a37f 15%,var(--bg))}.mtwtabs button.no.on{border-color:#e63950;background:color-mix(in srgb,#e63950 12%,var(--bg))}
 .mtwl2{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
 .tpc.mtno{background:color-mix(in srgb,#e63950 8%,var(--bg))}.tpc.mtnot{opacity:.8}.tpc.mtnot .tpspr{filter:saturate(.7)}
+/* ===== Puzle de sprites ===== */
+.pzpick{text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+.pzsz{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;width:100%;max-width:640px}
+.pzsz button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border-radius:14px;background:var(--bg);color:var(--ink);border:2px solid var(--line)}
+.pzsz button b{font-size:1.5rem}.pzsz button small{color:var(--mute)}.pzsz button i{font-style:normal;font-size:.72rem;font-weight:800;color:var(--mc,#d8456f)}
+.pzsz button:hover{border-color:var(--mc,#d8456f);transform:translateY(-2px)}
+.pzwrap{position:relative;width:min(560px,100%,62vh);margin:6px auto}
+.pzb{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:1px;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#1b2340;touch-action:none;user-select:none}
+.pzp{position:relative;cursor:grab;background-image:var(--img),radial-gradient(circle at 26% 22%,rgba(255,255,255,.8) 0 7%,transparent 7.5%),radial-gradient(circle at 78% 78%,rgba(255,255,255,.35) 0 16%,transparent 16.5%),repeating-linear-gradient(45deg,rgba(255,255,255,.12) 0 6%,transparent 6% 12%),linear-gradient(160deg,color-mix(in srgb,var(--c1) 70%,#fff),var(--c2));
+  background-size:calc(var(--n)*100%) calc(var(--n)*100%);background-repeat:no-repeat;transition:transform .1s}
+.pzp.sel{outline:3px solid #ffd35c;outline-offset:-3px;z-index:2;transform:scale(1.06)}
+.pzp.ok{cursor:default;box-shadow:inset 0 0 0 2px rgba(62,207,142,.9)}
+.pzb.pzdone{gap:0}.pzb.pzdone .pzp{box-shadow:none}
+.pzref{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;border-radius:12px;background:linear-gradient(160deg,#fff,#dfe4ff);opacity:0;pointer-events:none;transition:opacity .15s;z-index:3}
+.pzref.on{opacity:.95}
+.pzres{font-weight:800;text-align:center;margin:4px 0}
+/* ===== Más o menos ===== */
+.hlvs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch;margin:10px 0}
+.hlc{display:flex;flex-direction:column;align-items:center;gap:3px;padding:12px 8px;border-radius:16px;background:var(--bg);border:2px solid var(--line);text-align:center}
+.hlc.R{border-color:color-mix(in srgb,#4f9dff 45%,var(--line))}.hlc.E{border-color:color-mix(in srgb,#b26cff 50%,var(--line))}.hlc.L{border-color:color-mix(in srgb,#ffb62e 60%,var(--line))}
+.hlspr{height:150px;display:grid;place-items:center}.hlspr img{max-height:150px}.hlc>small{color:var(--mute);font-size:.75rem}
+.hlv{display:flex;flex-direction:column;align-items:center;margin-top:4px;padding:6px 16px;border-radius:12px;background:var(--panel);min-width:96px}.hlv b{font-size:1.8rem;line-height:1.1}.hlv small{color:var(--mute);font-size:.72rem}
+.hlv.ok{background:color-mix(in srgb,#3ecf8e 25%,var(--panel))}.hlv.bad{background:color-mix(in srgb,#e63950 25%,var(--panel))}
+.hlmid{align-self:center;font:900 20px inherit;color:var(--mc,#3a7be0)}
+.hlbtn{display:flex;gap:6px;margin-top:6px;width:100%}.hlbtn button{flex:1;padding:10px 6px;font-size:1rem}
+.hlq{text-align:center;margin:0}
+@media (max-width:520px){.hlspr,.hlspr img{height:96px;max-height:96px}.hlv b{font-size:1.4rem}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2445,7 +2472,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.14.4</small>
+    <small class="pcver">Versión 6.15</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7072,8 +7099,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.14.4";
+const GAME_VER="6.15";
 const NEWS=[
+{v:"2026-11-06d",ver:"6.15",at:"2026-11-06T12:54",t:"🧩 Dos minijuegos nuevos: Puzle de sprites y Más o menos",l:["🧩 Puzle de sprites: recompón la imagen de un Pokémon intercambiando piezas. Elige 9, 16, 25, 36, 49, 64 o 100 piezas: cuantas más, más puntos","Toca dos piezas o arrastra una encima de otra; las bien colocadas se quedan fijas en verde. Mantén pulsado «Ver la imagen» para mirar el Pokémon","📊 Más o menos: ¿el siguiente Pokémon tiene más o menos Ataque, Velocidad, PS…? Racha hasta el primer fallo (también con las flechas ↑ ↓)","Los dos dan premio, récord, pase de temporada y clasificación semanal, y entran en el Torneo semanal desde la semana que viene"]},
 {v:"2026-11-06c",ver:"6.14",at:"2026-11-06T11:15",t:"🔴 Incursiones renovadas: combate en directo y más difícil",l:["Toca la pantalla (o Espacio) para el ataque rápido: cada golpe carga energía","Con la energía llena, lanza ataques cargados mucho más fuertes (botones o teclas 1 y 2)","El jefe brilla en amarillo antes de atacar: desliza o usa ⬅️ ➡️ / A y D para esquivar y recibir mucho menos daño","Sus ataques cargados pueden debilitar a tu Pokémon de un golpe. Si cae todo tu equipo, puedes volver a entrar, pero pierdes 10 segundos","Los PS del jefe dependen de la fuerza real de los equipos: siempre es un reto. En grupo es más fácil","Premios mejores: 650.000 🎟️ (+250.000 a quien más daño haga) y 3 Ultra Ball"]},
 {v:"2026-11-06b",ver:"6.13",at:"2026-11-06T10:00",t:"🎯 Zona de entrenamiento y MT más claras",l:["Nueva Zona de entrenamiento (Actividades, o el botón junto a «¡Combatir!»): prueba a cualquiera de tus Pokémon contra el rival, el nivel y la habilidad que quieras","Modo Diana: no ataca, recupera sus PS cada turno y te dice el daño exacto de cada golpe. O un combate de práctica de verdad","No se gastan PS, PP ni objetos, y no da premios ni experiencia","Tienda de MT: botón «👀 ¿Quién puede aprenderla?» con tus Pokémon que la aprenden y los de su tipo que NO, antes de comprarla","Tienda de MT: elige uno de tus Pokémon para ver solo las MT que puede aprender"]},
 {v:"2026-11-06a",ver:"6.12",at:"2026-11-06T09:01",t:"🌐 ¡El juego ya está en inglés! · Now in English!",l:["Nuevo ajuste de idioma: ⚙️ Ajustes → Accesibilidad → 🌐 Idioma (Español / English)","Los jugadores nuevos eligen su idioma nada más entrar, y en la pantalla de inicio hay un botón 🌐 para cambiarlo","En inglés se traducen menús, combates, objetos, movimientos y habilidades (con sus nombres oficiales), la historia de Exploración, los minijuegos y los mensajes","New language setting: ⚙️ Settings → Accessibility → 🌐 Language. Menus, battles, items, moves, abilities and the Exploration story are translated"]},
@@ -7261,7 +7289,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793963816";
+const GAME_B="1793966048";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -13683,6 +13711,92 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 if(typeof gmClose==="function"){const _gc=gmClose;gmClose=function(){if(typeof fcd!=="undefined"&&fcd&&EX.battle&&GM.scr==="batP"){toast("⚔️ Termina el combate o pulsa «Huir» para volver a la Exploración.");return}return _gc.apply(this,arguments)}}
 // si aun así el combate se queda oculto (por ejemplo, al abrir otra sección), se vuelve a mostrar
 setInterval(()=>{try{if(typeof fcd!=="undefined"&&fcd&&EX.battle&&typeof GM!=="undefined"&&gmOn()&&GM.scr!=="batP"&&!document.querySelector("#uiDlg:not([hidden]),#pkv:not([hidden])")&&$("hubM").hidden)gmOpen("batP")}catch(e){}},1500);
+
+// =====================================================================================
+// MINIJUEGOS NUEVOS: Puzle de sprites y Más o menos
+// =====================================================================================
+const mgImgSrc=p=>{const m=/src="([^"]+)"/.exec(icoHD(p,256,false,false));return m?m[1]:""};
+
+// ---------------- PUZLE DE SPRITES: recompón la imagen de un Pokémon intercambiando piezas ----------------
+const PZ_SIZES=[3,4,5,6,7,8,10];
+const G_PUZ={id:"puz",n:"Puzle de sprites",ic:"🧩",c:"#d8456f",d:"Recompón la imagen de un Pokémon intercambiando sus piezas. Elige de 9 a 100 piezas: cuantas más, más puntos.",
+  rw:s=>s*45,
+  start(B,end){
+    const pick=()=>{
+      B.innerHTML='<div class="pzpick"><h3>¿Cuántas piezas?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-pzn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i>×'+(n*n*40>=1000?fmt(n*n*40):n*n*40)+' pts</i></button>').join("")+'</div><small class="mut">Toca dos piezas para intercambiarlas, o arrastra una encima de otra. Las piezas bien colocadas se quedan fijas en verde.</small></div>';
+      B.querySelectorAll("[data-pzn]").forEach(b=>b.onclick=()=>{snd("ui");play(+b.dataset.pzn)})};
+    const play=N=>{
+      const pool=P.filter(p=>p[2]!=="M");let mon=pool[Math.floor(Math.random()*pool.length)],src=mgImgSrc(mon),tries=0;
+      const T=N*N;let ord=[...Array(T).keys()];
+      // barajar sin dejar demasiadas piezas ya en su sitio
+      do{for(let i=T-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]]}}while(ord.filter((v,i)=>v===i).length>Math.max(1,T*.08));
+      const minSw=(()=>{const seen=new Array(T).fill(false);let c=0;for(let i=0;i<T;i++){if(seen[i])continue;let j=i;while(!seen[j]){seen[j]=true;j=ord[j]}c++}return T-c})();
+      let moves=0,sel=-1,t0=performance.now(),done=false;
+      B.innerHTML='<div class="whohd"><span>🧩 <b>'+T+'</b> piezas</span><span>⏱️ <b id="pzT">0:00</b></span><span>🔄 <b id="pzM">0</b></span><span>✅ <b id="pzOk">0</b>/'+T+'</span></div>'+
+        '<div class="pzwrap"><div class="pzb" id="pzB" style="--n:'+N+';--c1:'+(TC[tys(mon)[0]]||"#4a6ae0")+';--c2:'+(TC[tys(mon)[1]||"fairy"]||"#ff8ad8")+'"></div><img class="pzref" id="pzRef" alt=""></div>'+
+        '<div class="mgbtns"><button class="alt" id="pzPeek">👁️ Ver la imagen (mantén pulsado)</button></div>';
+      const box=$("pzB"),ref=$("pzRef");
+      const draw=()=>{let ok=0;box.innerHTML=ord.map((v,i)=>{const good=v===i;if(good)ok++;const x=v%N,y=Math.floor(v/N);
+          return '<div class="pzp'+(good?' ok':'')+(i===sel?' sel':'')+'" data-pz="'+i+'" style="--img:url(\''+src+'\');background-position:'+(N>1?x*100/(N-1):0)+'% '+(N>1?y*100/(N-1):0)+'%"></div>'}).join("");
+        $("pzOk").textContent=ok;$("pzM").textContent=moves;return ok};
+      const im=new Image();im.onload=()=>{draw()};im.onerror=()=>{tries++;const id=(/\/(\d+)\.png/.exec(src)||[])[1];if(tries===1&&id&&typeof SPRU2!=="undefined"){src=SPRU2+"other/home/"+id+".png"}else if(tries<4){mon=pool[Math.floor(Math.random()*pool.length)];src=mgImgSrc(mon)}else{draw();return}im.src=src;ref.src=src;draw()};im.src=src;ref.src=src;draw();
+      const tick=()=>{if(done)return;const s=Math.floor((performance.now()-t0)/1000),e=$("pzT");if(e)e.textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0");MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
+      const swap=(a,b)=>{if(done||a===b||a<0||b<0||ord[a]===a||ord[b]===b)return;[ord[a],ord[b]]=[ord[b],ord[a]];moves++;sel=-1;snd(ord[a]===a||ord[b]===b?"lvl":"ui");
+        const ok=draw();[a,b].forEach(i=>{if(ord[i]===i){const el=box.querySelector('[data-pz="'+i+'"]');if(el&&!hubCalm())el.animate([{transform:"scale(1.15)",filter:"brightness(1.6)"},{transform:"none",filter:"none"}],{duration:300})}});
+        if(ok===T)win()};
+      const win=()=>{done=true;cancelAnimationFrame(MG.raf);const t=(performance.now()-t0)/1000,par=T*3.2+8,base=T*40,eff=Math.min(1,minSw/Math.max(1,moves)),spd=Math.min(1,par/Math.max(1,t));
+        const sc=Math.round(base*(.5+.5*spd)*(.6+.4*eff));mgSet(sc);box.classList.add("pzdone");snd("win");mgConfetti();try{cry(mon[0])}catch(e){}
+        B.querySelector(".mgbtns").innerHTML='<p class="pzres">¡Es <b>'+esc(mon[0])+'</b>! · '+Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,"0")+' · '+moves+' cambios (mínimo '+minSw+')</p>';
+        mgT(()=>end(sc),2600)};
+      // tocar dos piezas o arrastrar una encima de otra
+      let down=-1;
+      box.addEventListener("pointerdown",e=>{const p=e.target.closest("[data-pz]");if(!p||done)return;const i=+p.dataset.pz;if(ord[i]===i)return;down=i;try{box.setPointerCapture(e.pointerId)}catch(x){}});
+      box.addEventListener("pointerup",e=>{if(down<0||done)return;const el=document.elementFromPoint(e.clientX,e.clientY),p=el&&el.closest&&el.closest("[data-pz]"),i=p?+p.dataset.pz:-1,d=down;down=-1;
+        if(i>=0&&i!==d){swap(d,i);return}
+        if(i===d){if(sel<0){sel=d;draw()}else if(sel===d){sel=-1;draw()}else swap(sel,d)}});
+      const pk=$("pzPeek"),on=()=>{ref.classList.add("on")},off=()=>{ref.classList.remove("on")};
+      pk.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(ev=>pk.addEventListener(ev,off));
+    };
+    mgSet(0);pick();
+  }};
+
+// ---------------- MÁS O MENOS: ¿el siguiente Pokémon tiene más o menos estadística? ----------------
+const HL_ST=[["PS",0],["Ataque",1],["Defensa",2],["Ataque Especial",3],["Defensa Especial",4],["Velocidad",5],["Total",-1]];
+const hlVal=(p,k)=>{const b=BSD[p[0]];if(!b)return 0;return k<0?b.reduce((a,x)=>a+x,0):b[k]};
+const G_HL={id:"hl",n:"Más o menos",ic:"📊",c:"#3a7be0",d:"Mira la estadística base de un Pokémon y adivina si el siguiente tiene MÁS o MENOS. Acierta seguidas todas las que puedas: un fallo y se acaba.",
+  rw:s=>s*110,
+  start(B,end){
+    const pool=P.filter(p=>p[2]!=="M"&&BSD[p[0]]);let a=pool[Math.floor(Math.random()*pool.length)],streak=0,busy=false;
+    const round=()=>{
+      const st=HL_ST[Math.floor(Math.random()*HL_ST.length)],va=hlVal(a,st[1]),hard=Math.min(.85,.3+streak*.05);
+      // con la racha, los valores se parecen cada vez más
+      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(Math.random()*pool.length)];if(c===a)continue;const vb=hlVal(c,st[1]),r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(Math.random()<hard&&r>(st[1]<0?1.15:1.35))continue;b=c}
+      if(!b)b=pool.find(c=>c!==a);
+      const T=Math.max(4500,10000-streak*400),t0=performance.now();busy=false;
+      B.innerHTML='<div class="whohd"><span>🔥 Racha: <b>'+streak+'</b></span><span>📊 '+st[0]+'</span></div><div class="mgtime"><i id="hlT"></i></div>'+
+        '<div class="hlvs"><div class="hlc '+a[2]+'"><div class="hlspr">'+icoHD(a,150,false,false)+'</div><b>'+esc(a[0])+'</b><small>'+tyTxt(a)+'</small><div class="hlv"><small>'+st[0]+' base</small><b>'+va+'</b></div></div>'+
+        '<div class="hlmid">VS</div>'+
+        '<div class="hlc '+b[2]+'"><div class="hlspr">'+icoHD(b,150,false,false)+'</div><b>'+esc(b[0])+'</b><small>'+tyTxt(b)+'</small><div class="hlv" id="hlV"><small>'+st[0]+' base</small><b>?</b></div>'+
+          '<div class="hlbtn"><button class="red" data-hl="1">⬆️ Más</button><button class="alt" data-hl="-1">⬇️ Menos</button></div></div></div>'+
+        '<p class="hlq">¿<b>'+esc(b[0])+'</b> tiene más o menos <b>'+st[0]+'</b> que '+esc(a[0])+'?</p>';
+      const tick=()=>{if(busy)return;const k=1-(performance.now()-t0)/T,bar=$("hlT");if(bar)bar.style.width=Math.max(0,k*100)+"%";if(k<=0){pick(0);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
+      const pick=dir=>{if(busy)return;busy=true;cancelAnimationFrame(MG.raf);const vb=hlVal(b,st[1]),ok=dir!==0&&(vb===va||(dir>0?vb>va:vb<va)),left=Math.max(0,1-(performance.now()-t0)/T);
+        B.querySelectorAll("[data-hl]").forEach(x=>{x.disabled=true});const v=$("hlV");if(v){v.classList.add(ok?"ok":"bad");const n=v.querySelector("b"),s0=performance.now();const an=()=>{const k=Math.min(1,(performance.now()-s0)/600);n.textContent=Math.round(vb*k);if(k<1)requestAnimationFrame(an)};an()}
+        if(ok){streak++;const pts=100+Math.round(left*60)+streak*10;mgSet(MG.score+pts);snd("lvl");const c=B.querySelectorAll(".hlc")[1].getBoundingClientRect();mgPop(c.left+c.width/2,c.top+30,"+"+pts,"#ffd35c");a=b;mgT(round,1400)}
+        else{snd("miss");mgT(()=>end(MG.score),1900)}};
+      B.querySelectorAll("[data-hl]").forEach(x=>x.onclick=()=>pick(+x.dataset.hl));
+    };
+    mgSet(0);round();
+  }};
+// teclas: flecha arriba = más, abajo = menos
+document.addEventListener("keydown",e=>{if(!MG.g||MG.g.id!=="hl")return;const b=e.key==="ArrowUp"?'[data-hl="1"]':e.key==="ArrowDown"?'[data-hl="-1"]':null;if(!b)return;const x=document.querySelector("#mgB "+b);if(x&&!x.disabled){e.preventDefault();x.click()}});
+
+MGS.push(G_PUZ,G_HL);
+// entran en la rotación del Torneo semanal a partir de la semana que viene (no cambia el torneo en curso)
+TOUR_ROT.push(["2026-W46","who mem dig fish thr run exc wgt fos puz hl"]);
+Object.assign(MGHOW,{
+  puz:["Elige de <b>9 a 100 piezas</b>: cada pieza vale <b>40 puntos</b> (con 100 piezas, hasta 4.000).","Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.","<b>Rapidez</b>: hasta la mitad de los puntos dependen de lo rápido que termines.","<b>Precisión</b>: cuantos menos cambios hagas (cerca del mínimo), más puntos.","Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo."],
+  hl:["Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>. Si empatan, cuenta como acierto.","Con la racha, los valores se parecen cada vez más y tienes menos tiempo.","Teclado: <b>↑</b> más, <b>↓</b> menos."]});
 
 </script>
 <script>

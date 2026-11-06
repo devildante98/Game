@@ -727,5 +727,15 @@
 "⚡ {}": "⚡ {}",
 "💨 ¡Esquivado! {} usa {}. {} pierde {} PS.": "💨 Dodged! {} used {}. {} loses {} HP.",
 "{} usa {}. {} pierde {} PS.": "{} used {}. {} loses {} HP.",
-"⚔️ Termina el combate o pulsa «Huir» para volver a la Exploración.": "⚔️ Finish the battle or press «Run» to go back to Exploration."
+"⚔️ Termina el combate o pulsa «Huir» para volver a la Exploración.": "⚔️ Finish the battle or press «Run» to go back to Exploration.",
+"✅ Tus Pokémon que la aprenden {}": "✅ Your Pokémon that learn it {}",
+"❌ Tus Pokémon de tipo {} que NO {}": "❌ Your {}-type Pokémon that DON'T {}",
+"📖 Todas las especies {}": "📖 All species {}",
+"No lo tienes": "You don't have it",
+"⭐ Equipo": "⭐ Team",
+"No la aprende": "Can't learn it",
+"Hay {}: usa el buscador.": "There are {}: use the search box.",
+"Ninguno de tus Pokémon puede aprenderla.": "None of your Pokémon can learn it.",
+"Todos tus Pokémon de tipo {} pueden aprenderla. 👍": "All your {}-type Pokémon can learn it. 👍",
+"Tienes ×{}": "You have ×{}"
 }

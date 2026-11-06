@@ -6,7 +6,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.14.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.14.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -41,7 +41,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793963114">
+<meta name="game-build" content="1793963488">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2370,6 +2370,16 @@ body.gm #gBg .pcpar{display:none!important}
 #menu{counter-reset:mvk}#menu .mvb{position:relative;counter-increment:mvk}
 #menu .mvb:nth-child(-n+4)::after{content:counter(mvk);position:absolute;top:5px;right:7px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:6px;background:rgba(0,0,0,.55);color:#fff;font:800 11px/18px inherit;text-align:center;pointer-events:none}
 @media (pointer:coarse){#menu .mvb::after{display:none}}
+/* ventana «¿Quién puede aprender esta MT?» */
+#mtWM{position:fixed;inset:0;z-index:96;background:rgba(14,16,40,.62);display:grid;place-items:center;padding:12px}#mtWM[hidden]{display:none}
+.mtww{width:min(1080px,100%);height:min(780px,calc(100vh - 24px))}
+.mtwhd{display:flex;align-items:center;gap:10px;min-width:0}.mtwhd>span{display:flex;flex-direction:column}.mtwhd small{color:var(--mute);font-size:.8rem}
+.mtwtabs{display:flex;gap:6px;padding:0 14px 10px;flex-wrap:wrap;flex:none}
+.mtwtabs button{font-size:.82rem;padding:7px 12px;border-radius:12px;background:var(--bg);color:var(--ink);border:2px solid var(--line)}
+.mtwtabs button b{margin-left:4px;background:var(--panel);border-radius:99px;padding:0 7px}
+.mtwtabs button.on{border-color:#13a37f;background:color-mix(in srgb,#13a37f 15%,var(--bg))}.mtwtabs button.no.on{border-color:#e63950;background:color-mix(in srgb,#e63950 12%,var(--bg))}
+.mtwl2{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
+.tpc.mtno{background:color-mix(in srgb,#e63950 8%,var(--bg))}.tpc.mtnot{opacity:.8}.tpc.mtnot .tpspr{filter:saturate(.7)}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2435,7 +2445,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.14.2</small>
+    <small class="pcver">Versión 6.14.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7062,7 +7072,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.14.2";
+const GAME_VER="6.14.3";
 const NEWS=[
 {v:"2026-11-06c",ver:"6.14",at:"2026-11-06T11:15",t:"🔴 Incursiones renovadas: combate en directo y más difícil",l:["Toca la pantalla (o Espacio) para el ataque rápido: cada golpe carga energía","Con la energía llena, lanza ataques cargados mucho más fuertes (botones o teclas 1 y 2)","El jefe brilla en amarillo antes de atacar: desliza o usa ⬅️ ➡️ / A y D para esquivar y recibir mucho menos daño","Sus ataques cargados pueden debilitar a tu Pokémon de un golpe. Si cae todo tu equipo, puedes volver a entrar, pero pierdes 10 segundos","Los PS del jefe dependen de la fuerza real de los equipos: siempre es un reto. En grupo es más fácil","Premios mejores: 650.000 🎟️ (+250.000 a quien más daño haga) y 3 Ultra Ball"]},
 {v:"2026-11-06b",ver:"6.13",at:"2026-11-06T10:00",t:"🎯 Zona de entrenamiento y MT más claras",l:["Nueva Zona de entrenamiento (Actividades, o el botón junto a «¡Combatir!»): prueba a cualquiera de tus Pokémon contra el rival, el nivel y la habilidad que quieras","Modo Diana: no ataca, recupera sus PS cada turno y te dice el daño exacto de cada golpe. O un combate de práctica de verdad","No se gastan PS, PP ni objetos, y no da premios ni experiencia","Tienda de MT: botón «👀 ¿Quién puede aprenderla?» con tus Pokémon que la aprenden y los de su tipo que NO, antes de comprarla","Tienda de MT: elige uno de tus Pokémon para ver solo las MT que puede aprender"]},
@@ -7251,7 +7261,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793963114";
+const GAME_B="1793963488";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -10034,7 +10044,7 @@ function mtShopUI(){const box=$("mtPB");if(!box)return;const own=P.filter(p=>S.o
   let last="";h+=L.length?'<div class="mtg">'+L.map(m=>{const id="mt"+m.id,pr=mtPrice(m),n=S.bag[id]|0,cnt=own.filter(p=>mtOk(p[0],m.id)).length,hd=m.t!==last?'</div><h3 class="shh">'+EM[m.t]+' '+TIPO[m.t]+'</h3><div class="mtg">':'';last=m.t;
     return hd+'<div class="mtc" style="--tc:'+TC[m.t]+'"><div class="mtch">'+itemIco(id,42)+'<div><b>MT '+esc(m.n)+'</b><small>'+EM[m.t]+' '+TIPO[m.t]+' · '+(m.cl===0?'Estado':m.cl===1?'Físico':'Especial')+'</small></div></div>'+
       '<small class="mut mtd">'+esc(mvDesc(m))+'</small><small class="mtcp">'+(MTF.p?'✅ <b>'+esc(nk(MTF.p))+'</b> puede aprenderla · ':'')+(cnt?'✅ La pueden aprender <b>'+cnt+'</b> de tus Pokémon':'⚪ Ninguno de tus Pokémon la aprende')+(n?' · Tienes ×'+n:'')+'</small>'+
-      '<button class="alt mtwho" data-mtw="'+m.id+'" aria-expanded="'+(MTF.open[m.id]?'true':'false')+'">'+(MTF.open[m.id]?'▲ Ocultar':'👀 ¿Quién puede aprenderla?')+'</button>'+(MTF.open[m.id]?mtWhoHTML(m,own):'')+
+      '<button class="alt mtwho" data-mtw="'+m.id+'">👀 ¿Quién puede aprenderla?</button>'+
       '<button class="red" data-mtb="'+id+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button></div>'}).join("")+'</div>':'<p class="mut">No hay MT con esos filtros.</p>';
   h=h.replace('<div class="mtg"></div>','');
   box.innerHTML=h+'<small class="mut">💡 Después de comprarla, ve a la <a href="#" data-mtbag>Mochila</a>, pulsa «Usar» en la MT y elige qué Pokémon la aprende y qué movimiento olvida.</small>';
@@ -10044,19 +10054,36 @@ function mtShopUI(){const box=$("mtPB");if(!box)return;const own=P.filter(p=>S.o
 }
 document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
   const ty=t.closest("#mtPB [data-mtt]");if(ty){MTF.t=ty.dataset.mtt;snd("ui");mtShopUI();return}
-  const wh=t.closest("#mtPB [data-mtw]");if(wh){const k=wh.dataset.mtw;MTF.open[k]=!MTF.open[k];snd("ui");const y=wh.getBoundingClientRect().top;mtShopUI();const n=document.querySelector('#mtPB [data-mtw="'+k+'"]');if(n){const sc=n.closest(".hubb,.panel,#gScrB")||document.scrollingElement;try{sc.scrollTop+=n.getBoundingClientRect().top-y}catch(e){}}return}
+  const wh=t.closest("#mtPB [data-mtw]");if(wh){snd("ui");mtWhoOpen(wh.dataset.mtw);return}
   const bg=t.closest("#mtPB [data-mtbag]");if(bg){e.preventDefault();hubOpen("bag","bagU");return}
   const b=t.closest("#mtPB [data-mtb]");if(b){const id=b.dataset.mtb,m=MVD[id.slice(2)],pr=mtPrice(m);if(S.t<pr){toast("Te faltan "+fmt(pr-S.t)+" 🎟️.");return}
     S.t-=pr;S.bag[id]=(S.bag[id]|0)+1;qEv("buy",1);save();render();snd("lvl");toast("💿 Has comprado la MT "+m.n+". Úsala desde la Mochila.");mtShopUI()}});
-// quién puede aprender una MT: tus Pokémon que sí, los de su mismo tipo que no, y el resto de especies
-function mtWhoHTML(m,own){const yes=own.filter(p=>mtOk(p[0],m.id)),no=own.filter(p=>!mtOk(p[0],m.id)&&tys(p).includes(m.t)),team=new Set((S.team||[]).filter(Boolean));
-  const chip=(p,ok)=>'<span class="mtwc'+(ok?'':' no')+(team.has(p[0])?' tm':'')+'" title="'+esc(p[0])+'">'+ico(p,34)+'<small>'+esc(nk(p[0]))+'</small></span>';
-  const sort=L=>L.slice().sort((a,b)=>(team.has(b[0])-team.has(a[0]))||nk(a[0]).localeCompare(nk(b[0])));
-  const all=P.filter(p=>!(S.owned[p[0]]>0)&&mtOk(p[0],m.id)).map(p=>p[0]);
-  return '<div class="mtwho2">'+(yes.length?'<b>✅ Tus Pokémon que la aprenden ('+yes.length+')</b><div class="mtwl">'+sort(yes).map(p=>chip(p,1)).join("")+'</div>':'<b>⚪ Ninguno de tus Pokémon puede aprenderla</b>')+
-    (no.length?'<b class="mtwn">❌ Tus Pokémon de tipo '+TIPO[m.t]+' que NO la aprenden ('+no.length+')</b><div class="mtwl">'+sort(no).map(p=>chip(p,0)).join("")+'</div>':'')+
-    (all.length?'<details><summary>📖 Otras especies que la aprenden ('+all.length+')</summary><small class="mut mtwall">'+all.map(esc).join(", ")+'</small></details>':'')+
-    '<small class="mut">Los marcados con ⭐ están en tu equipo.</small></div>'}
+// quién puede aprender una MT: ventana con tarjetas (tus Pokémon que sí, los de su tipo que no y el resto de especies)
+const MTW={id:"",tab:"yes",q:""};
+function mtWhoOpen(id){MTW.id=String(id);MTW.q="";const m=MVD[MTW.id];if(!m)return;const own=P.filter(p=>S.owned[p[0]]>0);
+  MTW.tab=own.some(p=>mtOk(p[0],m.id))?"yes":"all";
+  let w=$("mtWM");if(!w){w=document.createElement("div");w.id="mtWM";w.setAttribute("role","dialog");w.setAttribute("aria-modal","true");document.body.appendChild(w);
+    w.addEventListener("click",e=>{if(e.target===w||e.target.closest(".tpx")){w.hidden=true;return}const t=e.target.closest("[data-mwt]");if(t){MTW.tab=t.dataset.mwt;snd("ui");mtWhoRender();return}
+      const c=e.target.closest("[data-mwn]");if(c&&S.owned[c.dataset.mwn]>0&&typeof pkView==="function"){try{pkView(c.dataset.mwn)}catch(x){}}});
+    w.addEventListener("input",e=>{if(e.target.id==="mtWQ"){MTW.q=e.target.value;mtWhoList()}});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!w.hidden&&(!$("pkv")||$("pkv").hidden)){w.hidden=true;e.stopPropagation()}},true)}
+  w.hidden=false;mtWhoRender();setTimeout(()=>{const q=$("mtWQ");if(q&&matchMedia("(pointer:fine)").matches)q.focus()},50)}
+function mtWhoSets(m){const own=P.filter(p=>S.owned[p[0]]>0);
+  return {yes:own.filter(p=>mtOk(p[0],m.id)),no:own.filter(p=>!mtOk(p[0],m.id)&&tys(p).includes(m.t)),all:P.filter(p=>mtOk(p[0],m.id))}}
+function mtWhoRender(){const w=$("mtWM"),m=MVD[MTW.id];if(!w||!m)return;const L=mtWhoSets(m),n=S.bag["mt"+m.id]|0;
+  w.innerHTML='<div class="tpw mtww"><div class="tph"><span class="mtwhd">'+itemIco("mt"+m.id,40)+'<span><b>MT '+esc(m.n)+'</b><small>'+EM[m.t]+' '+TIPO[m.t]+' · '+(m.cl===0?'Estado':m.cl===1?'Físico':'Especial')+(n?' · Tienes ×'+n:'')+'</small></span></span><button class="tpx" aria-label="Cerrar">✕</button></div>'+
+    '<div class="mtwtabs"><button class="'+(MTW.tab==="yes"?'on':'')+'" data-mwt="yes">✅ Tus Pokémon que la aprenden <b>'+L.yes.length+'</b></button>'+
+      '<button class="no '+(MTW.tab==="no"?'on':'')+'" data-mwt="no">❌ Tus Pokémon de tipo '+TIPO[m.t]+' que NO <b>'+L.no.length+'</b></button>'+
+      '<button class="'+(MTW.tab==="all"?'on':'')+'" data-mwt="all">📖 Todas las especies <b>'+L.all.length+'</b></button></div>'+
+    '<div class="tpf"><input id="mtWQ" placeholder="Buscar Pokémon..." value="'+esc(MTW.q)+'"></div><div class="tpl mtwl2" id="mtWL"></div></div>';
+  mtWhoList()}
+function mtWhoList(){const el=$("mtWL"),m=MVD[MTW.id];if(!el||!m)return;const L=mtWhoSets(m),team=new Set((S.team||[]).filter(Boolean)),q=nrm(MTW.q||""),tab=MTW.tab;
+  let a=L[tab].filter(p=>!q||nrm(p[0]).includes(q)||(S.owned[p[0]]>0&&nrm(nk(p[0])).includes(q)));
+  a=a.slice().sort((x,y)=>(team.has(y[0])-team.has(x[0]))||((S.owned[y[0]]>0)-(S.owned[x[0]]>0))||(tab==="all"?(x[4]||0)-(y[4]||0):nk(x[0]).localeCompare(nk(y[0]),"es")));
+  const tot=a.length;a=a.slice(0,400);
+  el.innerHTML=a.length?a.map(p=>{const n=p[0],mine=S.owned[n]>0,sh=mine&&S.shiny&&S.shiny[n]>0,ok=mtOk(n,m.id);
+    return '<button type="button" class="tpc '+p[2]+(ok?'':' mtno')+(mine?'':' mtnot')+'" data-mwn="'+esc(n)+'" title="'+esc(n)+'"><span class="tpspr">'+ico(p,56,false,sh)+'</span><b>'+(sh?"✨ ":"")+esc(mine?nk(n):n)+'</b>'+(mine?'<small>Nv'+lvd(n).l+'</small>':'<small>No lo tienes</small>')+'<small>'+tyTxt(p)+'</small>'+(team.has(n)?'<i class="tpin">⭐ Equipo</i>':'')+(ok?'':'<i class="tpko">No la aprende</i>')+'</button>'}).join("")+(tot>400?'<small class="mut tzpkmore">Hay '+tot+': usa el buscador.</small>':'')
+    :'<small class="mut tzpkmore">'+(tab==="yes"?'Ninguno de tus Pokémon puede aprenderla.':tab==="no"?'Todos tus Pokémon de tipo '+TIPO[m.t]+' pueden aprenderla. 👍':'Ningún Pokémon coincide con la búsqueda.')+'</small>'}
 // ================= ficha: movimientos que conoce el Pokémon =================
 function fmovHTML(n){const L=moves(PM[n]).filter(x=>x);if(!L.length)return "";const CL=["💫 Estado","💥 Físico","🔮 Especial"];
   return '<span>Movimientos</span><div class="fmovs">'+L.map(mv=>{const c=ppCur(n,mv.id),x=ppMax(n,mv.id),fx=String(mvDesc(mv)).split(" · ").filter(t=>!/^(PP|Poder|Prec\.)\s|^(Físico|Especial|Estado)$/.test(t)).slice(1).join(" · ");

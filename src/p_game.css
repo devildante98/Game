@@ -735,3 +735,13 @@ body.gm #gBg .pcpar{display:none!important}
 #menu{counter-reset:mvk}#menu .mvb{position:relative;counter-increment:mvk}
 #menu .mvb:nth-child(-n+4)::after{content:counter(mvk);position:absolute;top:5px;right:7px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:6px;background:rgba(0,0,0,.55);color:#fff;font:800 11px/18px inherit;text-align:center;pointer-events:none}
 @media (pointer:coarse){#menu .mvb::after{display:none}}
+/* ventana «¿Quién puede aprender esta MT?» */
+#mtWM{position:fixed;inset:0;z-index:96;background:rgba(14,16,40,.62);display:grid;place-items:center;padding:12px}#mtWM[hidden]{display:none}
+.mtww{width:min(1080px,100%);height:min(780px,calc(100vh - 24px))}
+.mtwhd{display:flex;align-items:center;gap:10px;min-width:0}.mtwhd>span{display:flex;flex-direction:column}.mtwhd small{color:var(--mute);font-size:.8rem}
+.mtwtabs{display:flex;gap:6px;padding:0 14px 10px;flex-wrap:wrap;flex:none}
+.mtwtabs button{font-size:.82rem;padding:7px 12px;border-radius:12px;background:var(--bg);color:var(--ink);border:2px solid var(--line)}
+.mtwtabs button b{margin-left:4px;background:var(--panel);border-radius:99px;padding:0 7px}
+.mtwtabs button.on{border-color:#13a37f;background:color-mix(in srgb,#13a37f 15%,var(--bg))}.mtwtabs button.no.on{border-color:#e63950;background:color-mix(in srgb,#e63950 12%,var(--bg))}
+.mtwl2{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
+.tpc.mtno{background:color-mix(in srgb,#e63950 8%,var(--bg))}.tpc.mtnot{opacity:.8}.tpc.mtnot .tpspr{filter:saturate(.7)}

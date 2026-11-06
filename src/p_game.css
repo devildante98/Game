@@ -731,3 +731,7 @@ body.gm #gBg .pcpar{display:none!important}
 .rdgo .rdme b,.rdgo .rdme b small{color:#fff}.rdgo .rdme small{color:#dfe4ff}
 .rdgme{bottom:178px}
 @media (max-width:560px){.rdgme{bottom:228px}}
+/* número de tecla en cada ataque (1-4) */
+#menu{counter-reset:mvk}#menu .mvb{position:relative;counter-increment:mvk}
+#menu .mvb:nth-child(-n+4)::after{content:counter(mvk);position:absolute;top:5px;right:7px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:6px;background:rgba(0,0,0,.55);color:#fff;font:800 11px/18px inherit;text-align:center;pointer-events:none}
+@media (pointer:coarse){#menu .mvb::after{display:none}}

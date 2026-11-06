@@ -6,7 +6,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.14"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.14.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -41,7 +41,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793960136">
+<meta name="game-build" content="1793962339">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2366,6 +2366,10 @@ body.gm #gBg .pcpar{display:none!important}
 .rdgo .rdme b,.rdgo .rdme b small{color:#fff}.rdgo .rdme small{color:#dfe4ff}
 .rdgme{bottom:178px}
 @media (max-width:560px){.rdgme{bottom:228px}}
+/* número de tecla en cada ataque (1-4) */
+#menu{counter-reset:mvk}#menu .mvb{position:relative;counter-increment:mvk}
+#menu .mvb:nth-child(-n+4)::after{content:counter(mvk);position:absolute;top:5px;right:7px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:6px;background:rgba(0,0,0,.55);color:#fff;font:800 11px/18px inherit;text-align:center;pointer-events:none}
+@media (pointer:coarse){#menu .mvb::after{display:none}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2431,7 +2435,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.14</small>
+    <small class="pcver">Versión 6.14.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -4825,6 +4829,15 @@ async function evoPrompt(n,list){
 
 // entrenadores: usan Hiperpociones cuando su Pokémon está muy débil (las que les queden)
 function aiAct(E,i){const m=beAct(E.sd[i]);if(B&&B.trainer&&(B.tHeal|0)>0&&m&&m.mh>0&&m.mh<m.mx*.25&&Math.random()<.75){B.tHeal--;return "h"}return aiPick(E,i)}
+// ---- teclas 1-4: cada tecla lanza el ataque de su botón (combates normales, Exploración, PVP y dobles) ----
+window.addEventListener("keydown",e=>{
+  if(!/^[1-4]$/.test(e.key)||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;
+  const tg=e.target&&e.target.tagName;if(tg==="INPUT"||tg==="SELECT"||tg==="TEXTAREA"||(e.target&&e.target.isContentEditable))return;
+  if(typeof RD!=="undefined"&&RD.phase==="fight")return;// las incursiones tienen sus propias teclas
+  const m=$("menu"),ar=$("arena");if(!m||!ar||ar.hidden||!m.offsetParent)return;
+  const L=[...m.querySelectorAll(".mvb")].filter(b=>b.offsetParent);if(!L.length)return;
+  const b=L[+e.key-1];e.preventDefault();e.stopImmediatePropagation();
+  if(b&&!b.disabled){b.click();b.animate([{transform:"scale(.95)"},{transform:"none"}],140)}},true);
 // ================= imagenes de objetos (SVG creado con codigo) =================
 const ITEM_IMG={pot:"potion",spot:"super-potion",hpot:"hyper-potion",mpot:"max-potion",rev:"revive",mrev:"max-revive",pb:"poke-ball",sb:"great-ball",ub:"ultra-ball",mb:"master-ball",cand:"rare-candy",eter:"ether",meter:"max-ether",elix:"elixir",melix:"max-elixir",ppup:"pp-up",ppmax:"pp-max"};
 // si la imagen original no carga se usa el dibujo propio (o 💎 para los objetos evolutivos)
@@ -7049,7 +7062,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.14";
+const GAME_VER="6.14.1";
 const NEWS=[
 {v:"2026-11-06c",ver:"6.14",at:"2026-11-06T11:15",t:"🔴 Incursiones renovadas: combate en directo y más difícil",l:["Toca la pantalla (o Espacio) para el ataque rápido: cada golpe carga energía","Con la energía llena, lanza ataques cargados mucho más fuertes (botones o teclas 1 y 2)","El jefe brilla en amarillo antes de atacar: desliza o usa ⬅️ ➡️ / A y D para esquivar y recibir mucho menos daño","Sus ataques cargados pueden debilitar a tu Pokémon de un golpe. Si cae todo tu equipo, puedes volver a entrar, pero pierdes 10 segundos","Los PS del jefe dependen de la fuerza real de los equipos: siempre es un reto. En grupo es más fácil","Premios mejores: 650.000 🎟️ (+250.000 a quien más daño haga) y 3 Ultra Ball"]},
 {v:"2026-11-06b",ver:"6.13",at:"2026-11-06T10:00",t:"🎯 Zona de entrenamiento y MT más claras",l:["Nueva Zona de entrenamiento (Actividades, o el botón junto a «¡Combatir!»): prueba a cualquiera de tus Pokémon contra el rival, el nivel y la habilidad que quieras","Modo Diana: no ataca, recupera sus PS cada turno y te dice el daño exacto de cada golpe. O un combate de práctica de verdad","No se gastan PS, PP ni objetos, y no da premios ni experiencia","Tienda de MT: botón «👀 ¿Quién puede aprenderla?» con tus Pokémon que la aprenden y los de su tipo que NO, antes de comprarla","Tienda de MT: elige uno de tus Pokémon para ver solo las MT que puede aprender"]},
@@ -7238,7 +7251,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793960136";
+const GAME_B="1793962339";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

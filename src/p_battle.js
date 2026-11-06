@@ -679,3 +679,12 @@ async function evoPrompt(n,list){
 
 // entrenadores: usan Hiperpociones cuando su Pokémon está muy débil (las que les queden)
 function aiAct(E,i){const m=beAct(E.sd[i]);if(B&&B.trainer&&(B.tHeal|0)>0&&m&&m.mh>0&&m.mh<m.mx*.25&&Math.random()<.75){B.tHeal--;return "h"}return aiPick(E,i)}
+// ---- teclas 1-4: cada tecla lanza el ataque de su botón (combates normales, Exploración, PVP y dobles) ----
+window.addEventListener("keydown",e=>{
+  if(!/^[1-4]$/.test(e.key)||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;
+  const tg=e.target&&e.target.tagName;if(tg==="INPUT"||tg==="SELECT"||tg==="TEXTAREA"||(e.target&&e.target.isContentEditable))return;
+  if(typeof RD!=="undefined"&&RD.phase==="fight")return;// las incursiones tienen sus propias teclas
+  const m=$("menu"),ar=$("arena");if(!m||!ar||ar.hidden||!m.offsetParent)return;
+  const L=[...m.querySelectorAll(".mvb")].filter(b=>b.offsetParent);if(!L.length)return;
+  const b=L[+e.key-1];e.preventDefault();e.stopImmediatePropagation();
+  if(b&&!b.disabled){b.click();b.animate([{transform:"scale(.95)"},{transform:"none"}],140)}},true);

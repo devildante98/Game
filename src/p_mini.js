@@ -66,15 +66,15 @@ const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a l
       $("digT").textContent=Math.ceil((dur-el)/1000);
       const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
       if(free.length){const h=free[Math.floor(Math.random()*free.length)],m=h.querySelector(".digm"),r=Math.random(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
-        m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-el/45);
-        mgT(()=>{if(m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;$("digC").textContent=""}},up)}
+        const sid=(+m.dataset.sid||0)+1;m.dataset.sid=sid;m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-el/45);
+        mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;$("digC").textContent=""}},up)}
       mgT(spawn,Math.max(330,780-el/60));
     };
     holes.forEach(h=>h.addEventListener("pointerdown",e=>{const m=h.querySelector(".digm");if(!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
       const k=m.dataset.k;let pts=k==="t"?3:k==="v"?-3:1;
       if(k==="v"){combo=0;snd("hit",1);h.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:180,iterations:2})}else{combo++;hits++;snd("pop");if(combo>=5)pts+=1}
       mgSet(MG.score+pts);mgPop(e.clientX,e.clientY,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";
-      mgT(()=>m.classList.remove("up"),180)}));
+      mgT(()=>{m.classList.remove("up");mgT(()=>{if(!m.classList.contains("up"))m.classList.remove("hit")},200)},180)}));
     spawn();
   }};
 

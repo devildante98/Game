@@ -267,7 +267,7 @@ button.big{font-size:1.15rem;padding:12px 30px;border-radius:16px}.mgbtns{displa
 .digh{position:relative;aspect-ratio:1.1;cursor:pointer}
 .digback{position:absolute;left:8%;right:8%;bottom:6%;height:26%;border-radius:50%;background:radial-gradient(#2a180c 0 55%,#4a2e16 70%,#6b4423 100%)}
 .digclip{position:absolute;left:0;right:0;top:0;bottom:19%;overflow:hidden}
-.digm{position:absolute;left:0;right:0;bottom:0;height:100%;display:grid;place-items:end center;transform:translateY(105%);transition:transform .14s ease-out}.digm.up{transform:translateY(8%)}.digm.hit{filter:brightness(1.7) saturate(.4);transform:translateY(35%) scale(.92)}
+.digm{position:absolute;left:0;right:0;bottom:0;height:100%;display:grid;place-items:end center;transform:translateY(105%);transition:transform .14s ease-out}.digm.up{transform:translateY(8%)}.digm.up.hit{filter:brightness(1.7) saturate(.4);transform:translateY(35%) scale(.92)}
 .digm img{width:92%!important;height:auto!important;max-height:none;margin-bottom:-14%;pointer-events:none}
 .diglip{position:absolute;left:8%;right:8%;bottom:6%;height:13%;border-radius:0 0 50% 50%/0 0 100% 100%;background:linear-gradient(#7a4f29,#5a3a1c);box-shadow:0 4px 0 rgba(0,0,0,.15)}
 .fiw{position:relative;height:280px;border-radius:20px;overflow:hidden;cursor:pointer;user-select:none;touch-action:manipulation}

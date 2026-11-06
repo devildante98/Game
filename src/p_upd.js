@@ -108,7 +108,7 @@ $("sugGo").onclick=async()=>{
 };
 sugLoad=async function(){
   if(!window.sugList)return;
-  let l;try{l=(await window.sugList()).filter(x=>!x.ah)}catch(e){$("sugAdm").hidden=true;return}
+  let l;try{const ah=Array.isArray(S.sugAdmHid)?S.sugAdmHid:[];l=(await window.sugList()).filter(x=>!x.ah&&!ah.includes(x.id))}catch(e){$("sugAdm").hidden=true;return}
   $("sugAdm").hidden=false;
   $("sugList").innerHTML=l.length?l.map(s=>{const im=Array.isArray(s.imgs)?s.imgs:[];return '<div class="sugi"><div class="sugbt">'+(im.length?'<button class="alt" data-sdi="'+esc(s.id)+'">🖼️ Borrar fotos</button>':'')+'<button class="alt" data-sd="'+esc(s.id)+'">🗑️ Borrar</button></div><b>'+esc(s.name||"Anónimo")+'</b>'+(s.nick?' <small class="mut">('+esc(s.nick)+')</small>':'')+' <small class="mut">· '+(s.at?new Date(s.at).toLocaleString("es"):"")+'</small> '+sugStB(s.st)+'<p>'+esc(s.text||"").replace(/\n/g,"<br>")+'</p>'+sugAdmBox(s)+
     (im.length?'<div class="sugims">'+im.map(u=>/^data:image\/(jpeg|png|webp);base64,/.test(u)?'<a href="#" data-sgv="1"><img src="'+u+'" alt="Foto adjunta"></a>':'').join("")+'</div>':(s.nimg?'<small class="mut">🖼️ '+s.nimg+' foto'+(s.nimg>1?'s':'')+' borrada'+(s.nimg>1?'s':'')+'</small>':''))+'</div>'}).join(""):'<small class="mut">Aún no hay sugerencias.</small>';
@@ -1043,5 +1043,6 @@ setInterval(()=>{try{if(S&&S.nick)localStorage.setItem("pgcNick",String(S.nick).
 document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("#sugList [data-sd]");if(!b)return;
   e.preventDefault();e.stopImmediatePropagation();if(!window.sugUpd)return;
   if(!await askOk("¿Borrar esta sugerencia de tu lista? El jugador la seguirá viendo en «Mis sugerencias» hasta que decida quitarla."))return;
-  b.disabled=true;try{await window.sugUpd(b.dataset.sd,{ah:true});toast("🗑️ Sugerencia borrada de tu lista.")}catch(x){toast("No se ha podido borrar ("+((x&&x.code)||"error")+").");b.disabled=false}
+  // las reglas de Firestore no dejan añadir campos nuevos a la sugerencia: la lista de borradas se guarda en la partida del administrador
+  const H=Array.isArray(S.sugAdmHid)?S.sugAdmHid:(S.sugAdmHid=[]);if(!H.includes(b.dataset.sd))H.push(b.dataset.sd);S.sugAdmHid=H.slice(-1000);save();toast("🗑️ Sugerencia borrada de tu lista.")
   if(SUGC)SUGC=SUGC.filter(x=>x.id!==b.dataset.sd);sugLoad()},true);

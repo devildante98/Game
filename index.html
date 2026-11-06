@@ -36,7 +36,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.27.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.27.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -71,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794000523">
+<meta name="game-build" content="1794001741">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2547,7 +2547,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.27.2</small>
+    <small class="pcver">Versión 6.27.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7200,8 +7200,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.27.2";
+const GAME_VER="6.27.3";
 const NEWS=[
+{v:"2026-11-06-6.27.3",ver:"6.27.3",at:"2026-11-06T22:49",t:"🔧 Arreglos/Mejoras",l:["Exploración: ya se pueden usar los Caramelos Raros desde la mochila (sube 1 nivel, hasta el límite de tus medallas)"]},
 {v:"2026-11-06-6.27.2",ver:"6.27.2",at:"2026-11-06T22:28",t:"🔧 Arreglos/Mejoras",l:["Evolución: nuevo botón «⏩ Saltar animación» (o Espacio / Enter) para ver directamente el resultado. «✋ Detener» sigue sirviendo para cancelar la evolución"]},
 {v:"2026-11-06-6.27.1",ver:"6.27.1",at:"2026-11-06T22:24",t:"🔧 Arreglos/Mejoras",l:["Exploración: menos Pokémon salvajes. En las cuevas salen la mitad que antes y en la hierba alta algo menos","Después de un encuentro tienes unos pasos de calma antes del siguiente"]},
 {v:"2026-11-06o",ver:"6.27",at:"2026-11-06T22:21",t:"🔒 Límite de nivel en el equipo",l:["Un Pokémon de nivel más alto que tu límite (el de tus medallas) ya no se puede poner en el equipo","Si ya lo tenías en el equipo, no podrás combatir (combates, gimnasios, Exploración, incursiones, PVP ni dobles) hasta que lo saques o consigas las medallas necesarias","Su ficha y su tarjeta te avisan con «🔒»"]},
@@ -7421,7 +7422,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794000523";
+const GAME_B="1794001741";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -12620,13 +12621,14 @@ STX.dep=()=>stRun(async()=>{const town=(EX.map||"").replace(/^tienda_/,"");
 
 // ================= usar objetos de la mochila de Exploración (fuera de combate) =================
 const XU={id:null};
-const xuKind=id=>{const it=xsIt(id);if(!it)return null;if(["pot","spot","hpot","mpot"].includes(id))return "heal";if(id==="rev"||id==="mrev")return "rev";if(["eter","meter","elix","melix"].includes(id))return "pp";
+const xuKind=id=>{const it=xsIt(id);if(!it)return null;if(["pot","spot","hpot","mpot"].includes(id))return "heal";if(id==="rev"||id==="mrev")return "rev";if(["eter","meter","elix","melix"].includes(id))return "pp";if(id==="cand")return "cand";
   if(it[7]==="evo")return "evo";if(xsMT(id))return "mt";if(it[7]==="mint")return "mint";if(it[7]==="hold")return "hold";return null};
 function xuTargets(id){return xgRun(()=>{const k=xuKind(id),own=Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]);
   return own.map(n=>{const l=lvd(n).l,mx=stH(PM[n],l),hp=S.hp[n]===undefined?mx:Math.min(mx,S.hp[n]);let ok=false,why="";
     if(k==="heal"){ok=hp>0&&hp<mx;why=hp<=0?"Debilitado":hp>=mx?"PS al máximo":""}
     else if(k==="rev"){ok=hp<=0;why=ok?"":"No está debilitado"}
     else if(k==="pp"){ok=true}
+    else if(k==="cand"){ok=l<lvCap();why=ok?"":"En el límite (Nv"+lvCap()+")"}
     else if(k==="evo"){const e=EVO(n).filter(x=>x[1]==="I"+id);ok=e.length>0;why=ok?"":"No le hace efecto"}
     else if(k==="mt"){const mid=id.slice(2);ok=mtOk(n,mid)&&!moveIds(n).includes(mid);why=moveIds(n).includes(mid)?"Ya lo conoce":"No puede aprenderlo"}
     else if(k==="mint"){const ni=+id.slice(4),cur=S.nat&&S.nat[n];ok=cur!==ni;why=ok?"":"Ya tiene esa naturaleza"}
@@ -12642,6 +12644,7 @@ async function xuApply(n,slot){const id=XU.id,k=xuKind(id);let msg="",evoTo=null
     if(k==="heal"){const nh=Math.min(mx,hp+Math.ceil(mx*(it[4]||35)/100));if(nh>=mx)delete S.hp[n];else S.hp[n]=nh;msg=nk(n)+" recupera "+(nh-hp)+" PS."}
     else if(k==="rev"){const nh=Math.max(1,Math.round(mx*(it[5]||50)/100));if(nh>=mx)delete S.hp[n];else S.hp[n]=nh;msg="¡"+nk(n)+" se ha recuperado!"}
     else if(k==="pp"){if(S.pp)delete S.pp[n];msg="Los PP de "+nk(n)+" están al máximo."}
+    else if(k==="cand"){const d=lvd(n);if(d.l>=lvCap())return;const l0=d.l;moveIds(n);d.l++;d.x=0;qEv("lvl",1);if(S.hp[n]!==undefined)S.hp[n]=Math.min(stH(PM[n],d.l),S.hp[n]+8);msg=nk(n)+" sube de Nv"+l0+" a Nv"+d.l+"."+(evoLvReady(n).length?" ¡Ya puede evolucionar!":"")}
     else if(k==="evo"){const e=EVO(n).find(x=>x[1]==="I"+id);if(!e||!PM[e[0]])return;evoTo=e[0];evoApply(n,e[0]);msg="¡"+n+" ha evolucionado a "+e[0]+"!"}
     else if(k==="mt"){const mid=id.slice(2),ids=moveIds(n).slice();if(ids.includes(mid))return;const old=slot>=0?ids[slot]:null;if(slot>=0)ids[slot]=mid;else if(ids.length<4)ids.push(mid);else return;S.mv[n]=ids;if(old&&S.pp&&S.pp[n])delete S.pp[n][old];
       msg="¡"+nk(n)+" ha aprendido "+MVD[mid].n+"!"+(old&&MVD[old]?" (Ha olvidado "+MVD[old].n+")":"")}
@@ -12649,7 +12652,7 @@ async function xuApply(n,slot){const id=XU.id,k=xuKind(id);let msg="",evoTo=null
     else if(k==="hold"){S.held=S.held||{};const old=S.held[n];S.held[n]=id;if(old&&old!==id)S.bag[old]=(S.bag[old]||0)+1;msg=nk(n)+" ahora lleva "+IN(id)+(old&&old!==id?" (y "+IN(old)+" vuelve a la mochila)":"")+"."}
     else return;
     S.bag[id]--;if(!S.bag[id])delete S.bag[id]});
-  if(msg){save();snd(k==="evo"?"win":k==="mt"||k==="mint"||k==="hold"?"lvl":"heal");XU.msg=msg}
+  if(msg){save();snd(k==="evo"?"win":k==="mt"||k==="mint"||k==="hold"||k==="cand"?"lvl":"heal");XU.msg=msg}
   if(!xgRun(()=>S.bag[id]>0)){XU.id=null;try{xgPanel()}catch(e){}const b=$("exTeam");if(b&&msg)b.insertAdjacentHTML("afterbegin",'<div class="xsmsg">'+esc(msg)+'</div>');XU.msg="";return}
   xuUI()}
 // botón «Usar» en la mochila de Exploración

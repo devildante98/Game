@@ -73,13 +73,14 @@ STX.dep=()=>stRun(async()=>{const town=(EX.map||"").replace(/^tienda_/,"");
 
 // ================= usar objetos de la mochila de Exploración (fuera de combate) =================
 const XU={id:null};
-const xuKind=id=>{const it=xsIt(id);if(!it)return null;if(["pot","spot","hpot","mpot"].includes(id))return "heal";if(id==="rev"||id==="mrev")return "rev";if(["eter","meter","elix","melix"].includes(id))return "pp";
+const xuKind=id=>{const it=xsIt(id);if(!it)return null;if(["pot","spot","hpot","mpot"].includes(id))return "heal";if(id==="rev"||id==="mrev")return "rev";if(["eter","meter","elix","melix"].includes(id))return "pp";if(id==="cand")return "cand";
   if(it[7]==="evo")return "evo";if(xsMT(id))return "mt";if(it[7]==="mint")return "mint";if(it[7]==="hold")return "hold";return null};
 function xuTargets(id){return xgRun(()=>{const k=xuKind(id),own=Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]);
   return own.map(n=>{const l=lvd(n).l,mx=stH(PM[n],l),hp=S.hp[n]===undefined?mx:Math.min(mx,S.hp[n]);let ok=false,why="";
     if(k==="heal"){ok=hp>0&&hp<mx;why=hp<=0?"Debilitado":hp>=mx?"PS al máximo":""}
     else if(k==="rev"){ok=hp<=0;why=ok?"":"No está debilitado"}
     else if(k==="pp"){ok=true}
+    else if(k==="cand"){ok=l<lvCap();why=ok?"":"En el límite (Nv"+lvCap()+")"}
     else if(k==="evo"){const e=EVO(n).filter(x=>x[1]==="I"+id);ok=e.length>0;why=ok?"":"No le hace efecto"}
     else if(k==="mt"){const mid=id.slice(2);ok=mtOk(n,mid)&&!moveIds(n).includes(mid);why=moveIds(n).includes(mid)?"Ya lo conoce":"No puede aprenderlo"}
     else if(k==="mint"){const ni=+id.slice(4),cur=S.nat&&S.nat[n];ok=cur!==ni;why=ok?"":"Ya tiene esa naturaleza"}
@@ -95,6 +96,7 @@ async function xuApply(n,slot){const id=XU.id,k=xuKind(id);let msg="",evoTo=null
     if(k==="heal"){const nh=Math.min(mx,hp+Math.ceil(mx*(it[4]||35)/100));if(nh>=mx)delete S.hp[n];else S.hp[n]=nh;msg=nk(n)+" recupera "+(nh-hp)+" PS."}
     else if(k==="rev"){const nh=Math.max(1,Math.round(mx*(it[5]||50)/100));if(nh>=mx)delete S.hp[n];else S.hp[n]=nh;msg="¡"+nk(n)+" se ha recuperado!"}
     else if(k==="pp"){if(S.pp)delete S.pp[n];msg="Los PP de "+nk(n)+" están al máximo."}
+    else if(k==="cand"){const d=lvd(n);if(d.l>=lvCap())return;const l0=d.l;moveIds(n);d.l++;d.x=0;qEv("lvl",1);if(S.hp[n]!==undefined)S.hp[n]=Math.min(stH(PM[n],d.l),S.hp[n]+8);msg=nk(n)+" sube de Nv"+l0+" a Nv"+d.l+"."+(evoLvReady(n).length?" ¡Ya puede evolucionar!":"")}
     else if(k==="evo"){const e=EVO(n).find(x=>x[1]==="I"+id);if(!e||!PM[e[0]])return;evoTo=e[0];evoApply(n,e[0]);msg="¡"+n+" ha evolucionado a "+e[0]+"!"}
     else if(k==="mt"){const mid=id.slice(2),ids=moveIds(n).slice();if(ids.includes(mid))return;const old=slot>=0?ids[slot]:null;if(slot>=0)ids[slot]=mid;else if(ids.length<4)ids.push(mid);else return;S.mv[n]=ids;if(old&&S.pp&&S.pp[n])delete S.pp[n][old];
       msg="¡"+nk(n)+" ha aprendido "+MVD[mid].n+"!"+(old&&MVD[old]?" (Ha olvidado "+MVD[old].n+")":"")}
@@ -102,7 +104,7 @@ async function xuApply(n,slot){const id=XU.id,k=xuKind(id);let msg="",evoTo=null
     else if(k==="hold"){S.held=S.held||{};const old=S.held[n];S.held[n]=id;if(old&&old!==id)S.bag[old]=(S.bag[old]||0)+1;msg=nk(n)+" ahora lleva "+IN(id)+(old&&old!==id?" (y "+IN(old)+" vuelve a la mochila)":"")+"."}
     else return;
     S.bag[id]--;if(!S.bag[id])delete S.bag[id]});
-  if(msg){save();snd(k==="evo"?"win":k==="mt"||k==="mint"||k==="hold"?"lvl":"heal");XU.msg=msg}
+  if(msg){save();snd(k==="evo"?"win":k==="mt"||k==="mint"||k==="hold"||k==="cand"?"lvl":"heal");XU.msg=msg}
   if(!xgRun(()=>S.bag[id]>0)){XU.id=null;try{xgPanel()}catch(e){}const b=$("exTeam");if(b&&msg)b.insertAdjacentHTML("afterbegin",'<div class="xsmsg">'+esc(msg)+'</div>');XU.msg="";return}
   xuUI()}
 // botón «Usar» en la mochila de Exploración

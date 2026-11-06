@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.27.2";
+const GAME_VER="6.27.3";
 const NEWS=[
+{v:"2026-11-06-6.27.3",ver:"6.27.3",at:"2026-11-06T22:49",t:"🔧 Arreglos/Mejoras",l:["Exploración: ya se pueden usar los Caramelos Raros desde la mochila (sube 1 nivel, hasta el límite de tus medallas)"]},
 {v:"2026-11-06-6.27.2",ver:"6.27.2",at:"2026-11-06T22:28",t:"🔧 Arreglos/Mejoras",l:["Evolución: nuevo botón «⏩ Saltar animación» (o Espacio / Enter) para ver directamente el resultado. «✋ Detener» sigue sirviendo para cancelar la evolución"]},
 {v:"2026-11-06-6.27.1",ver:"6.27.1",at:"2026-11-06T22:24",t:"🔧 Arreglos/Mejoras",l:["Exploración: menos Pokémon salvajes. En las cuevas salen la mitad que antes y en la hierba alta algo menos","Después de un encuentro tienes unos pasos de calma antes del siguiente"]},
 {v:"2026-11-06o",ver:"6.27",at:"2026-11-06T22:21",t:"🔒 Límite de nivel en el equipo",l:["Un Pokémon de nivel más alto que tu límite (el de tus medallas) ya no se puede poner en el equipo","Si ya lo tenías en el equipo, no podrás combatir (combates, gimnasios, Exploración, incursiones, PVP ni dobles) hasta que lo saques o consigas las medallas necesarias","Su ficha y su tarjeta te avisan con «🔒»"]},

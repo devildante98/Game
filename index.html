@@ -71,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793993997">
+<meta name="game-build" content="1793994292">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -7147,10 +7147,28 @@ $("prsGo").onclick=()=>$("reset").click();
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
 const GAME_VER="6.18.4";
 const NEWS=[
+{v:"2026-11-06-6.18.4",ver:"6.18.4",at:"2026-11-06T20:40",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett!: los Diglett golpeados se esconden del todo y dejan el hoyo libre para que salgan otros"]},
+{v:"2026-11-06-6.18.1",ver:"6.18.1",at:"2026-11-06T20:25",t:"🔧 Arreglos/Mejoras",l:["Minijuegos: Espacio (o Enter) para empezar la partida o jugar otra vez", "🖱️ En Ajustes → Controles puedes asignar los botones del ratón (central, derecho y laterales) a la Poké Ball y a las respuestas de los minijuegos"]},
 {v:"2026-11-06f",ver:"6.18",at:"2026-11-06T20:15",t:"⌨️ Teclas para responder en los minijuegos",l:["En «¿Quién es ese Pokémon?», «¿Cuál pesa más?» y «Más o menos», cada respuesta tiene su tecla: 1, 2, 3 y 4 (se ve en cada casilla)","Puedes cambiarlas en Ajustes → Controles → Teclas de respuesta: toca una casilla y pulsa la tecla que prefieras (W, A, F…)","No chocan con la tecla de la Poké Ball ni compran mejoras de la tienda mientras juegas"]},
+{v:"2026-11-06-6.17.6",ver:"6.17.6",at:"2026-11-06T20:04",t:"🔧 Arreglos/Mejoras",l:["Las nubes, los pájaros y demás animaciones ya no se apagan por el ajuste de animaciones de Windows o del móvil: solo con «Reducir movimiento» o «Animaciones ligeras» del juego", "Los números al tocar la Poké Ball siempre suben, nunca se quedan amontonados"]},
+{v:"2026-11-06-6.17.5",ver:"6.17.5",at:"2026-11-06T20:01",t:"🔧 Arreglos/Mejoras",l:["Los números con decimales usan coma en todo el juego (+98,7 en vez de +98.7)"]},
+{v:"2026-11-06-6.17.2",ver:"6.17.2",at:"2026-11-06T19:40",t:"🔧 Arreglos/Mejoras",l:["🎟️ Contador de tickets con la escala española: K (mil), M (millón), mM (mil millones), B (billón), mB, T…", "El número y la letra se ven separados (1,6 mM)"]},
+{v:"2026-11-06-6.16.3",ver:"6.16.3",at:"2026-11-06T16:11",t:"🔧 Arreglos/Mejoras",l:["Tema oscuro: el texto de los campos (apodo, buscadores…) ya se lee bien"]},
+{v:"2026-11-06-6.16.2",ver:"6.16.2",at:"2026-11-06T16:01",t:"🔧 Arreglos/Mejoras",l:["Las teclas 1-8 ya no compran mejoras de la tienda durante combates, incursiones, minijuegos ni Exploración"]},
+{v:"2026-11-06-6.16.1",ver:"6.16.1",at:"2026-11-06T15:57",t:"🔧 Arreglos/Mejoras",l:["📔 Álbum: las pegatinas brillante y holográfica de las formas supremas siguen a su forma base (5 copias o variocolor de la base)"]},
 {v:"2026-11-06e",ver:"6.16",at:"2026-11-06T15:53",t:"💠 Las formas supremas ya se pueden desbloquear",l:["Giratina y Dialga Forma Origen, Kyurem Blanco y Negro, Mega-Rayquaza, Ultra-Necrozma, Kyogre y Groudon Primigenios y el resto de formas supremas no salen en el gacha","Ahora basta con tener la forma base: llévala a un combate y transfórmala con un Cristal Supremo (el botón 💠 muestra 🔓 si aún no la tienes)","La primera vez que lo hagas, la forma suprema se añade a tu colección","Los Cristales Supremos se consiguen en la Torre Batalla, las incursiones, el torneo, el pase de temporada y la tienda"]},
+{v:"2026-11-06-6.15.4",ver:"6.15.4",at:"2026-11-06T14:37",t:"🔧 Arreglos/Mejoras",l:["📨 Mis sugerencias: tus sugerencias se quedan en tu historial aunque el desarrollador las archive", "Nuevo botón «🗑️ Quitar» para quitarlas solo de tu historial cuando quieras, y «♻️ Recuperar las quitadas» por si te arrepientes"]},
+{v:"2026-11-06-6.15.3",ver:"6.15.3",at:"2026-11-06T13:53",t:"🔧 Arreglos/Mejoras",l:["Exploración: el Pokémon que te sigue ya no se ve pequeño, flotando o descolocado"]},
+{v:"2026-11-06-6.15.2",ver:"6.15.2",at:"2026-11-06T13:16",t:"🔧 Arreglos/Mejoras",l:["Pantalla principal: los números al tocar la Poké Ball vuelven a subir en vez de quedarse amontonados"]},
+{v:"2026-11-06-6.15.1",ver:"6.15.1",at:"2026-11-06T13:05",t:"🔧 Arreglos/Mejoras",l:["Tienda de mejoras: el Estadio Pokémon da 500 🎟️/s y el Laboratorio del Profesor 2.500 🎟️/s por unidad"]},
 {v:"2026-11-06d",ver:"6.15",at:"2026-11-06T12:54",t:"🧩 Dos minijuegos nuevos: Puzle de sprites y Más o menos",l:["🧩 Puzle de sprites: recompón la imagen de un Pokémon intercambiando piezas. Elige 9, 16, 25, 36, 49, 64 o 100 piezas: cuantas más, más puntos","Toca dos piezas o arrastra una encima de otra; las bien colocadas se quedan fijas en verde. Mantén pulsado «Ver la imagen» para mirar el Pokémon","📊 Más o menos: ¿el siguiente Pokémon tiene más o menos Ataque, Velocidad, PS…? Racha hasta el primer fallo (también con las flechas ↑ ↓)","Los dos dan premio, récord, pase de temporada y clasificación semanal, y entran en el Torneo semanal desde la semana que viene"]},
+{v:"2026-11-06-6.14.4",ver:"6.14.4",at:"2026-11-06T12:17",t:"🔧 Arreglos/Mejoras",l:["🎒 Nuevo icono de la Mochila"]},
+{v:"2026-11-06-6.14.3",ver:"6.14.3",at:"2026-11-06T12:11",t:"🔧 Arreglos/Mejoras",l:["Tienda de MT: «¿Quién puede aprenderla?» abre una ventana con pestañas y buscador en vez de alargar la lista"]},
+{v:"2026-11-06-6.14.2",ver:"6.14.2",at:"2026-11-06T12:06",t:"🔧 Arreglos/Mejoras",l:["Exploración: pulsar Esc en medio de un combate ya no te saca de él ni deja la Exploración bloqueada"]},
+{v:"2026-11-06-6.14.1",ver:"6.14.1",at:"2026-11-06T11:53",t:"🔧 Arreglos/Mejoras",l:["⌨️ Combates: teclas 1, 2, 3 y 4 para lanzar cada ataque (el número se ve en cada botón)"]},
 {v:"2026-11-06c",ver:"6.14",at:"2026-11-06T11:15",t:"🔴 Incursiones renovadas: combate en directo y más difícil",l:["Toca la pantalla (o Espacio) para el ataque rápido: cada golpe carga energía","Con la energía llena, lanza ataques cargados mucho más fuertes (botones o teclas 1 y 2)","El jefe brilla en amarillo antes de atacar: desliza o usa ⬅️ ➡️ / A y D para esquivar y recibir mucho menos daño","Sus ataques cargados pueden debilitar a tu Pokémon de un golpe. Si cae todo tu equipo, puedes volver a entrar, pero pierdes 10 segundos","Los PS del jefe dependen de la fuerza real de los equipos: siempre es un reto. En grupo es más fácil","Premios mejores: 650.000 🎟️ (+250.000 a quien más daño haga) y 3 Ultra Ball"]},
+{v:"2026-11-06-6.13.2",ver:"6.13.2",at:"2026-11-06T11:02",t:"🔧 Arreglos/Mejoras",l:["Pantalla de carga: la Poké Ball se abre por la mitad, con la tapa subiendo recta"]},
+{v:"2026-11-06-6.13.1",ver:"6.13.1",at:"2026-11-06T10:14",t:"🔧 Arreglos/Mejoras",l:["Zona de entrenamiento: eliges los Pokémon con tarjetas, como en el resto del juego, y cada habilidad muestra lo que hace"]},
 {v:"2026-11-06b",ver:"6.13",at:"2026-11-06T10:00",t:"🎯 Zona de entrenamiento y MT más claras",l:["Nueva Zona de entrenamiento (Actividades, o el botón junto a «¡Combatir!»): prueba a cualquiera de tus Pokémon contra el rival, el nivel y la habilidad que quieras","Modo Diana: no ataca, recupera sus PS cada turno y te dice el daño exacto de cada golpe. O un combate de práctica de verdad","No se gastan PS, PP ni objetos, y no da premios ni experiencia","Tienda de MT: botón «👀 ¿Quién puede aprenderla?» con tus Pokémon que la aprenden y los de su tipo que NO, antes de comprarla","Tienda de MT: elige uno de tus Pokémon para ver solo las MT que puede aprender"]},
 {v:"2026-11-06a",ver:"6.12",at:"2026-11-06T09:01",t:"🌐 ¡El juego ya está en inglés! · Now in English!",l:["Nuevo ajuste de idioma: ⚙️ Ajustes → Accesibilidad → 🌐 Idioma (Español / English)","Los jugadores nuevos eligen su idioma nada más entrar, y en la pantalla de inicio hay un botón 🌐 para cambiarlo","En inglés se traducen menús, combates, objetos, movimientos y habilidades (con sus nombres oficiales), la historia de Exploración, los minijuegos y los mensajes","New language setting: ⚙️ Settings → Accessibility → 🌐 Language. Menus, battles, items, moves, abilities and the Exploration story are translated"]},
 {v:"2026-11-05n",ver:"6.11",at:"2026-11-05T20:23",t:"📋 Ficha técnica en Exploración",l:["En el panel 🎒 de Exploración, toca cualquier Pokémon para ver su ficha completa","Verás su nivel, PS, experiencia, tipos, naturaleza, habilidad, objeto equipado, estadísticas con sus valores base y movimientos con potencia, precisión y PP","Desde la ficha puedes ponerle un mote, quitarle el objeto y meterlo o sacarlo del equipo","La mochila de Exploración también se ve ahora con tarjetas grandes y ordenada por tipo"]},
@@ -7337,7 +7355,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793993997";
+const GAME_B="1793994292";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

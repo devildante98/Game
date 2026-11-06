@@ -139,7 +139,10 @@ function hubInit(){
 document.addEventListener("click",e=>{
   const t=e.target;if(!t.closest)return;
   const hg=t.closest("[data-hg]");if(hg){hubOpen(hg.dataset.hg);return}
-  const hq=t.closest("[data-hq]");if(hq){hubMenu(false);hubClose();try{$(hq.dataset.hq)._siv({behavior:"smooth",block:"start"})}catch(x){}return}
+  const hq=t.closest("[data-hq]");if(hq){hubMenu(false);hubClose();const id=hq.dataset.hq;
+    // en el modo juego, Tiradas / Combate / Tickets gratis abren su pantalla (Entrenar es la pantalla principal)
+    try{if(typeof gmOn==="function"&&gmOn()&&typeof GMSCR!=="undefined"){if(GMSCR[id])gmOpen(id);else if(GM.scr)gmClose();return}}catch(x){}
+    try{$(id)._siv({behavior:"smooth",block:"start"})}catch(x){}return}
   const ht=t.closest("#hubTabs [data-ht]");if(ht){hubOpen(HB.g,ht.dataset.ht);return}
   const ha=t.closest("#hubTabs [data-ha]");if(ha){if(ha.dataset.ha==="opt"){hubClose();$("optp").hidden=false}else if(ha.dataset.ha==="welc"){hubClose();welcShow()}return}
   if(t.closest("#hubX")){hubClose();return}

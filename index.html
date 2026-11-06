@@ -6,7 +6,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.12"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.13"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -41,7 +41,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793952106">
+<meta name="game-build" content="1793955638">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2282,6 +2282,29 @@ body.gm #gBg .pcpar{display:none!important}
 .xgl .xgc{cursor:pointer}
 @media (max-width:700px){.xfw{grid-template-columns:1fr}.xfrow{grid-template-columns:1fr}.xfspr{width:110px;height:110px}.xfspr img{max-width:100px;max-height:100px}}
 .xfrow.xf1{grid-template-columns:1fr}
+/* ===== Zona de entrenamiento ===== */
+.tzw{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:start;margin:8px 0}
+@media (max-width:640px){.tzw{grid-template-columns:1fr}.tzvs{justify-self:center}}
+.tzcol{background:var(--panel);border:2px solid var(--line);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.tzcol h3{margin:0;font-size:15px}
+.tzmon{display:flex;gap:10px;align-items:center}.tzmon>div{display:flex;flex-direction:column;gap:2px;min-width:0}.tzmon b{font-size:16px}.tzmon small{color:var(--mute)}
+.tzvs{font:900 22px inherit;color:var(--red);align-self:center}
+.tzl{display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:700;color:var(--mute)}
+.tzl select,.tzl input{font:inherit;font-size:14px;padding:7px 9px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.tzmodes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 12px}@media (max-width:640px){.tzmodes{grid-template-columns:1fr}}
+.tzmode{display:flex;flex-direction:column;gap:3px;padding:10px 12px;border-radius:14px;border:2px solid var(--line);cursor:pointer;background:var(--panel)}
+.tzmode.on{border-color:var(--red);background:color-mix(in srgb,var(--red) 8%,var(--panel))}.tzmode input{position:absolute;opacity:0;pointer-events:none}.tzmode small{color:var(--mute)}
+.tzgo{width:100%;font-size:17px;padding:12px}
+#tzOpen{margin-left:6px}
+/* ===== Tienda de MT: quién la aprende ===== */
+.mtfor{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700;font-size:13px}.mtfor select{font:inherit;font-size:13px;padding:6px 8px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);max-width:100%}
+.mtwho{font-size:13px;padding:6px 10px}
+.mtwho2{display:flex;flex-direction:column;gap:6px;background:var(--bg);border-radius:12px;padding:8px;font-size:13px}
+.mtwl{display:flex;flex-wrap:wrap;gap:6px}
+.mtwc{display:flex;flex-direction:column;align-items:center;width:62px;text-align:center;border-radius:10px;padding:3px;background:color-mix(in srgb,var(--teal) 12%,transparent)}
+.mtwc small{font-size:10px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.mtwc.no{background:color-mix(in srgb,var(--red) 12%,transparent);opacity:.85}.mtwc.tm{box-shadow:inset 0 0 0 2px var(--yel)}.mtwc.tm small::before{content:"⭐"}
+.mtwn{color:var(--red)}.mtwall{display:block;max-height:140px;overflow:auto;margin-top:4px}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2347,7 +2370,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.12</small>
+    <small class="pcver">Versión 6.13</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -6965,8 +6988,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.12";
+const GAME_VER="6.13";
 const NEWS=[
+{v:"2026-11-06b",ver:"6.13",at:"2026-11-06T10:00",t:"🎯 Zona de entrenamiento y MT más claras",l:["Nueva Zona de entrenamiento (Actividades, o el botón junto a «¡Combatir!»): prueba a cualquiera de tus Pokémon contra el rival, el nivel y la habilidad que quieras","Modo Diana: no ataca, recupera sus PS cada turno y te dice el daño exacto de cada golpe. O un combate de práctica de verdad","No se gastan PS, PP ni objetos, y no da premios ni experiencia","Tienda de MT: botón «👀 ¿Quién puede aprenderla?» con tus Pokémon que la aprenden y los de su tipo que NO, antes de comprarla","Tienda de MT: elige uno de tus Pokémon para ver solo las MT que puede aprender"]},
 {v:"2026-11-06a",ver:"6.12",at:"2026-11-06T09:01",t:"🌐 ¡El juego ya está en inglés! · Now in English!",l:["Nuevo ajuste de idioma: ⚙️ Ajustes → Accesibilidad → 🌐 Idioma (Español / English)","Los jugadores nuevos eligen su idioma nada más entrar, y en la pantalla de inicio hay un botón 🌐 para cambiarlo","En inglés se traducen menús, combates, objetos, movimientos y habilidades (con sus nombres oficiales), la historia de Exploración, los minijuegos y los mensajes","New language setting: ⚙️ Settings → Accessibility → 🌐 Language. Menus, battles, items, moves, abilities and the Exploration story are translated"]},
 {v:"2026-11-05n",ver:"6.11",at:"2026-11-05T20:23",t:"📋 Ficha técnica en Exploración",l:["En el panel 🎒 de Exploración, toca cualquier Pokémon para ver su ficha completa","Verás su nivel, PS, experiencia, tipos, naturaleza, habilidad, objeto equipado, estadísticas con sus valores base y movimientos con potencia, precisión y PP","Desde la ficha puedes ponerle un mote, quitarle el objeto y meterlo o sacarlo del equipo","La mochila de Exploración también se ve ahora con tarjetas grandes y ordenada por tipo"]},
 {v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},
@@ -7152,7 +7176,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793952106";
+const GAME_B="1793955638";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9870,25 +9894,39 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;if(t
 // ================= TIENDA DE MT: compra discos que enseñan movimientos fuera de combate =================
 nxPanel("mtP","💿 Tienda de MT","Las MT enseñan un movimiento a un Pokémon fuera de combate. Cada Pokémon solo puede aprender las MT que aprende en los juegos originales. Se usan desde la Mochila (un solo uso).");
 {const g=HUB.find(x=>x.k==="bag");if(g&&!g.tabs.some(t=>t[0]==="mtP")){const i=g.tabs.findIndex(t=>t[0]==="bagP");g.tabs.splice(i+1,0,["mtP","Tienda de MT"])}HUBP.mtP="bag";HUBR.mtP=()=>mtShopUI()}
-let MTF={t:"",q:"",mine:false};
+let MTF={t:"",q:"",mine:false,p:"",open:{}};
 function mtShopUI(){const box=$("mtPB");if(!box)return;const own=P.filter(p=>S.owned[p[0]]>0),types=[...new Set(MT_LIST.map(m=>m.t))];
-  const q=nrm(MTF.q||"");const L=MT_LIST.filter(m=>(!MTF.t||m.t===MTF.t)&&(!q||nrm(m.n).includes(q))&&(!MTF.mine||own.some(p=>mtOk(p[0],m.id))));
-  let h='<div class="mttop"><div class="tshtk">🎟️ Tienes <b>'+fmt(S.t)+'</b></div><input id="mtQ" placeholder="Buscar MT..." value="'+esc(MTF.q||"")+'" aria-label="Buscar MT"><label class="mtmine"><input type="checkbox" id="mtMine"'+(MTF.mine?' checked':'')+'> Solo las que puede aprender alguno de mis Pokémon</label></div>'+
+  const q=nrm(MTF.q||"");const L=MT_LIST.filter(m=>(!MTF.t||m.t===MTF.t)&&(!q||nrm(m.n).includes(q))&&(!MTF.mine||own.some(p=>mtOk(p[0],m.id)))&&(!MTF.p||mtOk(MTF.p,m.id)));
+  if(MTF.p&&!(S.owned[MTF.p]>0))MTF.p="";
+  let h='<div class="mttop"><div class="tshtk">🎟️ Tienes <b>'+fmt(S.t)+'</b></div><input id="mtQ" placeholder="Buscar MT..." value="'+esc(MTF.q||"")+'" aria-label="Buscar MT"><label class="mtmine"><input type="checkbox" id="mtMine"'+(MTF.mine?' checked':'')+'> Solo las que puede aprender alguno de mis Pokémon</label>'+
+    '<label class="mtfor">🎯 Ver las MT que puede aprender<select id="mtFor"><option value="">— Cualquiera de mis Pokémon —</option>'+own.slice().sort((a,b)=>nk(a[0]).localeCompare(nk(b[0]))).map(p=>'<option value="'+esc(p[0])+'"'+(MTF.p===p[0]?' selected':'')+'>'+esc(nk(p[0])!==p[0]?nk(p[0])+" ("+p[0]+")":p[0])+'</option>').join("")+'</select></label></div>'+
     '<div class="mtty"><button class="'+(!MTF.t?'on':'')+'" data-mtt="">Todas</button>'+types.map(t=>'<button class="'+(MTF.t===t?'on':'')+'" data-mtt="'+t+'" style="--tc:'+TC[t]+'">'+EM[t]+' '+TIPO[t]+'</button>').join("")+'</div>';
   let last="";h+=L.length?'<div class="mtg">'+L.map(m=>{const id="mt"+m.id,pr=mtPrice(m),n=S.bag[id]|0,cnt=own.filter(p=>mtOk(p[0],m.id)).length,hd=m.t!==last?'</div><h3 class="shh">'+EM[m.t]+' '+TIPO[m.t]+'</h3><div class="mtg">':'';last=m.t;
     return hd+'<div class="mtc" style="--tc:'+TC[m.t]+'"><div class="mtch">'+itemIco(id,42)+'<div><b>MT '+esc(m.n)+'</b><small>'+EM[m.t]+' '+TIPO[m.t]+' · '+(m.cl===0?'Estado':m.cl===1?'Físico':'Especial')+'</small></div></div>'+
-      '<small class="mut mtd">'+esc(mvDesc(m))+'</small><small class="mtcp">'+(cnt?'✅ La pueden aprender <b>'+cnt+'</b> de tus Pokémon':'⚪ Ninguno de tus Pokémon la aprende')+(n?' · Tienes ×'+n:'')+'</small>'+
+      '<small class="mut mtd">'+esc(mvDesc(m))+'</small><small class="mtcp">'+(MTF.p?'✅ <b>'+esc(nk(MTF.p))+'</b> puede aprenderla · ':'')+(cnt?'✅ La pueden aprender <b>'+cnt+'</b> de tus Pokémon':'⚪ Ninguno de tus Pokémon la aprende')+(n?' · Tienes ×'+n:'')+'</small>'+
+      '<button class="alt mtwho" data-mtw="'+m.id+'" aria-expanded="'+(MTF.open[m.id]?'true':'false')+'">'+(MTF.open[m.id]?'▲ Ocultar':'👀 ¿Quién puede aprenderla?')+'</button>'+(MTF.open[m.id]?mtWhoHTML(m,own):'')+
       '<button class="red" data-mtb="'+id+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button></div>'}).join("")+'</div>':'<p class="mut">No hay MT con esos filtros.</p>';
   h=h.replace('<div class="mtg"></div>','');
   box.innerHTML=h+'<small class="mut">💡 Después de comprarla, ve a la <a href="#" data-mtbag>Mochila</a>, pulsa «Usar» en la MT y elige qué Pokémon la aprende y qué movimiento olvida.</small>';
   const qi=$("mtQ");if(qi){qi.oninput=()=>{MTF.q=qi.value;const p=qi.selectionStart;mtShopUI();const n=$("mtQ");n.focus();try{n.setSelectionRange(p,p)}catch(e){}}}
   const mm=$("mtMine");if(mm)mm.onchange=()=>{MTF.mine=mm.checked;mtShopUI()};
+  const mf=$("mtFor");if(mf)mf.onchange=()=>{MTF.p=mf.value;snd("ui");mtShopUI()};
 }
 document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
   const ty=t.closest("#mtPB [data-mtt]");if(ty){MTF.t=ty.dataset.mtt;snd("ui");mtShopUI();return}
+  const wh=t.closest("#mtPB [data-mtw]");if(wh){const k=wh.dataset.mtw;MTF.open[k]=!MTF.open[k];snd("ui");const y=wh.getBoundingClientRect().top;mtShopUI();const n=document.querySelector('#mtPB [data-mtw="'+k+'"]');if(n){const sc=n.closest(".hubb,.panel,#gScrB")||document.scrollingElement;try{sc.scrollTop+=n.getBoundingClientRect().top-y}catch(e){}}return}
   const bg=t.closest("#mtPB [data-mtbag]");if(bg){e.preventDefault();hubOpen("bag","bagU");return}
   const b=t.closest("#mtPB [data-mtb]");if(b){const id=b.dataset.mtb,m=MVD[id.slice(2)],pr=mtPrice(m);if(S.t<pr){toast("Te faltan "+fmt(pr-S.t)+" 🎟️.");return}
     S.t-=pr;S.bag[id]=(S.bag[id]|0)+1;qEv("buy",1);save();render();snd("lvl");toast("💿 Has comprado la MT "+m.n+". Úsala desde la Mochila.");mtShopUI()}});
+// quién puede aprender una MT: tus Pokémon que sí, los de su mismo tipo que no, y el resto de especies
+function mtWhoHTML(m,own){const yes=own.filter(p=>mtOk(p[0],m.id)),no=own.filter(p=>!mtOk(p[0],m.id)&&tys(p).includes(m.t)),team=new Set((S.team||[]).filter(Boolean));
+  const chip=(p,ok)=>'<span class="mtwc'+(ok?'':' no')+(team.has(p[0])?' tm':'')+'" title="'+esc(p[0])+'">'+ico(p,34)+'<small>'+esc(nk(p[0]))+'</small></span>';
+  const sort=L=>L.slice().sort((a,b)=>(team.has(b[0])-team.has(a[0]))||nk(a[0]).localeCompare(nk(b[0])));
+  const all=P.filter(p=>!(S.owned[p[0]]>0)&&mtOk(p[0],m.id)).map(p=>p[0]);
+  return '<div class="mtwho2">'+(yes.length?'<b>✅ Tus Pokémon que la aprenden ('+yes.length+')</b><div class="mtwl">'+sort(yes).map(p=>chip(p,1)).join("")+'</div>':'<b>⚪ Ninguno de tus Pokémon puede aprenderla</b>')+
+    (no.length?'<b class="mtwn">❌ Tus Pokémon de tipo '+TIPO[m.t]+' que NO la aprenden ('+no.length+')</b><div class="mtwl">'+sort(no).map(p=>chip(p,0)).join("")+'</div>':'')+
+    (all.length?'<details><summary>📖 Otras especies que la aprenden ('+all.length+')</summary><small class="mut mtwall">'+all.map(esc).join(", ")+'</small></details>':'')+
+    '<small class="mut">Los marcados con ⭐ están en tu equipo.</small></div>'}
 // ================= ficha: movimientos que conoce el Pokémon =================
 function fmovHTML(n){const L=moves(PM[n]).filter(x=>x);if(!L.length)return "";const CL=["💫 Estado","💥 Físico","🔮 Especial"];
   return '<span>Movimientos</span><div class="fmovs">'+L.map(mv=>{const c=ppCur(n,mv.id),x=ppMax(n,mv.id),fx=String(mvDesc(mv)).split(" · ").filter(t=>!/^(PP|Poder|Prec\.)\s|^(Físico|Especial|Estado)$/.test(t)).slice(1).join(" · ");
@@ -13376,6 +13414,85 @@ function gmTown(t){const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$(
   if(pan&&GM.scr!==pan.id)gmOpen(pan.id);else if(!pan&&GM.scr&&(s.el==="#train"||s.el==="#gnavb"))gmClose();
   if(el&&pan)setTimeout(()=>{try{el._siv({block:"center"})}catch(e){}},80)}}catch(e){}return r}}
 window.GM=GM;window.gmOpen=gmOpen;window.gmClose=gmClose;
+
+// =====================================================================================
+// ZONA DE ENTRENAMIENTO: combates de práctica para probar habilidades, movimientos y objetos
+// No gasta PS, PP ni objetos, no da premios ni experiencia y no cuenta para misiones ni logros.
+// =====================================================================================
+nxPanel("tzP","🎯 Zona de entrenamiento","Prueba a cualquiera de tus Pokémon contra el rival que quieras para ver cómo funcionan sus habilidades, movimientos y objetos. Aquí no se gastan PS, PP ni objetos, y tampoco hay premios ni experiencia.");
+{const g=HUB.find(x=>x.k==="act");if(g&&!g.tabs.some(t=>t[0]==="tzP")){const i=g.tabs.findIndex(t=>t[0]==="budP");g.tabs.splice(i+1,0,["tzP","Zona de entrenamiento"])}HUBP.tzP="act";HUBR.tzP=()=>tzUI()}
+const TZ={me:"",op:"Snorlax",lv:0,ab:null,mode:"dummy",last:null};
+const tzOwned=()=>P.filter(p=>S.owned[p[0]]>0&&!(typeof isSup==="function"&&isSup(p[0]))&&!(typeof isMegaF==="function"&&isMegaF(p[0]))).map(p=>p[0]);
+const tzSpecies=()=>Object.keys(PM).filter(n=>!(typeof isSup==="function"&&isSup(n))&&!(typeof isMegaF==="function"&&isMegaF(n)));
+const tzAbName=id=>(ABD.n&&ABD.n[id])||"—";
+function tzUI(){const box=$("tzPB");if(!box)return;const own=tzOwned();
+  if(!own.length){box.innerHTML='<p class="mut">Todavía no tienes Pokémon. ¡Haz una tirada para conseguir el primero!</p>';return}
+  if(!TZ.me||!own.includes(TZ.me))TZ.me=((S.team||[]).find(n=>n&&own.includes(n)))||own[0];
+  if(!PM[TZ.op])TZ.op="Snorlax";
+  const me=TZ.me,ml=lvd(me).l,lv=TZ.lv||ml,abs=abList(PM[TZ.op]),ab=TZ.ab!=null&&abs.includes(TZ.ab)?TZ.ab:abDefault(PM[TZ.op]);
+  const held=heldOf(me),hn=held?(ITEMS.find(i=>i[0]===held)||[0,held])[1]:"—";
+  const ownSorted=own.slice().sort((a,b)=>nk(a).localeCompare(nk(b)));
+  box.innerHTML='<div class="tzw">'+
+   '<div class="tzcol"><h3>🧑 Tu Pokémon</h3><div class="tzmon">'+ico(PM[me],72)+'<div><b>'+esc(nk(me))+'</b><small>Nv'+ml+' · '+tys(PM[me]).map(t=>EM[t]+' '+TIPO[t]).join(" / ")+'</small><small>✨ '+esc(tzAbName(abOf(me)))+'</small><small>🎒 '+esc(hn)+'</small></div></div>'+
+    '<label class="tzl">Elegir<select id="tzMe">'+ownSorted.map(n=>'<option value="'+esc(n)+'"'+(n===me?' selected':'')+'>'+esc(nk(n)!==n?nk(n)+" ("+n+")":n)+' · Nv'+lvd(n).l+'</option>').join("")+'</select></label>'+
+    '<small class="mut">Usa la habilidad, el objeto, la naturaleza y los movimientos que tenga ahora. Cámbialos en su ficha.</small></div>'+
+   '<div class="tzvs">VS</div>'+
+   '<div class="tzcol"><h3>🎯 Rival</h3><div class="tzmon">'+ico(PM[TZ.op],72)+'<div><b>'+esc(TZ.op)+'</b><small>'+tys(PM[TZ.op]).map(t=>EM[t]+' '+TIPO[t]).join(" / ")+'</small></div></div>'+
+    '<label class="tzl">Pokémon<input id="tzOp" list="tzOpL" value="'+esc(TZ.op)+'" autocomplete="off" placeholder="Buscar Pokémon..."></label><datalist id="tzOpL">'+tzSpecies().map(n=>'<option value="'+esc(n)+'">').join("")+'</datalist>'+
+    '<label class="tzl">Nivel<input id="tzLv" type="number" min="1" max="100" value="'+lv+'"></label>'+
+    '<label class="tzl">Habilidad<select id="tzAb">'+(abs.length?abs:[ab]).map(a=>'<option value="'+a+'"'+(a===ab?' selected':'')+'>'+esc(tzAbName(a))+'</option>').join("")+'</select></label></div>'+
+  '</div>'+
+  '<div class="tzmodes"><label class="tzmode'+(TZ.mode==="dummy"?' on':'')+'"><input type="radio" name="tzM" value="dummy"'+(TZ.mode==="dummy"?' checked':'')+'><b>🎯 Diana</b><small>No ataca y recupera todos sus PS cada turno. Verás el daño exacto de cada golpe.</small></label>'+
+   '<label class="tzmode'+(TZ.mode==="fight"?' on':'')+'"><input type="radio" name="tzM" value="fight"'+(TZ.mode==="fight"?' checked':'')+'><b>⚔️ Combate de práctica</b><small>El rival lucha de verdad, con sus movimientos y su habilidad.</small></label></div>'+
+  '<button class="red tzgo" id="tzGo">▶ Empezar entrenamiento</button>';
+  $("tzMe").onchange=e=>{TZ.me=e.target.value;TZ.lv=0;snd("ui");tzUI()};
+  $("tzOp").onchange=e=>{const v=e.target.value.trim(),k=Object.keys(PM).find(n=>n.toLowerCase()===v.toLowerCase());if(k){TZ.op=k;TZ.ab=null;snd("ui")}else toast("No hay ningún Pokémon con ese nombre.");tzUI()};
+  $("tzLv").onchange=e=>{TZ.lv=Math.max(1,Math.min(100,+e.target.value|0||1));e.target.value=TZ.lv};
+  $("tzAb").onchange=e=>{TZ.ab=+e.target.value};
+  box.querySelectorAll('[name="tzM"]').forEach(r=>r.onchange=()=>{TZ.mode=r.value;snd("ui");tzUI()});
+  $("tzGo").onclick=()=>{snd("ui");tzStart({me:TZ.me,op:TZ.op,lv:TZ.lv||lvd(TZ.me).l,ab:TZ.ab!=null&&abList(PM[TZ.op]).includes(TZ.ab)?TZ.ab:abDefault(PM[TZ.op]),mode:TZ.mode})};
+}
+function tzStart(c){
+  if(fcd||(typeof D!=="undefined"&&D)||(typeof PV!=="undefined"&&PV.st!=="idle")){toast("Termina antes tu combate actual.");return}
+  if(!S.owned[c.me]||!PM[c.op])return;
+  TZ.last=c;
+  // copia de seguridad: nada de lo que pase aquí se guarda
+  TZ.bak={bag:JSON.stringify(S.bag||{}),held:JSON.stringify(S.held||{})};
+  const team0=S.team,hp0=S.hp;S.team=[c.me];S.hp={};
+  const en=mkEnemy(PM[c.op],Math.max(1,Math.min(100,c.lv|0)));en.ab=c.ab;
+  let p;try{try{hubClose()}catch(e){}p=startBattle({eteam:[en],tzone:1})}finally{S.team=team0;S.hp=hp0}
+  if(!B||!fcd)return;
+  B.practice=1;B.tzDummy=c.mode==="dummy";
+  B.who=(i,n)=>i===0?nk(n):(B.tzDummy?"La diana ("+n+")":n+" rival");
+  // PP al máximo
+  try{B.E.sd[0].t.forEach(t=>{t.pp=t.m.map(mv=>ppMax((t.p0||t.p)[0],mv.id))})}catch(e){}
+  return p}
+// fin del combate de práctica
+function tzRestore(){if(!TZ.bak)return;try{S.bag=JSON.parse(TZ.bak.bag);S.held=JSON.parse(TZ.bak.held)}catch(e){}TZ.bak=null;save();try{render()}catch(e){}}
+{const _f=finish;finish=async function(res){if(!(B&&B.practice))return _f.apply(this,arguments);
+  B.E.sd[0].t.forEach(t=>{t.sts=""});
+  await say(res==="win"?(B.tzDummy?"¡La diana no ha aguantado el golpe! Entrenamiento completado.":"¡Has ganado el combate de práctica!"):res==="lose"?"Tu Pokémon se ha debilitado. ¡Sigue practicando!":"Fin del entrenamiento.");
+  tzRestore();$("menu").innerHTML='<button data-k="tzr">🔁 Repetir</button><button data-k="9">Volver</button>';B.busy=false}}
+// nada se guarda durante la práctica
+{const _s=saveHp;saveHp=function(){if(B&&B.practice)return;return _s.apply(this,arguments)}}
+{const _p=syncPP;syncPP=function(){if(B&&B.practice)return;return _p.apply(this,arguments)}}
+// la diana no ataca
+{const _a=aiAct;aiAct=function(E,i){if(B&&B.practice&&B.tzDummy&&i===1)return "x";return _a.apply(this,arguments)}}
+// la diana recupera sus PS cada turno y se muestra el daño de cada golpe
+{const _t=sTurn;sTurn=async function(act){if(!(B&&B.practice))return _t.apply(this,arguments);
+  const b=B,om=beAct(B.E.sd[1]);if(B.tzDummy&&om&&om.mh>0){om.mh=om.mx;try{bePaint(beSnap(B.E))}catch(e){}}
+  const h0=om?om.mh:0;await _t.apply(this,arguments);
+  if(b.tzDummy&&om){const d=Math.max(0,h0-Math.max(0,om.mh));if(d>0)toast("🎯 Daño: "+fmt(d)+" PS ("+Math.round(d/om.mx*100)+"% de sus PS)");else if(/^m\d$/.test(act))toast("🎯 Sin daño en este turno")}}}
+// sin objetos ni capturas; «Repetir» vuelve a empezar con lo mismo
+{const _tu=turn;turn=async function(k){if(B&&B.practice){
+    if(k==="tzr"){const c=TZ.last;arenaReset();bigSet("");$("arena").hidden=true;$("fsel").hidden=false;fcd=false;B=null;updTeam();if(c)setTimeout(()=>tzStart(c),60);return}
+    if(k==="b"||/^[iuv]:/.test(k)){if(!B.busy)toast("🎯 En la Zona de entrenamiento no se usan objetos de la Mochila.");return}
+    if(k==="f"&&!B.busy){B.busy=true;setMenu(false);await say("Has terminado el entrenamiento.");tzRestore();B.busy=false;$("menu").innerHTML='<button data-k="tzr">🔁 Repetir</button><button data-k="9">Volver</button>';return}}
+  return _tu.apply(this,arguments)}}
+// al volver, otra vez a la Zona de entrenamiento
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('#menu [data-k="9"]');if(b&&B&&B.practice){tzRestore();setTimeout(()=>{try{hubOpen("act","tzP")}catch(x){}},80)}},true);
+// acceso directo junto a «¡Combatir!»
+{const g=$("fgo");if(g&&!$("tzOpen")){const b=document.createElement("button");b.className="alt";b.id="tzOpen";b.type="button";b.textContent="🎯 Zona de entrenamiento";b.onclick=()=>{snd("ui");hubOpen("act","tzP")};g.after(b)}}
 
 </script>
 <script>

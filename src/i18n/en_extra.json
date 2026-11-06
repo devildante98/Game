@@ -883,5 +883,8 @@
 "¡{} ha recuperado PS con el Lodo Negro!": "{} restored HP with Black Sludge!",
 "¡El Lodo Negro ha hecho daño a {}!": "{} was hurt by Black Sludge!",
 "¡La Toxiesfera ha envenenado gravemente a {}!": "{} was badly poisoned by the Toxic Orb!",
-"¡La Llamasfera ha quemado a {}!": "{} was burned by the Flame Orb!"
+"¡La Llamasfera ha quemado a {}!": "{} was burned by the Flame Orb!",
+"🔒 No puedes combatir con {} en el equipo: supera tu límite de nivel (Nv{d}). Sácalo del equipo o consigue más medallas de gimnasio.": "🔒 You can't battle with {} in your team: it's above your level cap (Lv{d}). Remove it from the team or earn more gym badges.",
+"🔒 No puedes combatir con {} en el equipo: superan tu límite de nivel (Nv{d}). Sácalo del equipo o consigue más medallas de gimnasio.": "🔒 You can't battle with {} in your team: they're above your level cap (Lv{d}). Remove them from the team or earn more gym badges.",
+"🔒 {} (Nv{d}) supera tu límite de nivel (Nv{d}). Consigue más medallas de gimnasio para poder llevarlo en el equipo.": "🔒 {} (Lv{d}) is above your level cap (Lv{d}). Earn more gym badges to put it in your team."
 }

@@ -58,6 +58,7 @@ function tpSet(i,n){
   if(n&&isSup(n)){toast("💠 "+n+" es una forma suprema: lleva a "+SUP[n]+" y transfórmalo en combate.");return false}
   if(n&&isMegaF(n)){toast("🧬 "+n+" no va en el equipo: lleva a "+megaBase(n)+" y "+megaVerb(n)+" en combate.");return false}
   if(n&&busyMon(n)){toast("🔒 "+n+" está "+busyTxt(n)+".");return false}
+  if(n&&typeof overCap==="function"&&overCap(n)&&!S.team.includes(n)){toast("🔒 "+nk(n)+" (Nv"+lvd(n).l+") supera tu límite de nivel (Nv"+lvCap()+"). Consigue más medallas de gimnasio para poder llevarlo en el equipo.");return false}
   // si ya estaba en otra casilla, intercambian posiciones (no sale del equipo)
   const old=S.team[i]||"",from=n?S.team.findIndex((x,j)=>j!==i&&x===n):-1;
   S.team[i]=n||"";if(from>=0)S.team[from]=old;save();updTeam();snd("ui");
@@ -1159,3 +1160,15 @@ Object.assign(ITMSG,{rhelm:["d",w=>"¡"+w+" se ha hecho daño con el Casco Denta
 // objetos Elección: en el menú, los otros movimientos se bloquean hasta que se retire
 {const _sm=setMenu;setMenu=function(v){_sm.apply(this,arguments);try{if(v!==true||!B||!B.E)return;const sd=B.E.sd[0],m=beAct(sd);if(!m||!/^c(band|specs|scarf)$/.test(m.it||"")||m.dmx||sd.v.lock==null||!m.m[sd.v.lock]||m.pp[sd.v.lock]<=0)return;
   document.querySelectorAll('#menu .mvb[data-k^="m"]').forEach(b=>{const j=+String(b.dataset.k).slice(1);if(j!==sd.v.lock){b.disabled=true;b.title="Bloqueado por "+HOLDK[m.it][1]+": solo puede usar "+m.m[sd.v.lock].n}})}catch(e){}}}
+
+// ================= LÍMITE DE NIVEL: no se puede combatir con un Pokémon por encima del límite en el equipo =================
+// (los recibidos por intercambio, regalo o mercadillo). Hay que sacarlo del equipo o ganar medallas.
+function capBlock(){try{const L=(S.team||[]).filter(n=>n&&S.owned[n]&&overCap(n));if(!L.length)return false;
+  const t=L.map(n=>nk(n)+" (Nv"+lvd(n).l+")").join(", ");askInfo("🔒 No puedes combatir con "+t+" en el equipo: "+(L.length>1?"superan":"supera")+" tu límite de nivel (Nv"+lvCap()+"). Sácalo del equipo o consigue más medallas de gimnasio.");return true}catch(e){return false}}
+{const _sb=startBattle;startBattle=async function(){if(!fcd&&capBlock())return;return _sb.apply(this,arguments)}}
+{const _rj=rdJoin;rdJoin=async function(){if(capBlock())return;return _rj.apply(this,arguments)}}
+{const _db=dbStart;dbStart=function(){if(capBlock())return;return _db.apply(this,arguments)}}
+{const _pc=pvChallenge;pvChallenge=function(){if(capBlock())return false;return _pc.apply(this,arguments)}}
+{const _pa=pvAccept;pvAccept=function(){if(capBlock())return;return _pa.apply(this,arguments)}}
+{const _ro=r2Open;r2Open=async function(){if(capBlock())return;return _ro.apply(this,arguments)}}
+{const _eb=exBattle;exBattle=async function(){if(!fcd&&capBlock())return;return _eb.apply(this,arguments)}}

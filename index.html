@@ -36,7 +36,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.20.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.20.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -71,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793995615">
+<meta name="game-build" content="1793996379">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2519,7 +2519,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.20.1</small>
+    <small class="pcver">Versión 6.20.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7150,7 +7150,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.20.1";
+const GAME_VER="6.20.2";
 const NEWS=[
 {v:"2026-11-06h",ver:"6.20",at:"2026-11-06T20:57",t:"🔴 Movimientos Dinamax",l:["Al dinamaxizar (o gigamaxizar) a tu Pokémon, sus ataques se convierten en Movimientos Dinamax, como en la saga: Maxiataque, Maxignición, Maxichorro, Maxitormenta…","Tienen mucha más potencia (de 90 a 150 según el ataque original; Lucha y Veneno de 70 a 100) y nunca fallan","Los ataques de estado se convierten en Maxibarrera, que te protege ese turno","Con Gigamax, los ataques de su tipo se convierten en su Movimiento Gigamax (Gigallamarada, Gigalianas…) con su efecto especial","En los botones verás el nombre del Movimiento Dinamax, su potencia y de qué ataque viene"]},
 {v:"2026-11-06g",ver:"6.19",at:"2026-11-06T20:53",t:"🔎 Filtros al elegir Pokémon para el equipo",l:["En la ventana «Elige un Pokémon para el equipo» ya puedes filtrar por rareza, tipo y generación, además de buscar por nombre y ordenar","El botón «✖ Quitar filtros» los borra todos de una vez"]},
@@ -7362,7 +7362,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793995615";
+const GAME_B="1793996379";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7735,9 +7735,12 @@ document.addEventListener("click",async e=>{
 $("trdM").addEventListener("click",e=>{if(e.target.id==="trdM"&&TM.st!=="anim")trClose()});
 // ================= gritos de los Pokémon (audio original de PokeAPI) =================
 const CRY="https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/",CRY2="https://cdn.jsdelivr.net/gh/PokeAPI/cries@main/cries/pokemon/latest/";
+// gritos que en los juegos modernos son distintos al de la lista: Pikachu dice su nombre (el grito de Let's Go, Espada/Escudo y Escarlata/Púrpura)
+const CRYX={25:10158};
 function cry(n){
   if(!O.cry||!O.svol||!O.sfx)return;const p=PM[n];if(!p||!p[4]||p[4]>1025)return;
-  try{const a=new Audio((SPRB?CRY2:CRY)+p[4]+".ogg");a.volume=Math.min(1,O.svol*.5);a.onerror=()=>{if(a.src.indexOf(CRY)===0){a.src=CRY2+p[4]+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
+  const id=CRYX[p[4]]||p[4];
+  try{const a=new Audio((SPRB?CRY2:CRY)+id+".ogg");a.volume=Math.min(1,O.svol*.5);a.onerror=()=>{if(a.src.indexOf(CRY)===0){a.src=CRY2+id+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
 }
 $("dex").addEventListener("click",e=>{const c=e.target.closest(".card");if(!c)return;const im=c.querySelector("img[data-n]");if(im)cry(im.dataset.n)});
 

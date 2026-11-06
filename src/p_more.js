@@ -303,8 +303,11 @@ document.addEventListener("click",async e=>{
 $("trdM").addEventListener("click",e=>{if(e.target.id==="trdM"&&TM.st!=="anim")trClose()});
 // ================= gritos de los Pokémon (audio original de PokeAPI) =================
 const CRY="https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/",CRY2="https://cdn.jsdelivr.net/gh/PokeAPI/cries@main/cries/pokemon/latest/";
+// gritos que en los juegos modernos son distintos al de la lista: Pikachu dice su nombre (el grito de Let's Go, Espada/Escudo y Escarlata/Púrpura)
+const CRYX={25:10158};
 function cry(n){
   if(!O.cry||!O.svol||!O.sfx)return;const p=PM[n];if(!p||!p[4]||p[4]>1025)return;
-  try{const a=new Audio((SPRB?CRY2:CRY)+p[4]+".ogg");a.volume=Math.min(1,O.svol*.5);a.onerror=()=>{if(a.src.indexOf(CRY)===0){a.src=CRY2+p[4]+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
+  const id=CRYX[p[4]]||p[4];
+  try{const a=new Audio((SPRB?CRY2:CRY)+id+".ogg");a.volume=Math.min(1,O.svol*.5);a.onerror=()=>{if(a.src.indexOf(CRY)===0){a.src=CRY2+id+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
 }
 $("dex").addEventListener("click",e=>{const c=e.target.closest(".card");if(!c)return;const im=c.querySelector("img[data-n]");if(im)cry(im.dataset.n)});

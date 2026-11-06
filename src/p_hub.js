@@ -184,7 +184,7 @@ function setInit(){
   sec(cP,"Juego");add(cP,[lab("askip"),lab("skip"),lab("bgprod")]);
   // accesibilidad
   const aP=mk("acc","Accesibilidad");
-  {const d=document.createElement("div");d.innerHTML='<label class="slid"><span>🔠 Tamaño del texto</span><select id="setTxt"><option value="1">Normal</option><option value="1.1">Grande</option><option value="1.22">Muy grande</option></select></label><label class="tog"><input type="checkbox" data-o="calm"> Reducir el movimiento (sin animaciones ni balanceos)</label><label class="tog"><input type="checkbox" data-o="hc"> Alto contraste (textos y bordes más marcados)</label><small class="setnote">Estas opciones solo cambian cómo se ve el juego en este dispositivo.</small>';[...d.childNodes].forEach(n=>aP.appendChild(n))}
+  {const d=document.createElement("div");d.innerHTML='<label class="slid noi18n"><span>🌐 Idioma · Language</span><select id="setLang"><option value="es">Español</option><option value="en">English</option></select></label><label class="slid"><span>🔠 Tamaño del texto</span><select id="setTxt"><option value="1">Normal</option><option value="1.1">Grande</option><option value="1.22">Muy grande</option></select></label><label class="tog"><input type="checkbox" data-o="calm"> Reducir el movimiento (sin animaciones ni balanceos)</label><label class="tog"><input type="checkbox" data-o="hc"> Alto contraste (textos y bordes más marcados)</label><small class="setnote">Estas opciones solo cambian cómo se ve el juego en este dispositivo.</small>';[...d.childNodes].forEach(n=>aP.appendChild(n))}
   // cuenta
   const kP=mk("acct","Cuenta y guardado");
   add(kP,[byId("clInfo"),par("clNow"),par("clDel"),par("clExp"),byId("clImpOk"),byId("clFile"),byId("clCloud"),byId("clMsg")]);
@@ -196,6 +196,7 @@ function setInit(){
   w.innerHTML='<div class="seth"><h2>Ajustes</h2><button type="button" class="setx" id="setX">Cerrar</button></div><div class="settabs">'+SETT.map(t=>'<button type="button" data-st="'+t[0]+'">'+t[1]+'</button>').join("")+'</div><div class="setbody"></div>';
   const body=w.querySelector(".setbody");SETT.forEach(t=>body.appendChild(panes[t[0]]));
   [...op.childNodes].forEach(n=>n.remove());op.appendChild(w);
+  {const s=$("setLang");if(s){s.value=window.PGC_LANG||"es";s.onchange=()=>{try{save()}catch(e){}if(window.pgcSetLang)pgcSetLang(s.value)}}}
   {const s=$("setTxt");s.value=String(O.txt||1);s.onchange=()=>{O.txt=+s.value;saveO();applyO()}}
   {const s=$("setSpr");s.value=O.spr||"";s.onchange=()=>{O.spr=s.value;saveO();snd("ui");try{render()}catch(e){}toast(O.spr==="px"?"🖼️ Sprites clásicos animados en todo el juego.":"🖼️ Pokémon del gacha en alta definición.")}}
   {const s=$("setTheme");s.value=O.theme||"";s.onchange=()=>{O.theme=s.value;saveO();applyO();snd("ui")}}

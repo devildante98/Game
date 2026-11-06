@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.11.2";
+const GAME_VER="6.12";
 const NEWS=[
+{v:"2026-11-06a",ver:"6.12",at:"2026-11-06T09:01",t:"🌐 ¡El juego ya está en inglés! · Now in English!",l:["Nuevo ajuste de idioma: ⚙️ Ajustes → Accesibilidad → 🌐 Idioma (Español / English)","Los jugadores nuevos eligen su idioma nada más entrar, y en la pantalla de inicio hay un botón 🌐 para cambiarlo","En inglés se traducen menús, combates, objetos, movimientos y habilidades (con sus nombres oficiales), la historia de Exploración, los minijuegos y los mensajes","New language setting: ⚙️ Settings → Accessibility → 🌐 Language. Menus, battles, items, moves, abilities and the Exploration story are translated"]},
 {v:"2026-11-05n",ver:"6.11",at:"2026-11-05T20:23",t:"📋 Ficha técnica en Exploración",l:["En el panel 🎒 de Exploración, toca cualquier Pokémon para ver su ficha completa","Verás su nivel, PS, experiencia, tipos, naturaleza, habilidad, objeto equipado, estadísticas con sus valores base y movimientos con potencia, precisión y PP","Desde la ficha puedes ponerle un mote, quitarle el objeto y meterlo o sacarlo del equipo","La mochila de Exploración también se ve ahora con tarjetas grandes y ordenada por tipo"]},
 {v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},
 {v:"2026-11-05l",ver:"6.9",at:"2026-11-05T16:35",t:"🛒 Tiendas Pokémon en Exploración",l:["Cada pueblo tiene ahora su Tienda Pokémon (el edificio de tejado azul). Habla con el dependiente para comprar y vender","Cada tienda tiene su propio surtido, que mejora región a región: Poké Balls, pociones, Revivir, Éter y Elixires, piedras evolutivas, MT del tipo de la zona y objetos equipables","Al vender te dan la mitad de su precio. Se paga con tickets y lo comprado va a tu mochila de Exploración","Nuevo: en la mochila 🎒 de Exploración puedes usar pociones, Revivir, Éter, piedras evolutivas y MT fuera de los combates","La tecla Esc ya no te saca de la pantalla completa: ahora cierra la tienda, la mochila y los menús como el del Centro Pokémon"]},
@@ -595,6 +596,8 @@ exec(open(W+'add_ui2.py',encoding='utf-8').read())
 exec(open(W+'add_rar.py',encoding='utf-8').read())
 exec(open(W+'add_hub.py',encoding='utf-8').read())
 exec(open(W+'add_new.py',encoding='utf-8').read())
+H=H.replace('<meta charset="utf-8">','<meta charset="utf-8">\n'+open(W+'p_lang.html',encoding='utf-8').read(),1)
 H=H.replace('__GAMEVER__',re.search(r'const GAME_VER="([^"]+)"',H).group(1))
 open(W + 'index.html', 'w', encoding='utf-8').write(H)
 print('OK', len(H.encode()))
+exec(open(W+'build_i18n.py',encoding='utf-8').read())

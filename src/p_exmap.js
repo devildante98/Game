@@ -140,7 +140,7 @@ document.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind||WM.open||e
 // los textos de ayuda y los botones muestran la tecla que tenga asignada cada persona
 {const _k=exKeysTxt;exKeysTxt=function(){const r=_k.apply(this,arguments);try{const kb=exKB(),f=a=>kb[a].filter(Boolean).map(exKName).join(" / ")||"sin tecla";
   const e=$("exKeys");
-  if(e)e.textContent=e.textContent.replace(" · Pantalla completa"," · Minimapa: "+f("mm")+" · Mapa: "+f("wm")+" · Equipo y mochila: "+f("bag")+" · Controles: "+f("ctl")+" · Pantalla completa");
+  if(e)e.textContent=e.textContent.replace(/ · (Pantalla completa|Fullscreen)/," · Minimapa: "+f("mm")+" · Mapa: "+f("wm")+" · Equipo y mochila: "+f("bag")+" · Controles: "+f("ctl")+" · Pantalla completa");
   const T={exMiniB:"Mostrar u ocultar el minimapa",exWmB:"Mapa de la región",exTeamB:"Tu equipo de Exploración"};for(const a in EXSC){const b=$(EXSC[a]);if(b)b.title=T[EXSC[a]]+" ("+f(a)+")"}
   document.querySelectorAll(".exkb").forEach(b=>b.title="Controles ("+f("ctl")+")");const m=$("exMini");if(m)m.title="Minimapa · tócalo para ampliarlo"}catch(x){}return r}}
 setTimeout(()=>{try{exKeysTxt()}catch(e){}},0);

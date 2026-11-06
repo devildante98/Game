@@ -3,7 +3,7 @@ const eff=(a,d)=>typeEff(a,d);
 let sk=null;
 const waitSkip=ms=>new Promise(r=>{const id=setTimeout(done,ms);function done(){clearTimeout(id);sk=null;r()}sk=done});
 async function say(t){
-  const b=$("fmsg");b.textContent="";let fast=false;
+  if(window.i18nT)t=i18nT(String(t));const b=$("fmsg");b.textContent="";let fast=false;
   sk=()=>{fast=true};
   for(const c of t){if(fast)break;b.textContent+=c;await sleep(14)}
   b.textContent=t;

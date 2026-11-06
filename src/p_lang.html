@@ -1,0 +1,35 @@
+<script>
+// ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
+(function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
+  window.PGC_LANG=L||"es";
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=__GAMEVER__"><\/script>')}
+  window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
+  var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
+  document.addEventListener("DOMContentLoaded",function(){
+    // botón pequeño en la pantalla de inicio para cambiarlo sin entrar
+    var au=document.getElementById("auth");
+    if(au){var b=document.createElement("button");b.type="button";b.className="langbtn noi18n";b.textContent="🌐 "+(window.PGC_LANG==="en"?"English":"Español");b.setAttribute("aria-label","Idioma · Language");
+      b.onclick=function(){pgcSetLang(window.PGC_LANG==="en"?"es":"en")};au.appendChild(b)}
+    if(L||!isNew())return;
+    var nav=(navigator.language||"es").slice(0,2).toLowerCase(),d=document.createElement("div");
+    d.className="langpick noi18n";d.setAttribute("role","dialog");d.setAttribute("aria-label","Idioma · Language");
+    d.innerHTML='<div class="lpbox"><div class="lpglobe">🌐</div><h2>Elige tu idioma<small>Choose your language</small></h2>'+
+      '<button type="button" data-l="es"'+(nav!=="en"?' class="on"':'')+'><span>🇪🇸</span>Español</button>'+
+      '<button type="button" data-l="en"'+(nav==="en"?' class="on"':'')+'><span>🇬🇧</span>English</button>'+
+      '<p>Puedes cambiarlo cuando quieras en ⚙️ Ajustes<br>You can change it anytime in ⚙️ Settings</p></div>';
+    d.addEventListener("click",function(e){var t=e.target.closest("[data-l]");if(!t)return;var l=t.dataset.l;try{localStorage.setItem("pgc-lang",l)}catch(x){}
+      if(l==="en")location.reload();else d.remove()});
+    document.body.appendChild(d)})})();
+</script>
+<style>
+.langpick{position:fixed;inset:0;z-index:2147483600;display:grid;place-items:center;background:radial-gradient(circle at 50% 30%,#3b4bb8,#141a46 70%);padding:16px;font-family:inherit}
+.langpick .lpbox{background:#fff;color:#1c1f3a;border-radius:24px;padding:26px 22px 18px;width:min(360px,100%);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.45);animation:lpIn .35s cubic-bezier(.2,1.4,.4,1)}
+.langpick .lpglobe{font-size:52px;line-height:1;animation:lpSpin 6s linear infinite}
+.langpick h2{margin:10px 0 16px;font-size:22px}.langpick h2 small{display:block;font-size:14px;font-weight:600;color:#6b6f90;margin-top:2px}
+.langpick button{display:flex;align-items:center;gap:12px;width:100%;margin:8px 0;padding:14px 16px;border-radius:16px;border:2px solid #d9d6ee;background:#f6f5fc;font:700 18px inherit;color:#1c1f3a;cursor:pointer;transition:transform .12s,border-color .12s}
+.langpick button span{font-size:26px}.langpick button.on{border-color:#e63950;background:#fff0f2}.langpick button:hover{transform:translateY(-2px);border-color:#e63950}
+.langpick p{font-size:12px;color:#6b6f90;margin:12px 0 0;line-height:1.5}
+@keyframes lpIn{from{transform:scale(.85);opacity:0}}@keyframes lpSpin{50%{transform:rotate(12deg) scale(1.06)}}
+.langbtn{position:absolute;left:12px;bottom:12px;z-index:50;border:0;border-radius:999px;padding:8px 14px;background:rgba(0,0,0,.45);color:#fff;font:700 14px inherit;cursor:pointer;backdrop-filter:blur(4px)}
+@media (prefers-reduced-motion:reduce){.langpick .lpglobe,.langpick .lpbox{animation:none}}
+</style>

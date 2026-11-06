@@ -735,7 +735,7 @@ H=H[:_ai]+'''<div id="auth">
   try{var nk=localStorage.getItem("pgcNick");if(nk){var h=$i("pcHi");h.textContent="¡Hola de nuevo, "+nk+"! 👋";h.hidden=false}}catch(e){}
   $i("pcPlay").addEventListener("click",function(){var o=$i("pcOpts");o.hidden=false;this.hidden=true;try{$i("agoogle").focus()}catch(e){}});
   // si se piden los datos (por ejemplo, un error al entrar) se despliegan las opciones
-  new MutationObserver(function(){var m=$i("amsg");if(m&&m.textContent&&!/Comprobando/.test(m.textContent)&&$i("pcOpts").hidden&&/rror|incorrect|no existe|contraseña|cuenta/i.test(m.textContent)){$i("pcOpts").hidden=false;$i("pcPlay").hidden=true}}).observe($i("amsg"),{childList:true,characterData:true,subtree:true});
+  new MutationObserver(function(){var m=$i("amsg");if(m&&m.textContent&&!/Comprobando|Checking/.test(m.textContent)&&$i("pcOpts").hidden&&/rror|incorrect|no existe|contraseña|cuenta/i.test(m.textContent)){$i("pcOpts").hidden=false;$i("pcPlay").hidden=true}}).observe($i("amsg"),{childList:true,characterData:true,subtree:true});
   // desfile de Pokémon caminando por la hierba
   var MON=["pikachu","charmander","bulbasaur","squirtle","eevee","jigglypuff","psyduck","snorlax","gengar","lucario","togepi","piplup","chikorita","cyndaquil","totodile","mudkip","torchic","treecko","riolu","sylveon","umbreon","espeon","dragonite","lapras","mew","celebi","vulpix","growlithe","meowth","togekiss","pachirisu","oshawott","snivy","tepig","froakie","fennekin","chespin","rowlet","litten","popplio","sobble","scorbunny","grookey","sprigatito","fuecoco","quaxly","gardevoir","garchomp","arcanine","charizard"];
   var par=$i("pcPar"),busy=0;

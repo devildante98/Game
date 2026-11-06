@@ -102,7 +102,7 @@ function exNpcWalk(dt){const w=EX.walkTo,n=w.n;if(n.mv)return;const[ddx,ddy]=EXD
   const[dx,dy]=EXDIR[n.f];n.mv={x0:n.px,y0:n.py,t:0,d:230};n.px+=dx;n.py+=dy;n.step=(n.step||0)+1}
 // ---------- diálogos ----------
 function exSay(lines,cb){EX.dlg={l:lines,i:0,c:0,cb:cb};EX.keys={};EX.kst=[]}
-const exDlgT=r=>String(r||"").replace(/^§[^|]*\|/,"");
+const exDlgT=r=>{const s=String(r||"").replace(/^§[^|]*\|/,"");return window.i18nT?i18nT(s):s};
 function exDlgNext(){const d=EX.dlg;if(!d)return;const t=exDlgT(d.l[d.i]);if(d.c<t.length){d.c=t.length;return}d.i++;d.c=0;snd("ui");if(d.i>=d.l.length){EX.dlg=null;d.cb&&d.cb()}}
 function exInteract(){if(EX.dlg){exDlgNext();return}if(EX.mv||EX.trans)return;const[dx,dy]=EXDIR[EX.f],x=EX.x+dx,y=EX.y+dy,c=exAt(x,y);
   const n=EX.npcs.find(q=>q.px===x&&q.py===y);if(n){n.f={u:"d",d:"u",l:"r",r:"l"}[EX.f];if(n.beat)exSay([n.n+":","«¡Qué buen combate! Sigue entrenando, que se nota que tus Pokémon te quieren.»"]);else{exSay([n.n+":","«"+n.txt+"»"],()=>exTrainerBattle(n))}return}

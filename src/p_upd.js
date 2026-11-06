@@ -447,7 +447,7 @@ setTimeout(megaClean,1500);setInterval(megaClean,4000);
 // 1) ficha: sin nivel, movimientos, habilidad, objeto ni estadísticas (no se usan); explica a qué Pokémon desbloquea
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);if(isMegaF(n)&&S.owned[n]>0)Promise.resolve().then(()=>{try{megaFicha(n)}catch(e){console.error(e)}})}}
 function megaFicha(n){const m=$("pkv");if(!m||m.hidden)return;const b=megaBase(n),gm=/ Gigamax$/.test(n),lb=S.owned[b]>0?lvd(b).l:0;
-  const inf=m.querySelector(".pkvinfo");if(inf)[...inf.children].forEach(x=>{if(/Nivel/.test(x.textContent))x.remove()});
+  const inf=m.querySelector(".pkvinfo");if(inf)[...inf.children].forEach(x=>{if(/Nivel|Level/.test(x.textContent))x.remove()});
   const w=m.querySelector(".fich");if(!w)return;
   [...w.querySelectorAll(".fichr")].forEach(r=>{const l=(r.querySelector("span")||{}).textContent||"";if(!/Mote|Favorito/.test(l))r.remove()});
   const k=document.createElement("div");k.className="fichr fkey";

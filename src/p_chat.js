@@ -272,7 +272,7 @@ function chKnown(){const o={};const add=(u,n)=>{n=pvClean(n||"");if(u&&n&&n!=="E
   const me=chMe();Object.keys(o).forEach(k=>{if(o[k].u===me)delete o[k]});return o}
 function chMentUids(t){const K=chKnown(),out=[];String(t).replace(/@([^\s@,.!?¿¡:;]{2,16})/g,(x,n)=>{const r=K[n.toLowerCase()];if(r&&!out.includes(r.u))out.push(r.u);return x});return out.slice(0,5)}
 const chMent=m=>Array.isArray(m.mn)&&m.mn.includes(chMe())&&m.u!==chMe();
-function chTxt(t){return esc(t).replace(/@([^\s@,.!?¿¡:;&<]{2,16})/g,'<b class="chat-at">@$1</b>')}
+function chTxt(t){return '<span class="noi18n">'+esc(t).replace(/@([^\s@,.!?¿¡:;&<]{2,16})/g,'<b class="chat-at">@$1</b>')+'</span>'}
 function chQuote(r){return '<div class="chq" data-chq="'+esc(r.id)+'"><b>↩️ '+esc(pvClean(r.n||"Entrenador"))+'</b><small>'+esc(String(r.t||"").slice(0,80))+'</small></div>'}
 function chRpUI(){let b=$("chRp");const f=$("chF");if(!f)return;if(!b){b=document.createElement("div");b.id="chRp";f.before(b)}
   b.hidden=!CH.rp;b.innerHTML=CH.rp?'<span>↩️ Respondiendo a <b>'+esc(CH.rp.n)+'</b>: '+esc(CH.rp.t)+'</span><button type="button" data-chrpx="1" aria-label="Cancelar respuesta">✕</button>':''}

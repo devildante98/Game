@@ -2,10 +2,46 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<script>
+// ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
+(function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
+  window.PGC_LANG=L||"es";
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.12"><\/script>')}
+  window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
+  var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
+  document.addEventListener("DOMContentLoaded",function(){
+    // botón pequeño en la pantalla de inicio para cambiarlo sin entrar
+    var au=document.getElementById("auth");
+    if(au){var b=document.createElement("button");b.type="button";b.className="langbtn noi18n";b.textContent="🌐 "+(window.PGC_LANG==="en"?"English":"Español");b.setAttribute("aria-label","Idioma · Language");
+      b.onclick=function(){pgcSetLang(window.PGC_LANG==="en"?"es":"en")};au.appendChild(b)}
+    if(L||!isNew())return;
+    var nav=(navigator.language||"es").slice(0,2).toLowerCase(),d=document.createElement("div");
+    d.className="langpick noi18n";d.setAttribute("role","dialog");d.setAttribute("aria-label","Idioma · Language");
+    d.innerHTML='<div class="lpbox"><div class="lpglobe">🌐</div><h2>Elige tu idioma<small>Choose your language</small></h2>'+
+      '<button type="button" data-l="es"'+(nav!=="en"?' class="on"':'')+'><span>🇪🇸</span>Español</button>'+
+      '<button type="button" data-l="en"'+(nav==="en"?' class="on"':'')+'><span>🇬🇧</span>English</button>'+
+      '<p>Puedes cambiarlo cuando quieras en ⚙️ Ajustes<br>You can change it anytime in ⚙️ Settings</p></div>';
+    d.addEventListener("click",function(e){var t=e.target.closest("[data-l]");if(!t)return;var l=t.dataset.l;try{localStorage.setItem("pgc-lang",l)}catch(x){}
+      if(l==="en")location.reload();else d.remove()});
+    document.body.appendChild(d)})})();
+</script>
+<style>
+.langpick{position:fixed;inset:0;z-index:2147483600;display:grid;place-items:center;background:radial-gradient(circle at 50% 30%,#3b4bb8,#141a46 70%);padding:16px;font-family:inherit}
+.langpick .lpbox{background:#fff;color:#1c1f3a;border-radius:24px;padding:26px 22px 18px;width:min(360px,100%);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.45);animation:lpIn .35s cubic-bezier(.2,1.4,.4,1)}
+.langpick .lpglobe{font-size:52px;line-height:1;animation:lpSpin 6s linear infinite}
+.langpick h2{margin:10px 0 16px;font-size:22px}.langpick h2 small{display:block;font-size:14px;font-weight:600;color:#6b6f90;margin-top:2px}
+.langpick button{display:flex;align-items:center;gap:12px;width:100%;margin:8px 0;padding:14px 16px;border-radius:16px;border:2px solid #d9d6ee;background:#f6f5fc;font:700 18px inherit;color:#1c1f3a;cursor:pointer;transition:transform .12s,border-color .12s}
+.langpick button span{font-size:26px}.langpick button.on{border-color:#e63950;background:#fff0f2}.langpick button:hover{transform:translateY(-2px);border-color:#e63950}
+.langpick p{font-size:12px;color:#6b6f90;margin:12px 0 0;line-height:1.5}
+@keyframes lpIn{from{transform:scale(.85);opacity:0}}@keyframes lpSpin{50%{transform:rotate(12deg) scale(1.06)}}
+.langbtn{position:absolute;left:12px;bottom:12px;z-index:50;border:0;border-radius:999px;padding:8px 14px;background:rgba(0,0,0,.45);color:#fff;font:700 14px inherit;cursor:pointer;backdrop-filter:blur(4px)}
+@media (prefers-reduced-motion:reduce){.langpick .lpglobe,.langpick .lpbox{animation:none}}
+</style>
+
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793911637">
+<meta name="game-build" content="1793952106">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2311,7 +2347,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.11.2</small>
+    <small class="pcver">Versión 6.12</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -2322,7 +2358,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
   try{var nk=localStorage.getItem("pgcNick");if(nk){var h=$i("pcHi");h.textContent="¡Hola de nuevo, "+nk+"! 👋";h.hidden=false}}catch(e){}
   $i("pcPlay").addEventListener("click",function(){var o=$i("pcOpts");o.hidden=false;this.hidden=true;try{$i("agoogle").focus()}catch(e){}});
   // si se piden los datos (por ejemplo, un error al entrar) se despliegan las opciones
-  new MutationObserver(function(){var m=$i("amsg");if(m&&m.textContent&&!/Comprobando/.test(m.textContent)&&$i("pcOpts").hidden&&/rror|incorrect|no existe|contraseña|cuenta/i.test(m.textContent)){$i("pcOpts").hidden=false;$i("pcPlay").hidden=true}}).observe($i("amsg"),{childList:true,characterData:true,subtree:true});
+  new MutationObserver(function(){var m=$i("amsg");if(m&&m.textContent&&!/Comprobando|Checking/.test(m.textContent)&&$i("pcOpts").hidden&&/rror|incorrect|no existe|contraseña|cuenta/i.test(m.textContent)){$i("pcOpts").hidden=false;$i("pcPlay").hidden=true}}).observe($i("amsg"),{childList:true,characterData:true,subtree:true});
   // desfile de Pokémon caminando por la hierba
   var MON=["pikachu","charmander","bulbasaur","squirtle","eevee","jigglypuff","psyduck","snorlax","gengar","lucario","togepi","piplup","chikorita","cyndaquil","totodile","mudkip","torchic","treecko","riolu","sylveon","umbreon","espeon","dragonite","lapras","mew","celebi","vulpix","growlithe","meowth","togekiss","pachirisu","oshawott","snivy","tepig","froakie","fennekin","chespin","rowlet","litten","popplio","sobble","scorbunny","grookey","sprigatito","fuecoco","quaxly","gardevoir","garchomp","arcanine","charizard"];
   var par=$i("pcPar"),busy=0;
@@ -4029,7 +4065,7 @@ const eff=(a,d)=>typeEff(a,d);
 let sk=null;
 const waitSkip=ms=>new Promise(r=>{const id=setTimeout(done,ms);function done(){clearTimeout(id);sk=null;r()}sk=done});
 async function say(t){
-  const b=$("fmsg");b.textContent="";let fast=false;
+  if(window.i18nT)t=i18nT(String(t));const b=$("fmsg");b.textContent="";let fast=false;
   sk=()=>{fast=true};
   for(const c of t){if(fast)break;b.textContent+=c;await sleep(14)}
   b.textContent=t;
@@ -6929,8 +6965,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.11.2";
+const GAME_VER="6.12";
 const NEWS=[
+{v:"2026-11-06a",ver:"6.12",at:"2026-11-06T09:01",t:"🌐 ¡El juego ya está en inglés! · Now in English!",l:["Nuevo ajuste de idioma: ⚙️ Ajustes → Accesibilidad → 🌐 Idioma (Español / English)","Los jugadores nuevos eligen su idioma nada más entrar, y en la pantalla de inicio hay un botón 🌐 para cambiarlo","En inglés se traducen menús, combates, objetos, movimientos y habilidades (con sus nombres oficiales), la historia de Exploración, los minijuegos y los mensajes","New language setting: ⚙️ Settings → Accessibility → 🌐 Language. Menus, battles, items, moves, abilities and the Exploration story are translated"]},
 {v:"2026-11-05n",ver:"6.11",at:"2026-11-05T20:23",t:"📋 Ficha técnica en Exploración",l:["En el panel 🎒 de Exploración, toca cualquier Pokémon para ver su ficha completa","Verás su nivel, PS, experiencia, tipos, naturaleza, habilidad, objeto equipado, estadísticas con sus valores base y movimientos con potencia, precisión y PP","Desde la ficha puedes ponerle un mote, quitarle el objeto y meterlo o sacarlo del equipo","La mochila de Exploración también se ve ahora con tarjetas grandes y ordenada por tipo"]},
 {v:"2026-11-05m",ver:"6.10",at:"2026-11-05T16:43",t:"🛍️ Tiendas de Exploración con mucho más surtido",l:["Las tiendas tienen ahora entre 11 y 51 productos: más balls, pociones, Revivir máximo, Éter y Elixires","Todas las piedras evolutivas y objetos de evolución: Escama Dragón, Revestimiento Metálico, Roca del Rey, Protector, Electrizador, Cordón Unión…","Más MT de ataque de muchos tipos y MT de estado como Protección, Danza Espada, Danza Dragón, Maquinación o Fuego Fatuo","Objetos equipables (Restos, Vidasfera, Banda Focus, Chaleco Asalto, Huevo Suerte, Bayas, Semillas…) y Mentas para cambiar la naturaleza","En la mochila 🎒 de Exploración ya puedes usar Mentas y equipar objetos a tus Pokémon","Cuanto más avanzas por las regiones, mejor surtido tienen las tiendas"]},
 {v:"2026-11-05l",ver:"6.9",at:"2026-11-05T16:35",t:"🛒 Tiendas Pokémon en Exploración",l:["Cada pueblo tiene ahora su Tienda Pokémon (el edificio de tejado azul). Habla con el dependiente para comprar y vender","Cada tienda tiene su propio surtido, que mejora región a región: Poké Balls, pociones, Revivir, Éter y Elixires, piedras evolutivas, MT del tipo de la zona y objetos equipables","Al vender te dan la mitad de su precio. Se paga con tickets y lo comprado va a tu mochila de Exploración","Nuevo: en la mochila 🎒 de Exploración puedes usar pociones, Revivir, Éter, piedras evolutivas y MT fuera de los combates","La tecla Esc ya no te saca de la pantalla completa: ahora cierra la tienda, la mochila y los menús como el del Centro Pokémon"]},
@@ -7115,7 +7152,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793911637";
+const GAME_B="1793952106";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7719,7 +7756,7 @@ function setInit(){
   sec(cP,"Juego");add(cP,[lab("askip"),lab("skip"),lab("bgprod")]);
   // accesibilidad
   const aP=mk("acc","Accesibilidad");
-  {const d=document.createElement("div");d.innerHTML='<label class="slid"><span>🔠 Tamaño del texto</span><select id="setTxt"><option value="1">Normal</option><option value="1.1">Grande</option><option value="1.22">Muy grande</option></select></label><label class="tog"><input type="checkbox" data-o="calm"> Reducir el movimiento (sin animaciones ni balanceos)</label><label class="tog"><input type="checkbox" data-o="hc"> Alto contraste (textos y bordes más marcados)</label><small class="setnote">Estas opciones solo cambian cómo se ve el juego en este dispositivo.</small>';[...d.childNodes].forEach(n=>aP.appendChild(n))}
+  {const d=document.createElement("div");d.innerHTML='<label class="slid noi18n"><span>🌐 Idioma · Language</span><select id="setLang"><option value="es">Español</option><option value="en">English</option></select></label><label class="slid"><span>🔠 Tamaño del texto</span><select id="setTxt"><option value="1">Normal</option><option value="1.1">Grande</option><option value="1.22">Muy grande</option></select></label><label class="tog"><input type="checkbox" data-o="calm"> Reducir el movimiento (sin animaciones ni balanceos)</label><label class="tog"><input type="checkbox" data-o="hc"> Alto contraste (textos y bordes más marcados)</label><small class="setnote">Estas opciones solo cambian cómo se ve el juego en este dispositivo.</small>';[...d.childNodes].forEach(n=>aP.appendChild(n))}
   // cuenta
   const kP=mk("acct","Cuenta y guardado");
   add(kP,[byId("clInfo"),par("clNow"),par("clDel"),par("clExp"),byId("clImpOk"),byId("clFile"),byId("clCloud"),byId("clMsg")]);
@@ -7731,6 +7768,7 @@ function setInit(){
   w.innerHTML='<div class="seth"><h2>Ajustes</h2><button type="button" class="setx" id="setX">Cerrar</button></div><div class="settabs">'+SETT.map(t=>'<button type="button" data-st="'+t[0]+'">'+t[1]+'</button>').join("")+'</div><div class="setbody"></div>';
   const body=w.querySelector(".setbody");SETT.forEach(t=>body.appendChild(panes[t[0]]));
   [...op.childNodes].forEach(n=>n.remove());op.appendChild(w);
+  {const s=$("setLang");if(s){s.value=window.PGC_LANG||"es";s.onchange=()=>{try{save()}catch(e){}if(window.pgcSetLang)pgcSetLang(s.value)}}}
   {const s=$("setTxt");s.value=String(O.txt||1);s.onchange=()=>{O.txt=+s.value;saveO();applyO()}}
   {const s=$("setSpr");s.value=O.spr||"";s.onchange=()=>{O.spr=s.value;saveO();snd("ui");try{render()}catch(e){}toast(O.spr==="px"?"🖼️ Sprites clásicos animados en todo el juego.":"🖼️ Pokémon del gacha en alta definición.")}}
   {const s=$("setTheme");s.value=O.theme||"";s.onchange=()=>{O.theme=s.value;saveO();applyO();snd("ui")}}
@@ -8484,7 +8522,7 @@ function chKnown(){const o={};const add=(u,n)=>{n=pvClean(n||"");if(u&&n&&n!=="E
   const me=chMe();Object.keys(o).forEach(k=>{if(o[k].u===me)delete o[k]});return o}
 function chMentUids(t){const K=chKnown(),out=[];String(t).replace(/@([^\s@,.!?¿¡:;]{2,16})/g,(x,n)=>{const r=K[n.toLowerCase()];if(r&&!out.includes(r.u))out.push(r.u);return x});return out.slice(0,5)}
 const chMent=m=>Array.isArray(m.mn)&&m.mn.includes(chMe())&&m.u!==chMe();
-function chTxt(t){return esc(t).replace(/@([^\s@,.!?¿¡:;&<]{2,16})/g,'<b class="chat-at">@$1</b>')}
+function chTxt(t){return '<span class="noi18n">'+esc(t).replace(/@([^\s@,.!?¿¡:;&<]{2,16})/g,'<b class="chat-at">@$1</b>')+'</span>'}
 function chQuote(r){return '<div class="chq" data-chq="'+esc(r.id)+'"><b>↩️ '+esc(pvClean(r.n||"Entrenador"))+'</b><small>'+esc(String(r.t||"").slice(0,80))+'</small></div>'}
 function chRpUI(){let b=$("chRp");const f=$("chF");if(!f)return;if(!b){b=document.createElement("div");b.id="chRp";f.before(b)}
   b.hidden=!CH.rp;b.innerHTML=CH.rp?'<span>↩️ Respondiendo a <b>'+esc(CH.rp.n)+'</b>: '+esc(CH.rp.t)+'</span><button type="button" data-chrpx="1" aria-label="Cancelar respuesta">✕</button>':''}
@@ -10018,7 +10056,7 @@ setTimeout(megaClean,1500);setInterval(megaClean,4000);
 // 1) ficha: sin nivel, movimientos, habilidad, objeto ni estadísticas (no se usan); explica a qué Pokémon desbloquea
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);if(isMegaF(n)&&S.owned[n]>0)Promise.resolve().then(()=>{try{megaFicha(n)}catch(e){console.error(e)}})}}
 function megaFicha(n){const m=$("pkv");if(!m||m.hidden)return;const b=megaBase(n),gm=/ Gigamax$/.test(n),lb=S.owned[b]>0?lvd(b).l:0;
-  const inf=m.querySelector(".pkvinfo");if(inf)[...inf.children].forEach(x=>{if(/Nivel/.test(x.textContent))x.remove()});
+  const inf=m.querySelector(".pkvinfo");if(inf)[...inf.children].forEach(x=>{if(/Nivel|Level/.test(x.textContent))x.remove()});
   const w=m.querySelector(".fich");if(!w)return;
   [...w.querySelectorAll(".fichr")].forEach(r=>{const l=(r.querySelector("span")||{}).textContent||"";if(!/Mote|Favorito/.test(l))r.remove()});
   const k=document.createElement("div");k.className="fichr fkey";
@@ -10668,7 +10706,7 @@ function exNpcWalk(dt){const w=EX.walkTo,n=w.n;if(n.mv)return;const[ddx,ddy]=EXD
   const[dx,dy]=EXDIR[n.f];n.mv={x0:n.px,y0:n.py,t:0,d:230};n.px+=dx;n.py+=dy;n.step=(n.step||0)+1}
 // ---------- diálogos ----------
 function exSay(lines,cb){EX.dlg={l:lines,i:0,c:0,cb:cb};EX.keys={};EX.kst=[]}
-const exDlgT=r=>String(r||"").replace(/^§[^|]*\|/,"");
+const exDlgT=r=>{const s=String(r||"").replace(/^§[^|]*\|/,"");return window.i18nT?i18nT(s):s};
 function exDlgNext(){const d=EX.dlg;if(!d)return;const t=exDlgT(d.l[d.i]);if(d.c<t.length){d.c=t.length;return}d.i++;d.c=0;snd("ui");if(d.i>=d.l.length){EX.dlg=null;d.cb&&d.cb()}}
 function exInteract(){if(EX.dlg){exDlgNext();return}if(EX.mv||EX.trans)return;const[dx,dy]=EXDIR[EX.f],x=EX.x+dx,y=EX.y+dy,c=exAt(x,y);
   const n=EX.npcs.find(q=>q.px===x&&q.py===y);if(n){n.f={u:"d",d:"u",l:"r",r:"l"}[EX.f];if(n.beat)exSay([n.n+":","«¡Qué buen combate! Sigue entrenando, que se nota que tus Pokémon te quieren.»"]);else{exSay([n.n+":","«"+n.txt+"»"],()=>exTrainerBattle(n))}return}
@@ -11964,7 +12002,7 @@ document.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind||WM.open||e
 // los textos de ayuda y los botones muestran la tecla que tenga asignada cada persona
 {const _k=exKeysTxt;exKeysTxt=function(){const r=_k.apply(this,arguments);try{const kb=exKB(),f=a=>kb[a].filter(Boolean).map(exKName).join(" / ")||"sin tecla";
   const e=$("exKeys");
-  if(e)e.textContent=e.textContent.replace(" · Pantalla completa"," · Minimapa: "+f("mm")+" · Mapa: "+f("wm")+" · Equipo y mochila: "+f("bag")+" · Controles: "+f("ctl")+" · Pantalla completa");
+  if(e)e.textContent=e.textContent.replace(/ · (Pantalla completa|Fullscreen)/," · Minimapa: "+f("mm")+" · Mapa: "+f("wm")+" · Equipo y mochila: "+f("bag")+" · Controles: "+f("ctl")+" · Pantalla completa");
   const T={exMiniB:"Mostrar u ocultar el minimapa",exWmB:"Mapa de la región",exTeamB:"Tu equipo de Exploración"};for(const a in EXSC){const b=$(EXSC[a]);if(b)b.title=T[EXSC[a]]+" ("+f(a)+")"}
   document.querySelectorAll(".exkb").forEach(b=>b.title="Controles ("+f("ctl")+")");const m=$("exMini");if(m)m.title="Minimapa · tócalo para ampliarlo"}catch(x){}return r}}
 setTimeout(()=>{try{exKeysTxt()}catch(e){}},0);
@@ -12300,7 +12338,7 @@ function abOf(n){const a=S.abil&&S.abil[n];return a&&abValid(n,a)?a:abDefault(PM
 // ficha: elegir la habilidad
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0))return;const w=document.querySelector("#pkv .fich");if(!w)return;const L=abList(PM[n]);if(!L.length)return;const cur=abOf(n);
   const d=document.createElement("div");d.className="fichr fabil";d.innerHTML='<span>Habilidad</span><div><div class="fichin"><select id="fAbil" data-fn="'+esc(n)+'">'+L.map(a=>'<option value="'+a+'"'+(a===cur?' selected':'')+'>'+esc(abName(a))+(ABDESC[a]?'':' (sin efecto todavía)')+'</option>').join("")+'</select></div><small class="mut" id="fAbilD">'+esc(ABDESC[cur]||"Esta habilidad todavía no tiene efecto en los combates del juego.")+'</small></div>';
-  const nat=[...w.querySelectorAll(".fichr")].find(x=>/Naturaleza/.test(x.textContent));if(nat)nat.after(d);else w.appendChild(d)}catch(e){console.error(e)}}}
+  const nat=[...w.querySelectorAll(".fichr")].find(x=>/Naturaleza|Nature/.test(x.textContent));if(nat)nat.after(d);else w.appendChild(d)}catch(e){console.error(e)}}}
 document.addEventListener("change",e=>{if(e.target&&e.target.id==="fAbil"){const n=e.target.dataset.fn,a=+e.target.value;if(fcd){toast("Termina el combate antes de cambiar la habilidad.");e.target.value=abOf(n);return}if(!abValid(n,a))return;S.abil=S.abil||{};S.abil[n]=a;save();snd("ui");const dd=$("fAbilD");if(dd)dd.textContent=ABDESC[a]||"Esta habilidad todavía no tiene efecto en los combates del juego.";toast("✨ "+nk(n)+" ahora tiene la habilidad "+abName(a))}});
 
 // =====================================================================================
@@ -13256,7 +13294,7 @@ function gmTop(){
   let tp=0;try{tp=tps()}catch(e){}const ts=tp>0?"+"+gmK(tp)+"/s":"";if($("gTps").textContent!==ts)$("gTps").textContent=ts;
   try{const m=(typeof XGSW!=="undefined"&&XGSW?Object.keys(XGSW.med||{}).filter(k=>XGSW.med[k]).length:medCount())+"/8";if($("gMedN").textContent!==m)$("gMedN").textContent=m}catch(e){}
   try{const s=String(strkNow());if($("gStkN").textContent!==s)$("gStkN").textContent=s}catch(e){}
-  try{const pm=$("passMini"),q=pm&&pm.textContent.match(/Nv\s*(\d+)\s*\/\s*(\d+)/);if(q){const s="Nv "+q[1];if($("gPassN").textContent!==s)$("gPassN").textContent=s;const bi=pm.querySelector(".pmbar i");$("gPassB").style.width=bi?bi.style.width||"0%":(q[1]/q[2]*100)+"%"}}catch(e){}
+  try{const pm=$("passMini"),q=pm&&pm.textContent.match(/(?:Nv|Lv)\s*(\d+)\s*\/\s*(\d+)/);if(q){const s="Nv "+q[1];if($("gPassN").textContent!==s)$("gPassN").textContent=s;const bi=pm.querySelector(".pmbar i");$("gPassB").style.width=bi?bi.style.width||"0%":(q[1]/q[2]*100)+"%"}}catch(e){}
   try{if(GM.scr==="stage"){const pm=+(($("pityM")||{}).textContent)||30,pv=+(($("pity")||{}).textContent)||0,left=Math.max(0,pm-pv);$("gPityN").textContent=left;$("gPityB").style.width=Math.min(100,pv/pm*100)+"%";$("gPity").classList.toggle("gnear",left<=5)}}catch(e){}
   try{const nk=S.nick?String(S.nick).slice(0,18):"Entrenador";if($("gNick").textContent!==nk)$("gNick").textContent=nk}catch(e){}
   try{const cv=parseFloat(($("cpsv")||{}).textContent)||0,cb=$("gCombo");if(cv>=1){$("gCmb").textContent=cv.toFixed(1);if(!cb.classList.contains("on"))cb.classList.add("on");cb.classList.toggle("hot",cv>=6)}else cb.classList.remove("on","hot")}catch(e){}

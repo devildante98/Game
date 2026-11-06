@@ -34,8 +34,8 @@ async function formDo(k){
   }else{
     const np=kind==="gmax"?PM[fname]:m.p;
     await say("¡"+nk(base)+" está "+(kind==="gmax"?"gigamaxizándose":"dinamaxizándose")+"!");snd("flash");
-    formApply(m,np,2,1.35);m.dmx=1;B.dmx=3;if(kind==="gmax"&&typeof GMX!=="undefined"&&GMX[fname])m.gmx=fname;setSpr(0);bePaint();if(sp)sp.classList.add("dmax");snd("lvl");
-    await say("¡"+(kind==="gmax"?fname:nk(base)+" Dinamax")+"! Durante 3 turnos tiene el doble de PS y ataca con más fuerza.");
+    formApply(m,np,2,1.2);m.dmx=1;B.dmx=3;if(kind==="gmax"&&typeof GMX!=="undefined"&&GMX[fname])m.gmx=fname;setSpr(0);bePaint();if(sp)sp.classList.add("dmax");snd("lvl");
+    await say("¡"+(kind==="gmax"?fname:nk(base)+" Dinamax")+"! Durante 3 turnos tiene el doble de PS y sus ataques son Movimientos Dinamax, mucho más potentes.");
     if(m.gmx){const g=GMX[m.gmx];await say("✨ Sus ataques de tipo "+TIPO[g[0]]+" serán "+g[1]+": "+g[3]+".")}
   }
   B.busy=false;setMenu(true);

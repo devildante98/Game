@@ -869,7 +869,7 @@ function pvFreeBtns(side,pm){if(!D||!D.E||!D.E.free||!pm||pm.mh<=0)return "";let
       if(np){sd.fu=1;pre.push([i,kind,np,m.p[0]])}}}
     const z=s.match(/^([zx])(\d)(t\d)?$/);if(z){const mv=m&&m.m[+z[2]];if(!E.free||sd.zu||!m||pvZOk(m,mv)!==z[1])s="m"+z[2]+(z[3]||"");else sd.zu=1}
     return s});
-  const ev0=[];pre.forEach(([i,kind,np,base])=>{const m=beAct(E.sd[i]);if(kind==="mega")formApply(m,np,1,1.12);else{formApply(m,np,2,1.35);m.dmx=1;E.sd[i].dmx=3;if(kind==="gmax"&&typeof GMX!=="undefined"&&GMX[np[0]])m.gmx=np[0]}ev0.push({k:"form",s:i,kind:kind,n:base,f:np[0],snap:beSnap(E)})});
+  const ev0=[];pre.forEach(([i,kind,np,base])=>{const m=beAct(E.sd[i]);if(kind==="mega")formApply(m,np,1,1.12);else{formApply(m,np,2,1.2);m.dmx=1;E.sd[i].dmx=3;if(kind==="gmax"&&typeof GMX!=="undefined"&&GMX[np[0]])m.gmx=np[0]}ev0.push({k:"form",s:i,kind:kind,n:base,f:np[0],snap:beSnap(E)})});
   const ev=_bt.call(this,E,acts,rng);
   E.sd.forEach((sd,i)=>{if(sd.dmx>0&&--sd.dmx<=0){const m=sd.t.find(t=>t.dmx);if(m){formRevert(m);ev.push({k:"dmxend",s:i,n:m.p[0],snap:beSnap(E)})}}});
   return ev0.concat(ev)}}
@@ -1052,3 +1052,19 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
   // las reglas de Firestore no dejan añadir campos nuevos a la sugerencia: la lista de borradas se guarda en la partida del administrador
   const H=Array.isArray(S.sugAdmHid)?S.sugAdmHid:(S.sugAdmHid=[]);if(!H.includes(b.dataset.sd))H.push(b.dataset.sd);S.sugAdmHid=H.slice(-1000);save();toast("🗑️ Sugerencia borrada de tu lista.")
   if(SUGC)SUGC=SUGC.filter(x=>x.id!==b.dataset.sd);sugLoad()},true);
+// ================= MOVIMIENTOS DINAMAX =================
+// Mientras un Pokémon está dinamaxizado, sus ataques se convierten en Movimientos Dinamax (como en la saga):
+// más potencia según el ataque original, nunca fallan, y los de estado pasan a ser Maxibarrera (protege ese turno).
+const DXN={normal:"Maxiataque",fire:"Maxignición",water:"Maxichorro",electric:"Maxitormenta",grass:"Maxiflora",ice:"Maxihelada",fighting:"Maxipuño",poison:"Maxiácido",
+  ground:"Maxitemblor",flying:"Maxiciclón",psychic:"Maxionda",bug:"Maxinsecto",rock:"Maxilito",ghost:"Maxiespectro",dragon:"Maxidraco",dark:"Maxisombra",steel:"Maximetal",fairy:"Maxiestela"};
+function dxPow(mv){const lo=mv.t==="fighting"||mv.t==="poison",p=mv.fixed||mv.flv||mv.half||!mv.pw?0:mv.pw;
+  const T=lo?[70,75,80,85,90,95,100]:[90,100,110,120,130,140,150];if(!p)return lo?75:100;
+  return p<=40?T[0]:p<=50?T[1]:p<=60?T[2]:p<=70?T[3]:p<=100?T[4]:p<=140?T[5]:T[6]}
+let _dxProt=null;const dxProt=()=>_dxProt||(_dxProt=Object.values(MVD).find(x=>x&&x.prot&&x.cl===0)||null);
+function dxMove(mv,me){if(!mv||mv.cl==null)return mv;const g=me&&me.gmx&&typeof GMX!=="undefined"&&GMX[me.gmx];
+  const id="dx:"+mv.id+"|"+(g?me.gmx:"");
+  if(mv.cl===0){const pr=dxProt();if(!pr)return mv;return Object.assign({},pr,{id:id,n:"Maxibarrera",t:mv.t,pp:mv.pp,dx:1})}
+  return Object.assign({},mv,{id:id,n:g&&g[0]===mv.t?g[1]:(DXN[mv.t]||"Movimiento Dinamax"),pw:dxPow(mv),ac:0,ailc:0,fl:0,ch:[],sc:0,hits:null,rec:0,drain:0,kami:0,rech:0,fixed:0,flv:0,half:0,pr:0,dx:1})}
+function dxById(s){const [mid,gf]=String(s).split("|"),mv=MVD[mid];return mv?dxMove(mv,{gmx:gf||""}):STRUG}
+// botones de ataque: muestran el Movimiento Dinamax con su potencia
+{const _mb=mvBtn;mvBtn=function(mv,pp,mx,attr,foe,me){if(me&&me.dmx&&mv&&mv.cl!=null){const d=dxMove(mv,me);const h=_mb(d,pp,mx,attr,foe,me);return h.replace('</small></button>',(d.cl?' · Poder '+d.pw:'')+' · desde '+esc(mv.n)+'</small></button>')}return _mb.apply(this,arguments)}}

@@ -69,6 +69,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   let mv,k=-1;const allOut=me.pp.every(x=>x<=0);
   if(q[1]==null){if(!allOut)return;mv=STRUG}
   else{k=+q[1];mv=me.m[k];if(!mv)return;if(me.pp[k]<=0){if(!allOut)return;mv=STRUG;k=-1}}
+  if(me.dmx&&mv&&mv!==STRUG&&typeof dxMove==="function")mv=dxMove(mv,me);
   if(me.it==="avest"&&mv&&mv.cl===0){push({k:"item",s:i,n:me.p[0],it:"avest"});return}
   if(zf&&mv&&mv.cl>0&&typeof zMove==="function"){mv=zf==="x"&&typeof zxMove==="function"?zxMove(me,mv):zMove(mv);push({k:"zpow",s:i,n:me.p[0]})}
   if(k>=0){me.pp[k]--;if(me.pp[k]>0&&axFoesL(E,i).some(o=>o.m.ab===46))me.pp[k]--}

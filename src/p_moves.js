@@ -49,7 +49,7 @@ GD.MV.forEach(r=>{const m=mvParse(r);MVD[m.id]=m;MVX.push(m)});
 // Ataque Especial y Defensa Especial separados del Ataque y la Defensa (datos oficiales de PokeAPI)
 {const STCH=__STCH__;Object.keys(STCH).forEach(id=>{const m=MVD[id];if(m&&m.ch.length)m.ch=STCH[id].map(x=>[x[0],x[1]])})}
 const STRUG={id:"forc",n:"Forcejeo",t:"normal",pw:50,ac:0,pp:1,pr:0,cl:1,fx:"c",ch:[],rec:25,typeless:1};
-const MVI=id=>id==="forc"?STRUG:String(id).slice(0,3)==="zx:"&&typeof zxById==="function"?zxById(String(id).slice(3)):String(id).slice(0,2)==="z:"&&typeof zMove==="function"?zMove(MVD[String(id).slice(2)]):MVD[id];
+const MVI=id=>id==="forc"?STRUG:String(id).slice(0,3)==="dx:"&&typeof dxById==="function"?dxById(String(id).slice(3)):String(id).slice(0,3)==="zx:"&&typeof zxById==="function"?zxById(String(id).slice(3)):String(id).slice(0,2)==="z:"&&typeof zMove==="function"?zMove(MVD[String(id).slice(2)]):MVD[id];
 // aprendizaje por nivel (como en los juegos): [[nivel, id], ...]
 const _ls={};
 function learnRaw(n){

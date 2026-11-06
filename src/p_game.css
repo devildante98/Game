@@ -475,6 +475,7 @@ body[data-tod=night] #gStars{opacity:1}
 #gRays,#gNav .gbig .gni:before,#gScr #stage>.gview:before,.glr,#fists{will-change:transform}
 body.gm #train{filter:none}
 body.gm:not(.gmhome) #farm *,body.gm:not(.gmhome) #farm,body.gm:not(.gmhome) #gStars{animation-play-state:paused!important}
+body.gm #farm .fl,body.gm #farm #fx *,body.gm #farm #rain *{animation-play-state:running!important}
 /* animaciones ligeras: sin giros ni rebotes continuos, menos efectos */
 body.glite #gRays,body.glite #gNav .gbig .gni:before,body.glite #gScr #stage>.gview:before,body.glite #fists,body.glite #gStars,body.glite .gbd,body.glite #train,body.glite .gtrn img,body.glite .gpk img,body.glite #gTr img,body.glite #gBud img,body.glite .gsmk,body.glite #gScr #fgo,body.glite #gScr #menu>.frmb,body.glite #gNav .gbig .gni,body.glite #gPed i,body.glite .gtar{animation:none!important}
 body.glite .gsmk{display:none}

@@ -36,7 +36,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.17.5"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.17.6"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -71,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793991668">
+<meta name="game-build" content="1793991875">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -171,7 +171,7 @@ button.red{background:var(--red);color:#fff}
 #fists i{position:absolute;left:50%;top:50%;margin:-16px 0 0 -16px;font-size:1.8rem;line-height:1;font-style:normal;transition:transform .08s;transform:rotate(var(--a)) translateX(var(--r)) rotate(180deg)}
 @keyframes spin{to{transform:rotate(360deg)}}
 #fists svg{display:block}
-@media (prefers-reduced-motion:reduce){#fists{animation:none}}
+body.calm #fists{animation:none}
 .grows{flex:1;min-width:230px;display:flex;flex-direction:column;gap:6px}
 .gr{background:linear-gradient(90deg,rgba(0,0,0,.2),transparent);border:1px solid var(--line);border-radius:10px;padding:4px 10px;display:flex;align-items:center;gap:10px;overflow:hidden}
 .gr b{font-size:.8rem;white-space:nowrap;min-width:140px;flex:1;overflow:hidden;text-overflow:ellipsis}.gr .gi{flex-wrap:nowrap}.gr .gn{font-weight:800;font-size:.95rem;min-width:44px;text-align:right}
@@ -183,7 +183,7 @@ button.red{background:var(--red);color:#fff}
 @keyframes rise{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-60px)}}
 .rn{position:absolute;top:-30px;font-size:1.3rem;opacity:.65;animation:fall 3.2s linear forwards}
 @keyframes fall{to{transform:translateY(420px) rotate(40deg);opacity:0}}
-@media (prefers-reduced-motion:reduce){.gi i,.rn,.fl,.bigball.bump{animation:none}}
+body.calm .gi i,body.calm .rn,body.calm .bigball.bump{animation:none}
 .nox .card{animation:none}
 .slot{display:flex;justify-content:center;align-items:center;min-height:92px}
 .ball.mini{width:64px;height:64px;border-width:3px}
@@ -238,7 +238,7 @@ h2{font-size:1.1rem;margin:0 0 10px}
 .dex{max-height:62vh;overflow-y:auto;padding:4px}
 .cnt{position:absolute;top:2px;right:6px;font-size:.7rem;color:var(--mute)}
 .msg{min-height:1.4em;color:var(--mute);font-size:.9rem;text-align:center}
-@media (prefers-reduced-motion:reduce){.ball.shake,.card{animation:none}}
+body.calm .ball.shake,body.calm .card{animation:none}
 
 body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(circle at 10% 15%,rgba(255,107,129,.30),transparent 40%),radial-gradient(circle at 90% 10%,rgba(79,157,255,.30),transparent 42%),radial-gradient(circle at 15% 90%,rgba(255,211,92,.28),transparent 42%),radial-gradient(circle at 88% 85%,rgba(47,224,176,.28),transparent 42%),radial-gradient(circle at 50% 50%,rgba(178,108,255,.14),transparent 55%)}
 #bgw{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;opacity:.24}
@@ -305,7 +305,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 .hchip.ok{background:rgba(62,207,90,.2);color:#2e9a47}.hchip.low{background:rgba(245,196,0,.28);color:#9a7600}.hchip.ko{background:rgba(230,57,80,.2);color:#c0233a}
 .hdlg{background:#1d2140;color:#fff;border:3px solid #c9c9d8;border-radius:12px;padding:12px 14px;min-height:58px}
 .hbtn{width:100%;padding:14px;font-size:1.05rem}
-@media (prefers-reduced-motion:reduce){.hmach.glow,.hmach.glow .hb,.hmach.glow .hlamps i,.hmach.run .hb,.hspr,.hsp,#bgw i{animation:none}}
+body.calm .hmach.glow,body.calm .hmach.glow .hb,body.calm .hmach.glow .hlamps i,body.calm .hmach.run .hb,body.calm .hspr,body.calm .hsp,body.calm #bgw i{animation:none}
 
 .sets{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px;display:flex;flex-direction:column;gap:10px}
 .sets-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
@@ -329,7 +329,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 .jconf{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .jconf span{position:absolute;top:-40px;animation:jfall linear infinite}
 @keyframes jfall{to{transform:translateY(520px) rotate(360deg)}}
-@media (prefers-reduced-motion:reduce){.jbox,.jconf span{animation:none}}
+body.calm .jbox,body.calm .jconf span{animation:none}
 .hlprow{padding:7px 0;border-top:1px solid var(--line)}
 .tchip{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:1px 8px;margin:2px 4px 2px 0;font-size:.78rem;white-space:nowrap}
 
@@ -367,7 +367,7 @@ body.off-pColl #collP,body.off-pBat #batP,body.off-pBat #lgP,body.off-pBag #bagP
 .scene svg{width:100%;height:100%;display:block}
 .cl{animation:cdrift 70s ease-in-out infinite alternate}
 @keyframes cdrift{from{transform:translateX(-45px)}to{transform:translateX(60px)}}
-@media (prefers-reduced-motion:reduce){.cl{animation:none}}
+body.calm .cl{animation:none}
 #arena.bigbat{position:fixed;inset:0;z-index:90;background:var(--bg);overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:6px;align-items:stretch}
 #arena.bigbat>*{width:100%;max-width:1500px;margin-left:auto;margin-right:auto}
 #arena.bigbat.win{inset:2vh 2vw;border:3px solid var(--line);border-radius:20px;box-shadow:0 0 0 100vmax rgba(8,10,25,.75)}
@@ -706,7 +706,7 @@ body.menuon main *,body.hubon main *,body.modalon main *,body.menuon #bgw,body.m
 @keyframes nbbob{50%{transform:translateY(-6px) rotate(-6deg)}}
 @keyframes nbring{0%{transform:scale(.85);opacity:.75}70%,100%{transform:scale(1.5);opacity:0}}
 @media (max-width:700px){#navb{width:74px!important;height:74px!important;right:14px!important;bottom:calc(32px + env(safe-area-inset-bottom,0px))!important}#navb .nblab{font-size:11px!important;padding:2px 10px;bottom:-20px}}
-@media (prefers-reduced-motion:reduce){#navb .nbball{animation:none}#navb .nbring{display:none}}
+body.calm #navb .nbball{animation:none}body.calm #navb .nbring{display:none}
 @keyframes hubfade{from{opacity:0}}
 @keyframes hubpop{from{opacity:0;transform:translateY(18px) scale(.9)}}
 @media (max-width:700px){.hubgl{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.hubtile{min-height:0;flex-direction:row;justify-content:flex-start;text-align:left;padding:12px;gap:12px}.hubtile small{display:none}.hubtile .hti{width:42px;height:42px;font-size:1.35rem;flex:none}#hubG{padding:14px 14px calc(140px + env(safe-area-inset-bottom,0px))}}
@@ -1133,7 +1133,7 @@ body:has(#mgM:not([hidden]) .rdw) #chw{z-index:99}
 .pcmini{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:1}.pcmini img{height:96px;image-rendering:pixelated}.pcmini b{font-size:.85rem}
 .tshcard{width:100%}.tshcard .pcard{padding:10px 6px;min-height:132px;box-sizing:border-box;display:grid;place-items:center}
 .tshtop{display:flex;gap:14px;align-items:center;margin-bottom:6px}.tshtop>div:last-child{display:flex;flex-direction:column;gap:4px}.tshcard.big{width:170px;flex:none}
-@media (prefers-reduced-motion:reduce){.pcard,.pcard::after{animation:none!important}}
+body.calm .pcard,body.calm .pcard::after{animation:none!important}
 body.calm .pcard,body.calm .pcard::after{animation:none!important}
 .mycbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.mycwrap{max-width:640px}
 .mtrow{display:none!important}
@@ -1660,7 +1660,7 @@ body.exfsOn #navb,body.exfsOn #fsb{display:none!important}
 @media (max-width:520px){.pclogo h1 span{font-size:1.85rem}.pcball{width:52px;height:52px}#auth form#aform{padding:16px 16px 12px}#auth .pcplay{font-size:1.3rem;padding:13px}.pcfeat span{font-size:.68rem;padding:3px 8px}}
 .pcmus{position:absolute;right:14px;bottom:14px;z-index:6;width:46px;height:46px;border-radius:50%;padding:0;font-size:1.3rem;background:rgba(255,255,255,.85);border:3px solid #fff;box-shadow:0 0 0 3px #e83a50,0 6px 14px rgba(0,0,0,.25)}
 .pcmus.on{animation:pcpulse 1.2s ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.pcmon,.pcball,.pcplay,.pclogo h1 span{animation:none!important}}
+body.calm .pcmon,body.calm .pcball,body.calm .pcplay,body.calm .pclogo h1 span{animation:none!important}
 #pkv{z-index:100!important}
 #gacOut .card[data-pn]{cursor:zoom-in}
 /* ================= modo juego ================= */
@@ -1828,7 +1828,7 @@ body.gm .hubb .panel h2,body.gm #gScrB .panel h2{font-weight:800;letter-spacing:
 #gLoad.op:after{content:"";position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px;border-radius:50%;background:#fff;animation:gflx .45s ease-in forwards}
 @keyframes gflx{to{transform:scale(90)}}
 #gLoad.out{opacity:0}
-@media (prefers-reduced-motion:reduce){body.gm #train,#gNav .gbig .gni,.gbd,#gTr img,#gBud img{animation:none!important}}
+body.calm.gm #train,body.calm #gNav .gbig .gni,body.calm .gbd,body.calm #gTr img,body.calm #gBud img{animation:none!important}
 /* ================= modo juego · v2 (acabado visual) ================= */
 body.gm{--gol:0 2px 0 #0f173a,1.5px 1.5px 0 #0f173a,-1.5px 1.5px 0 #0f173a,1.5px -1.5px 0 #0f173a,-1.5px -1.5px 0 #0f173a;--gtop:72px}
 @media (max-width:700px){body.gm{--gtop:60px}}
@@ -2258,7 +2258,7 @@ body.gm #gBg .pcpar{display:none!important}
 .rqh small{display:block;margin-top:4px;color:var(--mute);font-size:.85rem;line-height:1.35}
 @keyframes rqin{from{transform:scale(.85);opacity:0}}
 @keyframes rqbob{50%{transform:translateY(-4px) rotate(-6deg)}}
-@media (prefers-reduced-motion:reduce){.rqbox,.rqic{animation:none}}
+body.calm .rqbox,body.calm .rqic{animation:none}
 /* pase diario: premios nuevos */
 .bpd span .ski,.bpd span .skt{display:inline-flex;align-items:center;gap:1px}
 .bpd span .skt{flex-direction:column;font-size:1rem;line-height:1}
@@ -2503,7 +2503,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.17.5</small>
+    <small class="pcver">Versión 6.17.6</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7133,7 +7133,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.17.5";
+const GAME_VER="6.17.6";
 const NEWS=[
 {v:"2026-11-06e",ver:"6.16",at:"2026-11-06T15:53",t:"💠 Las formas supremas ya se pueden desbloquear",l:["Giratina y Dialga Forma Origen, Kyurem Blanco y Negro, Mega-Rayquaza, Ultra-Necrozma, Kyogre y Groudon Primigenios y el resto de formas supremas no salen en el gacha","Ahora basta con tener la forma base: llévala a un combate y transfórmala con un Cristal Supremo (el botón 💠 muestra 🔓 si aún no la tienes)","La primera vez que lo hagas, la forma suprema se añade a tu colección","Los Cristales Supremos se consiguen en la Torre Batalla, las incursiones, el torneo, el pase de temporada y la tienda"]},
 {v:"2026-11-06d",ver:"6.15",at:"2026-11-06T12:54",t:"🧩 Dos minijuegos nuevos: Puzle de sprites y Más o menos",l:["🧩 Puzle de sprites: recompón la imagen de un Pokémon intercambiando piezas. Elige 9, 16, 25, 36, 49, 64 o 100 piezas: cuantas más, más puntos","Toca dos piezas o arrastra una encima de otra; las bien colocadas se quedan fijas en verde. Mantén pulsado «Ver la imagen» para mirar el Pokémon","📊 Más o menos: ¿el siguiente Pokémon tiene más o menos Ataque, Velocidad, PS…? Racha hasta el primer fallo (también con las flechas ↑ ↓)","Los dos dan premio, récord, pase de temporada y clasificación semanal, y entran en el Torneo semanal desde la semana que viene"]},
@@ -7324,7 +7324,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793991668";
+const GAME_B="1793991875";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -7790,7 +7790,7 @@ function hubBadges(){
   return o;
 }
 let _hubAnim=0;
-const hubCalm=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches||!O.fx||!!O.calm}catch(e){return false}};
+const hubCalm=()=>{try{return !O.fx||!!O.calm}catch(e){return false}};
 function hubBallC(){const r=$("navb").getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function hubSparks(c){
   const cols=["#ffffff","#fff59a","#ffd35c","#ff8a8a","#9ad7ff"];

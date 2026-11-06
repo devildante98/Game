@@ -46,7 +46,7 @@ function hubBadges(){
   return o;
 }
 let _hubAnim=0;
-const hubCalm=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches||!O.fx||!!O.calm}catch(e){return false}};
+const hubCalm=()=>{try{return !O.fx||!!O.calm}catch(e){return false}};
 function hubBallC(){const r=$("navb").getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height/2}}
 function hubSparks(c){
   const cols=["#ffffff","#fff59a","#ffd35c","#ff8a8a","#9ad7ff"];

@@ -467,7 +467,7 @@ body:has(#mgM:not([hidden]) .rdw) #chw{z-index:99}
 .pcmini{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:1}.pcmini img{height:96px;image-rendering:pixelated}.pcmini b{font-size:.85rem}
 .tshcard{width:100%}.tshcard .pcard{padding:10px 6px;min-height:132px;box-sizing:border-box;display:grid;place-items:center}
 .tshtop{display:flex;gap:14px;align-items:center;margin-bottom:6px}.tshtop>div:last-child{display:flex;flex-direction:column;gap:4px}.tshcard.big{width:170px;flex:none}
-@media (prefers-reduced-motion:reduce){.pcard,.pcard::after{animation:none!important}}
+body.calm .pcard,body.calm .pcard::after{animation:none!important}
 body.calm .pcard,body.calm .pcard::after{animation:none!important}
 .mycbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.mycwrap{max-width:640px}
 .mtrow{display:none!important}
@@ -885,7 +885,7 @@ rep('#welc,#newsM,#privM{',r'''#auth{background:#8cc4f2!important;overflow:hidde
 @media (max-width:520px){.pclogo h1 span{font-size:1.85rem}.pcball{width:52px;height:52px}#auth form#aform{padding:16px 16px 12px}#auth .pcplay{font-size:1.3rem;padding:13px}.pcfeat span{font-size:.68rem;padding:3px 8px}}
 .pcmus{position:absolute;right:14px;bottom:14px;z-index:6;width:46px;height:46px;border-radius:50%;padding:0;font-size:1.3rem;background:rgba(255,255,255,.85);border:3px solid #fff;box-shadow:0 0 0 3px #e83a50,0 6px 14px rgba(0,0,0,.25)}
 .pcmus.on{animation:pcpulse 1.2s ease-in-out infinite}
-@media (prefers-reduced-motion:reduce){.pcmon,.pcball,.pcplay,.pclogo h1 span{animation:none!important}}
+body.calm .pcmon,body.calm .pcball,body.calm .pcplay,body.calm .pclogo h1 span{animation:none!important}
 #welc,#newsM,#privM{''')
 rep('#welc,#newsM,#privM{','#pkv{z-index:100!important}\n#gacOut .card[data-pn]{cursor:zoom-in}\n#welc,#newsM,#privM{')
 

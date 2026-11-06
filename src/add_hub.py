@@ -43,7 +43,7 @@ body.menuon main *,body.hubon main *,body.modalon main *,body.menuon #bgw,body.m
 @keyframes nbbob{50%{transform:translateY(-6px) rotate(-6deg)}}
 @keyframes nbring{0%{transform:scale(.85);opacity:.75}70%,100%{transform:scale(1.5);opacity:0}}
 @media (max-width:700px){#navb{width:74px!important;height:74px!important;right:14px!important;bottom:calc(32px + env(safe-area-inset-bottom,0px))!important}#navb .nblab{font-size:11px!important;padding:2px 10px;bottom:-20px}}
-@media (prefers-reduced-motion:reduce){#navb .nbball{animation:none}#navb .nbring{display:none}}
+body.calm #navb .nbball{animation:none}body.calm #navb .nbring{display:none}
 @keyframes hubfade{from{opacity:0}}
 @keyframes hubpop{from{opacity:0;transform:translateY(18px) scale(.9)}}
 @media (max-width:700px){.hubgl{grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.hubtile{min-height:0;flex-direction:row;justify-content:flex-start;text-align:left;padding:12px;gap:12px}.hubtile small{display:none}.hubtile .hti{width:42px;height:42px;font-size:1.35rem;flex:none}#hubG{padding:14px 14px calc(140px + env(safe-area-inset-bottom,0px))}}

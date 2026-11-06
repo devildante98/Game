@@ -163,7 +163,7 @@ body.gm .hubb .panel h2,body.gm #gScrB .panel h2{font-weight:800;letter-spacing:
 #gLoad.op:after{content:"";position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px;border-radius:50%;background:#fff;animation:gflx .45s ease-in forwards}
 @keyframes gflx{to{transform:scale(90)}}
 #gLoad.out{opacity:0}
-@media (prefers-reduced-motion:reduce){body.gm #train,#gNav .gbig .gni,.gbd,#gTr img,#gBud img{animation:none!important}}
+body.calm.gm #train,body.calm #gNav .gbig .gni,body.calm .gbd,body.calm #gTr img,body.calm #gBud img{animation:none!important}
 /* ================= modo juego · v2 (acabado visual) ================= */
 body.gm{--gol:0 2px 0 #0f173a,1.5px 1.5px 0 #0f173a,-1.5px 1.5px 0 #0f173a,1.5px -1.5px 0 #0f173a,-1.5px -1.5px 0 #0f173a;--gtop:72px}
 @media (max-width:700px){body.gm{--gtop:60px}}
@@ -593,7 +593,7 @@ body.gm #gBg .pcpar{display:none!important}
 .rqh small{display:block;margin-top:4px;color:var(--mute);font-size:.85rem;line-height:1.35}
 @keyframes rqin{from{transform:scale(.85);opacity:0}}
 @keyframes rqbob{50%{transform:translateY(-4px) rotate(-6deg)}}
-@media (prefers-reduced-motion:reduce){.rqbox,.rqic{animation:none}}
+body.calm .rqbox,body.calm .rqic{animation:none}
 /* pase diario: premios nuevos */
 .bpd span .ski,.bpd span .skt{display:inline-flex;align-items:center;gap:1px}
 .bpd span .skt{flex-direction:column;font-size:1rem;line-height:1}

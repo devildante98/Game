@@ -774,5 +774,14 @@
 "Con la racha, los valores se parecen cada vez más y tienes menos tiempo.": "As your streak grows, the values get closer and you have less time.",
 "Teclado:": "Keyboard:",
 "más,": "higher,",
-"menos.": "lower."
+"menos.": "lower.",
+"Puedes cancelar cualquiera que todavía no esté completada, o quitarla solo de tu historial cuando quieras.": "You can cancel any that isn't completed yet, or remove it from your own history whenever you want.",
+"🗑️ Quitar": "🗑️ Remove",
+"Quitarla solo de tu historial": "Remove it from your history only",
+"♻️ Recuperar las quitadas ({d})": "♻️ Restore removed ({d})",
+"¿Quitar esta sugerencia de tu historial? Solo desaparece para ti: el desarrollador la seguirá viendo.": "Remove this suggestion from your history? It only disappears for you: the developer will still see it.",
+"🗑️ Sugerencia quitada de tu historial.": "🗑️ Suggestion removed from your history.",
+"¿Borrar esta sugerencia de tu lista? El jugador la seguirá viendo en «Mis sugerencias» hasta que decida quitarla.": "Delete this suggestion from your list? The player will still see it in “My suggestions” until they choose to remove it.",
+"🗑️ Sugerencia borrada de tu lista.": "🗑️ Suggestion deleted from your list.",
+"No se ha podido borrar ({}).": "Couldn't delete it ({})."
 }

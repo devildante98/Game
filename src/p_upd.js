@@ -108,7 +108,7 @@ $("sugGo").onclick=async()=>{
 };
 sugLoad=async function(){
   if(!window.sugList)return;
-  let l;try{l=await window.sugList()}catch(e){$("sugAdm").hidden=true;return}
+  let l;try{l=(await window.sugList()).filter(x=>!x.ah)}catch(e){$("sugAdm").hidden=true;return}
   $("sugAdm").hidden=false;
   $("sugList").innerHTML=l.length?l.map(s=>{const im=Array.isArray(s.imgs)?s.imgs:[];return '<div class="sugi"><div class="sugbt">'+(im.length?'<button class="alt" data-sdi="'+esc(s.id)+'">🖼️ Borrar fotos</button>':'')+'<button class="alt" data-sd="'+esc(s.id)+'">🗑️ Borrar</button></div><b>'+esc(s.name||"Anónimo")+'</b>'+(s.nick?' <small class="mut">('+esc(s.nick)+')</small>':'')+' <small class="mut">· '+(s.at?new Date(s.at).toLocaleString("es"):"")+'</small> '+sugStB(s.st)+'<p>'+esc(s.text||"").replace(/\n/g,"<br>")+'</p>'+sugAdmBox(s)+
     (im.length?'<div class="sugims">'+im.map(u=>/^data:image\/(jpeg|png|webp);base64,/.test(u)?'<a href="#" data-sgv="1"><img src="'+u+'" alt="Foto adjunta"></a>':'').join("")+'</div>':(s.nimg?'<small class="mut">🖼️ '+s.nimg+' foto'+(s.nimg>1?'s':'')+' borrada'+(s.nimg>1?'s':'')+'</small>':''))+'</div>'}).join(""):'<small class="mut">Aún no hay sugerencias.</small>';
@@ -140,28 +140,35 @@ $("sugList").addEventListener("click",async e=>{
   sugLoad();
 });
 // ---- mis sugerencias ----
-nxPanel("mySugP","📨 Mis sugerencias","Aquí ves las sugerencias que has enviado, en qué estado están y lo que te ha contestado el desarrollador. Puedes cancelar cualquiera que todavía no esté completada.");
+nxPanel("mySugP","📨 Mis sugerencias","Aquí ves las sugerencias que has enviado, en qué estado están y lo que te ha contestado el desarrollador. Puedes cancelar cualquiera que todavía no esté completada, o quitarla solo de tu historial cuando quieras.");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="mySugP")){const i=g.tabs.findIndex(t=>t[0]==="sugP");g.tabs.splice(i+1,0,["mySugP","Mis sugerencias"])}HUBP.mySugP="mas";HUBR.mySugP=()=>mySugUI(true)}
 let MYSUG=null,_mysAt=0;
 async function mySugFetch(){if(!window.sugMine)return null;try{MYSUG=await window.sugMine();_mysAt=Date.now()}catch(e){MYSUG=e&&e.code==="sin-cuenta"?"login":"err"}return MYSUG}
-const sugNew=s=>s.rpAt&&s.rpAt>(S.sugSeen||0);
+const sugHid=()=>Array.isArray(S.sugHid)?S.sugHid:(S.sugHid=[]);
+const sugNew=s=>s.rpAt&&s.rpAt>(S.sugSeen||0)&&!sugHid().includes(s.id);
 async function mySugUI(fetch){
   const box=$("mySugPB");if(!box)return;
   if(!window.sugMine){box.innerHTML='<p class="mut">Inicia sesión con tu cuenta para enviar sugerencias y ver las respuestas.</p>';return}
   if(fetch||!MYSUG){box.innerHTML='<p class="mut">Cargando tus sugerencias…</p>';await mySugFetch()}
   if(MYSUG==="login"){box.innerHTML='<p class="mut">Inicia sesión con tu cuenta para ver tus sugerencias.</p>';return}
   if(MYSUG==="err"){box.innerHTML='<p class="mut">No se han podido cargar tus sugerencias ahora mismo. Inténtalo más tarde.</p><button class="alt" data-mys="re">🔄 Reintentar</button>';return}
-  const l=MYSUG||[];
-  box.innerHTML='<div class="sets-row"><button class="alt" data-mys="re">🔄 Actualizar</button><button class="alt" data-mys="new">✏️ Escribir otra</button><small class="mut">'+l.length+' sugerencia'+(l.length===1?'':'s')+'</small></div>'+
+  const hid=sugHid(),all=MYSUG||[],l=all.filter(x=>!hid.includes(x.id)),nh=all.length-l.length;
+  box.innerHTML='<div class="sets-row"><button class="alt" data-mys="re">🔄 Actualizar</button><button class="alt" data-mys="new">✏️ Escribir otra</button>'+(nh?'<button class="alt" data-mys="unh">♻️ Recuperar las quitadas ('+nh+')</button>':'')+'<small class="mut">'+l.length+' sugerencia'+(l.length===1?'':'s')+'</small></div>'+
     (l.length?l.map(s=>{const done=s.st==="done",nw=sugNew(s);return '<div class="sugi mys'+(nw?' nw':'')+'">'+
-      '<div class="mysh">'+sugStB(s.st)+'<small class="mut">'+sugDate(s.at)+'</small>'+(done?'':'<button class="alt mini" data-mysc="'+esc(s.id)+'">✖ Cancelar</button>')+'</div>'+
+      '<div class="mysh">'+sugStB(s.st)+'<small class="mut">'+sugDate(s.at)+'</small>'+(done||s.ah?'':'<button class="alt mini" data-mysc="'+esc(s.id)+'">✖ Cancelar</button>')+'<button class="alt mini" data-mysh="'+esc(s.id)+'" title="Quitarla solo de tu historial">🗑️ Quitar</button></div>'+
       '<p>'+esc(s.text||"").replace(/\n/g,"<br>")+'</p>'+(s.nimg?'<small class="mut">🖼️ '+s.nimg+' foto'+(s.nimg>1?'s':'')+' adjunta'+(s.nimg>1?'s':'')+'</small>':'')+
       (s.rp?'<div class="sugrp"><b>💬 Respuesta del desarrollador'+(nw?' <span class="sugnw">NUEVA</span>':'')+'</b><p>'+esc(s.rp).replace(/\n/g,"<br>")+'</p><small class="mut">'+sugDate(s.rpAt)+'</small></div>':'')+'</div>'}).join(""):'<p class="mut">Todavía no has enviado ninguna sugerencia.</p>');
   const mx=Math.max(S.sugSeen||0,...l.map(s=>s.rpAt||0));if(mx>(S.sugSeen||0)){S.sugSeen=mx;save()}
 }
 document.addEventListener("click",async e=>{
-  const b=e.target.closest&&e.target.closest("#mySugPB [data-mys],#mySugPB [data-mysc]");if(!b)return;
+  const b=e.target.closest&&e.target.closest("#mySugPB [data-mys],#mySugPB [data-mysc],#mySugPB [data-mysh]");if(!b)return;
   if(b.dataset.mys==="re"){snd("ui");mySugUI(true);return}
+  if(b.dataset.mys==="unh"){snd("ui");S.sugHid=[];save();mySugUI(false);return}
+  if(b.dataset.mysh){const id=b.dataset.mysh,s=(Array.isArray(MYSUG)?MYSUG:[]).find(x=>x.id===id);if(!s)return;
+    if(!await askOk("¿Quitar esta sugerencia de tu historial? Solo desaparece para ti: el desarrollador la seguirá viendo."))return;
+    snd("ui");sugHid().push(id);S.sugHid=sugHid().slice(-300);save();
+    if(s.ah&&s.st!=="done"&&window.sugDel){try{await window.sugDel(id);MYSUG=MYSUG.filter(x=>x.id!==id)}catch(x){}}
+    toast("🗑️ Sugerencia quitada de tu historial.");mySugUI(false);return}
   if(b.dataset.mys==="new"){snd("ui");hubOpen("mas","sugP");setTimeout(()=>{try{$("sugT").focus()}catch(x){}},200);return}
   const id=b.dataset.mysc,s=(Array.isArray(MYSUG)?MYSUG:[]).find(x=>x.id===id);if(!s||s.st==="done")return;
   if(!await askOk("¿Cancelar esta sugerencia? Se borrará y el desarrollador ya no la verá."))return;
@@ -1030,3 +1037,11 @@ setInterval(()=>{try{if(S&&S.nick)localStorage.setItem("pgcNick",String(S.nick).
   if(mv&&mv.id==="620"&&m.mh>0&&m.p[0]==="Rayquaza"&&!m.p0&&!sd.fu&&PM["Mega-Rayquaza"]&&(!E.pvp||E.free)&&!(typeof B!=="undefined"&&B&&B.E===E&&B.formUsed)){
     sd.fu=1;if(typeof B!=="undefined"&&B&&B.E===E)B.formUsed=1;formApply(m,PM["Mega-Rayquaza"],1,1.12);push({k:"form",s:i,kind:"mega",n:"Rayquaza",f:"Mega-Rayquaza",snap:beSnap(E)})}}catch(e){console.error(e)}
   return _bu.apply(this,arguments)}}
+
+// ================= sugerencias: borrar como administrador ya no la borra del historial del jugador =================
+// el desarrollador la archiva (deja de verla) y el jugador la conserva en «Mis sugerencias» hasta que decida quitarla
+document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("#sugList [data-sd]");if(!b)return;
+  e.preventDefault();e.stopImmediatePropagation();if(!window.sugUpd)return;
+  if(!await askOk("¿Borrar esta sugerencia de tu lista? El jugador la seguirá viendo en «Mis sugerencias» hasta que decida quitarla."))return;
+  b.disabled=true;try{await window.sugUpd(b.dataset.sd,{ah:true});toast("🗑️ Sugerencia borrada de tu lista.")}catch(x){toast("No se ha podido borrar ("+((x&&x.code)||"error")+").");b.disabled=false}
+  if(SUGC)SUGC=SUGC.filter(x=>x.id!==b.dataset.sd);sugLoad()},true);

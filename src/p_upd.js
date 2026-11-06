@@ -1108,3 +1108,17 @@ document.addEventListener("pointercancel",e=>tdEnd(e,true));
 // después de arrastrar no se abre la lista de Pokémon
 // (el clic que el navegador manda al soltar puede caer fuera de la tarjeta y cerrar la pantalla: se ignora cualquier clic justo después)
 document.addEventListener("click",e=>{if(Date.now()-TD.skip<350){e.stopImmediatePropagation();e.preventDefault()}},true);
+// ================= RECLAMAR TODO: misiones diarias y logros de una vez =================
+function claimAllMis(){const dm=dmEnsure();let n=0;
+  dm.l.forEach(m=>{const d=MISM[m.id];if(!d||m.c||m.p<d[2])return;m.c=true;grant(d[4]);qEv("dm");n++});
+  if(n){snd("win");toast("🎁 Has reclamado "+n+" misi"+(n===1?"ón":"ones")+" de una vez.");save();render()}return n}
+function claimAllAch(){let n=0,guard=0;S.ach=S.ach||{};
+  // un logro puede tener varios niveles listos: se reclaman todos
+  for(let again=true;again&&guard<500;guard++){again=false;ACHS().forEach(a=>{if(!achReady(a))return;const r=AR[a[5][achLv(a)][1]];S.ach[a[0]]=achLv(a)+1;grant(r);n++;again=true})}
+  if(n){snd("lvl");toast("🏅 Has reclamado "+n+" logro"+(n===1?"":"s")+" de una vez.");save();render()}return n}
+function claimAllUI(){
+  const add=(listId,id,fn)=>{const L=$(listId);if(!L)return null;let b=$(id);if(!b){b=document.createElement("button");b.id=id;b.type="button";b.className="claimall";b.onclick=()=>{fn();claimAllUI()};L.before(b)}return b};
+  const bm=add("qList","qAll",claimAllMis),ba=add("achList","achAll",claimAllAch);
+  try{const dm=dmEnsure(),nm=dm.l.filter(m=>{const d=MISM[m.id];return d&&!m.c&&m.p>=d[2]}).length;if(bm){bm.hidden=nm<2;bm.textContent="🎁 Reclamar todas ("+nm+")"}}catch(e){}
+  try{const na=ACHS().filter(achReady).length;if(ba){ba.hidden=na<2;ba.textContent="🏅 Reclamar todos los logros ("+na+")"}}catch(e){}}
+setInterval(()=>{try{claimAllUI()}catch(e){}},1000);

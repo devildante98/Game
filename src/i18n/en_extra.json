@@ -828,5 +828,11 @@
 "Maxibarrera": "Max Guard",
 "Movimiento Dinamax": "Max Move",
 "desde {}": "from {}",
-"¡{}! Durante 3 turnos tiene el doble de PS y sus ataques son Movimientos Dinamax, mucho más potentes.": "{}! For 3 turns it has double HP and its attacks become much stronger Max Moves."
+"¡{}! Durante 3 turnos tiene el doble de PS y sus ataques son Movimientos Dinamax, mucho más potentes.": "{}! For 3 turns it has double HP and its attacks become much stronger Max Moves.",
+"🎁 Reclamar todas ({d})": "🎁 Claim all ({d})",
+"🏅 Reclamar todos los logros ({d})": "🏅 Claim all achievements ({d})",
+"🎁 Has reclamado {d} misiones de una vez.": "🎁 You claimed {d} missions at once.",
+"🎁 Has reclamado {d} misión de una vez.": "🎁 You claimed {d} mission at once.",
+"🏅 Has reclamado {d} logros de una vez.": "🏅 You claimed {d} achievements at once.",
+"🏅 Has reclamado {d} logro de una vez.": "🏅 You claimed {d} achievement at once."
 }

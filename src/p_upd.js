@@ -1082,3 +1082,29 @@ const DISPN={"Eternatus Dinamax Infinito":"Eternatus Eternamax"};
   walk(document.body);
   try{const P=CanvasRenderingContext2D.prototype;["fillText","strokeText","measureText"].forEach(f=>{const o=P[f];P[f]=function(t){if(typeof t==="string"&&has(t)){const a=[].slice.call(arguments);a[0]=fix(t);return o.apply(this,a)}return o.apply(this,arguments)}})}catch(e){}
 })();
+// ================= EQUIPO: arrastrar una tarjeta sobre otra para intercambiar sus casillas =================
+// Con el ratón o el dedo: mantén pulsada una tarjeta, muévela y suéltala encima de otra casilla (o de una vacía).
+// Un toque sin mover sigue abriendo la lista para cambiar el Pokémon.
+const TD={on:false,i:-1,x0:0,y0:0,gh:null,src:null,tgt:null,skip:0};
+document.addEventListener("pointerdown",e=>{if(e.button!==0)return;const b=e.target.closest&&e.target.closest(".tmbtn.on");if(!b||e.target.closest("[data-tmf]"))return;
+  TD.i=+b.dataset.tm;TD.x0=e.clientX;TD.y0=e.clientY;TD.src=b;TD.on=false;TD.pid=e.pointerId});
+function tdTarget(x,y){if(TD.gh)TD.gh.style.display="none";const el=document.elementFromPoint(x,y);if(TD.gh)TD.gh.style.display="";const t=el&&el.closest&&el.closest(".tmbtn");return t&&t!==TD.src?t:null}
+document.addEventListener("pointermove",e=>{if(!TD.src||e.pointerId!==TD.pid)return;
+  if(!TD.on){if(Math.hypot(e.clientX-TD.x0,e.clientY-TD.y0)<8)return;
+    if(fcd){TD.src=null;toast("Termina el combate antes de cambiar el equipo.");return}
+    TD.on=true;const r=TD.src.getBoundingClientRect(),g=TD.src.cloneNode(true);g.classList.add("tmghost");g.style.width=r.width+"px";g.style.height=r.height+"px";
+    TD.dx=TD.x0-r.left;TD.dy=TD.y0-r.top;document.body.appendChild(g);TD.gh=g;TD.src.classList.add("tmdrag");document.body.classList.add("tmdragging")}
+  e.preventDefault();TD.gh.style.left=(e.clientX-TD.dx)+"px";TD.gh.style.top=(e.clientY-TD.dy)+"px";
+  const t=tdTarget(e.clientX,e.clientY);if(t!==TD.tgt){if(TD.tgt)TD.tgt.classList.remove("tmover");TD.tgt=t;if(t)t.classList.add("tmover")}},{passive:false});
+function tdEnd(e,cancel){if(!TD.src)return;const was=TD.on,t=was&&!cancel?tdTarget(e.clientX,e.clientY):null;
+  if(TD.gh)TD.gh.remove();TD.src.classList.remove("tmdrag");if(TD.tgt)TD.tgt.classList.remove("tmover");document.body.classList.remove("tmdragging");
+  const i=TD.i;TD.src=null;TD.gh=null;TD.tgt=null;TD.on=false;
+  if(!was)return;TD.skip=Date.now();
+  if(t){const j=+t.dataset.tm,a=S.team[i]||"",bn=S.team[j]||"";if(j===i||!a)return;
+    S.team[i]=bn;S.team[j]=a;save();updTeam();snd("ui");
+    toast(bn?"🔄 "+nk(a)+" y "+nk(bn)+" han intercambiado sus casillas ("+(i+1)+" ↔ "+(j+1)+")":"🔄 "+nk(a)+" ha pasado de la casilla "+(i+1)+" a la "+(j+1))}}
+document.addEventListener("pointerup",e=>tdEnd(e,false));
+document.addEventListener("pointercancel",e=>tdEnd(e,true));
+// después de arrastrar no se abre la lista de Pokémon
+// (el clic que el navegador manda al soltar puede caer fuera de la tarjeta y cerrar la pantalla: se ignora cualquier clic justo después)
+document.addEventListener("click",e=>{if(Date.now()-TD.skip<350){e.stopImmediatePropagation();e.preventDefault()}},true);

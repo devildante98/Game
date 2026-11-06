@@ -789,3 +789,9 @@ body.calm .rqbox,body.calm .rqic{animation:none}
 #tpM .tpf2{flex-wrap:wrap;margin-top:-2px}
 #tpM .tpf2 select{flex:1 1 140px;min-width:0}
 #tpM .tpf2 #tpClr{flex:0 0 auto}
+/* equipo: arrastrar para intercambiar */
+.tmbtn.on{touch-action:none;cursor:grab}
+body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
+.tmbtn.tmdrag{opacity:.35}
+.tmbtn.tmover{outline:3px dashed var(--yel);outline-offset:2px}
+.tmghost{position:fixed;z-index:2147483000;pointer-events:none;margin:0;opacity:.92;transform:rotate(-2deg) scale(1.03);box-shadow:0 14px 30px rgba(0,0,0,.45);border-radius:16px}

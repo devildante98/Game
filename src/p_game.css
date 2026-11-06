@@ -688,3 +688,13 @@ body.gm #gBg .pcpar{display:none!important}
 .tzpkt button.on{border-color:var(--tc,#13a37f);background:color-mix(in srgb,var(--tc,#13a37f) 18%,var(--bg))}
 .tzpkmore{grid-column:1/-1;text-align:center}
 .tzpkt{flex:none;align-items:center;min-height:38px}.tzpkt button{line-height:1.2}
+/* pantalla de carga: la Poké Ball se abre por la mitad, la tapa sube recta (como en el anime) */
+#gLoad .glb{perspective:420px}
+#gLoad .glt{transform-origin:50% 0;transition:transform .42s cubic-bezier(.25,1.4,.5,1)}
+#gLoad.op .glt{transform:translateY(-32px) rotateX(38deg)}
+#gLoad .glbt{transition:transform .42s cubic-bezier(.25,1.4,.5,1)}
+#gLoad.op .glbt{transform:translateY(6px)}
+#gLoad .glb:before{content:"";position:absolute;left:8%;right:8%;top:50%;height:0;margin-top:-1px;border-radius:50%;background:radial-gradient(ellipse,#fff 30%,rgba(255,255,255,0) 70%);box-shadow:0 0 30px 12px rgba(255,255,255,.9);opacity:0;transition:height .3s,margin .3s,opacity .2s;z-index:0}
+#gLoad.op .glb:before{height:44px;margin-top:-22px;opacity:1}
+#gLoad.op .glbtn{opacity:0;transition:opacity .12s}
+#gLoad.op:after{animation-delay:.32s;transform:scale(0)}

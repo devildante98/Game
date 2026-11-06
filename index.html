@@ -6,7 +6,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.13.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.13.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -41,7 +41,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793956443">
+<meta name="game-build" content="1793959372">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2323,6 +2323,16 @@ body.gm #gBg .pcpar{display:none!important}
 .tzpkt button.on{border-color:var(--tc,#13a37f);background:color-mix(in srgb,var(--tc,#13a37f) 18%,var(--bg))}
 .tzpkmore{grid-column:1/-1;text-align:center}
 .tzpkt{flex:none;align-items:center;min-height:38px}.tzpkt button{line-height:1.2}
+/* pantalla de carga: la Poké Ball se abre por la mitad, la tapa sube recta (como en el anime) */
+#gLoad .glb{perspective:420px}
+#gLoad .glt{transform-origin:50% 0;transition:transform .42s cubic-bezier(.25,1.4,.5,1)}
+#gLoad.op .glt{transform:translateY(-32px) rotateX(38deg)}
+#gLoad .glbt{transition:transform .42s cubic-bezier(.25,1.4,.5,1)}
+#gLoad.op .glbt{transform:translateY(6px)}
+#gLoad .glb:before{content:"";position:absolute;left:8%;right:8%;top:50%;height:0;margin-top:-1px;border-radius:50%;background:radial-gradient(ellipse,#fff 30%,rgba(255,255,255,0) 70%);box-shadow:0 0 30px 12px rgba(255,255,255,.9);opacity:0;transition:height .3s,margin .3s,opacity .2s;z-index:0}
+#gLoad.op .glb:before{height:44px;margin-top:-22px;opacity:1}
+#gLoad.op .glbtn{opacity:0;transition:opacity .12s}
+#gLoad.op:after{animation-delay:.32s;transform:scale(0)}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2388,7 +2398,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.13.1</small>
+    <small class="pcver">Versión 6.13.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7006,7 +7016,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.13.1";
+const GAME_VER="6.13.2";
 const NEWS=[
 {v:"2026-11-06b",ver:"6.13",at:"2026-11-06T10:00",t:"🎯 Zona de entrenamiento y MT más claras",l:["Nueva Zona de entrenamiento (Actividades, o el botón junto a «¡Combatir!»): prueba a cualquiera de tus Pokémon contra el rival, el nivel y la habilidad que quieras","Modo Diana: no ataca, recupera sus PS cada turno y te dice el daño exacto de cada golpe. O un combate de práctica de verdad","No se gastan PS, PP ni objetos, y no da premios ni experiencia","Tienda de MT: botón «👀 ¿Quién puede aprenderla?» con tus Pokémon que la aprenden y los de su tipo que NO, antes de comprarla","Tienda de MT: elige uno de tus Pokémon para ver solo las MT que puede aprender"]},
 {v:"2026-11-06a",ver:"6.12",at:"2026-11-06T09:01",t:"🌐 ¡El juego ya está en inglés! · Now in English!",l:["Nuevo ajuste de idioma: ⚙️ Ajustes → Accesibilidad → 🌐 Idioma (Español / English)","Los jugadores nuevos eligen su idioma nada más entrar, y en la pantalla de inicio hay un botón 🌐 para cambiarlo","En inglés se traducen menús, combates, objetos, movimientos y habilidades (con sus nombres oficiales), la historia de Exploración, los minijuegos y los mensajes","New language setting: ⚙️ Settings → Accessibility → 🌐 Language. Menus, battles, items, moves, abilities and the Exploration story are translated"]},
@@ -7194,7 +7204,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793956443";
+const GAME_B="1793959372";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -13295,7 +13305,7 @@ function gmApply(){
 {const _a=applyO;applyO=function(){const r=_a.apply(this,arguments);try{if(GM.init&&document.body.classList.contains("gm")!==(gmOn()))gmApply();if(GM.init)gmLite()}catch(e){}return r}}
 // pantalla de carga: una Poké Ball que se abre
 function gmLoad(){if(!gmOn()||hubCalm())return;const L=gmEl("div","gLoad","",'<i class="glr"></i><div class="glogo"><span>POKE GACHA</span><b>ONLINE</b></div><div class="glb"><i class="glt"></i><i class="glbt"></i><i class="glbtn"></i></div><b class="glm">¡Vamos allá!</b>');
-  setTimeout(()=>L.classList.add("op"),900);setTimeout(()=>{L.classList.add("out");try{snd("open")}catch(e){}},1150);setTimeout(()=>L.remove(),1700)}
+  setTimeout(()=>{L.classList.add("op");try{snd("open")}catch(e){}},850);setTimeout(()=>L.classList.add("out"),1350);setTimeout(()=>L.remove(),1900)}
 // ---------- abrir y cerrar secciones ----------
 function gmOpen(id,auto){
   if(!gmOn()||!GM.init)return;const P=$(id),D=GMSCR[id];if(!P||!D)return;

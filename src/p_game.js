@@ -224,7 +224,7 @@ function gmApply(){
 {const _a=applyO;applyO=function(){const r=_a.apply(this,arguments);try{if(GM.init&&document.body.classList.contains("gm")!==(gmOn()))gmApply();if(GM.init)gmLite()}catch(e){}return r}}
 // pantalla de carga: una Poké Ball que se abre
 function gmLoad(){if(!gmOn()||hubCalm())return;const L=gmEl("div","gLoad","",'<i class="glr"></i><div class="glogo"><span>POKE GACHA</span><b>ONLINE</b></div><div class="glb"><i class="glt"></i><i class="glbt"></i><i class="glbtn"></i></div><b class="glm">¡Vamos allá!</b>');
-  setTimeout(()=>L.classList.add("op"),900);setTimeout(()=>{L.classList.add("out");try{snd("open")}catch(e){}},1150);setTimeout(()=>L.remove(),1700)}
+  setTimeout(()=>{L.classList.add("op");try{snd("open")}catch(e){}},850);setTimeout(()=>L.classList.add("out"),1350);setTimeout(()=>L.remove(),1900)}
 // ---------- abrir y cerrar secciones ----------
 function gmOpen(id,auto){
   if(!gmOn()||!GM.init)return;const P=$(id),D=GMSCR[id];if(!P||!D)return;

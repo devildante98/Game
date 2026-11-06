@@ -632,12 +632,12 @@ function arenaReset(){
 // ================= evoluciones (animacion como en los juegos) =================
 function evoAnim(a,b){
   return new Promise(res=>{
-    const pa=PM[a],pb=PM[b];let stop=false,done=false;
+    const pa=PM[a],pb=PM[b];let stop=false,done=false,skip=false;
     $("evoT").textContent="¿Eh? ¡"+a+" está evolucionando!";
     $("evoA").innerHTML=ico(pa,120);$("evoB").innerHTML=ico(pb,120);$("evoB").style.opacity=0;$("evoA").style.opacity=1;
-    $("evoBtns").innerHTML='<button class="alt" id="evoStop">✋ Detener</button>';
+    $("evoBtns").innerHTML='<button class="alt" id="evoSkip">⏩ Saltar animación</button><button class="alt" id="evoStop">✋ Detener</button>';
     $("evo").hidden=false;$("evo").classList.remove("done");snd("flash");
-    $("evoStop").onclick=()=>{stop=true};
+    $("evoStop").onclick=()=>{stop=true};$("evoSkip").onclick=()=>{skip=true;fin(true)};
     const A=$("evoA"),Bb=$("evoB"),st=$("evo").querySelector(".evost");
     const fin=ok=>{if(done)return;done=true;
       A.style.filter=Bb.style.filter="";
@@ -646,8 +646,10 @@ function evoAnim(a,b){
       $("evoBtns").innerHTML='<button class="red" id="evoOk">Continuar</button>';$("evoOk").focus();$("evoOk").onclick=()=>{$("evo").hidden=true;res(ok)}};
     let k=0;const sil="brightness(0) invert(1) drop-shadow(0 0 14px #fff)";
     A.style.filter=sil;Bb.style.filter=sil;
-    const step=()=>{if(stop)return fin(false);if(k>=22)return fin(true);const on=k%2===0;A.style.opacity=on?1:0;Bb.style.opacity=on?0:1;k++;setTimeout(step,Math.max(70,560-k*24))};
+    const step=()=>{if(done||skip)return;if(stop)return fin(false);if(k>=22)return fin(true);const on=k%2===0;A.style.opacity=on?1:0;Bb.style.opacity=on?0:1;k++;setTimeout(step,Math.max(70,560-k*24))};
     setTimeout(step,1300);
+    // Espacio o Enter también saltan la animación
+    const kd=e=>{if($("evo").hidden||done){document.removeEventListener("keydown",kd,true);return}if(e.key===" "||e.key==="Enter"){e.preventDefault();e.stopPropagation();skip=true;fin(true);document.removeEventListener("keydown",kd,true)}};document.addEventListener("keydown",kd,true);
   });
 }
 function evoApply(a,b){

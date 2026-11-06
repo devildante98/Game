@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.27.1";
+const GAME_VER="6.27.2";
 const NEWS=[
+{v:"2026-11-06-6.27.2",ver:"6.27.2",at:"2026-11-06T22:28",t:"🔧 Arreglos/Mejoras",l:["Evolución: nuevo botón «⏩ Saltar animación» (o Espacio / Enter) para ver directamente el resultado. «✋ Detener» sigue sirviendo para cancelar la evolución"]},
 {v:"2026-11-06-6.27.1",ver:"6.27.1",at:"2026-11-06T22:24",t:"🔧 Arreglos/Mejoras",l:["Exploración: menos Pokémon salvajes. En las cuevas salen la mitad que antes y en la hierba alta algo menos","Después de un encuentro tienes unos pasos de calma antes del siguiente"]},
 {v:"2026-11-06o",ver:"6.27",at:"2026-11-06T22:21",t:"🔒 Límite de nivel en el equipo",l:["Un Pokémon de nivel más alto que tu límite (el de tus medallas) ya no se puede poner en el equipo","Si ya lo tenías en el equipo, no podrás combatir (combates, gimnasios, Exploración, incursiones, PVP ni dobles) hasta que lo saques o consigas las medallas necesarias","Su ficha y su tarjeta te avisan con «🔒»"]},
 {v:"2026-11-06n",ver:"6.26",at:"2026-11-06T22:12",t:"🎒 14 objetos equipables nuevos",l:["En la Tienda de objetos: Cinta Elección, Gafas Elección y Pañuelo Elección (+50% de daño físico, especial o Velocidad, pero solo pueden usar el primer movimiento que elijan hasta retirarse)","Cinta Experto, Cinta Fuerte, Gafas Especiales, Mineral Evolutivo, Casco Dentado y Lodo Negro","Toxiesfera, Llamasfera, Bolaluz (para Pikachu), Polvo Brillo y Lupa","Funcionan como en la saga y se equipan desde la Mochila o la ficha del Pokémon"]},

@@ -100,3 +100,8 @@ function tzRestore(){if(!TZ.bak)return;try{S.bag=JSON.parse(TZ.bak.bag);S.held=J
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('#menu [data-k="9"]');if(b&&B&&B.practice){tzRestore();setTimeout(()=>{try{hubOpen("act","tzP")}catch(x){}},80)}},true);
 // acceso directo junto a «¡Combatir!»
 {const g=$("fgo");if(g&&!$("tzOpen")){const b=document.createElement("button");b.className="alt";b.id="tzOpen";b.type="button";b.textContent="🎯 Zona de entrenamiento";b.onclick=()=>{snd("ui");hubOpen("act","tzP")};g.after(b)}}
+
+// ---------- combates de Exploración: no se pueden cerrar a medias ----------
+if(typeof gmClose==="function"){const _gc=gmClose;gmClose=function(){if(typeof fcd!=="undefined"&&fcd&&EX.battle&&GM.scr==="batP"){toast("⚔️ Termina el combate o pulsa «Huir» para volver a la Exploración.");return}return _gc.apply(this,arguments)}}
+// si aun así el combate se queda oculto (por ejemplo, al abrir otra sección), se vuelve a mostrar
+setInterval(()=>{try{if(typeof fcd!=="undefined"&&fcd&&EX.battle&&typeof GM!=="undefined"&&gmOn()&&GM.scr!=="batP"&&!document.querySelector("#uiDlg:not([hidden]),#pkv:not([hidden])")&&$("hubM").hidden)gmOpen("batP")}catch(e){}},1500);

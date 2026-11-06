@@ -516,3 +516,7 @@ window.addEventListener("keydown",e=>{if(e.key!=="Escape"||!EX.cv||!EX.cv.isConn
   else if(vis("exTeam")){$("exTeam").hidden=true;snd("ui");done=true}
   else if(vis("exCh")){const bs=$("exCh").querySelectorAll("button");if(bs.length){bs[bs.length-1].click();done=true}}
   if(done||EX.fs){e.preventDefault();e.stopImmediatePropagation();try{EX.cv.focus({preventScroll:true})}catch(x){}}},true);
+// ---------- un combate de Exploración no se puede cerrar a medias (Esc o volver dejaban el combate oculto y la Exploración bloqueada) ----------
+window.addEventListener("keydown",e=>{if(e.key!=="Escape"||typeof fcd==="undefined"||!fcd)return;
+  if(document.querySelector("#uiDlg:not([hidden]),#pkv:not([hidden]),#gacM:not([hidden])"))return;// Esc sigue cerrando ventanas de aviso, fichas, etc.
+  const ar=$("arena");if(ar&&!ar.hidden){e.preventDefault();e.stopImmediatePropagation();if(EX.battle)toast("⚔️ Termina el combate o pulsa «Huir» para volver a la Exploración.")}},true);

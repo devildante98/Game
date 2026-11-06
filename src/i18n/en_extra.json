@@ -726,5 +726,6 @@
 "{} se ha debilitado. ¡Adelante, {}!": "{} fainted. Go, {}!",
 "⚡ {}": "⚡ {}",
 "💨 ¡Esquivado! {} usa {}. {} pierde {} PS.": "💨 Dodged! {} used {}. {} loses {} HP.",
-"{} usa {}. {} pierde {} PS.": "{} used {}. {} loses {} HP."
+"{} usa {}. {} pierde {} PS.": "{} used {}. {} loses {} HP.",
+"⚔️ Termina el combate o pulsa «Huir» para volver a la Exploración.": "⚔️ Finish the battle or press «Run» to go back to Exploration."
 }

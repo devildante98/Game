@@ -71,3 +71,23 @@ function sanity(){let fix=0;
 setTimeout(sanity,3000);setInterval(sanity,60000);
 // si el panel de sugerencias de administrador aparece después, también activa la moderación
 setInterval(()=>{try{if(!MOD.admin&&$("sugAdm")&&!$("sugAdm").hidden){MOD.admin=true;modTab();if(typeof CH!=="undefined"&&CH.open)chRender(true)}}catch(e){}},3000);
+
+// =====================================================================================
+// ACELERADOR DE PÁGINAS: el freno está en p_clock.html (el juego solo ve el tiempo real).
+// Aquí se apunta cuánto tiempo y cuántos tickets se le han frenado, y se avisa al administrador
+// con un reporte automático (uno al día como mucho) en Moderación → Reportes.
+// =====================================================================================
+function spdCheck(){const K=window.PGC_SPD;if(!K||!K.on)return;
+  const sec=Math.round((K.blk||0)/1000),prev=S.spd||{};
+  // lo frenado en esta sesión (en segundos de juego y en tickets de producción automática)
+  if(sec>(prev.cur|0)||prev.sess!==K.at){const add=prev.sess===K.at?sec-(prev.cur|0):sec;
+    S.spd={sess:K.at,cur:sec,sec:(prev.sec|0)+Math.max(0,add),tk:Math.round((prev.tk||0)+Math.max(0,add)*tps()),peak:Math.max(prev.peak||1,K.peak||1),n:(prev.n|0)+(prev.sess===K.at?0:1),first:prev.first||Date.now()};save()}
+  // aviso al administrador: solo si el acelerador se ha medido varias veces y claramente (no un salto de reloj)
+  const d=new Date().toISOString().slice(0,10);
+  if(K.n>=2&&K.peak>=1.4&&S.spdRep!==d&&window.FB&&window.FB.reportAdd&&window.FB.uid&&window.FB.uid()){S.spdRep=d;save();const s=S.spd||{},nm=pvClean(pvNick()).slice(0,30);
+    window.FB.reportAdd({u:window.FB.uid(),un:nm,by:window.FB.uid(),byn:"🤖 Sistema",why:"⏩ Acelerador de páginas",
+      t:("Su navegador va ×"+(K.peak||1).toFixed(1)+" más rápido que la hora real. El juego ya lo frena: solo cuenta el tiempo real. "+
+        "Frenado hasta ahora: "+Math.round((s.sec|0)/60)+" min de juego ≈ "+fmt(s.tk||0)+" 🎟️ que habría generado de más. "+
+        "Producción actual: "+fmt(tps())+" 🎟️/s · Tickets: "+fmt(S.t)+" · Tiempo jugado: "+Math.floor((S.ptime||0)/3600)+" h").slice(0,300),
+      img:0,at:Date.now()}).catch(()=>{S.spdRep=""})}}
+setInterval(()=>{try{spdCheck()}catch(e){}},20000);

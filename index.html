@@ -3,10 +3,40 @@
 <head>
 <meta charset="utf-8">
 <script>
+// ===== freno contra aceleradores de páginas web (speedhack) =====
+// Todo lo que se produce solo se calcula con el reloj del navegador (Date.now). Un acelerador lo adelanta.
+// Cada 30 s se compara con la hora real del servidor (cabecera Date): si el reloj del navegador corre
+// más deprisa, a partir de ahí el juego solo ve el tiempo real (el reloj nunca va hacia atrás: se queda
+// quieto hasta que la hora real lo alcanza, así que lo ganado antes de detectarlo también se compensa).
+(function(){
+  var W=window,o=Date.now.bind(Date),K={on:false,r:1,peak:1,at:0,last:0,blk:0,n:0},S=[],ds=0,dl=0,off=0,rv=0;
+  W.PGC_SPD=K;
+  function srv(){return ds+(o()-dl)/K.r}                    // hora real estimada
+  Date.now=function(){var l=o();if(!K.on){if(l>rv)rv=l;return l}var v=Math.floor(srv()+off);if(v<rv)v=rv;rv=v;K.blk=Math.max(0,l-v);return v};
+  function sample(){
+    var a=o(),u=location.origin+"/robots.txt?_v=clk"+a.toString(36)+Math.random().toString(36).slice(2,6);
+    fetch(u,{method:"HEAD",cache:"no-store"}).then(function(res){
+      var b=o(),d=Date.parse(res.headers.get("date")||"");if(!(d>0)||b-a>20000)return;   // respuesta muy lenta: no vale
+      d+=500+(parseInt(res.headers.get("age")||"0",10)||0)*1000;var m=(a+b)/2;
+      if(S.length&&d-S[S.length-1][0]<25000)return;   // con el acelerador los intervalos también corren: se guarda una muestra cada ~30 s reales
+      S.push([d,m]);if(S.length>20)S.shift();
+      // ventana: la muestra más antigua de los últimos ~3 min con al menos 60 s de diferencia
+      var p=null;for(var i=0;i<S.length-1;i++){var dd=d-S[i][0];if(dd>=60000&&dd<=200000){p=S[i];break}}
+      if(!p){if(!K.on){ds=d;dl=m}return}
+      var r=(m-p[1])/(d-p[0]);
+      if(!K.on&&r>1.25){off=p[1]-p[0];ds=p[0];dl=p[1];K.r=Math.max(1,r);K.on=true;K.at=Date.now()}
+      if(K.on){ds=d;dl=m;K.r=r>1.1?r:1;if(r>K.peak)K.peak=r;K.last=r;if(r>1.25)K.n++}
+    }).catch(function(){});
+  }
+  if(/^https?:$/.test(location.protocol)){setTimeout(sample,1500);setInterval(sample,30000)}
+})();
+</script>
+
+<script>
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.16.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.17"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -41,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793977885">
+<meta name="game-build" content="1793987867">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2472,7 +2502,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.16.3</small>
+    <small class="pcver">Versión 6.17</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7102,7 +7132,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.16.3";
+const GAME_VER="6.17";
 const NEWS=[
 {v:"2026-11-06e",ver:"6.16",at:"2026-11-06T15:53",t:"💠 Las formas supremas ya se pueden desbloquear",l:["Giratina y Dialga Forma Origen, Kyurem Blanco y Negro, Mega-Rayquaza, Ultra-Necrozma, Kyogre y Groudon Primigenios y el resto de formas supremas no salen en el gacha","Ahora basta con tener la forma base: llévala a un combate y transfórmala con un Cristal Supremo (el botón 💠 muestra 🔓 si aún no la tienes)","La primera vez que lo hagas, la forma suprema se añade a tu colección","Los Cristales Supremos se consiguen en la Torre Batalla, las incursiones, el torneo, el pase de temporada y la tienda"]},
 {v:"2026-11-06d",ver:"6.15",at:"2026-11-06T12:54",t:"🧩 Dos minijuegos nuevos: Puzle de sprites y Más o menos",l:["🧩 Puzle de sprites: recompón la imagen de un Pokémon intercambiando piezas. Elige 9, 16, 25, 36, 49, 64 o 100 piezas: cuantas más, más puntos","Toca dos piezas o arrastra una encima de otra; las bien colocadas se quedan fijas en verde. Mantén pulsado «Ver la imagen» para mirar el Pokémon","📊 Más o menos: ¿el siguiente Pokémon tiene más o menos Ataque, Velocidad, PS…? Racha hasta el primer fallo (también con las flechas ↑ ↓)","Los dos dan premio, récord, pase de temporada y clasificación semanal, y entran en el Torneo semanal desde la semana que viene"]},
@@ -7293,7 +7323,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793977885";
+const GAME_B="1793987867";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -13176,6 +13206,26 @@ function sanity(){let fix=0;
 setTimeout(sanity,3000);setInterval(sanity,60000);
 // si el panel de sugerencias de administrador aparece después, también activa la moderación
 setInterval(()=>{try{if(!MOD.admin&&$("sugAdm")&&!$("sugAdm").hidden){MOD.admin=true;modTab();if(typeof CH!=="undefined"&&CH.open)chRender(true)}}catch(e){}},3000);
+
+// =====================================================================================
+// ACELERADOR DE PÁGINAS: el freno está en p_clock.html (el juego solo ve el tiempo real).
+// Aquí se apunta cuánto tiempo y cuántos tickets se le han frenado, y se avisa al administrador
+// con un reporte automático (uno al día como mucho) en Moderación → Reportes.
+// =====================================================================================
+function spdCheck(){const K=window.PGC_SPD;if(!K||!K.on)return;
+  const sec=Math.round((K.blk||0)/1000),prev=S.spd||{};
+  // lo frenado en esta sesión (en segundos de juego y en tickets de producción automática)
+  if(sec>(prev.cur|0)||prev.sess!==K.at){const add=prev.sess===K.at?sec-(prev.cur|0):sec;
+    S.spd={sess:K.at,cur:sec,sec:(prev.sec|0)+Math.max(0,add),tk:Math.round((prev.tk||0)+Math.max(0,add)*tps()),peak:Math.max(prev.peak||1,K.peak||1),n:(prev.n|0)+(prev.sess===K.at?0:1),first:prev.first||Date.now()};save()}
+  // aviso al administrador: solo si el acelerador se ha medido varias veces y claramente (no un salto de reloj)
+  const d=new Date().toISOString().slice(0,10);
+  if(K.n>=2&&K.peak>=1.4&&S.spdRep!==d&&window.FB&&window.FB.reportAdd&&window.FB.uid&&window.FB.uid()){S.spdRep=d;save();const s=S.spd||{},nm=pvClean(pvNick()).slice(0,30);
+    window.FB.reportAdd({u:window.FB.uid(),un:nm,by:window.FB.uid(),byn:"🤖 Sistema",why:"⏩ Acelerador de páginas",
+      t:("Su navegador va ×"+(K.peak||1).toFixed(1)+" más rápido que la hora real. El juego ya lo frena: solo cuenta el tiempo real. "+
+        "Frenado hasta ahora: "+Math.round((s.sec|0)/60)+" min de juego ≈ "+fmt(s.tk||0)+" 🎟️ que habría generado de más. "+
+        "Producción actual: "+fmt(tps())+" 🎟️/s · Tickets: "+fmt(S.t)+" · Tiempo jugado: "+Math.floor((S.ptime||0)/3600)+" h").slice(0,300),
+      img:0,at:Date.now()}).catch(()=>{S.spdRep=""})}}
+setInterval(()=>{try{spdCheck()}catch(e){}},20000);
 
 // =====================================================================================
 // APP INSTALABLE (PWA) Y NOTIFICACIONES

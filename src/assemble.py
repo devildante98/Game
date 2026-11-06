@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.18.2";
+const GAME_VER="6.18.3";
 const NEWS=[
 {v:"2026-11-06f",ver:"6.18",at:"2026-11-06T20:15",t:"⌨️ Teclas para responder en los minijuegos",l:["En «¿Quién es ese Pokémon?», «¿Cuál pesa más?» y «Más o menos», cada respuesta tiene su tecla: 1, 2, 3 y 4 (se ve en cada casilla)","Puedes cambiarlas en Ajustes → Controles → Teclas de respuesta: toca una casilla y pulsa la tecla que prefieras (W, A, F…)","No chocan con la tecla de la Poké Ball ni compran mejoras de la tienda mientras juegas"]},
 {v:"2026-11-06e",ver:"6.16",at:"2026-11-06T15:53",t:"💠 Las formas supremas ya se pueden desbloquear",l:["Giratina y Dialga Forma Origen, Kyurem Blanco y Negro, Mega-Rayquaza, Ultra-Necrozma, Kyogre y Groudon Primigenios y el resto de formas supremas no salen en el gacha","Ahora basta con tener la forma base: llévala a un combate y transfórmala con un Cristal Supremo (el botón 💠 muestra 🔓 si aún no la tienes)","La primera vez que lo hagas, la forma suprema se añade a tu colección","Los Cristales Supremos se consiguen en la Torre Batalla, las incursiones, el torneo, el pase de temporada y la tienda"]},

@@ -93,7 +93,7 @@ const ckKeys=()=>Array.isArray(O.ckeys)&&O.ckeys.length===4&&O.ckeys.every(k=>ty
 const CK_RES=["escape","enter"," ","tab","shift","control","alt","meta","capslock","backspace","delete","dead","unidentified","process","arrowup","arrowdown","arrowleft","arrowright","contextmenu","os"];
 function ckBtns(){const B=$("mgB"),M=$("mgM");if(!B||!M||M.hidden)return [];return [...B.querySelectorAll(CK_SEL)].filter(b=>b.offsetParent)}
 // marca en cada casilla con su tecla
-function ckBadges(){const K=ckKeys();ckBtns().forEach((b,i)=>{if(i>3)return;let s=b.querySelector(".ckk");if(/^mouse/.test(K[i])){if(s)s.remove();return}if(!s){s=document.createElement("span");s.className="ckk noi18n";b.appendChild(s)}const t=tkLabel(K[i]);if(s.textContent!==t)s.textContent=t})}
+function ckBadges(){const K=ckKeys();ckBtns().forEach((b,i)=>{if(i>3)return;let s=b.querySelector(".ckk");if(!s){s=document.createElement("span");s.className="ckk noi18n";b.appendChild(s)}const t=/^mouse/.test(K[i])?"🖱️":tkLabel(K[i]);if(s.textContent!==t)s.textContent=t})}
 new MutationObserver(()=>{try{ckBadges()}catch(e){}}).observe(document.body,{childList:true,subtree:true});
 window.addEventListener("keydown",e=>{
   if(window._cap||window._ckCap!=null||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;

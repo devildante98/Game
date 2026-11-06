@@ -693,5 +693,16 @@
 "⚪ Ninguno de tus Pokémon puede aprenderla": "⚪ None of your Pokémon can learn it",
 "❌ Tus Pokémon de tipo {} que NO la aprenden ({})": "❌ Your {}-type Pokémon that DON'T learn it ({})",
 "📖 Otras especies que la aprenden ({})": "📖 Other species that learn it ({})",
-"Los marcados con ⭐ están en tu equipo.": "The ones marked with ⭐ are in your team."
+"Los marcados con ⭐ están en tu equipo.": "The ones marked with ⭐ are in your team.",
+"🔄 Cambiar": "🔄 Change",
+"Sin objeto": "No item",
+"Como el tuyo": "Same as yours",
+"Habilidad del rival": "Opponent's ability",
+"Elige tu Pokémon": "Choose your Pokémon",
+"Elige el Pokémon rival": "Choose the opposing Pokémon",
+"Buscar por nombre o mote...": "Search by name or nickname...",
+"Elegido": "Chosen",
+"Hay {}: usa el buscador o los tipos para encontrar el que quieres.": "There are {}: use the search box or the types to find the one you want.",
+"Ningún Pokémon coincide con la búsqueda.": "No Pokémon match the search.",
+"Rareza": "Rarity"
 }

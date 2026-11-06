@@ -8,33 +8,57 @@ const TZ={me:"",op:"Snorlax",lv:0,ab:null,mode:"dummy",last:null};
 const tzOwned=()=>P.filter(p=>S.owned[p[0]]>0&&!(typeof isSup==="function"&&isSup(p[0]))&&!(typeof isMegaF==="function"&&isMegaF(p[0]))).map(p=>p[0]);
 const tzSpecies=()=>Object.keys(PM).filter(n=>!(typeof isSup==="function"&&isSup(n))&&!(typeof isMegaF==="function"&&isMegaF(n)));
 const tzAbName=id=>(ABD.n&&ABD.n[id])||"—";
+const tzAbDesc=id=>(typeof ABDESC!=="undefined"&&ABDESC[id])||"";
+const tzTypes=p=>'<span class="tztys">'+tys(p).map(t=>'<i style="--tc:'+(TC[t]||"#999")+'">'+EM[t]+' '+TIPO[t]+'</i>').join("")+'</span>';
 function tzUI(){const box=$("tzPB");if(!box)return;const own=tzOwned();
   if(!own.length){box.innerHTML='<p class="mut">Todavía no tienes Pokémon. ¡Haz una tirada para conseguir el primero!</p>';return}
   if(!TZ.me||!own.includes(TZ.me))TZ.me=((S.team||[]).find(n=>n&&own.includes(n)))||own[0];
   if(!PM[TZ.op])TZ.op="Snorlax";
-  const me=TZ.me,ml=lvd(me).l,lv=TZ.lv||ml,abs=abList(PM[TZ.op]),ab=TZ.ab!=null&&abs.includes(TZ.ab)?TZ.ab:abDefault(PM[TZ.op]);
-  const held=heldOf(me),hn=held?(ITEMS.find(i=>i[0]===held)||[0,held])[1]:"—";
-  const ownSorted=own.slice().sort((a,b)=>nk(a).localeCompare(nk(b)));
+  const me=TZ.me,ml=lvd(me).l,lv=TZ.lv||ml,abs=abList(PM[TZ.op]),ab=TZ.ab!=null&&abs.includes(TZ.ab)?TZ.ab:abDefault(PM[TZ.op]),mab=abOf(me);
+  const held=heldOf(me),hit=held?ITEMS.find(i=>i[0]===held):null,sh=S.shiny&&S.shiny[me]>0;
   box.innerHTML='<div class="tzw">'+
-   '<div class="tzcol"><h3>🧑 Tu Pokémon</h3><div class="tzmon">'+ico(PM[me],72)+'<div><b>'+esc(nk(me))+'</b><small>Nv'+ml+' · '+tys(PM[me]).map(t=>EM[t]+' '+TIPO[t]).join(" / ")+'</small><small>✨ '+esc(tzAbName(abOf(me)))+'</small><small>🎒 '+esc(hn)+'</small></div></div>'+
-    '<label class="tzl">Elegir<select id="tzMe">'+ownSorted.map(n=>'<option value="'+esc(n)+'"'+(n===me?' selected':'')+'>'+esc(nk(n)!==n?nk(n)+" ("+n+")":n)+' · Nv'+lvd(n).l+'</option>').join("")+'</select></label>'+
+   '<div class="tzcol"><h3>🧑 Tu Pokémon</h3>'+
+    '<button type="button" class="tzpick '+PM[me][2]+'" data-tzpk="me"><span class="tzspr">'+ico(PM[me],96,false,sh)+'</span><span class="tzinfo"><b>'+(sh?"✨ ":"")+esc(nk(me))+'</b>'+(nk(me)!==me?'<small>'+esc(me)+'</small>':'')+'<small>Nv'+ml+' · '+STAR[PM[me][2]]+'</small>'+tzTypes(PM[me])+'</span><span class="tzchg">🔄 Cambiar</span></button>'+
+    '<div class="tzab one"><b>✨ '+esc(tzAbName(mab))+'</b><small>'+esc(tzAbDesc(mab)||"—")+'</small></div>'+
+    '<div class="tzab one"><b>🎒 '+esc(hit?hit[1]:"Sin objeto")+'</b>'+(hit&&hit[6]?'<small>'+esc(String(hit[6]).replace(/\. Se equipa desde.*$/,""))+'</small>':'')+'</div>'+
     '<small class="mut">Usa la habilidad, el objeto, la naturaleza y los movimientos que tenga ahora. Cámbialos en su ficha.</small></div>'+
    '<div class="tzvs">VS</div>'+
-   '<div class="tzcol"><h3>🎯 Rival</h3><div class="tzmon">'+ico(PM[TZ.op],72)+'<div><b>'+esc(TZ.op)+'</b><small>'+tys(PM[TZ.op]).map(t=>EM[t]+' '+TIPO[t]).join(" / ")+'</small></div></div>'+
-    '<label class="tzl">Pokémon<input id="tzOp" list="tzOpL" value="'+esc(TZ.op)+'" autocomplete="off" placeholder="Buscar Pokémon..."></label><datalist id="tzOpL">'+tzSpecies().map(n=>'<option value="'+esc(n)+'">').join("")+'</datalist>'+
-    '<label class="tzl">Nivel<input id="tzLv" type="number" min="1" max="100" value="'+lv+'"></label>'+
-    '<label class="tzl">Habilidad<select id="tzAb">'+(abs.length?abs:[ab]).map(a=>'<option value="'+a+'"'+(a===ab?' selected':'')+'>'+esc(tzAbName(a))+'</option>').join("")+'</select></label></div>'+
+   '<div class="tzcol"><h3>🎯 Rival</h3>'+
+    '<button type="button" class="tzpick '+PM[TZ.op][2]+'" data-tzpk="op"><span class="tzspr">'+ico(PM[TZ.op],96)+'</span><span class="tzinfo"><b>'+esc(TZ.op)+'</b><small>'+STAR[PM[TZ.op][2]]+'</small>'+tzTypes(PM[TZ.op])+'</span><span class="tzchg">🔄 Cambiar</span></button>'+
+    '<label class="tzl tzlv">Nivel<input id="tzLv" type="number" min="1" max="100" value="'+lv+'"><span class="tzlvb"><button type="button" data-tzlv="'+ml+'">Como el tuyo</button><button type="button" data-tzlv="50">50</button><button type="button" data-tzlv="100">100</button></span></label>'+
+    '<div class="tzl">Habilidad del rival<div class="tzabs">'+(abs.length?abs:[ab]).map(a=>'<button type="button" class="tzab'+(a===ab?' on':'')+'" data-tzab="'+a+'"><b>'+(a===ab?'✅ ':'')+esc(tzAbName(a))+'</b><small>'+esc(tzAbDesc(a)||"—")+'</small></button>').join("")+'</div></div></div>'+
   '</div>'+
   '<div class="tzmodes"><label class="tzmode'+(TZ.mode==="dummy"?' on':'')+'"><input type="radio" name="tzM" value="dummy"'+(TZ.mode==="dummy"?' checked':'')+'><b>🎯 Diana</b><small>No ataca y recupera todos sus PS cada turno. Verás el daño exacto de cada golpe.</small></label>'+
    '<label class="tzmode'+(TZ.mode==="fight"?' on':'')+'"><input type="radio" name="tzM" value="fight"'+(TZ.mode==="fight"?' checked':'')+'><b>⚔️ Combate de práctica</b><small>El rival lucha de verdad, con sus movimientos y su habilidad.</small></label></div>'+
   '<button class="red tzgo" id="tzGo">▶ Empezar entrenamiento</button>';
-  $("tzMe").onchange=e=>{TZ.me=e.target.value;TZ.lv=0;snd("ui");tzUI()};
-  $("tzOp").onchange=e=>{const v=e.target.value.trim(),k=Object.keys(PM).find(n=>n.toLowerCase()===v.toLowerCase());if(k){TZ.op=k;TZ.ab=null;snd("ui")}else toast("No hay ningún Pokémon con ese nombre.");tzUI()};
   $("tzLv").onchange=e=>{TZ.lv=Math.max(1,Math.min(100,+e.target.value|0||1));e.target.value=TZ.lv};
-  $("tzAb").onchange=e=>{TZ.ab=+e.target.value};
   box.querySelectorAll('[name="tzM"]').forEach(r=>r.onchange=()=>{TZ.mode=r.value;snd("ui");tzUI()});
   $("tzGo").onclick=()=>{snd("ui");tzStart({me:TZ.me,op:TZ.op,lv:TZ.lv||lvd(TZ.me).l,ab:TZ.ab!=null&&abList(PM[TZ.op]).includes(TZ.ab)?TZ.ab:abDefault(PM[TZ.op]),mode:TZ.mode})};
 }
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest||!t.closest("#tzPB"))return;
+  const a=t.closest("[data-tzab]");if(a){TZ.ab=+a.dataset.tzab;snd("ui");tzUI();return}
+  const l=t.closest("[data-tzlv]");if(l){e.preventDefault();TZ.lv=+l.dataset.tzlv;snd("ui");tzUI();return}
+  const k=t.closest("[data-tzpk]");if(k){snd("ui");tzPkOpen(k.dataset.tzpk)}});
+// ---------- elegir Pokémon con tarjetas (como al formar el equipo) ----------
+const TZK={w:"me",q:"",t:"",o:"az"};
+function tzPkOpen(w){TZK.w=w;TZK.q="";TZK.t="";let m=$("tzPkM");if(!m){m=document.createElement("div");m.id="tzPkM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m);
+    m.addEventListener("click",e=>{if(e.target===m||e.target.closest(".tpx")){m.hidden=true;return}const c=e.target.closest("[data-tzn]");if(c){const n=c.dataset.tzn;if(TZK.w==="me"){TZ.me=n;TZ.lv=0}else{TZ.op=n;TZ.ab=null}m.hidden=true;snd("ui");tzUI();return}
+      const ty=e.target.closest("[data-tzt]");if(ty){TZK.t=ty.dataset.tzt;tzPkRender();return}});
+    m.addEventListener("input",e=>{if(e.target.id==="tzPkQ"){TZK.q=e.target.value;tzPkList()}});m.addEventListener("change",e=>{if(e.target.id==="tzPkO"){TZK.o=e.target.value;tzPkList()}});
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!m.hidden){m.hidden=true;e.stopPropagation()}},true)}
+  m.hidden=false;tzPkRender();setTimeout(()=>{const q=$("tzPkQ");if(q&&matchMedia("(pointer:fine)").matches)q.focus()},50)}
+function tzPkRender(){const m=$("tzPkM"),types=Object.keys(TIPO);
+  m.innerHTML='<div class="tpw"><div class="tph"><b>'+(TZK.w==="me"?'Elige tu Pokémon':'Elige el Pokémon rival')+'</b><button class="tpx" aria-label="Cerrar">✕</button></div>'+
+    '<div class="tpf"><input id="tzPkQ" placeholder="'+(TZK.w==="me"?'Buscar por nombre o mote...':'Buscar Pokémon...')+'" value="'+esc(TZK.q)+'"><select id="tzPkO" aria-label="Ordenar">'+[["az","Alfabético (A-Z)"],["dex","Número de Pokédex"],["rar","Rareza"]].concat(TZK.w==="me"?[["lv","Nivel (mayor primero)"]]:[]).map(o=>'<option value="'+o[0]+'"'+(TZK.o===o[0]?' selected':'')+'>'+o[1]+'</option>').join("")+'</select></div>'+
+    '<div class="tzpkt"><button class="'+(!TZK.t?'on':'')+'" data-tzt="">Todos</button>'+types.map(t=>'<button class="'+(TZK.t===t?'on':'')+'" data-tzt="'+t+'" style="--tc:'+(TC[t]||"#999")+'">'+EM[t]+' '+TIPO[t]+'</button>').join("")+'</div>'+
+    '<div class="tpl" id="tzPkL"></div></div>';
+  tzPkList()}
+function tzPkList(){const L=$("tzPkL");if(!L)return;const q=nrm(TZK.q||""),me=TZK.w==="me",cur=me?TZ.me:TZ.op;
+  let a=(me?tzOwned():tzSpecies()).map(n=>PM[n]).filter(p=>p&&(!TZK.t||tys(p).includes(TZK.t))&&(!q||nrm(p[0]).includes(q)||(me&&nrm(nk(p[0])).includes(q))));
+  const so={az:(x,y)=>(me?nk(x[0]):x[0]).localeCompare(me?nk(y[0]):y[0],"es"),dex:(x,y)=>(x[4]||0)-(y[4]||0)||x[0].localeCompare(y[0]),rar:(x,y)=>"CREML".indexOf(y[2])-"CREML".indexOf(x[2])||x[0].localeCompare(y[0]),lv:(x,y)=>lvd(y[0]).l-lvd(x[0]).l}[TZK.o]||((x,y)=>0);
+  a.sort(so);const tot=a.length;a=a.slice(0,300);
+  L.innerHTML=a.length?a.map(p=>{const n=p[0],sh=me&&S.shiny&&S.shiny[n]>0;
+    return '<button class="tpc '+p[2]+(n===cur?' cur':'')+'" data-tzn="'+esc(n)+'"><span class="tpspr">'+ico(p,56,false,sh)+'</span><b>'+(sh?"✨ ":"")+esc(me?nk(n):n)+'</b><small>'+(me?'Nv'+lvd(n).l+' · ':'')+STAR[p[2]]+'</small><small>'+tyTxt(p)+'</small>'+(n===cur?'<i class="tpin">Elegido</i>':'')+'</button>'}).join("")+(tot>300?'<small class="mut tzpkmore">Hay '+tot+': usa el buscador o los tipos para encontrar el que quieres.</small>':''):'<small class="mut">Ningún Pokémon coincide con la búsqueda.</small>'}
 function tzStart(c){
   if(fcd||(typeof D!=="undefined"&&D)||(typeof PV!=="undefined"&&PV.st!=="idle")){toast("Termina antes tu combate actual.");return}
   if(!S.owned[c.me]||!PM[c.op])return;

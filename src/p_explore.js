@@ -136,7 +136,7 @@ setInterval(()=>{if(EX.battle&&!fcd){const b=EX.battle;EX.battle=null;
 // ---------- compañero que te sigue ----------
 async function exFollower(){const b=S.buddy&&S.owned[S.buddy.n]>0?S.buddy.n:(S.team||[]).find(n=>n&&S.owned[n]);if(!b){EX.fol=null;return}
   if(EX.fol&&EX.fol.n===b)return;EX.fol={n:b,d:null};const d=typeof pmdLoad==="function"?await pmdLoad(b,!!(S.shiny&&S.shiny[b]>0)):null;
-  if(EX.fol&&EX.fol.n===b){EX.fol.d=d;if(d){const img=new Image();img.src=d.Walk.url;EX.fol.img=img}else{const i=new Image();i.src=SPRU+(window._spr&&window._spr[b])+".png";EX.fol.st=i}}}
+  if(EX.fol&&EX.fol.n===b){EX.fol.d=d;if(d){const img=new Image();img.src=d.Walk.url;EX.fol.img=img}else{const i=new Image();i.crossOrigin="anonymous";i.src=SPRU+(window._spr&&window._spr[b])+".png";EX.fol.st=i}}}
 function exFollowerReset(){if(EX.fol){EX.fol.x=null}}
 // ---------- dibujo ----------
 function exCam(W,H){const M=EX.M,mw=M.g[0].length*EXTL,mh=M.g.length*EXTL,cx=EX.px*EXTL+EXTL/2-W/2,cy=EX.py*EXTL+EXTL/2-H/2;const t=[mw<=W?(mw-W)/2:Math.max(0,Math.min(mw-W,cx)),mh<=H?(mh-H)/2:Math.max(0,Math.min(mh-H,cy))];
@@ -185,9 +185,15 @@ function exFolPos(){const t=EX.trail[0]||{x:EX.x,y:EX.y};if(!EX.mv)return{x:t.x,
 function exDrawFol(g,cx,cy,ts){const f=EX.fol;if(!f)return;const p=exFolPos();if(p.x===EX.px&&p.y===EX.py)return;
   const dx=EX.px-p.x,dy=EX.py-p.y,face=Math.abs(dx)>Math.abs(dy)?(dx>0?"r":"l"):(dy>0?"d":"u"),X=p.x*EXTL-cx+16,Y=p.y*EXTL-cy+28;
   g.fillStyle="rgba(0,0,0,.2)";g.beginPath();g.ellipse(X,Y,9,3.5,0,0,7);g.fill();
-  if(f.d&&f.img&&f.img.complete){const a=f.d.Walk,row=a.rows<8?0:{d:0,r:2,u:4,l:6}[face],fr=EX.mv?pmdFrame(ts,a):0,sc=Math.min(1,40/Math.max(8,a.bot-a.top+1));
-    g.drawImage(f.img,fr*a.fw,row*a.fh,a.fw,a.fh,Math.round(X-a.fw*sc/2),Math.round(Y-(a.bot+1)*sc+2),a.fw*sc,a.fh*sc)}
-  else if(f.st&&f.st.complete){g.save();g.translate(X,Y);if(face==="r")g.scale(-1,1);g.drawImage(f.st,-20,-38,40,40);g.restore()}}
+  if(f.d&&f.img&&f.img.complete){const a=f.d.Walk,row=a.rows<8?0:{d:0,r:2,u:4,l:6}[face],fr=EX.mv?pmdFrame(ts,a):0,bb=(a.bb&&a.bb[row])||{cx:a.fw/2,bot:a.bot,h:a.bot-a.top+1},
+      sc=Math.min(1,40/Math.max(8,Math.max(a.bot-a.top+1,bb.h)));
+    // el cuerpo (no el recuadro de la hoja) queda centrado sobre su sombra, mire hacia donde mire
+    g.drawImage(f.img,fr*a.fw,row*a.fh,a.fw,a.fh,Math.round(X-bb.cx*sc),Math.round(Y-(bb.bot+1)*sc+2),a.fw*sc,a.fh*sc)}
+  else if(f.st&&f.st.complete&&f.st.naturalWidth){
+    // imagen normal: se recorta a su contorno real y se apoya sobre la sombra (antes flotaba y se veía pequeña)
+    if(!f.stb){const W=f.st.naturalWidth,H=f.st.naturalHeight;f.stb={l:0,t:0,w:W,h:H};try{const c=document.createElement("canvas");c.width=W;c.height=H;const q=c.getContext("2d");q.drawImage(f.st,0,0);const px=q.getImageData(0,0,W,H).data;let l=W,r=-1,t=H,b=-1;
+      for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(px[(y*W+x)*4+3]>20){if(x<l)l=x;if(x>r)r=x;if(y<t)t=y;if(y>b)b=y}if(r>=0)f.stb={l:l,t:t,w:r-l+1,h:b-t+1}}catch(e){}}
+    const bb=f.stb,sc=Math.min(1,34/Math.max(bb.w,bb.h));g.save();g.translate(X,Y);if(face==="r")g.scale(-1,1);g.drawImage(f.st,bb.l,bb.t,bb.w,bb.h,-bb.w*sc/2,-bb.h*sc+2,bb.w*sc,bb.h*sc);g.restore()}}
 function exDlgDraw(){const box=$("exDlg");if(!box)return;const d=EX.dlg||(EX.pend.length?null:null);if(!d){box.hidden=true;return}
   const raw=d.l[d.i]||"",nm=(raw.match(/^§([^|]*)\|/)||[])[1],t=exDlgT(raw);d.c=Math.min(t.length,(d.c||0)+1.2);box.hidden=false;const s=t.slice(0,Math.floor(d.c));if(box._s!==s+d.i){box._s=s+d.i;box.classList.toggle("exnmd",!!nm);box.innerHTML=(nm?'<b class="exnm">'+esc(nm)+'</b>':'')+esc(s)+(d.c>=t.length?'<i class="exnx">▼</i>':'')}}
 // ---------- panel ----------

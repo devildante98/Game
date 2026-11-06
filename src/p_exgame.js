@@ -29,7 +29,7 @@ sGive=function(r){if(r.t)grant({t:r.t});if(r.it&&Object.keys(r.it).length)xgRun(
 // el compañero que te sigue es el primero de tu equipo de Exploración
 exFollower=async function(){const b=xgTeam()[0];if(!b){EX.fol=null;return}if(EX.fol&&EX.fol.n===b)return;EX.fol={n:b,d:null};
   const sh=xgRun(()=>!!(S.shiny&&S.shiny[b]>0)),d=typeof pmdLoad==="function"?await pmdLoad(b,sh):null;
-  if(EX.fol&&EX.fol.n===b){EX.fol.d=d;if(d){const img=new Image();img.src=d.Walk.url;EX.fol.img=img}else{const i=new Image();i.src=SPRU+(window._spr&&window._spr[b])+".png";EX.fol.st=i}}};
+  if(EX.fol&&EX.fol.n===b){EX.fol.d=d;if(d){const img=new Image();img.src=d.Walk.url;EX.fol.img=img}else{const i=new Image();i.crossOrigin="anonymous";i.src=SPRU+(window._spr&&window._spr[b])+".png";EX.fol.st=i}}};
 setInterval(()=>{if(EX.on&&!EX.title){const b=xgTeam()[0];if((EX.fol&&EX.fol.n)!==b)exFollower()}},2000);
 // ---------- niveles fijos, como en los juegos ----------
 // nivel base de los rivales de la historia según el punto de la historia

@@ -781,7 +781,14 @@ function pmdLoad(n,sh){const id=pmdId(n);if(!id)return Promise.resolve(null);con
       a.W=img.naturalWidth;a.H=img.naturalHeight;a.rows=Math.max(1,Math.round(a.H/a.fh));a.url=img.src;a.T=a.d.reduce((u,v)=>u+v,0);
       const c=document.createElement("canvas");c.width=a.fw;c.height=a.fh;const g2=c.getContext("2d");g2.drawImage(img,0,0,a.fw,a.fh,0,0,a.fw,a.fh);
       let top=a.fh,bot=0;try{const px=g2.getImageData(0,0,a.fw,a.fh).data;for(let y=0;y<a.fh;y++)for(let q=0;q<a.fw;q++)if(px[(y*a.fw+q)*4+3]>20){if(y<top)top=y;if(y>bot)bot=y}}catch(e){top=0;bot=a.fh-1}
-      a.top=top;a.bot=bot;out[nm]=a}
+      a.top=top;a.bot=bot;
+      // caja del cuerpo en cada dirección (primer fotograma de cada fila): en algunas hojas el Pokémon no está centrado
+      a.bb=[];try{const c2=document.createElement("canvas");c2.width=a.fw;c2.height=a.fh;const g3=c2.getContext("2d");
+        for(let r=0;r<a.rows;r++){g3.clearRect(0,0,a.fw,a.fh);g3.drawImage(img,0,r*a.fh,a.fw,a.fh,0,0,a.fw,a.fh);const px=g3.getImageData(0,0,a.fw,a.fh).data;let l=a.fw,rr=-1,t=a.fh,b=-1;
+          for(let y=0;y<a.fh;y++)for(let q=0;q<a.fw;q++)if(px[(y*a.fw+q)*4+3]>20){if(q<l)l=q;if(q>rr)rr=q;if(y<t)t=y;if(y>b)b=y}
+          a.bb.push(rr<0?{cx:a.fw/2,bot:a.bot,h:a.bot-a.top+1}:{cx:(l+rr+1)/2,bot:b,h:b-t+1})}}catch(e){a.bb=[]}
+      out[nm]=a}
+    if(!out.Walk&&out.Idle)out.Walk=out.Idle;// algunos Pokémon solo tienen la animación de estar quieto
     if(!out.Walk)throw 0;out.Idle=out.Idle||out.Walk;const h=Math.max(8,out.Idle.bot-out.Idle.top+1);out.sc=Math.min(3,Math.max(1,Math.round(62/h*2)/2));return out}
   catch(e){if(sh)return pmdLoad(n,false);return null}})()}
 function pmdFrame(t,a){let m=t%a.T;for(let i=0;i<a.d.length;i++){if(m<a.d[i])return i;m-=a.d[i]}return 0}

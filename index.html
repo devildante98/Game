@@ -6,7 +6,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.15.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.15.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -41,7 +41,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793967366">
+<meta name="game-build" content="1793969599">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2472,7 +2472,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.15.2</small>
+    <small class="pcver">Versión 6.15.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7099,7 +7099,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.15.2";
+const GAME_VER="6.15.3";
 const NEWS=[
 {v:"2026-11-06d",ver:"6.15",at:"2026-11-06T12:54",t:"🧩 Dos minijuegos nuevos: Puzle de sprites y Más o menos",l:["🧩 Puzle de sprites: recompón la imagen de un Pokémon intercambiando piezas. Elige 9, 16, 25, 36, 49, 64 o 100 piezas: cuantas más, más puntos","Toca dos piezas o arrastra una encima de otra; las bien colocadas se quedan fijas en verde. Mantén pulsado «Ver la imagen» para mirar el Pokémon","📊 Más o menos: ¿el siguiente Pokémon tiene más o menos Ataque, Velocidad, PS…? Racha hasta el primer fallo (también con las flechas ↑ ↓)","Los dos dan premio, récord, pase de temporada y clasificación semanal, y entran en el Torneo semanal desde la semana que viene"]},
 {v:"2026-11-06c",ver:"6.14",at:"2026-11-06T11:15",t:"🔴 Incursiones renovadas: combate en directo y más difícil",l:["Toca la pantalla (o Espacio) para el ataque rápido: cada golpe carga energía","Con la energía llena, lanza ataques cargados mucho más fuertes (botones o teclas 1 y 2)","El jefe brilla en amarillo antes de atacar: desliza o usa ⬅️ ➡️ / A y D para esquivar y recibir mucho menos daño","Sus ataques cargados pueden debilitar a tu Pokémon de un golpe. Si cae todo tu equipo, puedes volver a entrar, pero pierdes 10 segundos","Los PS del jefe dependen de la fuerza real de los equipos: siempre es un reto. En grupo es más fácil","Premios mejores: 650.000 🎟️ (+250.000 a quien más daño haga) y 3 Ultra Ball"]},
@@ -7289,7 +7289,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793967366";
+const GAME_B="1793969599";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -10582,7 +10582,14 @@ function pmdLoad(n,sh){const id=pmdId(n);if(!id)return Promise.resolve(null);con
       a.W=img.naturalWidth;a.H=img.naturalHeight;a.rows=Math.max(1,Math.round(a.H/a.fh));a.url=img.src;a.T=a.d.reduce((u,v)=>u+v,0);
       const c=document.createElement("canvas");c.width=a.fw;c.height=a.fh;const g2=c.getContext("2d");g2.drawImage(img,0,0,a.fw,a.fh,0,0,a.fw,a.fh);
       let top=a.fh,bot=0;try{const px=g2.getImageData(0,0,a.fw,a.fh).data;for(let y=0;y<a.fh;y++)for(let q=0;q<a.fw;q++)if(px[(y*a.fw+q)*4+3]>20){if(y<top)top=y;if(y>bot)bot=y}}catch(e){top=0;bot=a.fh-1}
-      a.top=top;a.bot=bot;out[nm]=a}
+      a.top=top;a.bot=bot;
+      // caja del cuerpo en cada dirección (primer fotograma de cada fila): en algunas hojas el Pokémon no está centrado
+      a.bb=[];try{const c2=document.createElement("canvas");c2.width=a.fw;c2.height=a.fh;const g3=c2.getContext("2d");
+        for(let r=0;r<a.rows;r++){g3.clearRect(0,0,a.fw,a.fh);g3.drawImage(img,0,r*a.fh,a.fw,a.fh,0,0,a.fw,a.fh);const px=g3.getImageData(0,0,a.fw,a.fh).data;let l=a.fw,rr=-1,t=a.fh,b=-1;
+          for(let y=0;y<a.fh;y++)for(let q=0;q<a.fw;q++)if(px[(y*a.fw+q)*4+3]>20){if(q<l)l=q;if(q>rr)rr=q;if(y<t)t=y;if(y>b)b=y}
+          a.bb.push(rr<0?{cx:a.fw/2,bot:a.bot,h:a.bot-a.top+1}:{cx:(l+rr+1)/2,bot:b,h:b-t+1})}}catch(e){a.bb=[]}
+      out[nm]=a}
+    if(!out.Walk&&out.Idle)out.Walk=out.Idle;// algunos Pokémon solo tienen la animación de estar quieto
     if(!out.Walk)throw 0;out.Idle=out.Idle||out.Walk;const h=Math.max(8,out.Idle.bot-out.Idle.top+1);out.sc=Math.min(3,Math.max(1,Math.round(62/h*2)/2));return out}
   catch(e){if(sh)return pmdLoad(n,false);return null}})()}
 function pmdFrame(t,a){let m=t%a.T;for(let i=0;i<a.d.length;i++){if(m<a.d[i])return i;m-=a.d[i]}return 0}
@@ -10963,7 +10970,7 @@ setInterval(()=>{if(EX.battle&&!fcd){const b=EX.battle;EX.battle=null;
 // ---------- compañero que te sigue ----------
 async function exFollower(){const b=S.buddy&&S.owned[S.buddy.n]>0?S.buddy.n:(S.team||[]).find(n=>n&&S.owned[n]);if(!b){EX.fol=null;return}
   if(EX.fol&&EX.fol.n===b)return;EX.fol={n:b,d:null};const d=typeof pmdLoad==="function"?await pmdLoad(b,!!(S.shiny&&S.shiny[b]>0)):null;
-  if(EX.fol&&EX.fol.n===b){EX.fol.d=d;if(d){const img=new Image();img.src=d.Walk.url;EX.fol.img=img}else{const i=new Image();i.src=SPRU+(window._spr&&window._spr[b])+".png";EX.fol.st=i}}}
+  if(EX.fol&&EX.fol.n===b){EX.fol.d=d;if(d){const img=new Image();img.src=d.Walk.url;EX.fol.img=img}else{const i=new Image();i.crossOrigin="anonymous";i.src=SPRU+(window._spr&&window._spr[b])+".png";EX.fol.st=i}}}
 function exFollowerReset(){if(EX.fol){EX.fol.x=null}}
 // ---------- dibujo ----------
 function exCam(W,H){const M=EX.M,mw=M.g[0].length*EXTL,mh=M.g.length*EXTL,cx=EX.px*EXTL+EXTL/2-W/2,cy=EX.py*EXTL+EXTL/2-H/2;const t=[mw<=W?(mw-W)/2:Math.max(0,Math.min(mw-W,cx)),mh<=H?(mh-H)/2:Math.max(0,Math.min(mh-H,cy))];
@@ -11012,9 +11019,15 @@ function exFolPos(){const t=EX.trail[0]||{x:EX.x,y:EX.y};if(!EX.mv)return{x:t.x,
 function exDrawFol(g,cx,cy,ts){const f=EX.fol;if(!f)return;const p=exFolPos();if(p.x===EX.px&&p.y===EX.py)return;
   const dx=EX.px-p.x,dy=EX.py-p.y,face=Math.abs(dx)>Math.abs(dy)?(dx>0?"r":"l"):(dy>0?"d":"u"),X=p.x*EXTL-cx+16,Y=p.y*EXTL-cy+28;
   g.fillStyle="rgba(0,0,0,.2)";g.beginPath();g.ellipse(X,Y,9,3.5,0,0,7);g.fill();
-  if(f.d&&f.img&&f.img.complete){const a=f.d.Walk,row=a.rows<8?0:{d:0,r:2,u:4,l:6}[face],fr=EX.mv?pmdFrame(ts,a):0,sc=Math.min(1,40/Math.max(8,a.bot-a.top+1));
-    g.drawImage(f.img,fr*a.fw,row*a.fh,a.fw,a.fh,Math.round(X-a.fw*sc/2),Math.round(Y-(a.bot+1)*sc+2),a.fw*sc,a.fh*sc)}
-  else if(f.st&&f.st.complete){g.save();g.translate(X,Y);if(face==="r")g.scale(-1,1);g.drawImage(f.st,-20,-38,40,40);g.restore()}}
+  if(f.d&&f.img&&f.img.complete){const a=f.d.Walk,row=a.rows<8?0:{d:0,r:2,u:4,l:6}[face],fr=EX.mv?pmdFrame(ts,a):0,bb=(a.bb&&a.bb[row])||{cx:a.fw/2,bot:a.bot,h:a.bot-a.top+1},
+      sc=Math.min(1,40/Math.max(8,Math.max(a.bot-a.top+1,bb.h)));
+    // el cuerpo (no el recuadro de la hoja) queda centrado sobre su sombra, mire hacia donde mire
+    g.drawImage(f.img,fr*a.fw,row*a.fh,a.fw,a.fh,Math.round(X-bb.cx*sc),Math.round(Y-(bb.bot+1)*sc+2),a.fw*sc,a.fh*sc)}
+  else if(f.st&&f.st.complete&&f.st.naturalWidth){
+    // imagen normal: se recorta a su contorno real y se apoya sobre la sombra (antes flotaba y se veía pequeña)
+    if(!f.stb){const W=f.st.naturalWidth,H=f.st.naturalHeight;f.stb={l:0,t:0,w:W,h:H};try{const c=document.createElement("canvas");c.width=W;c.height=H;const q=c.getContext("2d");q.drawImage(f.st,0,0);const px=q.getImageData(0,0,W,H).data;let l=W,r=-1,t=H,b=-1;
+      for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(px[(y*W+x)*4+3]>20){if(x<l)l=x;if(x>r)r=x;if(y<t)t=y;if(y>b)b=y}if(r>=0)f.stb={l:l,t:t,w:r-l+1,h:b-t+1}}catch(e){}}
+    const bb=f.stb,sc=Math.min(1,34/Math.max(bb.w,bb.h));g.save();g.translate(X,Y);if(face==="r")g.scale(-1,1);g.drawImage(f.st,bb.l,bb.t,bb.w,bb.h,-bb.w*sc/2,-bb.h*sc+2,bb.w*sc,bb.h*sc);g.restore()}}
 function exDlgDraw(){const box=$("exDlg");if(!box)return;const d=EX.dlg||(EX.pend.length?null:null);if(!d){box.hidden=true;return}
   const raw=d.l[d.i]||"",nm=(raw.match(/^§([^|]*)\|/)||[])[1],t=exDlgT(raw);d.c=Math.min(t.length,(d.c||0)+1.2);box.hidden=false;const s=t.slice(0,Math.floor(d.c));if(box._s!==s+d.i){box._s=s+d.i;box.classList.toggle("exnmd",!!nm);box.innerHTML=(nm?'<b class="exnm">'+esc(nm)+'</b>':'')+esc(s)+(d.c>=t.length?'<i class="exnx">▼</i>':'')}}
 // ---------- panel ----------
@@ -11931,7 +11944,7 @@ sGive=function(r){if(r.t)grant({t:r.t});if(r.it&&Object.keys(r.it).length)xgRun(
 // el compañero que te sigue es el primero de tu equipo de Exploración
 exFollower=async function(){const b=xgTeam()[0];if(!b){EX.fol=null;return}if(EX.fol&&EX.fol.n===b)return;EX.fol={n:b,d:null};
   const sh=xgRun(()=>!!(S.shiny&&S.shiny[b]>0)),d=typeof pmdLoad==="function"?await pmdLoad(b,sh):null;
-  if(EX.fol&&EX.fol.n===b){EX.fol.d=d;if(d){const img=new Image();img.src=d.Walk.url;EX.fol.img=img}else{const i=new Image();i.src=SPRU+(window._spr&&window._spr[b])+".png";EX.fol.st=i}}};
+  if(EX.fol&&EX.fol.n===b){EX.fol.d=d;if(d){const img=new Image();img.src=d.Walk.url;EX.fol.img=img}else{const i=new Image();i.crossOrigin="anonymous";i.src=SPRU+(window._spr&&window._spr[b])+".png";EX.fol.st=i}}};
 setInterval(()=>{if(EX.on&&!EX.title){const b=xgTeam()[0];if((EX.fol&&EX.fol.n)!==b)exFollower()}},2000);
 // ---------- niveles fijos, como en los juegos ----------
 // nivel base de los rivales de la historia según el punto de la historia

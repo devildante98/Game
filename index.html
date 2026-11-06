@@ -36,7 +36,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.27"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.27.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -71,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794000105">
+<meta name="game-build" content="1794000249">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2547,7 +2547,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.27</small>
+    <small class="pcver">Versión 6.27.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7198,8 +7198,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.27";
+const GAME_VER="6.27.1";
 const NEWS=[
+{v:"2026-11-06-6.27.1",ver:"6.27.1",at:"2026-11-06T22:24",t:"🔧 Arreglos/Mejoras",l:["Exploración: menos Pokémon salvajes. En las cuevas salen la mitad que antes y en la hierba alta algo menos","Después de un encuentro tienes unos pasos de calma antes del siguiente"]},
 {v:"2026-11-06o",ver:"6.27",at:"2026-11-06T22:21",t:"🔒 Límite de nivel en el equipo",l:["Un Pokémon de nivel más alto que tu límite (el de tus medallas) ya no se puede poner en el equipo","Si ya lo tenías en el equipo, no podrás combatir (combates, gimnasios, Exploración, incursiones, PVP ni dobles) hasta que lo saques o consigas las medallas necesarias","Su ficha y su tarjeta te avisan con «🔒»"]},
 {v:"2026-11-06n",ver:"6.26",at:"2026-11-06T22:12",t:"🎒 14 objetos equipables nuevos",l:["En la Tienda de objetos: Cinta Elección, Gafas Elección y Pañuelo Elección (+50% de daño físico, especial o Velocidad, pero solo pueden usar el primer movimiento que elijan hasta retirarse)","Cinta Experto, Cinta Fuerte, Gafas Especiales, Mineral Evolutivo, Casco Dentado y Lodo Negro","Toxiesfera, Llamasfera, Bolaluz (para Pikachu), Polvo Brillo y Lupa","Funcionan como en la saga y se equipan desde la Mochila o la ficha del Pokémon"]},
 {v:"2026-11-06m",ver:"6.25",at:"2026-11-06T22:10",t:"🔒 Pokémon por encima de tu límite de nivel",l:["Como en los juegos, un Pokémon de nivel más alto que tu límite (el de tus medallas de gimnasio) no rinde al máximo: lucha con el nivel de tu límite","Pasa con los que hayas recibido por intercambio, regalo o mercadillo. Su nivel real no cambia","Cada vez que ganes una medalla, recuperan más fuerza; sin límite (tras el último gimnasio) luchan con su nivel completo","En su ficha y en la tarjeta del equipo verás «🔒 Lucha a Nv…»"]},
@@ -7417,7 +7418,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794000105";
+const GAME_B="1794000249";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11213,8 +11214,9 @@ function exArrive(){const st=exSt();exStepFx(EX.x,EX.y,EX.f,EX.mvRun);st.x=EX.x;
   if(M.w&&M.w[c]){const w=M.w[c];if(w.med&&medCount()<w.med){exSay(["Un guardia te detiene:","«Para entrar ahí necesitas al menos "+w.med+" medalla"+(w.med>1?"s":"")+" de gimnasio.»"],()=>{exStepBack()});return}
     snd("ui");EX.trans={t:0,d:500,k:"fade",done:()=>{exLoad(w.to,w.x,w.y,w.f);EX.trans={t:0,d:400,k:"fadein"};exFollowerReset()}};return}
   if(exNpcSight())return;
-  const enc=c==="T"||c==="d"||c==="g"?1/9:c==="c"?1/15:0;
-  if(enc&&Math.random()<enc)exEncounter()}
+  // probabilidad por paso: hierba alta 1/12, suelo de cueva 1/32; y tras un encuentro, al menos 6 pasos de calma
+  const enc=c==="T"||c==="d"||c==="g"?1/12:c==="c"?1/32:0;
+  if(enc&&EX.steps-(EX.encAt||-99)>=6&&Math.random()<enc){EX.encAt=EX.steps;exEncounter()}}
 function exStepBack(){const t=EX.trail[0];if(t){EX.x=t.x;EX.y=t.y;EX.px=t.x;EX.py=t.y}EX.f={u:"d",d:"u",l:"r",r:"l"}[EX.f]}
 // ---------- entrenadores que te ven ----------
 function exNpcSight(){for(const n of EX.npcs){if(n.beat)continue;const[dx,dy]=EXDIR[n.f];for(let i=1;i<=n.sight;i++){const x=n.px+dx*i,y=n.py+dy*i;if(exBlocked(x,y)&&!(x===EX.x&&y===EX.y))break;

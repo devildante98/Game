@@ -90,8 +90,9 @@ function exArrive(){const st=exSt();exStepFx(EX.x,EX.y,EX.f,EX.mvRun);st.x=EX.x;
   if(M.w&&M.w[c]){const w=M.w[c];if(w.med&&medCount()<w.med){exSay(["Un guardia te detiene:","«Para entrar ahí necesitas al menos "+w.med+" medalla"+(w.med>1?"s":"")+" de gimnasio.»"],()=>{exStepBack()});return}
     snd("ui");EX.trans={t:0,d:500,k:"fade",done:()=>{exLoad(w.to,w.x,w.y,w.f);EX.trans={t:0,d:400,k:"fadein"};exFollowerReset()}};return}
   if(exNpcSight())return;
-  const enc=c==="T"||c==="d"||c==="g"?1/9:c==="c"?1/15:0;
-  if(enc&&Math.random()<enc)exEncounter()}
+  // probabilidad por paso: hierba alta 1/12, suelo de cueva 1/32; y tras un encuentro, al menos 6 pasos de calma
+  const enc=c==="T"||c==="d"||c==="g"?1/12:c==="c"?1/32:0;
+  if(enc&&EX.steps-(EX.encAt||-99)>=6&&Math.random()<enc){EX.encAt=EX.steps;exEncounter()}}
 function exStepBack(){const t=EX.trail[0];if(t){EX.x=t.x;EX.y=t.y;EX.px=t.x;EX.py=t.y}EX.f={u:"d",d:"u",l:"r",r:"l"}[EX.f]}
 // ---------- entrenadores que te ven ----------
 function exNpcSight(){for(const n of EX.npcs){if(n.beat)continue;const[dx,dy]=EXDIR[n.f];for(let i=1;i<=n.sight;i++){const x=n.px+dx*i,y=n.py+dy*i;if(exBlocked(x,y)&&!(x===EX.x&&y===EX.y))break;

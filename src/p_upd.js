@@ -1146,3 +1146,16 @@ const ocTxt=n=>"🔒 Lucha a Nv"+lvCap()+" hasta que consigas más medallas (su 
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||!overCap(n))return;const w=document.querySelector("#pkv .pkvw");if(!w)return;const d=document.createElement("div");d.className="supnote ocnote";d.textContent=ocTxt(n)+". En los juegos, un Pokémon de nivel muy alto no obedece sin las medallas necesarias.";const t=w.querySelector(".pkvtags");if(t)t.after(d);else w.appendChild(d)}catch(e){}}}
 {const _tc=tmCards;tmCards=function(){_tc.apply(this,arguments);try{for(let i=0;i<6;i++){const b=document.querySelector('.tmbtn[data-tm="'+i+'"]');if(!b)continue;const n=S.team[i];let x=b.querySelector(".tmoc");
   if(n&&overCap(n)){if(!x){x=document.createElement("small");x.className="tmoc";const t=b.querySelector(".tmt");(t||b).appendChild(x)}const s="🔒 Lucha a Nv"+lvCap();if(x.textContent!==s)x.textContent=s}else if(x)x.remove()}}catch(e){}}}
+// ================= OBJETOS EQUIPABLES NUEVOS: Elección, Cinta Experto, Mineral Evolutivo, Casco Dentado… =================
+Object.assign(HIMG,{cband:"choice-band",cspecs:"choice-specs",cscarf:"choice-scarf",ebelt:"expert-belt",mband:"muscle-band",wglass:"wise-glasses",eviol:"eviolite",rhelm:"rocky-helmet",bsludge:"black-sludge",torb:"toxic-orb",forb:"flame-orb",lball:"light-ball",bpow:"bright-powder",wlens:"wide-lens"});
+const itCanEvo=p=>{try{return !!p&&typeof EVO==="function"&&EVO(p[0]).some(e=>PM[e[0]]&&!(typeof isMegaF==="function"&&isMegaF(e[0])))}catch(e){return false}};
+// multiplicador de daño de los objetos (atacante y defensor)
+function itDmg(me,tm,mv,phy,e){let k=1;const a=me&&me.it,d=tm&&tm.it;
+  if(a==="cband"&&phy)k*=1.5;if(a==="cspecs"&&!phy)k*=1.5;if(a==="mband"&&phy)k*=1.1;if(a==="wglass"&&!phy)k*=1.1;if(a==="ebelt"&&e>1)k*=1.2;
+  if(a==="lball"&&me.p&&/^Pikachu/.test(me.p[0]))k*=2;
+  if(d==="eviol"&&itCanEvo(tm.p))k/=1.5;return k}
+Object.assign(ITMSG,{rhelm:["d",w=>"¡"+w+" se ha hecho daño con el Casco Dentado!"],bsludge:["h",w=>"¡"+w+" ha recuperado PS con el Lodo Negro!"],bsludgeD:["d",w=>"¡El Lodo Negro ha hecho daño a "+w+"!"],
+  torb:["d",w=>"¡La Toxiesfera ha envenenado gravemente a "+w+"!"],forb:["d",w=>"¡La Llamasfera ha quemado a "+w+"!"]});
+// objetos Elección: en el menú, los otros movimientos se bloquean hasta que se retire
+{const _sm=setMenu;setMenu=function(v){_sm.apply(this,arguments);try{if(v!==true||!B||!B.E)return;const sd=B.E.sd[0],m=beAct(sd);if(!m||!/^c(band|specs|scarf)$/.test(m.it||"")||m.dmx||sd.v.lock==null||!m.m[sd.v.lock]||m.pp[sd.v.lock]<=0)return;
+  document.querySelectorAll('#menu .mvb[data-k^="m"]').forEach(b=>{const j=+String(b.dataset.k).slice(1);if(j!==sd.v.lock){b.disabled=true;b.title="Bloqueado por "+HOLDK[m.it][1]+": solo puede usar "+m.m[sd.v.lock].n}})}catch(e){}}}

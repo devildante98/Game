@@ -28,7 +28,7 @@ const beFoes=(E,i)=>{const ti=beTeamOf(E,i);return E.tm.filter((t,k)=>k!==ti).re
 function beIll(s,m){if(!s||!m||m.ab!==149||m.illOff||m.mh<=0)return null;
   if(m.illP===undefined){let k=-1;for(let j=s.t.length-1;j>=0;j--)if(s.t[j]!==m&&s.t[j].mh>0){k=j;break}m.illP=k>=0?s.t[k].p:null}return m.illP}
 const beSnap=E=>({il:E.sd.map(s=>beIll(s,s.t[s.ai])),ai:E.sd.map(s=>s.ai),hp:E.sd.map(s=>s.t.map(x=>Math.max(0,x.mh))),st:E.sd.map(s=>s.t.map(x=>x.sts))});
-const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+bsSpe(m.p))*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(E?axSpdK(s,E):1)+rng()*3};
+const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+bsSpe(m.p))*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(m.it==="cscarf"?1.5:1)*(E?axSpdK(s,E):1)+rng()*3};
 // habilidades: multiplicadores de daño e Intimidación
 function abAtk(me,mv,ty){const a=me.ab;let k=1;if(!a)return 1;
   if(me.mh<=me.mx/3&&((a===65&&ty==="grass")||(a===66&&ty==="fire")||(a===67&&ty==="water")||(a===68&&ty==="bug")))k*=1.5;
@@ -69,6 +69,8 @@ function beUse(E,i,a,rng,push,acted,faint){
   let mv,k=-1;const allOut=me.pp.every(x=>x<=0);
   if(q[1]==null){if(!allOut)return;mv=STRUG}
   else{k=+q[1];mv=me.m[k];if(!mv)return;if(me.pp[k]<=0){if(!allOut)return;mv=STRUG;k=-1}}
+  // objetos Elección: solo puede usar el primer movimiento que eligió hasta que se retire
+  if(mv!==STRUG&&k>=0&&(me.it==="cband"||me.it==="cspecs"||me.it==="cscarf")&&!me.dmx){if(v.lock!=null&&v.lock!==k&&me.m[v.lock]&&me.pp[v.lock]>0){k=v.lock;mv=me.m[k]}v.lock=k}
   if(me.dmx&&mv&&mv!==STRUG&&typeof dxMove==="function")mv=dxMove(mv,me);
   if(me.it==="avest"&&mv&&mv.cl===0){push({k:"item",s:i,n:me.p[0],it:"avest"});return}
   if(zf&&mv&&mv.cl>0&&typeof zMove==="function"){mv=zf==="x"&&typeof zxMove==="function"?zxMove(me,mv):zMove(mv);push({k:"zpow",s:i,n:me.p[0]})}
@@ -81,7 +83,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   const ts=E.sd[tg],tm=beAct(ts);
   if(mv.id==="389"&&tg!==i){const q=String((E._acts||{})[tg]||"").match(/^m(\d)/),tmv=q?tm.m[+q[1]]:null;if(acted[tg]||!tmv||tmv.cl===0){push({k:"fail",s:i});return}}
   if(tg!==i&&ts.v.prot&&!(me.ab===260&&mv.cl===1)&&!(me.gmx&&GMX[me.gmx]&&GMX[me.gmx][2]==="oneblow")){push({k:"blocked",s:tg,n:tm.p[0]});return}
-  const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g};
+  const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g*(me.it==="wlens"?1.1:1)*(tm.it==="bpow"?.9:1)};
   if(mv.cl===0){
     if(mv.prot){if(v.pc&&rng()>=1/Math.pow(3,v.pc)){v.pc=0;push({k:"fail",s:i});return}v.prot=1;v.pc++;push({k:"prot",s:i,n:me.p[0]});return}
     if(mv.rest){if(me.mh>=me.mx||me.sts==="slp"){push({k:"fail",s:i});return}me.mh=me.mx;me.sts="slp";me.slp=2;push({k:"rest",s:i,n:me.p[0]});return}
@@ -107,7 +109,7 @@ function beUse(E,i,a,rng,push,acted,faint){
     let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
     else{const phy=mv.cl!==2;let am=tm.ab===109&&!axMB(me)?1:STG(phy?v.st.atk:v.st.spa),dm=me.ab===109?1:STG(phy?ts.v.st.def:ts.v.st.spd);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
-      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1)*bsSR(me.p))*bsDF(tm.p,phy)*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)))}
+      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1)*bsSR(me.p))*bsDF(tm.p,phy)*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)*(typeof itDmg==="function"?itDmg(me,tm,mv,phy,e):1)))}
     if(cr)crit++;
     if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
     if(mv.id==="206"&&d>=tm.mh&&tm.mh>1)d=tm.mh-1;
@@ -120,6 +122,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   push({k:"after",s:i,tg:tg,e:e,crit:crit,nh:nh});
   if(mv.drain&&tot&&me.mh>0){if(tm.ab===64&&!axMB(me)){me.mh=Math.max(0,me.mh-Math.max(1,Math.round(tot*mv.drain/100)));axSay(push,tg,tm,"¡{o} ha absorbido el lodo de {w} y pierde PS!",{i:i,m:me},{});faint(i)}else{const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100)));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}}
   if(mv.rec&&tot&&!((me.ab===69||me.ab===98)&&mv.id!=="forc")){const d=Math.max(1,Math.round((mv.id==="forc"?me.mx:tot)*mv.rec/100));me.mh=Math.max(0,me.mh-d);push({k:"recoil",s:i,n:me.p[0]})}
+  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&tm.it==="rhelm"&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/6)));push({k:"item",s:i,n:me.p[0],it:"rhelm"});faint(i)}
   if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&me.ab!==203){const ta=tm.ab;if((ta===24||ta===160)&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/8)));push({k:"abil",s:tg,n:tm.p[0],ab:ta,o:i,on:me.p[0]})}
     else if((ta===9||ta===38||ta===49||ta===27)&&!me.sts&&rng()<.3){const a2=ta===9?"par":ta===38?"psn":ta===49?"brn":["psn","par","slp"][Math.floor(rng()*3)];push({k:"abil",s:tg,n:tm.p[0],ab:ta});beAil(E,i,a2,push,rng,false,tg)}}
   if(me.it==="shell"&&tot&&me.mh>0&&me.mh<me.mx){me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot/8)));push({k:"item",s:i,n:me.p[0],it:"shell"})}
@@ -159,6 +162,9 @@ function beTurn(E,acts,rng){
     if(d&&m.ab===90&&(m.sts==="psn"||m.sts==="tox")){if(m.mh<m.mx){axHeal(m,1/8);axSay(push,i,m,"¡{w} se cura con el veneno gracias a {a}!",null,{hl:1})}}else if(d&&m.ab!==98){if(m.ab===85&&m.sts==="brn")d/=2;m.mh=Math.max(0,m.mh-Math.max(1,Math.floor(d)));push({k:"res",s:i,n:m.p[0],a:m.sts});faint(i)}
     if(m.mh>0&&m.ab===3&&sd.v.st.spe<6){sd.v.st.spe++;push({k:"abil",s:i,n:m.p[0],ab:3})}
     if(m.mh>0&&m.it==="left"&&m.mh<m.mx){m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.floor(m.mx/16)));push({k:"item",s:i,n:m.p[0],it:"left"})}
+    if(m.mh>0&&m.it==="bsludge"){if(tys(m.p).includes("poison")){if(m.mh<m.mx){m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.floor(m.mx/16)));push({k:"item",s:i,n:m.p[0],it:"bsludge"})}}else if(m.ab!==98){m.mh=Math.max(0,m.mh-Math.max(1,Math.floor(m.mx/8)));push({k:"item",s:i,n:m.p[0],it:"bsludgeD"})}}
+    if(m.mh>0&&!m.sts&&m.it==="torb"&&!tys(m.p).some(t=>t==="poison"||t==="steel")){m.sts="tox";m.tox=0;push({k:"item",s:i,n:m.p[0],it:"torb"})}
+    if(m.mh>0&&!m.sts&&m.it==="forb"&&!tys(m.p).includes("fire")){m.sts="brn";push({k:"item",s:i,n:m.p[0],it:"forb"})}
     axEnd(E,i,push,rng,faint);beBerry(E,i,push)}
   axField(E,push);
   E.sd.forEach(s2=>{if(s2.piv){s2.piv=0;if(!s2.out&&!s2.need&&beAct(s2).mh>0&&s2.t.some((x,k)=>k!==s2.ai&&x.mh>0))s2.need=1}});

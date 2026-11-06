@@ -83,3 +83,42 @@ TOUR_ROT.push(["2026-W46","who mem dig fish thr run exc wgt fos puz hl"]);
 Object.assign(MGHOW,{
   puz:["Elige de <b>9 a 100 piezas</b>: cada pieza vale <b>40 puntos</b> (con 100 piezas, hasta 4.000).","Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.","<b>Rapidez</b>: hasta la mitad de los puntos dependen de lo rápido que termines.","<b>Precisión</b>: cuantos menos cambios hagas (cerca del mínimo), más puntos.","Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo."],
   hl:["Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>. Si empatan, cuenta como acierto.","Con la racha, los valores se parecen cada vez más y tienes menos tiempo.","Teclado: <b>↑</b> más, <b>↓</b> menos."]});
+// =====================================================================================
+// TECLAS DE RESPUESTA EN LOS MINIJUEGOS (¿Quién es ese Pokémon?, ¿Cuál pesa más?, Más o menos…)
+// Cada casilla tiene su tecla (por defecto 1, 2, 3, 4) y se pueden cambiar en Ajustes → Controles.
+// Solo funcionan con un minijuego abierto: no compran mejoras de la tienda ni tocan la Poké Ball.
+// =====================================================================================
+const CK_DEF=["1","2","3","4"],CK_SEL="[data-who],[data-wg],[data-hl]";
+const ckKeys=()=>Array.isArray(O.ckeys)&&O.ckeys.length===4&&O.ckeys.every(k=>typeof k==="string"&&k)?O.ckeys:CK_DEF.slice();
+const CK_RES=["escape","enter"," ","tab","shift","control","alt","meta","capslock","backspace","delete","dead","unidentified","process","arrowup","arrowdown","arrowleft","arrowright","contextmenu","os"];
+function ckBtns(){const B=$("mgB"),M=$("mgM");if(!B||!M||M.hidden)return [];return [...B.querySelectorAll(CK_SEL)].filter(b=>b.offsetParent)}
+// marca en cada casilla con su tecla
+function ckBadges(){const K=ckKeys();ckBtns().forEach((b,i)=>{if(i>3)return;let s=b.querySelector(".ckk");if(!s){s=document.createElement("span");s.className="ckk noi18n";b.appendChild(s)}const t=tkLabel(K[i]);if(s.textContent!==t)s.textContent=t})}
+new MutationObserver(()=>{try{ckBadges()}catch(e){}}).observe(document.body,{childList:true,subtree:true});
+window.addEventListener("keydown",e=>{
+  if(window._cap||window._ckCap!=null||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;
+  const L=ckBtns();if(!L.length)return;
+  // escribiendo en un campo visible (por ejemplo el chat) no se responde; un campo que se quedó con el foco detrás del minijuego no cuenta
+  const t=e.target,tg=t&&t.tagName;if((tg==="INPUT"||tg==="SELECT"||tg==="TEXTAREA"||(t&&t.isContentEditable))&&t.offsetParent&&!$("mgM").contains(t))return;if(!L.length)return;const i=ckKeys().indexOf(String(e.key).toLowerCase());if(i<0)return;
+  e.preventDefault();e.stopImmediatePropagation();const b=L[i];if(b&&!b.disabled){b.click();b.animate([{transform:"scale(.95)"},{transform:"none"}],140)}},true);
+// ---- ajustes: cuatro casillas para cambiar las teclas ----
+function ckUI(){const w=$("ckl");if(!w)return;const K=ckKeys();
+  w.innerHTML=K.map((k,i)=>'<button type="button" class="ckslot'+(window._ckCap===i?' on':'')+'" data-cks="'+i+'"><small>Casilla '+(i+1)+'</small><kbd>'+(window._ckCap===i?'…':esc(tkLabel(k)))+'</kbd></button>').join("")}
+function ckMsg(t){const m=$("ckmsg");if(m)m.textContent=t}
+function ckInit(){const tm=$("tkmsg");if(!tm||$("ckl"))return;
+  const h=document.createElement("div");h.className="ckwrap";
+  h.innerHTML='<b class="cksec">🎮 Teclas de respuesta (minijuegos)</b><div id="ckl" class="ckl"></div><div class="mrow"><button type="button" id="ckreset" class="alt">Restablecer (1, 2, 3, 4)</button></div><small id="ckmsg" class="mut">Toca una casilla y pulsa la tecla que quieras para elegir esa respuesta en «¿Quién es ese Pokémon?» y los demás minijuegos de respuestas. Solo funcionan con el minijuego abierto.</small>';
+  tm.after(h);ckUI();
+  $("ckl").addEventListener("click",e=>{const b=e.target.closest("[data-cks]");if(!b)return;window._ckCap=+b.dataset.cks;ckUI();ckMsg("Pulsa ahora la tecla para la casilla "+(+b.dataset.cks+1)+" (Esc para cancelar)…")});
+  $("ckreset").onclick=()=>{window._ckCap=null;O.ckeys=CK_DEF.slice();saveO();ckUI();ckMsg("Restablecidas a 1, 2, 3 y 4.")}}
+window.addEventListener("keydown",e=>{if(window._ckCap==null)return;e.preventDefault();e.stopImmediatePropagation();
+  const i=window._ckCap,k=String(e.key).toLowerCase();window._ckCap=null;
+  if(k==="escape"){ckUI();ckMsg("Cancelado.");return}
+  if(CK_RES.includes(k)||k.length>1&&!/^f\d+$/.test(k)){ckUI();ckMsg("Esa tecla está reservada (Esc, Enter, Espacio, flechas…): elige otra.");return}
+  if((O.tkeys||["u"]).includes(k)){ckUI();ckMsg("Esa tecla ya la usas para tocar la Poké Ball. Elige otra o quítala de allí primero.");return}
+  const K=ckKeys().slice(),j=K.indexOf(k);
+  if(j>=0&&j!==i){ckUI();ckMsg("Esa tecla ya es la de la casilla "+(j+1)+".");return}
+  K[i]=k;O.ckeys=K;saveO();ckUI();ckMsg("Casilla "+(i+1)+": tecla "+tkLabel(k)+".")},true);
+// la tecla de la Poké Ball tampoco puede coincidir con las de respuesta
+{const _tc=tkCapture;tkCapture=function(e){const k=String(e.key).toLowerCase();if(k!=="escape"&&ckKeys().includes(k)){window._cap=false;const m=$("tkmsg");if(m)m.textContent="Esa tecla ya la usas para las respuestas de los minijuegos (Ajustes → Controles). Elige otra.";return}return _tc.apply(this,arguments)}}
+setTimeout(ckInit,500);setInterval(ckInit,3000);

@@ -773,3 +773,13 @@ body.calm .rqbox,body.calm .rqic{animation:none}
 .hlbtn{display:flex;gap:6px;margin-top:6px;width:100%}.hlbtn button{flex:1;padding:10px 6px;font-size:1rem}
 .hlq{text-align:center;margin:0}
 @media (max-width:520px){.hlspr,.hlspr img{height:96px;max-height:96px}.hlv b{font-size:1.4rem}}
+/* teclas de respuesta en minijuegos */
+#mgB [data-who],#mgB [data-wg],#mgB [data-hl]{position:relative}
+#mgB .ckk{position:absolute;top:5px;left:7px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:6px;background:rgba(0,0,0,.55);color:#fff;font:800 11px/18px inherit;text-align:center;pointer-events:none;text-transform:uppercase}
+@media (hover:none){#mgB .ckk{display:none}}
+.ckwrap{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.ckl{display:flex;gap:8px;flex-wrap:wrap}
+.ckslot{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:74px;padding:6px 10px;border-radius:12px;background:var(--bg);color:var(--ink);border:2px solid var(--line)}
+.ckslot small{font-size:.7rem;color:var(--mute);font-weight:700}
+.ckslot kbd{font:inherit;font-weight:800;font-size:1.05rem;text-transform:uppercase}
+.ckslot.on{border-color:var(--yel);box-shadow:0 0 0 3px color-mix(in srgb,var(--yel) 35%,transparent)}

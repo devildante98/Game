@@ -786,5 +786,17 @@
 "No se ha podido borrar ({}).": "Couldn't delete it ({}).",
 "Transforma en combate a un Pokémon en su forma suprema (Mega-Rayquaza, Ultra-Necrozma, Kyogre Primigenio…) si la tienes en tu colección. Si aún no tienes esa forma, la desbloqueas la primera vez. Se gasta al usarlo": "Transforms a Pokémon in battle into its supreme form (Mega Rayquaza, Ultra Necrozma, Primal Kyogre…). If you don't have that form yet, you unlock it the first time. Used up on use",
 "Se desbloquea la primera vez que transformes a {}.": "It unlocks the first time you transform {}.",
-"💠 ¡Has desbloqueado {}! Ya aparece en tu colección.": "💠 You unlocked {}! It now appears in your collection."
+"💠 ¡Has desbloqueado {}! Ya aparece en tu colección.": "💠 You unlocked {}! It now appears in your collection.",
+"🎮 Teclas de respuesta (minijuegos)": "🎮 Answer keys (minigames)",
+"Restablecer (1, 2, 3, 4)": "Reset (1, 2, 3, 4)",
+"Toca una casilla y pulsa la tecla que quieras para elegir esa respuesta en «¿Quién es ese Pokémon?» y los demás minijuegos de respuestas. Solo funcionan con el minijuego abierto.": "Tap a slot and press the key you want to pick that answer in “Who's that Pokémon?” and the other answer minigames. They only work while the minigame is open.",
+"Casilla {d}": "Slot {d}",
+"Pulsa ahora la tecla para la casilla {d} (Esc para cancelar)…": "Now press the key for slot {d} (Esc to cancel)…",
+"Restablecidas a 1, 2, 3 y 4.": "Reset to 1, 2, 3 and 4.",
+"Cancelado.": "Cancelled.",
+"Esa tecla está reservada (Esc, Enter, Espacio, flechas…): elige otra.": "That key is reserved (Esc, Enter, Space, arrows…): pick another.",
+"Esa tecla ya la usas para tocar la Poké Ball. Elige otra o quítala de allí primero.": "You already use that key to tap the Poké Ball. Pick another or remove it there first.",
+"Esa tecla ya es la de la casilla {d}.": "That key is already used for slot {d}.",
+"Casilla {d}: tecla {}.": "Slot {d}: key {}.",
+"Esa tecla ya la usas para las respuestas de los minijuegos (Ajustes → Controles). Elige otra.": "You already use that key for minigame answers (Settings → Controls). Pick another."
 }

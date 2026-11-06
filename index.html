@@ -36,7 +36,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.17.6"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.18"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -71,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793991875">
+<meta name="game-build" content="1793992506">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2438,6 +2438,16 @@ body.calm .rqbox,body.calm .rqic{animation:none}
 .hlbtn{display:flex;gap:6px;margin-top:6px;width:100%}.hlbtn button{flex:1;padding:10px 6px;font-size:1rem}
 .hlq{text-align:center;margin:0}
 @media (max-width:520px){.hlspr,.hlspr img{height:96px;max-height:96px}.hlv b{font-size:1.4rem}}
+/* teclas de respuesta en minijuegos */
+#mgB [data-who],#mgB [data-wg],#mgB [data-hl]{position:relative}
+#mgB .ckk{position:absolute;top:5px;left:7px;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:6px;background:rgba(0,0,0,.55);color:#fff;font:800 11px/18px inherit;text-align:center;pointer-events:none;text-transform:uppercase}
+@media (hover:none){#mgB .ckk{display:none}}
+.ckwrap{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.ckl{display:flex;gap:8px;flex-wrap:wrap}
+.ckslot{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:74px;padding:6px 10px;border-radius:12px;background:var(--bg);color:var(--ink);border:2px solid var(--line)}
+.ckslot small{font-size:.7rem;color:var(--mute);font-weight:700}
+.ckslot kbd{font:inherit;font-weight:800;font-size:1.05rem;text-transform:uppercase}
+.ckslot.on{border-color:var(--yel);box-shadow:0 0 0 3px color-mix(in srgb,var(--yel) 35%,transparent)}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2503,7 +2513,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.17.6</small>
+    <small class="pcver">Versión 6.18</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7133,8 +7143,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.17.6";
+const GAME_VER="6.18";
 const NEWS=[
+{v:"2026-11-06f",ver:"6.18",at:"2026-11-06T20:15",t:"⌨️ Teclas para responder en los minijuegos",l:["En «¿Quién es ese Pokémon?», «¿Cuál pesa más?» y «Más o menos», cada respuesta tiene su tecla: 1, 2, 3 y 4 (se ve en cada casilla)","Puedes cambiarlas en Ajustes → Controles → Teclas de respuesta: toca una casilla y pulsa la tecla que prefieras (W, A, F…)","No chocan con la tecla de la Poké Ball ni compran mejoras de la tienda mientras juegas"]},
 {v:"2026-11-06e",ver:"6.16",at:"2026-11-06T15:53",t:"💠 Las formas supremas ya se pueden desbloquear",l:["Giratina y Dialga Forma Origen, Kyurem Blanco y Negro, Mega-Rayquaza, Ultra-Necrozma, Kyogre y Groudon Primigenios y el resto de formas supremas no salen en el gacha","Ahora basta con tener la forma base: llévala a un combate y transfórmala con un Cristal Supremo (el botón 💠 muestra 🔓 si aún no la tienes)","La primera vez que lo hagas, la forma suprema se añade a tu colección","Los Cristales Supremos se consiguen en la Torre Batalla, las incursiones, el torneo, el pase de temporada y la tienda"]},
 {v:"2026-11-06d",ver:"6.15",at:"2026-11-06T12:54",t:"🧩 Dos minijuegos nuevos: Puzle de sprites y Más o menos",l:["🧩 Puzle de sprites: recompón la imagen de un Pokémon intercambiando piezas. Elige 9, 16, 25, 36, 49, 64 o 100 piezas: cuantas más, más puntos","Toca dos piezas o arrastra una encima de otra; las bien colocadas se quedan fijas en verde. Mantén pulsado «Ver la imagen» para mirar el Pokémon","📊 Más o menos: ¿el siguiente Pokémon tiene más o menos Ataque, Velocidad, PS…? Racha hasta el primer fallo (también con las flechas ↑ ↓)","Los dos dan premio, récord, pase de temporada y clasificación semanal, y entran en el Torneo semanal desde la semana que viene"]},
 {v:"2026-11-06c",ver:"6.14",at:"2026-11-06T11:15",t:"🔴 Incursiones renovadas: combate en directo y más difícil",l:["Toca la pantalla (o Espacio) para el ataque rápido: cada golpe carga energía","Con la energía llena, lanza ataques cargados mucho más fuertes (botones o teclas 1 y 2)","El jefe brilla en amarillo antes de atacar: desliza o usa ⬅️ ➡️ / A y D para esquivar y recibir mucho menos daño","Sus ataques cargados pueden debilitar a tu Pokémon de un golpe. Si cae todo tu equipo, puedes volver a entrar, pero pierdes 10 segundos","Los PS del jefe dependen de la fuerza real de los equipos: siempre es un reto. En grupo es más fácil","Premios mejores: 650.000 🎟️ (+250.000 a quien más daño haga) y 3 Ultra Ball"]},
@@ -7324,7 +7335,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793991875";
+const GAME_B="1793992506";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -13890,6 +13901,45 @@ TOUR_ROT.push(["2026-W46","who mem dig fish thr run exc wgt fos puz hl"]);
 Object.assign(MGHOW,{
   puz:["Elige de <b>9 a 100 piezas</b>: cada pieza vale <b>40 puntos</b> (con 100 piezas, hasta 4.000).","Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.","<b>Rapidez</b>: hasta la mitad de los puntos dependen de lo rápido que termines.","<b>Precisión</b>: cuantos menos cambios hagas (cerca del mínimo), más puntos.","Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo."],
   hl:["Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>. Si empatan, cuenta como acierto.","Con la racha, los valores se parecen cada vez más y tienes menos tiempo.","Teclado: <b>↑</b> más, <b>↓</b> menos."]});
+// =====================================================================================
+// TECLAS DE RESPUESTA EN LOS MINIJUEGOS (¿Quién es ese Pokémon?, ¿Cuál pesa más?, Más o menos…)
+// Cada casilla tiene su tecla (por defecto 1, 2, 3, 4) y se pueden cambiar en Ajustes → Controles.
+// Solo funcionan con un minijuego abierto: no compran mejoras de la tienda ni tocan la Poké Ball.
+// =====================================================================================
+const CK_DEF=["1","2","3","4"],CK_SEL="[data-who],[data-wg],[data-hl]";
+const ckKeys=()=>Array.isArray(O.ckeys)&&O.ckeys.length===4&&O.ckeys.every(k=>typeof k==="string"&&k)?O.ckeys:CK_DEF.slice();
+const CK_RES=["escape","enter"," ","tab","shift","control","alt","meta","capslock","backspace","delete","dead","unidentified","process","arrowup","arrowdown","arrowleft","arrowright","contextmenu","os"];
+function ckBtns(){const B=$("mgB"),M=$("mgM");if(!B||!M||M.hidden)return [];return [...B.querySelectorAll(CK_SEL)].filter(b=>b.offsetParent)}
+// marca en cada casilla con su tecla
+function ckBadges(){const K=ckKeys();ckBtns().forEach((b,i)=>{if(i>3)return;let s=b.querySelector(".ckk");if(!s){s=document.createElement("span");s.className="ckk noi18n";b.appendChild(s)}const t=tkLabel(K[i]);if(s.textContent!==t)s.textContent=t})}
+new MutationObserver(()=>{try{ckBadges()}catch(e){}}).observe(document.body,{childList:true,subtree:true});
+window.addEventListener("keydown",e=>{
+  if(window._cap||window._ckCap!=null||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;
+  const L=ckBtns();if(!L.length)return;
+  // escribiendo en un campo visible (por ejemplo el chat) no se responde; un campo que se quedó con el foco detrás del minijuego no cuenta
+  const t=e.target,tg=t&&t.tagName;if((tg==="INPUT"||tg==="SELECT"||tg==="TEXTAREA"||(t&&t.isContentEditable))&&t.offsetParent&&!$("mgM").contains(t))return;if(!L.length)return;const i=ckKeys().indexOf(String(e.key).toLowerCase());if(i<0)return;
+  e.preventDefault();e.stopImmediatePropagation();const b=L[i];if(b&&!b.disabled){b.click();b.animate([{transform:"scale(.95)"},{transform:"none"}],140)}},true);
+// ---- ajustes: cuatro casillas para cambiar las teclas ----
+function ckUI(){const w=$("ckl");if(!w)return;const K=ckKeys();
+  w.innerHTML=K.map((k,i)=>'<button type="button" class="ckslot'+(window._ckCap===i?' on':'')+'" data-cks="'+i+'"><small>Casilla '+(i+1)+'</small><kbd>'+(window._ckCap===i?'…':esc(tkLabel(k)))+'</kbd></button>').join("")}
+function ckMsg(t){const m=$("ckmsg");if(m)m.textContent=t}
+function ckInit(){const tm=$("tkmsg");if(!tm||$("ckl"))return;
+  const h=document.createElement("div");h.className="ckwrap";
+  h.innerHTML='<b class="cksec">🎮 Teclas de respuesta (minijuegos)</b><div id="ckl" class="ckl"></div><div class="mrow"><button type="button" id="ckreset" class="alt">Restablecer (1, 2, 3, 4)</button></div><small id="ckmsg" class="mut">Toca una casilla y pulsa la tecla que quieras para elegir esa respuesta en «¿Quién es ese Pokémon?» y los demás minijuegos de respuestas. Solo funcionan con el minijuego abierto.</small>';
+  tm.after(h);ckUI();
+  $("ckl").addEventListener("click",e=>{const b=e.target.closest("[data-cks]");if(!b)return;window._ckCap=+b.dataset.cks;ckUI();ckMsg("Pulsa ahora la tecla para la casilla "+(+b.dataset.cks+1)+" (Esc para cancelar)…")});
+  $("ckreset").onclick=()=>{window._ckCap=null;O.ckeys=CK_DEF.slice();saveO();ckUI();ckMsg("Restablecidas a 1, 2, 3 y 4.")}}
+window.addEventListener("keydown",e=>{if(window._ckCap==null)return;e.preventDefault();e.stopImmediatePropagation();
+  const i=window._ckCap,k=String(e.key).toLowerCase();window._ckCap=null;
+  if(k==="escape"){ckUI();ckMsg("Cancelado.");return}
+  if(CK_RES.includes(k)||k.length>1&&!/^f\d+$/.test(k)){ckUI();ckMsg("Esa tecla está reservada (Esc, Enter, Espacio, flechas…): elige otra.");return}
+  if((O.tkeys||["u"]).includes(k)){ckUI();ckMsg("Esa tecla ya la usas para tocar la Poké Ball. Elige otra o quítala de allí primero.");return}
+  const K=ckKeys().slice(),j=K.indexOf(k);
+  if(j>=0&&j!==i){ckUI();ckMsg("Esa tecla ya es la de la casilla "+(j+1)+".");return}
+  K[i]=k;O.ckeys=K;saveO();ckUI();ckMsg("Casilla "+(i+1)+": tecla "+tkLabel(k)+".")},true);
+// la tecla de la Poké Ball tampoco puede coincidir con las de respuesta
+{const _tc=tkCapture;tkCapture=function(e){const k=String(e.key).toLowerCase();if(k!=="escape"&&ckKeys().includes(k)){window._cap=false;const m=$("tkmsg");if(m)m.textContent="Esa tecla ya la usas para las respuestas de los minijuegos (Ajustes → Controles). Elige otra.";return}return _tc.apply(this,arguments)}}
+setTimeout(ckInit,500);setInterval(ckInit,3000);
 
 </script>
 <script>

@@ -6,7 +6,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.13.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.14"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -41,7 +41,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793959372">
+<meta name="game-build" content="1793960136">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2333,6 +2333,39 @@ body.gm #gBg .pcpar{display:none!important}
 #gLoad.op .glb:before{height:44px;margin-top:-22px;opacity:1}
 #gLoad.op .glbtn{opacity:0;transition:opacity .12s}
 #gLoad.op:after{animation-delay:.32s;transform:scale(0)}
+/* ===== Incursiones: combate en directo (tocar, cargar, esquivar) ===== */
+.rdgo{position:relative;border-radius:20px;overflow:hidden;min-height:470px;padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;user-select:none;-webkit-user-select:none;touch-action:manipulation;cursor:pointer;
+  background:radial-gradient(ellipse 70% 40% at 50% 34%,color-mix(in srgb,var(--rc) 45%,#fff) 0%,transparent 70%),linear-gradient(#1d2558,color-mix(in srgb,var(--rc) 55%,#1d2558) 62%,#3a7a46 62.5%,#2c5e36);color:#fff}
+.rdgo .rdhpw{background:rgba(0,0,0,.35);border-radius:12px;padding:6px 10px}.rdgo .rdhpw b{color:#fff}.rdcp{font-weight:900;color:#ffd35c}
+.rdgboss{display:grid;place-items:center;height:210px;animation:rdbob 2.4s ease-in-out infinite;transition:filter .15s}
+.rdgboss img{max-height:210px;filter:drop-shadow(0 10px 0 rgba(0,0,0,.25))}
+@keyframes rdbob{50%{transform:translateY(-6px) scale(1.02)}}
+.rdgboss.rdtell img{filter:drop-shadow(0 0 10px #ffe14d) drop-shadow(0 0 22px #ffcc00) brightness(1.25)}
+.rdgboss.rdtell2 img{filter:drop-shadow(0 0 14px #fff36b) drop-shadow(0 0 34px #ff9d00) brightness(1.4);animation:rdshk .18s linear infinite}
+@keyframes rdshk{50%{transform:translateX(3px)}}
+.rdgboss.rdhitb img{filter:brightness(3)}
+.rdwarn{position:absolute;left:50%;top:44%;translate:-50% -50%;font:900 30px inherit;opacity:0;pointer-events:none;text-shadow:0 3px 0 #000;transition:opacity .1s;z-index:3}
+.rdwarn.on{opacity:1;animation:rdwp .35s ease-in-out infinite alternate}.rdwarn.big{font-size:22px;background:rgba(255,190,0,.92);color:#1b1b1b;text-shadow:none;padding:6px 14px;border-radius:99px;top:62%}
+@keyframes rdwp{to{transform:scale(1.18)}}
+.rdgme{position:absolute;left:14px;bottom:150px;width:150px;height:150px;display:grid;place-items:end center;pointer-events:none;z-index:2}.rdgme img{max-height:150px;filter:drop-shadow(0 6px 0 rgba(0,0,0,.3))}
+.rdhint{text-align:center;font-size:.78rem;font-weight:800;opacity:.85;text-shadow:0 2px 0 rgba(0,0,0,.4);margin-top:auto}
+.rdgbar{display:flex;gap:10px;align-items:center;justify-content:space-between;background:rgba(0,0,0,.38);border-radius:12px;padding:6px 10px;margin-left:150px}
+@media (max-width:560px){.rdgbar{margin-left:0}.rdgme{bottom:200px;width:110px;height:110px}.rdgme img{max-height:110px}.rdgboss{height:170px}.rdgboss img{max-height:170px}}
+.rdgbar .rdme{flex:1;min-width:0}.rdgbar .rdme b{color:#fff}.rdgbar small{color:#dfe4ff}
+.rdparty{display:flex;gap:3px}.rdparty span{position:relative;width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.12);display:grid;place-items:center;overflow:hidden}
+.rdparty span.on{box-shadow:inset 0 0 0 2px #ffd35c}.rdparty span.ko{opacity:.35;filter:grayscale(1)}.rdparty img{max-width:30px;max-height:30px}
+.rdparty i{position:absolute;left:0;bottom:0;height:3px;background:#3ecf8e}
+.rdgo .rdmv{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rdcm{position:relative;opacity:.6}.rdcm.ok{opacity:1;animation:rdok 1s ease-in-out infinite}
+@keyframes rdok{50%{box-shadow:0 0 0 3px var(--tc),0 0 18px var(--tc)}}
+.rden{display:flex;gap:3px;margin-top:4px}.rden i{flex:1;height:7px;border-radius:4px;background:linear-gradient(90deg,var(--tc) var(--f),rgba(0,0,0,.18) var(--f))}
+.rddg{display:flex;gap:8px}.rddg button{flex:1;padding:8px;font-size:.85rem}
+.rdgo.rdcharge:after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--cc) 70%,#fff) 0,transparent 60%);animation:rdch .9s ease-in forwards;pointer-events:none}
+@keyframes rdch{0%{opacity:0}60%{opacity:.85}100%{opacity:0}}
+.rdgo .rdme{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;color:#fff;display:block}
+.rdgo .rdme b,.rdgo .rdme b small{color:#fff}.rdgo .rdme small{color:#dfe4ff}
+.rdgme{bottom:178px}
+@media (max-width:560px){.rdgme{bottom:228px}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2398,7 +2431,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.13.2</small>
+    <small class="pcver">Versión 6.14</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7016,8 +7049,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.13.2";
+const GAME_VER="6.14";
 const NEWS=[
+{v:"2026-11-06c",ver:"6.14",at:"2026-11-06T11:15",t:"🔴 Incursiones renovadas: combate en directo y más difícil",l:["Toca la pantalla (o Espacio) para el ataque rápido: cada golpe carga energía","Con la energía llena, lanza ataques cargados mucho más fuertes (botones o teclas 1 y 2)","El jefe brilla en amarillo antes de atacar: desliza o usa ⬅️ ➡️ / A y D para esquivar y recibir mucho menos daño","Sus ataques cargados pueden debilitar a tu Pokémon de un golpe. Si cae todo tu equipo, puedes volver a entrar, pero pierdes 10 segundos","Los PS del jefe dependen de la fuerza real de los equipos: siempre es un reto. En grupo es más fácil","Premios mejores: 650.000 🎟️ (+250.000 a quien más daño haga) y 3 Ultra Ball"]},
 {v:"2026-11-06b",ver:"6.13",at:"2026-11-06T10:00",t:"🎯 Zona de entrenamiento y MT más claras",l:["Nueva Zona de entrenamiento (Actividades, o el botón junto a «¡Combatir!»): prueba a cualquiera de tus Pokémon contra el rival, el nivel y la habilidad que quieras","Modo Diana: no ataca, recupera sus PS cada turno y te dice el daño exacto de cada golpe. O un combate de práctica de verdad","No se gastan PS, PP ni objetos, y no da premios ni experiencia","Tienda de MT: botón «👀 ¿Quién puede aprenderla?» con tus Pokémon que la aprenden y los de su tipo que NO, antes de comprarla","Tienda de MT: elige uno de tus Pokémon para ver solo las MT que puede aprender"]},
 {v:"2026-11-06a",ver:"6.12",at:"2026-11-06T09:01",t:"🌐 ¡El juego ya está en inglés! · Now in English!",l:["Nuevo ajuste de idioma: ⚙️ Ajustes → Accesibilidad → 🌐 Idioma (Español / English)","Los jugadores nuevos eligen su idioma nada más entrar, y en la pantalla de inicio hay un botón 🌐 para cambiarlo","En inglés se traducen menús, combates, objetos, movimientos y habilidades (con sus nombres oficiales), la historia de Exploración, los minijuegos y los mensajes","New language setting: ⚙️ Settings → Accessibility → 🌐 Language. Menus, battles, items, moves, abilities and the Exploration story are translated"]},
 {v:"2026-11-05n",ver:"6.11",at:"2026-11-05T20:23",t:"📋 Ficha técnica en Exploración",l:["En el panel 🎒 de Exploración, toca cualquier Pokémon para ver su ficha completa","Verás su nivel, PS, experiencia, tipos, naturaleza, habilidad, objeto equipado, estadísticas con sus valores base y movimientos con potencia, precisión y PP","Desde la ficha puedes ponerle un mote, quitarle el objeto y meterlo o sacarlo del equipo","La mochila de Exploración también se ve ahora con tarjetas grandes y ordenada por tipo"]},
@@ -7204,7 +7238,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793959372";
+const GAME_B="1793960136";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9425,17 +9459,17 @@ function rdShell(){
 async function rdCreate(){
   if(!window.FB||!window.FB.raidNew)return;if(fcd){toast("Termina el combate primero.");return}
   const me=window.FB.uid(),b=raidBoss(),id=me+"_"+Date.now();
-  const d={h:me,hn:pvClean(pvNick()).slice(0,30),boss:b[0],st:"lobby",hp:0,mx:0,pl:{[me]:rdMe()},at:Date.now()};
+  const d={h:me,hn:pvClean(pvNick()).slice(0,30),boss:b[0],st:"lobby",hp:0,mx:0,pl:{[me]:rdMe(b[0])},at:Date.now()};
   try{await window.FB.raidNew(id,d)}catch(e){toast("No se ha podido crear la sala.");return}rdJoinWatch(id);
 }
-function rdMe(){const t=(S.team||[]).filter(n=>n&&S.owned[n]);return{n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),dmg:0,lead:t[0]||"",at:Date.now()}}
+function rdMe(boss){const t=(S.team||[]).filter(n=>n&&S.owned[n]);let pw=0;try{pw=Math.round(rdPow(rdBuildTeam(),PM[boss]||raidBoss()))}catch(e){}return{n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),dmg:0,lead:t[0]||"",pw:pw,at:Date.now()}}
 async function rdJoin(id){
   if(!window.FB)return;if(fcd){toast("Termina el combate primero.");return}if(!(S.team||[]).some(n=>n&&S.owned[n])){toast("Necesitas un equipo para entrar en una incursión.");return}
-  try{await window.FB.raidJoin(id,window.FB.uid(),rdMe())}catch(e){toast("No se ha podido entrar: la sala está llena o ya ha empezado.");return}rdJoinWatch(id);
+  const it=(RD.list||[]).find(x=>x.id===id);try{await window.FB.raidJoin(id,window.FB.uid(),rdMe(it&&it.boss))}catch(e){toast("No se ha podido entrar: la sala está llena o ya ha empezado.");return}rdJoinWatch(id);
 }
 function rdJoinWatch(id){
   if(RD.unsub)try{RD.unsub()}catch(e){}RD.id=id;RD.me=window.FB.uid();RD.phase="lobby";RD.res=null;RD.out=false;RD.acc=0;
-  const names=(S.team||[]).filter(n=>n&&S.owned[n]);RD.team=names.map(n=>{const ids=moveIds(n),m=beMon(PM[n],lvd(n).l,null,ids);monX(m,natOf(n),heldOf(n));m.mh=m.mx;m.sh=S.shiny&&S.shiny[n]>0?1:0;return m});RD.ai=0;
+  RD.team=rdBuildTeam();RD.ai=0;
   rdShell();
   RD.unsub=window.FB.raidWatch(id,d=>{if(RD.id!==id)return;if(!d){if(RD.phase==="lobby"){toast("La sala se ha cerrado.");mgClose();rdLeave()}return}RD.d=d;rdTick(true)});
   mgI(()=>rdTick(false),250);
@@ -9450,9 +9484,9 @@ function rdTick(fromSnap){
   const d=RD.d;if(!d||!$("mgB"))return;const now=Date.now(),me=RD.me,pl=d.pl||{},ids=Object.keys(pl);
   if(d.st==="lobby"){RD.phase="lobby";const b=PM[d.boss]||raidBoss();if(!fromSnap&&$("rdLob"))return;
     $("rdTm").textContent=ids.length+"/"+RD_MAX;
-    $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+tyTxt(b)+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos.</p>'+(ids.length<RD_MAX?'<button class="rdinv" data-rdchat="inv">📨 Invitar a más gente por el chat</button>':'')+'<div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
+    $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+tyTxt(b)+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos. Toca para atacar, carga los ataques fuertes y esquiva cuando el jefe brille en amarillo.</p>'+(ids.length<RD_MAX?'<button class="rdinv" data-rdchat="inv">📨 Invitar a más gente por el chat</button>':'')+'<div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
       (d.h===me?'<button class="red big" id="rdGo">⚔️ ¡Empezar la incursión!</button><small class="mut">Cuantos más seáis, más PS tendrá el jefe… ¡pero más probabilidades de ganar!</small>':'<p><b>Esperando a que el anfitrión empiece…</b></p>')+'</div>';
-    const g=$("rdGo");if(g)g.onclick=()=>{const n=Object.keys(RD.d.pl||{}).length,mx=Math.round(RD_HP*n*(PM[d.boss][2]==="L"?1.15:1));window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:Date.now()+3500,end:Date.now()+3500+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
+    const g=$("rdGo");if(g)g.onclick=()=>{const mx=rdBossHP(RD.d);window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:Date.now()+3500,end:Date.now()+3500+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
     return}
   if(d.st==="fight"||d.st==="end"){
     if(RD.phase==="lobby"||RD.phase==="")rdFightUI();RD.phase=RD.phase==="catch"||RD.phase==="done"?RD.phase:"fight";
@@ -9463,44 +9497,95 @@ function rdTick(fromSnap){
     if(RD.phase==="fight"){
       if(hp<=0&&d.mx){rdFlush();if(d.st!=="end")window.FB.raidUpd(RD.id,{st:"end",win:1}).catch(()=>{});rdWin();return}
       if(d.st==="end"&&!d.win||now>(d.end||Infinity)+1500){rdFlush();if(d.st!=="end")window.FB.raidUpd(RD.id,{st:"end",win:0}).catch(()=>{});rdLose();return}
-      if(now>=t0&&!RD.out&&now-(RD.bossAt||0)>3600){RD.bossAt=now;if(RD.bossAt0)rdBossHit();RD.bossAt0=1}
     }
   }
 }
+// ---------- combate al estilo de las incursiones en directo: tocar, cargar y esquivar ----------
+const RDT=180,RDTAP={n:"Placaje",pw:40,t:"normal",cl:1};
+function rdBuildTeam(){return (S.team||[]).filter(n=>n&&S.owned[n]).map(n=>{const ids=moveIds(n),m=beMon(PM[n],lvd(n).l,null,ids);monX(m,natOf(n),heldOf(n));m.ab=abOf(n);m.mh=m.mx;m.sh=S.shiny&&S.shiny[n]>0?1:0;rdPrep(m);return m})}
+// ataque rápido: el más flojo; ataques cargados: los dos más fuertes
+const RDFAST={normal:"Placaje",fire:"Ascuas",water:"Pistola Agua",grass:"Látigo Cepa",electric:"Impactrueno",ice:"Nieve Polvo",fighting:"Golpe Karate",poison:"Picotazo Veneno",ground:"Bofetón Lodo",flying:"Ataque Ala",psychic:"Confusión",bug:"Picadura",rock:"Lanzarrocas",ghost:"Lengüetazo",dragon:"Dragoaliento",dark:"Mordisco",steel:"Garra Metal",fairy:"Viento Feérico"};
+function rdPrep(m){const dm=m.m.filter(mv=>mv&&mv.cl>0&&(mv.pw|0)>0).sort((a,b)=>(a.pw|0)-(b.pw|0));
+  const t=tys(m.p)[0],sp=bsSR(m.p)>1;m.fm=dm.length>1&&(dm[0].pw|0)<=65?dm[0]:{n:RDFAST[t]||"Placaje",pw:45,t:RDFAST[t]?t:"normal",cl:sp?2:1};m.cm=dm.filter(mv=>mv!==m.fm).reverse().slice(0,2).map(mv=>({mv:mv,cost:(mv.pw|0)>=110?100:(mv.pw|0)>=80?50:34}));
+  if(!m.cm.length&&dm.length)m.cm=[{mv:dm[dm.length-1],cost:50}];m.en=0;
+  m.fcd=Math.round(480+(m.fm.pw|0)*6);m.fen=Math.round(7+(m.fm.pw|0)/10)}
+function rdBase(m,mv,foe){const e=mv.typeless?1:effP(mv.t,foe),st=stabP(mv.t,m.p)?1.5:1;
+  return {d:m.ma*(mv.cl===2?(m.nsa||1)*bsSR(m.p):(m.na||1))*bsDF(foe,mv.cl!==2)*(mv.pw||40)/45*e*st*(m.it==="lorb"?1.3:1),e:e}}
+const rdFastDmg=(m,foe)=>{const b=rdBase(m,m.fm,foe);return {d:b.d*.7,e:b.e}},rdChDmg=(m,c,foe)=>{const b=rdBase(m,c.mv,foe);return {d:b.d*(c.cost>=100?3.4:c.cost>=50?2.3:1.6),e:b.e}};
+// daño por segundo de un equipo (para calcular los PS del jefe)
+function rdPow(team,foe){if(!team.length)return 0;const v=team.map(m=>{const f=rdFastDmg(m,foe).d*.925,fd=f/(m.fcd/1000),er=m.fen/(m.fcd/1000);
+    const c=m.cm.length?Math.max(...m.cm.map(c=>rdChDmg(m,c,foe).d*.925*er/c.cost)):0;return fd+c}).sort((a,b)=>b-a);
+  return v.slice(0,3).reduce((a,b)=>a+b,0)/Math.min(3,v.length)}
+function rdBossHP(d){const pl=d.pl||{},b=PM[d.boss],L=b&&b[2]==="L";let sum=0;Object.values(pl).forEach(x=>{sum+=x.pw>0?x.pw:(RD_HP/90)});
+  const n=Math.max(1,Object.keys(pl).length);return Math.max(4000,Math.round(sum*(L?108:92)*(1-.07*(n-1))))}
+// movimientos del jefe
+function rdBossMoves(b){let ids=[];try{ids=defMoves(b[0],100)}catch(e){}const L=ids.map(MVI).filter(mv=>mv&&mv.cl>0&&(mv.pw|0)>0).sort((a,c)=>(a.pw|0)-(c.pw|0));
+  return {f:L[0]||RDTAP,c:L.length>1?L.slice(-2):[L[0]||{n:"Hiperrayo",pw:150,t:"normal",cl:2}]}}
 function rdFightUI(){
-  const d=RD.d,b=PM[d.boss];RD.bossAt=Date.now()+2000;RD.bossAt0=0;
-  $("mgB").innerHTML='<div class="rdf"><div class="rdtop"><div class="rdhpw"><b>'+esc(d.boss)+'</b><div class="rdhp"><i id="rdHp"></i></div><small id="rdHpT"></small></div><div class="rdbig" id="rdBoss">'+icoHD(b,200,false,false)+'</div></div>'+
-    '<div class="rdrk" id="rdRk"></div><div class="rdme" id="rdMe"></div><div class="rdmv" id="rdMv"></div><p class="rdmsg" id="rdMsg">¡El jefe ruge con fuerza!</p></div>';
-  rdMeUI();
+  const d=RD.d,b=PM[d.boss],now=Date.now();RD.bm=rdBossMoves(b);RD.bNext=(d.go||now)+2200;RD.bAtk=null;RD.lastDodge=0;RD.busyUntil=0;RD.swUntil=0;RD.rejoinAt=0;RD.cAnim=null;RD.nBoss=0;
+  const env=b?(TC[tys(b)[0]]||"#4a6ae0"):"#4a6ae0";
+  $("mgB").innerHTML='<div class="rdgo" id="rdGo" style="--rc:'+env+'"><div class="rdgtop"><div class="rdhpw"><b>'+esc(d.boss)+' <small class="rdcp">PC '+fmt(Math.round((d.mx|0)/3))+'</small></b><div class="rdhp"><i id="rdHp"></i></div><small id="rdHpT"></small></div></div>'+
+    '<div class="rdgboss" id="rdBoss">'+icoHD(b,220,false,false)+'</div><div class="rdwarn" id="rdWarn"></div>'+
+    '<div class="rdgme" id="rdMeS"></div><div class="rdhint" id="rdHint">👆 Toca para atacar · ↔ Desliza para esquivar</div>'+
+    '<div class="rdgbar"><div class="rdme" id="rdMe"></div><div class="rdparty" id="rdParty"></div></div>'+
+    '<div class="rdmv" id="rdMv"></div><div class="rddg"><button class="alt" data-rddg="-1">⬅️ Esquivar</button><button class="alt" data-rddg="1">Esquivar ➡️</button></div></div>'+
+    '<div class="rdrk" id="rdRk"></div><p class="rdmsg" id="rdMsg">¡El jefe ruge con fuerza!</p>';
+  rdMeUI();mgI(rdLoop,60);
 }
-function rdMeUI(){const m=RD.team[RD.ai],box=$("rdMe");if(!box)return;
-  if(!m||RD.out){box.innerHTML='<b>Todo tu equipo se ha debilitado. ¡Anima a tus compañeros!</b>';$("rdMv").innerHTML="";return}
-  box.innerHTML='<span class="rdmspr">'+ico(m.p,72,true,!!m.sh)+'</span><div><b>'+esc(nk(m.p[0]))+' <small>Nv'+m.l+'</small></b><div class="rdhp sm"><i style="width:'+(m.mh/m.mx*100)+'%;background:'+(m.mh/m.mx>.5?"#3ecf8e":m.mh/m.mx>.2?"#ffd35c":"#e63950")+'"></i></div><small>PS '+m.mh+'/'+m.mx+'</small></div>';
-  const foe=PM[RD.d.boss];$("rdMv").innerHTML=m.m.filter(mv=>mv.cl>0).slice(0,4).map((mv,k)=>'<button class="mvb" data-rdm="'+m.m.indexOf(mv)+'" style="--tc:'+(TC[mv.t]||"#999")+'"><span>'+esc(mv.n)+'</span><small>'+EM[mv.t]+' '+TIPO[mv.t]+' · Pot. '+(mv.pw||40)+effTag(mv,{p:foe})+'</small></button>').join("")||'<button class="mvb" data-rdm="-1"><span>Placaje</span><small>Pot. 40</small></button>';
-}
-function rdAttack(k){
-  if(RD.phase!=="fight"||RD.out||!RD.d)return;const now=Date.now();if(now<(RD.d.go||0)||now<RD.cd)return;const m=RD.team[RD.ai];if(!m||m.mh<=0)return;
-  const mv=k>=0?m.m[k]:{n:"Placaje",pw:40,t:"normal",cl:1},foe=PM[RD.d.boss],e=mv.typeless?1:effP(mv.t,foe),stab=stabP(mv.t,m.p)?1.5:1,cr=Math.random()<(m.it==="scope"?.12:.06);
-  const dmg=Math.max(1,Math.round(m.ma*(mv.cl===2?(m.nsa||1)*bsSR(m.p):(m.na||1))*bsDF(foe,mv.cl!==2)*(mv.pw||40)/45*e*stab*(.85+Math.random()*.15)*(cr?1.5:1)*(m.it==="lorb"?1.3:1)*2.2*1.1));
-  RD.acc+=dmg;RD.cd=now+Math.max(650,900+(mv.pw||40)*3);snd("hit",e);
-  const bs=$("rdBoss");if(bs&&!hubCalm()){bs.animate([{transform:"translateX(0)",filter:"brightness(1)"},{transform:"translateX(-8px)",filter:"brightness(2.2)"},{transform:"translateX(6px)"},{transform:"none",filter:"brightness(1)"}],{duration:300});const r=bs.getBoundingClientRect();mgPop(r.left+r.width/2+Math.random()*80-40,r.top+r.height/3,(cr?"¡Crítico! ":"")+fmt(dmg),e>1?"#ffd35c":e<1?"#9aa":"#fff")}
-  $("rdMsg").textContent=nk(m.p[0])+" usa "+mv.n+(e>1?". ¡Es súper eficaz!":e<1?". No es muy eficaz…":"");
-  document.querySelectorAll("#rdMv button").forEach(b=>{b.disabled=true;setTimeout(()=>{b.disabled=false},RD.cd-now)});
-  if(!RD.flushT)RD.flushT=setTimeout(rdFlush,900);rdTick(false);
-}
+function rdMeUI(){const m=RD.team[RD.ai],box=$("rdMe");if(!box)return;const now=Date.now();
+  const party=$("rdParty");if(party)party.innerHTML=RD.team.map((t,i)=>'<span class="'+(i===RD.ai?'on':'')+(t.mh<=0?' ko':'')+'">'+ico(t.p,30,false,!!t.sh)+'<i style="width:'+(t.mh/t.mx*100)+'%"></i></span>').join("");
+  const ms=$("rdMeS");
+  if(RD.out){box.innerHTML='<b>Todo tu equipo se ha debilitado.</b>';if(ms)ms.innerHTML="";
+    $("rdMv").innerHTML=RD.rejoinAt?'<button class="mvb" disabled><span>⏳ Volviendo a entrar… '+Math.max(0,Math.ceil((RD.rejoinAt-now)/1000))+' s</span></button>':'<button class="red big" data-rdrj="1">🔄 Volver a entrar (pierdes 10 s)</button>';return}
+  if(!m)return;
+  if(ms&&ms.dataset.n!==m.p[0]+RD.ai){ms.dataset.n=m.p[0]+RD.ai;ms.innerHTML=icoHD(m.p,150,true,!!m.sh)}
+  const k=m.mh/m.mx;box.innerHTML='<div><b>'+esc(nk(m.p[0]))+' <small>Nv'+m.l+'</small></b><div class="rdhp sm"><i style="width:'+(k*100)+'%;background:'+(k>.5?"#3ecf8e":k>.2?"#ffd35c":"#e63950")+'"></i></div><small>PS '+m.mh+'/'+m.mx+' · ⚡ '+esc(m.fm.n)+'</small></div>';
+  const foe=PM[RD.d.boss];
+  $("rdMv").innerHTML=m.cm.map((c,i)=>{const bars=c.cost>=100?1:c.cost>=50?2:3,seg=c.cost,full=Math.floor(m.en/seg),ok=m.en>=seg;
+    return '<button class="mvb rdcm'+(ok?' ok':'')+'" data-rdc="'+i+'" style="--tc:'+(TC[c.mv.t]||"#999")+'"'+(ok?'':' disabled')+'><span>'+esc(c.mv.n)+'</span><small>'+EM[c.mv.t]+' '+TIPO[c.mv.t]+effTag(c.mv,{p:foe})+'</small><span class="rden">'+Array.from({length:bars},(_,j)=>'<i style="--f:'+(Math.max(0,Math.min(1,(m.en-j*seg)/seg))*100)+'%"></i>').join("")+'</span></button>'}).join("")||'<small class="mut">Este Pokémon no tiene ataques cargados.</small>'}
+function rdFloat(txt,col,big){const bs=$("rdBoss");if(!bs)return;const r=bs.getBoundingClientRect();mgPop(r.left+r.width/2+Math.random()*90-45,r.top+r.height/3,txt,col);if(big)bs.classList.add("rdhitb"),setTimeout(()=>bs.classList.remove("rdhitb"),260)}
+// ataque rápido: tocar
+function rdTap(){if(RD.phase!=="fight"||RD.out||!RD.d)return;const now=Date.now(),m=RD.team[RD.ai];if(!m||m.mh<=0||now<(RD.d.go||0)||now<RD.busyUntil||now<RD.swUntil||RD.cAnim)return;
+  const foe=PM[RD.d.boss],r=rdFastDmg(m,foe),cr=Math.random()<(m.it==="scope"?.12:.06),dmg=Math.max(1,Math.round(r.d*(.85+Math.random()*.15)*(cr?1.5:1)));
+  RD.acc+=dmg;RD.busyUntil=now+m.fcd;m.en=Math.min(100,m.en+m.fen);snd("hit",r.e);
+  const ms=$("rdMeS");if(ms&&!hubCalm())ms.animate([{transform:"none"},{transform:"translate(18px,-14px)"},{transform:"none"}],{duration:Math.min(300,m.fcd-60)});
+  rdFloat((cr?"¡Crítico! ":"")+fmt(dmg),r.e>1?"#ffd35c":r.e<1?"#9aa":"#fff");
+  if(!RD.flushT)RD.flushT=setTimeout(rdFlush,900);rdMeUI()}
+// ataque cargado
+function rdCharged(i){if(RD.phase!=="fight"||RD.out||RD.cAnim)return;const now=Date.now(),m=RD.team[RD.ai];if(!m||m.mh<=0||now<RD.swUntil)return;const c=m.cm[i];if(!c||m.en<c.cost)return;
+  m.en-=c.cost;RD.cAnim={t:now+900,i:i};snd("ui");$("rdMsg").textContent="¡"+nk(m.p[0])+" usa "+c.mv.n+"!";
+  const g=$("rdGo");if(g){g.classList.add("rdcharge");g.style.setProperty("--cc",TC[c.mv.t]||"#fff")}
+  setTimeout(()=>{if(RD.phase!=="fight"){RD.cAnim=null;return}const foe=PM[RD.d.boss],r=rdChDmg(m,c,foe),cr=Math.random()<.06,dmg=Math.max(1,Math.round(r.d*(.85+Math.random()*.15)*(cr?1.5:1)));
+    RD.acc+=dmg;RD.cAnim=null;RD.busyUntil=Date.now()+350;snd("hit",Math.max(1.5,r.e));if(g)g.classList.remove("rdcharge");
+    rdFloat((cr?"¡Crítico! ":"")+fmt(dmg),r.e>1?"#ffd35c":r.e<1?"#9aa":"#fff",1);
+    $("rdMsg").textContent=c.mv.n+(r.e>1?": ¡es súper eficaz!":r.e<1?": no es muy eficaz…":"")+" (−"+fmt(dmg)+")";
+    if(!RD.flushT)RD.flushT=setTimeout(rdFlush,900);rdMeUI()},900);rdMeUI()}
+// esquivar: deslizar, flechas o botones
+function rdDodge(dir){if(RD.phase!=="fight"||RD.out)return;const now=Date.now();if(now-RD.lastDodge<550||RD.cAnim)return;RD.lastDodge=now;RD.busyUntil=Math.max(RD.busyUntil,now+450);
+  const ms=$("rdMeS");if(ms&&!hubCalm())ms.animate([{transform:"none"},{transform:"translateX("+(dir*70)+"px) rotate("+(dir*8)+"deg)"},{transform:"none"}],{duration:450,easing:"ease-out"})}
+// el jefe: avisa (brilla) y ataca
+function rdLoop(){if(RD.phase!=="fight"||!RD.d)return;const now=Date.now(),m=RD.team[RD.ai];
+  if(RD.out){if(RD.rejoinAt&&now>=RD.rejoinAt){RD.team.forEach(t=>{t.mh=t.mx;t.en=0});RD.ai=0;RD.out=false;RD.rejoinAt=0;RD.swUntil=now+800;RD.bNext=now+2000;RD.bAtk=null;$("rdMsg").textContent="¡Has vuelto a la incursión!";rdMeUI()}else if(RD.rejoinAt)rdMeUI();return}
+  if(now<(RD.d.go||0))return;
+  if(!RD.bAtk&&now>=RD.bNext){RD.nBoss++;const ch=RD.nBoss>3&&Math.random()<.3,mv=ch?RD.bm.c[Math.floor(Math.random()*RD.bm.c.length)]:RD.bm.f,warn=ch?1150:650;
+    RD.bAtk={mv:mv,ch:ch,land:now+warn,warn:warn};const w=$("rdWarn"),bs=$("rdBoss");if(bs)bs.classList.add(ch?"rdtell2":"rdtell");
+    if(w){w.className="rdwarn on"+(ch?" big":"");w.textContent=ch?"⚠️ "+mv.n+"":"⚠️"}}
+  const a=RD.bAtk;if(a&&now>=a.land){RD.bAtk=null;const w=$("rdWarn"),bs=$("rdBoss");if(w)w.className="rdwarn";if(bs){bs.classList.remove("rdtell","rdtell2");if(!hubCalm())bs.animate([{transform:"none"},{transform:"scale(1.1) translateY(14px)"},{transform:"none"}],{duration:280})}
+    RD.bNext=now+(a.ch?2400:1500+Math.random()*1100);
+    if(m&&m.mh>0&&now>=RD.swUntil){const dodged=RD.lastDodge&&RD.lastDodge>=a.land-a.warn&&RD.lastDodge<=a.land,foe=PM[RD.d.boss],e=a.mv.typeless?1:effP(a.mv.t,m.p),L=foe&&foe[2]==="L"?1.2:1,
+        df=Math.min(1.35,Math.max(.6,bsDF(m.p,a.mv.cl!==2)/.9)),fr=a.ch?.34+Math.random()*.1:.075+Math.random()*.035,dmg=Math.max(1,Math.round(m.mx*fr*e*df*L*(dodged?.25:1)));
+      m.mh=Math.max(0,m.mh-dmg);m.en=Math.min(100,m.en+Math.round(dmg/m.mx*60));snd("hit",e);
+      const me=$("rdMeS");if(me&&!hubCalm())me.animate([{transform:"translateX(-8px)",filter:"brightness(2)"},{transform:"translateX(8px)"},{transform:"none",filter:"none"}],{duration:260});
+      $("rdMsg").textContent=(dodged?"💨 ¡Esquivado! ":"")+RD.d.boss+" usa "+a.mv.n+(e>1?". ¡Es súper eficaz!":".")+" "+nk(m.p[0])+" pierde "+dmg+" PS.";
+      if(m.mh<=0){snd("faint");const nx=RD.team.findIndex(t=>t.mh>0);if(nx<0){RD.out=true;$("rdMsg").textContent="¡Todo tu equipo se ha debilitado! Vuelve a entrar para seguir luchando.";}else{RD.ai=nx;RD.swUntil=now+1300;RD.busyUntil=now+1300;$("rdMsg").textContent=nk(m.p[0])+" se ha debilitado. ¡Adelante, "+nk(RD.team[nx].p[0])+"!"}}
+      rdMeUI()}}}
+function rdAttack(k){rdTap()}
 function rdFlush(){clearTimeout(RD.flushT);RD.flushT=0;const a=RD.acc;if(!a||!RD.id||!window.FB)return;RD.acc=0;window.FB.raidHit(RD.id,RD.me,a).catch(()=>{RD.acc+=a})}
-function rdBossHit(){
-  const m=RD.team[RD.ai];if(!m||RD.out)return;const foe=PM[RD.d.boss],e=effP(foe[1],m.p),dmg=Math.max(1,Math.round(m.mx*(.11+Math.random()*.1)*e/(m.nd||1)));
-  m.mh=Math.max(0,m.mh-dmg);snd("hit",1);const me=$("rdMe");if(me&&!hubCalm())me.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:220});
-  const bs=$("rdBoss");if(bs&&!hubCalm())bs.animate([{transform:"scale(1)"},{transform:"scale(1.08) translateY(10px)"},{transform:"none"}],{duration:300});
-  $("rdMsg").textContent="¡"+RD.d.boss+" ataca! "+(e>1?"¡Es súper eficaz! ":"")+nk(m.p[0])+" pierde "+dmg+" PS.";
-  if(m.mh<=0){const nx=RD.team.findIndex(t=>t.mh>0);if(nx<0){RD.out=true;$("rdMsg").textContent="¡Todo tu equipo se ha debilitado!";snd("faint")}else{RD.ai=nx;snd("faint");$("rdMsg").textContent=nk(m.p[0])+" se ha debilitado. ¡Adelante, "+nk(RD.team[nx].p[0])+"!"}}
-  rdMeUI();
-}
+function rdBossHit(){}
 async function rdWin(){
   if(RD.phase!=="fight")return;RD.phase="catch";mgStop();const d=RD.d,b=PM[d.boss],pl=d.pl||{},ids=Object.keys(pl).sort((a,c)=>(pl[c].dmg|0)-(pl[a].dmg|0)),rank=ids.indexOf(RD.me);
   const st=mgState(),prize=raidLeft()>0;if(prize){st.n.raid=(st.n.raid|0)+1}
-  let rw=null;if(prize){rw={t:400000+(rank===0?200000:0),it:{ub:2}};if(Math.random()<.4)rw.it.cand=1;if(Math.random()<.3){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=1}grant(rw)}
+  let rw=null;if(prize){rw={t:650000+(rank===0?250000:0),it:{ub:3}};if(Math.random()<.4)rw.it.cand=1;if(Math.random()<.3){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=1}grant(rw)}
   qEv("win");save();render();snd("win");mgConfetti();
   let balls=prize?5+(rank===0?2:rank===1?1:0):0;const sh=Math.random()<1/50;
   const draw=msg=>{$("mgB").innerHTML='<div class="mgintro"><h3>¡Habéis derrotado a '+esc(d.boss)+'!</h3><div class="rdcatch" id="rdC">'+icoHD(b,170,false,sh)+'</div><p>'+(msg||'¡Ahora puedes intentar capturarlo! Te quedan <b>'+balls+'</b> Poké Balls Honor.')+'</p>'+(rw?'<p>Premio: <b>'+rwTxt(rw)+'</b></p>':'<p class="mut">Hoy ya has cobrado los '+RD_DAY+' premios de incursiones.</p>')+
@@ -9514,8 +9599,12 @@ async function rdWin(){
 }
 function rdLose(){if(RD.phase!=="fight")return;RD.phase="done";mgStop();const d=RD.d,rw={t:50000};grant(rw);save();render();snd("lose");
   $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">⌛</div><h3>¡'+esc(d.boss)+' ha resistido!</h3><p>Se ha acabado el tiempo. Premio de consolación: <b>'+rwTxt(rw)+'</b></p><div class="mgbtns"><button class="alt" id="rdX">Cerrar</button></div></div>';$("rdX").onclick=()=>{rdLeave();mgClose()}}
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#mgB [data-rdm]");if(b)rdAttack(+b.dataset.rdm)});
-document.addEventListener("keydown",e=>{if(RD.phase==="fight"&&/^[1-4]$/.test(e.key)){const b=document.querySelectorAll("#rdMv button")[+e.key-1];if(b&&!b.disabled)b.click()}});
+document.addEventListener("click",e=>{if(!e.target.closest)return;const c=e.target.closest("#mgB [data-rdc]");if(c){rdCharged(+c.dataset.rdc);return}const d=e.target.closest("#mgB [data-rddg]");if(d){rdDodge(+d.dataset.rddg);return}
+  if(e.target.closest("#mgB [data-rdrj]")){RD.rejoinAt=Date.now()+10000;snd("ui");rdMeUI()}});
+// tocar el campo = ataque rápido; deslizar = esquivar
+{let sx=null,sy=0,st=0;document.addEventListener("pointerdown",e=>{if(RD.phase!=="fight"||!e.target.closest||!e.target.closest("#rdGo")||e.target.closest("button"))return;sx=e.clientX;sy=e.clientY;st=Date.now()});
+  document.addEventListener("pointerup",e=>{if(sx==null)return;const dx=e.clientX-sx,dy=e.clientY-sy;sx=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy))rdDodge(dx>0?1:-1);else if(Date.now()-st<600)rdTap()})}
+document.addEventListener("keydown",e=>{if(RD.phase!=="fight")return;const k=e.key;if(k===" "||k==="Enter"){e.preventDefault();rdTap()}else if(k==="ArrowLeft"||k==="a"||k==="A")rdDodge(-1);else if(k==="ArrowRight"||k==="d"||k==="D")rdDodge(1);else if(k==="1"||k==="2"){rdCharged(+k-1)}});
 // ---- panel ----
 nxPanel("raidP","🔴 Incursiones","Uníos hasta 4 entrenadores para derrotar a un jefe gigante entre todos. Si lo vencéis, cada uno puede intentar capturarlo. El jefe cambia cada 3 horas.");
 {const g=HUB.find(x=>x.k==="onl");if(g&&!g.tabs.some(t=>t[0]==="raidP"))g.tabs.splice(1,0,["raidP","Incursiones"]);HUBP.raidP="onl";HUBR.raidP=()=>raidUI(true)}

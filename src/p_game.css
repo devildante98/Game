@@ -811,3 +811,7 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .stbs{display:flex;flex-direction:column;align-items:center;min-width:78px;padding:4px 6px;border-radius:8px;background:var(--panel);border:1px solid var(--line)}
 .stbs i{font-style:normal;font-size:.7rem;color:var(--mute)}.stbs em{font-style:normal;font-weight:800}.stbs small{font-size:.68rem}
 .stbs.up{border-color:#2fa36b}.stbs.up em,.stbs.up small{color:#2fa36b}.stbs.dn{border-color:#e63950}.stbs.dn em,.stbs.dn small{color:#e63950}
+/* intercambios: límite de nivel */
+.tcell.tover{opacity:.45;filter:grayscale(.6);cursor:not-allowed}
+.tcell .tovr{color:#e63950;font-weight:700}
+.tcap{margin:10px 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,#e63950 14%,transparent);border:1px solid #e63950;font-size:.9rem}

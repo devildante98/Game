@@ -78,4 +78,4 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 {const _mc=mkCollect;mkCollect=async function(d){const st=stt();if(!(S.mkPaid&&S.mkPaid[d.id])){st.mksold=(st.mksold|0)+1}return _mc.apply(this,arguments)}}
 // datos públicos del perfil
 {const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const s=shwGet();d.shw=(s.pk||[]).filter(n=>n&&PM[n]&&S.owned[n]>0).slice(0,3).map(n=>({n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0,k:S.mote&&S.mote[n]?String(S.mote[n]).slice(0,12):""}));
-  const t=TITLES.find(x=>x[0]===s.tit);d.tit=t&&titleOk(t[0])?t[1]:"";d.pt=Math.floor((S.ptime||0)/3600);d.pulls=(S.np||0)+(S.sp||0);return d}}
+  const t=TITLES.find(x=>x[0]===s.tit);d.tit=t&&titleOk(t[0])?t[1]:"";d.pt=Math.floor((S.ptime||0)/3600);try{d.cap=lvCap()}catch(e){}d.pulls=(S.np||0)+(S.sp||0);return d}}

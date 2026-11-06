@@ -191,9 +191,14 @@ const trRec=n=>n&&S.owned[n]>0?{n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0}:null
 function trGrid(){
   const q=nrm(TM.q),L=trOwnList().filter(p=>(!q||nrm(p[0]).includes(q))&&(!TM.f||p[2]===TM.f)).sort((a,b)=>lvd(b[0]).l-lvd(a[0]).l||WW[b[2]]-WW[a[2]]).slice(0,240);
   return '<div class="tfil"><input id="tq" placeholder="Buscar en tu equipo y colección..." value="'+esc(TM.q)+'"><select id="tf"><option value="">Todas</option>'+["C","R","E","L"].map(r=>'<option value="'+r+'"'+(TM.f===r?' selected':'')+'>'+STAR[r]+'</option>').join("")+'</select></div>'+
-    '<div class="tgrid">'+(L.length?L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;return '<button class="tcell '+p[2]+(TM.sel===p[0]?' sel':'')+(sh?' shiny':'')+'" data-tp="'+esc(p[0])+'">'+ico(p,56,false,sh)+'<b>'+esc(p[0])+'</b><small>Nv'+lvd(p[0]).l+(S.owned[p[0]]>1?' · ×'+S.owned[p[0]]:'')+(S.team.includes(p[0])?' · ⭐':'')+'</small></button>'}).join(""):'<small class="mut">No hay Pokémon con ese filtro.</small>')+'</div>';
+    '<div class="tgrid">'+(L.length?L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;const over=TM.pcap&&lvd(p[0]).l>TM.pcap;return '<button class="tcell '+p[2]+(TM.sel===p[0]?' sel':'')+(sh?' shiny':'')+(over?' tover':'')+'" data-tp="'+esc(p[0])+'"'+(over?' disabled title="Supera el límite de nivel de tu amigo (Nv'+TM.pcap+')"':'')+'>'+ico(p,56,false,sh)+'<b>'+esc(p[0])+'</b><small>Nv'+lvd(p[0]).l+(S.owned[p[0]]>1?' · ×'+S.owned[p[0]]:'')+(S.team.includes(p[0])?' · ⭐':'')+'</small>'+(over?'<small class="tovr">🔒 Supera su límite</small>':'')+'</button>'}).join(""):'<small class="mut">No hay Pokémon con ese filtro.</small>')+'</div>';
 }
-function trOpen(st,t){if(fcd&&st!=="anim"){toast("Termina el combate para intercambiar.");return}TM={st:st,t:t,sel:null,q:"",f:""};$("trdM").hidden=false;trRender()}
+function trOpen(st,t){if(fcd&&st!=="anim"){toast("Termina el combate para intercambiar.");return}TM={st:st,t:t,sel:null,q:"",f:"",pcap:0};$("trdM").hidden=false;trRender();trCapLoad()}
+// límite de nivel del otro jugador (lo publica en su perfil): no se le puede dar un Pokémon de más nivel del que él puede tener
+async function trCapLoad(){const t=TM.t;if(!t||!window.FB||!window.FB.rankGet)return;const me=window.FB.uid&&window.FB.uid(),u=t.uid||(t.from&&t.from!==me?t.from:t.to);if(!u||u===me)return;
+  try{const d=await window.FB.rankGet(u);const c=d&&+d.cap;if(c>0&&TM.t===t){TM.pcap=c;if(TM.st&&TM.st.startsWith("pick")){if(TM.sel&&lvd(TM.sel).l>c)TM.sel=null;trRender()}}}catch(e){}}
+const trOver=r=>!!r&&(r.l|0)>lvCap();
+const trOverTxt=r=>'<p class="tcap">🔒 '+esc(r.n)+' es de nivel '+(r.l|0)+' y tu límite es el Nv'+lvCap()+'. Consigue más medallas de gimnasio para poder recibir Pokémon de ese nivel.</p>';
 function trClose(){$("trdM").hidden=true;TM.st=null;trdUI()}
 function trRender(){
   const b=$("trdB"),t=TM.t,st=TM.st;if(!st)return;let h="";
@@ -201,15 +206,15 @@ function trRender(){
   if(st==="pick"||st==="pickb"){
     const partner=st==="pick"?t.n:pvClean(t.fn),mine=trRec(TM.sel);
     h='<h2>🔄 Intercambio con '+esc(partner)+'</h2>'+vs(trCard(mine,"Tú ofreces",mine?"":"Elige uno abajo"),st==="pickb"?trCard(t.o,esc(partner)+" ofrece"):trCard(null,esc(partner)+" ofrece","Lo elegirá después"))+
-      '<small class="mut">'+(st==="pick"?"Elige el Pokémon que quieres ofrecer. "+esc(partner)+" verá tu oferta y elegirá qué te da a cambio.":"Elige qué Pokémon das a cambio de su "+esc(t.o.n)+".")+' Se envía con su nivel; si te quedan copias, esas vuelven al nivel 1.</small>'+trGrid()+
+      '<small class="mut">'+(st==="pick"?"Elige el Pokémon que quieres ofrecer. "+esc(partner)+" verá tu oferta y elegirá qué te da a cambio.":"Elige qué Pokémon das a cambio de su "+esc(t.o.n)+".")+' Se envía con su nivel; si te quedan copias, esas vuelven al nivel 1.'+(TM.pcap?' Solo puedes dar Pokémon hasta el Nv'+TM.pcap+' (el límite de nivel de '+esc(partner)+').':'')+'</small>'+trGrid()+
       '<div class="jrow"><button class="red" data-tgo="1"'+(mine?'':' disabled')+'>🔄 Ofrecer '+(mine?esc(mine.n):"")+'</button><button class="alt" data-tcl="1">'+(st==="pickb"?"Volver":"Cancelar")+'</button>'+(st==="pickb"?'<button class="alt" data-tno="1">Rechazar</button>':'')+'</div>';
   }else if(st==="inc"){
-    h='<h2>📨 ¡Solicitud de intercambio!</h2><p><b>'+esc(pvClean(t.fn))+'</b> quiere intercambiar contigo y te ofrece:</p><div class="tsolo">'+trCard(t.o,"Te ofrece")+'</div><div class="jrow"><button class="red" data-tpb="1">👀 Elegir qué le doy a cambio</button><button class="alt" data-tno="1">Rechazar</button><button class="alt" data-tcl="1">Más tarde</button></div>';
+    const ov=trOver(t.o);h='<h2>📨 ¡Solicitud de intercambio!</h2><p><b>'+esc(pvClean(t.fn))+'</b> quiere intercambiar contigo y te ofrece:</p><div class="tsolo">'+trCard(t.o,"Te ofrece")+'</div>'+(ov?trOverTxt(t.o):'')+'<div class="jrow">'+(ov?'':'<button class="red" data-tpb="1">👀 Elegir qué le doy a cambio</button>')+'<button class="alt" data-tno="1">Rechazar</button><button class="alt" data-tcl="1">Más tarde</button></div>';
   }else if(st==="wait"){
     const mine=t.from===window.FB.uid();
     h='<h2>⏳ Intercambio en curso</h2>'+vs(trCard(mine?t.o:t.b,"Tú ofreces"),trCard(mine?t.b:t.o,mine?esc(pvClean(t.tn))+" ofrece":esc(pvClean(t.fn))+" ofrece",mine?"Esperando su elección…":""))+'<p class="tpulse">Esperando a '+esc(mine?pvClean(t.tn):pvClean(t.fn))+'…</p><div class="jrow"><button class="alt" data-tcl="1">Cerrar</button>'+(mine&&t.st==="req"?'<button class="alt" data-tcx="1">Cancelar intercambio</button>':'')+'</div>';
   }else if(st==="review"){
-    h='<h2>🔄 ¿Aceptas el intercambio?</h2>'+vs(trCard(t.o,"Tú das"),trCard(t.b,"Recibes de "+esc(pvClean(t.tn))))+'<div class="jrow"><button class="red" data-tacc="1">✅ Aceptar intercambio</button><button class="alt" data-trej="1">Rechazar</button><button class="alt" data-tcl="1">Pensarlo</button></div>';
+    const ov=trOver(t.b);h='<h2>🔄 ¿Aceptas el intercambio?</h2>'+vs(trCard(t.o,"Tú das"),trCard(t.b,"Recibes de "+esc(pvClean(t.tn))))+(ov?trOverTxt(t.b):'')+'<div class="jrow">'+(ov?'':'<button class="red" data-tacc="1">✅ Aceptar intercambio</button>')+'<button class="alt" data-trej="1">Rechazar</button><button class="alt" data-tcl="1">Pensarlo</button></div>';
   }else if(st==="anim"){h='<div class="tstage" id="tstage"><div class="tline"></div></div><p id="tmsg" class="tmsg"></p><div class="jrow" id="tbtn"></div>'}
   b.innerHTML=h;
   if($("tq"))$("tq").oninput=e=>{TM.q=e.target.value;const c=e.target.selectionStart;trRender();const n=$("tq");n.focus();n.setSelectionRange(c,c)};
@@ -287,16 +292,16 @@ document.addEventListener("click",async e=>{
     if(d.topen!=null){const x=($("trdBox")._L||[])[+d.topen];if(x)trOpen(x.st,x.t);return}
     if(d.tp){TM.sel=d.tp;snd("ui");const sc=$("trdB").querySelector(".tgrid").scrollTop;trRender();$("trdB").querySelector(".tgrid").scrollTop=sc;try{cry(d.tp)}catch(x){}return}
     if(d.tcl){trClose();return}
-    if(d.tpb){TM.st="pickb";TM.sel=null;trRender();return}
+    if(d.tpb){if(trOver(t&&t.o))return;TM.st="pickb";TM.sel=null;trRender();return}
     if(d.tgo){
-      if(!TM.sel||fcd)return;b.disabled=true;const rec=pkTake(TM.sel);if(!rec)return;
+      if(!TM.sel||fcd)return;if(TM.pcap&&lvd(TM.sel).l>TM.pcap){toast("🔒 Ese Pokémon supera el límite de nivel de tu amigo (Nv"+TM.pcap+").");return}b.disabled=true;const rec=pkTake(TM.sel);if(!rec)return;
       if(TM.st==="pick"){try{const ref=await window.FB.trSend(t.uid,t.n,pvClean(pvNick()),rec);if(window.cloudFlush)window.cloudFlush(true);snd("throw");TM.st="wait";TM.t={id:ref&&ref.id,from:window.FB.uid(),to:t.uid,tn:t.n,o:rec,st:"req"};trRender();toast("📨 Oferta enviada a "+t.n)}catch(x){await pkGive(rec,false);throw x}}
       else{try{await window.FB.trUpd(t.id,{st:"resp",b:rec});if(window.cloudFlush)window.cloudFlush(true);snd("throw");TM.st="wait";TM.t=Object.assign({},t,{b:rec,st:"resp"});trRender()}catch(x){await pkGive(rec,false);throw x}}
       render();return;
     }
     if(d.tno){await window.FB.trUpd(t.id,{st:"no"});trClose();toast("Has rechazado el intercambio.");return}
     if(d.tcx){const o=TRD.out.find(x=>x.o&&t&&x.st==="req"&&(x.id===t.id||(!t.id&&x.o.n===t.o.n)));if(!o)return;await window.FB.trUpd(o.id,{st:"cx"});S.trp=S.trp||{};S.trp[o.id+":cx"]=1;await pkGive(o.o,false);trClose();toast("Intercambio cancelado: recuperas a "+o.o.n+".");return}
-    if(d.tacc){if(!t||t.st!=="resp")return;b.disabled=true;await window.FB.trUpd(t.id,{st:"acc"});S.trp=S.trp||{};S.trp[t.id+":acc"]=1;stt().trade=(stt().trade||0)+1;save();await trAnim(t.o,t.b,pvClean(t.tn));await pkGive(t.b,true);if(window.cloudFlush)window.cloudFlush(true);render();return}
+    if(d.tacc){if(!t||t.st!=="resp"||trOver(t.b))return;b.disabled=true;await window.FB.trUpd(t.id,{st:"acc"});S.trp=S.trp||{};S.trp[t.id+":acc"]=1;stt().trade=(stt().trade||0)+1;save();await trAnim(t.o,t.b,pvClean(t.tn));await pkGive(t.b,true);if(window.cloudFlush)window.cloudFlush(true);render();return}
     if(d.trej){await window.FB.trUpd(t.id,{st:"rej"});S.trp=S.trp||{};S.trp[t.id+":rej"]=1;await pkGive(t.o,false);trClose();toast("Intercambio rechazado: recuperas a "+t.o.n+".");return}
   }catch(x){toast("No se pudo completar el intercambio ("+((x&&x.code)||"error")+").")}
 });

@@ -844,5 +844,9 @@
 "Las subidas y bajadas (Danza Espada, Maquinación, Fortaleza, Intimidación…) duran mientras el Pokémon siga en el campo. Cada nivel: ×1,5, ×2, ×2,5… hasta ×4 (o ×½, ×⅓… al bajar).": "Stat changes (Swords Dance, Nasty Plot, Defiant, Intimidate…) last while the Pokémon stays on the field. Each stage: ×1.5, ×2, ×2.5… up to ×4 (or ×½, ×⅓… when lowered).",
 "No hay ningún combate.": "There is no battle.",
 "Tu {}": "Your {}",
-"Rival: {}": "Foe: {}"
+"Rival: {}": "Foe: {}",
+"🔒 Supera su límite": "🔒 Above their cap",
+"Supera el límite de nivel de tu amigo (Nv{d})": "Above your friend's level cap (Lv{d})",
+"🔒 {} es de nivel {d} y tu límite es el Nv{d}. Consigue más medallas de gimnasio para poder recibir Pokémon de ese nivel.": "🔒 {} is level {d} and your cap is Lv{d}. Earn more gym badges to receive Pokémon of that level.",
+"🔒 Ese Pokémon supera el límite de nivel de tu amigo (Nv{d}).": "🔒 That Pokémon is above your friend's level cap (Lv{d})."
 }

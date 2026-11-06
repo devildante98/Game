@@ -72,7 +72,7 @@ async function verGo(){try{save()}catch(e){}try{if(window.cloudFlush)await windo
 $("updGo").onclick=verGo;
 setTimeout(()=>verCheck(true),1500);document.addEventListener("visibilitychange",()=>{if(!document.hidden)verCheck(false)});""".replace("__BID__",_BID))
 rep('setInterval(verCheck,5*60000);','setInterval(()=>verCheck(false),2*60000);')
-rep('else if(/^[1-6]$/.test(k)&&!e.repeat)','else if(/^[1-8]$/.test(k)&&!e.repeat)')
+rep('else if(/^[1-6]$/.test(k)&&!e.repeat)','else if(/^[1-8]$/.test(k)&&!e.repeat&&!(typeof kbFight==="function"&&kbFight()))')
 rep('  if(Date.now()-last<60000){sugMsg("Espera un minuto antes de enviar otra sugerencia.");return}\n','')
 rep('window.sugSend=async(text,nick)=>{if(!uid)throw {code:"sin-cuenta"};await S.addDoc(S.collection(db,"suggestions"),{uid:uid,name:cu?label(cu):"",nick:String(nick||"").slice(0,40),text:String(text).slice(0,1000),at:Date.now()})};',
  'window.sugSend=async(text,nick,imgs)=>{if(!uid)throw {code:"sin-cuenta"};const d={uid:uid,name:cu?label(cu):"",nick:String(nick||"").slice(0,40),text:String(text).slice(0,1000),at:Date.now()};if(Array.isArray(imgs)&&imgs.length){d.imgs=imgs.slice(0,3);d.nimg=d.imgs.length}await S.addDoc(S.collection(db,"suggestions"),d)};\n  window.sugImgDel=async id=>{await S.updateDoc(S.doc(db,"suggestions",id),{imgs:S.deleteField()})};')

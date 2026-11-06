@@ -679,6 +679,9 @@ async function evoPrompt(n,list){
 
 // entrenadores: usan Hiperpociones cuando su Pokémon está muy débil (las que les queden)
 function aiAct(E,i){const m=beAct(E.sd[i]);if(B&&B.trainer&&(B.tHeal|0)>0&&m&&m.mh>0&&m.mh<m.mx*.25&&Math.random()<.75){B.tHeal--;return "h"}return aiPick(E,i)}
+// en combate (normal, Exploración, PVP, dobles, incursiones) o en un minijuego, las teclas 1-8 no compran mejoras de la tienda
+function kbFight(){try{if(typeof fcd!=="undefined"&&fcd)return true;const ar=$("arena");if(ar&&!ar.hidden)return true;
+  if(typeof RD!=="undefined"&&RD&&(RD.phase==="fight"||RD.phase==="catch"))return true;const mg=$("mgM");if(mg&&!mg.hidden)return true;if(typeof EX!=="undefined"&&EX&&EX.on)return true}catch(e){}return false}
 // ---- teclas 1-4: cada tecla lanza el ataque de su botón (combates normales, Exploración, PVP y dobles) ----
 window.addEventListener("keydown",e=>{
   if(!/^[1-4]$/.test(e.key)||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;

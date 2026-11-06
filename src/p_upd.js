@@ -1119,8 +1119,8 @@ function claimAllAch(){let n=0,guard=0;S.ach=S.ach||{};
 function claimAllUI(){
   const add=(listId,id,fn)=>{const L=$(listId);if(!L)return null;let b=$(id);if(!b){b=document.createElement("button");b.id=id;b.type="button";b.className="claimall";b.onclick=()=>{fn();claimAllUI()};L.before(b)}return b};
   const bm=add("qList","qAll",claimAllMis),ba=add("achList","achAll",claimAllAch);
-  try{const dm=dmEnsure(),nm=dm.l.filter(m=>{const d=MISM[m.id];return d&&!m.c&&m.p>=d[2]}).length;if(bm){bm.hidden=nm<2;bm.textContent="🎁 Reclamar todas ("+nm+")"}}catch(e){}
-  try{const na=ACHS().filter(achReady).length;if(ba){ba.hidden=na<2;ba.textContent="🏅 Reclamar todos los logros ("+na+")"}}catch(e){}}
+  try{const dm=dmEnsure(),nm=dm.l.filter(m=>{const d=MISM[m.id];return d&&!m.c&&m.p>=d[2]}).length;if(bm){bm.hidden=nm<1;bm.textContent="🎁 Reclamar todas ("+nm+")"}}catch(e){}
+  try{const na=ACHS().filter(achReady).length;if(ba){ba.hidden=na<1;ba.textContent="🏅 Reclamar todos los logros ("+na+")"}}catch(e){}}
 setInterval(()=>{try{claimAllUI()}catch(e){}},1000);
 // ================= ESTADÍSTICAS EN COMBATE: subidas y bajadas (Danza Espada, Maquinación, Fortaleza…) =================
 // Botón 📊 junto al ❓ del combate: muestra las características de cada Pokémon en el campo y cuánto han subido o bajado.

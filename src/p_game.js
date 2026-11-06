@@ -4,7 +4,8 @@ var GM={init:0,scr:null,ph:{},auto:0,song:null,disp:null,look:"",bud:null,tw:[],
 const gmOn=()=>!O.classic;
 if(O.lite===undefined)O.lite=0;
 // números cortos: 1.250 → 1,25K · 3.400.000 → 3,4M (para que nunca ocupen más de la cuenta)
-function gmK(n){n=+n||0;if(Math.abs(n)<1000)return (Math.floor(n*10)/10).toLocaleString("es",{maximumFractionDigits:1});const U=["K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"];let i=-1;while(Math.abs(n)>=1000&&i<U.length-1){n/=1000;i++}
+function gmK(n){n=+n||0;if(Math.abs(n)<1000)return (Math.floor(n*10)/10).toLocaleString("es",{maximumFractionDigits:1});// escala española: mil (K), millón (M), mil millones (mM), billón (B), mil billones (mB), trillón (T)… · en inglés, la anglosajona
+  const U=window.PGC_LANG==="en"?["K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"]:["K","M","mM","B","mB","T","mT","C","mC","Qi","mQi"];let i=-1;while(Math.abs(n)>=1000&&i<U.length-1){n/=1000;i++}
   const d=Math.abs(n)<10?2:Math.abs(n)<100?1:0,v=Math.floor(n*Math.pow(10,d))/Math.pow(10,d);return v.toLocaleString("es",{maximumFractionDigits:d})+"\u202F"+U[i]}
 const GMSCR={stage:{n:"Gacha",d:"Tiradas y máquina de Poké Balls",i:"gacha",c:"#e8414f",mus:null,nav:"gacha"},batP:{n:"Combate",d:"Combates contra Pokémon salvajes",i:"vs",c:"#2f6fd8",mus:3,nav:"bat"},shopP:{n:"Tienda de mejoras",d:"Mejora tu pueblo para ganar más tickets",i:"shop",c:"#0e9f6e",mus:4,nav:"shop"},earnP:{n:"Premios",d:"Regalo diario, racha y tickets gratis",i:"gift",c:"#e07a00",mus:null,nav:""}};
 // ---------- iconos dibujados (sin emojis) ----------

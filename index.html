@@ -36,7 +36,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.22"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.22.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -71,7 +71,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1793997700">
+<meta name="game-build" content="1793997800">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2463,6 +2463,8 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 /* reclamar todo */
 .claimall{display:block;width:100%;margin:0 0 10px;padding:10px 14px;font-weight:800;border-radius:14px;background:linear-gradient(135deg,#f5b82e,#e8414f)!important;color:#fff!important;border:none!important;box-shadow:0 3px 0 rgba(0,0,0,.25)}
 .claimall[hidden]{display:none}
+/* «¿Qué movimiento olvidar?» siempre por encima de la ficha y del recordador de movimientos */
+#lrnM{z-index:2147482000!important}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2528,7 +2530,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.22</small>
+    <small class="pcver">Versión 6.22.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7159,7 +7161,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.22";
+const GAME_VER="6.22.1";
 const NEWS=[
 {v:"2026-11-06j",ver:"6.22",at:"2026-11-06T21:41",t:"🎁 Reclamar todo de una vez",l:["En Misiones diarias, el botón «🎁 Reclamar todas» recoge los premios de todas las misiones completadas","En Logros, «🏅 Reclamar todos los logros» recoge todos los que tengas listos, también los que tengan varios niveles seguidos","Los botones aparecen cuando tienes 2 o más premios por reclamar"]},
 {v:"2026-11-06i",ver:"6.21",at:"2026-11-06T21:29",t:"🔄 Ordena tu equipo arrastrando",l:["En Combate, arrastra la tarjeta de un Pokémon de tu equipo encima de otra para intercambiar sus casillas (con el ratón o con el dedo)","Si la sueltas en una casilla vacía, el Pokémon se mueve a esa casilla","Un toque sin arrastrar sigue abriendo la lista para cambiar el Pokémon"]},
@@ -7373,7 +7375,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1793997700";
+const GAME_B="1793997800";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

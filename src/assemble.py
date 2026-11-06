@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.22";
+const GAME_VER="6.22.1";
 const NEWS=[
 {v:"2026-11-06j",ver:"6.22",at:"2026-11-06T21:41",t:"🎁 Reclamar todo de una vez",l:["En Misiones diarias, el botón «🎁 Reclamar todas» recoge los premios de todas las misiones completadas","En Logros, «🏅 Reclamar todos los logros» recoge todos los que tengas listos, también los que tengan varios niveles seguidos","Los botones aparecen cuando tienes 2 o más premios por reclamar"]},
 {v:"2026-11-06i",ver:"6.21",at:"2026-11-06T21:29",t:"🔄 Ordena tu equipo arrastrando",l:["En Combate, arrastra la tarjeta de un Pokémon de tu equipo encima de otra para intercambiar sus casillas (con el ratón o con el dedo)","Si la sueltas en una casilla vacía, el Pokémon se mueve a esa casilla","Un toque sin arrastrar sigue abriendo la lista para cambiar el Pokémon"]},

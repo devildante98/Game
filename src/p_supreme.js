@@ -10,7 +10,7 @@ Object.keys(SUP).forEach(k=>{if(!PM[k]||!PM[SUP[k]])delete SUP[k]});
 function isSup(n){return !!(SUP&&SUP[n])}
 function supOf(base){return SUP?Object.keys(SUP).filter(k=>SUP[k]===base):[]}
 // ---- Cristal Supremo ----
-ITEMS.push(["crys","Cristal Supremo",5000000,0,0,0,"Transforma en combate a un Pokémon en su forma suprema (Mega-Rayquaza, Ultra-Necrozma, Kyogre Primigenio…) si la tienes en tu colección. Se gasta al usarlo","crys"]);
+ITEMS.push(["crys","Cristal Supremo",5000000,0,0,0,"Transforma en combate a un Pokémon en su forma suprema (Mega-Rayquaza, Ultra-Necrozma, Kyogre Primigenio…) Si aún no tienes esa forma, la desbloqueas la primera vez. Se gasta al usarlo","crys"]);
 if(S.bag.crys==null)S.bag.crys=0;
 {const _ub=updBag;updBag=function(){if(!$("bq"+(ITEMS.length-1))){try{buildBag()}catch(e){}}return _ub.apply(this,arguments)}}
 {const _ii=itemIco;itemIco=function(id,s,noImg){if(id!=="crys")return _ii(id,s,noImg);return '<svg viewBox="0 0 64 64" width="'+s+'" height="'+s+'" aria-hidden="true"><defs><linearGradient id="cg'+s+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#8fe9ff"/><stop offset=".7" stop-color="#7a4ae0"/><stop offset="1" stop-color="#e0447a"/></linearGradient></defs><path d="M32 3 50 22 32 61 14 22Z" fill="url(#cg'+s+')" stroke="#2b1d5a" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22H50M32 3 26 22 32 61 38 22Z" fill="none" stroke="#2b1d5a" stroke-width="1.6" stroke-linejoin="round" opacity=".7"/><path d="M22 14 26 22 20 22Z" fill="#fff" opacity=".8"/></svg>'}}
@@ -23,23 +23,24 @@ function supClean(){let ch=false;const f=t=>(t||[]).map(n=>{if(n&&isSup(n)){ch=t
 setInterval(supClean,4000);
 // ---- botón en combate ----
 {const _fb=formBtns;formBtns=function(){let h=_fb();try{if(!B||B.mode!=="s"||B.formUsed)return h;const m=beAct(B.E.sd[0]);if(!m||m.mh<=0)return h;const base=(m.p0||m.p)[0];
-  supOf(base).filter(f=>S.owned[f]>0).forEach(f=>{h='<button class="frmb sup" data-k="sup:'+esc(f)+'">💠 '+esc(f)+' <small>('+(S.bag.crys|0)+' 💎)</small></button>'+h})}catch(e){}return h}}
+  supOf(base).forEach(f=>{h='<button class="frmb sup" data-k="sup:'+esc(f)+'">💠 '+esc(f)+(S.owned[f]>0?'':' 🔓')+' <small>('+(S.bag.crys|0)+' 💎)</small></button>'+h})}catch(e){}return h}}
 async function supDo(fname){
   if(!B||B.mode!=="s"||B.busy||B.formUsed)return;const sd=B.E.sd[0],m=beAct(sd);if(!m||m.mh<=0)return;const np=PM[fname],base=(m.p0||m.p)[0];
-  if(!np||!(S.owned[fname]>0)||SUP[fname]!==base)return;
+  if(!np||SUP[fname]!==base)return;
   if(!((S.bag.crys|0)>0)){B.busy=true;setMenu(false);await say("¡Necesitas un Cristal Supremo para transformar a "+nk(base)+"! Consíguelos en la Torre Batalla, las incursiones, el torneo, el pase de temporada o la tienda.");B.busy=false;setMenu(true);return}
   B.busy=true;setMenu(false);B.formUsed=1;S.bag.crys--;save();
   await say("¡"+nk(base)+" reacciona al Cristal Supremo!");snd("flash");
   if(!hubCalm()){const bt=$("arena").querySelector(".bt"),g=document.createElement("div");g.className="supfx";bt.appendChild(g);
     await g.animate([{opacity:0,transform:"scale(.1) rotate(0deg)"},{opacity:1,transform:"scale(1.1) rotate(180deg)",offset:.55},{opacity:0,transform:"scale(1.8) rotate(360deg)"}],{duration:1500,easing:"ease-out"}).finished;g.remove()}
   formApply(m,np,1.25,1.3);m.sup=1;setSpr(0);bePaint();snd("lvl");await say("¡"+nk(base)+" se ha transformado en "+fname+"! Su poder es abrumador.");
+  if(!(S.owned[fname]>0)){try{const lv=(S.lv[base]&&S.lv[base].l)||50;giveMon(fname,lv,!!(S.shiny&&S.shiny[base]));S.lv[fname]={l:lv,x:0};save();try{render()}catch(e){}}catch(e){}await say("💠 ¡Has desbloqueado "+fname+"! Ya aparece en tu colección.")}
   if(fname==="Eternatus Dinamax Infinito"){m.ab=900;await say("✨ ¡"+fname+" desata su habilidad Dinamax Infinito!")}
   B.busy=false;setMenu(true);
 }
 {const _t=turn;turn=async function(k){if(typeof k==="string"&&k.slice(0,4)==="sup:")return supDo(k.slice(4));return _t.apply(this,arguments)}}
 // ---- ficha: aviso de forma suprema ----
 {const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!isSup(n))return;const w=document.querySelector("#pkv .pkvw");if(!w)return;const d=document.createElement("div");d.className="supnote";
-  d.innerHTML='💠 <b>Forma suprema</b>. No se puede poner en el equipo: lleva a <b>'+esc(SUP[n])+'</b> a un combate y transfórmalo con un <b>Cristal Supremo</b> (tienes '+(S.bag.crys|0)+').'+(S.owned[SUP[n]]>0?'':' <b>Todavía no tienes a '+esc(SUP[n])+'.</b>');
+  d.innerHTML='💠 <b>Forma suprema</b>. No se puede poner en el equipo: lleva a <b>'+esc(SUP[n])+'</b> a un combate y transfórmalo con un <b>Cristal Supremo</b> (tienes '+(S.bag.crys|0)+').'+(S.owned[SUP[n]]>0?'':' <b>Todavía no tienes a '+esc(SUP[n])+'.</b>')+(S.owned[n]>0?'':' Se desbloquea la primera vez que transformes a '+esc(SUP[n])+'.');
   const t=w.querySelector(".pkvtags");if(t)t.after(d);else w.appendChild(d)}catch(e){}}}
 // ---- cómo conseguir cristales ----
 TW_SHOP.unshift(["crys",45]);

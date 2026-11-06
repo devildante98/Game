@@ -783,5 +783,8 @@
 "🗑️ Sugerencia quitada de tu historial.": "🗑️ Suggestion removed from your history.",
 "¿Borrar esta sugerencia de tu lista? El jugador la seguirá viendo en «Mis sugerencias» hasta que decida quitarla.": "Delete this suggestion from your list? The player will still see it in “My suggestions” until they choose to remove it.",
 "🗑️ Sugerencia borrada de tu lista.": "🗑️ Suggestion deleted from your list.",
-"No se ha podido borrar ({}).": "Couldn't delete it ({})."
+"No se ha podido borrar ({}).": "Couldn't delete it ({}).",
+"Transforma en combate a un Pokémon en su forma suprema (Mega-Rayquaza, Ultra-Necrozma, Kyogre Primigenio…) si la tienes en tu colección. Si aún no tienes esa forma, la desbloqueas la primera vez. Se gasta al usarlo": "Transforms a Pokémon in battle into its supreme form (Mega Rayquaza, Ultra Necrozma, Primal Kyogre…). If you don't have that form yet, you unlock it the first time. Used up on use",
+"Se desbloquea la primera vez que transformes a {}.": "It unlocks the first time you transform {}.",
+"💠 ¡Has desbloqueado {}! Ya aparece en tu colección.": "💠 You unlocked {}! It now appears in your collection."
 }

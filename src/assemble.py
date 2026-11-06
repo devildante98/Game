@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.18.4";
+const GAME_VER="6.19";
 const NEWS=[
+{v:"2026-11-06g",ver:"6.19",at:"2026-11-06T20:53",t:"🔎 Filtros al elegir Pokémon para el equipo",l:["En la ventana «Elige un Pokémon para el equipo» ya puedes filtrar por rareza, tipo y generación, además de buscar por nombre y ordenar","El botón «✖ Quitar filtros» los borra todos de una vez"]},
 {v:"2026-11-06-6.18.4",ver:"6.18.4",at:"2026-11-06T20:40",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett!: los Diglett golpeados se esconden del todo y dejan el hoyo libre para que salgan otros"]},
 {v:"2026-11-06-6.18.1",ver:"6.18.1",at:"2026-11-06T20:25",t:"🔧 Arreglos/Mejoras",l:["Minijuegos: Espacio (o Enter) para empezar la partida o jugar otra vez", "🖱️ En Ajustes → Controles puedes asignar los botones del ratón (central, derecho y laterales) a la Poké Ball y a las respuestas de los minijuegos"]},
 {v:"2026-11-06f",ver:"6.18",at:"2026-11-06T20:15",t:"⌨️ Teclas para responder en los minijuegos",l:["En «¿Quién es ese Pokémon?», «¿Cuál pesa más?» y «Más o menos», cada respuesta tiene su tecla: 1, 2, 3 y 4 (se ve en cada casilla)","Puedes cambiarlas en Ajustes → Controles → Teclas de respuesta: toca una casilla y pulsa la tecla que prefieras (W, A, F…)","No chocan con la tecla de la Poké Ball ni compran mejoras de la tienda mientras juegas"]},

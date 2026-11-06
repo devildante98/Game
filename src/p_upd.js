@@ -17,7 +17,7 @@ window._gk=null;
 var TP={slot:-1,q:"",o:"lv"};
 const tpSorts={lv:["Nivel (mayor primero)",(a,b)=>lvd(b[0]).l-lvd(a[0]).l||a[0].localeCompare(b[0],"es")],az:["Alfabético (A-Z)",(a,b)=>nk(a[0]).localeCompare(nk(b[0]),"es")],za:["Alfabético (Z-A)",(a,b)=>nk(b[0]).localeCompare(nk(a[0]),"es")],rar:["Rareza",(a,b)=>"CREML".indexOf(b[2])-"CREML".indexOf(a[2])||lvd(b[0]).l-lvd(a[0]).l],dex:["Número de Pokédex",(a,b)=>(a[4]||0)-(b[4]||0)]};
 function tpOwn(){
-  const q=nrm(($("fq")||{}).value||"").trim(),r=($("fr2")||{}).value,t=($("ft2")||{}).value,g=($("fg2")||{}).value,q2=nrm(TP.q||"");
+  const q="",r=TP.r||"",t=TP.t||"",g=TP.g||"",q2=nrm(TP.q||"");
   return P.filter(p=>S.owned[p[0]]&&!isSup(p[0])&&!isMegaF(p[0])&&(!r||p[2]===r)&&(!t||tys(p).includes(t))&&(!g||p[3]===+g)&&(nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))&&(!q2||nrm(p[0]).includes(q2)||nrm(nk(p[0])).includes(q2))).sort(tpSorts[TP.o]?tpSorts[TP.o][1]:tpSorts.lv[1]);
 }
 // ---------- casillas visuales del equipo ----------
@@ -35,13 +35,19 @@ function tmCards(){
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".tmbtn");if(b){snd("ui");tpOpen(+b.dataset.tm)}});
 function tpOpen(slot){TP.slot=slot;TP.q="";let m=$("tpM");if(!m){m=document.createElement("div");m.id="tpM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m);
   m.addEventListener("click",e=>{if(e.target===m||e.target.closest(".tpx")){tpClose();return}const c=e.target.closest("[data-tpn]");if(c){tpSet(TP.slot,c.dataset.tpn);tpClose();return}const s=e.target.closest("[data-tps]");if(s){TP.slot=+s.dataset.tps;tpRender()}});
-  m.addEventListener("input",e=>{if(e.target.id==="tpQ"){TP.q=e.target.value;tpList()}});m.addEventListener("change",e=>{if(e.target.id==="tpO"){TP.o=e.target.value;tpList()}})}
+  m.addEventListener("input",e=>{if(e.target.id==="tpQ"){TP.q=e.target.value;tpList()}});m.addEventListener("change",e=>{const id=e.target.id;if(id==="tpO"){TP.o=e.target.value;tpList()}else if(id==="tpR"||id==="tpT"||id==="tpG"){TP[id==="tpR"?"r":id==="tpT"?"t":"g"]=e.target.value;tpFiltSync();tpList()}});
+  m.addEventListener("click",e=>{if(e.target.closest("#tpClr")){TP.r=TP.t=TP.g="";tpFiltSync();tpList()}})}
   m.hidden=false;tpRender();setTimeout(()=>{const q=$("tpQ");if(q&&matchMedia("(pointer:fine)").matches)q.focus()},50)}
 function tpClose(){const m=$("tpM");if(m)m.hidden=true}
+// filtros dentro de la ventana: rareza, tipo y generación (las mismas opciones que la lista del equipo)
+function tpFiltHTML(){const o=(id,v)=>{const src=$(id);if(!src)return "";const t=document.createElement("select");t.innerHTML=src.innerHTML;[...t.options].forEach(x=>{if(x.value===(v||""))x.setAttribute("selected","");else x.removeAttribute("selected")});return t.innerHTML};
+  const any=TP.r||TP.t||TP.g;
+  return '<div class="tpf tpf2"><select id="tpR" aria-label="Filtrar por rareza">'+o("fr2",TP.r)+'</select><select id="tpT" aria-label="Filtrar por tipo">'+o("ft2",TP.t)+'</select><select id="tpG" aria-label="Filtrar por generación">'+o("fg2",TP.g)+'</select>'+(any?'<button type="button" class="alt mini" id="tpClr">✖ Quitar filtros</button>':'')+'</div>'}
+function tpFiltSync(){const w=document.querySelector("#tpM .tpf2");if(w)w.outerHTML=tpFiltHTML()}
 function tpRender(){const m=$("tpM");
   m.innerHTML='<div class="tpw"><div class="tph"><b>Elige un Pokémon para el equipo</b><button class="tpx" aria-label="Cerrar">✕</button></div>'+
     '<div class="tpslots">'+[0,1,2,3,4,5].map(i=>{const n=S.team[i];return '<button class="'+(i===TP.slot?'on':'')+'" data-tps="'+i+'" title="Casilla '+(i+1)+'">'+(n&&PM[n]?ico(PM[n],34):'<span>'+(i+1)+'</span>')+'</button>'}).join("")+'</div>'+
-    '<div class="tpf"><input id="tpQ" placeholder="Buscar por nombre o mote..." value="'+esc(TP.q)+'"><select id="tpO" aria-label="Ordenar">'+Object.keys(tpSorts).map(k=>'<option value="'+k+'"'+(TP.o===k?' selected':'')+'>'+tpSorts[k][0]+'</option>').join("")+'</select></div><div class="tpl" id="tpL"></div></div>';
+    '<div class="tpf"><input id="tpQ" placeholder="Buscar por nombre o mote..." value="'+esc(TP.q)+'"><select id="tpO" aria-label="Ordenar">'+Object.keys(tpSorts).map(k=>'<option value="'+k+'"'+(TP.o===k?' selected':'')+'>'+tpSorts[k][0]+'</option>').join("")+'</select></div>'+tpFiltHTML()+'<div class="tpl" id="tpL"></div></div>';
   tpList()}
 function tpList(){const L=$("tpL");if(!L)return;const own=tpOwn(),cur=S.team[TP.slot];
   L.innerHTML=(cur?'<button class="tpc tpquit" data-tpn=""><span class="tpspr">✖</span><b>Dejar vacía</b><small>Quitar a '+esc(nk(cur))+'</small></button>':'')+

@@ -785,3 +785,7 @@ body.calm .rqbox,body.calm .rqic{animation:none}
 .ckslot.on{border-color:var(--yel);box-shadow:0 0 0 3px color-mix(in srgb,var(--yel) 35%,transparent)}
 #mgGo .mgspk{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:6px;background:rgba(0,0,0,.25);font-size:.7rem;font-weight:800;vertical-align:middle}
 @media (hover:none){#mgGo .mgspk{display:none}}
+/* elegir Pokémon del equipo: filtros de rareza, tipo y generación */
+#tpM .tpf2{flex-wrap:wrap;margin-top:-2px}
+#tpM .tpf2 select{flex:1 1 140px;min-width:0}
+#tpM .tpf2 #tpClr{flex:0 0 auto}

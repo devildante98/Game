@@ -361,3 +361,7 @@ function gmTown(t){const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$(
   if(pan&&GM.scr!==pan.id)gmOpen(pan.id);else if(!pan&&GM.scr&&(s.el==="#train"||s.el==="#gnavb"))gmClose();
   if(el&&pan)setTimeout(()=>{try{el._siv({block:"center"})}catch(e){}},80)}}catch(e){}return r}}
 window.GM=GM;window.gmOpen=gmOpen;window.gmClose=gmClose;
+// la pantalla principal se marca como «inicio» desde el primer momento (si no, las animaciones del pueblo,
+// como los números al tocar la Poké Ball, se quedaban en pausa hasta abrir y cerrar algún menú)
+setTimeout(()=>{try{if(gmOn()&&GM.init)gmNav()}catch(e){}},0);
+setInterval(()=>{try{if(!gmOn()||!GM.init)return;const b=document.body,home=!GM.scr&&$("hubM").hidden&&(!$("hubG")||$("hubG").hidden);if(b.classList.contains("gmhome")!==home)gmNav()}catch(e){}},1000);

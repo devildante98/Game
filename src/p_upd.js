@@ -1122,3 +1122,22 @@ function claimAllUI(){
   try{const dm=dmEnsure(),nm=dm.l.filter(m=>{const d=MISM[m.id];return d&&!m.c&&m.p>=d[2]}).length;if(bm){bm.hidden=nm<2;bm.textContent="🎁 Reclamar todas ("+nm+")"}}catch(e){}
   try{const na=ACHS().filter(achReady).length;if(ba){ba.hidden=na<2;ba.textContent="🏅 Reclamar todos los logros ("+na+")"}}catch(e){}}
 setInterval(()=>{try{claimAllUI()}catch(e){}},1000);
+// ================= ESTADÍSTICAS EN COMBATE: subidas y bajadas (Danza Espada, Maquinación, Fortaleza…) =================
+// Botón 📊 junto al ❓ del combate: muestra las características de cada Pokémon en el campo y cuánto han subido o bajado.
+const STBN=[["atk","Ataque"],["def","Defensa"],["spa","At. Especial"],["spd","Def. Especial"],["spe","Velocidad"],["acc","Precisión"],["eva","Evasión"]];
+const stMul=(k,s)=>{const b=k==="acc"||k==="eva"?3:2;return s>=0?(b+s)/b:b/(b-s)};
+const stFmt=x=>"×"+(Math.round(x*100)/100).toString().replace(".",",");
+function stbE(){try{if(typeof B!=="undefined"&&B&&B.E&&B.E.sd)return B.E}catch(e){}try{if(typeof D!=="undefined"&&D&&D.E&&D.E.sd)return D.E}catch(e){}return null}
+function stbHTML(){const E=stbE();let h='<button id="stbx" aria-label="Cerrar" style="float:right;padding:2px 10px">✕</button><h4>📊 Características en combate</h4><small style="color:var(--mute)">Las subidas y bajadas (Danza Espada, Maquinación, Fortaleza, Intimidación…) duran mientras el Pokémon siga en el campo. Cada nivel: ×1,5, ×2, ×2,5… hasta ×4 (o ×½, ×⅓… al bajar).</small>';
+  if(!E)return h+'<p class="mut">No hay ningún combate.</p>';
+  const my=(typeof pvMy==="function"&&!(B&&B.E===E))?pvMy():0;
+  E.sd.forEach((sd,i)=>{const m=beAct(sd);if(!m||m.mh<=0||sd.out)return;const st=(sd.v&&sd.v.st)||{},mine=(typeof beTeamOf==="function"?beTeamOf(E,i)===beTeamOf(E,my):i===my);
+    h+='<div class="stbrow'+(mine?' me':'')+'"><b>'+(mine?'Tu ':'Rival: ')+esc(nk(m.p[0]))+'</b><div class="stbg">'+STBN.map(([k,n])=>{const s=st[k]|0;return '<span class="stbs'+(s>0?' up':s<0?' dn':'')+'"><i>'+n+'</i><em>'+(s>0?'+'+s:s<0?s:'—')+'</em>'+(s?'<small>'+stFmt(stMul(k,s))+'</small>':'')+'</span>'}).join("")+'</div></div>'});
+  return h}
+function stbAny(){const E=stbE();return !!E&&E.sd.some(sd=>!sd.out&&sd.v&&sd.v.st&&Object.values(sd.v.st).some(x=>x))}
+function stbInit(){const bt=document.querySelector("#arena .bt");if(!bt||$("stb"))return;
+  const b=document.createElement("button");b.id="stb";b.type="button";b.title="Subidas y bajadas de características";b.setAttribute("aria-label","Ver características en combate");b.innerHTML='📊<i class="stbdot" hidden></i>';
+  const p=document.createElement("div");p.id="stbp";p.hidden=true;bt.appendChild(b);bt.appendChild(p);
+  b.onclick=()=>{p.hidden=!p.hidden;if(!p.hidden){p.innerHTML=stbHTML();const h=$("hlpp");if(h)h.hidden=true}};
+  p.addEventListener("click",e=>{if(e.target.id==="stbx")p.hidden=true})}
+setInterval(()=>{try{stbInit();const p=$("stbp"),d=document.querySelector("#stb .stbdot");if(d)d.hidden=!stbAny();if(p&&!p.hidden){const h=stbHTML();if(p._h!==h){p._h=h;p.innerHTML=h}}}catch(e){}},500);

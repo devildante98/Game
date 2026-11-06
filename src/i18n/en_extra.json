@@ -762,7 +762,7 @@
 "Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.": "Tap two pieces to swap them or drag one onto another. The ones in the right place lock in green.",
 "Rapidez": "Speed",
 ": hasta la mitad de los puntos dependen de lo rápido que termines.": ": up to half of the points depend on how fast you finish.",
-"Precisión": "Precision",
+"Precisión": "Accuracy",
 ": cuantos menos cambios hagas (cerca del mínimo), más puntos.": ": the fewer swaps you make (close to the minimum), the more points.",
 "Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo.": "Hold «👁️ See the picture» to look at the whole Pokémon.",
 "Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.": "An official base stat is compared: HP, Attack, Defense, Special Attack, Special Defense, Speed or the Total.",
@@ -834,5 +834,15 @@
 "🎁 Has reclamado {d} misiones de una vez.": "🎁 You claimed {d} missions at once.",
 "🎁 Has reclamado {d} misión de una vez.": "🎁 You claimed {d} mission at once.",
 "🏅 Has reclamado {d} logros de una vez.": "🏅 You claimed {d} achievements at once.",
-"🏅 Has reclamado {d} logro de una vez.": "🏅 You claimed {d} achievement at once."
+"🏅 Has reclamado {d} logro de una vez.": "🏅 You claimed {d} achievement at once.",
+"📊 Características en combate": "📊 Battle stats",
+"At. Especial": "Sp. Atk",
+"Def. Especial": "Sp. Def",
+"Evasión": "Evasion",
+"Subidas y bajadas de características": "Stat changes",
+"Ver características en combate": "View battle stats",
+"Las subidas y bajadas (Danza Espada, Maquinación, Fortaleza, Intimidación…) duran mientras el Pokémon siga en el campo. Cada nivel: ×1,5, ×2, ×2,5… hasta ×4 (o ×½, ×⅓… al bajar).": "Stat changes (Swords Dance, Nasty Plot, Defiant, Intimidate…) last while the Pokémon stays on the field. Each stage: ×1.5, ×2, ×2.5… up to ×4 (or ×½, ×⅓… when lowered).",
+"No hay ningún combate.": "There is no battle.",
+"Tu {}": "Your {}",
+"Rival: {}": "Foe: {}"
 }

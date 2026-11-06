@@ -1141,3 +1141,8 @@ function stbInit(){const bt=document.querySelector("#arena .bt");if(!bt||$("stb"
   b.onclick=()=>{p.hidden=!p.hidden;if(!p.hidden){p.innerHTML=stbHTML();const h=$("hlpp");if(h)h.hidden=true}};
   p.addEventListener("click",e=>{if(e.target.id==="stbx")p.hidden=true})}
 setInterval(()=>{try{stbInit();const p=$("stbp"),d=document.querySelector("#stb .stbdot");if(d)d.hidden=!stbAny();if(p&&!p.hidden){const h=stbHTML();if(p._h!==h){p._h=h;p.innerHTML=h}}}catch(e){}},500);
+// ---- avisos de «lucha a un nivel menor» (Pokémon por encima del límite de nivel) ----
+const ocTxt=n=>"🔒 Lucha a Nv"+lvCap()+" hasta que consigas más medallas (su nivel real es "+lvd(n).l+")";
+{const _pv=pkView;pkView=function(n,sh){_pv(n,sh);try{if(!(S.owned[n]>0)||!overCap(n))return;const w=document.querySelector("#pkv .pkvw");if(!w)return;const d=document.createElement("div");d.className="supnote ocnote";d.textContent=ocTxt(n)+". En los juegos, un Pokémon de nivel muy alto no obedece sin las medallas necesarias.";const t=w.querySelector(".pkvtags");if(t)t.after(d);else w.appendChild(d)}catch(e){}}}
+{const _tc=tmCards;tmCards=function(){_tc.apply(this,arguments);try{for(let i=0;i<6;i++){const b=document.querySelector('.tmbtn[data-tm="'+i+'"]');if(!b)continue;const n=S.team[i];let x=b.querySelector(".tmoc");
+  if(n&&overCap(n)){if(!x){x=document.createElement("small");x.className="tmoc";const t=b.querySelector(".tmt");(t||b).appendChild(x)}const s="🔒 Lucha a Nv"+lvCap();if(x.textContent!==s)x.textContent=s}else if(x)x.remove()}}catch(e){}}}

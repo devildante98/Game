@@ -848,5 +848,7 @@
 "🔒 Supera su límite": "🔒 Above their cap",
 "Supera el límite de nivel de tu amigo (Nv{d})": "Above your friend's level cap (Lv{d})",
 "🔒 {} es de nivel {d} y tu límite es el Nv{d}. Consigue más medallas de gimnasio para poder recibir Pokémon de ese nivel.": "🔒 {} is level {d} and your cap is Lv{d}. Earn more gym badges to receive Pokémon of that level.",
-"🔒 Ese Pokémon supera el límite de nivel de tu amigo (Nv{d}).": "🔒 That Pokémon is above your friend's level cap (Lv{d})."
+"🔒 Ese Pokémon supera el límite de nivel de tu amigo (Nv{d}).": "🔒 That Pokémon is above your friend's level cap (Lv{d}).",
+"🔒 Lucha a Nv{d}": "🔒 Fights at Lv{d}",
+"🔒 Lucha a Nv{d} hasta que consigas más medallas (su nivel real es {d}). En los juegos, un Pokémon de nivel muy alto no obedece sin las medallas necesarias.": "🔒 Fights at Lv{d} until you earn more badges (its real level is {d}). In the games, a very high-level Pokémon won't obey without enough badges."
 }

@@ -5,7 +5,7 @@ const pvClean=t=>Array.from(String(t==null?"":t).replace(/[\u0000-\u001F\u007F-\
 const PVP_CAP=5000000;
 const pvDay=()=>{const d=today();if(!S.pvd||S.pvd.d!==d)S.pvd={d:d,t:0};return S.pvd};
 const pvHash=str=>{let h=2166136261;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
-const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:lvd(n).l,m:moveIds(n).slice(),sh:S.shiny&&S.shiny[n]>0?1:0,nt:natOf(n),it:heldOf(n),ab:abOf(n),f:(typeof FORMS!=="undefined"&&FORMS[n]||[]).filter(f=>S.owned[f[0]]>0).map(f=>f[0])}));
+const pvTeamData=()=>(S.team||[]).filter(n=>n&&S.owned[n]&&PM[n]).slice(0,6).map(n=>({n:n,l:blv(n),m:moveIds(n).slice(),sh:S.shiny&&S.shiny[n]>0?1:0,nt:natOf(n),it:heldOf(n),ab:abOf(n),f:(typeof FORMS!=="undefined"&&FORMS[n]||[]).filter(f=>S.owned[f[0]]>0).map(f=>f[0])}));
 function pvOkTeam(t){return Array.isArray(t)&&t.length>=1&&t.length<=6&&t.every(x=>x&&typeof x.n==="string"&&PM[x.n]&&Number.isInteger(x.l)&&x.l>=1&&x.l<=100&&Array.isArray(x.m)&&x.m.length>=1&&x.m.length<=4&&x.m.every(id=>typeof id==="string"&&MVD[id])&&new Set(x.m).size===x.m.length)&&new Set(t.map(x=>x.n)).size===t.length}
 const pvMk=team=>team.map(x=>{const m=beMon(PM[x.n],x.l,null,x.m);m.sh=x.sh?1:0;monX(m,Number.isInteger(x.nt)&&x.nt>=0&&x.nt<NAT.length?x.nt:0,HOLDK[x.it]?x.it:"");m.ab=abValid(x.n,x.ab)?x.ab:abDefault(PM[x.n]);return m});
 const gdBadge=g=>g&&typeof g==="object"&&g.t?'<span class="gtag" title="Gremio '+esc(g.t)+'">'+esc(String(g.i||"🛡️").slice(0,4))+' '+esc(String(g.t).slice(0,4))+'</span>':"";

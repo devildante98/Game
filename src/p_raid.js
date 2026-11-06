@@ -60,7 +60,7 @@ function rdTick(fromSnap){
 }
 // ---------- combate al estilo de las incursiones en directo: tocar, cargar y esquivar ----------
 const RDT=180,RDTAP={n:"Placaje",pw:40,t:"normal",cl:1};
-function rdBuildTeam(){return (S.team||[]).filter(n=>n&&S.owned[n]).map(n=>{const ids=moveIds(n),m=beMon(PM[n],lvd(n).l,null,ids);monX(m,natOf(n),heldOf(n));m.ab=abOf(n);m.mh=m.mx;m.sh=S.shiny&&S.shiny[n]>0?1:0;rdPrep(m);return m})}
+function rdBuildTeam(){return (S.team||[]).filter(n=>n&&S.owned[n]).map(n=>{const ids=moveIds(n),m=beMon(PM[n],blv(n),null,ids);monX(m,natOf(n),heldOf(n));m.ab=abOf(n);m.mh=m.mx;m.sh=S.shiny&&S.shiny[n]>0?1:0;rdPrep(m);return m})}
 // ataque rápido: el más flojo; ataques cargados: los dos más fuertes
 const RDFAST={normal:"Placaje",fire:"Ascuas",water:"Pistola Agua",grass:"Látigo Cepa",electric:"Impactrueno",ice:"Nieve Polvo",fighting:"Golpe Karate",poison:"Picotazo Veneno",ground:"Bofetón Lodo",flying:"Ataque Ala",psychic:"Confusión",bug:"Picadura",rock:"Lanzarrocas",ghost:"Lengüetazo",dragon:"Dragoaliento",dark:"Mordisco",steel:"Garra Metal",fairy:"Viento Feérico"};
 function rdPrep(m){const dm=m.m.filter(mv=>mv&&mv.cl>0&&(mv.pw|0)>0).sort((a,b)=>(a.pw|0)-(b.pw|0));

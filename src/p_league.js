@@ -110,7 +110,7 @@ async function startBattle(cfg){
   const ok=names.some(n=>S.hp[n]!==0);if(!ok){updTeam();return}
   fcd=true;$("fgo").disabled=true;
   try{$("batP").scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}
-  const team=names.map(n=>{const ids=moveIds(n),m=beMon(PM[n],lvd(n).l,S.hp[n],ids,ids.map(id=>ppCur(n,id)));m.sh=S.shiny&&S.shiny[n]>0?1:0;monX(m,natOf(n),heldOf(n));m.ab=abOf(n);if(S.buddy&&S.buddy.n===n&&(S.buddy.f|0)>=160)m.bud=1;return m});
+  const team=names.map(n=>{const ids=moveIds(n),m=beMon(PM[n],blv(n),S.hp[n],ids,ids.map(id=>ppCur(n,id)));m.sh=S.shiny&&S.shiny[n]>0?1:0;monX(m,natOf(n),heldOf(n));m.ab=abOf(n);if(S.buddy&&S.buddy.n===n&&(S.buddy.f|0)>=160)m.bud=1;return m});
   const cap=lvCap(),lead=Math.min(team.find(t=>t.mh>0).l,cap),wl=cap<100?Math.min(lead,cap-2):lead;
   let eteam,trainer=null,league=null,tsrc=null;
   if(cfg&&cfg.eteam){eteam=cfg.eteam;trainer=cfg.trainer;league=cfg.league||null;tsrc=cfg.tsrc}

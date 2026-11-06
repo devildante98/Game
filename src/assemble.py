@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.24";
+const GAME_VER="6.25";
 const NEWS=[
+{v:"2026-11-06m",ver:"6.25",at:"2026-11-06T22:10",t:"🔒 Pokémon por encima de tu límite de nivel",l:["Como en los juegos, un Pokémon de nivel más alto que tu límite (el de tus medallas de gimnasio) no rinde al máximo: lucha con el nivel de tu límite","Pasa con los que hayas recibido por intercambio, regalo o mercadillo. Su nivel real no cambia","Cada vez que ganes una medalla, recuperan más fuerza; sin límite (tras el último gimnasio) luchan con su nivel completo","En su ficha y en la tarjeta del equipo verás «🔒 Lucha a Nv…»"]},
 {v:"2026-11-06l",ver:"6.24",at:"2026-11-06T21:59",t:"🔒 Intercambios con límite de nivel",l:["Ya no se pueden recibir por intercambio Pokémon de más nivel que tu límite (el que marcan tus medallas de gimnasio)","Al elegir qué ofrecer, los Pokémon que superan el límite de tu amigo salen bloqueados","Si te ofrecen uno por encima de tu límite, el intercambio no se puede aceptar: solo rechazarlo"]},
 {v:"2026-11-06k",ver:"6.23",at:"2026-11-06T21:51",t:"📊 Características en combate",l:["Nuevo botón 📊 junto al ❓ en los combates: muestra cuánto han subido o bajado el Ataque, la Defensa, el Ataque y la Defensa Especial, la Velocidad, la Precisión y la Evasión de cada Pokémon","Sirve para ver el efecto de movimientos como Danza Espada o Maquinación y de habilidades como Fortaleza o Intimidación","Cuando hay algún cambio, el botón lleva un punto naranja"]},
 {v:"2026-11-06j",ver:"6.22",at:"2026-11-06T21:41",t:"🎁 Reclamar todo de una vez",l:["En Misiones diarias, el botón «🎁 Reclamar todas» recoge los premios de todas las misiones completadas","En Logros, «🏅 Reclamar todos los logros» recoge todos los que tengas listos, también los que tengan varios niveles seguidos","Los botones aparecen cuando tienes 2 o más premios por reclamar"]},

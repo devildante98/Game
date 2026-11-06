@@ -748,7 +748,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 
 // Tickets automáticos (también mientras estás fuera, hasta 100)
 const G=[["Entrenador",15,.1],["Granja de Miltank",100,.6],["Centro Pokémon",600,3],["Guardería",3500,15],["Liga Pokémon",20000,80]];
-const fmt=n=>n>=1000?Math.floor(n).toLocaleString("es"):String(Math.floor(n*10)/10);
+const fmt=n=>n>=1000?Math.floor(n).toLocaleString("es"):(Math.floor(n*10)/10).toLocaleString("es",{maximumFractionDigits:1});
 const PRS=()=>S.prs||0,PMUL=()=>1+.5*PRS(),RMUL=()=>1+.25*PRS(),PDISC=()=>Math.max(.5,1-.05*PRS()),PITY=()=>PRS()>=6?20:PRS()>=3?25:30;
 const cpc=()=>.1*Math.pow(2,S.cl)*PMUL(),clc=()=>Math.round(25*Math.pow(3,S.cl));
 const gc=i=>Math.ceil(G[i][1]*Math.pow(1.15,S.g[i]));

@@ -77,7 +77,9 @@ async function smClick(e){const t=e.target.closest("[data-sm]");if(!t)return;e.s
   if(a==="o_mp"){O.exMp=O.exMp===false;save();smRender();smFocus($("exStartM").querySelector('[data-sm="o_mp"]'));return}
   if(a==="o_ctl"){const c=$("exCtl");if(c){c.hidden=false;EX.bind=null;exCtlUI()}return}}
 // teclado y mando en la ventana
-window.addEventListener("keydown",e=>{const b=$("exStartM");if(!b||b.hidden||!EX.title||document.querySelector(".uidlg:not(.mvdlg)"))return;if($("exCtl")&&!$("exCtl").hidden)return;
+window.addEventListener("keydown",e=>{const b=$("exStartM");if(!b||b.hidden||!EX.title||document.querySelector(".uidlg:not(.mvdlg)"))return;
+  // la misma pulsación que abrió este menú (A en «Salir al menú principal») no debe elegir nada aquí
+  if(performance.now()<(SM.lock||0)){e.preventDefault();e.stopImmediatePropagation();return}if($("exCtl")&&!$("exCtl").hidden)return;
   const a=exAct(e.key),dir={ArrowUp:"u",ArrowDown:"d"}[e.key]||(a==="u"||a==="d"?a:null);e.preventDefault();e.stopImmediatePropagation();
   const L=[...b.querySelectorAll(".smb")],i=Math.max(0,L.findIndex(x=>x.classList.contains("on")));
   if(dir){smFocus(L[(i+(dir==="d"?1:-1)+L.length)%L.length]);snd("ui");return}
@@ -90,7 +92,7 @@ EXM_IT.splice(EXM_IT.findIndex(x=>x[0]==="x"),0,["title","🏠","Salir al menú 
 function exToTitle(){if((typeof fcd!=="undefined"&&fcd)||EX.trans){toast("Termina el combate para salir al menú principal.");return}
   try{exMenuClose()}catch(e){}XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});try{if(typeof WM!=="undefined"&&WM.open)wmHide()}catch(e){}try{if(typeof XSH!=="undefined"&&XSH.open)xsClose()}catch(e){}
   try{XFM=null}catch(e){}if(!EX.cut){EX.dlg=null;EX.choice=null}EX.keys={};EX.kst=[];save();try{if(window.cloudFlush)window.cloudFlush()}catch(e){}
-  EX.title=true;exTitleUI();smOpen("main");toast("💾 Partida guardada")}
+  SM.lock=performance.now()+350;EX.title=true;exTitleUI();smOpen("main");toast("💾 Partida guardada")}
 {const _md=exMenuDo;exMenuDo=function(k){if(k==="title"){try{exMenuClose()}catch(e){}exToTitle();return}return _md.apply(this,arguments)}}
 // el texto de la pantalla de título habla de la ranura activa
 {const _t=exTitleUI;exTitleUI=function(){const r=_t.apply(this,arguments);try{if(EX.title){const w=$("exWhere"),L=slD();if(w&&!slHas(L.cur))w.textContent="✨ Pulsa Iniciar para empezar una partida nueva";else if(w&&!/^Partida/.test(w.textContent))w.textContent="Partida "+L.cur+" · "+w.textContent}else smClose(true)}catch(e){}return r}}

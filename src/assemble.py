@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.52.9";
+const GAME_VER="6.52.10";
 const NEWS=[
+{v:"2026-11-11-6.52.10",ver:"6.52.10",at:"2026-11-11T22:19",t:"🔧 Arreglos/Mejoras",l:["Arreglado de verdad «Salir al menú principal» con el mando o el teclado: la misma pulsación de A (o Intro) que elegía la opción también pulsaba «Continuar» en el menú principal, y volvías al juego al instante. Ahora el menú principal ignora esa pulsación"]},
 {v:"2026-11-11-6.52.9",ver:"6.52.9",at:"2026-11-11T22:16",t:"🔧 Arreglos/Mejoras",l:["Exploración: mientras hay un diálogo, los indicadores de abajo (tickets, chat, jugadores, velocidad y menú) se esconden para no tapar el texto. Vuelven a salir al terminar"]},
 {v:"2026-11-11-6.52.8",ver:"6.52.8",at:"2026-11-11T22:14",t:"🔧 Arreglos/Mejoras",l:["Mando y teclado en las ventanas de confirmación («¿Activar…?», «¿Borrar…?»): ahora puedes elegir entre sus botones con la cruceta o las flechas (el elegido sale marcado), A confirma y B cancela. El panel de detrás ya no se mueve mientras están abiertas","PC de tu habitación: al marcar o desmarcar una casilla con el mando, la selección se queda en esa casilla en vez de saltar a «Cerrar»"]},
 {v:"2026-11-11-6.52.7",ver:"6.52.7",at:"2026-11-11T22:05",t:"🔧 Arreglos/Mejoras",l:["Arreglado: a veces «Salir al menú principal» no funcionaba (por ejemplo, con el Modo Locke o el Random activos), porque el juego creía que aún había una escena o un combate en marcha. Ahora solo se bloquea durante un combate. Si sales en mitad de una escena, al Continuar se retoma donde la dejaste"]},

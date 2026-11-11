@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52.9"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52.10"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794431787">
+<meta name="game-build" content="1794431944">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2775,7 +2775,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.52.9</small>
+    <small class="pcver">Versión 6.52.10</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7449,8 +7449,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.52.9";
+const GAME_VER="6.52.10";
 const NEWS=[
+{v:"2026-11-11-6.52.10",ver:"6.52.10",at:"2026-11-11T22:19",t:"🔧 Arreglos/Mejoras",l:["Arreglado de verdad «Salir al menú principal» con el mando o el teclado: la misma pulsación de A (o Intro) que elegía la opción también pulsaba «Continuar» en el menú principal, y volvías al juego al instante. Ahora el menú principal ignora esa pulsación"]},
 {v:"2026-11-11-6.52.9",ver:"6.52.9",at:"2026-11-11T22:16",t:"🔧 Arreglos/Mejoras",l:["Exploración: mientras hay un diálogo, los indicadores de abajo (tickets, chat, jugadores, velocidad y menú) se esconden para no tapar el texto. Vuelven a salir al terminar"]},
 {v:"2026-11-11-6.52.8",ver:"6.52.8",at:"2026-11-11T22:14",t:"🔧 Arreglos/Mejoras",l:["Mando y teclado en las ventanas de confirmación («¿Activar…?», «¿Borrar…?»): ahora puedes elegir entre sus botones con la cruceta o las flechas (el elegido sale marcado), A confirma y B cancela. El panel de detrás ya no se mueve mientras están abiertas","PC de tu habitación: al marcar o desmarcar una casilla con el mando, la selección se queda en esa casilla en vez de saltar a «Cerrar»"]},
 {v:"2026-11-11-6.52.7",ver:"6.52.7",at:"2026-11-11T22:05",t:"🔧 Arreglos/Mejoras",l:["Arreglado: a veces «Salir al menú principal» no funcionaba (por ejemplo, con el Modo Locke o el Random activos), porque el juego creía que aún había una escena o un combate en marcha. Ahora solo se bloquea durante un combate. Si sales en mitad de una escena, al Continuar se retoma donde la dejaste"]},
@@ -7730,7 +7731,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794431787";
+const GAME_B="1794431944";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -16349,7 +16350,9 @@ async function smClick(e){const t=e.target.closest("[data-sm]");if(!t)return;e.s
   if(a==="o_mp"){O.exMp=O.exMp===false;save();smRender();smFocus($("exStartM").querySelector('[data-sm="o_mp"]'));return}
   if(a==="o_ctl"){const c=$("exCtl");if(c){c.hidden=false;EX.bind=null;exCtlUI()}return}}
 // teclado y mando en la ventana
-window.addEventListener("keydown",e=>{const b=$("exStartM");if(!b||b.hidden||!EX.title||document.querySelector(".uidlg:not(.mvdlg)"))return;if($("exCtl")&&!$("exCtl").hidden)return;
+window.addEventListener("keydown",e=>{const b=$("exStartM");if(!b||b.hidden||!EX.title||document.querySelector(".uidlg:not(.mvdlg)"))return;
+  // la misma pulsación que abrió este menú (A en «Salir al menú principal») no debe elegir nada aquí
+  if(performance.now()<(SM.lock||0)){e.preventDefault();e.stopImmediatePropagation();return}if($("exCtl")&&!$("exCtl").hidden)return;
   const a=exAct(e.key),dir={ArrowUp:"u",ArrowDown:"d"}[e.key]||(a==="u"||a==="d"?a:null);e.preventDefault();e.stopImmediatePropagation();
   const L=[...b.querySelectorAll(".smb")],i=Math.max(0,L.findIndex(x=>x.classList.contains("on")));
   if(dir){smFocus(L[(i+(dir==="d"?1:-1)+L.length)%L.length]);snd("ui");return}
@@ -16362,7 +16365,7 @@ EXM_IT.splice(EXM_IT.findIndex(x=>x[0]==="x"),0,["title","🏠","Salir al menú 
 function exToTitle(){if((typeof fcd!=="undefined"&&fcd)||EX.trans){toast("Termina el combate para salir al menú principal.");return}
   try{exMenuClose()}catch(e){}XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});try{if(typeof WM!=="undefined"&&WM.open)wmHide()}catch(e){}try{if(typeof XSH!=="undefined"&&XSH.open)xsClose()}catch(e){}
   try{XFM=null}catch(e){}if(!EX.cut){EX.dlg=null;EX.choice=null}EX.keys={};EX.kst=[];save();try{if(window.cloudFlush)window.cloudFlush()}catch(e){}
-  EX.title=true;exTitleUI();smOpen("main");toast("💾 Partida guardada")}
+  SM.lock=performance.now()+350;EX.title=true;exTitleUI();smOpen("main");toast("💾 Partida guardada")}
 {const _md=exMenuDo;exMenuDo=function(k){if(k==="title"){try{exMenuClose()}catch(e){}exToTitle();return}return _md.apply(this,arguments)}}
 // el texto de la pantalla de título habla de la ranura activa
 {const _t=exTitleUI;exTitleUI=function(){const r=_t.apply(this,arguments);try{if(EX.title){const w=$("exWhere"),L=slD();if(w&&!slHas(L.cur))w.textContent="✨ Pulsa Iniciar para empezar una partida nueva";else if(w&&!/^Partida/.test(w.textContent))w.textContent="Partida "+L.cur+" · "+w.textContent}else smClose(true)}catch(e){}return r}}

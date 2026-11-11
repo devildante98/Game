@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.54"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.54.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794434074">
+<meta name="game-build" content="1794434638">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2710,6 +2710,9 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 /* mientras hay un diálogo, los indicadores de abajo (tickets, chat, jugadores, velocidad y menú) se esconden para no tapar el texto */
 .exscr:has(#exDlg:not([hidden])) :is(.exmoney,.xobtn,.exspdb,.exmenub){opacity:0!important;pointer-events:none!important;transition:opacity .15s}
 .exscr :is(.exmoney,.xobtn,.exspdb,.exmenub){transition:opacity .15s}
+/* información de los objetos en la Mochila de Exploración */
+.xginfo,.xuinfo{margin:6px 0 8px;padding:8px 12px;border-radius:10px;background:#eef4ff;border:2px solid #c9d8f5;color:#2a3558;font-size:.82rem;line-height:1.35;min-height:1.35em}
+.xuinfo{background:#fff8e6;border-color:#f3d48a;color:#5a4410}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2775,7 +2778,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.54</small>
+    <small class="pcver">Versión 6.54.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7449,8 +7452,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.54";
+const GAME_VER="6.54.1";
 const NEWS=[
+{v:"2026-11-11-6.54.1",ver:"6.54.1",at:"2026-11-11T23:03",t:"🔧 Arreglos/Mejoras",l:["Exploración: al conseguir una MT u otro objeto (del suelo, de un mueble o de regalo), el diálogo te explica qué hace. En las MT dice el movimiento, su tipo, categoría, poder, precisión, PP y efecto","Mochila de Exploración: un recuadro muestra qué hace el objeto que tienes seleccionado, también con el mando. Al ir a usarlo, enseñarlo o equiparlo a un Pokémon, la información aparece arriba (también la de los Cristales Supremos, objetos equipables, piedras evolutivas, mentas…)"]},
 {v:"2026-11-11-6.54",ver:"6.54",at:"2026-11-11T22:54",t:"🧬 Megaevolución y Dinamax en Exploración, como en los juegos",l:["Dinamax y Gigamax: necesitas la Maximuñequera, que te envía la Profesora Vega al ganar tu primera medalla. Solo funcionan en las zonas de poder (combates contra líderes de gimnasio, el Alto Mando y el Campeón) y una vez por combate","Megaevolución: con la 3.ª medalla recibes el Mega-Aro. Desde entonces, cualquier Pokémon con forma Mega puede megaevolucionar una vez por combate (no hace falta tener capturada la forma Mega)","El botón de transformar con Cristal Supremo solo aparece en Exploración si tienes algún cristal","Si ya tienes esas medallas, el paquete te llega en cuanto vuelvas a Exploración. En el juego normal todo sigue igual"]},
 {v:"2026-11-11-6.53.1",ver:"6.53.1",at:"2026-11-11T22:42",t:"🔧 Arreglos/Mejoras",l:["Arreglado: el grito de un Pokémon (sobre todo el de Pikachu, que es largo) a veces sonaba doble, por ejemplo al tocar su tarjeta y abrirse su ficha a la vez. Ahora el mismo grito no se repite mientras suena, y un grito nuevo corta al anterior"]},
 {v:"2026-11-11-6.53",ver:"6.53",at:"2026-11-11T22:26",t:"🎬 Escenas más cuidadas",l:["Al bajar por primera vez a la cocina, la escena con mamá empieza en cuanto llegas: ya no te puedes mover antes de que te hable","Cuando un personaje termina de hablar contigo después de acercarse (o de acompañarte), ya no vuelve a su sitio de golpe: la pantalla se funde a negro mientras regresa, como en los juegos clásicos"]},
@@ -7734,7 +7738,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794434074";
+const GAME_B="1794434638";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -16318,6 +16322,29 @@ function xGiftSpots(m,M,taken){const music=M.music;let n=0;if(music==="town"&&!/
       if(hid[x+","+y]&&!G[key]){G[key]=1;const id=xItPick(false),t=xItGive(id,xItQty(id));exSay(["Miras en "+XIT_NAME[c]+"…","¡Has encontrado "+t+"!","Lo guardas en la Mochila."]);return}
       if(c==="%"){snd("ui");const L=XIT_EMPTY["%"];exSay([L[(x+y)%L.length]]);return}}}}catch(e){console.error(e)}
   return _i.apply(this,arguments)}}
+// =====================================================================================
+// INFORMACIÓN DE LOS OBJETOS
+// · Al conseguir un objeto en Exploración (suelo, muebles, regalos…), el diálogo explica qué hace.
+// · En la Mochila: un recuadro muestra la descripción del objeto que tienes seleccionado (ratón, teclado o mando),
+//   y al ir a usarlo o equiparlo también se ve arriba.
+// =====================================================================================
+const xItDesc=id=>{const it=ITEMS.find(i=>i[0]===id);return it?String(it[6]||""):""};
+let XIT_BYNAME=null;
+function xItByName(nm){if(!XIT_BYNAME){XIT_BYNAME={};ITEMS.forEach(i=>{XIT_BYNAME[String(i[1]).toLowerCase()]=i[0]})}return XIT_BYNAME[String(nm).trim().toLowerCase()]||null}
+function xItInfoLine(id){const d=xItDesc(id),it=ITEMS.find(i=>i[0]===id)||[];if(!d)return null;
+  const ic=it[7]==="mt"?"📀 ":it[7]==="hold"?"🎽 ":it[7]==="evo"?"🌟 ":it[7]==="crys"?"💎 ":it[7]==="mint"?"🌿 ":"ℹ️ ";return ic+IN2(id)+": "+d}
+{const _s=exSay;exSay=function(lines,cb){try{if(Array.isArray(lines)&&EX.on){const out=[];let added=false;
+    lines.forEach(l=>{out.push(l);if(added)return;const t=String(l).replace(/^§[^|]*\|/,"");
+      const m=t.match(/(?:¡Has encontrado|te ha dado|¡Has recibido|¡Recibes)\s+(?:(\d+)\s*×\s*)?([^!¡]+?)!/);
+      if(m){const id=xItByName(m[2]);if(id&&!/^(pb|pot)$/.test(id)){const info=xItInfoLine(id);if(info){out.push(info);added=true}}}});
+    lines=out}}catch(e){}return _s.call(this,lines,cb)}}
+// recuadro de información en la Mochila
+{const _p=xgPanel;xgPanel=function(){const r=_p.apply(this,arguments);try{const box=$("exTeam");const g=box&&box.querySelector(".xgb");if(g&&!box.querySelector(".xginfo")){
+    g.insertAdjacentHTML("beforebegin",'<div class="xginfo">ℹ️ Pasa el ratón o mueve el mando sobre un objeto para ver qué hace.</div>');const inf=box.querySelector(".xginfo");
+    const show=e=>{const c=e.target.closest&&e.target.closest(".xgit[data-xgi]");if(!c)return;const l=xItInfoLine(c.dataset.xgi);if(l&&inf.textContent!==l)inf.textContent=l};
+    g.addEventListener("mouseover",show);g.addEventListener("focusin",show)}}catch(e){}return r}}
+// también al ir a usar o equipar el objeto
+{const _u=xuUI;xuUI=function(){const r=_u.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgh");if(h&&XU.id&&!box.querySelector(".xuinfo")){const l=xItInfoLine(XU.id);if(l)h.insertAdjacentHTML("afterend",'<div class="xuinfo">'+esc(l)+'</div>')}}catch(e){}return r}}
 
 // =====================================================================================
 // MENÚ PRINCIPAL DE EXPLORACIÓN (como en los juegos clásicos)

@@ -95,3 +95,26 @@ function xGiftSpots(m,M,taken){const music=M.music;let n=0;if(music==="town"&&!/
       if(hid[x+","+y]&&!G[key]){G[key]=1;const id=xItPick(false),t=xItGive(id,xItQty(id));exSay(["Miras en "+XIT_NAME[c]+"…","¡Has encontrado "+t+"!","Lo guardas en la Mochila."]);return}
       if(c==="%"){snd("ui");const L=XIT_EMPTY["%"];exSay([L[(x+y)%L.length]]);return}}}}catch(e){console.error(e)}
   return _i.apply(this,arguments)}}
+// =====================================================================================
+// INFORMACIÓN DE LOS OBJETOS
+// · Al conseguir un objeto en Exploración (suelo, muebles, regalos…), el diálogo explica qué hace.
+// · En la Mochila: un recuadro muestra la descripción del objeto que tienes seleccionado (ratón, teclado o mando),
+//   y al ir a usarlo o equiparlo también se ve arriba.
+// =====================================================================================
+const xItDesc=id=>{const it=ITEMS.find(i=>i[0]===id);return it?String(it[6]||""):""};
+let XIT_BYNAME=null;
+function xItByName(nm){if(!XIT_BYNAME){XIT_BYNAME={};ITEMS.forEach(i=>{XIT_BYNAME[String(i[1]).toLowerCase()]=i[0]})}return XIT_BYNAME[String(nm).trim().toLowerCase()]||null}
+function xItInfoLine(id){const d=xItDesc(id),it=ITEMS.find(i=>i[0]===id)||[];if(!d)return null;
+  const ic=it[7]==="mt"?"📀 ":it[7]==="hold"?"🎽 ":it[7]==="evo"?"🌟 ":it[7]==="crys"?"💎 ":it[7]==="mint"?"🌿 ":"ℹ️ ";return ic+IN2(id)+": "+d}
+{const _s=exSay;exSay=function(lines,cb){try{if(Array.isArray(lines)&&EX.on){const out=[];let added=false;
+    lines.forEach(l=>{out.push(l);if(added)return;const t=String(l).replace(/^§[^|]*\|/,"");
+      const m=t.match(/(?:¡Has encontrado|te ha dado|¡Has recibido|¡Recibes)\s+(?:(\d+)\s*×\s*)?([^!¡]+?)!/);
+      if(m){const id=xItByName(m[2]);if(id&&!/^(pb|pot)$/.test(id)){const info=xItInfoLine(id);if(info){out.push(info);added=true}}}});
+    lines=out}}catch(e){}return _s.call(this,lines,cb)}}
+// recuadro de información en la Mochila
+{const _p=xgPanel;xgPanel=function(){const r=_p.apply(this,arguments);try{const box=$("exTeam");const g=box&&box.querySelector(".xgb");if(g&&!box.querySelector(".xginfo")){
+    g.insertAdjacentHTML("beforebegin",'<div class="xginfo">ℹ️ Pasa el ratón o mueve el mando sobre un objeto para ver qué hace.</div>');const inf=box.querySelector(".xginfo");
+    const show=e=>{const c=e.target.closest&&e.target.closest(".xgit[data-xgi]");if(!c)return;const l=xItInfoLine(c.dataset.xgi);if(l&&inf.textContent!==l)inf.textContent=l};
+    g.addEventListener("mouseover",show);g.addEventListener("focusin",show)}}catch(e){}return r}}
+// también al ir a usar o equipar el objeto
+{const _u=xuUI;xuUI=function(){const r=_u.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgh");if(h&&XU.id&&!box.querySelector(".xuinfo")){const l=xItInfoLine(XU.id);if(l)h.insertAdjacentHTML("afterend",'<div class="xuinfo">'+esc(l)+'</div>')}}catch(e){}return r}}

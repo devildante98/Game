@@ -317,6 +317,11 @@ const CRYX={25:10158};
 function cry(n){
   if(!O.cry||!O.svol||!O.sfx||document.hidden)return;const p=PM[n];if(!p||!p[4]||p[4]>1025)return;
   const id=CRYX[p[4]]||p[4];
-  try{const a=new Audio((SPRB?CRY2:CRY)+id+".ogg");a.volume=Math.min(1,O.svol*.5);a.onerror=()=>{if(a.src.indexOf(CRY)===0){a.src=CRY2+id+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
+  // el mismo grito no se repite si ya está sonando (p. ej. al tocar la tarjeta y abrirse la ficha a la vez), y uno nuevo corta al anterior
+  const now=performance.now();if(CRYP.n===n&&now-CRYP.t<1500)return;
+  try{if(CRYP.a){CRYP.a.onerror=null;CRYP.a.pause()}}catch(e){}
+  try{const a=new Audio((SPRB?CRY2:CRY)+id+".ogg");CRYP.a=a;CRYP.n=n;CRYP.t=now;a.volume=Math.min(1,O.svol*.5);
+    let retried=false;a.onerror=()=>{if(!retried&&CRYP.a===a&&a.src.indexOf(CRY)===0){retried=true;a.src=CRY2+id+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
 }
+const CRYP={a:null,n:"",t:0};
 $("dex").addEventListener("click",e=>{const c=e.target.closest(".card");if(!c)return;const im=c.querySelector("img[data-n]");if(im)cry(im.dataset.n)});

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.53"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.53.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794432412">
+<meta name="game-build" content="1794433342">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2775,7 +2775,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.53</small>
+    <small class="pcver">Versión 6.53.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7449,8 +7449,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.53";
+const GAME_VER="6.53.1";
 const NEWS=[
+{v:"2026-11-11-6.53.1",ver:"6.53.1",at:"2026-11-11T22:42",t:"🔧 Arreglos/Mejoras",l:["Arreglado: el grito de un Pokémon (sobre todo el de Pikachu, que es largo) a veces sonaba doble, por ejemplo al tocar su tarjeta y abrirse su ficha a la vez. Ahora el mismo grito no se repite mientras suena, y un grito nuevo corta al anterior"]},
 {v:"2026-11-11-6.53",ver:"6.53",at:"2026-11-11T22:26",t:"🎬 Escenas más cuidadas",l:["Al bajar por primera vez a la cocina, la escena con mamá empieza en cuanto llegas: ya no te puedes mover antes de que te hable","Cuando un personaje termina de hablar contigo después de acercarse (o de acompañarte), ya no vuelve a su sitio de golpe: la pantalla se funde a negro mientras regresa, como en los juegos clásicos"]},
 {v:"2026-11-11-6.52.10",ver:"6.52.10",at:"2026-11-11T22:19",t:"🔧 Arreglos/Mejoras",l:["Arreglado de verdad «Salir al menú principal» con el mando o el teclado: la misma pulsación de A (o Intro) que elegía la opción también pulsaba «Continuar» en el menú principal, y volvías al juego al instante. Ahora el menú principal ignora esa pulsación"]},
 {v:"2026-11-11-6.52.9",ver:"6.52.9",at:"2026-11-11T22:16",t:"🔧 Arreglos/Mejoras",l:["Exploración: mientras hay un diálogo, los indicadores de abajo (tickets, chat, jugadores, velocidad y menú) se esconden para no tapar el texto. Vuelven a salir al terminar"]},
@@ -7732,7 +7733,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794432412";
+const GAME_B="1794433342";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8119,8 +8120,13 @@ const CRYX={25:10158};
 function cry(n){
   if(!O.cry||!O.svol||!O.sfx||document.hidden)return;const p=PM[n];if(!p||!p[4]||p[4]>1025)return;
   const id=CRYX[p[4]]||p[4];
-  try{const a=new Audio((SPRB?CRY2:CRY)+id+".ogg");a.volume=Math.min(1,O.svol*.5);a.onerror=()=>{if(a.src.indexOf(CRY)===0){a.src=CRY2+id+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
+  // el mismo grito no se repite si ya está sonando (p. ej. al tocar la tarjeta y abrirse la ficha a la vez), y uno nuevo corta al anterior
+  const now=performance.now();if(CRYP.n===n&&now-CRYP.t<1500)return;
+  try{if(CRYP.a){CRYP.a.onerror=null;CRYP.a.pause()}}catch(e){}
+  try{const a=new Audio((SPRB?CRY2:CRY)+id+".ogg");CRYP.a=a;CRYP.n=n;CRYP.t=now;a.volume=Math.min(1,O.svol*.5);
+    let retried=false;a.onerror=()=>{if(!retried&&CRYP.a===a&&a.src.indexOf(CRY)===0){retried=true;a.src=CRY2+id+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
 }
+const CRYP={a:null,n:"",t:0};
 $("dex").addEventListener("click",e=>{const c=e.target.closest(".card");if(!c)return;const im=c.querySelector("img[data-n]");if(im)cry(im.dataset.n)});
 
 $("zoneSel").onchange=()=>{S.zone=$("zoneSel").value;save()};

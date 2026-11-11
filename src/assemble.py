@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.53";
+const GAME_VER="6.53.1";
 const NEWS=[
+{v:"2026-11-11-6.53.1",ver:"6.53.1",at:"2026-11-11T22:42",t:"🔧 Arreglos/Mejoras",l:["Arreglado: el grito de un Pokémon (sobre todo el de Pikachu, que es largo) a veces sonaba doble, por ejemplo al tocar su tarjeta y abrirse su ficha a la vez. Ahora el mismo grito no se repite mientras suena, y un grito nuevo corta al anterior"]},
 {v:"2026-11-11-6.53",ver:"6.53",at:"2026-11-11T22:26",t:"🎬 Escenas más cuidadas",l:["Al bajar por primera vez a la cocina, la escena con mamá empieza en cuanto llegas: ya no te puedes mover antes de que te hable","Cuando un personaje termina de hablar contigo después de acercarse (o de acompañarte), ya no vuelve a su sitio de golpe: la pantalla se funde a negro mientras regresa, como en los juegos clásicos"]},
 {v:"2026-11-11-6.52.10",ver:"6.52.10",at:"2026-11-11T22:19",t:"🔧 Arreglos/Mejoras",l:["Arreglado de verdad «Salir al menú principal» con el mando o el teclado: la misma pulsación de A (o Intro) que elegía la opción también pulsaba «Continuar» en el menú principal, y volvías al juego al instante. Ahora el menú principal ignora esa pulsación"]},
 {v:"2026-11-11-6.52.9",ver:"6.52.9",at:"2026-11-11T22:16",t:"🔧 Arreglos/Mejoras",l:["Exploración: mientras hay un diálogo, los indicadores de abajo (tickets, chat, jugadores, velocidad y menú) se esconden para no tapar el texto. Vuelven a salir al terminar"]},

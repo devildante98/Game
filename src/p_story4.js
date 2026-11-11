@@ -94,3 +94,13 @@ STX.introMama=()=>stRun(async()=>{const m=stN("mama");if(m){await sAlert(m);awai
 {const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&(EX.map==="casa"||EX.map==="casa_up")){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);
   const T={B:["Tu cama. Todavía está calentita.","En la almohada hay un peluche de Pikachu."],O:["Tu ordenador. Tienes un correo de Dani: «¡Hoy nos dan Pokémon! ¡Llegaré pronto! (Seguro que me duermo)»."],C:["Tu armario. Ahí está tu ropa de viaje, lista desde hace semanas."],E:["Tu cómoda. En el espejo hay una foto tuya de pequeño con mamá en la Playa Coral."],V:["En la tele hablan de unas luces extrañas sobre la Cima Aurora…"],L:["La nevera. Mamá ha dejado una nota: «Bocadillo para el viaje, ¡no lo olvides!»."],G:["Huele a tortitas recién hechas."],Z:["Libros de mamá: «Recetas con bayas», «Cuidados del Pokémon»…"],S:["El sofá favorito de mamá."],D:["La mesa del desayuno. Hay un vaso de leche Mu-Mu."],K:["La encimera de la cocina."],M:["Una silla."]};
   if(T[c]&&!EX.npcs.some(n=>n.px===EX.x+dx&&n.py===EX.y+dy)){snd("ui");exSay(T[c]);return}}}catch(e){}return _i.apply(this,arguments)}}
+
+// =====================================================================================
+// GIMNASIOS OBLIGATORIOS: para seguir avanzando hay que ganar las medallas de Exploración, sin excepciones
+// · Región de Alba: la Cueva Roca, la Playa Coral y la Cima Aurora piden la Medalla Brote (Gimnasio de Pueblo Brisa)
+// · Barco: Escarcha 1 medalla, Brasa 3, Tormenta 5, Celeste 6; la Liga, las 8
+// =====================================================================================
+REG.forEach(r=>{r.pass=99});
+{const _a=exArrive;exArrive=function(){try{const c=exAt(EX.x,EX.y),w=EX.M&&EX.M.w&&EX.M.w[c];if(w&&w.xb&&xbCount()<w.xb){const st=exSt(),g=XGYM[0];snd("ui");
+  exSay(["Un guarda te detiene:","«Por aquí solo pueden pasar quienes tengan la "+g.b+" "+g.ic+".»","«Ve al Gimnasio de Pueblo Brisa y vence a la "+g.n+". ¡Te estaré esperando!»"],()=>{exStepBack();st.x=EX.x;st.y=EX.y;st.f=EX.f});return}}catch(e){}return _a.apply(this,arguments)}}
+Object.assign(STO_OBJ,{5:[4,"Detén a Noctis en la Playa Coral (Ruta 1 → sur · necesitas la Medalla Brote)"],6:[5,"Sube a la Cima Aurora (Pueblo Brisa → norte · necesitas la Medalla Brote)"]});

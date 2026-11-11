@@ -1,4 +1,6 @@
 // ================= PVP online =================
+// hora común para todos (la del servidor): así los retos no caducan antes de tiempo si el reloj de un móvil va adelantado
+const pvT=()=>typeof window.srvNow==="function"?Math.round(window.srvNow()):Date.now();
 let PR=null,PV={st:"idle",ch:null,ok:null,no:null,t0:0,inv:null},D=null;
 const pvNick=()=>{if(!S.nick){S.nick=O.nick?pvClean(O.nick):"Entrenador"+Math.floor(1000+Math.random()*9000);save()}return S.nick};
 const pvClean=t=>Array.from(String(t==null?"":t).replace(/[\u0000-\u001F\u007F-\u009F\u2028\u2029]/g,"").replace(/\s+/g," ").trim()).slice(0,16).join("").trim()||"Jugador";
@@ -19,8 +21,8 @@ const _seenInv={};
 function pvIncoming(){
   const me=pvMe();if(!me)return {ch:[],inv:[]};
   const o=pvOthers();
-  return{ch:o.filter(p=>{const c=p.presence.pvp.ch;return p.presence.pvp.st==="wait"&&c&&c.to===me.peer&&Date.now()-(c.t||0)<35000}),
-    inv:o.filter(p=>{const v=p.presence.pvp.inv;return v&&Array.isArray(v.to)&&v.to.includes(me.peer)&&typeof v.code==="string"&&/^[A-Z0-9]{4,6}$/.test(v.code)&&Date.now()-(v.t||0)<600000&&p.presence.pvp.st==="room"})};
+  return{ch:o.filter(p=>{const c=p.presence.pvp.ch;return p.presence.pvp.st==="wait"&&c&&c.to===me.peer&&pvT()-(c.t||0)<35000}),
+    inv:o.filter(p=>{const v=p.presence.pvp.inv;return v&&Array.isArray(v.to)&&v.to.includes(me.peer)&&typeof v.code==="string"&&/^[A-Z0-9]{4,6}$/.test(v.code)&&pvT()-(v.t||0)<600000&&p.presence.pvp.st==="room"})};
 }
 function pvRender(){
   if(!PR){$("pvSt").textContent="No disponible";$("pvList").innerHTML='<small class="mut">El PVP online necesita iniciar sesión con una cuenta; no funciona en «Jugar sin cuenta».</small>';frUI();return}
@@ -46,7 +48,7 @@ function pvRender(){
   $("pvList").innerHTML=others.length?others.map(p=>{const v=p.presence.pvp,busy=v.st==="duel",fr=isFriend(p.peer);return '<div class="pvrow"><span class="pvav">'+trImg(trDec(v.tr),"f","i")+'</span><b class="plink" data-prof="'+esc(p.peer)+'">'+esc(pvClean(v.n))+(v.prs?' 🌟'+(v.prs|0):'')+(fr?' <small title="Amigo">👥</small>':'')+' '+gdBadge(v.gd)+'</b><span class="pvtm">'+(Array.isArray(v.tm)?v.tm.filter(x=>x&&PM[x.n]).slice(0,6).map(x=>'<span title="'+esc(x.n)+' Nv'+(+x.l||1)+'">'+ico(PM[x.n],26)+'</span>').join(""):"")+'</span><small class="mut">'+(busy?"En duelo":v.st==="wait"?"Retando…":v.st==="room"?"En sala 2 vs 2":"Libre")+'</small>'+(fr||!window.FB?'':frPend(p.peer)?'<button class="alt" disabled title="Solicitud de amistad enviada">📨</button>':'<button class="alt" data-fradd="'+esc(pvClean(v.n))+'" title="Enviar solicitud de amistad">+👥</button>')+(v.md==="l"?'<span class="pvmt l" title="Modo Libre">🧬 Libre</span>':'<span class="pvmt" title="Modo Clásico">⚔️ Clásico</span>')+'<button data-pvch="'+esc(p.peer)+'"'+((PV.st!=="idle"||busy||v.st!=="idle"||!tm.length||fcd||(v.md==="l"?"l":"c")!==pvMd())?' disabled title="'+((v.md==="l"?"l":"c")!==pvMd()?'Está en otro modo de PVP':'')+'"':'')+'>⚔️ Retar</button></div>'}).join(""):'<small class="mut">Ahora mismo no hay otros jugadores. Comparte el enlace de la página para que alguien se conecte.</small>';
   if(PV.st==="wait"&&PV.ch&&me){
     const acc=others.find(p=>{const o=p.presence.pvp.ok;return o&&o.from===me.peer&&o.room===PV.ch.room});
-    const rej=others.find(p=>{const n=p.presence.pvp.no;return n&&n.from===me.peer&&n.room===PV.ch.room&&Date.now()-(n.t||0)<10000});
+    const rej=others.find(p=>{const n=p.presence.pvp.no;return n&&n.from===me.peer&&n.room===PV.ch.room&&pvT()-(n.t||0)<10000});
     if(acc)pvStart("A",PV.ch.room,PV.ch.seed);
     else if(rej){PV.st="idle";PV.ch=null;pvPub();pvMsg(pvClean(rej.presence.pvp.n)+" ha rechazado el reto.")}
     else if(Date.now()-PV.t0>30000){PV.st="idle";PV.ch=null;pvPub();pvMsg("El reto no ha sido respondido.")}
@@ -54,14 +56,14 @@ function pvRender(){
 }
 function pvChallenge(peer){
   const me=pvMe();if(!me||PV.st!=="idle"||!pvTeamData().length||fcd)return false;
-  PV.st="wait";PV.t0=Date.now();PV.dmd=pvMd();PV.ch={md:PV.dmd,to:peer,room:"d"+Math.floor(Math.random()*1e9).toString(36)+Date.now().toString(36),seed:Math.floor(Math.random()*2147483647),t:Date.now()};PV.ok=null;pvPub();pvRender();return true;
+  PV.st="wait";PV.t0=Date.now();PV.dmd=pvMd();PV.ch={md:PV.dmd,to:peer,room:"d"+Math.floor(Math.random()*1e9).toString(36)+Date.now().toString(36),seed:Math.floor(Math.random()*2147483647),t:pvT()};PV.ok=null;pvPub();pvRender();return true;
 }
 function pvAccept(peer){
   const o=pvOthers().find(p=>p.peer===peer);if(!o||PV.st!=="idle"||fcd)return;
   const c=o.presence.pvp.ch;if(!c||typeof c.room!=="string"||!/^[a-z0-9][a-z0-9_.-]{0,47}$/.test(c.room))return;
   PV.dmd=c.md==="l"?"l":"c";PV.st="duel";PV.ok={from:peer,room:c.room};PV.no=null;pvPub();pvStart("B",c.room,c.seed|0);
 }
-function pvDecline(peer){const o0=pvOthers().find(p=>p.peer===peer),rm=o0&&o0.presence.pvp.ch?o0.presence.pvp.ch.room:"";PV.no={from:peer,room:rm,t:Date.now()};pvPub();setTimeout(()=>{PV.no=null;pvPub()},8000);pvRender()}
+function pvDecline(peer){const o0=pvOthers().find(p=>p.peer===peer),rm=o0&&o0.presence.pvp.ch?o0.presence.pvp.ch.room:"";PV.no={from:peer,room:rm,t:pvT()};pvPub();setTimeout(()=>{PV.no=null;pvPub()},8000);pvRender()}
 // ---- duelo 1 vs 1 (misma arena, motor y animaciones que los combates normales) ----
 const pvOpp=()=>{if(!D)return null;const p=D.DR.peers().find(x=>!x.isMe&&x.kind==="viewer"&&x.presence&&x.presence.pv&&x.presence.pv.v===3);return p?p.presence.pv:null};
 function pvDPub(){const h={};Object.keys(D.hist).slice(-8).forEach(k=>{h[k]=D.hist[k]});D.DR.presence({pv:Object.assign({},D.base,{h:h})}).catch(()=>{})}
@@ -279,7 +281,7 @@ function r2Leave(msg){
   $("r2Room").hidden=true;$("pvLobby").hidden=false;pvRender();if(msg)r2Msg(msg);
 }
 function r2InviteFriend(uid){
-  if(!R2)return;PV.inv=PV.inv&&PV.inv.code===R2.code?PV.inv:{to:[],code:R2.code,t:Date.now()};
+  if(!R2)return;PV.inv=PV.inv&&PV.inv.code===R2.code?PV.inv:{to:[],code:R2.code,t:pvT()};
   if(!PV.inv.to.includes(uid))PV.inv.to=PV.inv.to.concat(uid).slice(-8);PV.inv.t=Date.now();pvPub();R2._h="";r2Render();toast("📨 Invitación enviada");
 }
 function r2Render(){

@@ -23,10 +23,10 @@ function rqItems(){const L=[];const me=window.FB&&window.FB.uid?window.FB.uid():
       onNo:async()=>{try{await window.FB.gReject(GS.gid,u)}catch(e){}}})})}}catch(e){}
   // invitaciones por mensaje privado (duelo, duelo de siluetas, incursión, gremio, sala 2 vs 2)
   try{if(typeof CH!=="undefined")Object.keys(CH.msgs).forEach(key=>{if(key.indexOf("d:")!==0)return;(CH.msgs[key]||[]).forEach(m=>{const v=m.inv;if(!v||m.u===me||!m.id)return;
-    if((v.exp||0)<Date.now()||(S.invOk&&S.invOk[m.id])||(S.invNo&&S.invNo[m.id])||(typeof chMuted==="function"&&chMuted(m.u)))return;
+    if((v.exp||0)<pvT()||(S.invOk&&S.invOk[m.id])||(S.invNo&&S.invNo[m.id])||(typeof chMuted==="function"&&chMuted(m.u)))return;
     const n=pvClean(m.n||""),T={pvp:["⚔️","te reta a un duelo PVP","Con tu equipo actual"],du:["❓","te reta a un Duelo de siluetas","8 rondas de «¿Quién es ese Pokémon?» en directo"],raid:["🔴","te invita a una incursión","Contra "+esc(v.boss||"un Pokémon muy fuerte")+" · hasta 4 entrenadores"],
       guild:["🛡️","te invita a su gremio",esc(v.nm||"")],r2:["👥","te invita a su sala 2 vs 2","Código "+esc(v.code||"")]}[v.k]||["✉️","te ha enviado una invitación",""];
-    L.push({k:"m"+m.id,ic:T[0],t:esc(n)+" "+T[1],s:T[2],ok:"✅ Aceptar",no:"Rechazar",alive:()=>(v.exp||0)>Date.now()&&!(S.invOk&&S.invOk[m.id])&&!(S.invNo&&S.invNo[m.id]),
+    L.push({k:"m"+m.id,ic:T[0],t:esc(n)+" "+T[1],s:T[2],ok:"✅ Aceptar",no:"Rechazar",alive:()=>(v.exp||0)>pvT()&&!(S.invOk&&S.invOk[m.id])&&!(S.invNo&&S.invNo[m.id]),
       onOk:()=>chInvAccept(m.id),onNo:()=>{S.invNo=S.invNo||{};S.invNo[m.id]=1;save();try{chRender(true)}catch(e){}}})})})}catch(e){}
   return L}
 function rqShow(it){RQ.seen[it.k]=1;const M=document.createElement("div");M.className="uidlg rqdlg";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");

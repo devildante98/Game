@@ -209,13 +209,13 @@ async function chSendInv(k){
   else if(k==="du"){inv={k:"du"};CH.duInvAt=Date.now()}
   else if(k==="raid"){if(!(typeof RD!=="undefined"&&RD.id&&RD.phase==="lobby"&&RD.d))return;inv={k:"raid",id:String(RD.id),boss:String(RD.d.boss||"")}}
   else if(k==="r2"){if(!(typeof R2!=="undefined"&&R2&&R2.ph==="lobby"))return;inv={k:"r2",code:String(R2.code)}}
-  if(!inv)return;inv.exp=Date.now()+INV_TTL[k];CH.last=Date.now();
+  if(!inv)return;inv.exp=pvT()+INV_TTL[k];CH.last=Date.now();
   const d={u:me,n:pvClean(pvNick()).slice(0,30),cr:typeof myCrown==="function"?myCrown():0,tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",t:"",inv:inv,at:Date.now()};
   const [tp,id]=key==="global"?["global","global"]:key.split(":");
   try{await window.FB.chSend(tp,id,d);snd("pop");if(k==="pvp"||k==="du")toast((k==="du"?"❓":"⚔️")+" Reto enviado. Cuando alguien lo acepte, el duelo empezará solo (mantén el juego abierto).")}catch(e){chFlash("No se ha podido enviar la invitación.")}
 }
 function chInvHTML(m,mine){
-  const v=m.inv||{},left=(v.exp||0)-Date.now(),no=S.invNo&&S.invNo[m.id],ok=S.invOk&&S.invOk[m.id];
+  const v=m.inv||{},left=(v.exp||0)-pvT(),no=S.invNo&&S.invNo[m.id],ok=S.invOk&&S.invOk[m.id];
   const ic=v.k==="guild"?"🛡️":v.k==="pvp"?"⚔️":v.k==="du"?"❓":v.k==="raid"?"🔴":"👥",tit=v.k==="du"?'Reto a un <b>Duelo de siluetas</b>':v.k==="raid"?'Invitación a una <b>incursión</b> contra <b>'+esc(v.boss||"")+'</b>':v.k==="guild"?'Invitación al gremio <b>'+esc(v.nm||"")+'</b>'+(v.tag?' <span class="gtag">'+esc(v.tag)+'</span>':''):v.k==="pvp"?'Reto a un <b>duelo PVP 1 vs 1</b>':'Invitación a una <b>sala 2 vs 2</b>';
   const sub=v.k==="du"?'8 rondas de «¿Quién es ese Pokémon?» en directo':v.k==="raid"?'Hasta 4 entrenadores · 3 minutos':v.k==="guild"?((v.n|0)+'/'+GUILD_MAX+' miembros · '+(v.open?'abierto':'con solicitud')):v.k==="r2"?'Código '+esc(v.code||""):'Con tu equipo actual';
   let st="";
@@ -228,7 +228,7 @@ function chInvHTML(m,mine){
 }
 function chFindMsg(id){for(const k in CH.msgs){const m=(CH.msgs[k]||[]).find(x=>x.id===id);if(m)return m}return null}
 async function chInvAccept(id){
-  const m=chFindMsg(id);if(!m||!m.inv)return;const v=m.inv;if((v.exp||0)<Date.now()){chRender(true);return}
+  const m=chFindMsg(id);if(!m||!m.inv)return;const v=m.inv;if((v.exp||0)<pvT()){chRender(true);return}
   const mark=()=>{S.invOk=S.invOk||{};S.invOk[id]=1;save();chRender(true)};
   if(v.k==="guild"){
     if(S.gid){toast("Ya perteneces a un gremio. Sal de él antes de unirte a otro.");return}

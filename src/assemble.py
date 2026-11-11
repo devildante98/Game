@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.30.1";
+const GAME_VER="6.30.2";
 const NEWS=[
+{v:"2026-11-11-6.30.2",ver:"6.30.2",at:"2026-11-11T10:57",t:"🔧 Arreglos/Mejoras",l:["Retos PVP, invitaciones por privado y lista de jugadores conectados: ahora usan la hora del servidor, así ya no desaparecen aunque el reloj de tu móvil vaya adelantado o atrasado"]},
 {v:"2026-11-11-6.30.1",ver:"6.30.1",at:"2026-11-11T10:48",t:"🔧 Arreglos/Mejoras",l:["Arreglado un fallo que, con el juego abierto en segundo plano, podía frenar la producción de tickets por error. Si perdiste tickets por esto, escríbenos en Sugerencias y te los devolvemos"]},
 {v:"2026-11-11-6.29.1",ver:"6.29.1",at:"2026-11-11T10:03",t:"🔧 Arreglos/Mejoras",l:["Tutorial: el combate ya no se queda escondido detrás. El tutorial se aparta mientras luchas y sigue cuando termina","Exploración: arrastra los Pokémon del equipo para ordenarlos, o entre el equipo y la caja para meterlos, sacarlos o cambiarlos"]},
 {v:"2026-11-11b",ver:"6.29",at:"2026-11-11T09:56",t:"🔴 Incursiones mejoradas",l:["Nuevo botón «🎯 Elegir los ataques de tu equipo» en la sala de espera: eliges el ataque rápido y los dos cargados de cada Pokémon","Cada ataque muestra su eficacia contra el jefe, y los de estado aparecen como «No sirve en incursiones»","Incursiones con amigos: el contador y el inicio van con la hora del servidor, así coinciden para todos aunque los relojes de cada móvil sean distintos","¿Cuál pesa más?: el contador de segundos ahora va bajando (antes parecía congelado)"]},
@@ -583,7 +584,7 @@ rep('''      this.hb=setInterval(()=>{if(!this.closed&&Object.keys(this.mine).le
         else{if(!this.unsub)this.unsub=this._sub();if(Object.keys(this.mine).length&&Date.now()-this.lastW>60000)this._w(true).catch(()=>{})}});''')
 rep('if(this.path[0]==="lobby"&&now-e.seen>60000)continue;', 'if(this.path[0]==="lobby"&&now-e.seen>600000)continue;')
 # vestibulo: al suscribirse solo se leen los jugadores vistos en los últimos 10 min (no todos los que han pasado alguna vez)
-rep('      this.unsub=S.onSnapshot(S.collection(db,...path),snap=>{', '      this._sub=()=>S.onSnapshot(path[0]==="lobby"?S.query(S.collection(db,...path),S.where("seen",">",Date.now()-600000)):S.collection(db,...path),snap=>{')
+rep('      this.unsub=S.onSnapshot(S.collection(db,...path),snap=>{', '      this._sub=()=>S.onSnapshot(path[0]==="lobby"?S.query(S.collection(db,...path),S.where("seen",">",(window.srvNow?Math.round(window.srvNow()):Date.now())-600000)):S.collection(db,...path),snap=>{')
 rep('if(!force&&j===this.lastJ&&Date.now()-this.lastW<20000)return;', 'if(!force&&j===this.lastJ)return;')
 FB_API = '''
   // ---- amigos y gremios (Firestore: friends, freq, guilds) ----

@@ -3165,7 +3165,7 @@ async function main(){
     }
     _n(){setTimeout(()=>this.hs.slice().forEach(h=>{try{h({peers:this.peers()})}catch(e){}}),0)}
     peers(){
-      const now=Date.now(),a=[{peer:this.uid,by:null,isMe:true,sameTab:true,kind:"viewer",guest:false,presence:this.mine,updatedAt:now}];
+      const now=(window.srvNow?Math.round(window.srvNow()):Date.now()),a=[{peer:this.uid,by:null,isMe:true,sameTab:true,kind:"viewer",guest:false,presence:this.mine,updatedAt:now}];
       for(const id in this.map){
         if(id===this.uid)continue;const e=this.map[id];
         if(this.path[0]==="lobby"&&now-e.seen>60000)continue;
@@ -3178,7 +3178,7 @@ async function main(){
       const j=JSON.stringify(this.mine);
       if(!force&&j===this.lastJ&&Date.now()-this.lastW<20000)return;
       this.lastJ=j;this.lastW=Date.now();
-      try{await S.setDoc(S.doc(this.db,...this.path,this.uid),{p:JSON.parse(j),seen:Date.now()})}
+      try{await S.setDoc(S.doc(this.db,...this.path,this.uid),{p:JSON.parse(j),seen:(window.srvNow?Math.round(window.srvNow()):Date.now())})}
       catch(e){this.lastJ="";if(e&&e.code==="permission-denied"){window.__pvErr=1;window.pvRender&&window.pvRender()}throw e}
     }
     onPeers(h){this.hs.push(h);this._n();return()=>{this.hs=this.hs.filter(x=>x!==h)}}

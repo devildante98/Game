@@ -66,12 +66,12 @@ function gpPoll(){const L=navigator.getGamepads?[...navigator.getGamepads()].fil
   let d=null;if(pr(12)||ax[1]<-.5)d="u";else if(pr(13)||ax[1]>.5)d="d";else if(pr(14)||ax[0]<-.5)d="l";else if(pr(15)||ax[0]>.5)d="r";
   const DK={u:"ArrowUp",d:"ArrowDown",l:"ArrowLeft",r:"ArrowRight"},inBattle=typeof fcd!=="undefined"&&fcd;
   if(d!==GP.dir){if(GP.dir&&!inBattle)gpKey("keyup",gpKeyOf(GP.dir));if(d){if(inBattle)gpNav(d);else gpKey("keydown",gpKeyOf(d))}GP.dir=d;GP.rep=performance.now()+380}
-  else if(d&&(inBattle||exMenuOpen()||EX.choice)&&performance.now()>GP.rep){GP.rep=performance.now()+160;if(inBattle)gpNav(d);else gpKey("keydown",gpKeyOf(d))}
+  else if(d&&(inBattle||exMenuOpen()||EX.choice||exOverlay())&&performance.now()>GP.rep){GP.rep=performance.now()+160;if(inBattle)gpNav(d);else gpKey("keydown",gpKeyOf(d))}
   const edge=k=>{const i=P0[k];return i>=0&&pr(i)&&!GP.prev[i]},rel=k=>{const i=P0[k];return i>=0&&!pr(i)&&GP.prev[i]};
   if(inBattle){if(edge("a"))gpClick();if(edge("b")){const bk=document.querySelector('#menu button[data-k="b"],#menu .mvback');if(bk)bk.click()}}
   else{
-    if(edge("a"))gpKey("keydown",gpKeyOf("a"));
-    if(edge("b")){if(exMenuOpen())gpKey("keydown","Escape");else{const ov=["exTeam","exDexP","exCtl"].map($).find(x=>x&&!x.hidden);if(ov){ov.hidden=true;snd("ui")}else if(typeof WM!=="undefined"&&WM.open)wmHide();else gpKey("keydown",gpKeyOf("b"))}}
+    if(edge("a"))gpKey("keydown",exOverlay()?"Enter":gpKeyOf("a"));
+    if(edge("b")){if(exMenuOpen()||exOverlay())gpKey("keydown","Escape");else if(typeof WM!=="undefined"&&WM.open)wmHide();else gpKey("keydown",gpKeyOf("b"))}
     if(rel("b"))gpKey("keyup",gpKeyOf("b"));
     if(edge("menu"))gpKey("keydown",gpKeyOf("menu"));
     if(edge("sp"))gpKey("keydown",gpKeyOf("sp"))}
@@ -189,3 +189,28 @@ wmDraw=function(ts){const cv=$("wmCv");if(!cv)return;const g=cv.getContext("2d")
     const side=n.r==="cel"||((n.t==="peak"||n.t==="cave")&&n.r!=="alba");const lft=side&&n.r==="bra",lx=side?(lft?x-28:x+28):x,ly=side?y+5:y+30;g.textAlign=side?(lft?"right":"left"):"center";
     g.strokeText(nm,lx,ly);g.fillStyle=kn?"#fff":"#c9c6d6";g.fillText(nm,lx,ly)});
   const H0=wmNode(here);if(H0){const b=Math.abs(Math.sin(ts/260))*8;g.font="30px serif";g.textAlign="center";g.fillText("📍",H0.x,H0.y-20-b)}};
+
+// =====================================================================================
+// PANELES DE EXPLORACIÓN CON MANDO Y TECLADO (Equipo y Mochila, Pokédex, Controles, Tiendas…)
+// Mientras hay un panel abierto, la cruceta/flechas mueven la selección (no al personaje), A pulsa y B vuelve o cierra.
+// =====================================================================================
+const XOV_IDS=["exTeam","exDexP","exCtl"];
+function exOverlay(){for(const id of XOV_IDS){const e=$(id);if(e&&!e.hidden&&e.offsetParent!==null)return e}return null}
+const XOV_SEL='button:not([disabled]),[data-xgi],[data-xg],input,select,[data-xsb],[data-xss]';
+function ovItems(ov){return [...ov.querySelectorAll(XOV_SEL)].filter(el=>el.offsetParent!==null&&!el.closest("[hidden]"))}
+function ovCur(ov){const a=document.activeElement;return a&&ov.contains(a)&&a.matches(XOV_SEL)?a:ov.querySelector(".gpf")}
+function ovFocus(el){document.querySelectorAll(".gpf").forEach(x=>x.classList.remove("gpf"));if(!el)return;if(!el.matches("button,input,select")&&!el.hasAttribute("tabindex"))el.setAttribute("tabindex","-1");el.classList.add("gpf");try{el.focus({preventScroll:true})}catch(e){}try{el.scrollIntoView({block:"nearest"})}catch(e){}}
+function ovMove(ov,d){const L=ovItems(ov);if(!L.length)return;const cur=ovCur(ov);if(!cur||!L.includes(cur)){ovFocus(L[0]);return}
+  const r=cur.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best=null,bd=1e9;
+  L.forEach(b=>{if(b===cur)return;const q=b.getBoundingClientRect(),x=q.left+q.width/2-cx,y=q.top+q.height/2-cy;const ok=d==="u"?y<-4:d==="d"?y>4:d==="l"?x<-4:x>4;if(!ok)return;const s=(d==="u"||d==="d")?Math.abs(y)+Math.abs(x)*2.2:Math.abs(x)+Math.abs(y)*2.2;if(s<bd){bd=s;best=b}});
+  if(best){ovFocus(best);snd("ui")}}
+function ovBack(ov){const bs=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null&&/Volver|Atrás|Cerrar|Listo|Salir/i.test(b.textContent));if(bs.length){bs[bs.length-1].click();return}ov.hidden=true;snd("ui")}
+window.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind||exMenuOpen())return;const ov=exOverlay();if(!ov)return;const t=e.target,inInput=t&&/INPUT|TEXTAREA|SELECT/.test(t.tagName);
+  const a=exAct(e.key),dir=["u","d","l","r"].includes(a)?a:{ArrowUp:"u",ArrowDown:"d",ArrowLeft:"l",ArrowRight:"r"}[e.key];
+  if(inInput&&e.key!=="Escape"&&!(dir&&(e.key==="ArrowUp"||e.key==="ArrowDown")))return;
+  if(dir){e.preventDefault();e.stopPropagation();ovMove(ov,dir);return}
+  if(a==="a"||e.key==="Enter"){const c=ovCur(ov);if(c){e.preventDefault();e.stopPropagation();c.click();setTimeout(()=>{const o2=exOverlay();if(o2&&!ovCur(o2)){const L=ovItems(o2);if(L.length)ovFocus(L[0])}},60)}else{e.preventDefault();e.stopPropagation();const L=ovItems(ov);if(L.length)ovFocus(L[0])}return}
+  if(a==="b"||e.key==="Escape"){e.preventDefault();e.stopPropagation();ovBack(ov);return}
+  if(a)e.stopPropagation()},true);
+// al abrir un panel con el mando, se selecciona el primer elemento
+setInterval(()=>{if(!GP.on)return;const ov=exOverlay();if(ov&&!ovCur(ov)){const L=ovItems(ov);if(L.length)ovFocus(L[0])}},300);

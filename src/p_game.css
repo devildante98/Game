@@ -917,3 +917,5 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 #menu.bclassic .bcq{white-space:normal}
 .bshq{grid-column:1/-1;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.bshq button{min-width:200px;padding:12px 16px;font-size:1rem}
 .bshp{grid-column:1/-1;text-align:center;margin:0 0 6px}
+/* elemento seleccionado con el mando o el teclado en los paneles */
+.gpf{outline:3px solid #ffd34a!important;outline-offset:2px;box-shadow:0 0 0 6px rgba(255,211,74,.35)!important;border-radius:10px}

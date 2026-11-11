@@ -214,3 +214,23 @@ window.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind||exMenuOpen()
   if(a)e.stopPropagation()},true);
 // al abrir un panel con el mando, se selecciona el primer elemento
 setInterval(()=>{if(!GP.on)return;const ov=exOverlay();if(ov&&!ovCur(ov)){const L=ovItems(ov);if(L.length)ovFocus(L[0])}},300);
+
+// =====================================================================================
+// EQUIPO: cambiar de posición a un Pokémon sin arrastrar (sirve con mando, teclado, ratón y pantalla táctil)
+// En su ficha: «🔀 Cambiar de posición» → eliges con quién. Con el mando: botón X sobre una tarjeta y luego A sobre otra.
+// =====================================================================================
+let XSW=null;
+function xswStart(n){XSW=n;snd("ui");xgPanel();setTimeout(()=>{const ov=exOverlay();if(!ov)return;const c=[...ov.querySelectorAll(".xgc")].find(b=>b.dataset.xg!==n);if(c)ovFocus(c)},80)}
+function xswDo(a,b){xgRun(()=>{let T=(S.team||[]).map(x=>x&&S.owned[x]?x:"");while(T.length<6)T.push("");const ia=T.indexOf(a),ib=T.indexOf(b);
+    if(ia<0)return;if(ib>=0){T[ia]=b;T[ib]=a}else{T[ia]=b}S.team=T.filter(x=>x).concat(["","","","","",""]).slice(0,6);save()});
+  snd("lvl");toast("🔀 "+nk(a)+" y "+nk(b)+" han cambiado de posición");XSW=null;xgPanel();try{updTeam()}catch(e){}}
+window.addEventListener("click",e=>{if(!XSW)return;const c=e.target.closest&&e.target.closest(".xgc[data-xg]");if(!c)return;e.stopPropagation();e.preventDefault();const n=c.dataset.xg;if(n===XSW){XSW=null;snd("ui");xgPanel();return}xswDo(XSW,n)},true);
+{const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam");if(!box)return r;
+  if(XSW){const h=box.querySelector(".xgh");if(h&&!box.querySelector(".xswb")){const d=document.createElement("div");d.className="xswb";d.innerHTML='🔀 Elige con quién cambiar de posición a <b>'+esc(nk(XSW))+'</b> <button type="button" class="alt" data-xswx="1">Cancelar</button>';h.after(d);d.querySelector("[data-xswx]").onclick=ev=>{ev.stopPropagation();XSW=null;xgPanel()}}
+    box.querySelectorAll(".xgc").forEach(c=>c.classList.toggle("xgsw",c.dataset.xg===XSW))}
+  else{const h=box.querySelector(".xgs");if(h&&!box.querySelector(".xswh")&&box.querySelector(".xgl .xgc.on")){const t=document.createElement("small");t.className="mut xswh";t.textContent="🎮 Con el mando: pulsa X sobre un Pokémon y después A sobre otro para cambiarlos de posición.";box.querySelector(".xgl").after(t)}}}catch(e){}return r}}
+{const _xf=xfOpen;xfOpen=function(n){const r=_xf.apply(this,arguments);try{const box=$("exTeam"),inT=xgRun(()=>(S.team||[]).includes(n));const h=box&&box.querySelector(".xgh");
+  if(h&&inT&&!h.querySelector("[data-xsw]")){const b=document.createElement("button");b.type="button";b.className="red";b.dataset.xsw="1";b.textContent="🔀 Cambiar de posición";b.onclick=ev=>{ev.stopPropagation();xswStart(n)};h.insertBefore(b,h.lastElementChild)}}catch(e){}return r}}
+// botón X del mando sobre una tarjeta: empezar el cambio
+{const _gp=gpPoll;gpPoll=function(){try{const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[];const gp=L[0];if(gp&&!GP.bind){const x=!!(gp.buttons[2]&&gp.buttons[2].pressed);
+  if(x&&!GP.xPrev){const ov=exOverlay(),c=ov&&ovCur(ov);if(c&&c.classList.contains("xgc")){if(XSW&&XSW!==c.dataset.xg)xswDo(XSW,c.dataset.xg);else if(xgRun(()=>(S.team||[]).includes(c.dataset.xg)))xswStart(c.dataset.xg)}}GP.xPrev=x}}catch(e){}return _gp.apply(this,arguments)}}

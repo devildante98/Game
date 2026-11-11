@@ -52,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.45"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.45.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794410778">
+<meta name="game-build" content="1794411198">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2600,6 +2600,11 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .bshp{grid-column:1/-1;text-align:center;margin:0 0 6px}
 /* elemento seleccionado con el mando o el teclado en los paneles */
 .gpf{outline:3px solid #ffd34a!important;outline-offset:2px;box-shadow:0 0 0 6px rgba(255,211,74,.35)!important;border-radius:10px}
+/* Pokédex de Exploración y cambio de posición: colores legibles siempre */
+#exDexP .exdexc{background:#f4f6fb;border:2px solid #d0d6e4;color:#1d2440}#exDexP .exdexc small{color:#5a6390}#exDexP .exdexc b{color:#1d2440}#exDexP .exdexc i{color:#3a4266}
+#exDexP .exdexg{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+.xswb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:8px 12px;border-radius:10px;background:#fff4d6;color:#7a5200;font-weight:700}
+.xgc.xgsw{outline:3px dashed #e64040;outline-offset:2px;animation:xgswp .6s ease-in-out infinite alternate}@keyframes xgswp{to{transform:translateY(-3px)}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2665,7 +2670,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.45</small>
+    <small class="pcver">Versión 6.45.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7336,8 +7341,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.45";
+const GAME_VER="6.45.1";
 const NEWS=[
+{v:"2026-11-11-6.45.1",ver:"6.45.1",at:"2026-11-11T16:33",t:"🔧 Arreglos/Mejoras",l:["Exploración: ya puedes cambiar a tus Pokémon de posición sin arrastrar. Con el mando, pulsa X sobre un Pokémon y luego A sobre otro. También desde su ficha, con el botón «🔀 Cambiar de posición» (funciona con mando, teclado, ratón y pantalla táctil)","Si eliges a un Pokémon de la caja, entra en el equipo en el sitio del que estabas cambiando","La Pokédex de Exploración ya se ve bien: tarjetas claras con el texto legible"]},
 {v:"2026-11-11-6.45",ver:"6.45",at:"2026-11-11T16:26",t:"🎨 Exploración: gráficos renovados (2.ª parte) y tu casa nueva",l:["Tu casa del inicio tiene dos plantas: te despiertas en tu dormitorio de arriba, bajas por la escalera y mamá te espera en la cocina","Abajo hay cocina, comedor y salón; arriba, tu cama, tu armario, tu escritorio con ordenador y tu cómoda. Mira las cosas con A: hay sorpresas","Árboles nuevos: copa redonda en capas, con hojas, brillo y sombra, y tronco con raíces","Caminos de tierra más cálidos, con el borde marcado y piedrecitas","Fachadas nuevas en las casas: tejado de tejas con alero, chimenea, paredes de tablas, ventanas con cortinas y jardinera, puerta con marco y escalón, y algún buzón"]},
 {v:"2026-11-11-6.44.1",ver:"6.44.1",at:"2026-11-11T16:21",t:"🔧 Arreglos/Mejoras",l:["Exploración con mando o teclado: en los paneles de Equipo y Mochila, Pokédex y Controles ya puedes moverte con la cruceta o las flechas (se marca en amarillo lo que tienes seleccionado), pulsar con A y volver o cerrar con B","Mientras tienes un panel o el menú abierto, tu personaje ya no se mueve por detrás"]},
 {v:"2026-11-11-6.44",ver:"6.44",at:"2026-11-11T16:16",t:"🏠 Casas por dentro renovadas",l:["Las casas que se pueden visitar tienen muebles nuevos: nevera, encimera con fregadero, fogones, mesa de comedor con sillas, sofá, tele, armario, escritorio con ordenador, cómoda con espejo y camas","En las casas de dos pisos, la planta baja es la cocina, el comedor y el salón, y las camas están arriba, en el dormitorio","La escalera ahora está en una esquina (unas casas a la izquierda y otras a la derecha), con peldaños, barandilla y sombra","Al subir o bajar, se ve cómo tu personaje sube o baja por la escalera","Puedes mirar los muebles con A: la tele, la nevera, el ordenador, los libros…"]},
@@ -7588,7 +7594,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794410778";
+const GAME_B="1794411198";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15335,6 +15341,26 @@ window.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind||exMenuOpen()
   if(a)e.stopPropagation()},true);
 // al abrir un panel con el mando, se selecciona el primer elemento
 setInterval(()=>{if(!GP.on)return;const ov=exOverlay();if(ov&&!ovCur(ov)){const L=ovItems(ov);if(L.length)ovFocus(L[0])}},300);
+
+// =====================================================================================
+// EQUIPO: cambiar de posición a un Pokémon sin arrastrar (sirve con mando, teclado, ratón y pantalla táctil)
+// En su ficha: «🔀 Cambiar de posición» → eliges con quién. Con el mando: botón X sobre una tarjeta y luego A sobre otra.
+// =====================================================================================
+let XSW=null;
+function xswStart(n){XSW=n;snd("ui");xgPanel();setTimeout(()=>{const ov=exOverlay();if(!ov)return;const c=[...ov.querySelectorAll(".xgc")].find(b=>b.dataset.xg!==n);if(c)ovFocus(c)},80)}
+function xswDo(a,b){xgRun(()=>{let T=(S.team||[]).map(x=>x&&S.owned[x]?x:"");while(T.length<6)T.push("");const ia=T.indexOf(a),ib=T.indexOf(b);
+    if(ia<0)return;if(ib>=0){T[ia]=b;T[ib]=a}else{T[ia]=b}S.team=T.filter(x=>x).concat(["","","","","",""]).slice(0,6);save()});
+  snd("lvl");toast("🔀 "+nk(a)+" y "+nk(b)+" han cambiado de posición");XSW=null;xgPanel();try{updTeam()}catch(e){}}
+window.addEventListener("click",e=>{if(!XSW)return;const c=e.target.closest&&e.target.closest(".xgc[data-xg]");if(!c)return;e.stopPropagation();e.preventDefault();const n=c.dataset.xg;if(n===XSW){XSW=null;snd("ui");xgPanel();return}xswDo(XSW,n)},true);
+{const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam");if(!box)return r;
+  if(XSW){const h=box.querySelector(".xgh");if(h&&!box.querySelector(".xswb")){const d=document.createElement("div");d.className="xswb";d.innerHTML='🔀 Elige con quién cambiar de posición a <b>'+esc(nk(XSW))+'</b> <button type="button" class="alt" data-xswx="1">Cancelar</button>';h.after(d);d.querySelector("[data-xswx]").onclick=ev=>{ev.stopPropagation();XSW=null;xgPanel()}}
+    box.querySelectorAll(".xgc").forEach(c=>c.classList.toggle("xgsw",c.dataset.xg===XSW))}
+  else{const h=box.querySelector(".xgs");if(h&&!box.querySelector(".xswh")&&box.querySelector(".xgl .xgc.on")){const t=document.createElement("small");t.className="mut xswh";t.textContent="🎮 Con el mando: pulsa X sobre un Pokémon y después A sobre otro para cambiarlos de posición.";box.querySelector(".xgl").after(t)}}}catch(e){}return r}}
+{const _xf=xfOpen;xfOpen=function(n){const r=_xf.apply(this,arguments);try{const box=$("exTeam"),inT=xgRun(()=>(S.team||[]).includes(n));const h=box&&box.querySelector(".xgh");
+  if(h&&inT&&!h.querySelector("[data-xsw]")){const b=document.createElement("button");b.type="button";b.className="red";b.dataset.xsw="1";b.textContent="🔀 Cambiar de posición";b.onclick=ev=>{ev.stopPropagation();xswStart(n)};h.insertBefore(b,h.lastElementChild)}}catch(e){}return r}}
+// botón X del mando sobre una tarjeta: empezar el cambio
+{const _gp=gpPoll;gpPoll=function(){try{const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[];const gp=L[0];if(gp&&!GP.bind){const x=!!(gp.buttons[2]&&gp.buttons[2].pressed);
+  if(x&&!GP.xPrev){const ov=exOverlay(),c=ov&&ovCur(ov);if(c&&c.classList.contains("xgc")){if(XSW&&XSW!==c.dataset.xg)xswDo(XSW,c.dataset.xg);else if(xgRun(()=>(S.team||[]).includes(c.dataset.xg)))xswStart(c.dataset.xg)}}GP.xPrev=x}}catch(e){}return _gp.apply(this,arguments)}}
 
 // =====================================================================================
 // HISTORIA MÁS VIVA: personajes que te guían andando (tú les sigues) y visitas guiadas por cada pueblo

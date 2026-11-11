@@ -919,3 +919,8 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .bshp{grid-column:1/-1;text-align:center;margin:0 0 6px}
 /* elemento seleccionado con el mando o el teclado en los paneles */
 .gpf{outline:3px solid #ffd34a!important;outline-offset:2px;box-shadow:0 0 0 6px rgba(255,211,74,.35)!important;border-radius:10px}
+/* Pokédex de Exploración y cambio de posición: colores legibles siempre */
+#exDexP .exdexc{background:#f4f6fb;border:2px solid #d0d6e4;color:#1d2440}#exDexP .exdexc small{color:#5a6390}#exDexP .exdexc b{color:#1d2440}#exDexP .exdexc i{color:#3a4266}
+#exDexP .exdexg{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+.xswb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:8px 12px;border-radius:10px;background:#fff4d6;color:#7a5200;font-weight:700}
+.xgc.xgsw{outline:3px dashed #e64040;outline-offset:2px;animation:xgswp .6s ease-in-out infinite alternate}@keyframes xgswp{to{transform:translateY(-3px)}}

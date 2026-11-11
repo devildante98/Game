@@ -848,8 +848,10 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .jgw{position:relative;width:min(560px,100%);margin:6px auto;border-radius:14px;background:repeating-linear-gradient(45deg,rgba(127,127,127,.07) 0 12px,transparent 12px 24px),var(--bg);border:2px solid var(--line);touch-action:none;user-select:none;-webkit-user-select:none;overflow:hidden}
 .jgbd{position:absolute;border-radius:6px;background:rgba(0,0,0,.18);box-shadow:inset 0 0 0 2px rgba(255,255,255,.25),inset 0 0 18px rgba(0,0,0,.35)}
 .jgbd img{width:100%;height:100%;object-fit:contain;opacity:.12;transition:opacity .2s;filter:grayscale(.4)}
-.jgbd canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:6px;opacity:0;transition:opacity .2s}
-.jgbd.peek canvas{opacity:1}.jgbd.peek img{opacity:0}
+/* la guía del tablero es el mismo dibujo que las piezas (antes la imagen tenía otro tamaño y parecía descuadrada) */
+.jgbd img{display:none}
+.jgbd canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:6px;opacity:.13;filter:grayscale(.4);transition:opacity .2s,filter .2s}
+.jgbd.peek canvas{opacity:1;filter:none}
 .jgp{position:absolute;cursor:grab;filter:drop-shadow(0 2px 3px rgba(0,0,0,.45));transition:filter .15s;pointer-events:none}
 .jgp.drag{filter:drop-shadow(0 8px 10px rgba(0,0,0,.5)) brightness(1.08)}.jgp.ok{filter:none}
 .jgw.jgdone .jgp{filter:none}

@@ -1,211 +1,243 @@
 rules_version = '2';
 // =====================================================================================
-// Reglas de Firestore de Poke Gacha Online
+// Reglas de Firestore de Poke Gacha Online (tus reglas + validación contra trampas)
 // Cópialas en la consola de Firebase → Firestore Database → Reglas → Publicar.
-// Si algo deja de funcionar, en esa misma pantalla puedes volver a la versión anterior (historial).
 // =====================================================================================
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ---------- utilidades ----------
-    function signedIn() { return request.auth != null; }
-    function me() { return request.auth.uid; }
-    function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
-    function d() { return request.resource.data; }
-    function str(v, max) { return v is string && v.size() <= max; }
-    function num(v, lo, hi) { return (v is int || v is float) && v >= lo && v <= hi; }
-    function optNum(f, lo, hi) { return !(f in d()) || num(d()[f], lo, hi); }
-    function optStr(f, max) { return !(f in d()) || str(d()[f], max); }
+function isAdmin() { return request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+function banned() {
+  return exists(/databases/$(database)/documents/bans/$(request.auth.uid)) &&
+    (get(/databases/$(database)/documents/bans/$(request.auth.uid)).data.until == 0 ||
+     get(/databases/$(database)/documents/bans/$(request.auth.uid)).data.until > request.time.toMillis());
+}
+// NUEVO: comprobaciones de valores
+function num(v, lo, hi) { return (v is int || v is float) && v >= lo && v <= hi; }
+function optNum(f, lo, hi) { return !(f in request.resource.data) || num(request.resource.data[f], lo, hi); }
+// NUEVO: puntuación máxima posible de cada minijuego («2026-W45_who» → who); el torneo semanal usa el máximo general
+function maxScore(w) {
+  return {'who': 6000, 'mem': 1700, 'dig': 400, 'fish': 3000, 'thr': 2500, 'run': 20000,
+          'exc': 2500, 'wgt': 40000, 'fos': 2500, 'puz': 50000, 'hl': 50000}
+         .get(w.split('_').size() > 1 ? w.split('_')[1] : 'x', 50000);
+}
 
-    // ---------- administradores y sanciones (solo el administrador escribe) ----------
-    match /admins/{u} {
-      allow read: if signedIn() && me() == u;
+match /fixes/{u} {
+  allow read, delete: if request.auth != null && (request.auth.uid == u || isAdmin());
+  allow create, update: if isAdmin();
+}
+match /reports/{id} {
+  allow create: if request.auth != null && request.resource.data.by == request.auth.uid
+    && (!('t' in request.resource.data) || (request.resource.data.t is string && request.resource.data.t.size() <= 400));
+  allow read, delete: if isAdmin();
+}
+match /bans/{u} {
+  allow read: if request.auth != null && (request.auth.uid == u || isAdmin());
+  allow write: if isAdmin();
+}
+  match /friends/{u} {
+  allow read, write: if request.auth != null && request.auth.uid == u;
+}
+// NUEVO: valores de la clasificación dentro de lo posible
+match /ranks/{u} {
+  allow read: if request.auth != null;
+  allow delete: if request.auth != null && (request.auth.uid == u || isAdmin());
+  allow create, update: if request.auth != null && request.auth.uid == u
+    && optNum('dex', 0, 1500) && optNum('med', 0, 8) && optNum('prs', 0, 200)
+    && optNum('sh', 0, 1000000) && optNum('ach', 0, 5000) && optNum('win', 0, 100000000)
+    && optNum('pw', 0, 10000000) && optNum('bs', 0, 10000000) && optNum('tw', 0, 100000)
+    && optNum('hof', 0, 100000) && optNum('cap', 1, 100) && optNum('pt', 0, 100000);
+}
+match /freq/{id} {
+  allow read: if request.auth != null && (resource == null || resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+  allow create: if request.auth != null && request.resource.data.from == request.auth.uid && id == request.auth.uid + "_" + request.resource.data.to;
+  allow update: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid)
+    && request.resource.data.from == resource.data.from && request.resource.data.to == resource.data.to;
+  allow delete: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+}
+match /chats/{room}/msgs/{m} {
+  allow read: if request.auth != null && room == "global";
+  allow create: if request.auth != null && room == "global" && request.resource.data.u == request.auth.uid
+    && request.resource.data.t is string && request.resource.data.t.size() <= 200 && !banned();
+  allow delete: if request.auth != null && (resource.data.u == request.auth.uid || isAdmin());
+}
+match /gchats/{gid}/msgs/{m} {
+  allow read: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/guilds/$(gid)).data.members;
+  allow create: if request.auth != null && request.resource.data.u == request.auth.uid
+    && request.resource.data.t is string && request.resource.data.t.size() <= 200
+    && request.auth.uid in get(/databases/$(database)/documents/guilds/$(gid)).data.members && !banned();
+  allow delete: if request.auth != null && (resource.data.u == request.auth.uid || isAdmin());
+}
+match /dms/{pair}/msgs/{m} {
+  allow read: if request.auth != null && request.auth.uid in pair.split('_');
+  allow create: if request.auth != null && request.resource.data.u == request.auth.uid
+    && request.auth.uid in pair.split('_')
+    && request.resource.data.t is string && request.resource.data.t.size() <= 200 && !banned();
+  allow delete: if request.auth != null && (resource.data.u == request.auth.uid || isAdmin());
+}
+// NUEVO: la puntuación no puede pasar del máximo real de cada minijuego
+match /tours/{week}/s/{u} {
+  allow read: if request.auth != null;
+  allow create, update: if request.auth != null && request.auth.uid == u && !banned()
+    && request.resource.data.sc is number && request.resource.data.sc > 0 && request.resource.data.sc <= maxScore(week);
+  allow delete: if isAdmin();
+}
+match /sdu/{id} {
+  allow read: if request.auth != null && (resource == null || request.auth.uid == resource.data.a || request.auth.uid == resource.data.b);
+  allow create: if request.auth != null && request.resource.data.a == request.auth.uid;
+  allow update: if request.auth != null && (request.auth.uid == resource.data.a || request.auth.uid == resource.data.b)
+    && request.resource.data.a == resource.data.a && request.resource.data.b == resource.data.b;
+  allow delete: if request.auth != null && (request.auth.uid == resource.data.a || request.auth.uid == resource.data.b);
+}
+
+match /raids/{id} {
+  allow read: if request.auth != null;
+  allow create: if request.auth != null && request.resource.data.h == request.auth.uid;
+  allow update: if request.auth != null && request.resource.data.h == resource.data.h && request.resource.data.boss == resource.data.boss;
+  allow delete: if request.auth != null && (resource.data.h == request.auth.uid || isAdmin());
+}
+// NUEVO: precios, niveles y cantidades razonables; al comprar solo cambia el estado
+match /market/{id} {
+  allow read: if request.auth != null;
+  allow create: if request.auth != null && request.resource.data.s == request.auth.uid
+    && request.resource.data.st == "open" && num(request.resource.data.pr, 1000, 2000000000) && !banned()
+    && (request.resource.data.k == 'pk' ? num(request.resource.data.pk.l, 1, 100) : num(request.resource.data.it.q, 1, 999999));
+  allow update: if request.auth != null && resource.data.st == "open" && resource.data.s != request.auth.uid
+    && request.resource.data.st == "sold" && request.resource.data.b == request.auth.uid
+    && request.resource.data.pr == resource.data.pr && request.resource.data.s == resource.data.s
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['st', 'b', 'bn']);
+  allow delete: if request.auth != null && (resource.data.s == request.auth.uid || isAdmin());
+}
+match /refs/{code} {
+  allow read: if request.auth != null;
+  allow create: if request.auth != null && request.resource.data.u == request.auth.uid;
+  allow delete: if isAdmin();
+  match /inv/{u} {
+    allow read: if request.auth != null;
+    allow create, update: if request.auth != null && request.auth.uid == u && optNum('med', 0, 8);
+    allow delete: if isAdmin();
+  }
+}
+match /guilds/{gid} {
+  function me() { return request.auth.uid; }
+  function isMember() { return me() in resource.data.members; }
+  function isLeader() { return resource.data.owner == me(); }
+  function isSub() { return resource.data.get('sub', '') == me() && isMember(); }
+  function changed() { return request.resource.data.diff(resource.data).affectedKeys(); }
+  function memDiff() { return request.resource.data.members.diff(resource.data.members); }
+  function reqDiff() { return request.resource.data.get('req', {}).diff(resource.data.get('req', {})); }
+
+  // Sublíder: aceptar una solicitud (entra exactamente quien la pidió)
+  function subAccept() {
+    return isSub()
+      && changed().hasOnly(['members', 'req', 'n'])
+      && memDiff().addedKeys().size() == 1
+      && memDiff().changedKeys().size() == 0
+      && memDiff().removedKeys().size() == 0
+      && reqDiff().removedKeys() == memDiff().addedKeys()
+      && reqDiff().addedKeys().size() == 0
+      && reqDiff().changedKeys().size() == 0
+      && request.resource.data.n == resource.data.n + 1
+      && request.resource.data.n <= 30;
+  }
+  // Sublíder: rechazar una solicitud
+  function subReject() {
+    return isSub()
+      && changed().hasOnly(['req'])
+      && reqDiff().removedKeys().size() == 1
+      && reqDiff().addedKeys().size() == 0
+      && reqDiff().changedKeys().size() == 0;
+  }
+  // Cualquier jugador sobre sí mismo: pedir unirse, unirse si es abierto o salir
+  function selfOnly() {
+    return changed().hasOnly(['members', 'req', 'n', 'sub'])
+      && memDiff().affectedKeys().hasOnly([me()])
+      && reqDiff().affectedKeys().hasOnly([me()])
+      && (!('sub' in changed()) || (resource.data.get('sub', '') == me() && request.resource.data.sub == ''))
+      && (!(me() in memDiff().addedKeys()) || resource.data.get('open', false) == true);
+  }
+  // Miembros: jefe semanal y misiones del gremio
+  function contrib() {
+    return isMember() && changed().hasOnly(['bd', 'bh', 'bm', 'bp', 'bw', 'gm']);
+  }
+
+  allow read: if request.auth != null;
+  allow create: if request.auth != null && request.resource.data.owner == me();
+  allow delete: if request.auth != null && (isLeader() || isAdmin());
+  allow update: if request.auth != null
+    && (isLeader() || subAccept() || subReject() || selfOnly() || contrib());
+}
+// NUEVO: los Pokémon intercambiados tienen que tener un nivel válido (1-100)
+match /trades/{id} {
+  allow read: if request.auth != null && (resource == null || resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+  allow create: if request.auth != null && request.resource.data.from == request.auth.uid
+    && num(request.resource.data.o.l, 1, 100);
+  allow update: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid)
+    && request.resource.data.from == resource.data.from && request.resource.data.to == resource.data.to
+    && (!('b' in request.resource.data) || num(request.resource.data.b.l, 1, 100));
+  allow delete: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+}
+match /gifts/{id} {
+  // cada jugador ve los regalos que ha enviado o que le han enviado
+  allow read: if request.auth != null && (resource.data.to == request.auth.uid || resource.data.from == request.auth.uid);
+  // un regalo al día por amigo, a tu nombre
+  allow create: if request.auth != null && request.resource.data.from == request.auth.uid
+    && id == request.auth.uid + "_" + request.resource.data.to + "_" + request.resource.data.d && !banned();
+  allow update: if request.auth != null && resource.data.from == request.auth.uid
+    && request.resource.data.from == request.auth.uid && request.resource.data.to == resource.data.to;
+  // solo quien lo recibe puede abrirlo (al abrirlo se borra)
+  allow delete: if request.auth != null && resource.data.to == request.auth.uid;
+}
+
+    // Partida de cada jugador (NUEVO: tiene que ser texto y de tamaño razonable)
+    match /users/{uid} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.data is string && request.resource.data.data.size() < 1000000;
+    }
+
+    // Lobby y salas del PVP (ya existían)
+    match /lobby/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+    match /duels/{room}/p/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Registro de apodos únicos (nadie puede quedarse con el apodo de otro)
+    match /nicks/{key} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow update: if false;
+    }
+
+    // Lista de administradores: solo se modifica desde la consola de Firebase.
+    // NUEVO: cada uno puede leer solo SU documento (así el juego sabe si eres administrador); nadie ve la lista.
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
       allow write: if false;
     }
-    match /bans/{u} {
-      allow read: if signedIn() && (me() == u || isAdmin());
-      allow write: if isAdmin();
-    }
-    match /fixes/{u} {
-      allow read, delete: if signedIn() && (me() == u || isAdmin());
-      allow create, update: if isAdmin();
-    }
 
-    // ---------- partida guardada en la nube: solo el dueño ----------
-    match /users/{u} {
-      allow read: if signedIn() && (me() == u || isAdmin());
-      allow create, update: if signedIn() && me() == u
-                   && d().data is string && d().data.size() < 1000000;
-      allow delete: if signedIn() && me() == u;
-    }
-
-    // ---------- clasificaciones (perfil público): valores dentro de lo posible ----------
-    match /ranks/{u} {
-      allow read: if true;
-      allow delete: if isAdmin();
-      allow create, update: if signedIn() && me() == u
-        && str(d().n, 40)
-        && optNum('dex', 0, 1500)   // Pokédex
-        && optNum('med', 0, 8)      // medallas
-        && optNum('prs', 0, 200)    // prestigio
-        && optNum('sh', 0, 1000000) // variocolores
-        && optNum('ach', 0, 5000)   // logros
-        && optNum('win', 0, 100000000)
-        && optNum('pw', 0, 10000000)
-        && optNum('bs', 0, 10000000)
-        && optNum('tw', 0, 100000)
-        && optNum('hof', 0, 100000)
-        && optNum('cap', 1, 100)
-        && optNum('pt', 0, 100000);
-    }
-
-    // ---------- torneo semanal y récords de minijuegos ----------
-    // Las claves son «2026-W45» (torneo) o «2026-W45_who» (récord de un minijuego).
-    // La puntuación no puede pasar del máximo posible de cada minijuego.
-    function maxScore(w) {
-      return {'who': 6000, 'mem': 1700, 'dig': 400, 'fish': 3000, 'thr': 2500, 'run': 20000,
-              'exc': 2500, 'wgt': 40000, 'fos': 2500, 'puz': 50000, 'hl': 50000}
-             .get(w.split('_').size() > 1 ? w.split('_')[1] : 'x', 50000);
-    }
-    match /tours/{w}/s/{u} {
-      allow read: if true;
-      allow delete: if signedIn() && (me() == u || isAdmin());
-      allow create, update: if signedIn() && me() == u
-        && num(d().sc, 1, maxScore(w))
-        && optStr('n', 40);
-    }
-
-    // ---------- apodos únicos ----------
-    match /nicks/{k} {
-      allow read: if true;
-      allow create: if signedIn() && d().uid == me() && str(d().nick, 40);
-      allow delete: if signedIn() && (resource.data.uid == me() || isAdmin());
-      allow update: if false;
-    }
-
-    // ---------- chat global, de gremio y privados ----------
-    match /chats/global/msgs/{m} {
-      allow read: if signedIn();
-      allow create: if signedIn() && d().u == me() && optStr('t', 1000) && optStr('n', 40);
-      allow delete: if signedIn() && (resource.data.u == me() || isAdmin());
-      allow update: if false;
-    }
-    match /dms/{id}/msgs/{m} {
-      allow read: if signedIn() && me() in id.split('_');
-      allow create: if signedIn() && me() in id.split('_') && d().u == me() && optStr('t', 1000);
-      allow delete: if signedIn() && (resource.data.u == me() || isAdmin());
-      allow update: if false;
-    }
-    match /gchats/{gid}/msgs/{m} {
-      function member() { return me() in get(/databases/$(database)/documents/guilds/$(gid)).data.members; }
-      allow read: if signedIn() && (member() || isAdmin());
-      allow create: if signedIn() && member() && d().u == me() && optStr('t', 1000);
-      allow delete: if signedIn() && (resource.data.u == me() || isAdmin());
-      allow update: if false;
-    }
-
-    // ---------- amigos ----------
-    match /friends/{u} {
-      allow read: if signedIn();
-      allow write: if signedIn() && me() == u;
-    }
-    match /freq/{id} {
-      allow read: if signedIn() && (resource == null || resource.data.from == me() || resource.data.to == me());
-      allow create: if signedIn() && d().from == me();
-      allow update: if signedIn() && (resource.data.to == me() || resource.data.from == me());
-      allow delete: if signedIn() && (resource.data.to == me() || resource.data.from == me());
-    }
-
-    // ---------- regalos entre amigos ----------
-    match /gifts/{id} {
-      allow read: if signedIn() && (resource == null || resource.data.to == me() || resource.data.from == me());
-      allow create: if signedIn() && d().from == me() && id.matches(me() + '_.*');
-      allow delete: if signedIn() && (resource.data.to == me() || resource.data.from == me());
-      allow update: if false;
-    }
-
-    // ---------- intercambios ----------
-    match /trades/{id} {
-      allow read: if signedIn() && (resource == null || resource.data.from == me() || resource.data.to == me());
-      allow create: if signedIn() && d().from == me() && d().st == 'req'
-        && num(d().o.l, 1, 100);
-      allow update: if signedIn() && (resource.data.from == me() || resource.data.to == me())
-        && (!('b' in d()) || num(d().b.l, 1, 100));
-      allow delete: if signedIn() && (resource.data.from == me() || resource.data.to == me());
-    }
-
-    // ---------- mercadillo ----------
-    match /market/{id} {
-      allow read: if signedIn();
-      allow create: if signedIn() && d().s == me() && d().st == 'open'
-        && num(d().pr, 1000, 2000000000)
-        && (d().k == 'pk' ? num(d().pk.l, 1, 100) : num(d().it.q, 1, 999999));
-      // comprar: solo cambia el estado a vendido, con tu cuenta como comprador
-      allow update: if signedIn() && resource.data.st == 'open' && resource.data.s != me()
-        && d().st == 'sold' && d().b == me()
-        && d().diff(resource.data).affectedKeys().hasOnly(['st', 'b', 'bn']);
-      allow delete: if signedIn() && (resource.data.s == me() || resource.data.get('b', '') == me() || isAdmin());
-    }
-
-    // ---------- incursiones ----------
-    match /raids/{id} {
-      allow read: if signedIn();
-      allow create: if signedIn() && d().h == me();
-      allow update: if signedIn();
-      allow delete: if signedIn() && (resource.data.h == me() || isAdmin());
-    }
-
-    // ---------- duelos de preguntas ----------
-    match /sdu/{id} {
-      allow read: if signedIn() && (resource == null || resource.data.a == me() || resource.data.b == me());
-      allow create: if signedIn() && d().a == me();
-      allow update, delete: if signedIn() && (resource.data.a == me() || resource.data.b == me());
-    }
-
-    // ---------- gremios ----------
-    match /guilds/{gid} {
-      allow read: if signedIn();
-      allow create: if signedIn() && d().owner == me();
-      allow update: if signedIn();
-      allow delete: if signedIn() && (resource.data.owner == me() || isAdmin());
-    }
-
-    // ---------- códigos de invitación ----------
-    match /refs/{c} {
-      allow read: if signedIn();
-      allow create, update: if signedIn() && d().u == me();
-      allow delete: if isAdmin();
-      match /inv/{u} {
-        allow read: if signedIn();
-        allow create, update: if signedIn() && me() == u && optNum('med', 0, 8);
-        allow delete: if isAdmin();
-      }
-    }
-
-    // ---------- reportes (incluidos los automáticos del sistema) ----------
-    match /reports/{id} {
-      allow create: if signedIn() && d().by == me() && optStr('t', 400);
-      allow read, delete: if isAdmin();
-    }
-
-    // ---------- sugerencias ----------
+    // Sugerencias.
+    // - Cualquiera con cuenta puede enviar (a su nombre, sin estado ni respuesta puestos por él).
+    // - Cada jugador puede leer las suyas y cancelarlas (borrarlas) si no están completadas.
+    // - Los administradores leen y borran todas, cambian el estado, responden y borran fotos.
     match /suggestions/{id} {
-      allow create: if signedIn() && d().uid == me()
-        && d().text is string && d().text.size() <= 1000
-        && (!('imgs' in d()) || d().imgs.size() <= 3)
-        && !('st' in d()) && !('rp' in d()) && !('rpAt' in d());
-      allow read: if isAdmin() || (signedIn() && resource.data.uid == me());
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid
+        && request.resource.data.text is string && request.resource.data.text.size() <= 1000
+        && (!('imgs' in request.resource.data) || request.resource.data.imgs.size() <= 3)
+        && !('st' in request.resource.data) && !('rp' in request.resource.data) && !('rpAt' in request.resource.data);
+      allow read: if isAdmin()
+        || (request.auth != null && resource.data.uid == request.auth.uid);
       allow delete: if isAdmin()
-        || (signedIn() && resource.data.uid == me() && resource.data.get('st', '') != 'done');
+        || (request.auth != null && resource.data.uid == request.auth.uid && resource.data.get('st', '') != 'done');
       allow update: if isAdmin()
-        && d().diff(resource.data).affectedKeys().hasOnly(['imgs', 'st', 'rp', 'rpAt'])
-        && (!('st' in d()) || d().st in ['', 'seen', 'wip', 'done', 'no'])
-        && (!('rp' in d()) || (d().rp is string && d().rp.size() <= 1000));
-    }
-
-    // ---------- todo lo demás: cerrado ----------
-    match /{document=**} {
-      allow read, write: if false;
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['imgs', 'st', 'rp', 'rpAt'])
+        && (!('st' in request.resource.data) || request.resource.data.st in ['', 'seen', 'wip', 'done', 'no'])
+        && (!('rp' in request.resource.data) || (request.resource.data.rp is string && request.resource.data.rp.size() <= 1000));
     }
   }
 }

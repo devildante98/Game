@@ -26,7 +26,11 @@
     fetch(u,{method:"HEAD",cache:"no-store"}).then(function(res){
       jumpChk();var b=o(),d=Date.parse(res.headers.get("date")||"");
       if(!(d>0)||b-a>1500||b<a||document.hidden)return;   // respuesta lenta o con la página oculta: no vale
-      d+=500+(parseInt(res.headers.get("age")||"0",10)||0)*1000;var m=(a+b)/2;
+      // solo respuestas que vienen directamente del servidor: las guardadas en una caché (cabecera Age) pueden traer
+      // la hora atrasada o dar saltos según el servidor de cada país, y eso se confundía con un acelerador
+      var age=parseInt(res.headers.get("age")||"0",10)||0;if(age>0)return;
+      d+=500;var m=(a+b)/2;
+      if(S.length&&d<=S[S.length-1][0])return;   // la hora del servidor no ha avanzado: respuesta repetida, no vale
       // diferencia entre la hora real y el reloj del juego (para ordenar el chat y las incursiones aunque tu reloj no esté en hora)
       K.so=d-(DN()-(b-m));
       if(S.length&&d-S[S.length-1][0]<25000)return;
@@ -34,7 +38,9 @@
       var p=null;for(var i=0;i<S.length-1;i++){var dd=d-S[i][0];if(dd>=60000&&dd<=200000){p=S[i];break}}
       if(!p)return;
       var r=(m-p[1])/(d-p[0]);K.last=r;
-      if(r>1.5){K.hit++;K.ok=0;if(r>K.peak)K.peak=r;if(K.on)K.n++}else{K.hit=0;K.ok++}
+      // un acelerador da siempre la misma proporción; si las medidas bailan mucho, es la red y no un acelerador
+      K.rs=(K.rs||[]).concat([r]).slice(-3);var steady=K.rs.length<2||Math.max.apply(null,K.rs)/Math.min.apply(null,K.rs)<1.25;
+      if(r>1.5&&r<20&&steady){K.hit++;K.ok=0;if(r>K.peak)K.peak=r;if(K.on)K.n++}else{K.hit=0;K.ok++}
       if(!K.on&&K.hit>=3){setR(Math.max(1,r));K.on=true;K.at=Date.now();K.n=K.hit}
       else if(K.on&&K.hit>0)setR(Math.max(1,r));
       else if(K.on&&K.ok>=2){K.on=false;K.r=1}   // ya no se detecta: vuelve a la hora normal

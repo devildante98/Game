@@ -30,7 +30,11 @@
     fetch(u,{method:"HEAD",cache:"no-store"}).then(function(res){
       jumpChk();var b=o(),d=Date.parse(res.headers.get("date")||"");
       if(!(d>0)||b-a>1500||b<a||document.hidden)return;   // respuesta lenta o con la página oculta: no vale
-      d+=500+(parseInt(res.headers.get("age")||"0",10)||0)*1000;var m=(a+b)/2;
+      // solo respuestas que vienen directamente del servidor: las guardadas en una caché (cabecera Age) pueden traer
+      // la hora atrasada o dar saltos según el servidor de cada país, y eso se confundía con un acelerador
+      var age=parseInt(res.headers.get("age")||"0",10)||0;if(age>0)return;
+      d+=500;var m=(a+b)/2;
+      if(S.length&&d<=S[S.length-1][0])return;   // la hora del servidor no ha avanzado: respuesta repetida, no vale
       // diferencia entre la hora real y el reloj del juego (para ordenar el chat y las incursiones aunque tu reloj no esté en hora)
       K.so=d-(DN()-(b-m));
       if(S.length&&d-S[S.length-1][0]<25000)return;
@@ -38,7 +42,9 @@
       var p=null;for(var i=0;i<S.length-1;i++){var dd=d-S[i][0];if(dd>=60000&&dd<=200000){p=S[i];break}}
       if(!p)return;
       var r=(m-p[1])/(d-p[0]);K.last=r;
-      if(r>1.5){K.hit++;K.ok=0;if(r>K.peak)K.peak=r;if(K.on)K.n++}else{K.hit=0;K.ok++}
+      // un acelerador da siempre la misma proporción; si las medidas bailan mucho, es la red y no un acelerador
+      K.rs=(K.rs||[]).concat([r]).slice(-3);var steady=K.rs.length<2||Math.max.apply(null,K.rs)/Math.min.apply(null,K.rs)<1.25;
+      if(r>1.5&&r<20&&steady){K.hit++;K.ok=0;if(r>K.peak)K.peak=r;if(K.on)K.n++}else{K.hit=0;K.ok++}
       if(!K.on&&K.hit>=3){setR(Math.max(1,r));K.on=true;K.at=Date.now();K.n=K.hit}
       else if(K.on&&K.hit>0)setR(Math.max(1,r));
       else if(K.on&&K.ok>=2){K.on=false;K.r=1}   // ya no se detecta: vuelve a la hora normal
@@ -52,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794413313">
+<meta name="game-build" content="1794413462">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2670,7 +2676,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.49</small>
+    <small class="pcver">Versión 6.49.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7341,8 +7347,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.49";
+const GAME_VER="6.49.1";
 const NEWS=[
+{v:"2026-11-11-6.49.1",ver:"6.49.1",at:"2026-11-11T17:11",t:"🔧 Arreglos/Mejoras",l:["Arreglado otro caso en el que el juego podía creer por error que tu navegador iba acelerado (sobre todo jugando desde otros países): ahora solo se fía de la hora que da directamente el servidor y exige que las medidas coincidan antes de frenar nada","Si te frenó la producción por error, escríbenos en Sugerencias y te devolvemos los tickets"]},
 {v:"2026-11-11-6.49",ver:"6.49",at:"2026-11-11T17:08",t:"🏅 Exploración: los gimnasios son obligatorios",l:["Para avanzar en la historia de Exploración hay que ganar las medallas de los gimnasios, como en los juegos","Región de Alba: para entrar en la Cueva Roca, la Playa Coral y la Cima Aurora necesitas la Medalla Brote del Gimnasio de Pueblo Brisa (antes contaban por error las medallas del juego normal)","Para viajar en barco: Escarcha pide 1 medalla de Exploración, Brasa 3, Tormenta 5 y Celeste 6. Para la Liga Pokémon hacen falta las 8","Ya no hay excepciones: aunque tu historia esté más avanzada, el marinero no te lleva a otra región si no tienes las medallas. Si te faltan, vuelve a por ellas: los líderes te esperan"]},
 {v:"2026-11-11-6.48.1",ver:"6.48.1",at:"2026-11-11T17:03",t:"🔧 Arreglos/Mejoras",l:["Tu dormitorio está mucho mejor amueblado: cama con mesita, escritorio con PC y silla, tele con un sillón delante, armario, estanterías, cómoda, una mesita baja, plantas, una lámpara de pie, tu baúl de juguetes y peluches de Pokémon","Puedes mirar los peluches y el baúl con A"]},
 {v:"2026-11-11-6.48",ver:"6.48",at:"2026-11-11T17:01",t:"🏥 Centros Pokémon y Tiendas renovados",l:["Centros Pokémon ordenados como en los juegos: el mostrador centrado con la enfermera y una máquina curativa a cada lado, el PC junto al mostrador y una alfombra roja desde la puerta hasta el mostrador","Bancos para esperar a un lado, una mesa con revistas y sillas al otro, plantas en las esquinas y carteles en la pared","Tiendas Pokémon con estanterías de verdad llenas de productos (Poké Balls, pociones, cajas y refrescos), neveras de bebidas contra la pared y dos pasillos entre las estanterías","Puedes mirar el PC, los bancos, la mesa, las máquinas, las neveras y los carteles con A"]},
@@ -7602,7 +7609,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794413313";
+const GAME_B="1794413462";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

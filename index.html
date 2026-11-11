@@ -52,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.39"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.40"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794408781">
+<meta name="game-build" content="1794408869">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2596,6 +2596,8 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 @media (max-width:620px){.bcmd{grid-template-columns:1fr}.bcq{font-size:1rem;text-align:center}.bfight{grid-template-columns:1fr}.bcinfo{grid-row:auto;grid-column:auto;flex-direction:row;flex-wrap:wrap}}
 #menu.bclassic>.bcmd,#menu.bclassic>.bfight{grid-column:1/-1;width:100%;box-sizing:border-box}
 #menu.bclassic .bcq{white-space:normal}
+.bshq{grid-column:1/-1;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.bshq button{min-width:200px;padding:12px 16px;font-size:1rem}
+.bshp{grid-column:1/-1;text-align:center;margin:0 0 6px}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2661,7 +2663,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.39</small>
+    <small class="pcver">Versión 6.40</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -4925,6 +4927,12 @@ async function askSwitch(i){
   const id=await new Promise(r=>{B.choose=r});
   $("menu").innerHTML="";return "s"+id;
 }
+async function askShift(nx){const sd=B.E.sd[0],rest=sd.t.map((t,k)=>k).filter(k=>sd.t[k].mh>0&&k!==sd.ai),foe=B.E.sd[1].t[nx];if(!rest.length||!foe)return -1;
+  await say("¡"+B.trainer+" va a sacar a "+foe.p[0]+"! ¿Quieres cambiar de Pokémon?");
+  $("menu").innerHTML='<div class="bshq"><button data-k="l:y" class="red">🔁 Sí, cambiar</button><button data-k="l:n" class="alt">No, seguir con '+esc(typeof nk==="function"&&S.owned[beAct(sd).p[0]]?nk(beAct(sd).p[0]):beAct(sd).p[0])+'</button></div>';
+  const yn=await new Promise(r=>{B.choose=r});if(yn!=="y"){$("menu").innerHTML="";return -1}
+  $("menu").innerHTML='<p class="bshp">Contra <b>'+esc(foe.p[0])+'</b> ('+tyTxt(foe.p)+' · Nv'+foe.l+'). ¿A quién sacas?</p>'+swGrid(rest.map(k=>swCard(sd.t[k],'data-k="l:'+k+'"',false,"")).join(""))+'<button data-k="l:n" class="alt">No cambiar</button>';
+  const id=await new Promise(r=>{B.choose=r});$("menu").innerHTML="";return id==="n"?-1:+id}
 async function sSend(e){
   if(e.s===0){
     if(!e.forced){await say("¡Vuelve "+(typeof nk==="function"?nk(e.old):e.old)+"!");await pbRecall("msp")}
@@ -4949,6 +4957,8 @@ async function sAfter(){
   const acts=["",""];
   if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex((x,k)=>x.mh>0&&k!==E.sd[1].ai);
   if(E.sd[0].need)acts[0]=await askSwitch(0);
+  // estilo «Cambio» (como en los juegos): al debilitar a un Pokémon del entrenador, te dice cuál sacará y puedes cambiar antes
+  else if(acts[1]&&B.trainer&&O.bshift!==false){const k=await askShift(+acts[1].slice(1));if(k>=0){E.sd[0].need=1;acts[0]="s"+k}}
   if(acts[0]||acts[1]){await bePlay(beSwap(E,acts));if(E.over!=null)return finish(E.over===0?"win":"lose")}
   B.busy=false;setMenu(true);
 }
@@ -7324,8 +7334,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.39";
+const GAME_VER="6.40";
 const NEWS=[
+{v:"2026-11-11-6.40",ver:"6.40",at:"2026-11-11T15:54",t:"🔁 Combates contra entrenadores: modo Cambio",l:["Cuando debilitas a un Pokémon de un entrenador, te avisa de cuál va a sacar: «¡… va a sacar a Caterpie! ¿Quieres cambiar de Pokémon?»","Si dices que sí, se abre tu equipo para elegir a quién sacar antes de que salga el rival, como en los juegos","Funciona en todos los combates contra entrenadores, también en los de Exploración"]},
 {v:"2026-11-11-6.39",ver:"6.39",at:"2026-11-11T15:53",t:"🏘️ Pueblos más grandes y casas para visitar",l:["Los 8 pueblos y ciudades de Exploración son más grandes: tienen un barrio nuevo al este, con caminos, flores, un estanque y árboles","En cada barrio hay dos casas nuevas en las que puedes entrar y charlar con los vecinos: te cuentan historias del lugar y te dan consejos","Una de las casas de cada pueblo tiene escaleras al primer piso, con un dormitorio y alguien más con quien hablar","Las salidas hacia las rutas se han movido al nuevo borde del pueblo"]},
 {v:"2026-11-11-6.38",ver:"6.38",at:"2026-11-11T15:48",t:"⚔️ Nueva interfaz de combate",l:["Al empezar cada turno te pregunta «¿Qué debería hacer…?» con cuatro botones: LUCHAR, MOCHILA, POKÉMON y HUIR (o RENDIRSE contra entrenadores)","Al pulsar LUCHAR ves tus 4 ataques en un cuadro de 2×2, con el borde del color de su tipo","A la derecha, un panel con el tipo, los PP, la categoría, la potencia y la eficacia del ataque que señalas","Los botones de Mega, Dinamax y movimientos Z siguen ahí, junto a «Atrás»","Con mando: la cruceta mueve la selección y A la pulsa"]},
 {v:"2026-11-11-6.37",ver:"6.37",at:"2026-11-11T15:45",t:"🎮 Exploración: menú, mando, velocidad y límite de nivel",l:["Nuevo menú lateral (botón ☰ o tecla Tab): Equipo y Mochila, Pokédex de Exploración, Mapa, Minimapa, Velocidad, Controles, Otros jugadores y Guardar","Compatible con mando: cruceta o stick para moverte, A para hablar, B para correr o volver, Start para el menú y Select para la velocidad. Los botones se cambian en Menú → Controles","Velocidad x1, x2 o x3 (botón ⏩ o tecla V): acelera el caminar, los personajes y los combates","Límite de nivel por gimnasio, como en el juego normal: hasta vencer a Brezo tus Pokémon no pasan del Nv14, y el límite sube con cada medalla. Si uno ya tiene más nivel, lucha al nivel del límite"]},
@@ -7569,7 +7580,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794408781";
+const GAME_B="1794408869";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

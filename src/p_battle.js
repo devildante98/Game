@@ -535,6 +535,12 @@ async function askSwitch(i){
   const id=await new Promise(r=>{B.choose=r});
   $("menu").innerHTML="";return "s"+id;
 }
+async function askShift(nx){const sd=B.E.sd[0],rest=sd.t.map((t,k)=>k).filter(k=>sd.t[k].mh>0&&k!==sd.ai),foe=B.E.sd[1].t[nx];if(!rest.length||!foe)return -1;
+  await say("¡"+B.trainer+" va a sacar a "+foe.p[0]+"! ¿Quieres cambiar de Pokémon?");
+  $("menu").innerHTML='<div class="bshq"><button data-k="l:y" class="red">🔁 Sí, cambiar</button><button data-k="l:n" class="alt">No, seguir con '+esc(typeof nk==="function"&&S.owned[beAct(sd).p[0]]?nk(beAct(sd).p[0]):beAct(sd).p[0])+'</button></div>';
+  const yn=await new Promise(r=>{B.choose=r});if(yn!=="y"){$("menu").innerHTML="";return -1}
+  $("menu").innerHTML='<p class="bshp">Contra <b>'+esc(foe.p[0])+'</b> ('+tyTxt(foe.p)+' · Nv'+foe.l+'). ¿A quién sacas?</p>'+swGrid(rest.map(k=>swCard(sd.t[k],'data-k="l:'+k+'"',false,"")).join(""))+'<button data-k="l:n" class="alt">No cambiar</button>';
+  const id=await new Promise(r=>{B.choose=r});$("menu").innerHTML="";return id==="n"?-1:+id}
 async function sSend(e){
   if(e.s===0){
     if(!e.forced){await say("¡Vuelve "+(typeof nk==="function"?nk(e.old):e.old)+"!");await pbRecall("msp")}
@@ -559,6 +565,8 @@ async function sAfter(){
   const acts=["",""];
   if(E.sd[1].need)acts[1]="s"+E.sd[1].t.findIndex((x,k)=>x.mh>0&&k!==E.sd[1].ai);
   if(E.sd[0].need)acts[0]=await askSwitch(0);
+  // estilo «Cambio» (como en los juegos): al debilitar a un Pokémon del entrenador, te dice cuál sacará y puedes cambiar antes
+  else if(acts[1]&&B.trainer&&O.bshift!==false){const k=await askShift(+acts[1].slice(1));if(k>=0){E.sd[0].need=1;acts[0]="s"+k}}
   if(acts[0]||acts[1]){await bePlay(beSwap(E,acts));if(E.over!=null)return finish(E.over===0?"win":"lose")}
   B.busy=false;setMenu(true);
 }

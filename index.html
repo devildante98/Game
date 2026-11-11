@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49.7"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.50"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794423089">
+<meta name="game-build" content="1794423516">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2690,7 +2690,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.49.7</small>
+    <small class="pcver">Versión 6.50</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7145,7 +7145,7 @@ function applyO(){
   document.querySelectorAll("[data-o]").forEach(c=>{c.checked=!!O[c.dataset.o]});
 }
 function buildOpts(){
-  if(!SG[O.song])O.song=SG.length-1;
+  if(!SG[O.song])O.song=9;
   $("song").innerHTML=SG.map((s,i)=>'<option value="'+i+'">'+s.n+'</option>').join("");
   $("vol").value=O.vol;
   $("optb").onclick=()=>{$("optp").hidden=!$("optp").hidden};
@@ -7163,7 +7163,7 @@ function buildOpts(){
   $("svol").value=O.svol;$("svol").oninput=()=>{O.svol=+$("svol").value;if(sgain)sgain.gain.value=O.svol;saveO();snd("ui")};
   applyO();mui();$("mnow").textContent="Pulsa ▶ para escuchar música.";
   if(O.auto&&AUD){
-    O.song=SG.length-1;mstart();
+    O.song=9;mstart();
     const go=e=>{if(e&&e.target&&e.target.closest&&e.target.closest("#optb,#optp"))return;if(mplaying&&actx&&actx.state==="suspended")actx.resume();["pointerdown","keydown","touchstart"].forEach(ev=>removeEventListener(ev,go))};
     ["pointerdown","keydown","touchstart"].forEach(ev=>addEventListener(ev,go,{passive:true}));
   }
@@ -7364,8 +7364,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.49.7";
+const GAME_VER="6.50";
 const NEWS=[
+{v:"2026-11-11-6.50",ver:"6.50",at:"2026-11-11T19:57",t:"🎵 Música de Exploración al estilo clásico",l:["12 temas nuevos y originales al estilo de las consolas portátiles clásicas: pulso con vibrato, segunda voz, bajo y percusión de 8 bits","La música cambia sola según dónde estés: pueblos, rutas (pradera, nieve y ceniza volcánica), bosque, playa, cuevas, Centros Pokémon y tiendas, gimnasios, casas, laboratorio y Liga","En los combates de Exploración suena el tema de Pokémon salvaje, el de entrenador o uno nuevo para líderes de gimnasio, el Alto Mando y los jefes del Equipo Ocaso","Suena si tienes la música activada y la opción «Música distinta en cada sección» encendida (lo está por defecto). Los temas nuevos también están en la lista del reproductor"]},
 {v:"2026-11-11-6.49.7",ver:"6.49.7",at:"2026-11-11T19:51",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball con varias teclas a la vez ya no ralentiza el juego ni corta la música: cada toque es unas 100 veces más ligero y la pantalla se actualiza una vez por fotograma","Los números de tickets ya no se amontonan: los toques seguidos se suman en un solo número. Sigues ganando exactamente lo mismo por cada toque"]},
 {v:"2026-11-11-6.49.6",ver:"6.49.6",at:"2026-11-11T19:47",t:"🔧 Arreglos/Mejoras",l:["Exploración: los paneles que abres desde el menú lateral (Equipo y Mochila, Pokédex y Controles) tienen un botón «◀ Menú» junto a «Cerrar» que te devuelve al menú, en la misma opción, sin tener que volver a abrirlo","Con el mando (B) o con Esc también vuelves al menú. Si estás dentro de una ficha o una subpantalla, primero vuelves al panel"]},
 {v:"2026-11-11-6.49.5",ver:"6.49.5",at:"2026-11-11T19:41",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas ×100 ahora se ve cuáles son los Pokémon nuevos, con la etiqueta «¡NUEVO!» y un borde rojo brillante. En las tiradas más pequeñas también se resaltan"]},
@@ -7632,7 +7633,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794423089";
+const GAME_B="1794423516";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15803,6 +15804,47 @@ function xToy(ch,x){const k="TY"+ch+(x%3);if(XG[k])return XG[k];const c=xc(32,48
 {const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&!EX.cut&&EX.M&&EX.M.base==="F"){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);
   const T={n:["Un peluche de Pokémon. ¡Lo tienes desde que eras pequeño!"],t:["Tu baúl de juguetes: una Poké Ball de goma, un muñeco de Squirtle y una peonza."]};
   if(T[c]){snd("ui");exSay(T[c]);return}}}catch(e){}return _i.apply(this,arguments)}}
+
+// =====================================================================================
+// MÚSICA DE EXPLORACIÓN: temas originales de estilo chiptune clásico (pulso, segunda voz, vibrato)
+// que cambian solos según el mapa (pueblo, ruta, cueva, bosque, playa, Centro Pokémon, gimnasio, casas…)
+// y según el combate (salvaje, entrenador o líder). Suena si tienes la música activada.
+// =====================================================================================
+const XMS=[{"k":"town","n":"Exploración · Pueblo","bpm":112,"duty":0.5,"bass":"walk","drum":"k...h...s...h...","prog":"C F C G Am F G C","cls":1,"lead":"E5:2 G5:2 C6:4 B5:2 A5:2 G5:4 A5:2 C6:2 F6:4 E6:2 D6:2 C6:4 G5:2 E5:2 C5:2 E5:2 G5:4 C6:4 B5:4 A5:2 G5:2 D5:8 C6:2 B5:2 A5:4 E5:2 A5:2 C6:4 D6:2 C6:2 A5:4 F5:4 A5:4 G5:2 A5:2 B5:2 D6:2 C6:2 B5:2 A5:2 B5:2 C6:8 -:4 G5:4","harm":"C5:8 E5:8 F5:8 A5:8 E5:8 G5:8 D5:8 B4:8 E5:8 C5:8 F5:8 C5:8 D5:8 G5:8 E5:8 -:8"},{"k":"route","n":"Exploración · Ruta","bpm":150,"duty":0.25,"bass":"pump","drum":"k.h.s.h.k.hks.h.","prog":"G D Em C G D C D","cls":1,"lead":"D5:2 G5:2 B5:2 D6:2 B5:4 G5:4 A5:2 F#5:2 D5:2 F#5:2 A5:4 D6:4 B5:2 G5:2 E5:2 G5:2 B5:2 E6:2 D6:4 C6:4 B5:2 A5:2 G5:4 E5:4 G5:2 B5:2 D6:4 E6:2 D6:2 B5:4 A5:2 B5:2 C6:2 D6:2 F#6:4 E6:2 D6:2 E6:4 D6:2 C6:2 B5:2 A5:2 G5:4 A5:6 B5:2 A5:4 F#5:4","harm":"B4:8 D5:8 F#4:8 A4:8 G4:8 B4:8 E5:8 C5:8 D5:8 G5:8 F#5:8 A5:8 G5:8 E5:8 F#5:8 D5:8"},{"k":"snow","n":"Exploración · Ruta nevada","bpm":104,"duty":0.125,"bass":"walk","drum":"k.......h...s...","prog":"D Bm G A D Bm Em A","cls":1,"lead":"F#5:4 A5:4 D6:6 C#6:2 B5:4 F#5:4 D5:8 G5:2 A5:2 B5:4 D6:4 B5:4 A5:8 E5:4 C#5:4 D5:4 F#5:2 A5:2 D6:4 F#6:4 E6:4 D6:2 B5:2 F#5:8 G5:2 B5:2 E6:4 D6:2 B5:2 G5:4 A5:4 C#6:4 E6:4 A5:4"},{"k":"volc","n":"Exploración · Senda de ceniza","bpm":138,"duty":0.25,"bass":"gallop","drum":"k.hsk.h.k.hsk.hs","prog":"Em C D B Em C Am B","cls":1,"lead":"E5:2 G5:2 B5:4 A5:2 G5:2 E5:4 E5:2 G5:2 C6:4 B5:2 A5:2 G5:4 F#5:2 A5:2 D6:4 C6:2 B5:2 A5:4 B5:4 D#6:4 F#6:4 D#6:4 E6:4 D6:2 B5:2 G5:4 B5:4 C6:4 B5:2 G5:2 E5:4 G5:4 A5:2 C6:2 E6:4 D6:2 C6:2 A5:4 B5:8 D#6:4 F#5:4"},{"k":"forest","n":"Exploración · Bosque","bpm":120,"duty":0.125,"bass":"walk","drum":"k.....h.k.....h.","prog":"Am F Am E Am F Dm E","cls":1,"lead":"A5:3 C6:1 E6:4 D6:2 C6:2 B5:4 C6:4 A5:4 F5:8 E5:2 A5:2 C6:2 E6:2 D6:4 C6:4 B5:4 G#5:4 E5:8 A5:3 B5:1 C6:4 E6:4 A6:4 G6:2 F6:2 E6:2 C6:2 A5:8 D6:4 F6:4 E6:2 D6:2 C6:2 B5:2 G#5:4 B5:4 E6:8"},{"k":"beach","n":"Exploración · Playa","bpm":126,"duty":0.5,"bass":"walk","drum":"k..hs.h.k.hhs.h.","prog":"F Bb F C Dm Bb C,C7 F","cls":1,"lead":"C6:2 A5:2 F5:4 A5:2 C6:2 F6:4 D6:4 Bb5:2 D6:2 F6:4 D6:4 C6:2 A5:2 C6:2 F6:2 E6:2 D6:2 C6:4 G5:4 C6:4 E6:4 G6:4 F6:4 D6:2 A5:2 F5:4 A5:4 Bb5:2 D6:2 F6:4 E6:2 D6:2 Bb5:4 C6:4 E6:4 G6:2 F6:2 E6:4 F6:8 -:4 C6:4"},{"k":"cave","n":"Exploración · Cueva","bpm":96,"duty":0.125,"bass":"long","drum":"k.......k...h...","prog":"Dm Dm Bb A Dm Dm Gm A","cls":1,"lead":"D5:4 F5:4 A5:6 G#5:2 A5:4 F5:4 D5:8 Bb5:4 D6:4 F6:4 D6:4 C#6:8 A5:8 D6:4 A5:2 F5:2 D5:4 F5:4 E5:2 F5:2 G5:2 A5:2 F5:8 G5:4 Bb5:4 D6:4 G6:4 E6:8 C#6:8"},{"k":"center","n":"Exploración · Centro Pokémon","bpm":104,"duty":0.5,"bass":"walk","drum":"k...h...s...h...","prog":"G Em C D G Em Am,D G","cls":1,"lead":"B5:4 D6:4 G6:4 D6:4 E6:4 B5:4 G5:8 C6:2 D6:2 E6:4 G6:4 E6:4 D6:4 A5:4 F#5:8 G5:2 B5:2 D6:4 B5:2 D6:2 G6:4 F#6:4 E6:2 D6:2 B5:8 C6:4 E6:4 D6:4 C6:2 A5:2 G5:8 -:8","harm":"G5:8 B5:8 B5:8 G5:8 G5:8 C6:8 A5:8 D5:8 D5:8 G5:8 B5:8 G5:8 E5:8 F#5:8 B4:8 -:8"},{"k":"gym","n":"Exploración · Gimnasio","bpm":140,"duty":0.25,"bass":"pump","drum":"k.hsk.hsk.hsk.ss","prog":"Bb F Gm Eb Bb F Eb,F Bb","cls":1,"lead":"F5:2 Bb5:2 D6:4 C6:2 Bb5:2 F5:4 A5:2 C6:2 F6:4 Eb6:2 D6:2 C6:4 D6:2 Bb5:2 G5:2 Bb5:2 D6:4 G6:4 G6:4 F6:2 Eb6:2 Bb5:8 D6:4 F6:4 Bb6:4 F6:4 C6:4 F6:4 A6:4 F6:4 G6:4 Eb6:4 F6:4 A6:4 Bb6:8 -:4 F6:4"},{"k":"home","n":"Exploración · Hogar","bpm":80,"soft":1,"bass":"long","drum":"","prog":"F C Dm Bb F C Bb,C F","cls":1,"lead":"A5:8 C6:8 G5:8 E5:8 F5:4 A5:4 D6:8 D6:8 Bb5:8 C6:8 A5:4 F5:4 G5:8 C6:8 Bb5:8 G5:8 F5:16"},{"k":"lab","n":"Exploración · Laboratorio","bpm":116,"duty":0.5,"bass":"walk","drum":"k.h.k.h.s.h.k.h.","prog":"C Am Dm G C Am F,G C","cls":1,"lead":"G5:2 C6:2 E6:2 C6:2 G5:2 C6:2 E6:4 E6:2 C6:2 A5:4 C6:2 E6:2 A6:4 F6:4 D6:2 A5:2 F5:4 A5:4 G5:2 B5:2 D6:2 G6:2 F6:4 D6:4 E6:4 G6:4 C7:4 G6:4 A6:4 E6:4 C6:8 F6:2 E6:2 D6:2 C6:2 B5:2 C6:2 D6:4 C6:8 -:8"},{"k":"leader","n":"¡Combate contra un Líder!","bpm":168,"duty":0.25,"bass":"gallop","drum":"k.hsk.hsk.hskshs","prog":"Cm Ab Bb G Cm Ab Fm G","cls":1,"lead":"C6:2 G5:2 Eb5:2 G5:2 C6:4 D6:2 Eb6:2 C6:4 Ab5:4 Eb5:4 Ab5:4 Bb5:2 D6:2 F6:4 Eb6:2 D6:2 Bb5:4 B5:4 D6:4 G6:4 F6:2 D6:2 Eb6:4 G6:4 C7:4 G6:4 Ab6:4 Eb6:2 C6:2 Ab5:4 C6:4 F6:4 Ab6:4 G6:2 F6:2 Eb6:4 D6:4 B5:4 G5:8"}];
+const XMI={};XMS.forEach(s=>{XMI[s.k]=SG.length;SG.push(s)});
+// segunda voz (contramelodía) en los temas que la tienen
+{const _bt=buildTrack;buildTrack=function(sg){const tr=_bt.apply(this,arguments);try{tr.ch.harm=[];if(sg.harm){let t=0;sg.harm.trim().split(/\s+/).forEach(tok=>{const p=tok.split(":"),l=+p[1]||2;if(p[0]!=="-")(tr.ch.harm[t%tr.L]=tr.ch.harm[t%tr.L]||[]).push([pitch(p[0]),l]);t+=l})}}catch(e){}return tr}}
+// nota con vibrato retrasado, como en las consolas portátiles clásicas
+function mnoteV(type,midi,t,dur,vol){const o=actx.createOscillator(),g=actx.createGain(),f=440*Math.pow(2,(midi-69)/12);
+  if(typeof type==="number")o.setPeriodicWave(pwave(type));else o.type=type;o.frequency.value=f;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.005);g.gain.setValueAtTime(vol*.85,t+dur*.6);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  const lf=actx.createOscillator(),lg=actx.createGain();lf.frequency.value=5.5;lg.gain.setValueAtTime(0,t);lg.gain.setValueAtTime(0,t+Math.min(.25,dur*.4));lg.gain.linearRampToValueAtTime(f*.012,t+Math.min(.45,dur*.7));
+  lf.connect(lg);lg.connect(o.frequency);o.connect(g);g.connect(mgain);o.start(t);lf.start(t);o.stop(t+dur+.05);lf.stop(t+dur+.05)}
+msched=function(){const sg=SG[gmSongI()]||SG[0],sd=60/sg.bpm/4,c=mtrack.ch;
+  while(mnext<actx.currentTime+.3){const i=mstep%mtrack.L;
+    (c.lead[i]||[]).forEach(e=>{if(sg.cls&&!sg.soft&&e[1]>=4)mnoteV(sg.duty||.5,e[0],mnext,sd*e[1]*.95,.1);else mnote(sg.soft?"sine":sg.duty||.5,e[0],mnext,sd*e[1]*.95,sg.soft?.14:.1,sg.soft?.06:.005)});
+    (c.harm&&c.harm[i]||[]).forEach(e=>mnote(.25,e[0],mnext,sd*e[1]*.9,.045));
+    if(!(sg.cls&&sg.harm))(c.arp[i]||[]).forEach(e=>mnote(sg.soft?"triangle":.125,e[0],mnext,sd*e[1]*.9,sg.soft?.035:.028));
+    (c.bass[i]||[]).forEach(e=>mnote(sg.soft?"sine":"triangle",e[0],mnext,sd*e[1]*.9,sg.soft?.18:.24,sg.soft?.05:.005));
+    (c.dr[i]||[]).forEach(e=>mdrum(e[0],mnext));
+    mstep++;mnext+=sd}};
+// qué tema toca en cada mapa
+function xmusMap(){const m=EX.map||"",M=EX.M||{};
+  if(/^gym_/.test(m))return XMI.gym;if(m==="liga")return 7;if(/^(centro|tienda)/.test(m))return XMI.center;if(/_h\d|_h2b|^casa/.test(m))return XMI.home;
+  const k=M.music;if(k==="lab")return XMI.lab;if(k==="route")return M.z==="nie"?XMI.snow:M.z==="vol"?XMI.volc:XMI.route;
+  if(k==="forest")return XMI.forest;if(k==="beach")return XMI.beach;if(k==="cave")return XMI.cave;return XMI.town}
+// combates de Exploración: salvaje, entrenador o líder/Alto Mando
+function xmusBattle(){const b=EX.battle||{},cfg=b.cfg||{},tr=cfg.trainer||(typeof B!=="undefined"&&B&&B.trainer)||"";
+  if(!tr)return 2;if(/^(Líder|Lider|Alto Mando|Campe|Comandante|Jef)/i.test(tr)||cfg.gym!=null)return XMI.leader;return 3}
+const xmusOn=()=>typeof EX!=="undefined"&&!!EX.M&&((EX.on&&EX.cv&&EX.cv.isConnected)||!!EX.battle);
+{const _xb=exBattle;exBattle=function(cfg){const p=_xb.apply(this,arguments);try{if(EX.battle)EX.battle.cfg=cfg||{wild:1}}catch(e){}return p}}
+{const _gm=gmMusic;gmMusic=function(i){try{if(xmusOn()){if(EX.battle&&typeof fcd!=="undefined"&&fcd)i=xmusBattle();else if(!EX.battle)i=xmusMap()}}catch(e){}return _gm.call(this,i)}}
+// al cambiar de mapa o al terminar un combate, se pone el tema que toca
+let XMLAST=null;setInterval(()=>{try{if(typeof GM==="undefined"||!GM||!GM.init)return;const on=xmusOn();
+  if(on){const want=EX.battle&&typeof fcd!=="undefined"&&fcd?xmusBattle():EX.battle?null:xmusMap();if(want!=null&&GM.song!==want)gmMusic(want);XMLAST=1}
+  else if(XMLAST){XMLAST=null;gmMusic(typeof HB!=="undefined"&&HB&&GMMUS[HB.t]!=null&&HB.t&&!$("hubM").hidden?GMMUS[HB.t]:null)}}catch(e){}},400);
+// los temas nuevos también en la lista del reproductor
+{const fill=()=>{const s=$("song");if(!s||s.options.length>=SG.length)return;const v=s.value;s.innerHTML=SG.map((g,i)=>'<option value="'+i+'">'+esc(g.n)+'</option>').join("");s.value=v};fill();setTimeout(fill,1500)}
 
 </script>
 <script>

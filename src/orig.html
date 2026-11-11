@@ -2798,7 +2798,7 @@ function applyO(){
   document.querySelectorAll("[data-o]").forEach(c=>{c.checked=!!O[c.dataset.o]});
 }
 function buildOpts(){
-  if(!SG[O.song])O.song=SG.length-1;
+  if(!SG[O.song])O.song=9;
   $("song").innerHTML=SG.map((s,i)=>'<option value="'+i+'">'+s.n+'</option>').join("");
   $("vol").value=O.vol;
   $("optb").onclick=()=>{$("optp").hidden=!$("optp").hidden};
@@ -2816,7 +2816,7 @@ function buildOpts(){
   $("svol").value=O.svol;$("svol").oninput=()=>{O.svol=+$("svol").value;if(sgain)sgain.gain.value=O.svol;saveO();snd("ui")};
   applyO();mui();$("mnow").textContent="Pulsa ▶ para escuchar música.";
   if(O.auto&&AUD){
-    O.song=SG.length-1;mstart();
+    O.song=9;mstart();
     const go=e=>{if(e&&e.target&&e.target.closest&&e.target.closest("#optb,#optp"))return;if(mplaying&&actx&&actx.state==="suspended")actx.resume();["pointerdown","keydown","touchstart"].forEach(ev=>removeEventListener(ev,go))};
     ["pointerdown","keydown","touchstart"].forEach(ev=>addEventListener(ev,go,{passive:true}));
   }

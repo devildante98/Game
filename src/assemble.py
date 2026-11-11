@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.31.1";
+const GAME_VER="6.31.2";
 const NEWS=[
+{v:"2026-11-11-6.31.2",ver:"6.31.2",at:"2026-11-11T11:11",t:"🔧 Arreglos/Mejoras",l:["Rompecabezas Pokémon y Puzle de piezas: fondo nuevo, más claro, con sol, nubes y colinas, para que cada pieza se distinga mejor","«Ver la imagen» ahora enseña también el fondo, igual que el puzle"]},
 {v:"2026-11-11-6.31.1",ver:"6.31.1",at:"2026-11-11T11:08",t:"🔧 Arreglos/Mejoras",l:["Rompecabezas Pokémon y Puzle de piezas: la partida también se guarda al cerrar con la ✕, con Esc o al cerrar la página"]},
 {v:"2026-11-11-6.31",ver:"6.31",at:"2026-11-11T11:05",t:"🧷 Nuevo minijuego: Puzle de piezas",l:["Un puzle como los de verdad: piezas con salientes y huecos que encajan unas con otras. Empiezan sueltas y lo montas desde cero","Elige el número de piezas: de 9 a 100. Si sueltas una pieza cerca de su sitio, encaja sola","El «Puzle de sprites» ahora se llama «Rompecabezas Pokémon»","En los dos puzles puedes pulsar «💾 Guardar y salir» y seguir otro día justo donde lo dejaste, con el tiempo parado","El Puzle de piezas entra en la rotación del Torneo semanal a partir de la semana que viene"]},
 {v:"2026-11-11-6.30.2",ver:"6.30.2",at:"2026-11-11T10:57",t:"🔧 Arreglos/Mejoras",l:["Retos PVP, invitaciones por privado y lista de jugadores conectados: ahora usan la hora del servidor, así ya no desaparecen aunque el reloj de tu móvil vaya adelantado o atrasado"]},

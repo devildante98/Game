@@ -28,7 +28,7 @@ const G_PUZ={id:"puz",n:"Rompecabezas Pokémon",ic:"🧩",c:"#d8456f",d:"Recomp�
       const minSw=(()=>{const seen=new Array(T).fill(false);let c=0;for(let i=0;i<T;i++){if(seen[i])continue;let j=i;while(!seen[j]){seen[j]=true;j=ord[j]}c++}return T-c})();
       let moves=sv?sv.mv|0:0,sel=-1,t0=performance.now()-(sv?sv.el|0:0),done=false;if(sv)mgSaveDel("puz");
       B.innerHTML='<div class="whohd"><span>🧩 <b>'+T+'</b> piezas</span><span>⏱️ <b id="pzT">0:00</b></span><span>🔄 <b id="pzM">0</b></span><span>✅ <b id="pzOk">0</b>/'+T+'</span></div>'+
-        '<div class="pzwrap"><div class="pzb" id="pzB" style="--n:'+N+';--c1:'+(TC[tys(mon)[0]]||"#4a6ae0")+';--c2:'+(TC[tys(mon)[1]||"fairy"]||"#ff8ad8")+'"></div><img class="pzref" id="pzRef" alt=""></div>'+
+        '<div class="pzwrap" style="--n:'+N+';--c1:'+(TC[tys(mon)[0]]||"#4a6ae0")+';--c2:'+(TC[tys(mon)[1]||"fairy"]||"#ff8ad8")+'"><div class="pzb" id="pzB"></div><img class="pzref" id="pzRef" alt=""></div>'+
         '<div class="mgbtns"><button class="alt" id="pzPeek">👁️ Ver la imagen (mantén pulsado)</button><button class="alt" id="pzSave">💾 Guardar y salir</button></div>';
       const box=$("pzB"),ref=$("pzRef");
       const draw=()=>{let ok=0;box.innerHTML=ord.map((v,i)=>{const good=v===i;if(good)ok++;const x=v%N,y=Math.floor(v/N);
@@ -133,18 +133,21 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧷",c:"#2f9e8f",d:"Un puzle como
       let cpx=0;
       const build=img=>{
         cpx=Math.max(28,Math.min(180,Math.round(JG_BW*wpx*(window.devicePixelRatio||1)/N)));const R=cpx*N,bd=document.createElement("canvas");bd.width=bd.height=R;const g=bd.getContext("2d");
-        // fondo con los colores del tipo y algo de dibujo, para que las piezas se distingan
-        const gr=g.createLinearGradient(0,0,R,R);gr.addColorStop(0,c1);gr.addColorStop(1,c2);g.fillStyle=gr;g.fillRect(0,0,R,R);
-        const rg=g.createRadialGradient(R*.5,R*.45,R*.05,R*.5,R*.5,R*.75);rg.addColorStop(0,"rgba(255,255,255,.45)");rg.addColorStop(1,"rgba(0,0,0,.25)");g.fillStyle=rg;g.fillRect(0,0,R,R);
-        g.strokeStyle="rgba(255,255,255,.18)";g.lineWidth=R*.012;for(let k=1;k<=5;k++){g.beginPath();g.arc(R*.5,R*.5,R*.11*k,0,Math.PI*2);g.stroke()}
-        for(let k=0;k<14;k++){g.fillStyle="rgba(255,255,255,"+(.06+.06*(k%3))+")";g.beginPath();g.arc(R*((k*37%100)/100),R*((k*61%100)/100),R*(.02+.015*(k%4)),0,Math.PI*2);g.fill()}
+        // fondo con un paisaje sencillo (sol, nubes, colinas y luz que cambia de un lado a otro): cada zona es distinta y se sabe dónde va cada pieza
+        const lg=g.createLinearGradient(0,0,0,R),mix=(a,b,k)=>{const h=x=>[1,3,5].map(o=>parseInt(x.slice(o,o+2),16));try{const A=h(a),Bc=h(b);return "rgb("+A.map((v,n)=>Math.round(v+(Bc[n]-v)*k)).join(",")+")"}catch(e){return a}};
+        lg.addColorStop(0,mix(c1,"#ffffff",.55));lg.addColorStop(.55,c1);lg.addColorStop(1,c2);g.fillStyle=lg;g.fillRect(0,0,R,R);
+        const hg=g.createLinearGradient(0,0,R,0);hg.addColorStop(0,"rgba(255,255,255,.28)");hg.addColorStop(.45,"rgba(255,255,255,0)");hg.addColorStop(1,"rgba(0,0,0,.16)");g.fillStyle=hg;g.fillRect(0,0,R,R);
+        g.fillStyle="rgba(255,249,205,.4)";g.beginPath();g.arc(R*.18,R*.18,R*.13,0,Math.PI*2);g.fill();g.fillStyle="rgba(255,249,205,.98)";g.beginPath();g.arc(R*.18,R*.18,R*.08,0,Math.PI*2);g.fill();
+        g.fillStyle="rgba(255,255,255,.9)";g.beginPath();g.ellipse(R*.74,R*.16,R*.13,R*.06,0,0,Math.PI*2);g.fill();g.fillStyle="rgba(255,255,255,.75)";g.beginPath();g.ellipse(R*.84,R*.2,R*.09,R*.05,0,0,Math.PI*2);g.fill();
+        g.fillStyle=mix(c2,"#000000",.22);g.beginPath();g.ellipse(R*.92,R*1.04,R*.6,R*.32,0,0,Math.PI*2);g.fill();
+        g.fillStyle=mix(c2,"#000000",.45);g.beginPath();g.ellipse(R*.22,R*1.02,R*.75,R*.26,0,0,Math.PI*2);g.fill();
         if(img&&img.naturalWidth){const pd=R*.06,sz=R-pd*2,k=Math.min(sz/img.naturalWidth,sz/img.naturalHeight),w=img.naturalWidth*k,h=img.naturalHeight*k;g.shadowColor="rgba(0,0,0,.35)";g.shadowBlur=R*.02;g.drawImage(img,(R-w)/2,(R-h)/2,w,h);g.shadowBlur=0}
         const mp=Math.round(cpx*.25),S2=cpx+2*mp;
         PC.forEach(p=>{const cv=document.createElement("canvas");cv.width=cv.height=S2;cv.className="jgp";const x=cv.getContext("2d"),path=jgPath(cpx,mp,edges(p.i));
           x.save();x.clip(path);x.drawImage(bd,mp-(p.i%N)*cpx,mp-Math.floor(p.i/N)*cpx);x.restore();
           x.lineWidth=Math.max(1,cpx*.025);x.strokeStyle="rgba(255,255,255,.55)";x.stroke(path);x.lineWidth=Math.max(1,cpx*.012);x.strokeStyle="rgba(0,0,0,.45)";x.stroke(path);
           p.cv=cv;p.path=path;W.appendChild(cv)});
-        const ld=W.querySelector(".jgld");if(ld)ld.remove();ready=true;layout();$("jgOk").textContent=okN();if(okN()===T)win()};
+        const rc=document.createElement("canvas");rc.width=rc.height=Math.min(R,600);rc.getContext("2d").drawImage(bd,0,0,rc.width,rc.height);$("jgBd").appendChild(rc);const ld=W.querySelector(".jgld");if(ld)ld.remove();ready=true;layout();$("jgOk").textContent=okN();if(okN()===T)win()};
       const hc=document.createElement("canvas").getContext("2d");
       const hit=(ux,uy)=>{const L=PC.filter(p=>!p.l&&p.path).sort((a,b)=>b.z-a.z);
         for(const p of L){const lx=ux-(p.x-m),ly=uy-(p.y-m),sz=s+2*m;if(lx<0||ly<0||lx>sz||ly>sz)continue;const k=(cpx+2*Math.round(cpx*.25))/sz;if(hc.isPointInPath(p.path,lx*k,ly*k))return p}

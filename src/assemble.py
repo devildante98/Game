@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.49.6";
+const GAME_VER="6.49.7";
 const NEWS=[
+{v:"2026-11-11-6.49.7",ver:"6.49.7",at:"2026-11-11T19:51",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball con varias teclas a la vez ya no ralentiza el juego ni corta la música: cada toque es unas 100 veces más ligero y la pantalla se actualiza una vez por fotograma","Los números de tickets ya no se amontonan: los toques seguidos se suman en un solo número. Sigues ganando exactamente lo mismo por cada toque"]},
 {v:"2026-11-11-6.49.6",ver:"6.49.6",at:"2026-11-11T19:47",t:"🔧 Arreglos/Mejoras",l:["Exploración: los paneles que abres desde el menú lateral (Equipo y Mochila, Pokédex y Controles) tienen un botón «◀ Menú» junto a «Cerrar» que te devuelve al menú, en la misma opción, sin tener que volver a abrirlo","Con el mando (B) o con Esc también vuelves al menú. Si estás dentro de una ficha o una subpantalla, primero vuelves al panel"]},
 {v:"2026-11-11-6.49.5",ver:"6.49.5",at:"2026-11-11T19:41",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas ×100 ahora se ve cuáles son los Pokémon nuevos, con la etiqueta «¡NUEVO!» y un borde rojo brillante. En las tiradas más pequeñas también se resaltan"]},
 {v:"2026-11-11-6.49.4",ver:"6.49.4",at:"2026-11-11T19:35",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al ganar un combate (contra entrenadores o salvajes) se quedaba parado después del botín y no aparecía el botón «Volver». Ahora el combate termina con normalidad y recibes la experiencia","Además, si algún día fallase algo al repartir los premios, el combate se cierra igualmente y aparece «Volver»"]},

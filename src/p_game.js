@@ -4,9 +4,10 @@ var GM={init:0,scr:null,ph:{},auto:0,song:null,disp:null,look:"",bud:null,tw:[],
 const gmOn=()=>!O.classic;
 if(O.lite===undefined)O.lite=0;
 // números cortos: 1.250 → 1,25K · 3.400.000 → 3,4M (para que nunca ocupen más de la cuenta)
-function gmK(n){n=+n||0;if(Math.abs(n)<1000)return (Math.floor(n*10)/10).toLocaleString("es",{maximumFractionDigits:1});// escala española: mil (K), millón (M), mil millones (mM), billón (B), mil billones (mB), trillón (T)… · en inglés, la anglosajona
+const GKF=[0,1,2].map(d=>new Intl.NumberFormat("es",{maximumFractionDigits:d}));
+function gmK(n){n=+n||0;if(Math.abs(n)<1000)return GKF[1].format(Math.floor(n*10)/10);// escala española: mil (K), millón (M), mil millones (mM), billón (B), mil billones (mB), trillón (T)… · en inglés, la anglosajona
   const U=window.PGC_LANG==="en"?["K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"]:["K","M","mM","B","mB","T","mT","C","mC","Qi","mQi"];let i=-1;while(Math.abs(n)>=1000&&i<U.length-1){n/=1000;i++}
-  const d=Math.abs(n)<10?2:Math.abs(n)<100?1:0,v=Math.floor(n*Math.pow(10,d))/Math.pow(10,d);return v.toLocaleString("es",{maximumFractionDigits:d})+"\u202F"+U[i]}
+  const d=Math.abs(n)<10?2:Math.abs(n)<100?1:0,v=Math.floor(n*Math.pow(10,d))/Math.pow(10,d);return GKF[d].format(v)+"\u202F"+U[i]}
 const GMSCR={stage:{n:"Gacha",d:"Tiradas y máquina de Poké Balls",i:"gacha",c:"#e8414f",mus:null,nav:"gacha"},batP:{n:"Combate",d:"Combates contra Pokémon salvajes",i:"vs",c:"#2f6fd8",mus:3,nav:"bat"},shopP:{n:"Tienda de mejoras",d:"Mejora tu pueblo para ganar más tickets",i:"shop",c:"#0e9f6e",mus:4,nav:"shop"},earnP:{n:"Premios",d:"Regalo diario, racha y tickets gratis",i:"gift",c:"#e07a00",mus:null,nav:""}};
 // ---------- iconos dibujados (sin emojis) ----------
 const GMK='stroke="#1b2340" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
@@ -199,8 +200,9 @@ function gmInit(){
   document.addEventListener("click",gmClick,true);
   $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT();
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GM.scr&&gmOn()&&!document.querySelector("#gacM:not([hidden]),#uiDlg:not([hidden]),#pkv:not([hidden])")){gmClose()}});
-  $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const f=$("fx"),r=f.getBoundingClientRect(),b=$("train").getBoundingClientRect();
-    gmSparks(f,(e.clientX||b.left+b.width/2)-r.left,(e.clientY||b.top+b.height/2)-r.top,6);const tr=$("gTr");if(tr){tr.classList.remove("gjump");void tr.offsetWidth;tr.classList.add("gjump")}});
+  $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const Q=window._gsq||(window._gsq={x:0,y:0,on:0});Q.x=e.clientX||0;Q.y=e.clientY||0;if(Q.on)return;Q.on=1;
+    // chispas y salto del entrenador: una vez por fotograma aunque toques muchas veces a la vez
+    requestAnimationFrame(()=>{Q.on=0;const f=$("fx"),r=f.getBoundingClientRect(),b=$("train").getBoundingClientRect();gmSparks(f,(Q.x||b.left+b.width/2)-r.left,(Q.y||b.top+b.height/2)-r.top,6);const tr=$("gTr");if(tr){tr.classList.remove("gjump");void tr.offsetWidth;tr.classList.add("gjump")}})});
   // gacha: barra de garantía; combate: botón de filtros y barra de combatir fija
   {const gv=document.querySelector("#stage>.gview");if(gv&&!$("gPity")){gv.insertAdjacentHTML("afterend",'<div id="gPity" class="gmo"><span class="gpi">'+gI("medal",30)+'</span><div class="gpt"><b>Épico o mejor garantizado</b><i><u id="gPityB"></u></i></div><em><b id="gPityN">30</b><small>tiradas</small></em></div>');}
    const rt=document.querySelector("#stage>p.rates");if(rt)rt.classList.add("ghelp");

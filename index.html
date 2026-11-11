@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49.6"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49.7"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794422869">
+<meta name="game-build" content="1794423089">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2690,7 +2690,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.49.6</small>
+    <small class="pcver">Versión 6.49.7</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -3268,7 +3268,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 
 // Tickets automáticos (también mientras estás fuera, hasta 100)
 const G=[["Entrenador",15,.1],["Granja de Miltank",100,.6],["Centro Pokémon",600,3],["Guardería",3500,15],["Liga Pokémon",20000,80]];
-const fmt=n=>n>=1000?Math.floor(n).toLocaleString("es"):(Math.floor(n*10)/10).toLocaleString("es",{maximumFractionDigits:1});
+const NF0=new Intl.NumberFormat("es"),NF1=new Intl.NumberFormat("es",{maximumFractionDigits:1});const fmt=n=>n>=1000?NF0.format(Math.floor(n)):NF1.format(Math.floor(n*10)/10);
 const PRS=()=>S.prs||0,PMUL=()=>1+.5*PRS(),RMUL=()=>1+.25*PRS(),PDISC=()=>Math.max(.5,1-.05*PRS()),PITY=()=>PRS()>=6?20:PRS()>=3?25:30;
 const cpc=()=>.1*Math.pow(2,S.cl)*PMUL()*(typeof hhMul==="function"?hhMul("tk"):1),clc=()=>Math.round(25*Math.pow(3,S.cl));
 var gc=i=>Math.ceil(G[i][1]*Math.pow(1.15,S.g[i]));
@@ -3289,11 +3289,11 @@ function updShop(){
 }
 function fl(t,x,y){if(!O.flt)return;const e=document.createElement("span");e.className="fl";e.textContent=t;e.style.left=x+"px";e.style.top=y+"px";$("fx").appendChild(e);setTimeout(()=>e.remove(),900)}
 const CK=[];let CPSMAX=0;
-$("train").addEventListener("click",e=>{CK.push(Date.now());
-  const b=$("train"),r=b.getBoundingClientRect(),f=$("farm").getBoundingClientRect();
-  fl("+"+fmt(cpc()),(e.clientX||r.left+r.width/2)-f.left+Math.random()*30-15,(e.clientY||r.top+r.height/2)-f.top-20);
-  b.classList.remove("bump");void b.offsetWidth;b.classList.add("bump");const fs=$("fists");fs.classList.add("punch");setTimeout(()=>fs.classList.remove("punch"),90);
-});
+$("train").addEventListener("click",e=>{CK.push(Date.now());const T=window._tq||(window._tq={v:0,x:0,y:0,on:0,last:0});T.v+=cpc();T.x=e.clientX||0;T.y=e.clientY||0;if(T.on)return;T.on=1;
+  // varios toques seguidos (varias teclas a la vez) se juntan en un solo número y una sola animación, como mucho ~9 por segundo
+  const go=()=>requestAnimationFrame(()=>{T.on=0;T.last=performance.now();const b=$("train"),r=b.getBoundingClientRect(),f=$("farm").getBoundingClientRect();fl("+"+fmt(T.v),(T.x||r.left+r.width/2)-f.left+Math.random()*30-15,(T.y||r.top+r.height/2)-f.top-20);T.v=0;
+  b.classList.remove("bump");void b.offsetWidth;b.classList.add("bump");const fs=$("fists");fs.classList.add("punch");setTimeout(()=>fs.classList.remove("punch"),90)});
+  const w=110-(performance.now()-T.last);if(w>0)setTimeout(go,w);else go()});
 const GLV='<svg viewBox="0 0 36 36" width="32" height="32" aria-hidden="true"><rect x="2" y="11" width="9" height="14" rx="2" fill="#f4f2ff" stroke="#555a7a" stroke-width="1.5"/><rect x="9" y="8" width="23" height="20" rx="9" fill="#e63950" stroke="#7a1020" stroke-width="1.5"/><ellipse cx="21" cy="9.5" rx="8" ry="3.8" fill="#ff6c80" stroke="#7a1020" stroke-width="1.2"/><path d="M27 14v8" stroke="#7a1020" stroke-width="1.4" stroke-linecap="round"/></svg>';
 function fists(){
   if(S.cl===window._fk)return;window._fk=S.cl;const n=Math.min(S.cl,24);
@@ -3389,7 +3389,7 @@ $("ps10").onclick=()=>pull(10,true);
 $("p100").onclick=()=>pull(100);
 $("ps100").onclick=()=>pull(100,true);
 let cd=false;
-$("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");if(S.clicks%10===0)save();render()};
+$("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");if(S.clicks%10===0)save();if(!window._rq)window._rq=requestAnimationFrame(()=>{window._rq=0;render()})};
 // racha de dias seguidos: premios extra que crecen (cada 7 dias un Caramelo Raro, el dia 30 una Master Ball) y el ciclo vuelve a empezar
 const yday=()=>new Date(Date.now()-864e5).toISOString().slice(0,10);
 // pase de 30 días: cada semana mejor que la anterior, días grandes el 7, 14, 21 y 28 y gran premio el 30.
@@ -7364,8 +7364,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.49.6";
+const GAME_VER="6.49.7";
 const NEWS=[
+{v:"2026-11-11-6.49.7",ver:"6.49.7",at:"2026-11-11T19:51",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball con varias teclas a la vez ya no ralentiza el juego ni corta la música: cada toque es unas 100 veces más ligero y la pantalla se actualiza una vez por fotograma","Los números de tickets ya no se amontonan: los toques seguidos se suman en un solo número. Sigues ganando exactamente lo mismo por cada toque"]},
 {v:"2026-11-11-6.49.6",ver:"6.49.6",at:"2026-11-11T19:47",t:"🔧 Arreglos/Mejoras",l:["Exploración: los paneles que abres desde el menú lateral (Equipo y Mochila, Pokédex y Controles) tienen un botón «◀ Menú» junto a «Cerrar» que te devuelve al menú, en la misma opción, sin tener que volver a abrirlo","Con el mando (B) o con Esc también vuelves al menú. Si estás dentro de una ficha o una subpantalla, primero vuelves al panel"]},
 {v:"2026-11-11-6.49.5",ver:"6.49.5",at:"2026-11-11T19:41",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas ×100 ahora se ve cuáles son los Pokémon nuevos, con la etiqueta «¡NUEVO!» y un borde rojo brillante. En las tiradas más pequeñas también se resaltan"]},
 {v:"2026-11-11-6.49.4",ver:"6.49.4",at:"2026-11-11T19:35",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al ganar un combate (contra entrenadores o salvajes) se quedaba parado después del botín y no aparecía el botón «Volver». Ahora el combate termina con normalidad y recibes la experiencia","Además, si algún día fallase algo al repartir los premios, el combate se cierra igualmente y aparece «Volver»"]},
@@ -7631,7 +7632,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794422869";
+const GAME_B="1794423089";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9752,7 +9753,7 @@ function dayApply(){const ph=dayPhase();document.body.dataset.phase=ph;const b=$
 // ================= HORAS FELICES Y DÍA DE LA COMUNIDAD =================
 // Mismas horas para todos (hora de España): 13:00-14:00 y 20:00-21:00. Los sábados de 16:00 a 19:00, Día de la Comunidad.
 const HH_KINDS=[["shiny","✨ Variocolores ×3","Los variocolores salen 3 veces más en tiradas y combates"],["tk","🎟️ Tickets ×2","Ganas el doble de tickets por toque"],["xp","⭐ Experiencia ×2","Tus Pokémon ganan el doble de experiencia"],["leg","🌟 Lluvia de legendarios","Más probabilidad de legendarios en las tiradas"],["mg","🎮 Minijuegos ×2","Los premios de los minijuegos se duplican"]];
-function madridParts(t){const f=new Intl.DateTimeFormat("es-ES",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false}).formatToParts(new Date(t));const o={};f.forEach(x=>o[x.type]=x.value);return o}
+let MDF=null;function madridParts(t){if(!MDF)MDF=new Intl.DateTimeFormat("es-ES",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false});const f=MDF.formatToParts(new Date(t));const o={};f.forEach(x=>o[x.type]=x.value);return o}
 function hhSlots(dayOffset){// devuelve las franjas de un día (en ms) a partir del día de hoy en Madrid
   const now=Date.now(),out=[];for(let d=-1;d<=1+(dayOffset|0);d++){const t=now+d*864e5,o=madridParts(t),key=o.year+o.month+o.day;
     const base=t-((+o.hour)*36e5+(+o.minute)*6e4)-(new Date(t).getSeconds()*1e3+new Date(t).getMilliseconds());let h=0;for(const ch of key)h=(h*31+ch.charCodeAt(0))|0;h=Math.abs(h);
@@ -13936,9 +13937,10 @@ var GM={init:0,scr:null,ph:{},auto:0,song:null,disp:null,look:"",bud:null,tw:[],
 const gmOn=()=>!O.classic;
 if(O.lite===undefined)O.lite=0;
 // números cortos: 1.250 → 1,25K · 3.400.000 → 3,4M (para que nunca ocupen más de la cuenta)
-function gmK(n){n=+n||0;if(Math.abs(n)<1000)return (Math.floor(n*10)/10).toLocaleString("es",{maximumFractionDigits:1});// escala española: mil (K), millón (M), mil millones (mM), billón (B), mil billones (mB), trillón (T)… · en inglés, la anglosajona
+const GKF=[0,1,2].map(d=>new Intl.NumberFormat("es",{maximumFractionDigits:d}));
+function gmK(n){n=+n||0;if(Math.abs(n)<1000)return GKF[1].format(Math.floor(n*10)/10);// escala española: mil (K), millón (M), mil millones (mM), billón (B), mil billones (mB), trillón (T)… · en inglés, la anglosajona
   const U=window.PGC_LANG==="en"?["K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"]:["K","M","mM","B","mB","T","mT","C","mC","Qi","mQi"];let i=-1;while(Math.abs(n)>=1000&&i<U.length-1){n/=1000;i++}
-  const d=Math.abs(n)<10?2:Math.abs(n)<100?1:0,v=Math.floor(n*Math.pow(10,d))/Math.pow(10,d);return v.toLocaleString("es",{maximumFractionDigits:d})+"\u202F"+U[i]}
+  const d=Math.abs(n)<10?2:Math.abs(n)<100?1:0,v=Math.floor(n*Math.pow(10,d))/Math.pow(10,d);return GKF[d].format(v)+"\u202F"+U[i]}
 const GMSCR={stage:{n:"Gacha",d:"Tiradas y máquina de Poké Balls",i:"gacha",c:"#e8414f",mus:null,nav:"gacha"},batP:{n:"Combate",d:"Combates contra Pokémon salvajes",i:"vs",c:"#2f6fd8",mus:3,nav:"bat"},shopP:{n:"Tienda de mejoras",d:"Mejora tu pueblo para ganar más tickets",i:"shop",c:"#0e9f6e",mus:4,nav:"shop"},earnP:{n:"Premios",d:"Regalo diario, racha y tickets gratis",i:"gift",c:"#e07a00",mus:null,nav:""}};
 // ---------- iconos dibujados (sin emojis) ----------
 const GMK='stroke="#1b2340" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
@@ -14131,8 +14133,9 @@ function gmInit(){
   document.addEventListener("click",gmClick,true);
   $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT();
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GM.scr&&gmOn()&&!document.querySelector("#gacM:not([hidden]),#uiDlg:not([hidden]),#pkv:not([hidden])")){gmClose()}});
-  $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const f=$("fx"),r=f.getBoundingClientRect(),b=$("train").getBoundingClientRect();
-    gmSparks(f,(e.clientX||b.left+b.width/2)-r.left,(e.clientY||b.top+b.height/2)-r.top,6);const tr=$("gTr");if(tr){tr.classList.remove("gjump");void tr.offsetWidth;tr.classList.add("gjump")}});
+  $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const Q=window._gsq||(window._gsq={x:0,y:0,on:0});Q.x=e.clientX||0;Q.y=e.clientY||0;if(Q.on)return;Q.on=1;
+    // chispas y salto del entrenador: una vez por fotograma aunque toques muchas veces a la vez
+    requestAnimationFrame(()=>{Q.on=0;const f=$("fx"),r=f.getBoundingClientRect(),b=$("train").getBoundingClientRect();gmSparks(f,(Q.x||b.left+b.width/2)-r.left,(Q.y||b.top+b.height/2)-r.top,6);const tr=$("gTr");if(tr){tr.classList.remove("gjump");void tr.offsetWidth;tr.classList.add("gjump")}})});
   // gacha: barra de garantía; combate: botón de filtros y barra de combatir fija
   {const gv=document.querySelector("#stage>.gview");if(gv&&!$("gPity")){gv.insertAdjacentHTML("afterend",'<div id="gPity" class="gmo"><span class="gpi">'+gI("medal",30)+'</span><div class="gpt"><b>Épico o mejor garantizado</b><i><u id="gPityB"></u></i></div><em><b id="gPityN">30</b><small>tiradas</small></em></div>');}
    const rt=document.querySelector("#stage>p.rates");if(rt)rt.classList.add("ghelp");

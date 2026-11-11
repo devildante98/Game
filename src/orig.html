@@ -748,7 +748,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 
 // Tickets automáticos (también mientras estás fuera, hasta 100)
 const G=[["Entrenador",15,.1],["Granja de Miltank",100,.6],["Centro Pokémon",600,3],["Guardería",3500,15],["Liga Pokémon",20000,80]];
-const fmt=n=>n>=1000?Math.floor(n).toLocaleString("es"):(Math.floor(n*10)/10).toLocaleString("es",{maximumFractionDigits:1});
+const NF0=new Intl.NumberFormat("es"),NF1=new Intl.NumberFormat("es",{maximumFractionDigits:1});const fmt=n=>n>=1000?NF0.format(Math.floor(n)):NF1.format(Math.floor(n*10)/10);
 const PRS=()=>S.prs||0,PMUL=()=>1+.5*PRS(),RMUL=()=>1+.25*PRS(),PDISC=()=>Math.max(.5,1-.05*PRS()),PITY=()=>PRS()>=6?20:PRS()>=3?25:30;
 const cpc=()=>.1*Math.pow(2,S.cl)*PMUL(),clc=()=>Math.round(25*Math.pow(3,S.cl));
 const gc=i=>Math.ceil(G[i][1]*Math.pow(1.15,S.g[i]));
@@ -769,11 +769,11 @@ function updShop(){
 }
 function fl(t,x,y){if(!O.flt)return;const e=document.createElement("span");e.className="fl";e.textContent=t;e.style.left=x+"px";e.style.top=y+"px";$("fx").appendChild(e);setTimeout(()=>e.remove(),900)}
 const CK=[];let CPSMAX=0;
-$("train").addEventListener("click",e=>{CK.push(Date.now());
-  const b=$("train"),r=b.getBoundingClientRect(),f=$("farm").getBoundingClientRect();
-  fl("+"+fmt(cpc()),(e.clientX||r.left+r.width/2)-f.left+Math.random()*30-15,(e.clientY||r.top+r.height/2)-f.top-20);
-  b.classList.remove("bump");void b.offsetWidth;b.classList.add("bump");const fs=$("fists");fs.classList.add("punch");setTimeout(()=>fs.classList.remove("punch"),90);
-});
+$("train").addEventListener("click",e=>{CK.push(Date.now());const T=window._tq||(window._tq={v:0,x:0,y:0,on:0,last:0});T.v+=cpc();T.x=e.clientX||0;T.y=e.clientY||0;if(T.on)return;T.on=1;
+  // varios toques seguidos (varias teclas a la vez) se juntan en un solo número y una sola animación, como mucho ~9 por segundo
+  const go=()=>requestAnimationFrame(()=>{T.on=0;T.last=performance.now();const b=$("train"),r=b.getBoundingClientRect(),f=$("farm").getBoundingClientRect();fl("+"+fmt(T.v),(T.x||r.left+r.width/2)-f.left+Math.random()*30-15,(T.y||r.top+r.height/2)-f.top-20);T.v=0;
+  b.classList.remove("bump");void b.offsetWidth;b.classList.add("bump");const fs=$("fists");fs.classList.add("punch");setTimeout(()=>fs.classList.remove("punch"),90)});
+  const w=110-(performance.now()-T.last);if(w>0)setTimeout(go,w);else go()});
 const GLV='<svg viewBox="0 0 36 36" width="32" height="32" aria-hidden="true"><rect x="2" y="11" width="9" height="14" rx="2" fill="#f4f2ff" stroke="#555a7a" stroke-width="1.5"/><rect x="9" y="8" width="23" height="20" rx="9" fill="#e63950" stroke="#7a1020" stroke-width="1.5"/><ellipse cx="21" cy="9.5" rx="8" ry="3.8" fill="#ff6c80" stroke="#7a1020" stroke-width="1.2"/><path d="M27 14v8" stroke="#7a1020" stroke-width="1.4" stroke-linecap="round"/></svg>';
 function fists(){
   if(S.cl===window._fk)return;window._fk=S.cl;const n=Math.min(S.cl,24);
@@ -875,7 +875,7 @@ $("p10").onclick=()=>pull(10);
 $("ps").onclick=()=>pull(1,true);
 $("ps10").onclick=()=>pull(10,true);
 let cd=false;
-$("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");if(S.clicks%10===0)save();render()};
+$("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");if(S.clicks%10===0)save();if(!window._rq)window._rq=requestAnimationFrame(()=>{window._rq=0;render()})};
 $("daily").onclick=()=>{if(S.daily===today())return;S.daily=today();const gf=gift();S.t+=gf;S.dg=(S.dg||0)+1;qEv("daily");save();render();$("msg").textContent="¡+"+gf+" 🎟️ de regalo diario! Mañana será mayor."};
 function newGame(prs,seed){
   const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp};

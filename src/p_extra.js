@@ -63,7 +63,7 @@ function dayApply(){const ph=dayPhase();document.body.dataset.phase=ph;const b=$
 // ================= HORAS FELICES Y DÍA DE LA COMUNIDAD =================
 // Mismas horas para todos (hora de España): 13:00-14:00 y 20:00-21:00. Los sábados de 16:00 a 19:00, Día de la Comunidad.
 const HH_KINDS=[["shiny","✨ Variocolores ×3","Los variocolores salen 3 veces más en tiradas y combates"],["tk","🎟️ Tickets ×2","Ganas el doble de tickets por toque"],["xp","⭐ Experiencia ×2","Tus Pokémon ganan el doble de experiencia"],["leg","🌟 Lluvia de legendarios","Más probabilidad de legendarios en las tiradas"],["mg","🎮 Minijuegos ×2","Los premios de los minijuegos se duplican"]];
-function madridParts(t){const f=new Intl.DateTimeFormat("es-ES",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false}).formatToParts(new Date(t));const o={};f.forEach(x=>o[x.type]=x.value);return o}
+let MDF=null;function madridParts(t){if(!MDF)MDF=new Intl.DateTimeFormat("es-ES",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false});const f=MDF.formatToParts(new Date(t));const o={};f.forEach(x=>o[x.type]=x.value);return o}
 function hhSlots(dayOffset){// devuelve las franjas de un día (en ms) a partir del día de hoy en Madrid
   const now=Date.now(),out=[];for(let d=-1;d<=1+(dayOffset|0);d++){const t=now+d*864e5,o=madridParts(t),key=o.year+o.month+o.day;
     const base=t-((+o.hour)*36e5+(+o.minute)*6e4)-(new Date(t).getSeconds()*1e3+new Date(t).getMilliseconds());let h=0;for(const ch of key)h=(h*31+ch.charCodeAt(0))|0;h=Math.abs(h);

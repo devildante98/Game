@@ -17,7 +17,8 @@ const LKR=[
   ["hard","💪 Rivales más fuertes","Los Pokémon de los entrenadores tienen 2 niveles más."],
   ["leg","👑 Cláusula legendaria","Los legendarios y singulares se pueden capturar siempre: no gastan la captura de la zona ni cuentan como primer encuentro."],
   ["noleg","🚫 Sin legendarios","No puedes usar legendarios ni singulares en tu equipo (incluida tu compañera legendaria de la historia). Puedes capturarlos, pero se quedan en la caja."]];
-const LKDEF={mote:1,first:1,death:1,dupe:1,shiny:1,noitem:0,set:0,hard:0,leg:1,noleg:0};
+LKR.push(["nomercy","☠️ Cláusula Sin Piedad","Si todos los Pokémon de tu equipo se debilitan en un combate, pierdes el desafío al instante: la partida termina y tendrás que borrarla para empezar otra."]);
+const LKDEF={mote:1,first:1,death:1,dupe:1,shiny:1,noitem:0,set:0,hard:0,leg:1,noleg:0,nomercy:0};
 // los retos se eligen al principio: en cuanto bajas de tu habitación por primera vez, ya no se pueden activar
 const lkLocked=()=>{try{const t=stSt();return !!(t.f.lkLock||(t.s|0)>0)}catch(e){return true}};
 const lkLeg=n=>!!(PM[n]&&PM[n][2]==="L");
@@ -76,6 +77,14 @@ async function lkDeaths(){if(!lkEx()||!lkOn("death")||EX.noFaint)return;const L=
   if(fall.length)save();lkWipe()}
 function lkWipe(){const L=lkD();if(!L.on||!L.r.death||L.fail)return;const alive=xgRun(()=>Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]&&!lkDead(n)));
   if(!alive.length){L.fail=Date.now();save();setTimeout(()=>uiDlg("☠️ Todos tus Pokémon han caído. Tu reto Locke ha terminado. Puedes verlo en el PC de tu habitación, donde también puedes desactivar el modo Locke.",{alert:true,yes:"Entendido"}),400)}}
+// Sin Piedad: si cae todo el equipo en un combate, el desafío (y la partida) se acaba
+let LKNM=false;
+{const _f0=finish;finish=async function(res){try{if(res==="lose"&&lkEx()&&lkOn("nomercy")&&!EX.noFaint&&!(B&&B.ff)){const sd=B.E.sd[0];if(sd.t.every(t=>t.mh<=0)){const L=lkD();L.fail=Date.now();xgData().lost=Date.now();save();LKNM=true}}}catch(e){console.error(e)}
+  const r=await _f0.apply(this,arguments);
+  if(LKNM){LKNM=false;try{await say("☠️ Todo tu equipo ha caído. Por la Cláusula Sin Piedad, has perdido el desafío.")}catch(e){}
+    if(!window._lkNMShown)setTimeout(async()=>{window._lkNMShown=1;await uiDlg("☠️ Has perdido el desafío. Esta partida de Exploración ha terminado: para volver a jugar, bórrala desde «Borrar partida» y empieza una Partida nueva.",{alert:true,yes:"Entendido"});
+      const v=document.querySelector('#menu [data-k="9"]');if(v)v.click();setTimeout(()=>{try{EX.cut=null;EX.battle=null;exToTitle()}catch(e){console.error(e)}},1200)},300)}
+  return r}}
 {const _f=finish;finish=async function(res){try{if(lkEx()&&lkOn()){
     if(res==="cap"){const L=lkD(),lk=EX.battle.lk,sp=beAct(B.E.sd[1]).p[0];if(lk&&lk.z&&L.z[lk.z])L.z[lk.z].s="c";
       if(L.r.mote&&!xgRun(()=>S.mote&&S.mote[sp])){const n=await lkAskMote(sp);lkSetMote(sp,n);try{await say("¡"+sp+" ahora se llama «"+n+"»!")}catch(e){}}}
@@ -145,3 +154,5 @@ setInterval(()=>{try{if(!lkOn("noleg")||(typeof fcd!=="undefined"&&fcd))return;c
 {const _l=exLoad;exLoad=function(m){const from=EX.map;const r=_l.apply(this,arguments);try{const t=stSt();
   if(from==="casa_up"&&m==="casa"&&!t.f.lkLock){t.f.lkLock=1;save();const L=lkD(),R=rnD();if(L.on||R.w||R.t||R.i)setTimeout(()=>toast("🔐 Retos fijados para esta partida: "+(L.on?"Locke ":"")+(R.w||R.t||R.i?"Random":"")),600)}
   else if(m==="casa_up"&&!lkLocked()&&!EX._lkHint){EX._lkHint=1;setTimeout(()=>toast("💻 Antes de bajar, puedes activar el Modo Locke o el Modo Random en el PC de tu habitación."),2500)}}catch(e){}return r}}
+// si una partida perdió el desafío Sin Piedad, no se puede seguir jugando
+setInterval(()=>{try{if(!EX.on||EX.title||!(S.xg&&S.xg.lost)||(typeof fcd!=="undefined"&&fcd))return;exToTitle()}catch(e){}},1500);

@@ -12,7 +12,7 @@ function slHas(k){const d=slData(k),sto=d.ex&&d.ex.sto,xg=d.xg;
 function slInfo(k){const d=slData(k),ex=d.ex||{},xg=d.xg||{},f=(ex.sto&&ex.sto.f)||{};let med=0;try{med=XGYM.reduce((a,g,i)=>a+(f["xb"+i]?1:0),0)}catch(e){}
   const dex=xg.owned?Object.keys(xg.owned).filter(n=>xg.owned[n]>0&&PM[n]).length:0,pt=xg.pt|0,h=Math.floor(pt/3600),m=Math.floor(pt%3600/60);
   const team=(xg.team||[]).filter(n=>n&&PM[n]&&xg.owned&&xg.owned[n]>0).slice(0,6);
-  return {loc:(EXM[ex.m]||{}).n||"—",med:med,dex:dex,time:h+"h "+m+"m",team:team,mote:xg.mote||{},lk:!!(xg.lk&&xg.lk.on),rnd:!!(xg.rnd&&(xg.rnd.w||xg.rnd.t||xg.rnd.i))}}
+  return {loc:(EXM[ex.m]||{}).n||"—",med:med,dex:dex,time:h+"h "+m+"m",team:team,mote:xg.mote||{},lk:!!(xg.lk&&xg.lk.on),lost:!!xg.lost,rnd:!!(xg.rnd&&(xg.rnd.w||xg.rnd.t||xg.rnd.i))}}
 // deja la Exploración lista para la ranura activa (mapa, historia, compañero…)
 function slReset(){try{if(typeof XGSW!=="undefined"&&XGSW)xgOut()}catch(e){}
   Object.assign(EX,{map:null,grid:null,dlg:null,pend:[],cut:null,walkTo:null,fol:null,battle:null,trans:null,choice:null,mv:null,banner:null});
@@ -41,7 +41,7 @@ function smCard(k,act){const has=slHas(k),cur=slD().cur===k;
   return '<button type="button" class="smb smcard" data-sm="'+act+'" data-k="'+k+'"><div class="sch"><b>Partida '+k+(cur&&act!=="cont"?' <i>· activa</i>':'')+'</b><span>'+esc(i.loc)+'</span></div>'+
     '<div class="scb"><div class="scl"><div class="scw">'+tr+'<b class="scn">'+esc(S.nick||"Entrenador")+'</b></div>'+
     '<dl><dt>Medallas:</dt><dd>'+i.med+'</dd><dt>Pokédex:</dt><dd>'+i.dex+'</dd><dt>Tiempo:</dt><dd>'+i.time+'</dd></dl>'+
-    (i.lk||i.rnd?'<em>'+(i.lk?'🔒 Locke ':'')+(i.rnd?'🎲 Random':'')+'</em>':'')+'</div>'+
+    (i.lost?'<em class="sclost">☠️ Desafío perdido</em>':i.lk||i.rnd?'<em>'+(i.lk?'🔒 Locke ':'')+(i.rnd?'🎲 Random':'')+'</em>':'')+'</div>'+
     '<div class="sct">'+i.team.map(n=>'<span title="'+esc(i.mote[n]||n)+'">'+ico(PM[n],56)+'</span>').join("")+'</div></div></button>'}
 function smSlot(k,act){return smCard(k,act)}
 function smRender(){const b=$("exStartM");if(!b)return;const v=SM.v,L=slD(),has=slHas(L.cur);let h="";
@@ -59,6 +59,7 @@ function smRender(){const b=$("exStartM");if(!b)return;const v=SM.v,L=slD(),has=
   const first=b.querySelector(".smb");if(first)first.classList.add("on")}
 function smFocus(el){const b=$("exStartM");b.querySelectorAll(".smb.on").forEach(x=>x.classList.remove("on"));el.classList.add("on");try{el.scrollIntoView({block:"nearest"})}catch(e){}}
 async function smClick(e){const t=e.target.closest("[data-sm]");if(!t)return;e.stopPropagation();const a=t.dataset.sm,k=+t.dataset.k||0,L=slD();snd("ui");
+  if((a==="cont"||a==="loadk")&&slData(k||L.cur).xg&&slData(k||L.cur).xg.lost){await uiDlg("☠️ La Partida "+(k||L.cur)+" perdió el desafío (Cláusula Sin Piedad). Ya no se puede continuar: bórrala desde «Borrar partida» y empieza una Partida nueva.",{alert:true,yes:"Entendido"});return}
   if(a==="cont"){smStart();return}
   if(a==="back"){smClose();return}
   if(["main","new","load","del","opt"].includes(a)){SM.v=a;smRender();return}

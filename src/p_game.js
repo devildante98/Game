@@ -228,8 +228,12 @@ function gmApply(){
 // pantalla de carga: una Poké Ball que se abre
 function gmLoad(){if(!gmOn()||hubCalm())return;const L=gmEl("div","gLoad","",'<i class="glr"></i><div class="glogo"><span>POKE GACHA</span><b>ONLINE</b></div><div class="glb"><i class="glt"></i><i class="glbt"></i><i class="glbtn"></i></div><b class="glm">¡Vamos allá!</b>');
   // toda la animación va por CSS (la hace la tarjeta gráfica), así sigue fluida aunque el juego esté terminando de cargar
-  L.classList.add("glcss");setTimeout(()=>{try{snd("open")}catch(e){}},850);
-  const bye=()=>{if(L.isConnected)L.remove()};L.addEventListener("animationend",e=>{if(e.target===L)bye()});setTimeout(bye,4000)}
+  // la Poké Ball se balancea mientras el juego termina de cargar, y se abre en cuanto el navegador queda libre (así la apertura va fluida)
+  L.classList.add("glwait");let last=performance.now(),po=null,done=false;const t0=last;
+  try{po=new PerformanceObserver(()=>{last=performance.now()});po.observe({type:"longtask"})}catch(e){}
+  const go=()=>{if(done)return;done=true;try{po&&po.disconnect()}catch(e){}L.classList.remove("glwait");void L.offsetWidth;L.classList.add("glcss");setTimeout(()=>{try{snd("open")}catch(e){}},100)};
+  const chk=()=>{const n=performance.now();if(n-t0>3500||(n-t0>600&&n-last>300))go();else setTimeout(chk,100)};setTimeout(chk,300);
+  const bye=()=>{if(L.isConnected)L.remove()};L.addEventListener("animationend",e=>{if(e.target===L)bye()});setTimeout(bye,6000)}
 // ---------- abrir y cerrar secciones ----------
 function gmOpen(id,auto){
   if(!gmOn()||!GM.init)return;const P=$(id),D=GMSCR[id];if(!P||!D)return;

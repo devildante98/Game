@@ -93,11 +93,11 @@ const XFURN_TXT={B:["Una cama mullidita. Da ganas de echarse una siesta."],C:["U
   if(XFURN_TXT[c]&&!EX.npcs.some(n=>n.px===EX.x+dx&&n.py===EX.y+dy)){snd("ui");exSay(XFURN_TXT[c]);return}}}catch(e){}return _i.apply(this,arguments)}}
 // animación de subir o bajar la escalera
 {const _a=exArrive;exArrive=function(){try{const c=exAt(EX.x,EX.y),w=EX.M&&EX.M.w&&EX.M.w[c];if(w&&/^stairs/.test(w.look)&&!EX.climb){EX.climb={t0:performance.now(),up:w.look==="stairsup",out:1};EX.keys={};EX.kst=[];snd("ui");
-  const self=this,args=arguments;setTimeout(()=>{const cl=EX.climb;EX.climb=null;_a.apply(self,args);EX.climbIn={t0:performance.now()+500,up:cl.up}},420);return}}catch(e){}return _a.apply(this,arguments)}}
-{const _u=exUpdate;exUpdate=function(dt,ts){if(EX.climb||(EX.climbIn&&performance.now()-EX.climbIn.t0<380))return;return _u.apply(this,arguments)}}
-{const _t=exDrawTr;exDrawTr=function(g,code,face,x,y,fr,beat,me,ph){if(me&&(EX.climb||EX.climbIn)){const now=performance.now();let k=0,up=true;
-  if(EX.climb){k=Math.min(1,(now-EX.climb.t0)/400);up=EX.climb.up}else{const t=(now-EX.climbIn.t0)/380;if(t>=1){EX.climbIn=null;return _t.apply(this,arguments)}k=1-Math.max(0,t);up=!EX.climbIn.up}
-  g.save();g.globalAlpha=Math.max(0,1-k*.85);const dy=-k*(EX.climb?(up?16:9):12);const r=_t.call(this,g,code,face,x,y+dy,(Math.floor(now/120)%2)?1:3,beat,me,ph);g.restore();return r}
+  const self=this,args=arguments;setTimeout(()=>{EX.climbHold=EX.climb;EX.climb=null;_a.apply(self,args);setTimeout(()=>{EX.climbHold=null},600)},360);return}}catch(e){}return _a.apply(this,arguments)}}
+{const _u=exUpdate;exUpdate=function(dt,ts){if(EX.climb)return;return _u.apply(this,arguments)}}
+// al pisar la escalera: el personaje da un paso subiendo (o bajando) los peldaños, sin transparencias; luego la pantalla funde a negro
+{const _t=exDrawTr;exDrawTr=function(g,code,face,x,y,fr,beat,me,ph){const cl=me&&(EX.climb||EX.climbHold);if(cl){const k=Math.min(1,(performance.now()-cl.t0)/360);
+  const dy=cl.up?-k*10:-k*6,step=(Math.floor(performance.now()/110)%2)?1:3;return _t.call(this,g,code,face,x,y+dy,EX.climb?step:0,beat,me,ph)}
   return _t.apply(this,arguments)}}
 
 // =====================================================================================
@@ -171,3 +171,7 @@ function xStairWell(part,open){const k="SW"+part+open;if(XG[k])return XG[k];cons
 {const _g=xGround;xGround=function(x,y,fr){try{const c=exAt(x,y),M=EX.M,w=M&&M.w&&M.w[c];
   if(w&&w.look==="stairsdown")return xStairWell(0,xStOpen(x));
   if(c==="q")return xStairWell(1,xStOpen(x))}catch(e){}return _g.apply(this,arguments)}}
+
+// en los interiores, lo que queda fuera de la casa es negro (no árboles)
+{const _g=xGround;xGround=function(x,y,fr){if(EX.M&&EX.M.base==="F"&&!(EX.grid[y]&&EX.grid[y][x]!=null)){const k="VOID";return XG[k]||(XG[k]=(()=>{const c=xc(32,32);xr(c.getContext("2d"),0,0,32,32,"#0c0a14");return c})())}return _g.apply(this,arguments)}}
+{const _o=xObj;xObj=function(c,x,y){if(EX.M&&EX.M.base==="F"&&!(EX.grid[y]&&EX.grid[y][x]!=null))return null;return _o.apply(this,arguments)}}

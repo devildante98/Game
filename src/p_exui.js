@@ -329,3 +329,7 @@ window.addEventListener("keydown",e=>{const d=uiDlgOpen();if(!d)return;const t=e
   else if(eb){const n=d.querySelector('[data-u="0"]')||udBtns(d).pop();if(n)n.click();snd("ui")}}}
 // al abrirse, se marca el botón por defecto para que se vea qué está elegido
 setInterval(()=>{const d=uiDlgOpen();if(!d||d.querySelector(".gpf"))return;const a=document.activeElement;if(a&&d.contains(a)&&a.tagName==="BUTTON")udMark(a)},150);
+// con una ventana abierta (mochila, menú, mapa, tienda, PC, confirmaciones…) el personaje se para:
+// se olvidan las teclas de dirección que estuvieran pulsadas (su «soltar» lo recibe la ventana, no el juego)
+const exPaused=()=>{try{return !!(exOverlay()||exMenuOpen()||uiDlgOpen()||(typeof WM!=="undefined"&&WM.open)||(typeof XSH!=="undefined"&&XSH.open)||($("exStartM")&&!$("exStartM").hidden))}catch(e){return false}};
+{const _u=exUpdate;exUpdate=function(dt,ts){if(exPaused()){EX.keys={};EX.kst=[]}return _u.apply(this,arguments)}}

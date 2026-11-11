@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.54.3";
+const GAME_VER="6.54.4";
 const NEWS=[
+{v:"2026-11-11-6.54.4",ver:"6.54.4",at:"2026-11-11T23:21",t:"🔧 Arreglos/Mejoras",l:["Arreglado: si abrías la mochila (o el menú, el mapa, una tienda, el PC…) mientras andabas, tu personaje seguía avanzando. Ahora se para en cuanto se abre la ventana y no sigue andando solo al cerrarla"]},
 {v:"2026-11-11-6.54.3",ver:"6.54.3",at:"2026-11-11T23:13",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al rendirte ante un entrenador en Exploración, te volvía a detectar nada más salir y no podías irte. Ahora ese entrenador te deja en paz mientras sigas en esa zona (si quieres la revancha, háblale). Al cambiar de zona vuelve a vigilar como siempre"]},
 {v:"2026-11-11-6.54.2",ver:"6.54.2",at:"2026-11-11T23:05",t:"🔧 Arreglos/Mejoras",l:["Exploración: la ventana de «Usar objeto» de la Mochila ahora se ajusta a su contenido y sale centrada, sin tanto espacio vacío, con la explicación del objeto arriba"]},
 {v:"2026-11-11-6.54.1",ver:"6.54.1",at:"2026-11-11T23:03",t:"🔧 Arreglos/Mejoras",l:["Exploración: al conseguir una MT u otro objeto (del suelo, de un mueble o de regalo), el diálogo te explica qué hace. En las MT dice el movimiento, su tipo, categoría, poder, precisión, PP y efecto","Mochila de Exploración: un recuadro muestra qué hace el objeto que tienes seleccionado, también con el mando. Al ir a usarlo, enseñarlo o equiparlo a un Pokémon, la información aparece arriba (también la de los Cristales Supremos, objetos equipables, piedras evolutivas, mentas…)"]},

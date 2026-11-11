@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52.5"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794428209">
+<meta name="game-build" content="1794428486">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2771,7 +2771,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.52.4</small>
+    <small class="pcver">Versión 6.52.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7445,8 +7445,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.52.4";
+const GAME_VER="6.52.5";
 const NEWS=[
+{v:"2026-11-11-6.52.5",ver:"6.52.5",at:"2026-11-11T21:21",t:"🔧 Arreglos/Mejoras",l:["El botón «Pokémon» de la barra de abajo ahora se llama «Pokédex»"]},
 {v:"2026-11-11-6.52.4",ver:"6.52.4",at:"2026-11-11T21:16",t:"🔧 Arreglos/Mejoras",l:["Pantalla de carga rediseñada para que vaya fluida en cualquier ordenador: la Poké Ball se balancea mientras el juego termina de cargar y se abre cuando el navegador queda libre. El fondo es más ligero de dibujar","Modo Locke: nueva «☠️ Cláusula Sin Piedad». Si todos los Pokémon de tu equipo se debilitan en un combate, pierdes el desafío al instante. La partida queda marcada como «☠️ Desafío perdido» y ya no se puede continuar: hay que borrarla y empezar una Partida nueva"]},
 {v:"2026-11-11-6.52.3",ver:"6.52.3",at:"2026-11-11T21:04",t:"🔧 Arreglos/Mejoras",l:["La pantalla de carga va mucho más fluida: la Poké Ball que se abre la anima ahora la tarjeta gráfica, así que no se traba aunque el juego esté terminando de cargar","Mientras carga, ya no se dibuja el pueblo que queda tapado detrás","En la pantalla azul de antes de la carga hay una Poké Ball que se balancea, para que no parezca congelada"]},
 {v:"2026-11-11-6.52.2",ver:"6.52.2",at:"2026-11-11T20:58",t:"🔧 Arreglos/Mejoras",l:["Modo Locke y Modo Random: ahora se eligen al principio de la partida, como en los fangames. Solo puedes activarlos (y cambiar las reglas) en el PC de tu habitación antes de bajar las escaleras por primera vez","Al despertar en tu cuarto te avisa de que puedes configurarlos. Al bajar, los retos quedan fijados","Después solo se pueden desactivar, y no se pueden volver a activar en esa partida. Para jugar con ellos en una partida ya empezada, crea una Partida nueva desde el menú principal"]},
@@ -7721,7 +7722,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794428209";
+const GAME_B="1794428486";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14196,7 +14197,7 @@ function gmInit(){
     '<button class="gres" id="gStk" title="Racha diaria"><span class="gic">'+gI("flame",26)+'</span><b id="gStkN">0</b></button>'+
     '<button class="gres gpass" id="gPass" title="Pase de temporada"><span class="gic">'+gI("pass",26)+'</span><span class="gpb"><b id="gPassN">Nv 0</b><i><u id="gPassB"></u></i></span></button>');
   // barra de navegación inferior
-  const NAV=[["dex","dex","Pokémon"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","shop","Tienda"],["soc","soc","Social"],["menu","menu","Menú"]];
+  const NAV=[["dex","dex","Pokédex"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","shop","Tienda"],["soc","soc","Social"],["menu","menu","Menú"]];
   gmEl("nav","gNav","",NAV.map(n=>'<button data-gn="'+n[0]+'"'+(n[0]==="menu"?' id="gnavb"':'')+' class="'+(n[0]==="gacha"?"gbig":"")+'"><span class="gni">'+gI(n[1],n[0]==="gacha"?44:30)+'</span><b>'+n[2]+'</b><i class="gbd" hidden></i></button>').join(""));
   // pantallas de sección (mismo aspecto que las ventanas del menú)
   const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");

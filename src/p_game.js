@@ -173,7 +173,7 @@ function gmInit(){
     '<button class="gres" id="gStk" title="Racha diaria"><span class="gic">'+gI("flame",26)+'</span><b id="gStkN">0</b></button>'+
     '<button class="gres gpass" id="gPass" title="Pase de temporada"><span class="gic">'+gI("pass",26)+'</span><span class="gpb"><b id="gPassN">Nv 0</b><i><u id="gPassB"></u></i></span></button>');
   // barra de navegación inferior
-  const NAV=[["dex","dex","Pokémon"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","shop","Tienda"],["soc","soc","Social"],["menu","menu","Menú"]];
+  const NAV=[["dex","dex","Pokédex"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","shop","Tienda"],["soc","soc","Social"],["menu","menu","Menú"]];
   gmEl("nav","gNav","",NAV.map(n=>'<button data-gn="'+n[0]+'"'+(n[0]==="menu"?' id="gnavb"':'')+' class="'+(n[0]==="gacha"?"gbig":"")+'"><span class="gni">'+gI(n[1],n[0]==="gacha"?44:30)+'</span><b>'+n[2]+'</b><i class="gbd" hidden></i></button>').join(""));
   // pantallas de sección (mismo aspecto que las ventanas del menú)
   const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");

@@ -52,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.36.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.36.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794407645">
+<meta name="game-build" content="1794407802">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2622,7 +2622,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.36.1</small>
+    <small class="pcver">Versión 6.36.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7285,8 +7285,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.36.1";
+const GAME_VER="6.36.2";
 const NEWS=[
+{v:"2026-11-11-6.36.2",ver:"6.36.2",at:"2026-11-11T15:36",t:"🔧 Arreglos/Mejoras",l:["Exploración en compañía: cuando alguien sale de Exploración, cierra la página o deja el juego en segundo plano, desaparece del mapa de los demás en vez de quedarse quieto donde estaba","Al volver a entrar, los demás le ven en su posición nueva"]},
 {v:"2026-11-11-6.36.1",ver:"6.36.1",at:"2026-11-11T15:34",t:"🔧 Arreglos/Mejoras",l:["Exploración en compañía: arreglado que un jugador pudiera ver a otro pero no al revés cuando el reloj de uno de los móviles u ordenadores iba adelantado o atrasado","Puzle de piezas en equipo: el mismo arreglo para la lista de jugadores de la sala"]},
 {v:"2026-11-11-6.36",ver:"6.36",at:"2026-11-11T14:40",t:"👥 Juega en compañía en tiempo real",l:["Exploración en compañía: ahora ves en el mapa a los demás jugadores que están en la misma zona, con su nombre, moviéndose en tiempo real","Ponte delante de otro jugador y pulsa A para saludarle con un emoticono o retarle a un combate. Con el botón 💬 saludas a todos los que estén cerca","Con el botón 👥 ves cuántos jugadores hay en tu zona, y puedes ocultarlos si prefieres explorar solo","Nuevo modo cooperativo: Puzle de piezas en equipo. Crea una sala, pasa el código a tus amigos y montad el mismo puzle entre 2 y 4 jugadores, viendo moverse las piezas de los demás","Al terminar el puzle en equipo todos ganan premio, y quien más piezas encaja gana algo más"]},
 {v:"2026-11-11-6.35",ver:"6.35",at:"2026-11-11T14:33",t:"🎒 Más de 70 objetos equipables nuevos",l:["Repartir Experiencia: el Pokémon que lo lleva gana la mitad de la experiencia aunque no luche","Moneda Amuleto (el doble de tickets en los combates), Piedra Eterna (no evoluciona) y Amuleto (menos Pokémon salvajes en Exploración)","Los 18 objetos que potencian un tipo (Carbón, Agua Mística, Imán, Semilla Milagro…) y las 18 bayas que reducen un ataque supereficaz (Baya Caoca, Pasio, Chilan…)","Bayas Aranja, Higog, Lichi, Gonlan, Aslac, Yapati y Aricoc, y las que curan estados (Zreza, Atania, Meloc, Safre y Perasi)","Cinta Aguante, Seguro Debilidad, Seguro Fallo, Tubérculo, Pila, Bola de Nieve, Musgo Brillante, Telescopio, Raíz Grande, Paracontacto, Amuleto Puro, Capa Furtiva y Dado Trucado","Objetos de especie: Hueso Grueso, Puerro, Puño Suerte, Rocío Bondad, Diamansfera, Lustresfera, Griseosfera, Polvo Veloz y Polvo Metálico","Funcionan en el juego normal y en Exploración. En Exploración se compran en las Tiendas Pokémon, y cada pueblo vende los de su zona"]},
@@ -7526,7 +7527,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794407645";
+const GAME_B="1794407802";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14917,16 +14918,20 @@ async function xoJoin(map){const key="ex_"+map;if(XO.key===key&&XO.room)return;i
 XO.rc={};
 function xoFresh(p){const k=p.peer,u=+p.updatedAt||0,now=Date.now(),r=XO.rc[k];
   if(!r||r.u!==u){const far=Math.abs((typeof srvNow==="function"?srvNow():now)-u)>15*60000&&!r;XO.rc[k]={u:u,at:far?0:now}}
-  return now-XO.rc[k].at<75000}
+  return now-XO.rc[k].at<50000}
 function xoPeers(peers){XO.last=peers;const seen={};
       peers.forEach(p=>{if(p.isMe||!p.presence||!p.presence.x&&p.presence.x!==0)return;if(!xoFresh(p))return;const q=p.presence,o=XO.peers[p.peer]||{dx:q.x,dy:q.y};
         Object.assign(o,{id:p.peer,n:pvClean(q.n||"Jugador"),lk:q.lk||"",x:+q.x||0,y:+q.y||0,f:EXDIR[q.f]?q.f:"d",e:XO_EMO.includes(q.e)?q.e:"",et:+q.et||0});XO.peers[p.peer]=o;seen[p.peer]=1});
       Object.keys(XO.peers).forEach(k=>{if(!seen[k])delete XO.peers[k]})}
+// al cerrar o recargar la página, salir de la sala para no dejar un «fantasma»
+window.addEventListener("pagehide",()=>{if(XO.room)xoLeave()});
 async function xoLeave(){const r=XO.room;XO.room=null;XO.key="";XO.peers={};if(r)try{await r.leave()}catch(e){}}
 // publicar mi posición (como mucho cada 350 ms y solo si ha cambiado)
 setInterval(()=>{try{
-  const active=typeof EX!=="undefined"&&EX.map&&EX.map!=="casa"&&(EX.on||EX.battle)&&!EX.title&&xoOn()&&xoUid();
-  if(!active){if(XO.room&&!XO.leaveT)XO.leaveT=Date.now();if(XO.room&&Date.now()-XO.leaveT>6000){XO.leaveT=0;xoLeave()}return}XO.leaveT=0;
+  // solo cuentas como «en el mapa» si la pantalla de Exploración está abierta y a la vista (o estás en un combate de Exploración)
+  const vis=EX.cv&&EX.cv.isConnected&&EX.cv.offsetParent!==null&&!document.hidden;
+  const active=typeof EX!=="undefined"&&EX.map&&EX.map!=="casa"&&((EX.on&&vis)||EX.battle)&&!EX.title&&xoOn()&&xoUid();
+  if(!active){if(XO.room&&!XO.leaveT)XO.leaveT=Date.now();if(XO.room&&Date.now()-XO.leaveT>(document.hidden?15000:1500)){XO.leaveT=0;xoLeave()}return}XO.leaveT=0;
   if(XO.key!=="ex_"+EX.map){xoJoin(EX.map);return}if(!XO.room)return;
   const p={n:pvNick(),lk:trEnc(myLook()),x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT},j=JSON.stringify(p);
   const j2=j;if(j2!==XO.lastJ&&Date.now()-XO.lastW>=350){XO.lastJ=j2;XO.lastW=Date.now();XO.room.presence(p).catch(()=>{})}

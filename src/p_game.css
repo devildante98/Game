@@ -1016,3 +1016,6 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 @media (prefers-reduced-motion:reduce){html.gmpre body:not(.gm):has(#auth[hidden])::after{animation:none}}
 .exsm .scl em.sclost{color:#ff7a7a}
 .exscr:has(.extitle:not([hidden])) #exDlg{display:none!important}
+/* mientras hay un diálogo, los indicadores de abajo (tickets, chat, jugadores, velocidad y menú) se esconden para no tapar el texto */
+.exscr:has(#exDlg:not([hidden])) :is(.exmoney,.xobtn,.exspdb,.exmenub){opacity:0!important;pointer-events:none!important;transition:opacity .15s}
+.exscr :is(.exmoney,.xobtn,.exspdb,.exmenub){transition:opacity .15s}

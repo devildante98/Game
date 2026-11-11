@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52.8"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52.9"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794431650">
+<meta name="game-build" content="1794431787">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2707,6 +2707,9 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 @media (prefers-reduced-motion:reduce){html.gmpre body:not(.gm):has(#auth[hidden])::after{animation:none}}
 .exsm .scl em.sclost{color:#ff7a7a}
 .exscr:has(.extitle:not([hidden])) #exDlg{display:none!important}
+/* mientras hay un diálogo, los indicadores de abajo (tickets, chat, jugadores, velocidad y menú) se esconden para no tapar el texto */
+.exscr:has(#exDlg:not([hidden])) :is(.exmoney,.xobtn,.exspdb,.exmenub){opacity:0!important;pointer-events:none!important;transition:opacity .15s}
+.exscr :is(.exmoney,.xobtn,.exspdb,.exmenub){transition:opacity .15s}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2772,7 +2775,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.52.8</small>
+    <small class="pcver">Versión 6.52.9</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7446,8 +7449,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.52.8";
+const GAME_VER="6.52.9";
 const NEWS=[
+{v:"2026-11-11-6.52.9",ver:"6.52.9",at:"2026-11-11T22:16",t:"🔧 Arreglos/Mejoras",l:["Exploración: mientras hay un diálogo, los indicadores de abajo (tickets, chat, jugadores, velocidad y menú) se esconden para no tapar el texto. Vuelven a salir al terminar"]},
 {v:"2026-11-11-6.52.8",ver:"6.52.8",at:"2026-11-11T22:14",t:"🔧 Arreglos/Mejoras",l:["Mando y teclado en las ventanas de confirmación («¿Activar…?», «¿Borrar…?»): ahora puedes elegir entre sus botones con la cruceta o las flechas (el elegido sale marcado), A confirma y B cancela. El panel de detrás ya no se mueve mientras están abiertas","PC de tu habitación: al marcar o desmarcar una casilla con el mando, la selección se queda en esa casilla en vez de saltar a «Cerrar»"]},
 {v:"2026-11-11-6.52.7",ver:"6.52.7",at:"2026-11-11T22:05",t:"🔧 Arreglos/Mejoras",l:["Arreglado: a veces «Salir al menú principal» no funcionaba (por ejemplo, con el Modo Locke o el Random activos), porque el juego creía que aún había una escena o un combate en marcha. Ahora solo se bloquea durante un combate. Si sales en mitad de una escena, al Continuar se retoma donde la dejaste"]},
 {v:"2026-11-11-6.52.6",ver:"6.52.6",at:"2026-11-11T21:57",t:"🔧 Arreglos/Mejoras",l:["Modo Random: los tres Pokémon iniciales que te ofrece la Profesora Vega en el laboratorio son totalmente aleatorios y distintos en cada partida. Se respeta la opción de incluir o no legendarios","Tu rival se queda con uno de los otros dos, y es el que usará en todos sus combates de la historia"]},
@@ -7726,7 +7730,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794431650";
+const GAME_B="1794431787";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

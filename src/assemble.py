@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.52.5";
+const GAME_VER="6.52.6";
 const NEWS=[
+{v:"2026-11-11-6.52.6",ver:"6.52.6",at:"2026-11-11T21:57",t:"🔧 Arreglos/Mejoras",l:["Modo Random: los tres Pokémon iniciales que te ofrece la Profesora Vega en el laboratorio son totalmente aleatorios y distintos en cada partida. Se respeta la opción de incluir o no legendarios","Tu rival se queda con uno de los otros dos, y es el que usará en todos sus combates de la historia"]},
 {v:"2026-11-11-6.52.5",ver:"6.52.5",at:"2026-11-11T21:21",t:"🔧 Arreglos/Mejoras",l:["El botón «Pokémon» de la barra de abajo ahora se llama «Pokédex»"]},
 {v:"2026-11-11-6.52.4",ver:"6.52.4",at:"2026-11-11T21:16",t:"🔧 Arreglos/Mejoras",l:["Pantalla de carga rediseñada para que vaya fluida en cualquier ordenador: la Poké Ball se balancea mientras el juego termina de cargar y se abre cuando el navegador queda libre. El fondo es más ligero de dibujar","Modo Locke: nueva «☠️ Cláusula Sin Piedad». Si todos los Pokémon de tu equipo se debilitan en un combate, pierdes el desafío al instante. La partida queda marcada como «☠️ Desafío perdido» y ya no se puede continuar: hay que borrarla y empezar una Partida nueva"]},
 {v:"2026-11-11-6.52.3",ver:"6.52.3",at:"2026-11-11T21:04",t:"🔧 Arreglos/Mejoras",l:["La pantalla de carga va mucho más fluida: la Poké Ball que se abre la anima ahora la tarjeta gráfica, así que no se traba aunque el juego esté terminando de cargar","Mientras carga, ya no se dibuja el pueblo que queda tapado detrás","En la pantalla azul de antes de la carga hay una Poké Ball que se balancea, para que no parezca congelada"]},

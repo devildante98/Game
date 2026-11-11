@@ -105,7 +105,7 @@ STX.lab1=()=>stRun(async()=>{const v=stN("vega");await sSay(S_("Profesora Vega",
     await sSay(["¡Has recibido a "+st+" (Nv. "+lv+")!",st+" se ha unido a tu equipo."])}
   else await sSay(S_("Profesora Vega","Veo que "+stSt().f.st+" y tú ya os lleváis de maravilla."));
   snd("ui");const d=sAdd("dani",7,9,"u","Dani",STO_L.dani);await sW(300);sFaceTo(d);
-  await sSay(S_("Dani","¡Profe! ¡Perdón, perdón, me he dormido!","¿Eh? ¿Ya has elegido? Entonces yo me quedo con "+stSt().f.rv+". ¡Le tengo ventaja al tuyo!"));
+  await sSay(S_("Dani","¡Profe! ¡Perdón, perdón, me he dormido!","¿Eh? ¿Ya has elegido? Entonces yo me quedo con "+stSt().f.rv+". "+(stSt().f.rst?"¡A ver cuál de los dos es más fuerte!":"¡Le tengo ventaja al tuyo!")));
   await sApproach(d);
   await sSay(S_("Dani","¡Vamos a probarlos ahora mismo! ¡Combate!"));
   stHeal();EX.noFaint=1;let r;try{r=await sBattle(sTr([stSt().f.rv],0,"Dani",STO_L.dani))}finally{EX.noFaint=0}
@@ -339,7 +339,7 @@ function exExtraEnts(ents,g,cx,cy,ts){const M=EX.M,night=(()=>{const h=new Date(
   (M.bld||[]).forEach(b=>{const im=xBld(b),X=b.x*32-cx,Y=(b.y+b.h)*32-im.height-cy;ents.push({y:b.y+b.h-1+.45,d:()=>g.drawImage(night&&im._n?im._n:im,X,Y)})});
   const s=stSt().s;
   // Poké Balls sobre la mesa del laboratorio
-  if(EX.map==="lab"){const f=stSt().f;[["Bulbasaur",6],["Charmander",7],["Squirtle",8]].forEach(([n,x])=>{if(s>=2&&(f.st===n||f.rv===n))return;const X=x*32-cx+16,Y=5*32-cy+4;ents.push({y:5.1,d:()=>{xdisc(g,X,Y+5,5,1.5,"rgba(0,0,0,.25)");xdisc(g,X,Y,6,6,"#2b2440");xdisc(g,X,Y,5,5,"#fff");g.fillStyle="#ee3b4b";g.fillRect(X-5,Y-5,10,5);g.fillStyle="#2b2440";g.fillRect(X-6,Y-1,12,2);xdisc(g,X,Y,2,2,"#2b2440");xdisc(g,X,Y,1,1,"#fff")}})})}
+  if(EX.map==="lab"){const f=stSt().f;STARTERS.map((q,i)=>[q[0],6+i]).forEach(([n,x])=>{if(s>=2&&(f.st===n||f.rv===n))return;const X=x*32-cx+16,Y=5*32-cy+4;ents.push({y:5.1,d:()=>{xdisc(g,X,Y+5,5,1.5,"rgba(0,0,0,.25)");xdisc(g,X,Y,6,6,"#2b2440");xdisc(g,X,Y,5,5,"#fff");g.fillStyle="#ee3b4b";g.fillRect(X-5,Y-5,10,5);g.fillStyle="#2b2440";g.fillRect(X-6,Y-1,12,2);xdisc(g,X,Y,2,2,"#2b2440");xdisc(g,X,Y,1,1,"#fff")}})})}
   // Latias sobre el lago de la cima
   if(EX.map==="cima"&&(s===6||s===7)){const im=stMonImg("Latias");if(im.complete&&im.naturalWidth){const X=14*32-cx+16,bob=Math.sin(ts/500)*5,Y=5*32-cy+2+bob;ents.push({y:5.5,d:()=>{xdisc(g,X,5*32-cy+28,14-bob/2,4,"rgba(0,40,80,.3)");g.drawImage(im,X-40,Y-48,80,80)}})}}
   // brillo de la Escama Celeste en la cueva y de la Piedra Aurora

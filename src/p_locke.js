@@ -156,3 +156,13 @@ setInterval(()=>{try{if(!lkOn("noleg")||(typeof fcd!=="undefined"&&fcd))return;c
   else if(m==="casa_up"&&!lkLocked()&&!EX._lkHint){EX._lkHint=1;setTimeout(()=>toast("💻 Antes de bajar, puedes activar el Modo Locke o el Modo Random en el PC de tu habitación."),2500)}}catch(e){}return r}}
 // si una partida perdió el desafío Sin Piedad, no se puede seguir jugando
 setInterval(()=>{try{if(!EX.on||EX.title||!(S.xg&&S.xg.lost)||(typeof fcd!=="undefined"&&fcd))return;exToTitle()}catch(e){}},1500);
+// ---------- Modo Random: los Pokémon iniciales del laboratorio también son al azar (distintos en cada partida) ----------
+const RST0=["Bulbasaur","Charmander","Squirtle"];
+const rndOn=()=>{try{const R=rnD();return !!(R.w||R.t||R.i)}catch(e){return false}};
+function rstSync(){try{const f=stSt().f,L=Array.isArray(f.rst)&&f.rst.length===3&&f.rst.every(n=>PM[n])?f.rst:RST0;
+  STARTERS.splice(0,STARTERS.length,...L.map(n=>[n,L===RST0?({Bulbasaur:"Planta",Charmander:"Fuego",Squirtle:"Agua"})[n]:tyTxt(PM[n])]));
+  Object.keys(RIVAL_OF).forEach(k=>delete RIVAL_OF[k]);L.forEach((n,i)=>{RIVAL_OF[n]=L[(i+1)%3]})}catch(e){console.error(e)}}
+function rstRoll(){const f=stSt().f;if(f.st||f.rst||!rndOn())return;const pool=rndPool(!!rnD().l),out=[];
+  while(out.length<3){const p=pool[Math.floor(Math.random()*pool.length)];if(p&&!out.includes(p[0]))out.push(p[0])}f.rst=out;save()}
+{const _l1=STX.lab1;STX.lab1=function(){try{rstRoll();rstSync()}catch(e){console.error(e)}return _l1.apply(this,arguments)}}
+{const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{if(m==="lab")rstSync()}catch(e){}return r}}

@@ -987,3 +987,6 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .exsm .sct{display:grid;grid-template-columns:repeat(2,56px);grid-auto-rows:56px;gap:2px 8px;align-content:center}
 .exsm .sct img{width:56px;height:56px;image-rendering:pixelated}
 @media (max-width:520px){.exsm .sct{grid-template-columns:repeat(3,40px);grid-auto-rows:40px}.exsm .sct img{width:40px;height:40px}.exsm .scb{flex-direction:column}}
+.expc .lklock{margin:6px 0;padding:8px 12px;border-radius:10px;background:#fff1f1;border:2px solid #f3b4b4;color:#7a2a2a;font-size:.82rem}
+.expc .lklock.open{background:#effbf2;border-color:#9fdcb0;color:#1f6a3a}
+.expc .lkr:has(input:disabled),.expc .lkmain:has(input:disabled){opacity:.6;cursor:not-allowed}

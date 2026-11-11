@@ -18,6 +18,8 @@ const LKR=[
   ["leg","👑 Cláusula legendaria","Los legendarios y singulares se pueden capturar siempre: no gastan la captura de la zona ni cuentan como primer encuentro."],
   ["noleg","🚫 Sin legendarios","No puedes usar legendarios ni singulares en tu equipo (incluida tu compañera legendaria de la historia). Puedes capturarlos, pero se quedan en la caja."]];
 const LKDEF={mote:1,first:1,death:1,dupe:1,shiny:1,noitem:0,set:0,hard:0,leg:1,noleg:0};
+// los retos se eligen al principio: en cuanto bajas de tu habitación por primera vez, ya no se pueden activar
+const lkLocked=()=>{try{const t=stSt();return !!(t.f.lkLock||(t.s|0)>0)}catch(e){return true}};
 const lkLeg=n=>!!(PM[n]&&PM[n][2]==="L");
 const RNDR=[["w","🌿 Pokémon salvajes aleatorios","Cada Pokémon salvaje es de una especie al azar de cualquier generación."],["t","🧢 Entrenadores aleatorios","Los equipos de todos los entrenadores (también líderes, Alto Mando y Equipo Ocaso) son aleatorios. Se mantienen sus niveles."],["l","👑 Incluir legendarios y singulares","Si está apagado, el azar no saca legendarios ni singulares."]];
 function lkD(){const X=xgData();if(!X.lk||typeof X.lk!=="object")X.lk={on:0,r:Object.assign({},LKDEF),z:{},dead:[],fail:0};const L=X.lk;L.r=L.r||Object.assign({},LKDEF);L.z=L.z||{};L.dead=L.dead||[];
@@ -94,23 +96,25 @@ function lkOpen(){const sc=document.querySelector("#explPB .exscr")||document.qu
 function lkUI(){const d=$("exPC");if(!d)return;const L=lkD(),R=rnD(),zs=Object.values(L.z).sort((a,b)=>(a.t||0)-(b.t||0)),alive=xgRun(()=>Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]&&!lkDead(n)).length);
   const chk=(attr,on,dis)=>'<input type="checkbox" '+attr+(on?' checked':'')+(dis?' disabled':'')+'>';
   d.innerHTML='<div class="xgh"><b>💻 PC de tu habitación</b><button type="button" class="alt" data-lkx="close">Cerrar</button></div>'+
-  '<p class="mut">Retos para tu partida de Exploración, como los que hacen los fans de la saga (por ejemplo, el Pokémon Añil). No afectan al juego normal.</p>'+
-  '<section class="lksec'+(L.on?' on':'')+'"><label class="lkmain">'+chk('data-lk="on"',L.on)+'<span><b>🔒 Modo Locke</b><small>'+(L.on?(L.fail?'☠️ Reto terminado: todos tus Pokémon cayeron.':'Activo · '+zs.length+' zonas usadas · '+L.dead.length+' caídos · '+alive+' vivos'):'Apagado. Elige las reglas y actívalo cuando quieras.')+'</small></span></label>'+
-  '<div class="lkrules">'+LKR.map(([k,t,s])=>'<label class="lkr">'+chk('data-lkr="'+k+'"',L.r[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
-  '<section class="lksec'+(R.w||R.t||R.i?' on':'')+'"><b class="lkh">🎲 Modo Random</b><div class="lkrules">'+RNDR.map(([k,t,s])=>'<label class="lkr">'+chk('data-rn="'+k+'"',R[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
+  '<p class="mut">Retos para tu partida de Exploración, como los que hacen los fans de la saga (por ejemplo, el Pokémon Añil). No afectan al juego normal.</p>'+(lkLocked()?'<p class="lklock">🔐 Los retos se eligen al principio de la partida, antes de bajar de tu habitación. Ya no se pueden activar ni cambiar las reglas (solo desactivarlos). Para jugar con ellos, empieza una <b>Partida nueva</b> desde el menú principal.</p>':'<p class="lklock open">✨ Elige ahora tus retos: en cuanto bajes las escaleras de tu habitación, ya no podrás activarlos ni cambiar las reglas.</p>')+
+  '<section class="lksec'+(L.on?' on':'')+'"><label class="lkmain">'+chk('data-lk="on"',L.on,lkLocked()&&!L.on)+'<span><b>🔒 Modo Locke</b><small>'+(L.on?(L.fail?'☠️ Reto terminado: todos tus Pokémon cayeron.':'Activo · '+zs.length+' zonas usadas · '+L.dead.length+' caídos · '+alive+' vivos'):(lkLocked()?'Apagado.':'Apagado. Elige las reglas y actívalo cuando quieras.'))+'</small></span></label>'+
+  '<div class="lkrules">'+LKR.map(([k,t,s])=>'<label class="lkr">'+chk('data-lkr="'+k+'"',L.r[k],lkLocked())+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
+  '<section class="lksec'+(R.w||R.t||R.i?' on':'')+'"><b class="lkh">🎲 Modo Random</b><div class="lkrules">'+RNDR.map(([k,t,s])=>'<label class="lkr">'+chk('data-rn="'+k+'"',R[k],lkLocked()&&(!R[k]||k==="l"))+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
   (L.on||zs.length?'<section class="lksec"><b class="lkh">🗺️ Capturas por zona</b>'+(zs.length?'<div class="lkzs">'+zs.map(z=>'<span class="lkz '+(z.s==="c"?"ok":"ko")+'"><b>'+esc(z.n)+'</b>'+(PM[z.p]?ico(PM[z.p],32):'')+esc(z.p)+' · '+(z.s==="c"?'✅ capturado':'❌ perdido')+'</span>').join("")+'</div>':'<p class="mut">Todavía no has tenido ningún encuentro con el modo Locke activo.</p>')+'</section>':'')+
   (L.dead.length?'<section class="lksec"><b class="lkh">🪦 Cementerio ('+L.dead.length+')</b><div class="lkzs">'+L.dead.map(x=>'<span class="lkz rip">'+(PM[x.n]?ico(PM[x.n],32):'')+'<b>'+esc(x.k||x.n)+'</b>'+(x.k?esc(x.n)+' · ':'')+'Nv'+x.l+' · '+esc(x.z||"")+'</span>').join("")+'</div></section>':'')+
-  (L.on?'<div class="jrow"><button type="button" class="alt" data-lkx="reset">↺ Empezar el reto de nuevo</button></div>':'')}
+  (L.on&&!lkLocked()?'<div class="jrow"><button type="button" class="alt" data-lkx="reset">↺ Empezar el reto de nuevo</button></div>':'')}
 async function lkChange(e){const t=e.target;if(!t||t.type!=="checkbox")return;const L=lkD(),R=rnD();
+  if(lkLocked()&&t.checked){t.checked=false;toast("🔐 Los retos solo se pueden activar al principio de la partida.");lkUI();return}
+  if(lkLocked()&&t.dataset.lkr){t.checked=!t.checked;lkUI();return}
   if(t.dataset.lk==="on"){if(t.checked){t.checked=false;
-      if(!await uiDlg("¿Activar el modo Locke en tu partida de Exploración? Las reglas marcadas se aplican desde ahora. Las capturas que ya tienes no cuentan, y puedes cambiar las reglas cuando quieras desde este PC.",{yes:"¡Activar!",no:"Todavía no"})){lkUI();return}
+      if(!await uiDlg("¿Activar el modo Locke en tu partida de Exploración? Las reglas marcadas se aplican desde ahora. Las reglas quedan fijas en cuanto bajes de tu habitación.",{yes:"¡Activar!",no:"Todavía no"})){lkUI();return}
       L.on=1;L.fail=0;L.since=Date.now();save();snd("lvl");
       if(L.r.mote){const tm=xgRun(()=>(S.team||[]).filter(n=>n&&S.owned[n]&&!(S.mote&&S.mote[n])));for(const n of tm){const k=await lkAskMote(n,"🏷️ Regla Locke: tu equipo también lleva mote. ¿Cómo se llama tu ");lkSetMote(n,k)}}
       toast("🔒 Modo Locke activado. ¡Suerte!")}
-    else{t.checked=true;if(!await uiDlg("¿Desactivar el modo Locke? Tus caídos se quedan en el Cementerio y las zonas usadas se guardan por si lo vuelves a activar.",{yes:"Desactivar",no:"Seguir con el reto",danger:true})){lkUI();return}L.on=0;save();toast("Modo Locke desactivado")}
+    else{t.checked=true;if(!await uiDlg(""+(lkLocked()?"¿Desactivar el modo Locke? No podrás volver a activarlo en esta partida.":"¿Desactivar el modo Locke?"),{yes:"Desactivar",no:"Seguir con el reto",danger:true})){lkUI();return}L.on=0;save();toast("Modo Locke desactivado")}
     lkUI();return}
   if(t.dataset.lkr){L.r[t.dataset.lkr]=t.checked?1:0;save();snd("ui");lkUI();return}
-  if(t.dataset.rn){R[t.dataset.rn]=t.checked?1:0;save();snd("ui");toast(t.dataset.rn==="l"?(t.checked?"👑 El azar puede sacar legendarios":"El azar ya no saca legendarios"):"🎲 "+(t.checked?"Activado":"Desactivado")+": "+RNDR.find(x=>x[0]===t.dataset.rn)[1].replace(/^\S+ /,""));lkUI()}}
+  if(t.dataset.rn){if(lkLocked()&&!t.checked&&!await uiDlg("¿Desactivar esta opción del Modo Random? No podrás volver a activarla en esta partida.",{yes:"Desactivar",no:"Cancelar",danger:true})){lkUI();return}R[t.dataset.rn]=t.checked?1:0;save();snd("ui");toast(t.dataset.rn==="l"?(t.checked?"👑 El azar puede sacar legendarios":"El azar ya no saca legendarios"):"🎲 "+(t.checked?"Activado":"Desactivado")+": "+RNDR.find(x=>x[0]===t.dataset.rn)[1].replace(/^\S+ /,""));lkUI()}}
 async function lkClick(e){const b=e.target.closest("[data-lkx]");if(!b)return;e.stopPropagation();
   if(b.dataset.lkx==="close"){$("exPC").hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(x){}return}
   if(b.dataset.lkx==="reset"){if(!await uiDlg("¿Empezar el reto Locke de nuevo? Se borran las zonas usadas, el Cementerio se vacía y tus caídos pueden volver al equipo.",{yes:"Empezar de nuevo",no:"Cancelar",danger:true}))return;
@@ -137,3 +141,7 @@ setInterval(()=>{try{if(!lkOn("noleg")||(typeof fcd!=="undefined"&&fcd))return;c
   const rest=tm.filter(n=>n&&!lkLeg(n)&&!lkDead(n));if(!rest.length)return;
   xgRun(()=>{S.team=S.team.map(n=>n&&lkLeg(n)?"":n)});save();toast("🚫 Regla Locke «Sin legendarios»: "+bad.join(", ")+" vuelve a la caja.");const t=$("exTeam");if(t&&!t.hidden)try{xgPanel()}catch(e){}}catch(e){}},800);
 {const _p2=xgPanel;xgPanel=function(){const r=_p2.apply(this,arguments);try{if(lkOn("noleg")){const box=$("exTeam");if(box)box.querySelectorAll(".xgc[data-xg]").forEach(c=>{if(lkLeg(c.dataset.xg)&&!c.querySelector(".lkrip")){c.classList.add("lkdead");c.title="Regla Locke: sin legendarios";c.insertAdjacentHTML("beforeend",'<small class="lkrip">🚫 Sin legendarios</small>')}})}}catch(e){}return r}}
+// bajar de la habitación por primera vez cierra la elección de retos; antes, un aviso para que sepas que existen
+{const _l=exLoad;exLoad=function(m){const from=EX.map;const r=_l.apply(this,arguments);try{const t=stSt();
+  if(from==="casa_up"&&m==="casa"&&!t.f.lkLock){t.f.lkLock=1;save();const L=lkD(),R=rnD();if(L.on||R.w||R.t||R.i)setTimeout(()=>toast("🔐 Retos fijados para esta partida: "+(L.on?"Locke ":"")+(R.w||R.t||R.i?"Random":"")),600)}
+  else if(m==="casa_up"&&!lkLocked()&&!EX._lkHint){EX._lkHint=1;setTimeout(()=>toast("💻 Antes de bajar, puedes activar el Modo Locke o el Modo Random en el PC de tu habitación."),2500)}}catch(e){}return r}}

@@ -101,3 +101,32 @@ function xgCap(){try{const g=xgCapGym();if(g)return g.l;const f=stSt().f;if(!f.c
 function xgCapWhy(){try{const g=xgCapGym();if(g)return "Límite Nv"+g.l+": derrota a "+XGYM[g.i].n+" ("+XGYM[g.i].b+") para subirlo.";const f=stSt().f;return f.champ?"":"Límite Nv"+xgCap()+": derrota al Campeón de la Liga para quitarlo."}catch(e){return ""}}
 // mostrar el límite en el panel del equipo
 {const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgh");if(h&&!box.querySelector(".xgcap")){const w=xgRun(()=>xgCapWhy());if(w){const t=document.createElement("small");t.className="xgcap";t.textContent="🔒 "+w;h.after(t)}}}catch(e){}return r}}
+
+// =====================================================================================
+// COMBATE: interfaz clásica. Primero «¿Qué debería hacer…?» con LUCHAR / MOCHILA / POKÉMON / HUIR;
+// al pulsar LUCHAR, los 4 ataques en un cuadro de 2×2 con un panel de tipo y PP.
+// =====================================================================================
+{const _sm=setMenu;setMenu=function(v){_sm.apply(this,arguments);try{if(v!==true||!B||B.mode!=="s"||!B.E||O.bclassic===false)return;bcLayout()}catch(e){}}}
+function bcLayout(){const mn=$("menu");if(!mn||mn.querySelector(".bcmd"))return;const sd=B.E.sd[0],m=beAct(sd);if(!m)return;
+  const all=[...mn.children],mvs=all.filter(b=>b.matches&&b.matches('[data-k^="m"],[data-k="st"]')),cmd={};
+  ["b","e","f"].forEach(k=>{cmd[k]=all.find(b=>b.dataset&&b.dataset.k===k)});const extra=all.filter(b=>!mvs.includes(b)&&!Object.values(cmd).includes(b));
+  const hid=document.createElement("div");hid.hidden=true;Object.values(cmd).forEach(b=>{if(b)hid.appendChild(b)});
+  const nm=typeof nk==="function"&&S.owned[m.p[0]]?nk(m.p[0]):m.p[0];
+  const C=document.createElement("div");C.className="bcmd";
+  C.innerHTML='<div class="bcq">¿Qué debería hacer<br><b>'+esc(nm)+'</b>?</div><div class="bcg"><button type="button" class="bcb bc-f" data-cm="fight">LUCHAR</button><button type="button" class="bcb bc-b" data-cm="b">MOCHILA</button><button type="button" class="bcb bc-p" data-cm="e">POKÉMON</button><button type="button" class="bcb bc-r" data-cm="f">'+(B.trainer?'RENDIRSE':'HUIR')+'</button></div>';
+  const F=document.createElement("div");F.className="bfight";const G=document.createElement("div");G.className="bcmv";mvs.forEach(b=>G.appendChild(b));
+  const I=document.createElement("div");I.className="bcinfo";const X=document.createElement("div");X.className="bcx";extra.forEach(b=>X.appendChild(b));
+  X.insertAdjacentHTML("beforeend",'<button type="button" class="alt bcback" data-cm="back">◀ Atrás</button>');
+  F.appendChild(G);F.appendChild(I);F.appendChild(X);
+  mn.innerHTML="";mn.appendChild(C);mn.appendChild(F);mn.appendChild(hid);mn.classList.add("bclassic");
+  const info=b=>{const k=b&&b.dataset.k&&/^m\d$/.test(b.dataset.k)?+b.dataset.k[1]:-1,mv=k>=0?m.m[k]:null;
+    I.innerHTML=mv?'<span class="bcty" style="--tc:'+(TC[mv.t]||"#999")+'">'+(EM[mv.t]||"")+' '+(TIPO[mv.t]||mv.t).toUpperCase()+'</span><b>PP: '+m.pp[k]+'/'+ppMax(m.p[0],mv.id)+'</b><small>'+(mv.cl===0?'Estado':mv.cl===1?'Físico':'Especial')+(mv.pw?' · Pot. '+mv.pw:'')+'</small>':'<small class="mut">Elige un ataque</small>'};
+  G.querySelectorAll("button").forEach(b=>{b.addEventListener("mouseenter",()=>info(b));b.addEventListener("focus",()=>info(b))});info(mvs[0]);
+  const view=v=>{mn.classList.toggle("bcf",v==="fight");mn.classList.toggle("bcc",v!=="fight");B.bcv=v;const f=(v==="fight"?G:C).querySelector("button:not([disabled])");if(f&&GP.on)f.focus()};
+  view(B.bcv==="fight"&&B.bcKeep?"fight":"cmd");B.bcKeep=false;
+  mn.addEventListener("click",bcClick,true)}
+function bcClick(e){const b=e.target.closest&&e.target.closest("[data-cm]");if(!b)return;e.stopPropagation();const mn=$("menu"),k=b.dataset.cm;snd("ui");
+  if(k==="fight"){mn.classList.add("bcf");mn.classList.remove("bcc");const f=mn.querySelector(".bcmv button:not([disabled])");if(f&&GP.on)f.focus();return}
+  if(k==="back"){mn.classList.remove("bcf");mn.classList.add("bcc");const f=mn.querySelector(".bcmd button");if(f&&GP.on)f.focus();return}
+  const o=mn.querySelector('[hidden] [data-k="'+k+'"]');if(o)o.click()}
+// al volver de la mochila o del equipo con «Atrás», se vuelve al cuadro de órdenes

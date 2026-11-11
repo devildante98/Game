@@ -52,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.37"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.38"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794408342">
+<meta name="game-build" content="1794408505">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2570,6 +2570,32 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .exdexc{display:flex;flex-direction:column;align-items:center;padding:6px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}.exdexc small{color:var(--mute)}.exdexc b{font-size:.78rem}.exdexc i{font-style:normal;font-size:.7rem}
 .expadsec{margin-top:10px;display:flex;flex-direction:column;gap:6px}.expadsec small.ok{color:#2a9d5a}
 .xgcap{display:block;margin:4px 0 6px;padding:4px 10px;border-radius:8px;background:#fff4d6;color:#7a5200;font-weight:700}
+/* ===== combate: interfaz clásica ===== */
+#menu.bclassic{display:block!important;padding:0}
+#menu.bclassic.bcc .bfight,#menu.bclassic.bcf .bcmd{display:none!important}
+.bcmd{display:grid;grid-template-columns:1fr minmax(0,1.25fr);gap:10px;align-items:center;padding:10px 12px;border-radius:14px;background:linear-gradient(#3b3f4f,#2a2d39);border:3px solid #1b1d26;box-shadow:inset 0 0 0 2px #5a6074}
+.bcq{color:#fff;font-size:1.15rem;line-height:1.35;text-shadow:2px 2px 0 #000;padding-left:6px}.bcq b{color:#ffe27a}
+.bcg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bcb,.bcmv .mvb{--cut:14px;position:relative;isolation:isolate;border:none!important;min-height:52px;padding:6px 18px!important;color:#fff;font-weight:900;letter-spacing:.04em;background:var(--tc,#888)!important;
+  clip-path:polygon(var(--cut) 0,calc(100% - var(--cut)) 0,100% 50%,calc(100% - var(--cut)) 100%,var(--cut) 100%,0 50%);box-shadow:none!important;transition:transform .08s,filter .08s;text-shadow:2px 2px 0 rgba(0,0,0,.6)}
+.bcb::before,.bcmv .mvb::before{content:"";position:absolute;inset:4px;z-index:-1;clip-path:polygon(calc(var(--cut) - 2px) 0,calc(100% - var(--cut) + 2px) 0,100% 50%,calc(100% - var(--cut) + 2px) 100%,calc(var(--cut) - 2px) 100%,0 50%);
+  background:radial-gradient(circle,rgba(255,255,255,.07) 1.2px,transparent 1.6px) 0 0/8px 8px,linear-gradient(#454a5c,#30333f)}
+.bcb:hover,.bcb:focus-visible,.bcmv .mvb:hover:not([disabled]),.bcmv .mvb:focus-visible{transform:translateY(-2px);filter:brightness(1.15);outline:none}
+.bcb:focus-visible::after,.bcmv .mvb:focus-visible::after{content:"▶";position:absolute;left:4px;top:50%;transform:translateY(-50%);font-size:.7rem}
+.bc-f{--tc:#e04848;color:#ff8e8e}.bc-b{--tc:#e89a20;color:#ffd07a}.bc-p{--tc:#43b043;color:#9ef08e}.bc-r{--tc:#3a8fe0;color:#8cc8ff}
+.bcb{font-size:1.15rem}
+.bfight{display:grid;grid-template-columns:minmax(0,1fr) 150px;grid-template-rows:auto auto;gap:8px;padding:10px;border-radius:14px;background:linear-gradient(#3b3f4f,#2a2d39);border:3px solid #1b1d26}
+.bcmv{display:grid;grid-template-columns:1fr 1fr;gap:8px;grid-row:1}
+.bcmv .mvb{display:flex!important;align-items:center;justify-content:center;font-size:1rem}.bcmv .mvb small{display:none}.bcmv .mvb span{font-weight:800;color:#fff}
+.bcmv .mvb[disabled]{filter:grayscale(.8) brightness(.7)}
+.bcinfo{grid-row:1;grid-column:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;color:#fff;background:#30333f;border:3px solid #e8e8f0;
+  clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}
+.bcinfo b{font-size:1.1rem;text-shadow:2px 2px 0 #000}.bcinfo small{color:#c9cde0;font-size:.75rem;text-align:center}
+.bcty{padding:3px 10px;border-radius:6px;background:var(--tc);color:#fff;font-weight:900;font-size:.8rem;text-shadow:1px 1px 0 rgba(0,0,0,.5)}
+.bcx{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}.bcx button{min-height:0;padding:6px 12px}
+@media (max-width:620px){.bcmd{grid-template-columns:1fr}.bcq{font-size:1rem;text-align:center}.bfight{grid-template-columns:1fr}.bcinfo{grid-row:auto;grid-column:auto;flex-direction:row;flex-wrap:wrap}}
+#menu.bclassic>.bcmd,#menu.bclassic>.bfight{grid-column:1/-1;width:100%;box-sizing:border-box}
+#menu.bclassic .bcq{white-space:normal}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2635,7 +2661,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.37</small>
+    <small class="pcver">Versión 6.38</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7298,8 +7324,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.37";
+const GAME_VER="6.38";
 const NEWS=[
+{v:"2026-11-11-6.38",ver:"6.38",at:"2026-11-11T15:48",t:"⚔️ Nueva interfaz de combate",l:["Al empezar cada turno te pregunta «¿Qué debería hacer…?» con cuatro botones: LUCHAR, MOCHILA, POKÉMON y HUIR (o RENDIRSE contra entrenadores)","Al pulsar LUCHAR ves tus 4 ataques en un cuadro de 2×2, con el borde del color de su tipo","A la derecha, un panel con el tipo, los PP, la categoría, la potencia y la eficacia del ataque que señalas","Los botones de Mega, Dinamax y movimientos Z siguen ahí, junto a «Atrás»","Con mando: la cruceta mueve la selección y A la pulsa"]},
 {v:"2026-11-11-6.37",ver:"6.37",at:"2026-11-11T15:45",t:"🎮 Exploración: menú, mando, velocidad y límite de nivel",l:["Nuevo menú lateral (botón ☰ o tecla Tab): Equipo y Mochila, Pokédex de Exploración, Mapa, Minimapa, Velocidad, Controles, Otros jugadores y Guardar","Compatible con mando: cruceta o stick para moverte, A para hablar, B para correr o volver, Start para el menú y Select para la velocidad. Los botones se cambian en Menú → Controles","Velocidad x1, x2 o x3 (botón ⏩ o tecla V): acelera el caminar, los personajes y los combates","Límite de nivel por gimnasio, como en el juego normal: hasta vencer a Brezo tus Pokémon no pasan del Nv14, y el límite sube con cada medalla. Si uno ya tiene más nivel, lucha al nivel del límite"]},
 {v:"2026-11-11-6.36.2",ver:"6.36.2",at:"2026-11-11T15:36",t:"🔧 Arreglos/Mejoras",l:["Exploración en compañía: cuando alguien sale de Exploración, cierra la página o deja el juego en segundo plano, desaparece del mapa de los demás en vez de quedarse quieto donde estaba","Al volver a entrar, los demás le ven en su posición nueva"]},
 {v:"2026-11-11-6.36.1",ver:"6.36.1",at:"2026-11-11T15:34",t:"🔧 Arreglos/Mejoras",l:["Exploración en compañía: arreglado que un jugador pudiera ver a otro pero no al revés cuando el reloj de uno de los móviles u ordenadores iba adelantado o atrasado","Puzle de piezas en equipo: el mismo arreglo para la lista de jugadores de la sala"]},
@@ -7541,7 +7568,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794408342";
+const GAME_B="1794408505";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15175,6 +15202,35 @@ function xgCap(){try{const g=xgCapGym();if(g)return g.l;const f=stSt().f;if(!f.c
 function xgCapWhy(){try{const g=xgCapGym();if(g)return "Límite Nv"+g.l+": derrota a "+XGYM[g.i].n+" ("+XGYM[g.i].b+") para subirlo.";const f=stSt().f;return f.champ?"":"Límite Nv"+xgCap()+": derrota al Campeón de la Liga para quitarlo."}catch(e){return ""}}
 // mostrar el límite en el panel del equipo
 {const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgh");if(h&&!box.querySelector(".xgcap")){const w=xgRun(()=>xgCapWhy());if(w){const t=document.createElement("small");t.className="xgcap";t.textContent="🔒 "+w;h.after(t)}}}catch(e){}return r}}
+
+// =====================================================================================
+// COMBATE: interfaz clásica. Primero «¿Qué debería hacer…?» con LUCHAR / MOCHILA / POKÉMON / HUIR;
+// al pulsar LUCHAR, los 4 ataques en un cuadro de 2×2 con un panel de tipo y PP.
+// =====================================================================================
+{const _sm=setMenu;setMenu=function(v){_sm.apply(this,arguments);try{if(v!==true||!B||B.mode!=="s"||!B.E||O.bclassic===false)return;bcLayout()}catch(e){}}}
+function bcLayout(){const mn=$("menu");if(!mn||mn.querySelector(".bcmd"))return;const sd=B.E.sd[0],m=beAct(sd);if(!m)return;
+  const all=[...mn.children],mvs=all.filter(b=>b.matches&&b.matches('[data-k^="m"],[data-k="st"]')),cmd={};
+  ["b","e","f"].forEach(k=>{cmd[k]=all.find(b=>b.dataset&&b.dataset.k===k)});const extra=all.filter(b=>!mvs.includes(b)&&!Object.values(cmd).includes(b));
+  const hid=document.createElement("div");hid.hidden=true;Object.values(cmd).forEach(b=>{if(b)hid.appendChild(b)});
+  const nm=typeof nk==="function"&&S.owned[m.p[0]]?nk(m.p[0]):m.p[0];
+  const C=document.createElement("div");C.className="bcmd";
+  C.innerHTML='<div class="bcq">¿Qué debería hacer<br><b>'+esc(nm)+'</b>?</div><div class="bcg"><button type="button" class="bcb bc-f" data-cm="fight">LUCHAR</button><button type="button" class="bcb bc-b" data-cm="b">MOCHILA</button><button type="button" class="bcb bc-p" data-cm="e">POKÉMON</button><button type="button" class="bcb bc-r" data-cm="f">'+(B.trainer?'RENDIRSE':'HUIR')+'</button></div>';
+  const F=document.createElement("div");F.className="bfight";const G=document.createElement("div");G.className="bcmv";mvs.forEach(b=>G.appendChild(b));
+  const I=document.createElement("div");I.className="bcinfo";const X=document.createElement("div");X.className="bcx";extra.forEach(b=>X.appendChild(b));
+  X.insertAdjacentHTML("beforeend",'<button type="button" class="alt bcback" data-cm="back">◀ Atrás</button>');
+  F.appendChild(G);F.appendChild(I);F.appendChild(X);
+  mn.innerHTML="";mn.appendChild(C);mn.appendChild(F);mn.appendChild(hid);mn.classList.add("bclassic");
+  const info=b=>{const k=b&&b.dataset.k&&/^m\d$/.test(b.dataset.k)?+b.dataset.k[1]:-1,mv=k>=0?m.m[k]:null;
+    I.innerHTML=mv?'<span class="bcty" style="--tc:'+(TC[mv.t]||"#999")+'">'+(EM[mv.t]||"")+' '+(TIPO[mv.t]||mv.t).toUpperCase()+'</span><b>PP: '+m.pp[k]+'/'+ppMax(m.p[0],mv.id)+'</b><small>'+(mv.cl===0?'Estado':mv.cl===1?'Físico':'Especial')+(mv.pw?' · Pot. '+mv.pw:'')+'</small>':'<small class="mut">Elige un ataque</small>'};
+  G.querySelectorAll("button").forEach(b=>{b.addEventListener("mouseenter",()=>info(b));b.addEventListener("focus",()=>info(b))});info(mvs[0]);
+  const view=v=>{mn.classList.toggle("bcf",v==="fight");mn.classList.toggle("bcc",v!=="fight");B.bcv=v;const f=(v==="fight"?G:C).querySelector("button:not([disabled])");if(f&&GP.on)f.focus()};
+  view(B.bcv==="fight"&&B.bcKeep?"fight":"cmd");B.bcKeep=false;
+  mn.addEventListener("click",bcClick,true)}
+function bcClick(e){const b=e.target.closest&&e.target.closest("[data-cm]");if(!b)return;e.stopPropagation();const mn=$("menu"),k=b.dataset.cm;snd("ui");
+  if(k==="fight"){mn.classList.add("bcf");mn.classList.remove("bcc");const f=mn.querySelector(".bcmv button:not([disabled])");if(f&&GP.on)f.focus();return}
+  if(k==="back"){mn.classList.remove("bcf");mn.classList.add("bcc");const f=mn.querySelector(".bcmd button");if(f&&GP.on)f.focus();return}
+  const o=mn.querySelector('[hidden] [data-k="'+k+'"]');if(o)o.click()}
+// al volver de la mochila o del equipo con «Atrás», se vuelve al cuadro de órdenes
 
 </script>
 <script>

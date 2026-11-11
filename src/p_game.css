@@ -857,7 +857,7 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .jgw.jgdone .jgp{filter:none}
 .jgld{position:absolute;left:0;right:0;bottom:20%;text-align:center;color:var(--mute);font-weight:700}
 /* tickets de Exploración */
-.exmoney{position:absolute;left:8px;top:8px;z-index:4;padding:3px 10px;border-radius:999px;background:rgba(10,14,30,.72);color:#ffe27a;font-weight:800;font-size:.82rem;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.exmoney{position:absolute;left:8px;bottom:8px;z-index:4;padding:3px 10px;border-radius:999px;background:rgba(10,14,30,.72);color:#ffe27a;font-weight:800;font-size:.82rem;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.35)}
 .extitle:not([hidden])~.exmoney{display:none}
 /* Carrera de Rapidash */
 .ruw2{position:relative;width:100%;height:min(320px,46vh);border-radius:18px;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none;box-shadow:inset 0 0 0 2px rgba(0,0,0,.15)}
@@ -865,3 +865,14 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .ruw2 .rumsg{position:absolute;left:0;right:0;top:38%;text-align:center;font-weight:900;font-size:1.2rem;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.6);pointer-events:none}
 .rubtn{display:flex;gap:10px;justify-content:center;margin-top:8px}.rubtn button{flex:1;max-width:220px;padding:12px;font-size:1rem;touch-action:none;user-select:none}
 .rukeys{display:block;text-align:center;margin-top:6px}
+/* Exploración en compañía */
+.xobtn{position:absolute;left:8px;bottom:38px;z-index:5;display:flex;gap:6px}
+.xobtn button{padding:4px 9px;border-radius:999px;background:rgba(10,14,30,.72);color:#fff;border:1px solid rgba(255,255,255,.3);font-weight:800;font-size:.8rem;min-height:0}
+.xobtn.off button[data-xot]{opacity:.6}
+.xopan{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:7;display:flex;flex-direction:column;gap:8px;align-items:center;background:rgba(10,14,30,.88);color:#fff;padding:12px 14px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.4);max-width:92%}
+.xoemo{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.xoemo button{font-size:1.3rem;padding:4px 8px;background:rgba(255,255,255,.12);border-radius:10px;min-height:0}
+/* Puzle en equipo */
+.jcrow{display:flex;flex-direction:column;gap:6px;align-items:center;width:100%;max-width:640px}
+.jcjoin{display:flex;gap:8px}.jcjoin input{width:130px;text-transform:uppercase;letter-spacing:.2em;font-weight:800;text-align:center;font-size:1.1rem}
+.jccode{display:inline-block;padding:2px 12px;border-radius:10px;background:var(--bg);border:2px dashed var(--mc,#2f9e8f);letter-spacing:.2em;font-family:monospace}
+.jcpl{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}.jcpl span{padding:3px 10px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:.82rem;font-weight:700}

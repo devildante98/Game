@@ -102,7 +102,8 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como
   rw:s=>s*45,
   start(B,end){
     const pick=()=>{const sv=mgSaveGet("jig");
-      B.innerHTML=mgSaveHTML(sv,s=>s.N*s.N+" piezas · "+mgClk(s.el)+" · "+s.p.filter(q=>q[2]).length+" encajadas")+'<div class="pzpick"><h3>¿De cuántas piezas quieres el puzle?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-jgn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i>×'+fmt(n*n*50)+' pts</i></button>').join("")+'</div><small class="mut">Arrastra cada pieza a su sitio en el tablero: si la sueltas cerca, encaja sola.</small></div>';
+      B.innerHTML=mgSaveHTML(sv,s=>s.N*s.N+" piezas · "+mgClk(s.el)+" · "+s.p.filter(q=>q[2]).length+" encajadas")+'<div class="pzpick"><h3>¿De cuántas piezas quieres el puzle?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-jgn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i>×'+fmt(n*n*50)+' pts</i></button>').join("")+'</div><small class="mut">Arrastra cada pieza a su sitio en el tablero: si la sueltas cerca, encaja sola.</small><button type="button" class="alt big" data-jgco="1">👥 Jugar en equipo, en tiempo real</button></div>';
+      B.querySelector("[data-jgco]").onclick=()=>{snd("ui");if(typeof jgCoop==="function")jgCoop(B,end)};
       B.querySelectorAll("[data-jgn]").forEach(b=>b.onclick=()=>{snd("ui");if(sv)mgSaveDel("jig");play(+b.dataset.jgn)});
       mgSaveBind(B,sv,()=>play(sv.N,sv))};
     const play=(N,sv)=>{

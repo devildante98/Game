@@ -20,11 +20,15 @@
   try{Object.defineProperty(Date,"now",{value:DN,writable:false,configurable:false})}catch(e){Date.now=DN}
   // cambia la velocidad del reloj sin saltos
   function setR(r){var cur=K.on?virt():o();v0=Math.max(cur,rv);l0=o();K.r=r}
-  document.addEventListener("visibilitychange",function(){if(!document.hidden)S=[]});// medidas nuevas al volver
-  function sample(){if(document.hidden)return;
+  document.addEventListener("visibilitychange",function(){if(!document.hidden){S=[];off=null}});// medidas nuevas al volver
+  // si la hora del sistema cambia de golpe (ajuste automático, cambio de zona horaria, el móvil vuelve de reposo…)
+  // las medidas anteriores ya no valen: se descartan para no confundirlo con un acelerador
+  var PN=W.performance&&performance.now?performance.now.bind(performance):null,off=null;
+  function jumpChk(){if(!PN)return;var f=o()-PN();if(off!=null&&Math.abs(f-off)>2000){S=[];K.hit=0}off=f}
+  function sample(){if(document.hidden)return;jumpChk();
     var a=o(),u=location.origin+"/robots.txt?_v=clk"+a.toString(36)+Math.random().toString(36).slice(2,6);
     fetch(u,{method:"HEAD",cache:"no-store"}).then(function(res){
-      var b=o(),d=Date.parse(res.headers.get("date")||"");
+      jumpChk();var b=o(),d=Date.parse(res.headers.get("date")||"");
       if(!(d>0)||b-a>1500||b<a||document.hidden)return;   // respuesta lenta o con la página oculta: no vale
       d+=500+(parseInt(res.headers.get("age")||"0",10)||0)*1000;var m=(a+b)/2;
       // diferencia entre la hora real y el reloj del juego (para ordenar el chat y las incursiones aunque tu reloj no esté en hora)
@@ -48,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.31.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.31.5"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -83,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794392728">
+<meta name="game-build" content="1794392974">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2598,7 +2602,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.31.4</small>
+    <small class="pcver">Versión 6.31.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7256,8 +7260,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.31.4";
+const GAME_VER="6.31.5";
 const NEWS=[
+{v:"2026-11-11-6.31.5",ver:"6.31.5",at:"2026-11-11T11:29",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett!: arreglado el reloj que a veces se quedaba parado y hacía la partida infinita. Ahora la partida siempre termina a los 30 segundos","Si la hora del móvil o del ordenador se ajusta de golpe, el juego ya no lo confunde con un acelerador"]},
 {v:"2026-11-11-6.31.4",ver:"6.31.4",at:"2026-11-11T11:18",t:"🔧 Arreglos/Mejoras",l:["Iconos intercambiados: el Puzle de piezas ahora lleva la pieza de puzle 🧩 y el Rompecabezas Pokémon el 🧷"]},
 {v:"2026-11-11-6.31.3",ver:"6.31.3",at:"2026-11-11T11:16",t:"🔧 Arreglos/Mejoras",l:["Puzle de piezas: la imagen tenue del tablero ahora coincide exactamente con las piezas (antes se veía más grande y parecía descuadrada)"]},
 {v:"2026-11-11-6.31.2",ver:"6.31.2",at:"2026-11-11T11:11",t:"🔧 Arreglos/Mejoras",l:["Rompecabezas Pokémon y Puzle de piezas: fondo nuevo, más claro, con sol, nubes y colinas, para que cada pieza se distinga mejor","«Ver la imagen» ahora enseña también el fondo, igual que el puzle"]},
@@ -7489,7 +7494,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794392728";
+const GAME_B="1794392974";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8957,19 +8962,21 @@ const G_MEM={id:"mem",n:"Memoria Pokémon",ic:"🃏",c:"#7a4ae0",d:"Encuentra la
 const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a los Diglett (+1) y a los Dugtrio (+3) antes de que se escondan. ¡Cuidado con Voltorb (−3)! 30 segundos.",
   rw:s=>s*2500,
   start(B,end){
-    const D=PM.Diglett||P[0],T=PM.Dugtrio||D,V=PM.Voltorb||D,dur=30000,t0=Date.now();let hits=0,combo=0;
+    // reloj propio (performance.now) que no depende de la cadena de apariciones: si algo falla, la partida termina igual a los 30 s
+    const D=PM.Diglett||P[0],T=PM.Dugtrio||D,V=PM.Voltorb||D,dur=30000,now=()=>performance.now(),t0=now();let hits=0,combo=0,over=false;
     B.innerHTML='<div class="whohd"><span>⏱️ <b id="digT">30</b> s</span><span id="digC"></span></div><div class="digg">'+[...Array(9)].map((_,i)=>'<div class="digh" data-h="'+i+'"><div class="digback"></div><div class="digclip"><div class="digm"></div></div><div class="diglip"></div></div>').join("")+'</div>';
     mgSet(0);const holes=[...B.querySelectorAll(".digh")];
+    const finish=()=>{if(over)return;over=true;const e=$("digT");if(e)e.textContent="0";holes.forEach(h=>h.querySelector(".digm").classList.remove("up"));mgT(()=>end(MG.score),600)};
+    mgI(()=>{if(over)return;const el=now()-t0,e=$("digT");if(e)e.textContent=Math.max(0,Math.ceil((dur-el)/1000));if(el>=dur)finish()},200);
     const spawn=()=>{
-      const el=Date.now()-t0;if(el>=dur){holes.forEach(h=>h.querySelector(".digm").classList.remove("up"));mgT(()=>end(MG.score),600);return}
-      $("digT").textContent=Math.ceil((dur-el)/1000);
-      const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
+      if(over)return;const el=now()-t0;if(el>=dur){finish();return}
+      try{const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
       if(free.length){const h=free[Math.floor(Math.random()*free.length)],m=h.querySelector(".digm"),r=Math.random(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
         const sid=(+m.dataset.sid||0)+1;m.dataset.sid=sid;m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-el/45);
-        mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;$("digC").textContent=""}},up)}
+        mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
       mgT(spawn,Math.max(330,780-el/60));
     };
-    holes.forEach(h=>h.addEventListener("pointerdown",e=>{const m=h.querySelector(".digm");if(!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
+    holes.forEach(h=>h.addEventListener("pointerdown",e=>{const m=h.querySelector(".digm");if(over||!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
       const k=m.dataset.k;let pts=k==="t"?3:k==="v"?-3:1;
       if(k==="v"){combo=0;snd("hit",1);h.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:180,iterations:2})}else{combo++;hits++;snd("pop");if(combo>=5)pts+=1}
       mgSet(MG.score+pts);mgPop(e.clientX,e.clientY,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";

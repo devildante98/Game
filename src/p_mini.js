@@ -58,19 +58,21 @@ const G_MEM={id:"mem",n:"Memoria Pokémon",ic:"🃏",c:"#7a4ae0",d:"Encuentra la
 const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a los Diglett (+1) y a los Dugtrio (+3) antes de que se escondan. ¡Cuidado con Voltorb (−3)! 30 segundos.",
   rw:s=>s*2500,
   start(B,end){
-    const D=PM.Diglett||P[0],T=PM.Dugtrio||D,V=PM.Voltorb||D,dur=30000,t0=Date.now();let hits=0,combo=0;
+    // reloj propio (performance.now) que no depende de la cadena de apariciones: si algo falla, la partida termina igual a los 30 s
+    const D=PM.Diglett||P[0],T=PM.Dugtrio||D,V=PM.Voltorb||D,dur=30000,now=()=>performance.now(),t0=now();let hits=0,combo=0,over=false;
     B.innerHTML='<div class="whohd"><span>⏱️ <b id="digT">30</b> s</span><span id="digC"></span></div><div class="digg">'+[...Array(9)].map((_,i)=>'<div class="digh" data-h="'+i+'"><div class="digback"></div><div class="digclip"><div class="digm"></div></div><div class="diglip"></div></div>').join("")+'</div>';
     mgSet(0);const holes=[...B.querySelectorAll(".digh")];
+    const finish=()=>{if(over)return;over=true;const e=$("digT");if(e)e.textContent="0";holes.forEach(h=>h.querySelector(".digm").classList.remove("up"));mgT(()=>end(MG.score),600)};
+    mgI(()=>{if(over)return;const el=now()-t0,e=$("digT");if(e)e.textContent=Math.max(0,Math.ceil((dur-el)/1000));if(el>=dur)finish()},200);
     const spawn=()=>{
-      const el=Date.now()-t0;if(el>=dur){holes.forEach(h=>h.querySelector(".digm").classList.remove("up"));mgT(()=>end(MG.score),600);return}
-      $("digT").textContent=Math.ceil((dur-el)/1000);
-      const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
+      if(over)return;const el=now()-t0;if(el>=dur){finish();return}
+      try{const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
       if(free.length){const h=free[Math.floor(Math.random()*free.length)],m=h.querySelector(".digm"),r=Math.random(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
         const sid=(+m.dataset.sid||0)+1;m.dataset.sid=sid;m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-el/45);
-        mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;$("digC").textContent=""}},up)}
+        mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
       mgT(spawn,Math.max(330,780-el/60));
     };
-    holes.forEach(h=>h.addEventListener("pointerdown",e=>{const m=h.querySelector(".digm");if(!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
+    holes.forEach(h=>h.addEventListener("pointerdown",e=>{const m=h.querySelector(".digm");if(over||!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
       const k=m.dataset.k;let pts=k==="t"?3:k==="v"?-3:1;
       if(k==="v"){combo=0;snd("hit",1);h.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:180,iterations:2})}else{combo++;hits++;snd("pop");if(combo>=5)pts+=1}
       mgSet(MG.score+pts);mgPop(e.clientX,e.clientY,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";

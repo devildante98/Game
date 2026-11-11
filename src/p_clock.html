@@ -16,11 +16,15 @@
   try{Object.defineProperty(Date,"now",{value:DN,writable:false,configurable:false})}catch(e){Date.now=DN}
   // cambia la velocidad del reloj sin saltos
   function setR(r){var cur=K.on?virt():o();v0=Math.max(cur,rv);l0=o();K.r=r}
-  document.addEventListener("visibilitychange",function(){if(!document.hidden)S=[]});// medidas nuevas al volver
-  function sample(){if(document.hidden)return;
+  document.addEventListener("visibilitychange",function(){if(!document.hidden){S=[];off=null}});// medidas nuevas al volver
+  // si la hora del sistema cambia de golpe (ajuste automático, cambio de zona horaria, el móvil vuelve de reposo…)
+  // las medidas anteriores ya no valen: se descartan para no confundirlo con un acelerador
+  var PN=W.performance&&performance.now?performance.now.bind(performance):null,off=null;
+  function jumpChk(){if(!PN)return;var f=o()-PN();if(off!=null&&Math.abs(f-off)>2000){S=[];K.hit=0}off=f}
+  function sample(){if(document.hidden)return;jumpChk();
     var a=o(),u=location.origin+"/robots.txt?_v=clk"+a.toString(36)+Math.random().toString(36).slice(2,6);
     fetch(u,{method:"HEAD",cache:"no-store"}).then(function(res){
-      var b=o(),d=Date.parse(res.headers.get("date")||"");
+      jumpChk();var b=o(),d=Date.parse(res.headers.get("date")||"");
       if(!(d>0)||b-a>1500||b<a||document.hidden)return;   // respuesta lenta o con la página oculta: no vale
       d+=500+(parseInt(res.headers.get("age")||"0",10)||0)*1000;var m=(a+b)/2;
       // diferencia entre la hora real y el reloj del juego (para ordenar el chat y las incursiones aunque tu reloj no esté en hora)

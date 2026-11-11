@@ -227,7 +227,9 @@ function gmApply(){
 {const _a=applyO;applyO=function(){const r=_a.apply(this,arguments);try{if(GM.init&&document.body.classList.contains("gm")!==(gmOn()))gmApply();if(GM.init)gmLite()}catch(e){}return r}}
 // pantalla de carga: una Poké Ball que se abre
 function gmLoad(){if(!gmOn()||hubCalm())return;const L=gmEl("div","gLoad","",'<i class="glr"></i><div class="glogo"><span>POKE GACHA</span><b>ONLINE</b></div><div class="glb"><i class="glt"></i><i class="glbt"></i><i class="glbtn"></i></div><b class="glm">¡Vamos allá!</b>');
-  setTimeout(()=>{L.classList.add("op");try{snd("open")}catch(e){}},850);setTimeout(()=>L.classList.add("out"),1350);setTimeout(()=>L.remove(),1900)}
+  // toda la animación va por CSS (la hace la tarjeta gráfica), así sigue fluida aunque el juego esté terminando de cargar
+  L.classList.add("glcss");setTimeout(()=>{try{snd("open")}catch(e){}},850);
+  const bye=()=>{if(L.isConnected)L.remove()};L.addEventListener("animationend",e=>{if(e.target===L)bye()});setTimeout(bye,4000)}
 // ---------- abrir y cerrar secciones ----------
 function gmOpen(id,auto){
   if(!gmOn()||!GM.init)return;const P=$(id),D=GMSCR[id];if(!P||!D)return;
@@ -346,7 +348,7 @@ function gmWalkers(){const w=$("gWks");if(!w)return;let pool=[];try{pool=(S.team
   for(let i=0;i<N;i++){const n=pool[i%pool.length],e=document.createElement("div");e.className="gwk";e.innerHTML='<div class="gwki">'+ico(PM[n],40)+'</div>';w.appendChild(e);
     const im=e.querySelector("img"),K=gmScale();if(im)gmSz(im,K.k,K.cap);
     GM.tw.push({e:e,x:Math.random()*(tw-60),v:(Math.random()<.5?-1:1)*(18+Math.random()*16),wait:Math.random()*2000,y:Math.random()*4})}}
-function gmTown(t){const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$("hubM").hidden)return;
+function gmTown(t){if(document.getElementById("gLoad"))return;const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$("hubM").hidden)return;
   gmTownBuild();gmBudTick(dt);
   const tw=$("gTrack").scrollWidth||innerWidth,calm=hubCalm();
   GM.tw.forEach(o=>{if(calm){o.e.style.transform="translate("+o.x.toFixed(0)+"px,"+(-o.y).toFixed(0)+"px)";return}

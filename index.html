@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794427109">
+<meta name="game-build" content="1794427452">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2681,6 +2681,27 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .expc .lklock{margin:6px 0;padding:8px 12px;border-radius:10px;background:#fff1f1;border:2px solid #f3b4b4;color:#7a2a2a;font-size:.82rem}
 .expc .lklock.open{background:#effbf2;border-color:#9fdcb0;color:#1f6a3a}
 .expc .lkr:has(input:disabled),.expc .lkmain:has(input:disabled){opacity:.6;cursor:not-allowed}
+/* pantalla de carga: animación solo con CSS (transform/opacity), fluida aunque el juego siga cargando */
+#gLoad.glcss{animation:glout .45s ease 1.4s forwards;will-change:opacity;contain:strict}
+@keyframes glout{to{opacity:0;visibility:hidden}}
+#gLoad.glcss .glr{will-change:rotate;width:150vmax;height:150vmax}
+#gLoad.glcss .glb{will-change:transform}
+#gLoad.glcss .glt{transition:none;will-change:transform;animation:glopen .42s cubic-bezier(.25,1.4,.5,1) .85s forwards}
+@keyframes glopen{to{transform:translateY(-32px) rotateX(38deg)}}
+#gLoad.glcss .glbt{transition:none;will-change:transform;animation:glopb .42s cubic-bezier(.25,1.4,.5,1) .85s forwards}
+@keyframes glopb{to{transform:translateY(6px)}}
+#gLoad.glcss .glbtn{transition:none;animation:glhide .12s linear .85s forwards}
+@keyframes glhide{to{opacity:0}}
+#gLoad.glcss .glb:before{transition:none;height:44px;margin-top:-22px;transform:scaleY(0);opacity:0;will-change:transform,opacity;animation:glbeam .3s ease-out .85s forwards}
+@keyframes glbeam{to{transform:scaleY(1);opacity:1}}
+#gLoad.glcss:after{content:"";position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px;border-radius:50%;background:#fff;transform:scale(0);will-change:transform;animation:gflx .45s ease-in 1.17s forwards}
+@media (prefers-reduced-motion:reduce){#gLoad.glcss{animation-delay:.6s}#gLoad.glcss .glr{animation:none}}
+/* mientras el navegador prepara el juego (pantalla azul previa), una Poké Ball que se balancea: la anima la tarjeta gráfica aunque el juego esté cargando */
+html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;left:50%;top:50%;z-index:2147481001;width:108px;height:108px;margin:-54px 0 0 -54px;border-radius:50%;box-sizing:border-box;border:6px solid #1b2340;
+  background:radial-gradient(circle at 50% 50%,#fff 0 9px,#1b2340 9.5px 16px,transparent 16.5px),linear-gradient(#ff6b6b,#e8313a 46%,#1b2340 46% 54%,#fff 54%,#d9d5ea);
+  box-shadow:0 10px 0 rgba(0,0,0,.18);transform-origin:50% 90%;will-change:transform;animation:gprewob 1.1s ease-in-out infinite}
+@keyframes gprewob{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-16deg)}80%{transform:rotate(14deg)}90%{transform:rotate(-8deg)}}
+@media (prefers-reduced-motion:reduce){html.gmpre body:not(.gm):has(#auth[hidden])::after{animation:none}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2746,7 +2767,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.52.2</small>
+    <small class="pcver">Versión 6.52.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7420,8 +7441,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.52.2";
+const GAME_VER="6.52.3";
 const NEWS=[
+{v:"2026-11-11-6.52.3",ver:"6.52.3",at:"2026-11-11T21:04",t:"🔧 Arreglos/Mejoras",l:["La pantalla de carga va mucho más fluida: la Poké Ball que se abre la anima ahora la tarjeta gráfica, así que no se traba aunque el juego esté terminando de cargar","Mientras carga, ya no se dibuja el pueblo que queda tapado detrás","En la pantalla azul de antes de la carga hay una Poké Ball que se balancea, para que no parezca congelada"]},
 {v:"2026-11-11-6.52.2",ver:"6.52.2",at:"2026-11-11T20:58",t:"🔧 Arreglos/Mejoras",l:["Modo Locke y Modo Random: ahora se eligen al principio de la partida, como en los fangames. Solo puedes activarlos (y cambiar las reglas) en el PC de tu habitación antes de bajar las escaleras por primera vez","Al despertar en tu cuarto te avisa de que puedes configurarlos. Al bajar, los retos quedan fijados","Después solo se pueden desactivar, y no se pueden volver a activar en esa partida. Para jugar con ellos en una partida ya empezada, crea una Partida nueva desde el menú principal"]},
 {v:"2026-11-11-6.52.1",ver:"6.52.1",at:"2026-11-11T20:55",t:"🔧 Arreglos/Mejoras",l:["Modo Locke: nueva «👑 Cláusula legendaria» (activada por defecto). Los legendarios y singulares se pueden capturar siempre, sin gastar la captura de la zona","Modo Locke: nueva regla «🚫 Sin legendarios» (desactivada por defecto). No puedes usar legendarios ni singulares en tu equipo (tampoco tu compañera legendaria de la historia); se quedan en la caja","Las dos se activan o desactivan en el PC de tu cuarto"]},
 {v:"2026-11-11-6.52",ver:"6.52",at:"2026-11-11T20:45",t:"🎮 Menú principal clásico y objetos por el mundo",l:["Exploración: al pulsar «▶ Iniciar» se abre el menú principal clásico con Continuar, Partida nueva, Cargar partida, Borrar partida y Opciones","3 ranuras de guardado. Cada partida se ve en una ficha con el lugar, tu entrenador, medallas, Pokédex, tiempo de juego y tu equipo","Opciones: velocidad del texto, velocidad del juego, música, música según la zona, otros jugadores y controles","En el menú del juego hay una nueva opción, «Salir al menú principal», que guarda y vuelve a la pantalla de título","Hay NPC por pueblos, rutas, cuevas, bosques y playas que te regalan objetos al hablar con ellos, y el vecino de cada casa también te da algo la primera vez","Busca en neveras, estanterías, armarios, cómodas, baúles, encimeras, mesitas… y en las nuevas papeleras de casas, Centros y tiendas: en algunas hay objetos","Modo Random: nueva opción «Objetos aleatorios» en el PC de tu cuarto. Los objetos del suelo, de los muebles y los regalos son al azar"]},
@@ -7694,7 +7716,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794427109";
+const GAME_B="1794427452";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14223,7 +14245,9 @@ function gmApply(){
 {const _a=applyO;applyO=function(){const r=_a.apply(this,arguments);try{if(GM.init&&document.body.classList.contains("gm")!==(gmOn()))gmApply();if(GM.init)gmLite()}catch(e){}return r}}
 // pantalla de carga: una Poké Ball que se abre
 function gmLoad(){if(!gmOn()||hubCalm())return;const L=gmEl("div","gLoad","",'<i class="glr"></i><div class="glogo"><span>POKE GACHA</span><b>ONLINE</b></div><div class="glb"><i class="glt"></i><i class="glbt"></i><i class="glbtn"></i></div><b class="glm">¡Vamos allá!</b>');
-  setTimeout(()=>{L.classList.add("op");try{snd("open")}catch(e){}},850);setTimeout(()=>L.classList.add("out"),1350);setTimeout(()=>L.remove(),1900)}
+  // toda la animación va por CSS (la hace la tarjeta gráfica), así sigue fluida aunque el juego esté terminando de cargar
+  L.classList.add("glcss");setTimeout(()=>{try{snd("open")}catch(e){}},850);
+  const bye=()=>{if(L.isConnected)L.remove()};L.addEventListener("animationend",e=>{if(e.target===L)bye()});setTimeout(bye,4000)}
 // ---------- abrir y cerrar secciones ----------
 function gmOpen(id,auto){
   if(!gmOn()||!GM.init)return;const P=$(id),D=GMSCR[id];if(!P||!D)return;
@@ -14342,7 +14366,7 @@ function gmWalkers(){const w=$("gWks");if(!w)return;let pool=[];try{pool=(S.team
   for(let i=0;i<N;i++){const n=pool[i%pool.length],e=document.createElement("div");e.className="gwk";e.innerHTML='<div class="gwki">'+ico(PM[n],40)+'</div>';w.appendChild(e);
     const im=e.querySelector("img"),K=gmScale();if(im)gmSz(im,K.k,K.cap);
     GM.tw.push({e:e,x:Math.random()*(tw-60),v:(Math.random()<.5?-1:1)*(18+Math.random()*16),wait:Math.random()*2000,y:Math.random()*4})}}
-function gmTown(t){const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$("hubM").hidden)return;
+function gmTown(t){if(document.getElementById("gLoad"))return;const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$("hubM").hidden)return;
   gmTownBuild();gmBudTick(dt);
   const tw=$("gTrack").scrollWidth||innerWidth,calm=hubCalm();
   GM.tw.forEach(o=>{if(calm){o.e.style.transform="translate("+o.x.toFixed(0)+"px,"+(-o.y).toFixed(0)+"px)";return}

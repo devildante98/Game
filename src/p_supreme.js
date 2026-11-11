@@ -35,6 +35,10 @@ async function supDo(fname){
   formApply(m,np,1.25,1.3);m.sup=1;setSpr(0);bePaint();snd("lvl");await say("¡"+nk(base)+" se ha transformado en "+fname+"! Su poder es abrumador.");
   if(!(S.owned[fname]>0)){try{const lv=(S.lv[base]&&S.lv[base].l)||50;giveMon(fname,lv,!!(S.shiny&&S.shiny[base]));S.lv[fname]={l:lv,x:0};save();try{render()}catch(e){}}catch(e){}await say("💠 ¡Has desbloqueado "+fname+"! Ya aparece en tu colección.")}
   if(fname==="Eternatus Dinamax Infinito"){m.ab=900;await say("✨ ¡"+fname+" desata su habilidad Dinamax Infinito!")}
+  // fusiones y formas con movimiento propio (Calyrex, Kyurem, Necrozma…): aprende su movimiento característico mientras dure
+  try{const sig=supSig(fname,m);if(sig.length){if(!m.m0){m.m0=m.m.slice();m.pp0=m.pp.slice()}
+    for(const id of sig){const mv=MVI(id);if(!mv)continue;let k=-1;if(m.m.length<4){m.m.push(mv);m.pp.push(mv.pp||10)}else{let lo=1e9;m.m.forEach((x,j)=>{if(sig.includes(x.id))return;const v=x.cl?(x.pw||40):0;if(v<lo){lo=v;k=j}});if(k<0)continue;m.m[k]=mv;m.pp[k]=mv.pp||10}
+      await say("✨ ¡"+fname+" puede usar "+mv.n+" mientras dure la transformación!")}}}catch(e){console.error(e)}
   B.busy=false;setMenu(true);
 }
 {const _t=turn;turn=async function(k){if(typeof k==="string"&&k.slice(0,4)==="sup:")return supDo(k.slice(4));return _t.apply(this,arguments)}}
@@ -55,3 +59,10 @@ function supComp(){
   setTimeout(()=>{nxModal('<div class="hofb">💠</div><h3>Las formas supremas han cambiado</h3><p>Los Pokémon más poderosos ('+L.map(esc).join(", ")+') siguen en tu colección, pero ahora se usan como en los juegos: llevas a su forma base al combate y lo transformas con un <b>Cristal Supremo</b>.</p><p>Como compensación has recibido <b>'+cr+' Cristales Supremos</b>'+(gave.length?' y '+gave.map(esc).join(", ")+' para poder usarlos ya':'')+'. ¡Gracias por jugar!</p><button id="supOk">¡Entendido!</button>');$("supOk").onclick=nxModalClose},2500);
 }
 setTimeout(()=>{try{supComp()}catch(e){console.error(e)}},1800);
+
+// movimientos propios de la forma suprema que su forma base no usa (Lanza Glacial, Orbes Espectro, Rayo Fusión, Láser Prisma…)
+const SUPSIG={"Calyrex Jinete Glacial":["Lanza Glacial"],"Calyrex Jinete Espectral":["Orbes Espectro"],"Kyurem Negro":["Rayo Fusión","Rayo Gélido"],"Kyurem Blanco":["Llama Fusión","Llama Gélida"],
+  "Ultra-Necrozma":["Láser Prisma"],"Necrozma Melena Crepuscular":["Meteoimpacto"],"Necrozma Alas del Alba":["Rayo Umbrío"],"Hoopa Desatado":["Cerco Dimensión"]};
+function supSig(fname,m){try{return (SUPSIG[fname]||[]).map(n=>{const k=Object.keys(MVD).find(i=>MVD[i]&&MVD[i].n===n);return k}).filter(id=>id&&!(m.m||[]).some(x=>x.id===id))}catch(e){return []}}
+// al volver a la forma base recupera sus movimientos (y los PP que ha gastado en los que conservaba)
+{const _fr=formRevert;formRevert=function(m){if(m&&m.m0){const cur=m.m,cp=m.pp;m.m=m.m0;m.pp=m.pp0.map((v,i)=>cur[i]&&cur[i].id===m.m[i].id?cp[i]:v);delete m.m0;delete m.pp0}return _fr.apply(this,arguments)}}

@@ -458,7 +458,13 @@ body.gm #fists i svg{width:30px;height:30px;filter:drop-shadow(0 2px 0 rgba(0,0,
 body.gm #acct{top:calc(16px + env(safe-area-inset-top,0px))!important;left:auto!important;right:158px;z-index:62;background:rgba(6,10,34,.55)!important;border:2px solid rgba(255,255,255,.25)!important;color:#fff;max-width:none!important}
 body.gm #acct #aname{display:none}
 @media (max-width:1180px){body.gm .gpass{display:none!important}}
-@media (max-width:860px){body.gm #acct{display:none!important}}
+@media (max-width:860px){body.gm #acct{display:none!important}
+  /* en el móvil solo queda el botón de guardar, redondo, encima de la barra de abajo */
+  body.gm #acct:not([hidden]){display:flex!important;position:fixed!important;left:auto!important;top:auto!important;right:14px!important;top:calc(228px + env(safe-area-inset-top,0px))!important;bottom:auto!important;z-index:60;background:none!important;border:none!important;box-shadow:none!important;padding:0!important;width:auto!important}
+  body.gm #acct:not([hidden]) #aname,body.gm #acct:not([hidden]) #sync,body.gm #acct:not([hidden]) #aout{display:none!important}
+  body.gm #acct:not([hidden]) #asave{font-size:0!important;width:46px;height:46px;border-radius:50%!important;padding:0!important;display:grid;place-items:center;box-shadow:0 4px 0 rgba(0,0,0,.3),0 6px 14px rgba(0,0,0,.35)!important}
+  body.gm #acct:not([hidden]) #asave::before{content:"💾";font-size:22px}
+  body.gm:not(.gmhome) #acct{display:none!important}}
 .gacc{display:flex;flex-direction:column;gap:8px;padding:12px;margin-bottom:6px;border-radius:14px;background:rgba(19,163,127,.12);border:2px solid rgba(19,163,127,.35)}
 .gacc[hidden]{display:none!important}
 .gacc>div{display:flex;gap:8px;flex-wrap:wrap}

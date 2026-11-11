@@ -315,7 +315,7 @@ const CRY="https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/la
 // gritos que en los juegos modernos son distintos al de la lista: Pikachu dice su nombre (el grito de Let's Go, Espada/Escudo y Escarlata/Púrpura)
 const CRYX={25:10158};
 function cry(n){
-  if(!O.cry||!O.svol||!O.sfx)return;const p=PM[n];if(!p||!p[4]||p[4]>1025)return;
+  if(!O.cry||!O.svol||!O.sfx||document.hidden)return;const p=PM[n];if(!p||!p[4]||p[4]>1025)return;
   const id=CRYX[p[4]]||p[4];
   try{const a=new Audio((SPRB?CRY2:CRY)+id+".ogg");a.volume=Math.min(1,O.svol*.5);a.onerror=()=>{if(a.src.indexOf(CRY)===0){a.src=CRY2+id+".ogg";a.play().catch(()=>{})}};a.play().catch(()=>{})}catch(e){}
 }

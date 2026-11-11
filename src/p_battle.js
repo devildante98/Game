@@ -511,7 +511,10 @@ async function finish(res){
     const xpFac=(L,Lp)=>Math.pow((2*L+10)/(L+Lp+10),2.5);
     const xpOf=t=>B.trainer&&B.xpL&&B.xpL.length?Math.round(B.xpL.reduce((a,[b,l])=>a+b*xpFac(l,t.l),0)*1.2):Math.round(amt*xpFac(om.l,t.l));
     for(const t of E.sd[0].t)if(t.played&&t.mh>0){const a=Math.max(1,xpOf(t));if(await gainXp(t.p,t.it==="lucky"?Math.round(a*1.5):a))ups.push(t.p[0])}
-    for(const n of ups){if(S.owned[n]&&evoLvReady(n).length)await evoPrompt(n,evoLvReady(n))}
+    // evolución por nivel: los que han subido y también los del equipo que ya tenían el nivel (p. ej. por un Caramelo Raro);
+    // si cancelaste la evolución, se vuelve a intentar al subir el siguiente nivel, como en los juegos
+    {const cand=[...new Set(ups.concat((S.team||[]).filter(x=>x&&S.owned[x])))].filter(n=>S.owned[n]&&evoLvReady(n).length&&!(S.evoNo&&S.evoNo[n]>=lvd(n).l));
+     for(const n of cand){const ok=await evoPrompt(n,evoLvReady(n));if(!ok&&S.owned[n]){S.evoNo=S.evoNo||{};S.evoNo[n]=lvd(n).l;save()}}}
     if(B.league&&res==="win")await leagueWin();
     if(B.gym!=null&&res==="win")await gymWin(B.gym);
     if(res==="win"||res==="cap"){const dm=E.sd[1].t.reduce((a,t)=>a+Math.max(0,t.mx-Math.max(0,t.mh)),0);gAccAdd("dmg",dm)}

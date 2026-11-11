@@ -292,3 +292,5 @@ document.addEventListener("input",e=>{if(e.target.id!=="chI")return;const i=e.ta
 const CH_MT0=Date.now();
 {const _om=chOnMsgs;chOnMsgs=function(k){_om.apply(this,arguments);try{CH.mnSeen=CH.mnSeen||{};const me=chMe();(CH.msgs[k]||[]).forEach(m=>{if(m.at>CH_MT0&&!CH.mnSeen[m.id]&&chMent(m)){CH.mnSeen[m.id]=1;
   const where=k==="global"?"el chat global":k.startsWith("g:")?"el chat del gremio":"un mensaje privado";if(!(CH.open&&k===chKey()))toast("📣 "+pvClean(m.n||"Alguien")+" te ha mencionado en "+where+": «"+String(m.t||"").slice(0,60)+"»");snd("pop")}})}catch(e){}}}
+// los mensajes se fechan con la hora real del servidor (no con el reloj de cada móvil), así salen en el orden en que se enviaron
+{const wr=setInterval(()=>{const F=window.FB;if(!F||!F.chSend||F._chW)return;F._chW=1;clearInterval(wr);const o=F.chSend;F.chSend=function(tp,id,d){try{if(d&&typeof window.srvNow==="function")d.at=Math.round(window.srvNow())}catch(e){}return o.apply(this,arguments)}},500)}

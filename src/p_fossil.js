@@ -65,6 +65,8 @@ document.addEventListener("click",e=>{
   const c=t.closest("[data-fosk]");if(c&&!fosLab()){const k=c.dataset.fosk,f=FOSK[k];snd("ui");
     if(f[3].length>1)FOSSEL=[k];
     else if(FOSSEL&&FOSSEL.length===1&&FOSK[FOSSEL[0]][3].length===1&&FOSK[FOSSEL[0]][3]!==f[3])FOSSEL=[FOSSEL[0],k];
+    // dos mitades del mismo grupo (por ejemplo, dos Fósiles Dragón) no se pueden juntar, como en Espada y Escudo
+    else if(FOSSEL&&FOSSEL.length===1&&FOSK[FOSSEL[0]][3].length===1&&FOSK[FOSSEL[0]][3]===f[3]){toast("🦴 "+f[1]+" no se combina con "+FOSK[FOSSEL[0]][1]+": "+(f[3]==="a"?"necesita un Fósil Dragón o un Fósil Plesio":"necesita un Fósil Pájaro o un Fósil Pez")+", como en los juegos.");return}
     else FOSSEL=[k];
     fosUI();return}
   if(t.closest("[data-fosx]")){FOSSEL=null;snd("ui");fosUI();return}

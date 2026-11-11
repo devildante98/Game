@@ -7,6 +7,7 @@
 (function(){
   var W=window,o=Date.now.bind(Date),K={on:false,r:1,peak:1,at:0,last:0,blk:0,n:0},S=[],ds=0,dl=0,off=0,rv=0;
   W.PGC_SPD=K;
+  W.srvNow=function(){return Date.now()+(K.so||0)};
   function srv(){return ds+(o()-dl)/K.r}                    // hora real estimada
   Date.now=function(){var l=o();if(!K.on){if(l>rv)rv=l;return l}var v=Math.floor(srv()+off);if(v<rv)v=rv;rv=v;K.blk=Math.max(0,l-v);return v};
   function sample(){
@@ -15,6 +16,8 @@
       var b=o(),d=Date.parse(res.headers.get("date")||"");if(!(d>0)||b-a>20000)return;   // respuesta muy lenta: no vale
       d+=500+(parseInt(res.headers.get("age")||"0",10)||0)*1000;var m=(a+b)/2;
       if(S.length&&d-S[S.length-1][0]<25000)return;   // con el acelerador los intervalos también corren: se guarda una muestra cada ~30 s reales
+      // diferencia entre la hora real y el reloj del juego (para ordenar bien los mensajes del chat aunque tu reloj vaya adelantado o atrasado)
+      K.so=d-Date.now()+(b-a)/2;
       S.push([d,m]);if(S.length>20)S.shift();
       // ventana: la muestra más antigua de los últimos ~3 min con al menos 60 s de diferencia
       var p=null;for(var i=0;i<S.length-1;i++){var dd=d-S[i][0];if(dd>=60000&&dd<=200000){p=S[i];break}}

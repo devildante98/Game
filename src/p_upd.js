@@ -1172,3 +1172,8 @@ function capBlock(){try{const L=(S.team||[]).filter(n=>n&&S.owned[n]&&overCap(n)
 {const _pa=pvAccept;pvAccept=function(){if(capBlock())return;return _pa.apply(this,arguments)}}
 {const _ro=r2Open;r2Open=async function(){if(capBlock())return;return _ro.apply(this,arguments)}}
 {const _eb=exBattle;exBattle=async function(){if(!fcd&&capBlock())return;return _eb.apply(this,arguments)}}
+// ================= SONIDO EN SEGUNDO PLANO: se calla al cambiar de app o de pestaña =================
+{let wasRun=false;const bgAudio=()=>{try{if(typeof actx==="undefined"||!actx)return;
+  if(document.hidden){wasRun=actx.state==="running";if(wasRun)actx.suspend()}else if(wasRun){actx.resume();wasRun=false}}catch(e){}
+  try{document.querySelectorAll("audio,video").forEach(a=>{if(document.hidden&&!a.paused){a._bgp=1;a.pause()}else if(!document.hidden&&a._bgp){a._bgp=0;a.play().catch(()=>{})}})}catch(e){}};
+ document.addEventListener("visibilitychange",bgAudio);window.addEventListener("pagehide",()=>{try{if(actx&&actx.state==="running"){wasRun=true;actx.suspend()}}catch(e){}})}

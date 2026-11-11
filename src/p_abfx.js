@@ -177,7 +177,7 @@ function axZero(E,tg,tm,mv,me,push){if(axMB(me))return false;
   if(tm.ab===209&&!tm.dsf){tm.dsf=1;axSay(push,tg,tm,"¡El disfraz de {w} ha recibido el golpe y se ha roto!");return true}
   if(tm.ab===248&&!tm.icf&&mv.cl===1){tm.icf=1;axSay(push,tg,tm,"¡La cara de hielo de {w} ha absorbido el golpe!");return true}return false}
 // ---------- efectos secundarios ----------
-const axNoSec=(me,tm)=>me.ab===125||(tm.ab===19&&!axMB(me));
+const axNoSec=(me,tm)=>me.ab===125||(tm.ab===19&&!axMB(me))||tm.it==="ccloak";
 const axSec=me=>me.ab===32?2:1;
 // ---------- problemas de estado ----------
 function axAilBlock(E,j,a,push,status,src){return axSafe(()=>{

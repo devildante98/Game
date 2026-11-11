@@ -28,7 +28,7 @@ const beFoes=(E,i)=>{const ti=beTeamOf(E,i);return E.tm.filter((t,k)=>k!==ti).re
 function beIll(s,m){if(!s||!m||m.ab!==149||m.illOff||m.mh<=0)return null;
   if(m.illP===undefined){let k=-1;for(let j=s.t.length-1;j>=0;j--)if(s.t[j]!==m&&s.t[j].mh>0){k=j;break}m.illP=k>=0?s.t[k].p:null}return m.illP}
 const beSnap=E=>({il:E.sd.map(s=>beIll(s,s.t[s.ai])),ai:E.sd.map(s=>s.ai),hp:E.sd.map(s=>s.t.map(x=>Math.max(0,x.mh))),st:E.sd.map(s=>s.t.map(x=>x.sts))});
-const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+bsSpe(m.p))*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(m.it==="cscarf"?1.5:1)*(E?axSpdK(s,E):1)+rng()*3};
+const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+bsSpe(m.p))*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(m.it==="cscarf"?1.5:1)*(m.it==="qpow"&&/^Ditto/.test(m.p[0])?2:1)*(E?axSpdK(s,E):1)+rng()*3};
 // habilidades: multiplicadores de daño e Intimidación
 function abAtk(me,mv,ty){const a=me.ab;let k=1;if(!a)return 1;
   if(me.mh<=me.mx/3&&((a===65&&ty==="grass")||(a===66&&ty==="fire")||(a===67&&ty==="water")||(a===68&&ty==="bug")))k*=1.5;
@@ -83,7 +83,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   const ts=E.sd[tg],tm=beAct(ts);
   if(mv.id==="389"&&tg!==i){const q=String((E._acts||{})[tg]||"").match(/^m(\d)/),tmv=q?tm.m[+q[1]]:null;if(acted[tg]||!tmv||tmv.cl===0){push({k:"fail",s:i});return}}
   if(tg!==i&&ts.v.prot&&!(me.ab===260&&mv.cl===1)&&!(me.gmx&&GMX[me.gmx]&&GMX[me.gmx][2]==="oneblow")){push({k:"blocked",s:tg,n:tm.p[0]});return}
-  const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g*(me.it==="wlens"?1.1:1)*(tm.it==="bpow"?.9:1)};
+  const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g*(me.it==="wlens"?1.1:1)*(me.it==="zlens"&&acted&&acted[tg]?1.2:1)*(tm.it==="bpow"?.9:1)};
   if(mv.cl===0){
     if(mv.prot){if(v.pc&&rng()>=1/Math.pow(3,v.pc)){v.pc=0;push({k:"fail",s:i});return}v.prot=1;v.pc++;push({k:"prot",s:i,n:me.p[0]});return}
     if(mv.rest){if(me.mh>=me.mx||me.sts==="slp"){push({k:"fail",s:i});return}me.mh=me.mx;me.sts="slp";me.slp=2;push({k:"rest",s:i,n:me.p[0]});return}
@@ -98,15 +98,15 @@ function beUse(E,i,a,rng,push,acted,faint){
     if(!did&&!mv.heal)push({k:"noeff",s:i});
     return;
   }
-  if(!hitOk()){push({k:"miss",s:i,tg:tg});return}
+  if(!hitOk()){push({k:"miss",s:i,tg:tg});if(me.it==="bpol"&&!me.ius&&me.mh>0){me.ius=1;push({k:"item",s:i,n:me.p[0],it:"bpol"});beStat(E,i,[["spe",2]],push,i)}return}
   {const ty0=mv.typeless?"normal":axTy(me,mv),ta=axMB(me)?0:tm.ab;if(tg!==i&&!mv.fixed&&!mv.flv&&((ty0==="ground"&&ta===26)||(ty0==="water"&&ta===11)||(ty0==="electric"&&ta===10)||(ty0==="fire"&&ta===18))){let hl=0;if(ta!==26&&ta!==18&&tm.mh<tm.mx){const b=tm.mh;tm.mh=Math.min(tm.mx,tm.mh+Math.max(1,Math.round(tm.mx/4)));hl=tm.mh-b}if(ta===18)tm.ffire=1;push({k:"abil",s:tg,n:tm.p[0],ab:ta,imm:1,h:hl});return}}
   if(tg!==i&&axImm(E,i,tg,me,tm,mv,push,rng))return;
-  let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}if(mv.hits&&me.ab===92)hits=mv.hits[1];
+  let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}if(mv.hits&&me.ab===92)hits=mv.hits[1];else if(mv.hits&&me.it==="ldice"&&mv.hits[1]===5)hits=rng()<.5?4:5;
   const ty=mv.typeless?"normal":axTy(me,mv),special=mv.fixed||mv.flv||mv.half||mv.pct,e=mv.typeless||special?1:axEff(E,me,tm,ty,effP(ty,tm.p)),stab=!mv.typeless&&(stabP(ty,me.p)||[168,236,121,225].includes(me.ab))?(me.ab===91?2:1.5):1,pb=me.ab===185&&hits===1&&!mv.hits&&!special,h0=tm.mh;if(pb)hits=2;
   if(!mv.typeless&&tg!==i&&(special?axEff(E,me,tm,ty,effP(ty,tm.p)):e)===0){push({k:"noaff",s:tg,n:tm.p[0]});return}
   let tot=0,nh=0,crit=0;
   for(let h=0;h<hits&&tm.mh>0;h++){
-    let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
+    let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*((me.it==="leek"&&/^(Farfetch|Sirfetch)/.test(me.p[0]))||(me.it==="lpunch"&&/^Chansey/.test(me.p[0]))?4:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
     else{const phy=mv.cl!==2;let am=tm.ab===109&&!axMB(me)?1:STG(phy?v.st.atk:v.st.spa),dm=me.ab===109?1:STG(phy?ts.v.st.def:ts.v.st.spd);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
       d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1)*bsSR(me.p))*bsDF(tm.p,phy)*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)*(typeof itDmg==="function"?itDmg(me,tm,mv,phy,e):1)))}
@@ -116,14 +116,15 @@ function beUse(E,i,a,rng,push,acted,faint){
     let sash=0;if(tm.it==="sash"&&!tm.ius&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;tm.ius=1;sash=1}
     else if(tm.ab===5&&!axMB(me)&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;sash=3}
     else if(tm.bud&&!tm.bud2&&tm.mh>1&&d>=tm.mh&&rng()<.25){d=tm.mh-1;tm.bud2=1;sash=2}
+    else if(tm.it==="fband"&&tm.mh>1&&d>=tm.mh&&rng()<.1){d=tm.mh-1;sash=4}
     tm.mh=Math.max(0,tm.mh-d);tot+=d;nh++;
-    push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});if(d>0&&tg!==i&&beIll(E.sd[tg],tm)){tm.illOff=1;push({k:"illoff",s:tg,n:tm.p[0]})}if(sash===3)push({k:"abil",s:tg,n:tm.p[0],ab:5});else if(sash)push({k:"item",s:tg,n:tm.p[0],it:sash===2?"bud":"sash"});
+    push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});if(d>0&&tg!==i&&beIll(E.sd[tg],tm)){tm.illOff=1;push({k:"illoff",s:tg,n:tm.p[0]})}if(sash===3)push({k:"abil",s:tg,n:tm.p[0],ab:5});else if(sash)push({k:"item",s:tg,n:tm.p[0],it:sash===4?"fband":sash===2?"bud":"sash"});
   }
   push({k:"after",s:i,tg:tg,e:e,crit:crit,nh:nh});
-  if(mv.drain&&tot&&me.mh>0){if(tm.ab===64&&!axMB(me)){me.mh=Math.max(0,me.mh-Math.max(1,Math.round(tot*mv.drain/100)));axSay(push,tg,tm,"¡{o} ha absorbido el lodo de {w} y pierde PS!",{i:i,m:me},{});faint(i)}else{const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100)));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}}
+  if(mv.drain&&tot&&me.mh>0){if(tm.ab===64&&!axMB(me)){me.mh=Math.max(0,me.mh-Math.max(1,Math.round(tot*mv.drain/100)));axSay(push,tg,tm,"¡{o} ha absorbido el lodo de {w} y pierde PS!",{i:i,m:me},{});faint(i)}else{const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100*(me.it==="broot"?1.3:1))));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}}
   if(mv.rec&&tot&&!((me.ab===69||me.ab===98)&&mv.id!=="forc")){const d=Math.max(1,Math.round((mv.id==="forc"?me.mx:tot)*mv.rec/100));me.mh=Math.max(0,me.mh-d);push({k:"recoil",s:i,n:me.p[0]})}
-  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&tm.it==="rhelm"&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/6)));push({k:"item",s:i,n:me.p[0],it:"rhelm"});faint(i)}
-  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&me.ab!==203){const ta=tm.ab;if((ta===24||ta===160)&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/8)));push({k:"abil",s:tg,n:tm.p[0],ab:ta,o:i,on:me.p[0]})}
+  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&tm.it==="rhelm"&&me.ab!==98&&me.it!=="ppads"){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/6)));push({k:"item",s:i,n:me.p[0],it:"rhelm"});faint(i)}
+  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&me.ab!==203&&me.it!=="ppads"){const ta=tm.ab;if((ta===24||ta===160)&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/8)));push({k:"abil",s:tg,n:tm.p[0],ab:ta,o:i,on:me.p[0]})}
     else if((ta===9||ta===38||ta===49||ta===27)&&!me.sts&&rng()<.3){const a2=ta===9?"par":ta===38?"psn":ta===49?"brn":["psn","par","slp"][Math.floor(rng()*3)];push({k:"abil",s:tg,n:tm.p[0],ab:ta});beAil(E,i,a2,push,rng,false,tg)}}
   if(me.it==="shell"&&tot&&me.mh>0&&me.mh<me.mx){me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot/8)));push({k:"item",s:i,n:me.p[0],it:"shell"})}
   if(me.it==="lorb"&&tot&&me.mh>0&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/10)));push({k:"item",s:i,n:me.p[0],it:"lorb"})}
@@ -249,7 +250,7 @@ async function bePlay(ev){
       case "statmax":await say("¡"+ART[e.st]+" de "+who+" no puede "+(e.up?"subir":"bajar")+" más!");break;
       case "drain":bePaint(e.snap);fxHeal(sl.sp);await say("¡"+beWho(e.tg,e.n)+" ha perdido energía!");break;
       case "recoil":bePaint(e.snap);hitFx($(sl.sp),1);await say("¡"+who+" ha sufrido daño de retroceso!");break;
-      case "item":{bePaint(e.snap);const q=ITMSG[e.it];if(!q)break;if(q[0]==="h"){snd("heal");fxHeal(sl.sp)}else if(q[0]==="d")hitFx($(sl.sp),1);else snd("buff");await say(q[1](who));break}
+      case "item":{bePaint(e.snap);const q=ITMSG[e.it];if(!q)break;if(q[0]==="h"){snd("heal");fxHeal(sl.sp)}else if(q[0]==="d")hitFx($(sl.sp),1);else snd("buff");await say(q[1](who,e));break}
       case "abil":{bePaint(e.snap);const an=abName(e.ab);snd(e.imm?"guard":e.dm?"hit":"buff");
         if(e.t){if(e.hl){snd("heal");fxHeal(sl.sp)}if(e.dm)hitFx($(sl.sp),1);await say(axFmt(e,who,an))}
         else if(e.imm)await say(e.h?"¡"+who+" absorbe el ataque con "+an+" y recupera PS!":e.ab===18?"¡"+an+" de "+who+" absorbe el fuego y potencia sus ataques!":"¡"+who+" no se ve afectado gracias a "+an+"!");
@@ -497,8 +498,9 @@ async function finish(res){
     if(res==="win"){qEv("win");if(B.trainer){qEv("tr");await trainerDefeat()}}
     // en Exploración el premio va a los tickets de Exploración (cartera aparte)
     const xgw=typeof XGSW!=="undefined"&&!!XGSW&&typeof xTadd==="function"&&typeof EX!=="undefined"&&EX.battle&&EX.battle.rw;
-    if(xgw){const r=EX.battle.rw;if(!EX.battle.paid){EX.battle.paid=true;xTadd(r)}snd("win");await say("¡Recompensa: +"+fmt(r)+" 🎟️ de Exploración!")}else{
-    const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL());S.t+=rw;
+    const amc=E.sd[0].t.some(t=>t.it==="amcoin");
+    if(xgw){const r=EX.battle.rw*(amc?2:1);if(!EX.battle.paid){EX.battle.paid=true;xTadd(r)}snd("win");await say("¡Recompensa: +"+fmt(r)+" 🎟️ de Exploración!")}else{
+    const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL()*(amc?2:1));S.t+=rw;
     snd("win");await say("¡Recompensa: +"+fmt(rw)+" 🎟️!"+(rw===33550336?" ¡¡PREMIO GORDO!!":""));
     if(rw===33550336)await jackpot(rw);}
     if(res==="win"){
@@ -513,10 +515,10 @@ async function finish(res){
     // como en los juegos: cuanto más bajo es tu Pokémon respecto al rival, más experiencia gana (y casi nada si es muy superior)
     const xpFac=(L,Lp)=>Math.pow((2*L+10)/(L+Lp+10),2.5);
     const xpOf=t=>B.trainer&&B.xpL&&B.xpL.length?Math.round(B.xpL.reduce((a,[b,l])=>a+b*xpFac(l,t.l),0)*1.2):Math.round(amt*xpFac(om.l,t.l));
-    for(const t of E.sd[0].t)if(t.played&&t.mh>0){const a=Math.max(1,xpOf(t));if(await gainXp(t.p,t.it==="lucky"?Math.round(a*1.5):a))ups.push(t.p[0])}
+    for(const t of E.sd[0].t){const sh=!t.played&&t.mh>0&&t.it==="xshare";if((t.played||sh)&&t.mh>0){const a=Math.max(1,Math.round(xpOf(t)*(sh?.5:1)));if(await gainXp(t.p,t.it==="lucky"?Math.round(a*1.5):a))ups.push(t.p[0])}}
     // evolución por nivel: los que han subido y también los del equipo que ya tenían el nivel (p. ej. por un Caramelo Raro);
     // si cancelaste la evolución, se vuelve a intentar al subir el siguiente nivel, como en los juegos
-    {const cand=[...new Set(ups.concat((S.team||[]).filter(x=>x&&S.owned[x])))].filter(n=>S.owned[n]&&evoLvReady(n).length&&!(S.evoNo&&S.evoNo[n]>=lvd(n).l));
+    {const cand=[...new Set(ups.concat((S.team||[]).filter(x=>x&&S.owned[x])))].filter(n=>S.owned[n]&&evoLvReady(n).length&&!(S.evoNo&&S.evoNo[n]>=lvd(n).l)&&!(S.held&&S.held[n]==="everst"));
      for(const n of cand){const ok=await evoPrompt(n,evoLvReady(n));if(!ok&&S.owned[n]){S.evoNo=S.evoNo||{};S.evoNo[n]=lvd(n).l;save()}}}
     if(B.league&&res==="win")await leagueWin();
     if(B.gym!=null&&res==="win")await gymWin(B.gym);

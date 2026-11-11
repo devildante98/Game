@@ -52,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.34"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.35"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794393989">
+<meta name="game-build" content="1794404038">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2611,7 +2611,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.34</small>
+    <small class="pcver">Versión 6.35</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -4368,7 +4368,7 @@ const beFoes=(E,i)=>{const ti=beTeamOf(E,i);return E.tm.filter((t,k)=>k!==ti).re
 function beIll(s,m){if(!s||!m||m.ab!==149||m.illOff||m.mh<=0)return null;
   if(m.illP===undefined){let k=-1;for(let j=s.t.length-1;j>=0;j--)if(s.t[j]!==m&&s.t[j].mh>0){k=j;break}m.illP=k>=0?s.t[k].p:null}return m.illP}
 const beSnap=E=>({il:E.sd.map(s=>beIll(s,s.t[s.ai])),ai:E.sd.map(s=>s.ai),hp:E.sd.map(s=>s.t.map(x=>Math.max(0,x.mh))),st:E.sd.map(s=>s.t.map(x=>x.sts))});
-const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+bsSpe(m.p))*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(m.it==="cscarf"?1.5:1)*(E?axSpdK(s,E):1)+rng()*3};
+const beSpd=(s,rng,E)=>{const m=beAct(s);return (m.l+bsSpe(m.p))*STG(s.v.st.spe)*(m.sts==="par"?.5:1)*(m.ns||1)*(m.it==="cscarf"?1.5:1)*(m.it==="qpow"&&/^Ditto/.test(m.p[0])?2:1)*(E?axSpdK(s,E):1)+rng()*3};
 // habilidades: multiplicadores de daño e Intimidación
 function abAtk(me,mv,ty){const a=me.ab;let k=1;if(!a)return 1;
   if(me.mh<=me.mx/3&&((a===65&&ty==="grass")||(a===66&&ty==="fire")||(a===67&&ty==="water")||(a===68&&ty==="bug")))k*=1.5;
@@ -4423,7 +4423,7 @@ function beUse(E,i,a,rng,push,acted,faint){
   const ts=E.sd[tg],tm=beAct(ts);
   if(mv.id==="389"&&tg!==i){const q=String((E._acts||{})[tg]||"").match(/^m(\d)/),tmv=q?tm.m[+q[1]]:null;if(acted[tg]||!tmv||tmv.cl===0){push({k:"fail",s:i});return}}
   if(tg!==i&&ts.v.prot&&!(me.ab===260&&mv.cl===1)&&!(me.gmx&&GMX[me.gmx]&&GMX[me.gmx][2]==="oneblow")){push({k:"blocked",s:tg,n:tm.p[0]});return}
-  const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g*(me.it==="wlens"?1.1:1)*(tm.it==="bpow"?.9:1)};
+  const hitOk=()=>{const g=axHitK(E,i,tg,me,tm,mv);if(g===true)return true;return !mv.ac||rng()*100<mv.ac*STG3(v.st.acc)/STG3(axEva(me,ts))*g*(me.it==="wlens"?1.1:1)*(me.it==="zlens"&&acted&&acted[tg]?1.2:1)*(tm.it==="bpow"?.9:1)};
   if(mv.cl===0){
     if(mv.prot){if(v.pc&&rng()>=1/Math.pow(3,v.pc)){v.pc=0;push({k:"fail",s:i});return}v.prot=1;v.pc++;push({k:"prot",s:i,n:me.p[0]});return}
     if(mv.rest){if(me.mh>=me.mx||me.sts==="slp"){push({k:"fail",s:i});return}me.mh=me.mx;me.sts="slp";me.slp=2;push({k:"rest",s:i,n:me.p[0]});return}
@@ -4438,15 +4438,15 @@ function beUse(E,i,a,rng,push,acted,faint){
     if(!did&&!mv.heal)push({k:"noeff",s:i});
     return;
   }
-  if(!hitOk()){push({k:"miss",s:i,tg:tg});return}
+  if(!hitOk()){push({k:"miss",s:i,tg:tg});if(me.it==="bpol"&&!me.ius&&me.mh>0){me.ius=1;push({k:"item",s:i,n:me.p[0],it:"bpol"});beStat(E,i,[["spe",2]],push,i)}return}
   {const ty0=mv.typeless?"normal":axTy(me,mv),ta=axMB(me)?0:tm.ab;if(tg!==i&&!mv.fixed&&!mv.flv&&((ty0==="ground"&&ta===26)||(ty0==="water"&&ta===11)||(ty0==="electric"&&ta===10)||(ty0==="fire"&&ta===18))){let hl=0;if(ta!==26&&ta!==18&&tm.mh<tm.mx){const b=tm.mh;tm.mh=Math.min(tm.mx,tm.mh+Math.max(1,Math.round(tm.mx/4)));hl=tm.mh-b}if(ta===18)tm.ffire=1;push({k:"abil",s:tg,n:tm.p[0],ab:ta,imm:1,h:hl});return}}
   if(tg!==i&&axImm(E,i,tg,me,tm,mv,push,rng))return;
-  let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}if(mv.hits&&me.ab===92)hits=mv.hits[1];
+  let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}if(mv.hits&&me.ab===92)hits=mv.hits[1];else if(mv.hits&&me.it==="ldice"&&mv.hits[1]===5)hits=rng()<.5?4:5;
   const ty=mv.typeless?"normal":axTy(me,mv),special=mv.fixed||mv.flv||mv.half||mv.pct,e=mv.typeless||special?1:axEff(E,me,tm,ty,effP(ty,tm.p)),stab=!mv.typeless&&(stabP(ty,me.p)||[168,236,121,225].includes(me.ab))?(me.ab===91?2:1.5):1,pb=me.ab===185&&hits===1&&!mv.hits&&!special,h0=tm.mh;if(pb)hits=2;
   if(!mv.typeless&&tg!==i&&(special?axEff(E,me,tm,ty,effP(ty,tm.p)):e)===0){push({k:"noaff",s:tg,n:tm.p[0]});return}
   let tot=0,nh=0,crit=0;
   for(let h=0;h<hits&&tm.mh>0;h++){
-    let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*(me.ab===105?2:1)*axCritK(me,tm);
+    let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*((me.it==="leek"&&/^(Farfetch|Sirfetch)/.test(me.p[0]))||(me.it==="lpunch"&&/^Chansey/.test(me.p[0]))?4:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
     else{const phy=mv.cl!==2;let am=tm.ab===109&&!axMB(me)?1:STG(phy?v.st.atk:v.st.spa),dm=me.ab===109?1:STG(phy?ts.v.st.def:ts.v.st.spd);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
       d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1)*bsSR(me.p))*bsDF(tm.p,phy)*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)*(typeof itDmg==="function"?itDmg(me,tm,mv,phy,e):1)))}
@@ -4456,14 +4456,15 @@ function beUse(E,i,a,rng,push,acted,faint){
     let sash=0;if(tm.it==="sash"&&!tm.ius&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;tm.ius=1;sash=1}
     else if(tm.ab===5&&!axMB(me)&&tm.mh>=tm.mx&&tm.mh>1&&d>=tm.mh){d=tm.mh-1;sash=3}
     else if(tm.bud&&!tm.bud2&&tm.mh>1&&d>=tm.mh&&rng()<.25){d=tm.mh-1;tm.bud2=1;sash=2}
+    else if(tm.it==="fband"&&tm.mh>1&&d>=tm.mh&&rng()<.1){d=tm.mh-1;sash=4}
     tm.mh=Math.max(0,tm.mh-d);tot+=d;nh++;
-    push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});if(d>0&&tg!==i&&beIll(E.sd[tg],tm)){tm.illOff=1;push({k:"illoff",s:tg,n:tm.p[0]})}if(sash===3)push({k:"abil",s:tg,n:tm.p[0],ab:5});else if(sash)push({k:"item",s:tg,n:tm.p[0],it:sash===2?"bud":"sash"});
+    push({k:"hit",s:i,tg:tg,e:e,d:d,cr:cr?1:0});if(d>0&&tg!==i&&beIll(E.sd[tg],tm)){tm.illOff=1;push({k:"illoff",s:tg,n:tm.p[0]})}if(sash===3)push({k:"abil",s:tg,n:tm.p[0],ab:5});else if(sash)push({k:"item",s:tg,n:tm.p[0],it:sash===4?"fband":sash===2?"bud":"sash"});
   }
   push({k:"after",s:i,tg:tg,e:e,crit:crit,nh:nh});
-  if(mv.drain&&tot&&me.mh>0){if(tm.ab===64&&!axMB(me)){me.mh=Math.max(0,me.mh-Math.max(1,Math.round(tot*mv.drain/100)));axSay(push,tg,tm,"¡{o} ha absorbido el lodo de {w} y pierde PS!",{i:i,m:me},{});faint(i)}else{const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100)));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}}
+  if(mv.drain&&tot&&me.mh>0){if(tm.ab===64&&!axMB(me)){me.mh=Math.max(0,me.mh-Math.max(1,Math.round(tot*mv.drain/100)));axSay(push,tg,tm,"¡{o} ha absorbido el lodo de {w} y pierde PS!",{i:i,m:me},{});faint(i)}else{const b=me.mh;me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot*mv.drain/100*(me.it==="broot"?1.3:1))));push({k:"drain",s:i,tg:tg,n:tm.p[0],h:me.mh-b})}}
   if(mv.rec&&tot&&!((me.ab===69||me.ab===98)&&mv.id!=="forc")){const d=Math.max(1,Math.round((mv.id==="forc"?me.mx:tot)*mv.rec/100));me.mh=Math.max(0,me.mh-d);push({k:"recoil",s:i,n:me.p[0]})}
-  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&tm.it==="rhelm"&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/6)));push({k:"item",s:i,n:me.p[0],it:"rhelm"});faint(i)}
-  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&me.ab!==203){const ta=tm.ab;if((ta===24||ta===160)&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/8)));push({k:"abil",s:tg,n:tm.p[0],ab:ta,o:i,on:me.p[0]})}
+  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&tm.it==="rhelm"&&me.ab!==98&&me.it!=="ppads"){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/6)));push({k:"item",s:i,n:me.p[0],it:"rhelm"});faint(i)}
+  if(tot&&mv.cl===1&&tg!==i&&me.mh>0&&me.ab!==203&&me.it!=="ppads"){const ta=tm.ab;if((ta===24||ta===160)&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/8)));push({k:"abil",s:tg,n:tm.p[0],ab:ta,o:i,on:me.p[0]})}
     else if((ta===9||ta===38||ta===49||ta===27)&&!me.sts&&rng()<.3){const a2=ta===9?"par":ta===38?"psn":ta===49?"brn":["psn","par","slp"][Math.floor(rng()*3)];push({k:"abil",s:tg,n:tm.p[0],ab:ta});beAil(E,i,a2,push,rng,false,tg)}}
   if(me.it==="shell"&&tot&&me.mh>0&&me.mh<me.mx){me.mh=Math.min(me.mx,me.mh+Math.max(1,Math.round(tot/8)));push({k:"item",s:i,n:me.p[0],it:"shell"})}
   if(me.it==="lorb"&&tot&&me.mh>0&&me.ab!==98){me.mh=Math.max(0,me.mh-Math.max(1,Math.floor(me.mx/10)));push({k:"item",s:i,n:me.p[0],it:"lorb"})}
@@ -4589,7 +4590,7 @@ async function bePlay(ev){
       case "statmax":await say("¡"+ART[e.st]+" de "+who+" no puede "+(e.up?"subir":"bajar")+" más!");break;
       case "drain":bePaint(e.snap);fxHeal(sl.sp);await say("¡"+beWho(e.tg,e.n)+" ha perdido energía!");break;
       case "recoil":bePaint(e.snap);hitFx($(sl.sp),1);await say("¡"+who+" ha sufrido daño de retroceso!");break;
-      case "item":{bePaint(e.snap);const q=ITMSG[e.it];if(!q)break;if(q[0]==="h"){snd("heal");fxHeal(sl.sp)}else if(q[0]==="d")hitFx($(sl.sp),1);else snd("buff");await say(q[1](who));break}
+      case "item":{bePaint(e.snap);const q=ITMSG[e.it];if(!q)break;if(q[0]==="h"){snd("heal");fxHeal(sl.sp)}else if(q[0]==="d")hitFx($(sl.sp),1);else snd("buff");await say(q[1](who,e));break}
       case "abil":{bePaint(e.snap);const an=abName(e.ab);snd(e.imm?"guard":e.dm?"hit":"buff");
         if(e.t){if(e.hl){snd("heal");fxHeal(sl.sp)}if(e.dm)hitFx($(sl.sp),1);await say(axFmt(e,who,an))}
         else if(e.imm)await say(e.h?"¡"+who+" absorbe el ataque con "+an+" y recupera PS!":e.ab===18?"¡"+an+" de "+who+" absorbe el fuego y potencia sus ataques!":"¡"+who+" no se ve afectado gracias a "+an+"!");
@@ -4837,8 +4838,9 @@ async function finish(res){
     if(res==="win"){qEv("win");if(B.trainer){qEv("tr");await trainerDefeat()}}
     // en Exploración el premio va a los tickets de Exploración (cartera aparte)
     const xgw=typeof XGSW!=="undefined"&&!!XGSW&&typeof xTadd==="function"&&typeof EX!=="undefined"&&EX.battle&&EX.battle.rw;
-    if(xgw){const r=EX.battle.rw;if(!EX.battle.paid){EX.battle.paid=true;xTadd(r)}snd("win");await say("¡Recompensa: +"+fmt(r)+" 🎟️ de Exploración!")}else{
-    const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL());S.t+=rw;
+    const amc=E.sd[0].t.some(t=>t.it==="amcoin");
+    if(xgw){const r=EX.battle.rw*(amc?2:1);if(!EX.battle.paid){EX.battle.paid=true;xTadd(r)}snd("win");await say("¡Recompensa: +"+fmt(r)+" 🎟️ de Exploración!")}else{
+    const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL()*(amc?2:1));S.t+=rw;
     snd("win");await say("¡Recompensa: +"+fmt(rw)+" 🎟️!"+(rw===33550336?" ¡¡PREMIO GORDO!!":""));
     if(rw===33550336)await jackpot(rw);}
     if(res==="win"){
@@ -4853,10 +4855,10 @@ async function finish(res){
     // como en los juegos: cuanto más bajo es tu Pokémon respecto al rival, más experiencia gana (y casi nada si es muy superior)
     const xpFac=(L,Lp)=>Math.pow((2*L+10)/(L+Lp+10),2.5);
     const xpOf=t=>B.trainer&&B.xpL&&B.xpL.length?Math.round(B.xpL.reduce((a,[b,l])=>a+b*xpFac(l,t.l),0)*1.2):Math.round(amt*xpFac(om.l,t.l));
-    for(const t of E.sd[0].t)if(t.played&&t.mh>0){const a=Math.max(1,xpOf(t));if(await gainXp(t.p,t.it==="lucky"?Math.round(a*1.5):a))ups.push(t.p[0])}
+    for(const t of E.sd[0].t){const sh=!t.played&&t.mh>0&&t.it==="xshare";if((t.played||sh)&&t.mh>0){const a=Math.max(1,Math.round(xpOf(t)*(sh?.5:1)));if(await gainXp(t.p,t.it==="lucky"?Math.round(a*1.5):a))ups.push(t.p[0])}}
     // evolución por nivel: los que han subido y también los del equipo que ya tenían el nivel (p. ej. por un Caramelo Raro);
     // si cancelaste la evolución, se vuelve a intentar al subir el siguiente nivel, como en los juegos
-    {const cand=[...new Set(ups.concat((S.team||[]).filter(x=>x&&S.owned[x])))].filter(n=>S.owned[n]&&evoLvReady(n).length&&!(S.evoNo&&S.evoNo[n]>=lvd(n).l));
+    {const cand=[...new Set(ups.concat((S.team||[]).filter(x=>x&&S.owned[x])))].filter(n=>S.owned[n]&&evoLvReady(n).length&&!(S.evoNo&&S.evoNo[n]>=lvd(n).l)&&!(S.held&&S.held[n]==="everst"));
      for(const n of cand){const ok=await evoPrompt(n,evoLvReady(n));if(!ok&&S.owned[n]){S.evoNo=S.evoNo||{};S.evoNo[n]=lvd(n).l;save()}}}
     if(B.league&&res==="win")await leagueWin();
     if(B.gym!=null&&res==="win")await gymWin(B.gym);
@@ -7272,8 +7274,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.34";
+const GAME_VER="6.35";
 const NEWS=[
+{v:"2026-11-11-6.35",ver:"6.35",at:"2026-11-11T14:33",t:"🎒 Más de 70 objetos equipables nuevos",l:["Repartir Experiencia: el Pokémon que lo lleva gana la mitad de la experiencia aunque no luche","Moneda Amuleto (el doble de tickets en los combates), Piedra Eterna (no evoluciona) y Amuleto (menos Pokémon salvajes en Exploración)","Los 18 objetos que potencian un tipo (Carbón, Agua Mística, Imán, Semilla Milagro…) y las 18 bayas que reducen un ataque supereficaz (Baya Caoca, Pasio, Chilan…)","Bayas Aranja, Higog, Lichi, Gonlan, Aslac, Yapati y Aricoc, y las que curan estados (Zreza, Atania, Meloc, Safre y Perasi)","Cinta Aguante, Seguro Debilidad, Seguro Fallo, Tubérculo, Pila, Bola de Nieve, Musgo Brillante, Telescopio, Raíz Grande, Paracontacto, Amuleto Puro, Capa Furtiva y Dado Trucado","Objetos de especie: Hueso Grueso, Puerro, Puño Suerte, Rocío Bondad, Diamansfera, Lustresfera, Griseosfera, Polvo Veloz y Polvo Metálico","Funcionan en el juego normal y en Exploración. En Exploración se compran en las Tiendas Pokémon, y cada pueblo vende los de su zona"]},
 {v:"2026-11-11-6.34",ver:"6.34",at:"2026-11-11T11:46",t:"🔥 Carrera de Rapidash renovada",l:["Nuevo aspecto: paisaje con montañas, colinas, árboles y nubes que se mueven a distinta velocidad, y el día pasa a atardecer y noche mientras corres","Rapidash galopa dejando una estela de fuego y levanta polvo al aterrizar","La velocidad ya tiene un máximo y los obstáculos se separan más cuanto más rápido vas: siempre se pueden saltar","Más control: mantén pulsado para saltar más alto, pulsa otra vez en el aire para un doble salto y agáchate para esquivar a los Zubat","Obstáculos nuevos: troncos, vallas altas, vallas dobles y Zubat voladores","Potenciadores: 🔥 Llamarada (atraviesas los obstáculos) y 🧲 Imán (atraes los tickets). Los saltos «¡Justos!» seguidos dan puntos extra"]},
 {v:"2026-11-11-6.33",ver:"6.33",at:"2026-11-11T11:42",t:"🔥 Pase diario mucho mejor",l:["El regalo diario de tickets es 3 veces mayor (y sigue subiendo cada día de racha)","Ahora todos los días del Pase diario dan tickets extra, además de sus objetos, y los tickets extra valen más","Los objetos del Pase diario se duplican: el doble de Poké Balls, pociones y caramelos raros","El día 30 trae un premio enorme: 2 Master Balls, 12 caramelos raros, 2 objetos equipables, una menta y muchísimos tickets"]},
 {v:"2026-11-11-6.32",ver:"6.32",at:"2026-11-11T11:41",t:"🗺️ Exploración: tickets propios y entrenadores que no se reinician",l:["Exploración tiene ahora su propia cartera de tickets 🎟️, aparte de la del juego normal. Arriba a la izquierda del mapa ves cuántos tienes","Se ganan en Exploración: ganando combates (los entrenadores dan más), con los premios de la historia y vendiendo en la tienda. Solo se gastan en Exploración","Para empezar recibes 30.000 tickets de Exploración, más 20.000 por cada medalla de gimnasio de Exploración que ya tengas","Los combates de Exploración ya no dan tickets del juego normal","El Centro Pokémon de Exploración ahora cura gratis, como en los juegos","Los entrenadores que derrotas ya no vuelven a retarte al día siguiente: se quedan derrotados"]},
@@ -7510,7 +7513,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794393989";
+const GAME_B="1794404038";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11445,8 +11448,8 @@ function exArrive(){const st=exSt();exStepFx(EX.x,EX.y,EX.f,EX.mvRun);st.x=EX.x;
     snd("ui");EX.trans={t:0,d:500,k:"fade",done:()=>{exLoad(w.to,w.x,w.y,w.f);EX.trans={t:0,d:400,k:"fadein"};exFollowerReset()}};return}
   if(exNpcSight())return;
   // probabilidad por paso: hierba alta 1/12, suelo de cueva 1/32; y tras un encuentro, al menos 6 pasos de calma
-  const enc=c==="T"||c==="d"||c==="g"?1/12:c==="c"?1/32:0;
-  if(enc&&EX.steps-(EX.encAt||-99)>=6&&Math.random()<enc){EX.encAt=EX.steps;exEncounter()}}
+  const enc=c==="T"||c==="d"||c==="g"?1/12:c==="c"?1/32:0;const ld=(S.team||[]).find(n=>n&&S.owned[n]);const encK=ld&&S.held&&S.held[ld]==="cleanse"?1/3:1;
+  if(enc&&EX.steps-(EX.encAt||-99)>=6&&Math.random()<enc*encK){EX.encAt=EX.steps;exEncounter()}}
 function exStepBack(){const t=EX.trail[0];if(t){EX.x=t.x;EX.y=t.y;EX.px=t.x;EX.py=t.y}EX.f={u:"d",d:"u",l:"r",r:"l"}[EX.f]}
 // ---------- entrenadores que te ven ----------
 function exNpcSight(){for(const n of EX.npcs){if(n.beat)continue;const[dx,dy]=EXDIR[n.f];for(let i=1;i<=n.sight;i++){const x=n.px+dx*i,y=n.py+dy*i;if(exBlocked(x,y)&&!(x===EX.x&&y===EX.y))break;
@@ -13285,7 +13288,7 @@ function axZero(E,tg,tm,mv,me,push){if(axMB(me))return false;
   if(tm.ab===209&&!tm.dsf){tm.dsf=1;axSay(push,tg,tm,"¡El disfraz de {w} ha recibido el golpe y se ha roto!");return true}
   if(tm.ab===248&&!tm.icf&&mv.cl===1){tm.icf=1;axSay(push,tg,tm,"¡La cara de hielo de {w} ha absorbido el golpe!");return true}return false}
 // ---------- efectos secundarios ----------
-const axNoSec=(me,tm)=>me.ab===125||(tm.ab===19&&!axMB(me));
+const axNoSec=(me,tm)=>me.ab===125||(tm.ab===19&&!axMB(me))||tm.it==="ccloak";
 const axSec=me=>me.ab===32?2:1;
 // ---------- problemas de estado ----------
 function axAilBlock(E,j,a,push,status,src){return axSafe(()=>{
@@ -14781,6 +14784,105 @@ STX.enf=()=>stRun(async()=>{
 setInterval(()=>{const sc=document.querySelector("#explPB .exscr");if(!sc)return;let e=$("exMoney");
   if(!e){e=document.createElement("div");e.id="exMoney";e.className="exmoney";e.title="Tickets de Exploración (aparte de los del juego normal)";sc.appendChild(e)}
   const t="🎟️ "+fmt(xT());if(e.textContent!==t)e.textContent=t},500);
+
+// =====================================================================================
+// MÁS OBJETOS EQUIPABLES DE LA SAGA (juego normal y Exploración)
+// =====================================================================================
+const TYN={normal:"Normal",fire:"Fuego",water:"Agua",electric:"Eléctrico",grass:"Planta",ice:"Hielo",fighting:"Lucha",poison:"Veneno",ground:"Tierra",flying:"Volador",psychic:"Psíquico",bug:"Bicho",rock:"Roca",ghost:"Fantasma",dragon:"Dragón",dark:"Siniestro",steel:"Acero",fairy:"Hada"};
+// objetos que potencian un tipo un 20 %
+const HB_TYPE=[["hb_fire","Carbón","fire","charcoal"],["hb_water","Agua Mística","water","mystic-water"],["hb_elec","Imán","electric","magnet"],["hb_grass","Semilla Milagro","grass","miracle-seed"],
+ ["hb_ice","Antiderretir","ice","never-melt-ice"],["hb_fight","Cinturón Negro","fighting","black-belt"],["hb_pois","Flecha Venenosa","poison","poison-barb"],["hb_grnd","Arena Fina","ground","soft-sand"],
+ ["hb_fly","Pico Afilado","flying","sharp-beak"],["hb_psy","Cuchara Torcida","psychic","twisted-spoon"],["hb_bug","Polvo Plata","bug","silver-powder"],["hb_rock","Piedra Dura","rock","hard-stone"],
+ ["hb_ghost","Hechizo","ghost","spell-tag"],["hb_drag","Colmillo Dragón","dragon","dragon-fang"],["hb_dark","Gafas de Sol","dark","black-glasses"],["hb_steel","Tabla Acero","steel","iron-plate"],
+ ["hb_norm","Pañuelo Seda","normal","silk-scarf"],["hb_fairy","Tabla Duende","fairy","pixie-plate"]];
+// bayas que reducen a la mitad un ataque supereficaz de su tipo (la Baya Chilan, cualquier ataque Normal)
+const HB_RES=[["rb_fire","Baya Caoca","fire","occa-berry"],["rb_water","Baya Pasio","water","passho-berry"],["rb_elec","Baya Gualot","electric","wacan-berry"],["rb_grass","Baya Tamar","grass","rindo-berry"],
+ ["rb_ice","Baya Rimoya","ice","yache-berry"],["rb_fight","Baya Pomaro","fighting","chople-berry"],["rb_pois","Baya Kebia","poison","kebia-berry"],["rb_grnd","Baya Acardo","ground","shuca-berry"],
+ ["rb_fly","Baya Kouba","flying","coba-berry"],["rb_psy","Baya Payapa","psychic","payapa-berry"],["rb_bug","Baya Yecana","bug","tanga-berry"],["rb_rock","Baya Alcho","rock","charti-berry"],
+ ["rb_ghost","Baya Drasi","ghost","kasib-berry"],["rb_drag","Baya Anjiro","dragon","haban-berry"],["rb_dark","Baya Dillo","dark","colbur-berry"],["rb_steel","Baya Baribá","steel","babiri-berry"],
+ ["rb_norm","Baya Chilan","normal","chilan-berry"],["rb_fairy","Baya Hibis","fairy","roseli-berry"]];
+const HB_TY={},HB_RT={};HB_TYPE.forEach(h=>{HB_TY[h[0]]=h[2]});HB_RES.forEach(h=>{HB_RT[h[0]]=h[2]});
+const HB_MORE=[
+ ["xshare","Repartir Experiencia",1500000,"Gana la mitad de la experiencia de los combates aunque no haya luchado","exp-share"],
+ ["amcoin","Moneda Amuleto",2000000,"Si lo lleva un Pokémon de tu equipo, los combates dan el doble de tickets","amulet-coin"],
+ ["everst","Piedra Eterna",200000,"Impide que evolucione al subir de nivel","everstone"],
+ ["cleanse","Amuleto",400000,"En Exploración, si lo lleva el primero del equipo, aparecen menos Pokémon salvajes","cleanse-tag"],
+ ["fband","Cinta Aguante",700000,"A veces (10 %) aguanta con 1 PS un golpe que lo iba a debilitar","focus-band"],
+ ["wpol","Seguro Debilidad",900000,"Si recibe un ataque supereficaz, su Ataque y su Ataque Especial suben mucho (una vez por combate)","weakness-policy"],
+ ["abulb","Tubérculo",500000,"Si recibe un ataque de tipo Agua, sube su Ataque Especial (una vez por combate)","absorb-bulb"],
+ ["cbatt","Pila",500000,"Si recibe un ataque de tipo Eléctrico, sube su Ataque (una vez por combate)","cell-battery"],
+ ["snowb","Bola de Nieve",500000,"Si recibe un ataque de tipo Hielo, sube su Ataque (una vez por combate)","snowball"],
+ ["lmoss","Musgo Brillante",500000,"Si recibe un ataque de tipo Agua, sube su Defensa Especial (una vez por combate)","luminous-moss"],
+ ["ppads","Paracontacto",600000,"No sufre daño ni efectos al golpear con ataques físicos (Casco Dentado, Piel Tosca…)","protective-pads"],
+ ["bpol","Seguro Fallo",500000,"Si falla un ataque, su Velocidad sube mucho (una vez por combate)","blunder-policy"],
+ ["zlens","Telescopio",600000,"Si ataca después del rival, sus ataques tienen un 20 % más de precisión","zoom-lens"],
+ ["broot","Raíz Grande",500000,"Los ataques que absorben PS le curan un 30 % más","big-root"],
+ ["camulet","Amuleto Puro",900000,"El rival no puede bajarle las características","clear-amulet"],
+ ["ccloak","Capa Furtiva",900000,"Los efectos secundarios de los ataques del rival no le afectan","covert-cloak"],
+ ["ldice","Dado Trucado",700000,"Sus ataques de 2 a 5 golpes dan casi siempre 4 o 5","loaded-dice"],
+ ["tclub","Hueso Grueso",600000,"Si lo lleva Cubone o Marowak, duplica su Ataque","thick-club"],
+ ["leek","Puerro",500000,"Si lo lleva Farfetch'd o Sirfetch'd, da golpes críticos mucho más a menudo","leek"],
+ ["lpunch","Puño Suerte",500000,"Si lo lleva Chansey, da golpes críticos mucho más a menudo","lucky-punch"],
+ ["sdew","Rocío Bondad",1500000,"Si lo lleva Latias o Latios, sus ataques de tipo Psíquico y Dragón hacen un 20 % más de daño","soul-dew"],
+ ["adorb","Diamansfera",1500000,"Si lo lleva Dialga, sus ataques de tipo Acero y Dragón hacen un 20 % más de daño","adamant-orb"],
+ ["lsorb","Lustresfera",1500000,"Si lo lleva Palkia, sus ataques de tipo Agua y Dragón hacen un 20 % más de daño","lustrous-orb"],
+ ["grorb","Griseosfera",1500000,"Si lo lleva Giratina, sus ataques de tipo Fantasma y Dragón hacen un 20 % más de daño","griseous-orb"],
+ ["qpow","Polvo Veloz",400000,"Si lo lleva Ditto, duplica su Velocidad","quick-powder"],
+ ["mpow","Polvo Metálico",400000,"Si lo lleva Ditto, los ataques físicos le hacen la mitad de daño","metal-powder"],
+ ["oran","Baya Aranja",150000,"Recupera 10 PS cuando bajan de la mitad (una vez por combate)","oran-berry"],
+ ["figy","Baya Higog",450000,"Recupera un tercio de sus PS cuando bajan de un cuarto (una vez por combate)","figy-berry"],
+ ["liechi","Baya Lichi",600000,"Sube su Ataque cuando sus PS bajan de un cuarto (una vez por combate)","liechi-berry"],
+ ["ganlon","Baya Gonlan",600000,"Sube su Defensa cuando sus PS bajan de un cuarto (una vez por combate)","ganlon-berry"],
+ ["salac","Baya Aslac",600000,"Sube su Velocidad cuando sus PS bajan de un cuarto (una vez por combate)","salac-berry"],
+ ["petaya","Baya Yapati",600000,"Sube su Ataque Especial cuando sus PS bajan de un cuarto (una vez por combate)","petaya-berry"],
+ ["apicot","Baya Aricoc",600000,"Sube su Defensa Especial cuando sus PS bajan de un cuarto (una vez por combate)","apicot-berry"],
+ ["cheri","Baya Zreza",200000,"Cura la parálisis (una vez por combate)","cheri-berry"],
+ ["chesto","Baya Atania",200000,"Le despierta si se duerme (una vez por combate)","chesto-berry"],
+ ["pecha","Baya Meloc",200000,"Cura el envenenamiento (una vez por combate)","pecha-berry"],
+ ["rawst","Baya Safre",200000,"Cura las quemaduras (una vez por combate)","rawst-berry"],
+ ["aspear","Baya Perasi",200000,"Le descongela (una vez por combate)","aspear-berry"]];
+{const add=(id,n,pr,d,img)=>{if(HOLDK[id])return;const h=[id,n,pr,d];HOLD.push(h);HOLDK[id]=h;ITEMS.push([id,n,pr,0,0,0,d+". Se equipa desde la Mochila o desde la ficha del Pokémon","hold"]);if(img)HIMG[id]=img};
+  HB_TYPE.forEach(h=>add(h[0],h[1],900000,"Sus ataques de tipo "+TYN[h[2]]+" hacen un 20 % más de daño",h[3]));
+  HB_RES.forEach(h=>add(h[0],h[1],400000,h[2]==="normal"?"Recibe la mitad de daño de un ataque de tipo Normal (una vez por combate)":"Recibe la mitad de daño de un ataque supereficaz de tipo "+TYN[h[2]]+" (una vez por combate)",h[3]));
+  HB_MORE.forEach(h=>add(h[0],h[1],h[2],h[3],h[4]))}
+const hbIs=(m,re)=>!!(m&&m.p&&re.test(m.p[0]));
+// daño: tipo, objetos de especie, bayas de resistencia, Polvo Metálico y los objetos que reaccionan al recibir un golpe
+{const _d=itDmg;itDmg=function(me,tm,mv,phy,e){let k=_d.apply(this,arguments);try{const a=me&&me.it,d=tm&&tm.it,ty=typeof axTy==="function"?axTy(me,mv):mv.t;
+  if(a&&HB_TY[a]===ty)k*=1.2;
+  if(a==="tclub"&&phy&&hbIs(me,/^(Cubone|Marowak)/))k*=2;
+  if((a==="sdew"&&hbIs(me,/^(Latias|Latios)/)&&(ty==="psychic"||ty==="dragon"))||(a==="adorb"&&hbIs(me,/^Dialga/)&&(ty==="steel"||ty==="dragon"))||(a==="lsorb"&&hbIs(me,/^Palkia/)&&(ty==="water"||ty==="dragon"))||(a==="grorb"&&hbIs(me,/^Giratina/)&&(ty==="ghost"||ty==="dragon")))k*=1.2;
+  if(d==="mpow"&&phy&&hbIs(tm,/^Ditto/))k*=.5;
+  if(d&&HB_RT[d]&&!tm.ius&&HB_RT[d]===ty&&(e>1||ty==="normal")){k*=.5;tm.ius=1;tm._im=d}
+  if(!tm.ius&&((d==="wpol"&&e>1)||(d==="abulb"&&ty==="water")||(d==="cbatt"&&ty==="electric")||(d==="snowb"&&ty==="ice")||(d==="lmoss"&&ty==="water"))){tm.ius=1;tm._ib=d}
+ }catch(x){}return k}}
+// bayas y objetos que se activan después de un golpe o al final del turno
+const HB_ST={liechi:"atk",ganlon:"def",salac:"spe",petaya:"spa",apicot:"spd"},HB_CURE={cheri:["par"],chesto:["slp"],pecha:["psn","tox"],rawst:["brn"],aspear:["frz"]};
+{const _b=beBerry;beBerry=function(E,j,push){_b.apply(this,arguments);try{const m=beAct(E.sd[j]);if(!m||m.mh<=0)return;const it=m.it;
+  if(m._im){push({k:"item",s:j,n:m.p[0],it:"rbX",nm:m._im});m._im=null}
+  if(m._ib){const b=m._ib;m._ib=null;push({k:"item",s:j,n:m.p[0],it:b});beStat(E,j,b==="wpol"?[["atk",2],["spa",2]]:b==="abulb"?[["spa",1]]:b==="lmoss"?[["spd",1]]:[["atk",1]],push,j)}
+  if(m.ius||typeof axNoBerry==="function"&&axNoBerry(E,j))return;
+  if(it==="oran"&&m.mh<=m.mx/2){m.ius=1;m.mh=Math.min(m.mx,m.mh+10);push({k:"item",s:j,n:m.p[0],it:"oran"})}
+  else if(it==="figy"&&m.mh<=m.mx/4){m.ius=1;m.mh=Math.min(m.mx,m.mh+Math.max(1,Math.round(m.mx/3)));push({k:"item",s:j,n:m.p[0],it:"figy"})}
+  else if(HB_ST[it]&&m.mh<=m.mx/4){m.ius=1;push({k:"item",s:j,n:m.p[0],it:"pinch",nm:it});beStat(E,j,[[HB_ST[it],1]],push,j)}
+  else if(HB_CURE[it]&&HB_CURE[it].includes(m.sts)){m.ius=1;m.sts="";m.slp=0;m.tox=0;push({k:"item",s:j,n:m.p[0],it:"cure",nm:it})}
+ }catch(x){}}}
+// Amuleto Puro: el rival no puede bajarle las características
+{const _p=axStatPre;axStatPre=function(E,j,ch,push,src,tag){let r=_p.apply(this,arguments);try{const m=beAct(E.sd[j]);if(m&&m.it==="camulet"&&src!=null&&src!==j&&Array.isArray(r)&&r.some(q=>q[1]<0)){r=r.filter(q=>q[1]>0);push({k:"item",s:j,n:m.p[0],it:"camulet"})}}catch(x){}return r}}
+Object.assign(ITMSG,{
+  rbX:["",(w,e)=>"¡La "+IN(e&&e.nm)+" de "+w+" ha debilitado el ataque!"],
+  wpol:["",w=>"¡El Seguro Debilidad de "+w+" se ha activado!"],abulb:["",w=>"¡El Tubérculo de "+w+" se ha activado!"],cbatt:["",w=>"¡La Pila de "+w+" se ha activado!"],snowb:["",w=>"¡La Bola de Nieve de "+w+" se ha activado!"],lmoss:["",w=>"¡El Musgo Brillante de "+w+" se ha activado!"],
+  oran:["h",w=>"¡"+w+" ha recuperado PS con la Baya Aranja!"],figy:["h",w=>"¡"+w+" ha recuperado PS con la Baya Higog!"],
+  pinch:["",(w,e)=>"¡"+w+" se ha comido la "+IN(e&&e.nm)+"!"],cure:["h",(w,e)=>"¡La "+IN(e&&e.nm)+" ha curado a "+w+"!"],
+  camulet:["",w=>"¡El Amuleto Puro de "+w+" impide que le bajen las características!"],fband:["",w=>"¡"+w+" ha aguantado el golpe gracias a la Cinta Aguante!"],
+  bpol:["",w=>"¡El Seguro Fallo de "+w+" se ha activado!"]});
+// tiendas de Exploración: cada pueblo vende los objetos nuevos que encajan con su zona, y mejoran región a región
+{const ORD=["pueblo","pe","pn","pb","vv","ct","pc","cl"],TIER=[["oran","cheri","pecha","everst","xshare"],["chesto","rawst","aspear","cleanse","amcoin","broot"],["figy","fband","zlens","bpol","abulb","lmoss"],
+  ["liechi","petaya","salac","cbatt","snowb","ppads"],["ganlon","apicot","wpol","ldice","camulet"],["ccloak","tclub","leek","lpunch","qpow","mpow"],["sdew","adorb","lsorb","grorb"],[]];
+ const tyH=t=>(HB_TYPE.find(h=>h[2]===t)||[])[0],tyR=t=>(HB_RES.find(h=>h[2]===t)||[])[0];
+ ORD.forEach((k,i)=>{const T=typeof XS_TOWN!=="undefined"&&XS_TOWN[k];if(!T)return;T.hold=T.hold||[];
+  TIER[i].forEach(id=>{if(!T.hold.includes(id))T.hold.push(id)});
+  (T.mt||[]).forEach(([ty])=>{[tyH(ty),tyR(ty)].forEach(id=>{if(id&&!T.hold.includes(id))T.hold.push(id)})});
+  if(i===ORD.length-1)HB_TYPE.concat(HB_RES).forEach(h=>{if(!T.hold.includes(h[0]))T.hold.push(h[0])})})}
 
 </script>
 <script>

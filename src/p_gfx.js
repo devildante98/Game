@@ -235,3 +235,18 @@ const XCEN_TXT={O:["El PC del Centro Pokémon. Aquí los entrenadores guardan su
 const XTIE_TXT={L:["Una nevera llena de refrescos y zumos de bayas."],J:["Una planta decorativa."],x:["Un cartel de ofertas: «¡Esta semana, las Poké Balls brillan más que nunca!»."]};
 {const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&!EX.cut){const m=EX.map||"",[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy),T=/^centro/.test(m)?XCEN_TXT:/^tienda_/.test(m)?XTIE_TXT:null;
   if(T&&T[c]&&!EX.npcs.some(n=>n.px===EX.x+dx&&n.py===EX.y+dy)){snd("ui");exSay(T[c]);return}}}catch(e){}return _i.apply(this,arguments)}}
+
+// peluches (n) y baúl de juguetes (t) para tu dormitorio
+{const _b=exBlocked;exBlocked=function(x,y){const c=exAt(x,y);if((c==="n"||c==="t")&&EX.M&&EX.M.base==="F")return true;return _b.apply(this,arguments)}}
+function xToy(ch,x){const k="TY"+ch+(x%3);if(XG[k])return XG[k];const c=xc(32,48),g=c.getContext("2d"),R=(a,b,w,h,col)=>xr(g,a,b,w,h,col);xdisc(g,16,45,11,3,"rgba(0,0,0,.2)");
+  if(ch==="n"){const v=x%3,body=["#ffd23f","#ff8ad8","#8ac8ff"][v],ear=["#2b2440","#ff5aa8","#3a6ae0"][v];
+    xdisc(g,16,36,10,9,xInk);xdisc(g,16,36,9,8,body);xdisc(g,16,24,9,8,xInk);xdisc(g,16,24,8,7,body);
+    R(8,13,4,7,xInk);R(9,14,2,5,ear);R(20,13,4,7,xInk);R(21,14,2,5,ear);R(12,23,2,2,xInk);R(18,23,2,2,xInk);xdisc(g,11,27,2,1.5,"#ff7a8a");xdisc(g,21,27,2,1.5,"#ff7a8a");R(15,27,2,1,xInk)}
+  else{R(3,22,26,22,xInk);R(4,23,24,20,"#c8643a");R(4,23,24,4,"#e08050");R(4,31,24,2,"#8a3a20");R(14,30,4,5,"#ffd34a");
+    xdisc(g,9,21,4,4,xInk);xdisc(g,9,21,3,3,"#e8414f");R(17,15,6,8,xInk);R(18,16,4,6,"#3a8cff");xdisc(g,25,20,3,3,xInk);xdisc(g,25,20,2,2,"#ffd23f")}
+  return XG[k]=c}
+{const _g=xGround;xGround=function(x,y,fr){const c=exAt(x,y);if((c==="n"||c==="t")&&EX.M&&EX.M.base==="F")return xFloor(EX.M.fl||"wood",x,y);return _g.apply(this,arguments)}}
+{const _o=xObj;xObj=function(c,x,y){if((c==="n"||c==="t")&&EX.M&&EX.M.base==="F")return xToy(c,x);return _o.apply(this,arguments)}}
+{const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&!EX.cut&&EX.M&&EX.M.base==="F"){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);
+  const T={n:["Un peluche de Pokémon. ¡Lo tienes desde que eras pequeño!"],t:["Tu baúl de juguetes: una Poké Ball de goma, un muñeco de Squirtle y una peonza."]};
+  if(T[c]){snd("ui");exSay(T[c]);return}}}catch(e){}return _i.apply(this,arguments)}}

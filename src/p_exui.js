@@ -120,7 +120,7 @@ function bcLayout(){const mn=$("menu");if(!mn||mn.querySelector(".bcmd"))return;
   F.appendChild(G);F.appendChild(I);F.appendChild(X);
   mn.innerHTML="";mn.appendChild(C);mn.appendChild(F);mn.appendChild(hid);mn.classList.add("bclassic");
   const info=b=>{const k=b&&b.dataset.k&&/^m\d$/.test(b.dataset.k)?+b.dataset.k[1]:-1,mv=k>=0?m.m[k]:null;
-    I.innerHTML=mv?'<span class="bcty" style="--tc:'+(TC[mv.t]||"#999")+'">'+(EM[mv.t]||"")+' '+(TIPO[mv.t]||mv.t).toUpperCase()+'</span><b>PP: '+m.pp[k]+'/'+ppMax(m.p[0],mv.id)+'</b><small>'+(mv.cl===0?'Estado':mv.cl===1?'Físico':'Especial')+(mv.pw?' · Pot. '+mv.pw:'')+'</small>':'<small class="mut">Elige un ataque</small>'};
+    I.innerHTML=mv?'<span class="bcty" style="--tc:'+(TC[mv.t]||"#999")+'">'+(EM[mv.t]||"")+' '+(TIPO[mv.t]||mv.t).toUpperCase()+'</span><b>PP: '+m.pp[k]+'/'+ppMax(m.p[0],mv.id)+'</b><small>'+(mv.cl===0?'Estado':mv.cl===1?'Físico':'Especial')+(mv.pw?' · Pot. '+mv.pw:'')+'</small>'+(()=>{try{const foe=beAct(B.E.sd[1]);return '<small class="bceff">'+effTag(mv,foe,m)+'</small>'}catch(e){return ''}})():'<small class="mut">Elige un ataque</small>'};
   G.querySelectorAll("button").forEach(b=>{b.addEventListener("mouseenter",()=>info(b));b.addEventListener("focus",()=>info(b))});info(mvs[0]);
   const view=v=>{mn.classList.toggle("bcf",v==="fight");mn.classList.toggle("bcc",v!=="fight");B.bcv=v;const f=(v==="fight"?G:C).querySelector("button:not([disabled])");if(f&&GP.on)f.focus()};
   view(B.bcv==="fight"&&B.bcKeep?"fight":"cmd");B.bcKeep=false;

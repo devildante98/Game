@@ -38,17 +38,18 @@ function exMiniDraw(force){const w=exMiniUI();if(!w)return;const bt=$("exMiniB")
   const a=.6+.4*Math.sin(now/220);dot(EX.px,EX.py,Math.max(3,Z*.42)*(1+.18*a),"#ff3a3a","#fff")}
 {const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{if(ts-EXMM.t>90){EXMM.t=ts;exMiniDraw()}}catch(e){}return r}}
 // ================= mapa de la región (todas las islas, pueblos y rutas) =================
-const WM_R={alba:{n:"Región de Alba",c:"#86cf6a",d:"#3f7d3a",tx:300,ty:612},esc:{n:"Región de Escarcha",c:"#e9f3ff",d:"#7f9cc4",tx:258,ty:28},bra:{n:"Región de Brasa",c:"#b98a6c",d:"#6a3f2c",tx:742,ty:28},tor:{n:"Región de Tormenta",c:"#8f8ac0",d:"#3f3a6e",tx:742,ty:612}};
+const WM_R={alba:{n:"Región de Alba",c:"#86cf6a",d:"#3f7d3a",tx:300,ty:612},esc:{n:"Región de Escarcha",c:"#e9f3ff",d:"#7f9cc4",tx:258,ty:28},bra:{n:"Región de Brasa",c:"#b98a6c",d:"#6a3f2c",tx:742,ty:28},tor:{n:"Región de Tormenta",c:"#8f8ac0",d:"#3f3a6e",tx:742,ty:612},cel:{n:"Región Celeste",c:"#9fe0f0",d:"#3a8aa8",tx:500,ty:84}};
 // k: mapa · r: región · t: tipo (town/route/cave/peak/forest/beach/tower) · x,y: posición en el dibujo
 const WM_N=[
   {k:"pueblo",r:"alba",t:"town",x:180,y:450},{k:"ruta",r:"alba",t:"route",x:300,y:450},{k:"cima",r:"alba",t:"peak",x:180,y:350},
   {k:"cueva",r:"alba",t:"cave",x:300,y:355},{k:"bosque",r:"alba",t:"forest",x:415,y:450},{k:"playa",r:"alba",t:"beach",x:300,y:545},
   {k:"pe",r:"esc",t:"town",x:150,y:210},{k:"ruta2",r:"esc",t:"route",x:255,y:210},{k:"pn",r:"esc",t:"town",x:360,y:210},{k:"glaciar",r:"esc",t:"cave",x:360,y:135},{k:"pico_e",r:"esc",t:"peak",x:360,y:65},
   {k:"pb",r:"bra",t:"town",x:620,y:210},{k:"ruta3",r:"bra",t:"route",x:730,y:210},{k:"vv",r:"bra",t:"town",x:840,y:210},{k:"crater",r:"bra",t:"cave",x:840,y:135},{k:"cumbre",r:"bra",t:"peak",x:840,y:65},
-  {k:"ct",r:"tor",t:"town",x:640,y:470},{k:"ruta4",r:"tor",t:"route",x:760,y:470},{k:"torre",r:"tor",t:"tower",x:760,y:385}];
-const WM_E=[["pueblo","ruta"],["pueblo","cima"],["ruta","cueva"],["ruta","bosque"],["ruta","playa"],["pe","ruta2"],["ruta2","pn"],["pn","glaciar"],["glaciar","pico_e"],["pb","ruta3"],["ruta3","vv"],["vv","crater"],["crater","cumbre"],["ct","ruta4"],["ruta4","torre"]];
-const WM_SEA=[["playa","pe"],["playa","pb"],["playa","ct"]];
-const WM_IN={casa:"pueblo",lab:"pueblo",centro:"pueblo",centro_pe:"pe",centro_pn:"pn",centro_pb:"pb",centro_vv:"vv",centro_ct:"ct",tienda_pueblo:"pueblo",tienda_pe:"pe",tienda_pn:"pn",tienda_pb:"pb",tienda_vv:"vv",tienda_ct:"ct"};
+  {k:"ct",r:"tor",t:"town",x:640,y:470},{k:"ruta4",r:"tor",t:"route",x:760,y:470},{k:"torre",r:"tor",t:"tower",x:760,y:385},
+  {k:"pc",r:"cel",t:"town",x:505,y:395},{k:"ruta5",r:"cel",t:"route",x:505,y:330},{k:"cl",r:"cel",t:"town",x:505,y:262},{k:"victoria",r:"cel",t:"cave",x:505,y:192},{k:"liga",r:"cel",t:"tower",x:505,y:122}];
+const WM_E=[["pueblo","ruta"],["pueblo","cima"],["ruta","cueva"],["ruta","bosque"],["ruta","playa"],["pe","ruta2"],["ruta2","pn"],["pn","glaciar"],["glaciar","pico_e"],["pb","ruta3"],["ruta3","vv"],["vv","crater"],["crater","cumbre"],["ct","ruta4"],["ruta4","torre"],["pc","ruta5"],["ruta5","cl"],["cl","victoria"],["victoria","liga"]];
+const WM_SEA=[["playa","pe"],["playa","pb"],["playa","ct"],["playa","pc"]];
+const WM_IN={casa:"pueblo",lab:"pueblo",centro:"pueblo",centro_pe:"pe",centro_pn:"pn",centro_pb:"pb",centro_vv:"vv",centro_ct:"ct",tienda_pueblo:"pueblo",tienda_pe:"pe",tienda_pn:"pn",tienda_pb:"pb",tienda_vv:"vv",tienda_ct:"ct",gym_pueblo:"pueblo",gym_pe:"pe",gym_pn:"pn",gym_pb:"pb",gym_vv:"vv",gym_ct:"ct",gym_pc:"pc",gym_cl:"cl",centro_pc:"pc",tienda_pc:"pc",centro_cl:"cl",tienda_cl:"cl"};
 const WM_T={town:"Pueblo",route:"Ruta",cave:"Cueva",peak:"Cima",forest:"Bosque",beach:"Playa",tower:"Torre"};
 const WM={open:false,sel:null,raf:0};
 const wmNode=k=>WM_N.find(n=>n.k===k);
@@ -73,6 +74,7 @@ function wmDraw(ts){const cv=$("wmCv");if(!cv)return;const g=cv.getContext("2d")
   blob("esc",[[150,210,70],[255,210,70],[360,210,72],[360,135,60],[360,65,52],[205,170,48],[300,250,50]]);
   blob("bra",[[620,210,70],[730,210,70],[840,210,72],[840,135,60],[840,65,52],[690,250,50],[780,170,50]]);
   blob("tor",[[640,470,74],[760,470,74],[760,385,60],[700,520,56],[820,520,46]]);
+  blob("cel",[[505,395,42],[505,330,40],[505,262,42],[505,192,40],[505,122,40]]);
   // textura de cada isla (árboles, nieve, lava, rayos)
   const deco=(x,y,t)=>{g.font="16px serif";g.textAlign="center";g.globalAlpha=.55;g.fillText(t,x,y);g.globalAlpha=1};
   [[110,390,"🌳"],[250,520,"🌳"],[455,500,"🌲"],[440,400,"🌲"],[220,560,"🌴"],[95,470,"🌳"]].forEach(a=>deco(...a));
@@ -81,7 +83,7 @@ function wmDraw(ts){const cv=$("wmCv");if(!cv)return;const g=cv.getContext("2d")
   [[600,420,"⚡"],[820,430,"⚡"],[700,540,"🌩️"]].forEach(a=>deco(...a));
   // rutas en barco
   const P=k=>wmNode(k);g.setLineDash([10,9]);g.lineWidth=3;g.strokeStyle="rgba(255,255,255,.75)";
-  const SC={pe:[-80,600],pb:[560,640],ct:[470,660]};
+  const SC={pe:[-80,600],pb:[560,640],ct:[470,660],pc:[400,600]};
   WM_SEA.forEach(([a,b])=>{const A=P(a),B=P(b),[mx,my]=SC[b],ax=A.x,ay=A.y+20,bx=B.x,by=B.y+28;
     g.beginPath();g.moveTo(ax,ay);g.quadraticCurveTo(mx,my,bx,by);g.stroke();g.setLineDash([]);g.font="20px serif";g.textAlign="center";g.fillText("⛵",(ax+2*mx+bx)/4,(ay+2*my+by)/4+6);g.setLineDash([10,9])});
   g.setLineDash([]);

@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.27.3";
+const GAME_VER="6.28";
 const NEWS=[
+{v:"2026-11-11a",ver:"6.28",at:"2026-11-11T09:37",t:"🏟️ Exploración: gimnasios, región Celeste y Liga Pokémon",l:["8 gimnasios con su líder y sus entrenadores: Pueblo Brisa (Planta), Puerto Escarcha (Agua), Pueblo Nevado (Hielo), Puerto Brasa (Lucha), Villa Volcán (Fuego), Ciudad Trueno (Eléctrico), Puerto Celeste (Psíquico) y Ciudad Lunar (Dragón)","Las medallas de Exploración van con la historia: el marinero te pide 1, 3 y 5 medallas para viajar a cada región (si ya habías pasado por ella, no)","Acto V: nueva región Celeste con Puerto Celeste, la Ruta 5 y Ciudad Lunar, más tiendas con los objetos Elección","Con las 8 medallas, cruza la Calle Victoria y enfréntate al Alto Mando (Siniestro, Acero, Hada y Fantasma) y al Campeón… ¿adivinas quién es?","Al ganar entras en el Salón de la Fama y puedes revalidar el título una vez al día"]},
 {v:"2026-11-06-6.27.3",ver:"6.27.3",at:"2026-11-06T22:49",t:"🔧 Arreglos/Mejoras",l:["Exploración: ya se pueden usar los Caramelos Raros desde la mochila (sube 1 nivel, hasta el límite de tus medallas)"]},
 {v:"2026-11-06-6.27.2",ver:"6.27.2",at:"2026-11-06T22:28",t:"🔧 Arreglos/Mejoras",l:["Evolución: nuevo botón «⏩ Saltar animación» (o Espacio / Enter) para ver directamente el resultado. «✋ Detener» sigue sirviendo para cancelar la evolución"]},
 {v:"2026-11-06-6.27.1",ver:"6.27.1",at:"2026-11-06T22:24",t:"🔧 Arreglos/Mejoras",l:["Exploración: menos Pokémon salvajes. En las cuevas salen la mitad que antes y en la hierba alta algo menos","Después de un encuentro tienes unos pasos de calma antes del siguiente"]},

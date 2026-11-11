@@ -924,3 +924,4 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 #exDexP .exdexg{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
 .xswb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:8px 12px;border-radius:10px;background:#fff4d6;color:#7a5200;font-weight:700}
 .xgc.xgsw{outline:3px dashed #e64040;outline-offset:2px;animation:xgswp .6s ease-in-out infinite alternate}@keyframes xgswp{to{transform:translateY(-3px)}}
+.xgcapl{display:block;font-size:.68rem;font-weight:800;color:#b5651d}

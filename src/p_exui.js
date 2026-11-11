@@ -241,3 +241,16 @@ window.addEventListener("click",e=>{if(!XSW)return;const c=e.target.closest&&e.t
 // botón X del mando sobre una tarjeta: empezar el cambio
 {const _gp=gpPoll;gpPoll=function(){try{const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[];const gp=L[0];if(gp&&!GP.bind){const x=!!(gp.buttons[2]&&gp.buttons[2].pressed);
   if(x&&!GP.xPrev){const ov=exOverlay(),c=ov&&ovCur(ov);if(c&&c.classList.contains("xgc")){if(XSW&&XSW!==c.dataset.xg)xswDo(XSW,c.dataset.xg);else if(xgRun(()=>(S.team||[]).includes(c.dataset.xg)))xswStart(c.dataset.xg)}}GP.xPrev=x}}catch(e){}return _gp.apply(this,arguments)}}
+
+// =====================================================================================
+// LÍMITE DE NIVEL EN EXPLORACIÓN SIN BLOQUEAR: los Pokémon por encima del límite luchan al nivel del límite
+// (su nivel real no cambia; no ganan experiencia hasta que consigas la medalla siguiente)
+// =====================================================================================
+{const _cb=capBlock;capBlock=function(){if(typeof XGSW!=="undefined"&&XGSW)return false;return _cb.apply(this,arguments)}}
+{const _sb=startBattle;startBattle=function(){if(typeof XGSW!=="undefined"&&XGSW){const cap=lvCap(),saved=[];
+    try{(S.team||[]).forEach(n=>{if(n&&S.owned[n]){const d=lvd(n);if(d.l>cap){saved.push([d,d.l]);d.l=cap}}})}catch(e){}
+    try{return _sb.apply(this,arguments)}finally{saved.forEach(([d,l])=>{d.l=l})}}
+  return _sb.apply(this,arguments)}}
+// en el panel del equipo se avisa de a qué nivel luchan
+{const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam");if(!box)return r;const cap=xgRun(()=>lvCap());
+  box.querySelectorAll(".xgc").forEach(c=>{const l=xgRun(()=>lvd(c.dataset.xg).l);if(l>cap&&!c.querySelector(".xgcapl")){const s=document.createElement("small");s.className="xgcapl";s.textContent="🔒 lucha a Nv"+cap;c.appendChild(s)}})}catch(e){}return r}}

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.50.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.51"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794424228">
+<meta name="game-build" content="1794425473">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2625,6 +2625,24 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .xgc.xgsw{outline:3px dashed #e64040;outline-offset:2px;animation:xgswp .6s ease-in-out infinite alternate}@keyframes xgswp{to{transform:translateY(-3px)}}
 .xgcapl{display:block;font-size:.68rem;font-weight:800;color:#b5651d}
 .xmenub{margin-left:auto!important;margin-right:8px}
+/* PC de tu habitación: modo Locke y modo Random */
+.expc .lksec{margin:10px 0;padding:10px 12px;border-radius:14px;background:#f4f6ff;border:2px solid #dfe4f5}
+.expc .lksec.on{background:#fff6e8;border-color:#ffc36b}
+.expc .lkh{display:block;margin-bottom:6px;font-size:1rem}
+.expc .lkmain,.expc .lkr{display:flex;gap:10px;align-items:flex-start;padding:6px 8px;border-radius:10px;cursor:pointer}
+.expc .lkmain{font-size:1.05rem;background:#fff;border:2px solid #e3e7f6;margin-bottom:8px}
+.expc .lkr:hover,.expc .lkmain:hover{background:rgba(255,255,255,.75)}
+.expc .lkmain input,.expc .lkr input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#e8414f}
+.expc .lkmain span,.expc .lkr span{display:flex;flex-direction:column;gap:2px}
+.expc .lkr small,.expc .lkmain small{color:#5a6080;font-size:.78rem;line-height:1.3}
+.expc .lkrules{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px}
+.expc .lkzs{display:flex;flex-wrap:wrap;gap:6px}
+.expc .lkz{display:inline-flex;align-items:center;gap:4px;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;border:2px solid #dfe4f5;font-size:.8rem}
+.expc .lkz b{margin-right:4px}.expc .lkz.ok{border-color:#7fd69a}.expc .lkz.ko{border-color:#f0a0a0;opacity:.85}.expc .lkz.rip{background:#ececf2;filter:grayscale(.6)}
+.expc .lkz img{width:32px;height:32px;image-rendering:pixelated}
+.exlkchip{position:absolute;left:50%;transform:translateX(-50%);top:8px;z-index:6;padding:4px 10px;border-radius:999px;background:rgba(20,24,40,.82);color:#fff;font-size:.75rem;font-weight:800;pointer-events:none;max-width:70%}
+.xgc.lkdead{filter:grayscale(1);opacity:.6}.xgc .lkrip{display:block;font-size:.65rem;color:#6b6f80}
+.lkno{grid-column:1/-1;margin:0 0 6px;text-align:center}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2690,7 +2708,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.50.1</small>
+    <small class="pcver">Versión 6.51</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7364,8 +7382,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.50.1";
+const GAME_VER="6.51";
 const NEWS=[
+{v:"2026-11-11-6.51",ver:"6.51",at:"2026-11-11T20:31",t:"💻 Modo Locke y Modo Random en el PC de tu cuarto",l:["En Exploración, el PC de tu habitación (primera planta de tu casa) abre los «Retos de partida»","🔒 Modo Locke, con reglas que puedes elegir: motes obligatorios, solo el primer Pokémon de cada zona, muerte permanente con Cementerio, cláusula de duplicados, cláusula variocolor, sin objetos en combate, modo Set y rivales más fuertes","En el PC ves qué zonas ya has usado (capturado o perdido) y tu Cementerio. Mientras juegas, un aviso arriba te dice si aún tienes la captura libre en la zona en la que estás","🎲 Modo Random: Pokémon salvajes y de entrenadores (también líderes, Alto Mando y Equipo Ocaso) totalmente aleatorios de todas las generaciones, con o sin legendarios","Todo es solo para tu partida de Exploración y lo puedes activar o desactivar cuando quieras"]},
 {v:"2026-11-11-6.50.1",ver:"6.50.1",at:"2026-11-11T20:10",t:"🔧 Arreglos/Mejoras",l:["Exploración: nuevo control configurable «Volver al menú anterior» (teclado: Retroceso; mando: LB). Te lleva un paso atrás: de una ficha al panel, del panel o del mapa al menú, o cierra el menú. En combate, de los ataques vuelve a LUCHAR/MOCHILA/POKÉMON/HUIR","Nuevo botón de mando configurable «Abrir la mochila» (por defecto Y). En el teclado sigue siendo la I, y ahora también funciona con el menú u otro panel abierto","Puedes cambiarlos en Exploración → Menú → Controles","Arreglado: con el mando, B en combate podía abrir la mochila en lugar de volver atrás"]},
 {v:"2026-11-11-6.50",ver:"6.50",at:"2026-11-11T19:57",t:"🎵 Música de Exploración al estilo clásico",l:["12 temas nuevos y originales al estilo de las consolas portátiles clásicas: pulso con vibrato, segunda voz, bajo y percusión de 8 bits","La música cambia sola según dónde estés: pueblos, rutas (pradera, nieve y ceniza volcánica), bosque, playa, cuevas, Centros Pokémon y tiendas, gimnasios, casas, laboratorio y Liga","En los combates de Exploración suena el tema de Pokémon salvaje, el de entrenador o uno nuevo para líderes de gimnasio, el Alto Mando y los jefes del Equipo Ocaso","Suena si tienes la música activada y la opción «Música distinta en cada sección» encendida (lo está por defecto). Los temas nuevos también están en la lista del reproductor"]},
 {v:"2026-11-11-6.49.7",ver:"6.49.7",at:"2026-11-11T19:51",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball con varias teclas a la vez ya no ralentiza el juego ni corta la música: cada toque es unas 100 veces más ligero y la pantalla se actualiza una vez por fotograma","Los números de tickets ya no se amontonan: los toques seguidos se suman en un solo número. Sigues ganando exactamente lo mismo por cada toque"]},
@@ -7634,7 +7653,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794424228";
+const GAME_B="1794425473";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11999,6 +12018,7 @@ window.addEventListener("keydown",e=>{if(e.key!=="Escape"||!EX.cv||!EX.cv.isConn
   else if(typeof WM!=="undefined"&&WM.open){wmHide();done=true}
   else if(vis("exCtl")){if(typeof ovBack==="function")ovBack($("exCtl"));else{$("exCtl").hidden=true;snd("ui")}done=true}
   else if(vis("exTeam")){if(typeof ovBack==="function")ovBack($("exTeam"));else{$("exTeam").hidden=true;snd("ui")}done=true}
+  else if(vis("exPC")&&typeof ovBack==="function"){ovBack($("exPC"));done=true}
   else if(vis("exCh")){const bs=$("exCh").querySelectorAll("button");if(bs.length){bs[bs.length-1].click();done=true}}
   if(done||EX.fs){e.preventDefault();e.stopImmediatePropagation();try{EX.cv.focus({preventScroll:true})}catch(x){}}},true);
 // ---------- un combate de Exploración no se puede cerrar a medias (Esc o volver dejaban el combate oculto y la Exploración bloqueada) ----------
@@ -15874,6 +15894,137 @@ let XMLAST=null;setInterval(()=>{try{if(typeof GM==="undefined"||!GM||!GM.init)r
   else if(XMLAST){XMLAST=null;gmMusic(typeof HB!=="undefined"&&HB&&GMMUS[HB.t]!=null&&HB.t&&!$("hubM").hidden?GMMUS[HB.t]:null)}}catch(e){}},400);
 // los temas nuevos también en la lista del reproductor
 {const fill=()=>{const s=$("song");if(!s||s.options.length>=SG.length)return;const v=s.value;s.innerHTML=SG.map((g,i)=>'<option value="'+i+'">'+esc(g.n)+'</option>').join("");s.value=v};fill();setTimeout(fill,1500)}
+
+// =====================================================================================
+// PC DE TU HABITACIÓN: retos de partida para Exploración
+// · Modo Locke (como los retos «Nuzlocke» de los fans y el Pokémon Añil): motes obligatorios, solo el primer
+//   Pokémon de cada zona, muerte permanente (Cementerio), cláusulas de duplicados y variocolor, sin objetos en
+//   combate, modo Set y rivales más fuertes.
+// · Modo Random: Pokémon salvajes y de entrenadores totalmente aleatorios de todas las generaciones.
+// Todo se guarda en S.xg (la partida de Exploración), así que no afecta al juego normal.
+// =====================================================================================
+const LKR=[
+  ["mote","🏷️ Motes obligatorios","Cada Pokémon que captures tiene que llevar mote (también tu equipo al activar el reto)."],
+  ["first","1️⃣ Solo el primer Pokémon de cada zona","Únicamente puedes capturar el primer Pokémon salvaje que encuentres en cada ruta, cueva o zona. Si huyes, lo debilitas o se escapa, ya no podrás capturar en esa zona."],
+  ["death","💀 Muerte permanente","Si un Pokémon se debilita, muere: se va al Cementerio del PC y no puede volver al equipo. No se pueden usar Revivir en combate."],
+  ["dupe","♻️ Cláusula de duplicados","Si el primer Pokémon de una zona es de una especie que ya tienes (o que está en el Cementerio), no cuenta y puedes seguir buscando."],
+  ["shiny","✨ Cláusula variocolor","Los Pokémon variocolor se pueden capturar siempre, aunque ya hayas usado la captura de esa zona."],
+  ["noitem","🎒 Sin objetos en combate","En combate solo puedes usar Poké Balls (nada de pociones ni curas)."],
+  ["set","🔁 Modo Set","Cuando el rival va a sacar otro Pokémon, no se te ofrece cambiar el tuyo."],
+  ["hard","💪 Rivales más fuertes","Los Pokémon de los entrenadores tienen 2 niveles más."]];
+const LKDEF={mote:1,first:1,death:1,dupe:1,shiny:1,noitem:0,set:0,hard:0};
+const RNDR=[["w","🌿 Pokémon salvajes aleatorios","Cada Pokémon salvaje es de una especie al azar de cualquier generación."],["t","🧢 Entrenadores aleatorios","Los equipos de todos los entrenadores (también líderes, Alto Mando y Equipo Ocaso) son aleatorios. Se mantienen sus niveles."],["l","👑 Incluir legendarios y singulares","Si está apagado, el azar no saca legendarios ni singulares."]];
+function lkD(){const X=xgData();if(!X.lk||typeof X.lk!=="object")X.lk={on:0,r:Object.assign({},LKDEF),z:{},dead:[],fail:0};const L=X.lk;L.r=L.r||Object.assign({},LKDEF);L.z=L.z||{};L.dead=L.dead||[];
+  if(!X.rnd||typeof X.rnd!=="object")X.rnd={w:0,t:0,l:1};return L}
+const rnD=()=>{lkD();return S.xg.rnd};
+const lkOn=r=>{const L=lkD();return !!L.on&&(!r||!!L.r[r])};
+const lkDead=n=>lkD().dead.some(d=>d.n===n);
+const lkEx=()=>typeof XGSW!=="undefined"&&!!XGSW&&typeof EX!=="undefined"&&!!EX.battle;
+// ---------- Modo Random ----------
+let RNDP=null;
+function rndPool(leg){if(!RNDP)RNDP=P.filter(p=>p&&p[0]&&PM[p[0]]&&!/^Mega[ -]|Gigamax|Primigeni|Eternamax|Dinamax/i.test(p[0]));
+  return leg?RNDP:RNDP.filter(p=>p[2]!=="L")}
+function rndMon(m,leg){const L=rndPool(leg),p=L[Math.floor(Math.random()*L.length)],e=mkEnemy(p,m.l);if(m.sh)e.sh=1;return e}
+// ---------- combates de Exploración: azar, niveles y la regla de la primera captura ----------
+{const _xb=exBattle;exBattle=function(cfg,npc){
+  try{if(cfg&&Array.isArray(cfg.eteam)&&cfg.eteam.length&&!cfg.cap){const R=rnD();
+      if(R.w&&cfg.wild)cfg.eteam=cfg.eteam.map(m=>rndMon(m,!!R.l));
+      else if(R.t&&cfg.trainer)cfg.eteam=cfg.eteam.map(m=>rndMon(m,!!R.l));
+      if(lkOn("hard")&&cfg.trainer)cfg.eteam=cfg.eteam.map(m=>{const e=mkEnemy(m.p,clampL(m.l+2));if(m.sh)e.sh=1;return e})}}catch(e){console.error(e)}
+  const pr=_xb.apply(this,arguments);
+  try{const L=lkD();if(EX.battle&&L.on&&cfg&&cfg.wild&&cfg.eteam&&cfg.eteam[0]){const m=cfg.eteam[0],sp=m.p[0],z=EX.map,zn=(EX.M&&EX.M.n)||z,st=L.z[z];
+    const own=xgRun(()=>S.owned[sp]>0)||lkDead(sp);let lk;
+    if(!L.r.first)lk={ok:1};
+    else if(L.r.shiny&&m.sh)lk={ok:1,sh:1};
+    else if(st)lk={ok:0,why:"used",st:st};
+    else if(L.r.dupe&&own)lk={ok:0,why:"dupe"};
+    else{L.z[z]={p:sp,s:"e",n:zn,t:Date.now()};lk={ok:1,z:z};save();setTimeout(()=>toast("🎯 Primer encuentro en "+zn+": ¡es tu única oportunidad de capturar aquí!"),900)}
+    EX.battle.lk=lk}}catch(e){console.error(e)}
+  return pr}}
+// Poké Balls: se bloquean si la regla no te deja capturar este Pokémon
+{const _t=turn;turn=async function(k){try{if(typeof k==="string"&&k.slice(0,2)==="i:"&&B&&B.mode==="s"&&!B.busy&&!B.trainer&&lkEx()&&lkOn()){
+    const it=ITEMS.find(i=>i[0]===k.slice(2));if(it&&it[3]&&S.bag[it[0]]>0){const lk=EX.battle.lk||{ok:1},sp=beAct(B.E.sd[1]).p[0];let msg="";
+      if(lkDead(sp))msg="🔒 Regla Locke: "+sp+" está en tu Cementerio. No puedes capturar otro.";
+      else if(!lk.ok)msg=lk.why==="dupe"?"🔒 Regla Locke: ya tienes un "+sp+". Por la cláusula de duplicados no cuenta: sigue buscando en esta zona.":"🔒 Regla Locke: ya usaste la captura de esta zona ("+(lk.st&&lk.st.p?lk.st.p:"")+"). Solo puedes capturar el primer Pokémon de cada zona.";
+      if(msg){B.busy=true;setMenu(false);await say(msg);B.busy=false;setMenu(true);return}}}}catch(e){console.error(e)}
+  return _t.apply(this,arguments)}}
+// sin objetos / sin Revivir en la Bolsa de combate
+{const _sm=setMenu;setMenu=function(v){const r=_sm.apply(this,arguments);try{if(v==="bag"&&lkEx()&&lkOn()){const L=lkD();
+  $("menu").querySelectorAll('[data-k^="i:"]').forEach(b=>{const it=ITEMS.find(i=>i[0]===b.dataset.k.slice(2));if(!it)return;if((L.r.noitem&&!it[3])||(L.r.death&&it[5]))b.remove()});
+  if(L.r.noitem&&!$("menu").querySelector(".lkno"))$("menu").insertAdjacentHTML("afterbegin",'<p class="lkno mut">🔒 Regla Locke: en combate solo puedes usar Poké Balls.</p>')}}catch(e){}return r}}
+// Modo Set: no se ofrece cambiar cuando el rival saca otro Pokémon
+{const _as=askShift;askShift=async function(){if(lkEx()&&lkOn("set"))return -1;return _as.apply(this,arguments)}}
+// ---------- motes obligatorios ----------
+const LKMOTES=["Chispa","Bruma","Pistacho","Ruedas","Galleta","Trueno","Canela","Rocky","Luna","Coco","Nube","Tango","Mango","Brisa","Kiwi","Fuego","Lince","Sombra","Pipo","Nieve","Pepa","Cometa","Toffee","Ámbar","Ciruela","Lucero","Pimienta","Roble"];
+async function lkAskMote(sp,why){for(;;){const v=await uiDlg((why||"🏷️ Regla Locke: ponle un mote a ")+sp+". (Si no se te ocurre ninguno, pulsa «Al azar».)",{inp:"",max:12,yes:"Poner mote",no:"🎲 Al azar"});
+  let n=v==null?LKMOTES[Math.floor(Math.random()*LKMOTES.length)]:String(v).replace(/[<>]/g,"").trim().slice(0,12);if(n&&n!==sp)return n;if(v==null)return LKMOTES[0]}}
+function lkSetMote(sp,n){xgRun(()=>{S.mote=S.mote||{};S.mote[sp]=n});save()}
+// ---------- muerte permanente y fin del reto ----------
+async function lkDeaths(){if(!lkEx()||!lkOn("death")||EX.noFaint)return;const L=lkD(),sd=B&&B.E&&B.E.sd[0];if(!sd||sd._lkDone)return;sd._lkDone=1;
+  const fall=sd.t.filter(t=>t.mh<=0).map(t=>t.p[0]).filter(n=>!lkDead(n));
+  for(const n of fall){const k=xgRun(()=>(S.mote&&S.mote[n])||"");L.dead.push({n:n,k:k,l:xgRun(()=>lvd(n).l),z:(EX.M&&EX.M.n)||EX.map,t:Date.now()});
+    xgRun(()=>{S.team=(S.team||[]).map(x=>x===n?"":x);S.hp[n]=0});snd("faint");try{await say("💀 "+(k||n)+(k?" ("+n+")":"")+" ha caído en combate. Descansará para siempre en el Cementerio del PC.")}catch(e){}}
+  if(fall.length)save();lkWipe()}
+function lkWipe(){const L=lkD();if(!L.on||!L.r.death||L.fail)return;const alive=xgRun(()=>Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]&&!lkDead(n)));
+  if(!alive.length){L.fail=Date.now();save();setTimeout(()=>uiDlg("☠️ Todos tus Pokémon han caído. Tu reto Locke ha terminado. Puedes verlo en el PC de tu habitación, donde también puedes desactivar el modo Locke.",{alert:true,yes:"Entendido"}),400)}}
+{const _f=finish;finish=async function(res){try{if(lkEx()&&lkOn()){
+    if(res==="cap"){const L=lkD(),lk=EX.battle.lk,sp=beAct(B.E.sd[1]).p[0];if(lk&&lk.z&&L.z[lk.z])L.z[lk.z].s="c";
+      if(L.r.mote&&!xgRun(()=>S.mote&&S.mote[sp])){const n=await lkAskMote(sp);lkSetMote(sp,n);try{await say("¡"+sp+" ahora se llama «"+n+"»!")}catch(e){}}}
+    await lkDeaths()}}catch(e){console.error(e)}
+  return _f.apply(this,arguments)}}
+// huir no pasa por finish: también cuenta para los caídos
+{const _t2=turn;turn=async function(k){const r=await _t2.apply(this,arguments);try{if(k==="f"&&B&&!B.trainer&&lkEx()&&lkOn("death")&&$("menu").querySelector('[data-k="9"]'))await lkDeaths()}catch(e){}return r}}
+// los caídos no pueden volver al equipo (ni recibir objetos)
+window.addEventListener("click",e=>{try{if(!lkOn("death"))return;const box=e.target.closest&&e.target.closest("#exTeam");if(!box)return;const el=e.target.closest("[data-xg],[data-xun],[data-xub],[data-xuse],[data-xgi]");if(!el)return;
+  const v=Object.values(el.dataset);const n=v.find(x=>lkDead(x));if(n){e.preventDefault();e.stopImmediatePropagation();snd("ui");toast("🪦 "+n+" está en el Cementerio: no puede volver a luchar.")}}catch(x){}},true);
+setInterval(()=>{try{const L=lkD();if(!L.on||!L.r.death||!L.dead.length||(typeof fcd!=="undefined"&&fcd))return;
+  const bad=xgRun(()=>(S.team||[]).some(n=>n&&lkDead(n)));if(bad){xgRun(()=>{S.team=S.team.map(n=>n&&lkDead(n)?"":n)});save();const t=$("exTeam");if(t&&!t.hidden)try{xgPanel()}catch(e){}}}catch(e){}},1000);
+{const _p=xgPanel;xgPanel=function(){const r=_p.apply(this,arguments);try{if(lkOn("death")){const box=$("exTeam");if(box)box.querySelectorAll(".xgc[data-xg]").forEach(c=>{if(lkDead(c.dataset.xg)){c.classList.add("lkdead");c.title="En el Cementerio";if(!c.querySelector(".lkrip"))c.insertAdjacentHTML("beforeend",'<small class="lkrip">🪦 Cementerio</small>')}})}}catch(e){}return r}}
+// ---------- el PC ----------
+function lkOpen(){const sc=document.querySelector("#explPB .exscr")||document.querySelector(".exwrap .exscr");if(!sc)return;let d=$("exPC");
+  if(!d){d=document.createElement("div");d.id="exPC";d.className="exteam expc";sc.appendChild(d);d.addEventListener("click",lkClick);d.addEventListener("change",lkChange)}
+  lkUI();d.hidden=false;snd("ui")}
+function lkUI(){const d=$("exPC");if(!d)return;const L=lkD(),R=rnD(),zs=Object.values(L.z).sort((a,b)=>(a.t||0)-(b.t||0)),alive=xgRun(()=>Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n]&&!lkDead(n)).length);
+  const chk=(attr,on,dis)=>'<input type="checkbox" '+attr+(on?' checked':'')+(dis?' disabled':'')+'>';
+  d.innerHTML='<div class="xgh"><b>💻 PC de tu habitación</b><button type="button" class="alt" data-lkx="close">Cerrar</button></div>'+
+  '<p class="mut">Retos para tu partida de Exploración, como los que hacen los fans de la saga (por ejemplo, el Pokémon Añil). No afectan al juego normal.</p>'+
+  '<section class="lksec'+(L.on?' on':'')+'"><label class="lkmain">'+chk('data-lk="on"',L.on)+'<span><b>🔒 Modo Locke</b><small>'+(L.on?(L.fail?'☠️ Reto terminado: todos tus Pokémon cayeron.':'Activo · '+zs.length+' zonas usadas · '+L.dead.length+' caídos · '+alive+' vivos'):'Apagado. Elige las reglas y actívalo cuando quieras.')+'</small></span></label>'+
+  '<div class="lkrules">'+LKR.map(([k,t,s])=>'<label class="lkr">'+chk('data-lkr="'+k+'"',L.r[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
+  '<section class="lksec'+(R.w||R.t?' on':'')+'"><b class="lkh">🎲 Modo Random</b><div class="lkrules">'+RNDR.map(([k,t,s])=>'<label class="lkr">'+chk('data-rn="'+k+'"',R[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
+  (L.on||zs.length?'<section class="lksec"><b class="lkh">🗺️ Capturas por zona</b>'+(zs.length?'<div class="lkzs">'+zs.map(z=>'<span class="lkz '+(z.s==="c"?"ok":"ko")+'"><b>'+esc(z.n)+'</b>'+(PM[z.p]?ico(PM[z.p],32):'')+esc(z.p)+' · '+(z.s==="c"?'✅ capturado':'❌ perdido')+'</span>').join("")+'</div>':'<p class="mut">Todavía no has tenido ningún encuentro con el modo Locke activo.</p>')+'</section>':'')+
+  (L.dead.length?'<section class="lksec"><b class="lkh">🪦 Cementerio ('+L.dead.length+')</b><div class="lkzs">'+L.dead.map(x=>'<span class="lkz rip">'+(PM[x.n]?ico(PM[x.n],32):'')+'<b>'+esc(x.k||x.n)+'</b>'+(x.k?esc(x.n)+' · ':'')+'Nv'+x.l+' · '+esc(x.z||"")+'</span>').join("")+'</div></section>':'')+
+  (L.on?'<div class="jrow"><button type="button" class="alt" data-lkx="reset">↺ Empezar el reto de nuevo</button></div>':'')}
+async function lkChange(e){const t=e.target;if(!t||t.type!=="checkbox")return;const L=lkD(),R=rnD();
+  if(t.dataset.lk==="on"){if(t.checked){t.checked=false;
+      if(!await uiDlg("¿Activar el modo Locke en tu partida de Exploración? Las reglas marcadas se aplican desde ahora. Las capturas que ya tienes no cuentan, y puedes cambiar las reglas cuando quieras desde este PC.",{yes:"¡Activar!",no:"Todavía no"})){lkUI();return}
+      L.on=1;L.fail=0;L.since=Date.now();save();snd("lvl");
+      if(L.r.mote){const tm=xgRun(()=>(S.team||[]).filter(n=>n&&S.owned[n]&&!(S.mote&&S.mote[n])));for(const n of tm){const k=await lkAskMote(n,"🏷️ Regla Locke: tu equipo también lleva mote. ¿Cómo se llama tu ");lkSetMote(n,k)}}
+      toast("🔒 Modo Locke activado. ¡Suerte!")}
+    else{t.checked=true;if(!await uiDlg("¿Desactivar el modo Locke? Tus caídos se quedan en el Cementerio y las zonas usadas se guardan por si lo vuelves a activar.",{yes:"Desactivar",no:"Seguir con el reto",danger:true})){lkUI();return}L.on=0;save();toast("Modo Locke desactivado")}
+    lkUI();return}
+  if(t.dataset.lkr){L.r[t.dataset.lkr]=t.checked?1:0;save();snd("ui");lkUI();return}
+  if(t.dataset.rn){R[t.dataset.rn]=t.checked?1:0;save();snd("ui");toast(t.dataset.rn==="l"?(t.checked?"👑 El azar puede sacar legendarios":"El azar ya no saca legendarios"):"🎲 "+(t.checked?"Activado":"Desactivado")+": "+RNDR.find(x=>x[0]===t.dataset.rn)[1].replace(/^\S+ /,""));lkUI()}}
+async function lkClick(e){const b=e.target.closest("[data-lkx]");if(!b)return;e.stopPropagation();
+  if(b.dataset.lkx==="close"){$("exPC").hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(x){}return}
+  if(b.dataset.lkx==="reset"){if(!await uiDlg("¿Empezar el reto Locke de nuevo? Se borran las zonas usadas, el Cementerio se vacía y tus caídos pueden volver al equipo.",{yes:"Empezar de nuevo",no:"Cancelar",danger:true}))return;
+    const L=lkD();L.z={};L.dead=[];L.fail=0;L.since=Date.now();save();snd("lvl");lkUI();toast("↺ Reto Locke reiniciado")}}
+// el PC se maneja con el mando y el teclado como los demás paneles
+XOV_IDS.push("exPC");
+// interactuar con el ordenador de tu cuarto
+{const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&EX.map==="casa_up"){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);
+  if(c==="O"&&!EX.npcs.some(n=>n.px===EX.x+dx&&n.py===EX.y+dy)){snd("ui");exSay(["Enciendes tu PC…","«Retos de partida» · Modo Locke y Modo Random."],()=>lkOpen());return}}}catch(e){}return _i.apply(this,arguments)}}
+// aviso en pantalla mientras hay un reto activo
+setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr");if(!sc)return;let e=$("exLkChip");const L=lkD(),R=rnD(),on=L.on||R.w||R.t;
+  if(!on){if(e)e.remove();return}if(!e){e=document.createElement("div");e.id="exLkChip";e.className="exlkchip";sc.appendChild(e)}
+  let t=(L.on?(L.fail?"☠️ Locke terminado":"🔒 Locke"):"")+(R.w||R.t?(L.on?" · ":"")+"🎲 Random":"");
+  if(L.on&&L.r.first&&EX.M&&!/^(casa|centro|tienda|gym_|liga|lab)|_h/.test(EX.map||"")){const z=L.z[EX.map];t+=" · "+(z?(z.s==="c"?"✅ ":"❌ ")+"captura usada aquí":"🎯 captura libre aquí")}
+  if(e.textContent!==t)e.textContent=t}catch(x){}},700);
+// mando: con un cuadro de texto abierto (mote), A acepta y B pone uno al azar
+{const _gp=gpPoll;gpPoll=function(){const dl=document.querySelector(".uidlg .uidin");if(dl){const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[],gp=L[0];
+  if(gp){const P0=exPad(),pr=i=>i>=0&&!!(gp.buttons[i]&&gp.buttons[i].pressed);const ea=pr(P0.a)&&!GP.prev[P0.a],eb=pr(P0.b)&&!GP.prev[P0.b];
+    for(let i=0;i<gp.buttons.length;i++)GP.prev[i]=pr(i);const M=dl.closest(".uidlg");
+    if(ea){const y=M.querySelector('[data-u="1"]');if(!dl.value.trim()){const n=M.querySelector('[data-u="0"]');if(n)n.click()}else if(y)y.click()}else if(eb){const n=M.querySelector('[data-u="0"]');if(n)n.click()}return}}
+  return _gp.apply(this,arguments)}}
 
 </script>
 <script>

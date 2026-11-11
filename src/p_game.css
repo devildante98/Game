@@ -934,3 +934,21 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .xgc.xgsw{outline:3px dashed #e64040;outline-offset:2px;animation:xgswp .6s ease-in-out infinite alternate}@keyframes xgswp{to{transform:translateY(-3px)}}
 .xgcapl{display:block;font-size:.68rem;font-weight:800;color:#b5651d}
 .xmenub{margin-left:auto!important;margin-right:8px}
+/* PC de tu habitación: modo Locke y modo Random */
+.expc .lksec{margin:10px 0;padding:10px 12px;border-radius:14px;background:#f4f6ff;border:2px solid #dfe4f5}
+.expc .lksec.on{background:#fff6e8;border-color:#ffc36b}
+.expc .lkh{display:block;margin-bottom:6px;font-size:1rem}
+.expc .lkmain,.expc .lkr{display:flex;gap:10px;align-items:flex-start;padding:6px 8px;border-radius:10px;cursor:pointer}
+.expc .lkmain{font-size:1.05rem;background:#fff;border:2px solid #e3e7f6;margin-bottom:8px}
+.expc .lkr:hover,.expc .lkmain:hover{background:rgba(255,255,255,.75)}
+.expc .lkmain input,.expc .lkr input{width:20px;height:20px;margin-top:2px;flex:none;accent-color:#e8414f}
+.expc .lkmain span,.expc .lkr span{display:flex;flex-direction:column;gap:2px}
+.expc .lkr small,.expc .lkmain small{color:#5a6080;font-size:.78rem;line-height:1.3}
+.expc .lkrules{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px}
+.expc .lkzs{display:flex;flex-wrap:wrap;gap:6px}
+.expc .lkz{display:inline-flex;align-items:center;gap:4px;padding:4px 10px 4px 4px;border-radius:999px;background:#fff;border:2px solid #dfe4f5;font-size:.8rem}
+.expc .lkz b{margin-right:4px}.expc .lkz.ok{border-color:#7fd69a}.expc .lkz.ko{border-color:#f0a0a0;opacity:.85}.expc .lkz.rip{background:#ececf2;filter:grayscale(.6)}
+.expc .lkz img{width:32px;height:32px;image-rendering:pixelated}
+.exlkchip{position:absolute;left:50%;transform:translateX(-50%);top:8px;z-index:6;padding:4px 10px;border-radius:999px;background:rgba(20,24,40,.82);color:#fff;font-size:.75rem;font-weight:800;pointer-events:none;max-width:70%}
+.xgc.lkdead{filter:grayscale(1);opacity:.6}.xgc .lkrip{display:block;font-size:.65rem;color:#6b6f80}
+.lkno{grid-column:1/-1;margin:0 0 6px;text-align:center}

@@ -8,7 +8,7 @@ function mgState(){const d=today();S.mg=S.mg||{};if(S.mg.d!==d){S.mg.d=d;S.mg.n=
 const mgLeft=id=>Math.max(0,MG_DAY-(mgState().n[id]|0));
 const mgT=(f,ms)=>{const h=setTimeout(f,ms);MG.t.push(h);return h};
 const mgI=(f,ms)=>{const h=setInterval(f,ms);MG.t.push(h);return h};
-function mgStop(){MG.t.forEach(h=>{clearTimeout(h);clearInterval(h)});MG.t=[];if(MG.raf)cancelAnimationFrame(MG.raf);MG.raf=0}
+function mgStop(){MG.runKey=null;MG.t.forEach(h=>{clearTimeout(h);clearInterval(h)});MG.t=[];if(MG.raf)cancelAnimationFrame(MG.raf);MG.raf=0}
 const mgPick=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(Math.random()*c.length),1)[0]);return o};
 const mgSet=s=>{MG.score=Math.max(0,Math.round(s));const e=$("mgSc");if(e)e.textContent=fmt(MG.score)};
 function mgPop(x,y,txt,col){const b=$("mgB");if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement("span");s.className="mgpop";s.textContent=txt;s.style.left=(x-r.left)+"px";s.style.top=(y-r.top)+"px";if(col)s.style.color=col;b.appendChild(s);s.animate([{transform:"translate(-50%,-50%) scale(.6)",opacity:1},{transform:"translate(-50%,-160%) scale(1.15)",opacity:0}],{duration:800,easing:"ease-out"}).onfinish=()=>s.remove()}

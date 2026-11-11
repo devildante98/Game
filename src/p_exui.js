@@ -130,3 +130,14 @@ function bcClick(e){const b=e.target.closest&&e.target.closest("[data-cm]");if(!
   if(k==="back"){mn.classList.remove("bcf");mn.classList.add("bcc");const f=mn.querySelector(".bcmd button");if(f&&GP.on)f.focus();return}
   const o=mn.querySelector('[hidden] [data-k="'+k+'"]');if(o)o.click()}
 // al volver de la mochila o del equipo con «Atrás», se vuelve al cuadro de órdenes
+
+// =====================================================================================
+// CASAS VISITABLES: vecinos con los que charlar (sin combate) y escaleras al piso de arriba
+// =====================================================================================
+{const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans){const[dx,dy]=EXDIR[EX.f],x=EX.x+dx,y=EX.y+dy,n=EX.npcs.find(q=>q.px===x&&q.py===y);
+  if(n&&Array.isArray(n.chat)){n.f={u:"d",d:"u",l:"r",r:"l"}[EX.f];snd("ui");exSay(n.chat.map((l,k)=>k===0?n.n+": «"+l+"»":"«"+l+"»"));return}}}catch(e){}return _i.apply(this,arguments)}}
+// escaleras (dibujo propio)
+function xStairs(up){const k="ST"+(up?1:0);if(XG[k])return XG[k];const c=xc(32,32),g=c.getContext("2d"),ink="#2b2440";
+  xr(g,0,0,32,32,"#7a5634");for(let i=0;i<5;i++){const y=i*6+1,sh=up?i:4-i;xr(g,2,y,28,6,ink);xr(g,3,y+1,26,4,sh%2?"#c8955a":"#b07a44");xr(g,3,y+1,26,1,"#e2b27a")}
+  xr(g,0,0,3,32,ink);xr(g,29,0,3,32,ink);xr(g,1,0,1,32,"#9a6a3a");xr(g,30,0,1,32,"#9a6a3a");return XG[k]=c}
+{const _g=xGround;xGround=function(x,y,fr){try{const c=exAt(x,y),w=EX.M&&EX.M.w&&EX.M.w[c];if(w&&w.look==="stairs")return xStairs(/_h2$/.test(EX.map))}catch(e){}return _g.apply(this,arguments)}}

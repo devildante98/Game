@@ -675,6 +675,10 @@ rep('#welc,#newsM,#privM{',r'''.gb{display:inline-block;width:var(--gs,30px);hei
 .results.x100 .card{padding:4px 2px;border-width:2px;font-size:.62rem}
 .results.x100 .card .em img{width:44px!important;height:44px!important;margin:-6px!important}
 .results.x100 .card small,.results.x100 .card .tag{display:none}
+.results.x100 .card .tag:not(.dup){display:block;top:2px;right:2px;left:2px;padding:0;font-size:.5rem;line-height:1.5;text-align:center;letter-spacing:.02em;border-radius:5px;box-shadow:0 1px 0 rgba(0,0,0,.4);z-index:2}
+.results.x100 .card:has(.tag:not(.dup)){box-shadow:0 0 0 2px #ff5a6e,0 0 12px rgba(255,90,110,.75)!important;animation:gnewp 1.4s ease-in-out infinite}
+@keyframes gnewp{50%{box-shadow:0 0 0 2px #ff5a6e,0 0 18px rgba(255,90,110,1)}}
+.results:not(.x100) .card:has(.tag:not(.dup)){box-shadow:0 0 0 2px #ff5a6e,0 0 14px rgba(255,90,110,.7)}
 .results.x100 .card b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .results.one{display:flex;justify-content:center}
 .results.one .slot .gb{--gs:96px}

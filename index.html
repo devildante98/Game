@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49.5"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794422141">
+<meta name="game-build" content="1794422491">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -1549,6 +1549,10 @@ body.calm .bcfield:before{animation:none}
 .results.x100 .card{padding:4px 2px;border-width:2px;font-size:.62rem}
 .results.x100 .card .em img{width:44px!important;height:44px!important;margin:-6px!important}
 .results.x100 .card small,.results.x100 .card .tag{display:none}
+.results.x100 .card .tag:not(.dup){display:block;top:2px;right:2px;left:2px;padding:0;font-size:.5rem;line-height:1.5;text-align:center;letter-spacing:.02em;border-radius:5px;box-shadow:0 1px 0 rgba(0,0,0,.4);z-index:2}
+.results.x100 .card:has(.tag:not(.dup)){box-shadow:0 0 0 2px #ff5a6e,0 0 12px rgba(255,90,110,.75)!important;animation:gnewp 1.4s ease-in-out infinite}
+@keyframes gnewp{50%{box-shadow:0 0 0 2px #ff5a6e,0 0 18px rgba(255,90,110,1)}}
+.results:not(.x100) .card:has(.tag:not(.dup)){box-shadow:0 0 0 2px #ff5a6e,0 0 14px rgba(255,90,110,.7)}
 .results.x100 .card b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .results.one{display:flex;justify-content:center}
 .results.one .slot .gb{--gs:96px}
@@ -2685,7 +2689,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.49.4</small>
+    <small class="pcver">Versión 6.49.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7359,8 +7363,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.49.4";
+const GAME_VER="6.49.5";
 const NEWS=[
+{v:"2026-11-11-6.49.5",ver:"6.49.5",at:"2026-11-11T19:41",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas ×100 ahora se ve cuáles son los Pokémon nuevos, con la etiqueta «¡NUEVO!» y un borde rojo brillante. En las tiradas más pequeñas también se resaltan"]},
 {v:"2026-11-11-6.49.4",ver:"6.49.4",at:"2026-11-11T19:35",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al ganar un combate (contra entrenadores o salvajes) se quedaba parado después del botín y no aparecía el botón «Volver». Ahora el combate termina con normalidad y recibes la experiencia","Además, si algún día fallase algo al repartir los premios, el combate se cierra igualmente y aparece «Volver»"]},
 {v:"2026-11-11-6.49.3",ver:"6.49.3",at:"2026-11-11T17:23",t:"🔧 Arreglos/Mejoras",l:["Combate con mando: ahora se ve qué botón tienes seleccionado (borde amarillo y una flecha ▶), tanto en LUCHAR/MOCHILA/POKÉMON/HUIR como en los ataques. Al empezar el turno ya hay uno marcado","El recuadro de información del ataque mantiene siempre el mismo tamaño, tenga o no indicación de eficacia (×2, ×½…)"]},
 {v:"2026-11-11-6.49.2",ver:"6.49.2",at:"2026-11-11T17:15",t:"🔧 Arreglos/Mejoras",l:["Exploración: si tienes Pokémon por encima del límite de nivel (por ejemplo, de antes de que existiera), ya no se bloquean los combates. Luchan al nivel del límite (Nv14 hasta vencer a Brezo) y en el panel del equipo se indica con «🔒 lucha a Nv…»","Su nivel real no se pierde: lo recuperan en cuanto consigues la medalla siguiente. Mientras tanto no ganan experiencia"]},
@@ -7624,7 +7629,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794422141";
+const GAME_B="1794422491";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

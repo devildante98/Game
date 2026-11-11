@@ -1,32 +1,39 @@
 <script>
 // ===== freno contra aceleradores de páginas web (speedhack) =====
 // Todo lo que se produce solo se calcula con el reloj del navegador (Date.now). Un acelerador lo adelanta.
-// Cada 30 s se compara con la hora real del servidor (cabecera Date): si el reloj del navegador corre
-// más deprisa, a partir de ahí el juego solo ve el tiempo real (el reloj nunca va hacia atrás: se queda
-// quieto hasta que la hora real lo alcanza, así que lo ganado antes de detectarlo también se compensa).
+// Cada 30 s (solo con el juego a la vista) se compara con la hora del servidor (cabecera Date).
+// Solo se aceptan respuestas rápidas (menos de 1,5 s): si el navegador retrasa la respuesta (pestaña en segundo
+// plano, móvil bloqueado…) la medida no vale y se descarta. Para frenar hace falta que el reloj vaya al menos
+// un 50 % más rápido en 3 medidas seguidas de más de 1 minuto. Al frenar, el reloj sigue avanzando (nunca se
+// para ni va hacia atrás); si deja de detectarse, vuelve a la hora normal.
 (function(){
-  var W=window,o=Date.now.bind(Date),K={on:false,r:1,peak:1,at:0,last:0,blk:0,n:0},S=[],ds=0,dl=0,off=0,rv=0;
+  var W=window,o=Date.now.bind(Date),K={on:false,r:1,peak:1,at:0,last:0,blk:0,n:0,so:0,hit:0,ok:0},S=[],rv=0,l0=0,v0=0;
   // solo lectura desde fuera: no se puede apagar el freno desde la consola
   W.PGC_SPD=Object.freeze({get on(){return K.on},get r(){return K.r},get peak(){return K.peak},get at(){return K.at},get last(){return K.last},get blk(){return K.blk},get n(){return K.n},get so(){return K.so}});
   Object.defineProperty(W,"srvNow",{value:function(){return Date.now()+(K.so||0)},writable:false,configurable:false});
-  function srv(){return ds+(o()-dl)/K.r}                    // hora real estimada
-  var DN=function(){var l=o();if(!K.on){if(l>rv)rv=l;return l}var v=Math.floor(srv()+off);if(v<rv)v=rv;rv=v;K.blk=Math.max(0,l-v);return v};
+  function virt(){return v0+(o()-l0)/K.r}
+  var DN=function(){var l=o(),v=K.on?Math.floor(virt()):l;if(v<rv)v=rv;rv=v;K.blk=K.on?Math.max(0,l-v):0;return v};
   try{Object.defineProperty(Date,"now",{value:DN,writable:false,configurable:false})}catch(e){Date.now=DN}
-  function sample(){
+  // cambia la velocidad del reloj sin saltos
+  function setR(r){var cur=K.on?virt():o();v0=Math.max(cur,rv);l0=o();K.r=r}
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)S=[]});// medidas nuevas al volver
+  function sample(){if(document.hidden)return;
     var a=o(),u=location.origin+"/robots.txt?_v=clk"+a.toString(36)+Math.random().toString(36).slice(2,6);
     fetch(u,{method:"HEAD",cache:"no-store"}).then(function(res){
-      var b=o(),d=Date.parse(res.headers.get("date")||"");if(!(d>0)||b-a>20000)return;   // respuesta muy lenta: no vale
+      var b=o(),d=Date.parse(res.headers.get("date")||"");
+      if(!(d>0)||b-a>1500||b<a||document.hidden)return;   // respuesta lenta o con la página oculta: no vale
       d+=500+(parseInt(res.headers.get("age")||"0",10)||0)*1000;var m=(a+b)/2;
-      if(S.length&&d-S[S.length-1][0]<25000)return;   // con el acelerador los intervalos también corren: se guarda una muestra cada ~30 s reales
-      // diferencia entre la hora real y el reloj del juego (para ordenar bien los mensajes del chat aunque tu reloj vaya adelantado o atrasado)
-      K.so=d-Date.now()+(b-a)/2;
+      // diferencia entre la hora real y el reloj del juego (para ordenar el chat y las incursiones aunque tu reloj no esté en hora)
+      K.so=d-(DN()-(b-m));
+      if(S.length&&d-S[S.length-1][0]<25000)return;
       S.push([d,m]);if(S.length>20)S.shift();
-      // ventana: la muestra más antigua de los últimos ~3 min con al menos 60 s de diferencia
       var p=null;for(var i=0;i<S.length-1;i++){var dd=d-S[i][0];if(dd>=60000&&dd<=200000){p=S[i];break}}
-      if(!p){if(!K.on){ds=d;dl=m}return}
-      var r=(m-p[1])/(d-p[0]);
-      if(!K.on&&r>1.25){off=p[1]-p[0];ds=p[0];dl=p[1];K.r=Math.max(1,r);K.on=true;K.at=Date.now()}
-      if(K.on){ds=d;dl=m;K.r=r>1.1?r:1;if(r>K.peak)K.peak=r;K.last=r;if(r>1.25)K.n++}
+      if(!p)return;
+      var r=(m-p[1])/(d-p[0]);K.last=r;
+      if(r>1.5){K.hit++;K.ok=0;if(r>K.peak)K.peak=r;if(K.on)K.n++}else{K.hit=0;K.ok++}
+      if(!K.on&&K.hit>=3){setR(Math.max(1,r));K.on=true;K.at=Date.now();K.n=K.hit}
+      else if(K.on&&K.hit>0)setR(Math.max(1,r));
+      else if(K.on&&K.ok>=2){K.on=false;K.r=1}   // ya no se detecta: vuelve a la hora normal
     }).catch(function(){});
   }
   if(/^https?:$/.test(location.protocol)){setTimeout(sample,1500);setInterval(sample,30000)}

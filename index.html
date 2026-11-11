@@ -5,32 +5,39 @@
 <script>
 // ===== freno contra aceleradores de páginas web (speedhack) =====
 // Todo lo que se produce solo se calcula con el reloj del navegador (Date.now). Un acelerador lo adelanta.
-// Cada 30 s se compara con la hora real del servidor (cabecera Date): si el reloj del navegador corre
-// más deprisa, a partir de ahí el juego solo ve el tiempo real (el reloj nunca va hacia atrás: se queda
-// quieto hasta que la hora real lo alcanza, así que lo ganado antes de detectarlo también se compensa).
+// Cada 30 s (solo con el juego a la vista) se compara con la hora del servidor (cabecera Date).
+// Solo se aceptan respuestas rápidas (menos de 1,5 s): si el navegador retrasa la respuesta (pestaña en segundo
+// plano, móvil bloqueado…) la medida no vale y se descarta. Para frenar hace falta que el reloj vaya al menos
+// un 50 % más rápido en 3 medidas seguidas de más de 1 minuto. Al frenar, el reloj sigue avanzando (nunca se
+// para ni va hacia atrás); si deja de detectarse, vuelve a la hora normal.
 (function(){
-  var W=window,o=Date.now.bind(Date),K={on:false,r:1,peak:1,at:0,last:0,blk:0,n:0},S=[],ds=0,dl=0,off=0,rv=0;
+  var W=window,o=Date.now.bind(Date),K={on:false,r:1,peak:1,at:0,last:0,blk:0,n:0,so:0,hit:0,ok:0},S=[],rv=0,l0=0,v0=0;
   // solo lectura desde fuera: no se puede apagar el freno desde la consola
   W.PGC_SPD=Object.freeze({get on(){return K.on},get r(){return K.r},get peak(){return K.peak},get at(){return K.at},get last(){return K.last},get blk(){return K.blk},get n(){return K.n},get so(){return K.so}});
   Object.defineProperty(W,"srvNow",{value:function(){return Date.now()+(K.so||0)},writable:false,configurable:false});
-  function srv(){return ds+(o()-dl)/K.r}                    // hora real estimada
-  var DN=function(){var l=o();if(!K.on){if(l>rv)rv=l;return l}var v=Math.floor(srv()+off);if(v<rv)v=rv;rv=v;K.blk=Math.max(0,l-v);return v};
+  function virt(){return v0+(o()-l0)/K.r}
+  var DN=function(){var l=o(),v=K.on?Math.floor(virt()):l;if(v<rv)v=rv;rv=v;K.blk=K.on?Math.max(0,l-v):0;return v};
   try{Object.defineProperty(Date,"now",{value:DN,writable:false,configurable:false})}catch(e){Date.now=DN}
-  function sample(){
+  // cambia la velocidad del reloj sin saltos
+  function setR(r){var cur=K.on?virt():o();v0=Math.max(cur,rv);l0=o();K.r=r}
+  document.addEventListener("visibilitychange",function(){if(!document.hidden)S=[]});// medidas nuevas al volver
+  function sample(){if(document.hidden)return;
     var a=o(),u=location.origin+"/robots.txt?_v=clk"+a.toString(36)+Math.random().toString(36).slice(2,6);
     fetch(u,{method:"HEAD",cache:"no-store"}).then(function(res){
-      var b=o(),d=Date.parse(res.headers.get("date")||"");if(!(d>0)||b-a>20000)return;   // respuesta muy lenta: no vale
+      var b=o(),d=Date.parse(res.headers.get("date")||"");
+      if(!(d>0)||b-a>1500||b<a||document.hidden)return;   // respuesta lenta o con la página oculta: no vale
       d+=500+(parseInt(res.headers.get("age")||"0",10)||0)*1000;var m=(a+b)/2;
-      if(S.length&&d-S[S.length-1][0]<25000)return;   // con el acelerador los intervalos también corren: se guarda una muestra cada ~30 s reales
-      // diferencia entre la hora real y el reloj del juego (para ordenar bien los mensajes del chat aunque tu reloj vaya adelantado o atrasado)
-      K.so=d-Date.now()+(b-a)/2;
+      // diferencia entre la hora real y el reloj del juego (para ordenar el chat y las incursiones aunque tu reloj no esté en hora)
+      K.so=d-(DN()-(b-m));
+      if(S.length&&d-S[S.length-1][0]<25000)return;
       S.push([d,m]);if(S.length>20)S.shift();
-      // ventana: la muestra más antigua de los últimos ~3 min con al menos 60 s de diferencia
       var p=null;for(var i=0;i<S.length-1;i++){var dd=d-S[i][0];if(dd>=60000&&dd<=200000){p=S[i];break}}
-      if(!p){if(!K.on){ds=d;dl=m}return}
-      var r=(m-p[1])/(d-p[0]);
-      if(!K.on&&r>1.25){off=p[1]-p[0];ds=p[0];dl=p[1];K.r=Math.max(1,r);K.on=true;K.at=Date.now()}
-      if(K.on){ds=d;dl=m;K.r=r>1.1?r:1;if(r>K.peak)K.peak=r;K.last=r;if(r>1.25)K.n++}
+      if(!p)return;
+      var r=(m-p[1])/(d-p[0]);K.last=r;
+      if(r>1.5){K.hit++;K.ok=0;if(r>K.peak)K.peak=r;if(K.on)K.n++}else{K.hit=0;K.ok++}
+      if(!K.on&&K.hit>=3){setR(Math.max(1,r));K.on=true;K.at=Date.now();K.n=K.hit}
+      else if(K.on&&K.hit>0)setR(Math.max(1,r));
+      else if(K.on&&K.ok>=2){K.on=false;K.r=1}   // ya no se detecta: vuelve a la hora normal
     }).catch(function(){});
   }
   if(/^https?:$/.test(location.protocol)){setTimeout(sample,1500);setInterval(sample,30000)}
@@ -41,7 +48,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.30"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.30.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -76,7 +83,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794388168">
+<meta name="game-build" content="1794390505">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2574,7 +2581,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.30</small>
+    <small class="pcver">Versión 6.30.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7230,8 +7237,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.30";
+const GAME_VER="6.30.1";
 const NEWS=[
+{v:"2026-11-11-6.30.1",ver:"6.30.1",at:"2026-11-11T10:48",t:"🔧 Arreglos/Mejoras",l:["Arreglado un fallo que, con el juego abierto en segundo plano, podía frenar la producción de tickets por error. Si perdiste tickets por esto, escríbenos en Sugerencias y te los devolvemos"]},
 {v:"2026-11-11-6.29.1",ver:"6.29.1",at:"2026-11-11T10:03",t:"🔧 Arreglos/Mejoras",l:["Tutorial: el combate ya no se queda escondido detrás. El tutorial se aparta mientras luchas y sigue cuando termina","Exploración: arrastra los Pokémon del equipo para ordenarlos, o entre el equipo y la caja para meterlos, sacarlos o cambiarlos"]},
 {v:"2026-11-11b",ver:"6.29",at:"2026-11-11T09:56",t:"🔴 Incursiones mejoradas",l:["Nuevo botón «🎯 Elegir los ataques de tu equipo» en la sala de espera: eliges el ataque rápido y los dos cargados de cada Pokémon","Cada ataque muestra su eficacia contra el jefe, y los de estado aparecen como «No sirve en incursiones»","Incursiones con amigos: el contador y el inicio van con la hora del servidor, así coinciden para todos aunque los relojes de cada móvil sean distintos","¿Cuál pesa más?: el contador de segundos ahora va bajando (antes parecía congelado)"]},
 {v:"2026-11-11-6.28.1",ver:"6.28.1",at:"2026-11-11T09:51",t:"🔧 Arreglos/Mejoras",l:["Móvil: botón 💾 para guardar en la pantalla principal","El juego se calla al cambiar de app o de pestaña (y vuelve a sonar al volver)","Fusiones (Calyrex, Kyurem, Necrozma, Hoopa): al transformarse aprenden su movimiento propio, como Lanza Glacial u Orbes Espectro, mientras dure el combate","Evolución: si un Pokémon ya tiene el nivel (por ejemplo, con un Caramelo Raro), te lo ofrece al acabar el siguiente combate. Si la cancelas, vuelve a intentarlo al subir otro nivel","Chat: los mensajes se ordenan con la hora real, aunque el reloj de tu móvil vaya adelantado o atrasado","Laboratorio de fósiles: ahora te explica qué mitades se pueden combinar (por ejemplo, el Fósil Dragón con el Pájaro o el Pez)"]},
@@ -7456,7 +7464,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794388168";
+const GAME_B="1794390505";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -10718,23 +10726,23 @@ setInterval(()=>{try{if(!S||S.glFix8||fcd)return;if((S.cl|0)>=30){S.cl=8;window.
   const eco=(d&&d.eco)||null,nm=pvClean((d&&d.n)||"Jugador");
   const row=(lab,id,cur)=>'<label><span>'+lab+'</span><input type="number" min="0" id="'+id+'" placeholder="sin cambios"><small>ahora: '+(cur==null?'?':fmt(cur))+'</small></label>';
   box.insertAdjacentHTML("beforeend",'<div class="fixbox"><button class="alt" data-fixo="1">🛠️ Corregir partida (moderación)</button><div class="fixf" hidden>'+
-    '<p class="mut">Pon un <b>máximo</b> en lo que quieras corregir (si ya tiene menos, no se toca). Se aplicará la próxima vez que <b>'+esc(nm)+'</b> entre en el juego. Datos de su última partida guardada'+(eco?'':' (todavía no disponibles: aparecerán cuando vuelva a guardar)')+'.</p>'+
-    row("🎟️ Tickets","fxT",eco&&eco.t)+row("🥊 Guantes de entrenador","fxCl",eco&&eco.cl)+G.map((g,i)=>row(GI[i]+" "+g[0],"fxG"+i,eco&&eco.g?eco.g[i]:null)).join("")+
-    '<label class="fxm"><span>Mensaje para el jugador</span><textarea id="fxM" rows="2" maxlength="300">Tu partida se ha corregido por un fallo de los Guantes de entrenador.</textarea></label>'+
+    '<p class="mut">Puedes <b>devolverle tickets</b> o poner un <b>máximo</b> en lo que quieras corregir (si ya tiene menos, no se toca). Se aplicará la próxima vez que <b>'+esc(nm)+'</b> entre en el juego. Datos de su última partida guardada'+(eco?'':' (todavía no disponibles: aparecerán cuando vuelva a guardar)')+'.</p>'+
+    '<label><span>🎁 Devolver / regalar tickets</span><input type="number" min="0" id="fxAdd" placeholder="0"><small>se suman a los que tenga</small></label>'+row("🎟️ Tickets","fxT",eco&&eco.t)+row("🥊 Guantes de entrenador","fxCl",eco&&eco.cl)+G.map((g,i)=>row(GI[i]+" "+g[0],"fxG"+i,eco&&eco.g?eco.g[i]:null)).join("")+
+    '<label class="fxm"><span>Mensaje para el jugador</span><textarea id="fxM" rows="2" maxlength="300">Te devolvemos los tickets que perdiste por un fallo del juego. ¡Perdona las molestias!</textarea></label>'+
     '<div class="jrow"><button class="red" data-fixgo="'+esc(uid)+'" data-fixn="'+esc(nm)+'">💾 Aplicar corrección</button></div></div></div>')}catch(e){console.error(e)}return r}}
 document.addEventListener("click",async e=>{const t=e.target;if(!t.closest)return;
   const o=t.closest("[data-fixo]");if(o){const f=o.parentNode.querySelector(".fixf");f.hidden=!f.hidden;return}
   const b=t.closest("[data-fixgo]");if(!b||!(typeof MOD!=="undefined"&&MOD.admin))return;
   const num=id=>{const v=($(id)||{}).value;return v===""||v==null?null:Math.max(0,Math.floor(+v))};
-  const fx={t:num("fxT"),cl:num("fxCl"),g:G.map((g,i)=>num("fxG"+i)),msg:String(($("fxM")||{}).value||"").slice(0,300),at:Date.now(),n:b.dataset.fixn};
-  if(fx.t==null&&fx.cl==null&&fx.g.every(x=>x==null)){toast("Pon al menos un máximo.");return}
+  const fx={add:num("fxAdd"),t:num("fxT"),cl:num("fxCl"),g:G.map((g,i)=>num("fxG"+i)),msg:String(($("fxM")||{}).value||"").slice(0,300),at:Date.now(),n:b.dataset.fixn};
+  if(!fx.add&&fx.t==null&&fx.cl==null&&fx.g.every(x=>x==null)){toast("Pon tickets para devolver o al menos un máximo.");return}
   if(!await askOk("¿Aplicar esta corrección a "+b.dataset.fixn+"? Se aplicará la próxima vez que entre."))return;
   b.disabled=true;try{await window.FB.fixSet(b.dataset.fixgo,fx);toast("🛠️ Corrección guardada para "+b.dataset.fixn+". Se aplicará cuando entre.")}catch(x){toast("No se ha podido guardar ("+((x&&x.code)||"error")+"). ¿Has añadido la regla «fixes» en Firebase?");b.disabled=false}});
 // el jugador: al entrar comprueba si tiene una corrección pendiente (1 lectura por sesión)
 let _fixChk=0;
 async function fixCheck(){if(_fixChk||!window.FB||!window.FB.fixGet||!window.FB.uid||!window.FB.uid())return;_fixChk=1;let fx=null;try{fx=await window.FB.fixGet()}catch(e){return}
   if(!fx||!(fx.at>(S.fixAt||0)))return;
-  const ch=[];if(fx.t!=null&&S.t>fx.t){ch.push("🎟️ Tickets: "+fmt(S.t)+" → "+fmt(fx.t));S.t=fx.t}
+  const ch=[];if(fx.add>0){S.t+=fx.add;ch.push("🎁 Recibes "+fmt(fx.add)+" 🎟️")}if(fx.t!=null&&S.t>fx.t){ch.push("🎟️ Tickets: "+fmt(S.t)+" → "+fmt(fx.t));S.t=fx.t}
   if(fx.cl!=null&&(S.cl|0)>fx.cl){ch.push("🥊 Guantes: Nv"+S.cl+" → Nv"+fx.cl);S.cl=fx.cl;window._fk=null}
   (fx.g||[]).forEach((v,i)=>{if(v!=null&&G[i]&&(S.g[i]|0)>v){ch.push(GI[i]+" "+G[i][0]+": "+fmt(S.g[i])+" → "+fmt(v));S.g[i]=v}});window._gk=null;
   S.fixAt=fx.at;save();try{if(window.cloudFlush)window.cloudFlush(true)}catch(e){}try{await window.FB.fixDel()}catch(e){}render();
@@ -13540,7 +13548,7 @@ function spdCheck(){const K=window.PGC_SPD;if(!K||!K.on)return;
     S.spd={sess:K.at,cur:sec,sec:(prev.sec|0)+Math.max(0,add),tk:Math.round((prev.tk||0)+Math.max(0,add)*tps()),peak:Math.max(prev.peak||1,K.peak||1),n:(prev.n|0)+(prev.sess===K.at?0:1),first:prev.first||Date.now()};save()}
   // aviso al administrador: solo si el acelerador se ha medido varias veces y claramente (no un salto de reloj)
   const d=new Date().toISOString().slice(0,10);
-  if(K.n>=2&&K.peak>=1.4&&S.spdRep!==d&&window.FB&&window.FB.reportAdd&&window.FB.uid&&window.FB.uid()){S.spdRep=d;save();const s=S.spd||{},nm=pvClean(pvNick()).slice(0,30);
+  if(K.on&&K.n>=4&&K.peak>=1.6&&S.spdRep!==d&&window.FB&&window.FB.reportAdd&&window.FB.uid&&window.FB.uid()){S.spdRep=d;save();const s=S.spd||{},nm=pvClean(pvNick()).slice(0,30);
     window.FB.reportAdd({u:window.FB.uid(),un:nm,by:window.FB.uid(),byn:"🤖 Sistema",why:"⏩ Acelerador de páginas",
       t:("Su navegador va ×"+(K.peak||1).toFixed(1)+" más rápido que la hora real. El juego ya lo frena: solo cuenta el tiempo real. "+
         "Frenado hasta ahora: "+Math.round((s.sec|0)/60)+" min de juego ≈ "+fmt(s.tk||0)+" 🎟️ que habría generado de más. "+

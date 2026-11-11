@@ -84,7 +84,7 @@ function spdCheck(){const K=window.PGC_SPD;if(!K||!K.on)return;
     S.spd={sess:K.at,cur:sec,sec:(prev.sec|0)+Math.max(0,add),tk:Math.round((prev.tk||0)+Math.max(0,add)*tps()),peak:Math.max(prev.peak||1,K.peak||1),n:(prev.n|0)+(prev.sess===K.at?0:1),first:prev.first||Date.now()};save()}
   // aviso al administrador: solo si el acelerador se ha medido varias veces y claramente (no un salto de reloj)
   const d=new Date().toISOString().slice(0,10);
-  if(K.n>=2&&K.peak>=1.4&&S.spdRep!==d&&window.FB&&window.FB.reportAdd&&window.FB.uid&&window.FB.uid()){S.spdRep=d;save();const s=S.spd||{},nm=pvClean(pvNick()).slice(0,30);
+  if(K.on&&K.n>=4&&K.peak>=1.6&&S.spdRep!==d&&window.FB&&window.FB.reportAdd&&window.FB.uid&&window.FB.uid()){S.spdRep=d;save();const s=S.spd||{},nm=pvClean(pvNick()).slice(0,30);
     window.FB.reportAdd({u:window.FB.uid(),un:nm,by:window.FB.uid(),byn:"🤖 Sistema",why:"⏩ Acelerador de páginas",
       t:("Su navegador va ×"+(K.peak||1).toFixed(1)+" más rápido que la hora real. El juego ya lo frena: solo cuenta el tiempo real. "+
         "Frenado hasta ahora: "+Math.round((s.sec|0)/60)+" min de juego ≈ "+fmt(s.tk||0)+" 🎟️ que habría generado de más. "+

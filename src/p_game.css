@@ -876,3 +876,16 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .jcjoin{display:flex;gap:8px}.jcjoin input{width:130px;text-transform:uppercase;letter-spacing:.2em;font-weight:800;text-align:center;font-size:1.1rem}
 .jccode{display:inline-block;padding:2px 12px;border-radius:10px;background:var(--bg);border:2px dashed var(--mc,#2f9e8f);letter-spacing:.2em;font-family:monospace}
 .jcpl{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:6px 0}.jcpl span{padding:3px 10px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:.82rem;font-weight:700}
+/* Exploración: menú lateral, velocidad y Pokédex */
+.exspdb{right:110px!important;width:auto!important;padding:0 8px!important;font-size:.8rem!important;font-weight:800}
+.exmenub{top:auto!important;bottom:10px;right:10px;font-size:1.3rem!important}
+.exmenu{position:absolute;top:8px;right:8px;bottom:8px;z-index:8;width:min(240px,62%);display:flex;flex-direction:column;gap:4px;padding:10px;border-radius:14px;background:rgba(246,248,255,.97);border:3px solid #4a5a8a;box-shadow:0 8px 24px rgba(0,0,0,.45);overflow:auto;animation:exmIn .15s ease-out}
+@keyframes exmIn{from{transform:translateX(30px);opacity:0}}
+.exmenu button{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:transparent;color:#1d2440;border:2px solid transparent;text-align:left;min-height:0;font-size:.95rem}
+.exmenu button span{font-size:1.2rem;width:26px;text-align:center}.exmenu button b{flex:1}.exmenu button small{color:#5a6390;font-weight:700}
+.exmenu button.on,.exmenu button:hover{border-color:#e64040;background:#fff;box-shadow:0 2px 0 #c8cde6}
+.exmenu button.on::before{content:"▶";color:#e64040;font-size:.75rem;margin-right:-6px}
+.exdex .exdexg{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px}
+.exdexc{display:flex;flex-direction:column;align-items:center;padding:6px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}.exdexc small{color:var(--mute)}.exdexc b{font-size:.78rem}.exdexc i{font-style:normal;font-size:.7rem}
+.expadsec{margin-top:10px;display:flex;flex-direction:column;gap:6px}.expadsec small.ok{color:#2a9d5a}
+.xgcap{display:block;margin:4px 0 6px;padding:4px 10px;border-radius:8px;background:#fff4d6;color:#7a5200;font-weight:700}

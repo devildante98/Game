@@ -30,12 +30,12 @@ const GYMS=[["Roca","rock",12,"Ciudad Plateada","Brock"],["Cascada","water",18,"
 // ---- límite de nivel: nadie sube por encima del as del siguiente Líder hasta conseguir su medalla
 const gymAce=i=>GYMS[i][2]+2*(3+Math.floor(i/3))-4;
 const gymNext=()=>{for(let i=0;i<GYMS.length;i++)if(!(S.med&&S.med[i]))return i;return -1};
-const lvCap=()=>{const i=gymNext();return i<0?100:gymAce(i)};
+const lvCap=()=>{if(typeof XGSW!=="undefined"&&XGSW&&typeof xgCap==="function")return xgCap();const i=gymNext();return i<0?100:gymAce(i)};
 // nivel con el que lucha: un Pokémon por encima de tu límite (recibido por intercambio, regalo o mercadillo) lucha al nivel del límite,
 // como en los juegos cuando no tienes medallas suficientes; su nivel real no cambia y recupera su fuerza al ganar medallas
 function blv(n){const l=lvd(n).l;try{return Math.min(l,lvCap())}catch(e){return l}}
 const overCap=n=>{try{return lvd(n).l>lvCap()}catch(e){return false}};
-const capWhy=()=>{const i=gymNext();return i<0?"":"Derrota al Líder "+GYMS[i][4]+" (Gimnasio de "+GYMS[i][3]+") para subir el límite."};
+const capWhy=()=>{if(typeof XGSW!=="undefined"&&XGSW&&typeof xgCapWhy==="function")return xgCapWhy();const i=gymNext();return i<0?"":"Derrota al Líder "+GYMS[i][4]+" (Gimnasio de "+GYMS[i][3]+") para subir el límite."};
 const medCount=()=>Object.keys(S.med||{}).filter(k=>S.med[k]).length;
 const lgUnlocked=()=>medCount()>=8||Object.keys(S.lgDone||{}).length>0||!!S.lg;
 // ---- Líderes por región: cambian con cada nivel de prestigio (Kanto, Johto, Hoenn, Sinnoh, Teselia, Kalos y vuelta a empezar)

@@ -39,7 +39,7 @@ const G_PUZ={id:"puz",n:"Rompecabezas Pokémon",ic:"🧩",c:"#d8456f",d:"Recomp�
       const swap=(a,b)=>{if(done||a===b||a<0||b<0||ord[a]===a||ord[b]===b)return;[ord[a],ord[b]]=[ord[b],ord[a]];moves++;sel=-1;snd(ord[a]===a||ord[b]===b?"lvl":"ui");
         const ok=draw();[a,b].forEach(i=>{if(ord[i]===i){const el=box.querySelector('[data-pz="'+i+'"]');if(el&&!hubCalm())el.animate([{transform:"scale(1.15)",filter:"brightness(1.6)"},{transform:"none",filter:"none"}],{duration:300})}});
         if(ok===T)win()};
-      const win=()=>{done=true;cancelAnimationFrame(MG.raf);const t=(performance.now()-t0)/1000,par=T*3.2+8,base=T*40,eff=Math.min(1,minSw/Math.max(1,moves)),spd=Math.min(1,par/Math.max(1,t));
+      const win=()=>{done=true;MG.onClose=null;cancelAnimationFrame(MG.raf);const t=(performance.now()-t0)/1000,par=T*3.2+8,base=T*40,eff=Math.min(1,minSw/Math.max(1,moves)),spd=Math.min(1,par/Math.max(1,t));
         const sc=Math.round(base*(.5+.5*spd)*(.6+.4*eff));mgSet(sc);box.classList.add("pzdone");snd("win");mgConfetti();try{cry(mon[0])}catch(e){}
         B.querySelector(".mgbtns").innerHTML='<p class="pzres">¡Es <b>'+esc(mon[0])+'</b>! · '+Math.floor(t/60)+':'+String(Math.floor(t%60)).padStart(2,"0")+' · '+moves+' cambios (mínimo '+minSw+')</p>';
         mgT(()=>end(sc),2600)};
@@ -49,7 +49,9 @@ const G_PUZ={id:"puz",n:"Rompecabezas Pokémon",ic:"🧩",c:"#d8456f",d:"Recomp�
       box.addEventListener("pointerup",e=>{if(down<0||done)return;const el=document.elementFromPoint(e.clientX,e.clientY),p=el&&el.closest&&el.closest("[data-pz]"),i=p?+p.dataset.pz:-1,d=down;down=-1;
         if(i>=0&&i!==d){swap(d,i);return}
         if(i===d){if(sel<0){sel=d;draw()}else if(sel===d){sel=-1;draw()}else swap(sel,d)}});
-      $("pzSave").onclick=()=>{if(done)return;mgSavePut("puz",{N:N,m:mon[0],src:src,ord:ord.slice(),mv:moves,el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Rompecabezas guardado. Puedes seguir cuando quieras.");mgClose()};
+      // se guarda con «Guardar y salir», al cerrar con la ✕ o Esc, y si se cierra la página
+      MG.onClose=()=>{if(done)return;mgSavePut("puz",{N:N,m:mon[0],src:src,ord:ord.slice(),mv:moves,el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Rompecabezas guardado. Puedes seguir cuando quieras.")};
+      $("pzSave").onclick=()=>{if(!done)mgClose()};
       const pk=$("pzPeek"),on=()=>{ref.classList.add("on")},off=()=>{ref.classList.remove("on")};
       pk.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(ev=>pk.addEventListener(ev,off));
     };
@@ -158,24 +160,28 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧷",c:"#2f9e8f",d:"Un puzle como
         if(Math.abs(p.x-hx)<s*.3&&Math.abs(p.y-hy)<s*.3){p.x=hx;p.y=hy;p.l=true;place(p);snd("lvl");if(!hubCalm())p.cv.animate([{filter:"brightness(1.7)"},{filter:"none"}],{duration:350});const k=okN();$("jgOk").textContent=k;if(k===T)win()}
         else{place(p);snd("ui")}};
       W.addEventListener("pointerup",up);W.addEventListener("pointercancel",up);
-      const win=()=>{if(done)return;done=true;cancelAnimationFrame(MG.raf);const t=(performance.now()-t0)/1000,par=T*6+20,spd=Math.min(1,par/Math.max(1,t)),sc=Math.round(T*50*(.5+.5*spd));
+      const win=()=>{if(done)return;done=true;MG.onClose=null;cancelAnimationFrame(MG.raf);const t=(performance.now()-t0)/1000,par=T*6+20,spd=Math.min(1,par/Math.max(1,t)),sc=Math.round(T*50*(.5+.5*spd));
         mgSet(sc);W.classList.add("jgdone");snd("win");mgConfetti();try{cry(mon[0])}catch(e){}
         B.querySelector(".mgbtns").innerHTML='<p class="pzres">¡Es <b>'+esc(mon[0])+'</b>! · '+T+' piezas en '+mgClk(t*1000)+'</p>';
         mgT(()=>end(sc),2600)};
       $("jgPeek").onclick=()=>{$("jgBd").classList.toggle("peek")};
       $("jgMix").onclick=()=>{if(done||!ready)return;snd("ui");scatter(PC.filter(p=>!p.l));layout()};
-      $("jgSave").onclick=()=>{if(done)return;const r4=v=>Math.round(v*1e4)/1e4;
-        mgSavePut("jig",{N:N,m:mon[0],src:src,h:H,v:V,p:PC.map(p=>p.l?[0,0,1]:[r4(p.x),r4(p.y),0]),el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Puzle guardado. Puedes seguir cuando quieras.");mgClose()};
+      // se guarda con «Guardar y salir», al cerrar con la ✕ o Esc, y si se cierra la página
+      MG.onClose=()=>{if(done)return;const r4=v=>Math.round(v*1e4)/1e4;
+        mgSavePut("jig",{N:N,m:mon[0],src:src,h:H,v:V,p:PC.map(p=>p.l?[0,0,1]:[r4(p.x),r4(p.y),0]),el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Puzle guardado. Puedes seguir cuando quieras.")};
+      $("jgSave").onclick=()=>{if(!done)mgClose()};
     };
     mgSet(0);pick();
   }};
 
+// si se cierra o recarga la página con un puzle a medias, también se guarda
+window.addEventListener("pagehide",()=>{if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}});
 MGS.push(G_PUZ,G_JIG,G_HL);
 // entran en la rotación del Torneo semanal a partir de la semana que viene (no cambia el torneo en curso)
 TOUR_ROT.push(["2026-W46","who mem dig fish thr run exc wgt fos puz hl"]);
 TOUR_ROT.push(["2026-W47","who mem dig fish thr run exc wgt fos puz jig hl"]);
 Object.assign(MGHOW,{
-  jig:["Elige de <b>9 a 100 piezas</b>: cada pieza vale hasta <b>50 puntos</b> (con 100 piezas, hasta 5.000).","Las piezas empiezan sueltas debajo del tablero. Arrástralas a su sitio: si la sueltas cerca, <b>encaja sola</b> y se queda fija.","Fíjate en la forma: cada pieza tiene salientes y huecos que solo encajan con sus vecinas. Las de los bordes tienen un lado recto.","<b>Rapidez</b>: la mitad de los puntos dependen de lo rápido que termines.","<b>👁️ Ver la imagen</b> muestra el dibujo en el tablero; <b>🧺 Recoger las sueltas</b> vuelve a ordenar las piezas sueltas.","<b>💾 Guardar y salir</b> guarda el puzle tal cual, con el tiempo parado, para seguir otro día."],
+  jig:["Elige de <b>9 a 100 piezas</b>: cada pieza vale hasta <b>50 puntos</b> (con 100 piezas, hasta 5.000).","Las piezas empiezan sueltas debajo del tablero. Arrástralas a su sitio: si la sueltas cerca, <b>encaja sola</b> y se queda fija.","Fíjate en la forma: cada pieza tiene salientes y huecos que solo encajan con sus vecinas. Las de los bordes tienen un lado recto.","<b>Rapidez</b>: la mitad de los puntos dependen de lo rápido que termines.","<b>👁️ Ver la imagen</b> muestra el dibujo en el tablero; <b>🧺 Recoger las sueltas</b> vuelve a ordenar las piezas sueltas.","<b>💾 Guardar y salir</b> (o cerrar con la ✕) guarda el puzle tal cual, con el tiempo parado, para seguir otro día."],
   puz:["Elige de <b>9 a 100 piezas</b>: cada pieza vale <b>40 puntos</b> (con 100 piezas, hasta 4.000).","Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.","<b>Rapidez</b>: hasta la mitad de los puntos dependen de lo rápido que termines.","<b>Precisión</b>: cuantos menos cambios hagas (cerca del mínimo), más puntos.","Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo."],
   hl:["Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>. Si empatan, cuenta como acierto.","Con la racha, los valores se parecen cada vez más y tienes menos tiempo.","Teclado: <b>↑</b> más, <b>↓</b> menos."]});
 // =====================================================================================

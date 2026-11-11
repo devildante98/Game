@@ -143,7 +143,7 @@ const MGS=[G_WHO,G_MEM,G_DIG,G_FISH,G_THR];
 // ---------------- ventana del minijuego ----------------
 function mgOpen(id){
   const g=MGS.find(x=>x.id===id);if(!g)return;if(fcd){toast("Termina el combate primero.");return}
-  hubClose();mgStop();MG.g=g;MG.score=0;MG.fish=null;
+  if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}hubClose();mgStop();MG.g=g;MG.score=0;MG.fish=null;
   let m=$("mgM");if(!m){m=document.createElement("div");m.id="mgM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m)}
   m.style.setProperty("--mc",g.c);
   m.innerHTML='<div class="mgw"><div class="mgh"><span class="mgic">'+g.ic+'</span><b>'+g.n+'</b><span class="mgsc">⭐ <b id="mgSc">0</b></span><button class="mgx" aria-label="Salir del minijuego">✕</button></div><div class="mgb" id="mgB"></div></div>';
@@ -153,9 +153,9 @@ function mgOpen(id){
   $("mgGo").onclick=()=>{snd("ui");MG.t0=Date.now();g.start($("mgB"),mgEnd)};
   m.querySelector(".mgw").animate([{transform:"scale(.85)",opacity:0},{transform:"none",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.9,.3,1.2)"});
 }
-function mgClose(){mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
+function mgClose(){if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
 function mgEnd(score){
-  const g=MG.g;if(!g)return;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
+  const g=MG.g;if(!g)return;MG.onClose=null;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
   if(rec)st.best[g.id]=score;let rw=null,extra="";
   if(left>0&&score>0){st.n[g.id]=(st.n[g.id]|0)+1;rw={t:Math.min(400000,Math.round(g.rw(score)))*(typeof hhMul==="function"?hhMul("mg"):1),it:{}};
     const q=Math.random();if(q<.12)rw.it.ub=1;else if(q<.35)rw.it.sb=2;else if(q<.5)rw.it.pot=2;

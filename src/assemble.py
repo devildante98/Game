@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.31.5";
+const GAME_VER="6.31.6";
 const NEWS=[
+{v:"2026-11-11-6.31.6",ver:"6.31.6",at:"2026-11-11T11:31",t:"🔧 Arreglos/Mejoras",l:["El minijuego «¿Quién pesa más?» ahora se llama «Peso y altura», porque también pregunta cuál pesa menos y cuál es más alto o más bajo"]},
 {v:"2026-11-11-6.31.5",ver:"6.31.5",at:"2026-11-11T11:29",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett!: arreglado el reloj que a veces se quedaba parado y hacía la partida infinita. Ahora la partida siempre termina a los 30 segundos","Si la hora del móvil o del ordenador se ajusta de golpe, el juego ya no lo confunde con un acelerador"]},
 {v:"2026-11-11-6.31.4",ver:"6.31.4",at:"2026-11-11T11:18",t:"🔧 Arreglos/Mejoras",l:["Iconos intercambiados: el Puzle de piezas ahora lleva la pieza de puzle 🧩 y el Rompecabezas Pokémon el 🧷"]},
 {v:"2026-11-11-6.31.3",ver:"6.31.3",at:"2026-11-11T11:16",t:"🔧 Arreglos/Mejoras",l:["Puzle de piezas: la imagen tenue del tablero ahora coincide exactamente con las piezas (antes se veía más grande y parecía descuadrada)"]},

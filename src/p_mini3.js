@@ -188,7 +188,7 @@ Object.assign(MGHOW,{
   puz:["Elige de <b>9 a 100 piezas</b>: cada pieza vale <b>40 puntos</b> (con 100 piezas, hasta 4.000).","Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.","<b>Rapidez</b>: hasta la mitad de los puntos dependen de lo rápido que termines.","<b>Precisión</b>: cuantos menos cambios hagas (cerca del mínimo), más puntos.","Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo."],
   hl:["Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>. Si empatan, cuenta como acierto.","Con la racha, los valores se parecen cada vez más y tienes menos tiempo.","Teclado: <b>↑</b> más, <b>↓</b> menos."]});
 // =====================================================================================
-// TECLAS DE RESPUESTA EN LOS MINIJUEGOS (¿Quién es ese Pokémon?, ¿Cuál pesa más?, Más o menos…)
+// TECLAS DE RESPUESTA EN LOS MINIJUEGOS (¿Quién es ese Pokémon?, Peso y altura, Más o menos…)
 // Cada casilla tiene su tecla (por defecto 1, 2, 3, 4) y se pueden cambiar en Ajustes → Controles.
 // Solo funcionan con un minijuego abierto: no compran mejoras de la tienda ni tocan la Poké Ball.
 // =====================================================================================

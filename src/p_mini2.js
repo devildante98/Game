@@ -1,5 +1,5 @@
 // =====================================================================================
-// MÁS MINIJUEGOS: Carrera de Rapidash, Excavación subterránea, ¿Quién pesa más?,
+// MÁS MINIJUEGOS: Carrera de Rapidash, Excavación subterránea, Peso y altura,
 // Duelo de siluetas en directo (contra amigos) y Torneo semanal de récords
 // =====================================================================================
 const WTH=__WEIGHTS__;// peso en hectogramos por número de sprite
@@ -101,8 +101,8 @@ function exArt(e){
   return "";
 }
 
-// ---------------- ¿QUIÉN PESA MÁS? (o es más alto) ----------------
-const G_WGT={id:"wgt",n:"¿Quién pesa más?",ic:"⚖️",c:"#13a37f",d:"Dos Pokémon: ¿cuál pesa más o menos?, ¿cuál es más alto o más bajo? Acierta seguidas todas las que puedas. Un fallo y se acaba.",
+// ---------------- PESO Y ALTURA (antes «¿Quién pesa más?»): ¿cuál pesa más o menos?, ¿cuál es más alto o más bajo? ----------------
+const G_WGT={id:"wgt",n:"Peso y altura",ic:"⚖️",c:"#13a37f",d:"Dos Pokémon: ¿cuál pesa más o menos?, ¿cuál es más alto o más bajo? Acierta seguidas todas las que puedas. Un fallo y se acaba.",
   rw:s=>s*110,
   start(B,end){
     const pool=P.filter(p=>p[2]!=="M"&&pkW(p)>0&&pkH(p)>0);let a=pool[Math.floor(Math.random()*pool.length)],streak=0,busy=false;

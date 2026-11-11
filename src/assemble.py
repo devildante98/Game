@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.31.3";
+const GAME_VER="6.31.4";
 const NEWS=[
+{v:"2026-11-11-6.31.4",ver:"6.31.4",at:"2026-11-11T11:18",t:"🔧 Arreglos/Mejoras",l:["Iconos intercambiados: el Puzle de piezas ahora lleva la pieza de puzle 🧩 y el Rompecabezas Pokémon el 🧷"]},
 {v:"2026-11-11-6.31.3",ver:"6.31.3",at:"2026-11-11T11:16",t:"🔧 Arreglos/Mejoras",l:["Puzle de piezas: la imagen tenue del tablero ahora coincide exactamente con las piezas (antes se veía más grande y parecía descuadrada)"]},
 {v:"2026-11-11-6.31.2",ver:"6.31.2",at:"2026-11-11T11:11",t:"🔧 Arreglos/Mejoras",l:["Rompecabezas Pokémon y Puzle de piezas: fondo nuevo, más claro, con sol, nubes y colinas, para que cada pieza se distinga mejor","«Ver la imagen» ahora enseña también el fondo, igual que el puzle"]},
 {v:"2026-11-11-6.31.1",ver:"6.31.1",at:"2026-11-11T11:08",t:"🔧 Arreglos/Mejoras",l:["Rompecabezas Pokémon y Puzle de piezas: la partida también se guarda al cerrar con la ✕, con Esc o al cerrar la página"]},

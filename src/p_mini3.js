@@ -13,7 +13,7 @@ function mgSaveBind(B,sv,cont){if(!sv)return;const c=B.querySelector("[data-mgco
 
 // ---------------- ROMPECABEZAS POKÉMON (antes «Puzle de sprites»): recompón la imagen de un Pokémon intercambiando piezas ----------------
 const PZ_SIZES=[3,4,5,6,7,8,10];
-const G_PUZ={id:"puz",n:"Rompecabezas Pokémon",ic:"🧩",c:"#d8456f",d:"Recompón la imagen de un Pokémon intercambiando sus piezas. Elige de 9 a 100 piezas: cuantas más, más puntos. Puedes guardar la partida y seguir otro día.",
+const G_PUZ={id:"puz",n:"Rompecabezas Pokémon",ic:"🧷",c:"#d8456f",d:"Recompón la imagen de un Pokémon intercambiando sus piezas. Elige de 9 a 100 piezas: cuantas más, más puntos. Puedes guardar la partida y seguir otro día.",
   rw:s=>s*45,
   start(B,end){
     const pick=()=>{const sv=mgSaveGet("puz");
@@ -27,7 +27,7 @@ const G_PUZ={id:"puz",n:"Rompecabezas Pokémon",ic:"🧩",c:"#d8456f",d:"Recomp�
       if(sv&&Array.isArray(sv.ord)&&sv.ord.length===T)ord=sv.ord.slice();else do{for(let i=T-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]]}}while(ord.filter((v,i)=>v===i).length>Math.max(1,T*.08));
       const minSw=(()=>{const seen=new Array(T).fill(false);let c=0;for(let i=0;i<T;i++){if(seen[i])continue;let j=i;while(!seen[j]){seen[j]=true;j=ord[j]}c++}return T-c})();
       let moves=sv?sv.mv|0:0,sel=-1,t0=performance.now()-(sv?sv.el|0:0),done=false;if(sv)mgSaveDel("puz");
-      B.innerHTML='<div class="whohd"><span>🧩 <b>'+T+'</b> piezas</span><span>⏱️ <b id="pzT">0:00</b></span><span>🔄 <b id="pzM">0</b></span><span>✅ <b id="pzOk">0</b>/'+T+'</span></div>'+
+      B.innerHTML='<div class="whohd"><span>🧷 <b>'+T+'</b> piezas</span><span>⏱️ <b id="pzT">0:00</b></span><span>🔄 <b id="pzM">0</b></span><span>✅ <b id="pzOk">0</b>/'+T+'</span></div>'+
         '<div class="pzwrap" style="--n:'+N+';--c1:'+(TC[tys(mon)[0]]||"#4a6ae0")+';--c2:'+(TC[tys(mon)[1]||"fairy"]||"#ff8ad8")+'"><div class="pzb" id="pzB"></div><img class="pzref" id="pzRef" alt=""></div>'+
         '<div class="mgbtns"><button class="alt" id="pzPeek">👁️ Ver la imagen (mantén pulsado)</button><button class="alt" id="pzSave">💾 Guardar y salir</button></div>';
       const box=$("pzB"),ref=$("pzRef");
@@ -98,7 +98,7 @@ function jgEdge(g,x0,y0,x1,y1,t){const dx=x1-x0,dy=y1-y0;if(!t){g.lineTo(x1,y1);
   const nx=dy*t,ny=-dx*t,P=(u,v)=>[x0+dx*u+nx*v,y0+dy*u+ny*v],L=(u,v)=>{const p=P(u,v);g.lineTo(p[0],p[1])},C=(a,b,c,d,e,f)=>{const p=P(a,b),q=P(c,d),r=P(e,f);g.bezierCurveTo(p[0],p[1],q[0],q[1],r[0],r[1])};
   L(.36,0);C(.42,.02,.30,.22,.5,.22);C(.70,.22,.58,.02,.64,0);g.lineTo(x1,y1)}
 function jgPath(c,m,e){const g=new Path2D();g.moveTo(m,m);jgEdge(g,m,m,m+c,m,e[0]);jgEdge(g,m+c,m,m+c,m+c,e[1]);jgEdge(g,m+c,m+c,m,m+c,e[2]);jgEdge(g,m,m+c,m,m,e[3]);g.closePath();return g}
-const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧷",c:"#2f9e8f",d:"Un puzle como los de verdad: las piezas tienen salientes y huecos, empiezan sueltas y tienes que montarlo desde cero. Elige de 9 a 100 piezas. Puedes guardar la partida y seguir otro día.",
+const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como los de verdad: las piezas tienen salientes y huecos, empiezan sueltas y tienes que montarlo desde cero. Elige de 9 a 100 piezas. Puedes guardar la partida y seguir otro día.",
   rw:s=>s*45,
   start(B,end){
     const pick=()=>{const sv=mgSaveGet("jig");
@@ -122,7 +122,7 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧷",c:"#2f9e8f",d:"Un puzle como
       if(sv&&Array.isArray(sv.p)&&sv.p.length===T)sv.p.forEach((q,i)=>{const p=PC[i];p.l=!!q[2];if(p.l){[p.x,p.y]=home(i)}else{p.x=+q[0]||0;p.y=+q[1]||0}});else scatter(PC);
       let zTop=T+1,t0=performance.now()-(sv?sv.el|0:0),done=false,ready=false;if(sv)mgSaveDel("jig");
       const c1=TC[tys(mon)[0]]||"#4a6ae0",c2=TC[tys(mon)[1]||"fairy"]||"#ff8ad8";
-      B.innerHTML='<div class="whohd"><span>🧷 <b>'+T+'</b> piezas</span><span>⏱️ <b id="jgT">0:00</b></span><span>✅ <b id="jgOk">0</b>/'+T+'</span></div>'+
+      B.innerHTML='<div class="whohd"><span>🧩 <b>'+T+'</b> piezas</span><span>⏱️ <b id="jgT">0:00</b></span><span>✅ <b id="jgOk">0</b>/'+T+'</span></div>'+
         '<div class="jgw" id="jgW" style="aspect-ratio:1/'+AH.toFixed(4)+'"><div class="jgbd" id="jgBd" style="left:'+JG_BX*100+'%;top:'+(JG_BY/AH*100)+'%;width:'+JG_BW*100+'%;height:'+(JG_BW/AH*100)+'%;--c1:'+c1+';--c2:'+c2+'"><img alt="" id="jgRef"></div><div class="jgld">Cargando las piezas…</div></div>'+
         '<div class="mgbtns"><button class="alt" id="jgPeek">👁️ Ver la imagen</button><button class="alt" id="jgMix">🧺 Recoger las sueltas</button><button class="alt" id="jgSave">💾 Guardar y salir</button></div>';
       const W=$("jgW"),ref=$("jgRef");let wpx=W.clientWidth||400;

@@ -166,3 +166,28 @@ function rstRoll(){const f=stSt().f;if(f.st||f.rst||!rndOn())return;const pool=r
   while(out.length<3){const p=pool[Math.floor(Math.random()*pool.length)];if(p&&!out.includes(p[0]))out.push(p[0])}f.rst=out;save()}
 {const _l1=STX.lab1;STX.lab1=function(){try{rstRoll();rstSync()}catch(e){console.error(e)}return _l1.apply(this,arguments)}}
 {const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{if(m==="lab")rstSync()}catch(e){}return r}}
+// =====================================================================================
+// MEGAEVOLUCIÓN Y DINAMAX EN EXPLORACIÓN (como en los juegos)
+// · Dinamax/Gigamax: hace falta la Maximuñequera (llega con la 1.ª medalla) y solo en «zonas de poder»:
+//   combates contra líderes de gimnasio, el Alto Mando y el Campeón. Una vez por combate.
+// · Megaevolución: hace falta el Mega-Aro (llega con la 3.ª medalla). Una vez por combate.
+// · Cristal Supremo: el botón solo sale si tienes alguno.
+// =====================================================================================
+const xMedals=()=>{try{return xbCount()}catch(e){return 0}};
+const xBossFight=()=>{const b=EX.battle||{},cfg=b.cfg||{},tr=cfg.trainer||(typeof B!=="undefined"&&B&&B.trainer)||"";return /^(Líder|Lider|Alto Mando|Campe)/i.test(tr)};
+const xInBattle=()=>typeof XGSW!=="undefined"&&!!XGSW&&typeof EX!=="undefined"&&!!EX.battle;
+{const _fb=formBtns;formBtns=function(){if(!xInBattle())return _fb.apply(this,arguments);
+  if(!B||B.mode!=="s"||B.formUsed)return "";const m=beAct(B.E.sd[0]);if(!m||m.mh<=0)return "";const base=(m.p0||m.p)[0],X=xgData(),F=FORMS[base]||[];let h="";
+  if(X.megaRing){const mg=F.filter(f=>f[1]==="mega"&&f[0]!=="Mega-Rayquaza");mg.forEach(f=>{h+='<button class="frmb mega" data-k="mega:'+esc(f[0])+'">🧬 Megaevolucionar'+(mg.length>1?' ('+esc(f[0].slice(-1))+')':'')+'</button>'})}
+  if(X.dmxBand&&xBossFight()){const gm=F.filter(f=>f[1]==="gmax");h+=gm.length?'<button class="frmb gmax" data-k="gmax:'+esc(gm[0][0])+'">🔴 Gigamax</button>':'<button class="frmb dmax" data-k="dmax">🔴 Dinamax</button>'}
+  if((S.bag.crys|0)>0&&typeof supOf==="function")supOf(base).forEach(f=>{h='<button class="frmb sup" data-k="sup:'+esc(f)+'">💠 '+esc(f)+(S.owned[f]>0?'':' 🔓')+' <small>('+(S.bag.crys|0)+' 💎)</small></button>'+h});
+  return h}}
+// en Exploración no hace falta tener capturada la forma Mega: basta con el Mega-Aro
+{const _fd=formDo;formDo=async function(k){if(xInBattle()&&typeof k==="string"){const X=xgData();
+    if(/^mega:/.test(k)){if(!X.megaRing)return;const f=k.slice(5),had=S.owned[f];S.owned[f]=1;try{return await _fd.apply(this,arguments)}finally{if(had==null)delete S.owned[f];else S.owned[f]=had}}
+    if(/^(dmax|gmax:)/.test(k)&&!(X.dmxBand&&xBossFight()))return}
+  return _fd.apply(this,arguments)}}
+// la Maximuñequera y el Mega-Aro llegan con las medallas (y se avisa una vez)
+setInterval(()=>{try{if(!EX.on||EX.title||EX.cut||EX.dlg||EX.trans||EX.battle||(typeof fcd!=="undefined"&&fcd))return;const X=xgData(),n=xMedals();
+  if(n>=1&&!X.dmxBand){X.dmxBand=1;save();snd("lvl");exSay(["📦 ¡Te llega un paquete de la Profesora Vega!","«¡Enhorabuena por tu primera medalla! Te envío una Maximuñequera.»","«Con ella, tus Pokémon pueden dinamaxizarse (o gigamaxizarse) una vez por combate en las zonas de poder: los combates contra líderes de gimnasio, el Alto Mando y el Campeón.»","¡Has conseguido la Maximuñequera!"]);return}
+  if(n>=3&&!X.megaRing){X.megaRing=1;save();snd("lvl");exSay(["📦 ¡Otro paquete de la Profesora Vega!","«¡Ya tienes tres medallas! Has demostrado un vínculo muy fuerte con tus Pokémon, así que te envío un Mega-Aro con su Piedra Activadora.»","«Los Pokémon que tengan forma Mega podrán megaevolucionar una vez por combate.»","¡Has conseguido el Mega-Aro!"])}}catch(e){}},2000);

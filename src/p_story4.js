@@ -89,7 +89,7 @@ STX.introMama=()=>stRun(async()=>{const m=stN("mama");if(m){await sAlert(m);awai
   await sSay(S_("Mamá","Si tus Pokémon se cansan, vuelve a casa a descansar. ¡Te espero con la comida hecha!","Y no te olvides de escribirme de vez en cuando… aunque sea con un Pidgey mensajero."));
   sStep(1)});
 // al bajar a la cocina por primera vez, mamá te habla
-{const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{if(m==="casa"&&stSt().s===0&&stSt().f.woke){let n=0;const tk=()=>{if(EX.map!=="casa")return;if(EX.cut||EX.dlg||EX.trans){if(++n<30)setTimeout(tk,300);return}STX.introMama()};setTimeout(tk,900)}}catch(e){}return r}}
+{const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{if(m==="casa"&&stSt().s===0&&stSt().f.woke){let n=0;const tk=()=>{if(EX.map!=="casa")return;if(EX.title||EX.cut||EX.dlg){if(++n<60)setTimeout(tk,150);return}STX.introMama()};tk()}}catch(e){}return r}}
 // cosas que mirar en tu casa
 {const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&(EX.map==="casa"||EX.map==="casa_up")){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);
   const T={B:["Tu cama. Todavía está calentita.","En la almohada hay un peluche de Pikachu."],O:["Tu ordenador. Tienes un correo de Dani: «¡Hoy nos dan Pokémon! ¡Llegaré pronto! (Seguro que me duermo)»."],C:["Tu armario. Ahí está tu ropa de viaje, lista desde hace semanas."],E:["Tu cómoda. En el espejo hay una foto tuya de pequeño con mamá en la Playa Coral."],V:["En la tele hablan de unas luces extrañas sobre la Cima Aurora…"],L:["La nevera. Mamá ha dejado una nota: «Bocadillo para el viaje, ¡no lo olvides!»."],G:["Huele a tortitas recién hechas."],Z:["Libros de mamá: «Recetas con bayas», «Cuidados del Pokémon»…"],S:["El sofá favorito de mamá."],D:["La mesa del desayuno. Hay un vaso de leche Mu-Mu."],K:["La encimera de la cocina."],M:["Una silla."]};
@@ -104,3 +104,18 @@ REG.forEach(r=>{r.pass=99});
 {const _a=exArrive;exArrive=function(){try{const c=exAt(EX.x,EX.y),w=EX.M&&EX.M.w&&EX.M.w[c];if(w&&w.xb&&xbCount()<w.xb){const st=exSt(),g=XGYM[0];snd("ui");
   exSay(["Un guarda te detiene:","«Por aquí solo pueden pasar quienes tengan la "+g.b+" "+g.ic+".»","«Ve al Gimnasio de Pueblo Brisa y vence a la "+g.n+". ¡Te estaré esperando!»"],()=>{exStepBack();st.x=EX.x;st.y=EX.y;st.f=EX.f});return}}catch(e){}return _a.apply(this,arguments)}}
 Object.assign(STO_OBJ,{5:[4,"Detén a Noctis en la Playa Coral (Ruta 1 → sur · necesitas la Medalla Brote)"],6:[5,"Sube a la Cima Aurora (Pueblo Brisa → norte · necesitas la Medalla Brote)"]});
+// =====================================================================================
+// AL TERMINAR UNA ESCENA: si algún personaje se ha movido de su sitio (se acercó a hablarte, te acompañó…),
+// no salta de golpe: la pantalla se funde a negro mientras vuelve a su posición, como en los juegos clásicos
+// =====================================================================================
+const stSig=L=>L.filter(n=>n.story&&!n.gift).map(n=>n.sid+":"+n.px+","+n.py).sort().join("|");
+const _stRF=stRefresh;
+// durante una escena, quien se ha movido se queda donde está hasta que la escena termina
+stRefresh=function(){if(!EX.cut||!EX.M||EX._stForce)return _stRF.apply(this,arguments);
+  const keep={};EX.npcs.filter(n=>n.story&&!n.gift).forEach(n=>{keep[n.sid]=n});const r=_stRF.apply(this,arguments);
+  EX.npcs=EX.npcs.map(n=>{const k=n.story&&keep[n.sid];return k&&(k.px!==n.px||k.py!==n.py)?k:n});
+  Object.values(keep).forEach(k=>{if(!EX.npcs.some(n=>n.story&&n.sid===k.sid))EX.npcs.push(k)});return r};
+{const _sr=stRun;stRun=function(fn){const m0=EX.map;return _sr.call(this,async()=>{await fn();
+  try{if(EX.map!==m0||EX.title)return;for(let i=0;i<40&&EX.trans;i++)await sW(50);
+    const now=stSig(EX.npcs),want=stSig(stNPCs(EX.map).map(n=>Object.assign({},n,{px:n.x,py:n.y})));
+    if(now!==want){await sFade("fade",280);EX._stForce=1;try{_stRF()}finally{EX._stForce=0}await sW(120);await sFade("fadein",380)}}catch(e){console.error(e)}})}}

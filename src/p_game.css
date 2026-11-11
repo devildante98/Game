@@ -952,3 +952,38 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .exlkchip{position:absolute;left:50%;transform:translateX(-50%);top:8px;z-index:6;padding:4px 10px;border-radius:999px;background:rgba(20,24,40,.82);color:#fff;font-size:.75rem;font-weight:800;pointer-events:none;max-width:70%}
 .xgc.lkdead{filter:grayscale(1);opacity:.6}.xgc .lkrip{display:block;font-size:.65rem;color:#6b6f80}
 .lkno{grid-column:1/-1;margin:0 0 6px;text-align:center}
+/* menú principal de Exploración (estilo clásico) */
+.exsm{position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;padding:10px;
+  background:radial-gradient(ellipse at 30% 20%,rgba(120,240,255,.55),transparent 60%),linear-gradient(135deg,#0fb8d8,#1478b8);
+  background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px),radial-gradient(ellipse at 30% 20%,#5ff0ff,#12a0cc 55%,#0d6aa8);background-size:28px 28px,28px 28px,auto}
+.exsm[hidden]{display:none}
+.extitle.smopen>:not(.exsm){visibility:hidden}
+.exsm .smin{width:min(560px,100%);max-height:100%;overflow:auto;padding:4px;text-align:left;scrollbar-width:thin}
+.exsm h3{margin:2px 0 6px;font-size:.8rem;letter-spacing:3px;color:#eaffff;text-align:center;text-shadow:0 2px 0 #0b4a6a}
+.exsm p{margin:0 0 8px;font-size:.78rem;color:#fff;background:rgba(10,40,60,.55);padding:6px 10px;border-radius:8px}
+.exsm .smb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;margin:0 0 8px;padding:10px 16px 10px 34px;position:relative;
+  background:linear-gradient(#2f4a58,#243b47);border:4px solid #e9eef2;outline:2px solid #6d8592;outline-offset:-8px;border-radius:4px;color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.25);text-align:left;min-height:0;font-family:inherit}
+.exsm .smb b{font-size:1.15rem;letter-spacing:1px;font-weight:900;text-shadow:2px 2px 0 #10222c}
+.exsm .smb small{font-size:.75rem;color:#cfe6ee;font-weight:700}
+.exsm .smb.on,.exsm .smb:hover{border-color:#ffd34a;background:linear-gradient(#3a5a6a,#2b4756)}
+.exsm .smb.on::before{content:"▶";position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.9rem;color:#ffd34a;text-shadow:1px 1px 0 #000}
+.exsm .smx b{color:#c8d8e0}
+/* ficha de partida */
+.exsm .smcard{padding:0;border:5px solid #3fe6c4;outline:none;border-radius:6px;background:linear-gradient(#2c4b5a,#26404d 40%,#2d4f5d);overflow:hidden}
+.exsm .smcard.on,.exsm .smcard:hover{border-color:#ffd34a}
+.exsm .smcard.on::before{top:22px}
+.exsm .sch{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;box-sizing:border-box;padding:8px 14px 8px 32px;background:linear-gradient(#36596a,#2b4a59);border-bottom:3px solid #5a7886}
+.exsm .sch b{font-size:1.2rem}.exsm .sch b i{font-style:normal;font-size:.75rem;color:#7fffd0;letter-spacing:0}
+.exsm .sch span{font-size:1.05rem;font-weight:900;color:#f2f6f8;text-shadow:2px 2px 0 #10222c;text-align:right}
+.exsm .smcard.empty .sch span{color:#9fb6c0}
+.exsm .scb{display:flex;gap:10px;width:100%;box-sizing:border-box;padding:8px 14px 10px}
+.exsm .scl{flex:1;min-width:0}
+.exsm .scw{display:flex;align-items:center;gap:10px;margin-bottom:4px;background:rgba(0,0,0,.12);border-radius:6px;padding:2px 6px}
+.exsm .sctr{width:48px;height:72px;object-fit:contain;image-rendering:pixelated;margin:-6px 0}
+.exsm .scn{font-size:1.25rem!important;color:#4aa8ff!important;text-shadow:2px 2px 0 #0d2a4a!important}
+.exsm dl{display:grid;grid-template-columns:auto auto;gap:2px 16px;margin:0;font-weight:900;font-size:1.05rem;text-shadow:2px 2px 0 #10222c}
+.exsm dt{color:#eef4f6}.exsm dd{margin:0;text-align:right;color:#fff}
+.exsm .scl em{display:block;margin-top:4px;font-style:normal;font-size:.75rem;color:#ffd34a}
+.exsm .sct{display:grid;grid-template-columns:repeat(2,56px);grid-auto-rows:56px;gap:2px 8px;align-content:center}
+.exsm .sct img{width:56px;height:56px;image-rendering:pixelated}
+@media (max-width:520px){.exsm .sct{grid-template-columns:repeat(3,40px);grid-auto-rows:40px}.exsm .sct img{width:40px;height:40px}.exsm .scb{flex-direction:column}}

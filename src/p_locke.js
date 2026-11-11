@@ -93,7 +93,7 @@ function lkUI(){const d=$("exPC");if(!d)return;const L=lkD(),R=rnD(),zs=Object.v
   '<p class="mut">Retos para tu partida de Exploración, como los que hacen los fans de la saga (por ejemplo, el Pokémon Añil). No afectan al juego normal.</p>'+
   '<section class="lksec'+(L.on?' on':'')+'"><label class="lkmain">'+chk('data-lk="on"',L.on)+'<span><b>🔒 Modo Locke</b><small>'+(L.on?(L.fail?'☠️ Reto terminado: todos tus Pokémon cayeron.':'Activo · '+zs.length+' zonas usadas · '+L.dead.length+' caídos · '+alive+' vivos'):'Apagado. Elige las reglas y actívalo cuando quieras.')+'</small></span></label>'+
   '<div class="lkrules">'+LKR.map(([k,t,s])=>'<label class="lkr">'+chk('data-lkr="'+k+'"',L.r[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
-  '<section class="lksec'+(R.w||R.t?' on':'')+'"><b class="lkh">🎲 Modo Random</b><div class="lkrules">'+RNDR.map(([k,t,s])=>'<label class="lkr">'+chk('data-rn="'+k+'"',R[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
+  '<section class="lksec'+(R.w||R.t||R.i?' on':'')+'"><b class="lkh">🎲 Modo Random</b><div class="lkrules">'+RNDR.map(([k,t,s])=>'<label class="lkr">'+chk('data-rn="'+k+'"',R[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
   (L.on||zs.length?'<section class="lksec"><b class="lkh">🗺️ Capturas por zona</b>'+(zs.length?'<div class="lkzs">'+zs.map(z=>'<span class="lkz '+(z.s==="c"?"ok":"ko")+'"><b>'+esc(z.n)+'</b>'+(PM[z.p]?ico(PM[z.p],32):'')+esc(z.p)+' · '+(z.s==="c"?'✅ capturado':'❌ perdido')+'</span>').join("")+'</div>':'<p class="mut">Todavía no has tenido ningún encuentro con el modo Locke activo.</p>')+'</section>':'')+
   (L.dead.length?'<section class="lksec"><b class="lkh">🪦 Cementerio ('+L.dead.length+')</b><div class="lkzs">'+L.dead.map(x=>'<span class="lkz rip">'+(PM[x.n]?ico(PM[x.n],32):'')+'<b>'+esc(x.k||x.n)+'</b>'+(x.k?esc(x.n)+' · ':'')+'Nv'+x.l+' · '+esc(x.z||"")+'</span>').join("")+'</div></section>':'')+
   (L.on?'<div class="jrow"><button type="button" class="alt" data-lkx="reset">↺ Empezar el reto de nuevo</button></div>':'')}
@@ -117,9 +117,9 @@ XOV_IDS.push("exPC");
 {const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&EX.map==="casa_up"){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);
   if(c==="O"&&!EX.npcs.some(n=>n.px===EX.x+dx&&n.py===EX.y+dy)){snd("ui");exSay(["Enciendes tu PC…","«Retos de partida» · Modo Locke y Modo Random."],()=>lkOpen());return}}}catch(e){}return _i.apply(this,arguments)}}
 // aviso en pantalla mientras hay un reto activo
-setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr");if(!sc)return;let e=$("exLkChip");const L=lkD(),R=rnD(),on=L.on||R.w||R.t;
+setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr");if(!sc)return;let e=$("exLkChip");const L=lkD(),R=rnD(),on=L.on||R.w||R.t||R.i;
   if(!on){if(e)e.remove();return}if(!e){e=document.createElement("div");e.id="exLkChip";e.className="exlkchip";sc.appendChild(e)}
-  let t=(L.on?(L.fail?"☠️ Locke terminado":"🔒 Locke"):"")+(R.w||R.t?(L.on?" · ":"")+"🎲 Random":"");
+  let t=(L.on?(L.fail?"☠️ Locke terminado":"🔒 Locke"):"")+(R.w||R.t||R.i?(L.on?" · ":"")+"🎲 Random":"");
   if(L.on&&L.r.first&&EX.M&&!/^(casa|centro|tienda|gym_|liga|lab)|_h/.test(EX.map||"")){const z=L.z[EX.map];t+=" · "+(z?(z.s==="c"?"✅ ":"❌ ")+"captura usada aquí":"🎯 captura libre aquí")}
   if(e.textContent!==t)e.textContent=t}catch(x){}},700);
 // mando: con un cuadro de texto abierto (mote), A acepta y B pone uno al azar

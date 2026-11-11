@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.51"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.52"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794425473">
+<meta name="game-build" content="1794426347">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2643,6 +2643,41 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .exlkchip{position:absolute;left:50%;transform:translateX(-50%);top:8px;z-index:6;padding:4px 10px;border-radius:999px;background:rgba(20,24,40,.82);color:#fff;font-size:.75rem;font-weight:800;pointer-events:none;max-width:70%}
 .xgc.lkdead{filter:grayscale(1);opacity:.6}.xgc .lkrip{display:block;font-size:.65rem;color:#6b6f80}
 .lkno{grid-column:1/-1;margin:0 0 6px;text-align:center}
+/* menú principal de Exploración (estilo clásico) */
+.exsm{position:absolute;inset:0;z-index:8;display:flex;align-items:center;justify-content:center;padding:10px;
+  background:radial-gradient(ellipse at 30% 20%,rgba(120,240,255,.55),transparent 60%),linear-gradient(135deg,#0fb8d8,#1478b8);
+  background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px),radial-gradient(ellipse at 30% 20%,#5ff0ff,#12a0cc 55%,#0d6aa8);background-size:28px 28px,28px 28px,auto}
+.exsm[hidden]{display:none}
+.extitle.smopen>:not(.exsm){visibility:hidden}
+.exsm .smin{width:min(560px,100%);max-height:100%;overflow:auto;padding:4px;text-align:left;scrollbar-width:thin}
+.exsm h3{margin:2px 0 6px;font-size:.8rem;letter-spacing:3px;color:#eaffff;text-align:center;text-shadow:0 2px 0 #0b4a6a}
+.exsm p{margin:0 0 8px;font-size:.78rem;color:#fff;background:rgba(10,40,60,.55);padding:6px 10px;border-radius:8px}
+.exsm .smb{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;margin:0 0 8px;padding:10px 16px 10px 34px;position:relative;
+  background:linear-gradient(#2f4a58,#243b47);border:4px solid #e9eef2;outline:2px solid #6d8592;outline-offset:-8px;border-radius:4px;color:#fff;box-shadow:0 3px 0 rgba(0,0,0,.25);text-align:left;min-height:0;font-family:inherit}
+.exsm .smb b{font-size:1.15rem;letter-spacing:1px;font-weight:900;text-shadow:2px 2px 0 #10222c}
+.exsm .smb small{font-size:.75rem;color:#cfe6ee;font-weight:700}
+.exsm .smb.on,.exsm .smb:hover{border-color:#ffd34a;background:linear-gradient(#3a5a6a,#2b4756)}
+.exsm .smb.on::before{content:"▶";position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:.9rem;color:#ffd34a;text-shadow:1px 1px 0 #000}
+.exsm .smx b{color:#c8d8e0}
+/* ficha de partida */
+.exsm .smcard{padding:0;border:5px solid #3fe6c4;outline:none;border-radius:6px;background:linear-gradient(#2c4b5a,#26404d 40%,#2d4f5d);overflow:hidden}
+.exsm .smcard.on,.exsm .smcard:hover{border-color:#ffd34a}
+.exsm .smcard.on::before{top:22px}
+.exsm .sch{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;box-sizing:border-box;padding:8px 14px 8px 32px;background:linear-gradient(#36596a,#2b4a59);border-bottom:3px solid #5a7886}
+.exsm .sch b{font-size:1.2rem}.exsm .sch b i{font-style:normal;font-size:.75rem;color:#7fffd0;letter-spacing:0}
+.exsm .sch span{font-size:1.05rem;font-weight:900;color:#f2f6f8;text-shadow:2px 2px 0 #10222c;text-align:right}
+.exsm .smcard.empty .sch span{color:#9fb6c0}
+.exsm .scb{display:flex;gap:10px;width:100%;box-sizing:border-box;padding:8px 14px 10px}
+.exsm .scl{flex:1;min-width:0}
+.exsm .scw{display:flex;align-items:center;gap:10px;margin-bottom:4px;background:rgba(0,0,0,.12);border-radius:6px;padding:2px 6px}
+.exsm .sctr{width:48px;height:72px;object-fit:contain;image-rendering:pixelated;margin:-6px 0}
+.exsm .scn{font-size:1.25rem!important;color:#4aa8ff!important;text-shadow:2px 2px 0 #0d2a4a!important}
+.exsm dl{display:grid;grid-template-columns:auto auto;gap:2px 16px;margin:0;font-weight:900;font-size:1.05rem;text-shadow:2px 2px 0 #10222c}
+.exsm dt{color:#eef4f6}.exsm dd{margin:0;text-align:right;color:#fff}
+.exsm .scl em{display:block;margin-top:4px;font-style:normal;font-size:.75rem;color:#ffd34a}
+.exsm .sct{display:grid;grid-template-columns:repeat(2,56px);grid-auto-rows:56px;gap:2px 8px;align-content:center}
+.exsm .sct img{width:56px;height:56px;image-rendering:pixelated}
+@media (max-width:520px){.exsm .sct{grid-template-columns:repeat(3,40px);grid-auto-rows:40px}.exsm .sct img{width:40px;height:40px}.exsm .scb{flex-direction:column}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2708,7 +2743,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.51</small>
+    <small class="pcver">Versión 6.52</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7382,8 +7417,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.51";
+const GAME_VER="6.52";
 const NEWS=[
+{v:"2026-11-11-6.52",ver:"6.52",at:"2026-11-11T20:45",t:"🎮 Menú principal clásico y objetos por el mundo",l:["Exploración: al pulsar «▶ Iniciar» se abre el menú principal clásico con Continuar, Partida nueva, Cargar partida, Borrar partida y Opciones","3 ranuras de guardado. Cada partida se ve en una ficha con el lugar, tu entrenador, medallas, Pokédex, tiempo de juego y tu equipo","Opciones: velocidad del texto, velocidad del juego, música, música según la zona, otros jugadores y controles","En el menú del juego hay una nueva opción, «Salir al menú principal», que guarda y vuelve a la pantalla de título","Hay NPC por pueblos, rutas, cuevas, bosques y playas que te regalan objetos al hablar con ellos, y el vecino de cada casa también te da algo la primera vez","Busca en neveras, estanterías, armarios, cómodas, baúles, encimeras, mesitas… y en las nuevas papeleras de casas, Centros y tiendas: en algunas hay objetos","Modo Random: nueva opción «Objetos aleatorios» en el PC de tu cuarto. Los objetos del suelo, de los muebles y los regalos son al azar"]},
 {v:"2026-11-11-6.51",ver:"6.51",at:"2026-11-11T20:31",t:"💻 Modo Locke y Modo Random en el PC de tu cuarto",l:["En Exploración, el PC de tu habitación (primera planta de tu casa) abre los «Retos de partida»","🔒 Modo Locke, con reglas que puedes elegir: motes obligatorios, solo el primer Pokémon de cada zona, muerte permanente con Cementerio, cláusula de duplicados, cláusula variocolor, sin objetos en combate, modo Set y rivales más fuertes","En el PC ves qué zonas ya has usado (capturado o perdido) y tu Cementerio. Mientras juegas, un aviso arriba te dice si aún tienes la captura libre en la zona en la que estás","🎲 Modo Random: Pokémon salvajes y de entrenadores (también líderes, Alto Mando y Equipo Ocaso) totalmente aleatorios de todas las generaciones, con o sin legendarios","Todo es solo para tu partida de Exploración y lo puedes activar o desactivar cuando quieras"]},
 {v:"2026-11-11-6.50.1",ver:"6.50.1",at:"2026-11-11T20:10",t:"🔧 Arreglos/Mejoras",l:["Exploración: nuevo control configurable «Volver al menú anterior» (teclado: Retroceso; mando: LB). Te lleva un paso atrás: de una ficha al panel, del panel o del mapa al menú, o cierra el menú. En combate, de los ataques vuelve a LUCHAR/MOCHILA/POKÉMON/HUIR","Nuevo botón de mando configurable «Abrir la mochila» (por defecto Y). En el teclado sigue siendo la I, y ahora también funciona con el menú u otro panel abierto","Puedes cambiarlos en Exploración → Menú → Controles","Arreglado: con el mando, B en combate podía abrir la mochila en lugar de volver atrás"]},
 {v:"2026-11-11-6.50",ver:"6.50",at:"2026-11-11T19:57",t:"🎵 Música de Exploración al estilo clásico",l:["12 temas nuevos y originales al estilo de las consolas portátiles clásicas: pulso con vibrato, segunda voz, bajo y percusión de 8 bits","La música cambia sola según dónde estés: pueblos, rutas (pradera, nieve y ceniza volcánica), bosque, playa, cuevas, Centros Pokémon y tiendas, gimnasios, casas, laboratorio y Liga","En los combates de Exploración suena el tema de Pokémon salvaje, el de entrenador o uno nuevo para líderes de gimnasio, el Alto Mando y los jefes del Equipo Ocaso","Suena si tienes la música activada y la opción «Música distinta en cada sección» encendida (lo está por defecto). Los temas nuevos también están en la lista del reproductor"]},
@@ -7653,7 +7689,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794425473";
+const GAME_B="1794426347";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15990,7 +16026,7 @@ function lkUI(){const d=$("exPC");if(!d)return;const L=lkD(),R=rnD(),zs=Object.v
   '<p class="mut">Retos para tu partida de Exploración, como los que hacen los fans de la saga (por ejemplo, el Pokémon Añil). No afectan al juego normal.</p>'+
   '<section class="lksec'+(L.on?' on':'')+'"><label class="lkmain">'+chk('data-lk="on"',L.on)+'<span><b>🔒 Modo Locke</b><small>'+(L.on?(L.fail?'☠️ Reto terminado: todos tus Pokémon cayeron.':'Activo · '+zs.length+' zonas usadas · '+L.dead.length+' caídos · '+alive+' vivos'):'Apagado. Elige las reglas y actívalo cuando quieras.')+'</small></span></label>'+
   '<div class="lkrules">'+LKR.map(([k,t,s])=>'<label class="lkr">'+chk('data-lkr="'+k+'"',L.r[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
-  '<section class="lksec'+(R.w||R.t?' on':'')+'"><b class="lkh">🎲 Modo Random</b><div class="lkrules">'+RNDR.map(([k,t,s])=>'<label class="lkr">'+chk('data-rn="'+k+'"',R[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
+  '<section class="lksec'+(R.w||R.t||R.i?' on':'')+'"><b class="lkh">🎲 Modo Random</b><div class="lkrules">'+RNDR.map(([k,t,s])=>'<label class="lkr">'+chk('data-rn="'+k+'"',R[k])+'<span><b>'+t+'</b><small>'+s+'</small></span></label>').join("")+'</div></section>'+
   (L.on||zs.length?'<section class="lksec"><b class="lkh">🗺️ Capturas por zona</b>'+(zs.length?'<div class="lkzs">'+zs.map(z=>'<span class="lkz '+(z.s==="c"?"ok":"ko")+'"><b>'+esc(z.n)+'</b>'+(PM[z.p]?ico(PM[z.p],32):'')+esc(z.p)+' · '+(z.s==="c"?'✅ capturado':'❌ perdido')+'</span>').join("")+'</div>':'<p class="mut">Todavía no has tenido ningún encuentro con el modo Locke activo.</p>')+'</section>':'')+
   (L.dead.length?'<section class="lksec"><b class="lkh">🪦 Cementerio ('+L.dead.length+')</b><div class="lkzs">'+L.dead.map(x=>'<span class="lkz rip">'+(PM[x.n]?ico(PM[x.n],32):'')+'<b>'+esc(x.k||x.n)+'</b>'+(x.k?esc(x.n)+' · ':'')+'Nv'+x.l+' · '+esc(x.z||"")+'</span>').join("")+'</div></section>':'')+
   (L.on?'<div class="jrow"><button type="button" class="alt" data-lkx="reset">↺ Empezar el reto de nuevo</button></div>':'')}
@@ -16014,9 +16050,9 @@ XOV_IDS.push("exPC");
 {const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&EX.map==="casa_up"){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);
   if(c==="O"&&!EX.npcs.some(n=>n.px===EX.x+dx&&n.py===EX.y+dy)){snd("ui");exSay(["Enciendes tu PC…","«Retos de partida» · Modo Locke y Modo Random."],()=>lkOpen());return}}}catch(e){}return _i.apply(this,arguments)}}
 // aviso en pantalla mientras hay un reto activo
-setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr");if(!sc)return;let e=$("exLkChip");const L=lkD(),R=rnD(),on=L.on||R.w||R.t;
+setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr");if(!sc)return;let e=$("exLkChip");const L=lkD(),R=rnD(),on=L.on||R.w||R.t||R.i;
   if(!on){if(e)e.remove();return}if(!e){e=document.createElement("div");e.id="exLkChip";e.className="exlkchip";sc.appendChild(e)}
-  let t=(L.on?(L.fail?"☠️ Locke terminado":"🔒 Locke"):"")+(R.w||R.t?(L.on?" · ":"")+"🎲 Random":"");
+  let t=(L.on?(L.fail?"☠️ Locke terminado":"🔒 Locke"):"")+(R.w||R.t||R.i?(L.on?" · ":"")+"🎲 Random":"");
   if(L.on&&L.r.first&&EX.M&&!/^(casa|centro|tienda|gym_|liga|lab)|_h/.test(EX.map||"")){const z=L.z[EX.map];t+=" · "+(z?(z.s==="c"?"✅ ":"❌ ")+"captura usada aquí":"🎯 captura libre aquí")}
   if(e.textContent!==t)e.textContent=t}catch(x){}},700);
 // mando: con un cuadro de texto abierto (mote), A acepta y B pone uno al azar
@@ -16025,6 +16061,200 @@ setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr");if(!sc)re
     for(let i=0;i<gp.buttons.length;i++)GP.prev[i]=pr(i);const M=dl.closest(".uidlg");
     if(ea){const y=M.querySelector('[data-u="1"]');if(!dl.value.trim()){const n=M.querySelector('[data-u="0"]');if(n)n.click()}else if(y)y.click()}else if(eb){const n=M.querySelector('[data-u="0"]');if(n)n.click()}return}}
   return _gp.apply(this,arguments)}}
+
+// =====================================================================================
+// OBJETOS EN EL MUNDO DE EXPLORACIÓN
+// · NPC que regalan un objeto al hablar con ellos (en pueblos y rutas, y el vecino de cada casa).
+// · Muebles en los que hay algo: neveras, estanterías, armarios, cómodas, baúles, encimeras… y papeleras.
+// · Con el Modo Random (opción «Objetos aleatorios» del PC) todos estos objetos, y los del suelo, son al azar.
+// Cada objeto se recoge una sola vez por partida (se guarda en S.ex, así que va con cada ranura de guardado).
+// =====================================================================================
+RNDR.push(["i","🎁 Objetos aleatorios","Los objetos del suelo, de los muebles y los que te regalan son totalmente al azar (cualquier objeto del juego)."]);
+const XIT_POOL=[
+  ["pot","pot","pb","pb","eter","oran","cheri","pecha","rev"],
+  ["spot","spot","sb","sb","rev","eter","elix","sitrus","hb_norm","hb_fire","hb_water","hb_grass","rb_fire","rb_water"],
+  ["hpot","ub","ub","rev","elix","cand","sitrus","lum","fire-stone","water-stone","thunder-stone","leaf-stone","moon-stone","hb_elec","hb_fight","hb_psy","everst","xshare"],
+  ["hpot","mpot","ub","mrev","cand","cand","melix","ppup","left","sash","qclaw","scope","shell","lucky","wherb","dusk-stone","shiny-stone","dawn-stone","ice-stone"],
+  ["mpot","mrev","ub","cand","cand","ppup","ppmax","lorb","avest","cband","cspecs","cscarf","ebelt","rhelm","mint15","mint1","mint3","mint11"]];
+// lo que regalan los NPC: algo más especial
+const XIT_GIFT=[
+  ["pb","pot","eter","oran","sitrus"],
+  ["sb","rev","hb_fire","hb_water","hb_grass","hb_elec","amcoin","xshare"],
+  ["ub","cand","fire-stone","water-stone","thunder-stone","leaf-stone","moon-stone","everst","lucky","sash"],
+  ["ub","cand","left","lorb","qclaw","sitrus","wherb","shiny-stone","dusk-stone","linking-cord","kings-rock"],
+  ["mrev","cand","ppmax","cband","cspecs","cscarf","avest","ebelt","mb"]];
+const xItTier=()=>{let b=0;try{b=xbCount()}catch(e){}return Math.max(0,Math.min(4,Math.floor(b/2)))};
+let XIT_ALL=null;
+function xItRandom(){if(!XIT_ALL)XIT_ALL=ITEMS.map(i=>i[0]).filter(k=>k!=="crys");return XIT_ALL[Math.floor(Math.random()*XIT_ALL.length)]}
+const xItRnd=()=>{try{return !!rnD().i}catch(e){return false}};
+function xItPick(gift){if(xItRnd())return xItRandom();const L=(gift?XIT_GIFT:XIT_POOL)[xItTier()];return L[Math.floor(Math.random()*L.length)]}
+const xItQty=id=>/^(pb|sb|pot|eter|oran|cheri|pecha)$/.test(id)&&!xItRnd()?1+Math.floor(Math.random()*2):1;
+function xItGive(id,q){q=q||1;xgRun(()=>{S.bag[id]=(S.bag[id]||0)+q});save();snd("lvl");return (q>1?q+" × ":"")+IN2(id)}
+// los objetos del suelo también pueden ser aleatorios
+{const _l=exLoot;exLoot=function(){if(xItRnd())return xItRandom();return _l.apply(this,arguments)}}
+const xGot=()=>{const st=exSt();st.got=st.got||{};return st.got};
+// ---------- casillas especiales ----------
+const XIT_ROOMS=/^(casa|casa_up|lab|centro.*|tienda_.*|.*_h\d|.*_h2b)$/;
+const XIT_FURN="LZCEtKi%";
+const XIT_NAME={L:"la nevera",Z:"la estantería",C:"el armario",E:"la cómoda",t:"el baúl de juguetes",K:"la encimera",i:"la mesita de noche","%":"la papelera"};
+const XIT_EMPTY={"%":["Es una papelera. Solo hay papeles arrugados.","La papelera está vacía… ¡qué limpio todo!","En la papelera hay un envoltorio de Caramelo Raro. Vacío, claro."]};
+// papelera: se busca un hueco junto a la pared que no corte el paso
+function xBinSpot(m,M,G){if(!/(^casa$|_h\d|_h2b|^centro|^tienda_|^lab$)/.test(m))return null;const H=G.length,W=G[0].length,fl="F";
+  const free=(x,y)=>{const c=G[y]&&G[y][x];return c!=null&&!EXBLK.includes(c)&&!XFURN.includes(c)&&c!=="U"&&!(M.w&&M.w[c])&&!"Pixyq%".includes(c)||c==="y"||c==="R"};
+  const reach=(bx,by)=>{const seen=new Set();let st=null;for(let y=0;y<H;y++)for(let x=0;x<W;x++){const c=G[y][x];if(M.w&&M.w[c]){st=[x,y];break}}if(!st)return -1;
+    const q=[st];seen.add(st+"");while(q.length){const[x,y]=q.shift();[[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{const nx=x+a,ny=y+b,k=nx+","+ny;if(seen.has(k)||(nx===bx&&ny===by))return;const c=G[ny]&&G[ny][nx];if(c==null)return;if(!(free(nx,ny)||(M.w&&M.w[c])))return;seen.add(k);q.push([nx,ny])})}return seen.size};
+  const base=reach(-1,-1),r=rngS(pvHash("bin"+m)),C=[];
+  for(let y=2;y<H-2;y++)for(let x=1;x<W-1;x++){if(G[y][x]!==fl)continue;const up=G[y-1][x];if(!(up==="W"||up==="x"||XFURN.includes(up)||"Zi".includes(up)))continue;if(Math.abs(x-7)<2&&y>6)continue;C.push([x,y])}
+  for(let i=C.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[C[i],C[j]]=[C[j],C[i]]}
+  for(const[x,y]of C){if(reach(x,y)===base-1)return[x,y]}return null}
+{const _l=exLoad;exLoad=function(m,x,y,f){const r=_l.apply(this,arguments);try{const M=EXM[m];const b=xBinSpot(m,M,EX.grid);if(b&&!(b[0]===EX.x&&b[1]===EX.y))EX.grid[b[1]][b[0]]="%";EX.hid=xHidden(m)}catch(e){console.error(e)}return r}}
+// en qué muebles de cada sala hay algo (siempre los mismos para cada sala)
+function xHidden(m){if(!XIT_ROOMS.test(m))return {};const G=EX.grid,r=rngS(pvHash("hid"+m)),C=[];
+  for(let y=0;y<G.length;y++)for(let x=0;x<G[y].length;x++)if(XIT_FURN.includes(G[y][x]))C.push([x,y]);
+  // un mueble por mueble repetido (las neveras o estanterías de varias casillas cuentan una vez)
+  const seenCh={},U=[];C.forEach(([x,y])=>{const c=G[y][x],k=c+(c==="Z"||c==="K"?y:"");if(seenCh[k])return;seenCh[k]=1;U.push([x,y])});
+  for(let i=U.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[U[i],U[j]]=[U[j],U[i]]}
+  const n=/_h\d|_h2b|^casa/.test(m)?2:1,o={};U.slice(0,n).forEach(([x,y])=>{o[x+","+y]=1});
+  const bin=C.find(([x,y])=>G[y][x]==="%");if(bin&&r()<.6)o[bin[0]+","+bin[1]]=1;return o}
+// dibujo y choque de la papelera
+function xBin(x){const k="BIN"+(x%2);if(XG[k])return XG[k];const c=xc(32,48),g=c.getContext("2d"),R=(a,b,w,h,col)=>xr(g,a,b,w,h,col);xdisc(g,16,45,10,3,"rgba(0,0,0,.22)");
+  R(8,22,16,23,xInk);R(9,23,14,21,x%2?"#7d8aa6":"#6f9a7a");R(9,23,14,3,"rgba(255,255,255,.35)");[12,16,20].forEach(a=>R(a,27,1,15,"rgba(0,0,0,.18)"));R(7,20,18,4,xInk);R(8,21,16,2,x%2?"#a8b4cc":"#94c2a0");R(13,18,6,3,xInk);R(14,19,4,1,"#ddd");
+  R(11,16,3,4,"#f6f2e6");R(17,15,3,5,"#e8e2cc");return XG[k]=c}
+{const _g=xGround;xGround=function(x,y,fr){try{if(exAt(x,y)==="%")return xFloor((EX.M&&EX.M.fl)||"wood",x,y)}catch(e){}return _g.apply(this,arguments)}}
+{const _o=xObj;xObj=function(c,x,y){if(c==="%")return xBin(x);return _o.apply(this,arguments)}}
+{const _b=exBlocked;exBlocked=function(x,y){if(exAt(x,y)==="%")return true;return _b.apply(this,arguments)}}
+// ---------- NPC que regalan objetos ----------
+const XGF_NPC=[["Excursionista","¡Hola! Llevo tanto tiempo caminando que me sobran cosas en la mochila.","Toma, a ti te hará más falta que a mí."],
+  ["Señora amable","¡Qué alegría ver a alguien tan joven de aventura!","Llévate esto, por si tus Pokémon se cansan."],
+  ["Abuelo","De joven yo también fui entrenador, ¿sabes? Ganaba poco, pero me lo pasaba en grande.","Este objeto me trajo suerte. Ahora es tuyo."],
+  ["Niña","¡Mira lo que me he encontrado! Pero mi mamá dice que no lo necesito…","¡Te lo regalo! ¡Úsalo bien!"],
+  ["Pescador","Hoy no pican… pero al menos encontré algo flotando en el agua.","¡Para ti! Yo prefiero mi caña."],
+  ["Chico deportista","¡Uf, qué carrera! Corro por aquí todas las mañanas.","Me han dado esto en la meta, pero no tengo Pokémon. ¡Quédatelo!"],
+  ["Botánica","Estudio las plantas de esta zona. ¡Hay bayas por todas partes!","Te doy una muestra de mi colección."],
+  ["Coleccionista","Colecciono objetos raros… y tengo demasiados repetidos.","Uno de mis repetidos para tu colección."]];
+const XGF_THX=["¡Cuida bien de tus Pokémon!","¿Te sirvió lo que te di? ¡Me alegro!","¡Suerte con los gimnasios!","Si vuelves por aquí, ¡salúdame!"];
+function xGiftSpots(m,M,taken){const music=M.music;let n=0;if(music==="town"&&!/_h|casa/.test(m))n=2;else if(["route","forest","beach","cave"].includes(music))n=1;if(!n)return[];
+  const G=M.g,H=G.length,W=G[0].length,blk=c=>EXBLK.includes(c)||XFURN.includes(c)||c==="U"||c==="T"||c==="%",ok=c=>c===M.base||c==="="||c===","||c==="P";
+  // casillas alcanzables desde las entradas del mapa
+  const seen=new Set(),q=[];for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(M.w&&M.w[G[y][x]]){seen.add(x+","+y);q.push([x,y])}
+  while(q.length){const[x,y]=q.shift();[[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{const nx=x+a,ny=y+b,k=nx+","+ny;if(seen.has(k))return;const c=G[ny]&&G[ny][nx];if(c==null)return;if(EXBLK.includes(c)&&!(M.w&&M.w[c]))return;seen.add(k);q.push([nx,ny])})}
+  const r=rngS(pvHash("gift"+m)),C=[];
+  for(let y=2;y<H-2;y++)for(let x=2;x<W-2;x++){if(!ok(G[y][x])||!seen.has(x+","+y)||taken.has(x+","+y))continue;let good=true;
+    for(let a=-1;a<=1&&good;a++)for(let b=-1;b<=1;b++){const c=G[y+b][x+a];if(blk(c)||(M.w&&M.w[c])||c==="H"||taken.has((x+a)+","+(y+b))){good=false;break}}if(good)C.push([x,y])}
+  for(let i=C.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[C[i],C[j]]=[C[j],C[i]]}
+  const out=[];for(const c of C){if(out.every(o=>Math.abs(o[0]-c[0])+Math.abs(o[1]-c[1])>8))out.push(c);if(out.length>=n)break}return out}
+{const _n=stNPCs;stNPCs=function(m){const L=_n(m);try{const M=EXM[m];if(!M)return L;const taken=new Set();(M.npc||[]).forEach(n=>taken.add(n.x+","+n.y));L.forEach(n=>taken.add(n.x+","+n.y));
+  xGiftSpots(m,M,taken).forEach(([x,y],i)=>{const id="gift:"+m+":"+i,k=Math.abs(pvHash(id))%XGF_NPC.length,D=XGF_NPC[k];
+    L.push({sid:"gift"+i,x:x,y:y,f:"d",n:D[0],look:exNpcLook(id),t:[],sight:0,txt:"",id:id,story:1,still:1,beat:true,px:x,py:y,f0:"d",gift:{id:id,k:k}})})}catch(e){console.error(e)}return L}}
+// ---------- hablar y mirar ----------
+{const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&!EX.cut){const[dx,dy]=EXDIR[EX.f],x=EX.x+dx,y=EX.y+dy,c=exAt(x,y),G=xGot();
+    const n=EX.npcs.find(q=>q.px===x&&q.py===y);
+    if(n&&n.gift){n.f={u:"d",d:"u",l:"r",r:"l"}[EX.f];const D=XGF_NPC[n.gift.k],key=n.gift.id;snd("ui");
+      if(G[key]){exSay([n.n+": «"+XGF_THX[Math.abs(pvHash(key))%XGF_THX.length]+"»"]);return}
+      exSay([n.n+": «"+D[1]+"»","«"+D[2]+"»"],()=>{const id=xItPick(true),q=xItQty(id);G[key]=1;const t=xItGive(id,q);exSay(["¡"+n.n+" te ha dado "+t+"!","Lo guardas en la Mochila."])});return}
+    // el vecino de cada casa también te da algo la primera vez que hablas con él
+    if(n&&Array.isArray(n.chat)&&/_h1$/.test(EX.map)&&!G["chat:"+n.id]){n.f={u:"d",d:"u",l:"r",r:"l"}[EX.f];snd("ui");
+      exSay(n.chat.map((l,k)=>k===0?n.n+": «"+l+"»":"«"+l+"»").concat(["«¡Ah! Y llévate esto, que a mí no me hace falta.»"]),()=>{G["chat:"+n.id]=1;const id=xItPick(true),t=xItGive(id,xItQty(id));exSay(["¡Has recibido "+t+"!","Lo guardas en la Mochila."])});return}
+    if(!n&&XIT_ROOMS.test(EX.map)&&XIT_FURN.includes(c)){const key=EX.map+":"+x+","+y,hid=EX.hid||{};
+      if(hid[x+","+y]&&!G[key]){G[key]=1;const id=xItPick(false),t=xItGive(id,xItQty(id));exSay(["Miras en "+XIT_NAME[c]+"…","¡Has encontrado "+t+"!","Lo guardas en la Mochila."]);return}
+      if(c==="%"){snd("ui");const L=XIT_EMPTY["%"];exSay([L[(x+y)%L.length]]);return}}}}catch(e){console.error(e)}
+  return _i.apply(this,arguments)}}
+
+// =====================================================================================
+// MENÚ PRINCIPAL DE EXPLORACIÓN (como en los juegos clásicos)
+// Al pulsar «▶ Iniciar» se abre la ventana: Continuar · Partida nueva · Cargar partida · Borrar partida · Opciones.
+// Hay 3 ranuras de guardado: la activa vive en S.ex / S.xg (como siempre) y las otras se guardan en S.exSl.d.
+// Desde el menú del juego, «Salir al menú principal» vuelve a la pantalla de título.
+// =====================================================================================
+const SL_N=3;
+function slD(){if(!S.exSl||typeof S.exSl!=="object")S.exSl={cur:1,d:{}};S.exSl.d=S.exSl.d||{};if(!(S.exSl.cur>=1&&S.exSl.cur<=SL_N))S.exSl.cur=1;return S.exSl}
+function slData(k){const L=slD();return k===L.cur?{ex:S.ex,xg:S.xg}:(L.d[k]||{})}
+function slHas(k){const d=slData(k),sto=d.ex&&d.ex.sto,xg=d.xg;
+  return !!((xg&&xg.started)||(sto&&((sto.s|0)>0||(sto.f&&(sto.f.woke||sto.f.st))))||(xg&&xg.owned&&Object.keys(xg.owned).some(n=>xg.owned[n]>0)))}
+function slInfo(k){const d=slData(k),ex=d.ex||{},xg=d.xg||{},f=(ex.sto&&ex.sto.f)||{};let med=0;try{med=XGYM.reduce((a,g,i)=>a+(f["xb"+i]?1:0),0)}catch(e){}
+  const dex=xg.owned?Object.keys(xg.owned).filter(n=>xg.owned[n]>0&&PM[n]).length:0,pt=xg.pt|0,h=Math.floor(pt/3600),m=Math.floor(pt%3600/60);
+  const team=(xg.team||[]).filter(n=>n&&PM[n]&&xg.owned&&xg.owned[n]>0).slice(0,6);
+  return {loc:(EXM[ex.m]||{}).n||"—",med:med,dex:dex,time:h+"h "+m+"m",team:team,mote:xg.mote||{},lk:!!(xg.lk&&xg.lk.on),rnd:!!(xg.rnd&&(xg.rnd.w||xg.rnd.t||xg.rnd.i))}}
+// deja la Exploración lista para la ranura activa (mapa, historia, compañero…)
+function slReset(){try{if(typeof XGSW!=="undefined"&&XGSW)xgOut()}catch(e){}
+  Object.assign(EX,{map:null,grid:null,dlg:null,pend:[],cut:null,walkTo:null,fol:null,battle:null,trans:null,choice:null,mv:null,banner:null});
+  try{XFM=null}catch(e){}try{exStart()}catch(e){console.error(e)}try{exTitleUI()}catch(e){}save()}
+function slSwitch(k){const L=slD();if(k===L.cur)return;try{if(typeof XGSW!=="undefined"&&XGSW)xgOut()}catch(e){}
+  L.d[L.cur]={ex:S.ex,xg:S.xg};const t=L.d[k]||{};delete L.d[k];
+  if(t.ex)S.ex=t.ex;else delete S.ex;if(t.xg)S.xg=t.xg;else delete S.xg;L.cur=k;slReset()}
+function slWipe(k){const L=slD();if(k===L.cur){delete S.ex;delete S.xg;slReset()}else{delete L.d[k];save()}}
+// tiempo de juego de cada partida
+setInterval(()=>{try{if(EX.on&&!EX.title&&!document.hidden&&EX.cv&&EX.cv.isConnected&&EX.cv.offsetParent){const X=xgData();X.pt=(X.pt|0)+5}}catch(e){}},5000);
+// velocidad del texto de los diálogos
+if(O.exTxt==null)O.exTxt=0;
+{const _d=exDlgDraw;exDlgDraw=function(){try{const d=EX.dlg;if(d&&O.exTxt){const t=exDlgT(d.l[d.i]||"");d.c=O.exTxt===2?t.length:Math.min(t.length,(d.c||0)+1.6)}}catch(e){}return _d.apply(this,arguments)}}
+// ---------- la ventana ----------
+const SM={v:null,go:false};
+{const _g=exGo;exGo=function(){if(!EX.title)return;if(!SM.go){smOpen("main");return}SM.go=false;smClose(true);return _g.apply(this,arguments)}}
+function smBox(){const T=$("exTitle");if(!T)return null;let b=$("exStartM");if(!b){b=document.createElement("div");b.id="exStartM";b.className="exsm";b.hidden=true;T.appendChild(b);b.addEventListener("click",smClick)}return b}
+function smOpen(v){const b=smBox();if(!b)return;SM.v=v;b.hidden=false;$("exTitle").classList.add("smopen");smRender();snd("ui")}
+function smClose(quiet){const b=$("exStartM");if(b)b.hidden=true;SM.v=null;const T=$("exTitle");if(T)T.classList.remove("smopen");if(!quiet)snd("ui")}
+function smStart(){SM.go=true;exGo()}
+const smBtn=(act,t,sub,cls)=>'<button type="button" class="smb'+(cls?" "+cls:"")+'" data-sm="'+act+'"><b>'+t+'</b>'+(sub?'<small>'+sub+'</small>':'')+'</button>';
+// ficha de la partida (como en los juegos clásicos): lugar, entrenador, medallas, Pokédex, tiempo y equipo
+function smCard(k,act){const has=slHas(k),cur=slD().cur===k;
+  if(!has)return '<button type="button" class="smb smcard empty" data-sm="'+act+'" data-k="'+k+'"><div class="sch"><b>Partida '+k+'</b><span>— Vacía —</span></div></button>';
+  const i=slInfo(k);let tr="";try{tr='<img class="sctr" src="'+trURL(myLook(),"f","i")+'" alt="">'}catch(e){}
+  return '<button type="button" class="smb smcard" data-sm="'+act+'" data-k="'+k+'"><div class="sch"><b>Partida '+k+(cur&&act!=="cont"?' <i>· activa</i>':'')+'</b><span>'+esc(i.loc)+'</span></div>'+
+    '<div class="scb"><div class="scl"><div class="scw">'+tr+'<b class="scn">'+esc(S.nick||"Entrenador")+'</b></div>'+
+    '<dl><dt>Medallas:</dt><dd>'+i.med+'</dd><dt>Pokédex:</dt><dd>'+i.dex+'</dd><dt>Tiempo:</dt><dd>'+i.time+'</dd></dl>'+
+    (i.lk||i.rnd?'<em>'+(i.lk?'🔒 Locke ':'')+(i.rnd?'🎲 Random':'')+'</em>':'')+'</div>'+
+    '<div class="sct">'+i.team.map(n=>'<span title="'+esc(i.mote[n]||n)+'">'+ico(PM[n],56)+'</span>').join("")+'</div></div></button>'}
+function smSlot(k,act){return smCard(k,act)}
+function smRender(){const b=$("exStartM");if(!b)return;const v=SM.v,L=slD(),has=slHas(L.cur);let h="";
+  if(v==="main"){
+    h=(has?'<h3>CONTINUAR</h3>'+smCard(L.cur,"cont"):'<h3>MENÚ PRINCIPAL</h3>')+
+      smBtn("new","PARTIDA NUEVA")+smBtn("load","CARGAR PARTIDA")+smBtn("del","BORRAR PARTIDA")+smBtn("opt","OPCIONES")+smBtn("back","VOLVER","","smx")}
+  else if(v==="new")h='<h3>PARTIDA NUEVA</h3><p>Elige una ranura. Si ya tiene una partida, se borrará.</p>'+[1,2,3].map(k=>smSlot(k,"newk")).join("")+smBtn("main","VOLVER","","smx");
+  else if(v==="load")h='<h3>CARGAR PARTIDA</h3>'+[1,2,3].map(k=>smSlot(k,"loadk")).join("")+smBtn("main","VOLVER","","smx");
+  else if(v==="del")h='<h3>BORRAR PARTIDA</h3><p>⚠️ Se borra todo lo de esa partida de Exploración: historia, Pokémon, objetos y medallas. No se puede deshacer.</p>'+[1,2,3].map(k=>smSlot(k,"delk")).join("")+smBtn("main","VOLVER","","smx");
+  else if(v==="opt"){const ts=["Normal","Rápida","Instantánea"][O.exTxt|0];
+    h='<h3>OPCIONES</h3>'+smBtn("o_txt","VELOCIDAD DEL TEXTO","◀ "+ts+" ▶")+smBtn("o_spd","VELOCIDAD DEL JUEGO","◀ x"+exSpd()+" ▶")+
+      smBtn("o_mus","MÚSICA",typeof mplaying!=="undefined"&&mplaying?"Activada":"Desactivada")+smBtn("o_sec","MÚSICA SEGÚN LA ZONA",O.secMus?"Sí":"No")+
+      smBtn("o_mp","OTROS JUGADORES",O.exMp===false?"Ocultos":"Visibles")+smBtn("o_ctl","CONTROLES","Teclado y mando")+smBtn("main","VOLVER","","smx")}
+  b.innerHTML='<div class="smin">'+h+'</div>';
+  const first=b.querySelector(".smb");if(first)first.classList.add("on")}
+function smFocus(el){const b=$("exStartM");b.querySelectorAll(".smb.on").forEach(x=>x.classList.remove("on"));el.classList.add("on");try{el.scrollIntoView({block:"nearest"})}catch(e){}}
+async function smClick(e){const t=e.target.closest("[data-sm]");if(!t)return;e.stopPropagation();const a=t.dataset.sm,k=+t.dataset.k||0,L=slD();snd("ui");
+  if(a==="cont"){smStart();return}
+  if(a==="back"){smClose();return}
+  if(["main","new","load","del","opt"].includes(a)){SM.v=a;smRender();return}
+  if(a==="newk"){if(slHas(k)&&!await uiDlg("La Partida "+k+" ya tiene datos. ¿Borrarla y empezar una partida nueva en esa ranura?",{yes:"Sí, empezar de cero",no:"Cancelar",danger:true}))return;
+    if(k!==L.cur)slSwitch(k);delete S.ex;delete S.xg;slReset();xgData().started=Date.now();save();toast("✨ Partida nueva en la ranura "+k);smStart();return}
+  if(a==="loadk"){if(!slHas(k)){toast("Esa ranura está vacía. Usa «Partida nueva».");return}if(k!==L.cur)slSwitch(k);smStart();return}
+  if(a==="delk"){if(!slHas(k)){toast("Esa ranura ya está vacía.");return}
+    if(!await uiDlg("¿Borrar la Partida "+k+"? Se perderá todo su progreso de Exploración.",{yes:"Borrar",no:"Cancelar",danger:true}))return;
+    if(!await uiDlg("¿Seguro? Esto no se puede deshacer.",{yes:"Sí, borrar para siempre",no:"No",danger:true}))return;
+    slWipe(k);snd("faint");toast("🗑️ Partida "+k+" borrada");smRender();return}
+  if(a==="o_txt"){O.exTxt=((O.exTxt|0)+1)%3;saveO();smRender();smFocus($("exStartM").querySelector('[data-sm="o_txt"]'));return}
+  if(a==="o_spd"){exSpdNext();smRender();smFocus($("exStartM").querySelector('[data-sm="o_spd"]'));return}
+  if(a==="o_mus"){try{if(mplaying)mstop();else mstart()}catch(x){}smRender();smFocus($("exStartM").querySelector('[data-sm="o_mus"]'));return}
+  if(a==="o_sec"){O.secMus=O.secMus?0:1;saveO();try{applyO()}catch(x){}smRender();smFocus($("exStartM").querySelector('[data-sm="o_sec"]'));return}
+  if(a==="o_mp"){O.exMp=O.exMp===false;save();smRender();smFocus($("exStartM").querySelector('[data-sm="o_mp"]'));return}
+  if(a==="o_ctl"){const c=$("exCtl");if(c){c.hidden=false;EX.bind=null;exCtlUI()}return}}
+// teclado y mando en la ventana
+window.addEventListener("keydown",e=>{const b=$("exStartM");if(!b||b.hidden||!EX.title||document.querySelector(".uidlg:not(.mvdlg)"))return;if($("exCtl")&&!$("exCtl").hidden)return;
+  const a=exAct(e.key),dir={ArrowUp:"u",ArrowDown:"d"}[e.key]||(a==="u"||a==="d"?a:null);e.preventDefault();e.stopImmediatePropagation();
+  const L=[...b.querySelectorAll(".smb")],i=Math.max(0,L.findIndex(x=>x.classList.contains("on")));
+  if(dir){smFocus(L[(i+(dir==="d"?1:-1)+L.length)%L.length]);snd("ui");return}
+  if(a==="l"||a==="r"||e.key==="ArrowLeft"||e.key==="ArrowRight"){const c=L[i];if(c&&/^o_(txt|spd|mus|sec|mp)$/.test(c.dataset.sm))c.click();return}
+  if(e.repeat)return;
+  if(a==="a"||e.key==="Enter"||e.key===" "){if(L[i])L[i].click();return}
+  if(a==="b"||a==="back"||e.key==="Escape"||e.key==="Backspace"){if(SM.v==="main")smClose();else{SM.v="main";smRender()}snd("ui")}},true);
+// ---------- «Salir al menú principal» desde el menú del juego ----------
+EXM_IT.splice(EXM_IT.findIndex(x=>x[0]==="x"),0,["title","🏠","Salir al menú principal"]);
+function exToTitle(){if(EX.cut||EX.battle||(typeof fcd!=="undefined"&&fcd)){toast("Ahora no puedes salir al menú principal.");return}
+  try{exMenuClose()}catch(e){}XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});try{if(typeof WM!=="undefined"&&WM.open)wmHide()}catch(e){}try{if(typeof XSH!=="undefined"&&XSH.open)xsClose()}catch(e){}
+  try{XFM=null}catch(e){}EX.dlg=null;EX.keys={};EX.kst=[];EX.choice=null;save();try{if(window.cloudFlush)window.cloudFlush()}catch(e){}
+  EX.title=true;exTitleUI();smOpen("main");toast("💾 Partida guardada")}
+{const _md=exMenuDo;exMenuDo=function(k){if(k==="title"){try{exMenuClose()}catch(e){}exToTitle();return}return _md.apply(this,arguments)}}
+// el texto de la pantalla de título habla de la ranura activa
+{const _t=exTitleUI;exTitleUI=function(){const r=_t.apply(this,arguments);try{if(EX.title){const w=$("exWhere"),L=slD();if(w&&!slHas(L.cur))w.textContent="✨ Pulsa Iniciar para empezar una partida nueva";else if(w&&!/^Partida/.test(w.textContent))w.textContent="Partida "+L.cur+" · "+w.textContent}else smClose(true)}catch(e){}return r}}
 
 </script>
 <script>

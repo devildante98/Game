@@ -499,8 +499,9 @@ async function finish(res){
     // en Exploración el premio va a los tickets de Exploración (cartera aparte)
     const xgw=typeof XGSW!=="undefined"&&!!XGSW&&typeof xTadd==="function"&&typeof EX!=="undefined"&&EX.battle&&EX.battle.rw;
     const amc=E.sd[0].t.some(t=>t.it==="amcoin");
+    let rw=0;
     if(xgw){const r=EX.battle.rw*(amc?2:1);if(!EX.battle.paid){EX.battle.paid=true;xTadd(r)}snd("win");await say("¡Recompensa: +"+fmt(r)+" 🎟️ de Exploración!")}else{
-    const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL()*(amc?2:1));S.t+=rw;
+    rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL()*(amc?2:1));S.t+=rw;
     snd("win");await say("¡Recompensa: +"+fmt(rw)+" 🎟️!"+(rw===33550336?" ¡¡PREMIO GORDO!!":""));
     if(rw===33550336)await jackpot(rw);}
     if(res==="win"){
@@ -716,3 +717,5 @@ window.addEventListener("keydown",e=>{
   const L=[...m.querySelectorAll(".mvb")].filter(b=>b.offsetParent);if(!L.length)return;
   const b=L[+e.key-1];e.preventDefault();e.stopImmediatePropagation();
   if(b&&!b.disabled){b.click();b.animate([{transform:"scale(.95)"},{transform:"none"}],140)}},true);
+// red de seguridad: si algo falla al repartir premios, el combate termina igual y aparece «Volver»
+{const _fin=finish;finish=async function(res){try{return await _fin.apply(this,arguments)}catch(e){console.error(e);try{if(typeof afterBattle==="function")await afterBattle(res)}catch(e2){console.error(e2)}try{save();render();updTeam()}catch(e3){}$("menu").innerHTML='<button data-k="9">Volver</button>';B.busy=false}}}

@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.49.3";
+const GAME_VER="6.49.4";
 const NEWS=[
+{v:"2026-11-11-6.49.4",ver:"6.49.4",at:"2026-11-11T19:35",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al ganar un combate (contra entrenadores o salvajes) se quedaba parado después del botín y no aparecía el botón «Volver». Ahora el combate termina con normalidad y recibes la experiencia","Además, si algún día fallase algo al repartir los premios, el combate se cierra igualmente y aparece «Volver»"]},
 {v:"2026-11-11-6.49.3",ver:"6.49.3",at:"2026-11-11T17:23",t:"🔧 Arreglos/Mejoras",l:["Combate con mando: ahora se ve qué botón tienes seleccionado (borde amarillo y una flecha ▶), tanto en LUCHAR/MOCHILA/POKÉMON/HUIR como en los ataques. Al empezar el turno ya hay uno marcado","El recuadro de información del ataque mantiene siempre el mismo tamaño, tenga o no indicación de eficacia (×2, ×½…)"]},
 {v:"2026-11-11-6.49.2",ver:"6.49.2",at:"2026-11-11T17:15",t:"🔧 Arreglos/Mejoras",l:["Exploración: si tienes Pokémon por encima del límite de nivel (por ejemplo, de antes de que existiera), ya no se bloquean los combates. Luchan al nivel del límite (Nv14 hasta vencer a Brezo) y en el panel del equipo se indica con «🔒 lucha a Nv…»","Su nivel real no se pierde: lo recuperan en cuanto consigues la medalla siguiente. Mientras tanto no ganan experiencia"]},
 {v:"2026-11-11-6.49.1",ver:"6.49.1",at:"2026-11-11T17:11",t:"🔧 Arreglos/Mejoras",l:["Arreglado otro caso en el que el juego podía creer por error que tu navegador iba acelerado (sobre todo jugando desde otros países): ahora solo se fía de la hora que da directamente el servidor y exige que las medidas coincidan antes de frenar nada","Si te frenó la producción por error, escríbenos en Sugerencias y te devolvemos los tickets"]},

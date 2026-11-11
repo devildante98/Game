@@ -1,0 +1,211 @@
+rules_version = '2';
+// =====================================================================================
+// Reglas de Firestore de Poke Gacha Online
+// Cópialas en la consola de Firebase → Firestore Database → Reglas → Publicar.
+// Si algo deja de funcionar, en esa misma pantalla puedes volver a la versión anterior (historial).
+// =====================================================================================
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- utilidades ----------
+    function signedIn() { return request.auth != null; }
+    function me() { return request.auth.uid; }
+    function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function d() { return request.resource.data; }
+    function str(v, max) { return v is string && v.size() <= max; }
+    function num(v, lo, hi) { return (v is int || v is float) && v >= lo && v <= hi; }
+    function optNum(f, lo, hi) { return !(f in d()) || num(d()[f], lo, hi); }
+    function optStr(f, max) { return !(f in d()) || str(d()[f], max); }
+
+    // ---------- administradores y sanciones (solo el administrador escribe) ----------
+    match /admins/{u} {
+      allow read: if signedIn() && me() == u;
+      allow write: if false;
+    }
+    match /bans/{u} {
+      allow read: if signedIn() && (me() == u || isAdmin());
+      allow write: if isAdmin();
+    }
+    match /fixes/{u} {
+      allow read, delete: if signedIn() && (me() == u || isAdmin());
+      allow create, update: if isAdmin();
+    }
+
+    // ---------- partida guardada en la nube: solo el dueño ----------
+    match /users/{u} {
+      allow read: if signedIn() && (me() == u || isAdmin());
+      allow create, update: if signedIn() && me() == u
+                   && d().data is string && d().data.size() < 1000000;
+      allow delete: if signedIn() && me() == u;
+    }
+
+    // ---------- clasificaciones (perfil público): valores dentro de lo posible ----------
+    match /ranks/{u} {
+      allow read: if true;
+      allow delete: if isAdmin();
+      allow create, update: if signedIn() && me() == u
+        && str(d().n, 40)
+        && optNum('dex', 0, 1500)   // Pokédex
+        && optNum('med', 0, 8)      // medallas
+        && optNum('prs', 0, 200)    // prestigio
+        && optNum('sh', 0, 1000000) // variocolores
+        && optNum('ach', 0, 5000)   // logros
+        && optNum('win', 0, 100000000)
+        && optNum('pw', 0, 10000000)
+        && optNum('bs', 0, 10000000)
+        && optNum('tw', 0, 100000)
+        && optNum('hof', 0, 100000)
+        && optNum('cap', 1, 100)
+        && optNum('pt', 0, 100000);
+    }
+
+    // ---------- torneo semanal y récords de minijuegos ----------
+    // Las claves son «2026-W45» (torneo) o «2026-W45_who» (récord de un minijuego).
+    // La puntuación no puede pasar del máximo posible de cada minijuego.
+    function maxScore(w) {
+      return {'who': 6000, 'mem': 1700, 'dig': 400, 'fish': 3000, 'thr': 2500, 'run': 20000,
+              'exc': 2500, 'wgt': 40000, 'fos': 2500, 'puz': 50000, 'hl': 50000}
+             .get(w.split('_').size() > 1 ? w.split('_')[1] : 'x', 50000);
+    }
+    match /tours/{w}/s/{u} {
+      allow read: if true;
+      allow delete: if signedIn() && (me() == u || isAdmin());
+      allow create, update: if signedIn() && me() == u
+        && num(d().sc, 1, maxScore(w))
+        && optStr('n', 40);
+    }
+
+    // ---------- apodos únicos ----------
+    match /nicks/{k} {
+      allow read: if true;
+      allow create: if signedIn() && d().uid == me() && str(d().nick, 40);
+      allow delete: if signedIn() && (resource.data.uid == me() || isAdmin());
+      allow update: if false;
+    }
+
+    // ---------- chat global, de gremio y privados ----------
+    match /chats/global/msgs/{m} {
+      allow read: if signedIn();
+      allow create: if signedIn() && d().u == me() && optStr('t', 1000) && optStr('n', 40);
+      allow delete: if signedIn() && (resource.data.u == me() || isAdmin());
+      allow update: if false;
+    }
+    match /dms/{id}/msgs/{m} {
+      allow read: if signedIn() && me() in id.split('_');
+      allow create: if signedIn() && me() in id.split('_') && d().u == me() && optStr('t', 1000);
+      allow delete: if signedIn() && (resource.data.u == me() || isAdmin());
+      allow update: if false;
+    }
+    match /gchats/{gid}/msgs/{m} {
+      function member() { return me() in get(/databases/$(database)/documents/guilds/$(gid)).data.members; }
+      allow read: if signedIn() && (member() || isAdmin());
+      allow create: if signedIn() && member() && d().u == me() && optStr('t', 1000);
+      allow delete: if signedIn() && (resource.data.u == me() || isAdmin());
+      allow update: if false;
+    }
+
+    // ---------- amigos ----------
+    match /friends/{u} {
+      allow read: if signedIn();
+      allow write: if signedIn() && me() == u;
+    }
+    match /freq/{id} {
+      allow read: if signedIn() && (resource == null || resource.data.from == me() || resource.data.to == me());
+      allow create: if signedIn() && d().from == me();
+      allow update: if signedIn() && (resource.data.to == me() || resource.data.from == me());
+      allow delete: if signedIn() && (resource.data.to == me() || resource.data.from == me());
+    }
+
+    // ---------- regalos entre amigos ----------
+    match /gifts/{id} {
+      allow read: if signedIn() && (resource == null || resource.data.to == me() || resource.data.from == me());
+      allow create: if signedIn() && d().from == me() && id.matches(me() + '_.*');
+      allow delete: if signedIn() && (resource.data.to == me() || resource.data.from == me());
+      allow update: if false;
+    }
+
+    // ---------- intercambios ----------
+    match /trades/{id} {
+      allow read: if signedIn() && (resource == null || resource.data.from == me() || resource.data.to == me());
+      allow create: if signedIn() && d().from == me() && d().st == 'req'
+        && num(d().o.l, 1, 100);
+      allow update: if signedIn() && (resource.data.from == me() || resource.data.to == me())
+        && (!('b' in d()) || num(d().b.l, 1, 100));
+      allow delete: if signedIn() && (resource.data.from == me() || resource.data.to == me());
+    }
+
+    // ---------- mercadillo ----------
+    match /market/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && d().s == me() && d().st == 'open'
+        && num(d().pr, 1000, 2000000000)
+        && (d().k == 'pk' ? num(d().pk.l, 1, 100) : num(d().it.q, 1, 999999));
+      // comprar: solo cambia el estado a vendido, con tu cuenta como comprador
+      allow update: if signedIn() && resource.data.st == 'open' && resource.data.s != me()
+        && d().st == 'sold' && d().b == me()
+        && d().diff(resource.data).affectedKeys().hasOnly(['st', 'b', 'bn']);
+      allow delete: if signedIn() && (resource.data.s == me() || resource.data.get('b', '') == me() || isAdmin());
+    }
+
+    // ---------- incursiones ----------
+    match /raids/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && d().h == me();
+      allow update: if signedIn();
+      allow delete: if signedIn() && (resource.data.h == me() || isAdmin());
+    }
+
+    // ---------- duelos de preguntas ----------
+    match /sdu/{id} {
+      allow read: if signedIn() && (resource == null || resource.data.a == me() || resource.data.b == me());
+      allow create: if signedIn() && d().a == me();
+      allow update, delete: if signedIn() && (resource.data.a == me() || resource.data.b == me());
+    }
+
+    // ---------- gremios ----------
+    match /guilds/{gid} {
+      allow read: if signedIn();
+      allow create: if signedIn() && d().owner == me();
+      allow update: if signedIn();
+      allow delete: if signedIn() && (resource.data.owner == me() || isAdmin());
+    }
+
+    // ---------- códigos de invitación ----------
+    match /refs/{c} {
+      allow read: if signedIn();
+      allow create, update: if signedIn() && d().u == me();
+      allow delete: if isAdmin();
+      match /inv/{u} {
+        allow read: if signedIn();
+        allow create, update: if signedIn() && me() == u && optNum('med', 0, 8);
+        allow delete: if isAdmin();
+      }
+    }
+
+    // ---------- reportes (incluidos los automáticos del sistema) ----------
+    match /reports/{id} {
+      allow create: if signedIn() && d().by == me() && optStr('t', 400);
+      allow read, delete: if isAdmin();
+    }
+
+    // ---------- sugerencias ----------
+    match /suggestions/{id} {
+      allow create: if signedIn() && d().uid == me()
+        && d().text is string && d().text.size() <= 1000
+        && (!('imgs' in d()) || d().imgs.size() <= 3)
+        && !('st' in d()) && !('rp' in d()) && !('rpAt' in d());
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == me());
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.uid == me() && resource.data.get('st', '') != 'done');
+      allow update: if isAdmin()
+        && d().diff(resource.data).affectedKeys().hasOnly(['imgs', 'st', 'rp', 'rpAt'])
+        && (!('st' in d()) || d().st in ['', 'seen', 'wip', 'done', 'no'])
+        && (!('rp' in d()) || (d().rp is string && d().rp.size() <= 1000));
+    }
+
+    // ---------- todo lo demás: cerrado ----------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

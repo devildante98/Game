@@ -1022,3 +1022,6 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 /* información de los objetos en la Mochila de Exploración */
 .xginfo,.xuinfo{margin:6px 0 8px;padding:8px 12px;border-radius:10px;background:#eef4ff;border:2px solid #c9d8f5;color:#2a3558;font-size:.82rem;line-height:1.35;min-height:1.35em}
 .xuinfo{background:#fff8e6;border-color:#f3d48a;color:#5a4410}
+/* ventana de «Usar objeto» de Exploración: se ajusta a su contenido y queda centrada */
+.exteam.xucomp{inset:auto 12%;top:50%;transform:translateY(-50%);max-height:86%;height:auto}
+@media (max-width:700px){.exteam.xucomp{inset:auto 4%;top:50%}}

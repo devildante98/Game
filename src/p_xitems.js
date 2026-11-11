@@ -112,9 +112,9 @@ function xItInfoLine(id){const d=xItDesc(id),it=ITEMS.find(i=>i[0]===id)||[];if(
       if(m){const id=xItByName(m[2]);if(id&&!/^(pb|pot)$/.test(id)){const info=xItInfoLine(id);if(info){out.push(info);added=true}}}});
     lines=out}}catch(e){}return _s.call(this,lines,cb)}}
 // recuadro de información en la Mochila
-{const _p=xgPanel;xgPanel=function(){const r=_p.apply(this,arguments);try{const box=$("exTeam");const g=box&&box.querySelector(".xgb");if(g&&!box.querySelector(".xginfo")){
+{const _p=xgPanel;xgPanel=function(){const r=_p.apply(this,arguments);try{const box=$("exTeam");if(box)box.classList.remove("xucomp");const g=box&&box.querySelector(".xgb");if(g&&!box.querySelector(".xginfo")){
     g.insertAdjacentHTML("beforebegin",'<div class="xginfo">ℹ️ Pasa el ratón o mueve el mando sobre un objeto para ver qué hace.</div>');const inf=box.querySelector(".xginfo");
     const show=e=>{const c=e.target.closest&&e.target.closest(".xgit[data-xgi]");if(!c)return;const l=xItInfoLine(c.dataset.xgi);if(l&&inf.textContent!==l)inf.textContent=l};
     g.addEventListener("mouseover",show);g.addEventListener("focusin",show)}}catch(e){}return r}}
 // también al ir a usar o equipar el objeto
-{const _u=xuUI;xuUI=function(){const r=_u.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgh");if(h&&XU.id&&!box.querySelector(".xuinfo")){const l=xItInfoLine(XU.id);if(l)h.insertAdjacentHTML("afterend",'<div class="xuinfo">'+esc(l)+'</div>')}}catch(e){}return r}}
+{const _u=xuUI;xuUI=function(){const r=_u.apply(this,arguments);try{const box=$("exTeam");if(box)box.classList.add("xucomp");const h=box&&box.querySelector(".xgh");if(h&&XU.id&&!box.querySelector(".xuinfo")){const l=xItInfoLine(XU.id);if(l)h.insertAdjacentHTML("afterend",'<div class="xuinfo">'+esc(l)+'</div>')}}catch(e){}return r}}

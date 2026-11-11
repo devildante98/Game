@@ -1015,3 +1015,4 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 @keyframes gprewob{0%,60%,100%{transform:rotate(0)}70%{transform:rotate(-16deg)}80%{transform:rotate(14deg)}90%{transform:rotate(-8deg)}}
 @media (prefers-reduced-motion:reduce){html.gmpre body:not(.gm):has(#auth[hidden])::after{animation:none}}
 .exsm .scl em.sclost{color:#ff7a7a}
+.exscr:has(.extitle:not([hidden])) #exDlg{display:none!important}

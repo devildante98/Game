@@ -87,9 +87,9 @@ window.addEventListener("keydown",e=>{const b=$("exStartM");if(!b||b.hidden||!EX
   if(a==="b"||a==="back"||e.key==="Escape"||e.key==="Backspace"){if(SM.v==="main")smClose();else{SM.v="main";smRender()}snd("ui")}},true);
 // ---------- «Salir al menú principal» desde el menú del juego ----------
 EXM_IT.splice(EXM_IT.findIndex(x=>x[0]==="x"),0,["title","🏠","Salir al menú principal"]);
-function exToTitle(){if(EX.cut||EX.battle||(typeof fcd!=="undefined"&&fcd)){toast("Ahora no puedes salir al menú principal.");return}
+function exToTitle(){if((typeof fcd!=="undefined"&&fcd)||EX.trans){toast("Termina el combate para salir al menú principal.");return}
   try{exMenuClose()}catch(e){}XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});try{if(typeof WM!=="undefined"&&WM.open)wmHide()}catch(e){}try{if(typeof XSH!=="undefined"&&XSH.open)xsClose()}catch(e){}
-  try{XFM=null}catch(e){}EX.dlg=null;EX.keys={};EX.kst=[];EX.choice=null;save();try{if(window.cloudFlush)window.cloudFlush()}catch(e){}
+  try{XFM=null}catch(e){}if(!EX.cut){EX.dlg=null;EX.choice=null}EX.keys={};EX.kst=[];save();try{if(window.cloudFlush)window.cloudFlush()}catch(e){}
   EX.title=true;exTitleUI();smOpen("main");toast("💾 Partida guardada")}
 {const _md=exMenuDo;exMenuDo=function(k){if(k==="title"){try{exMenuClose()}catch(e){}exToTitle();return}return _md.apply(this,arguments)}}
 // el texto de la pantalla de título habla de la ranura activa

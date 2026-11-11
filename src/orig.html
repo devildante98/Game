@@ -731,12 +731,12 @@ function icoSVG(p,s){
 }
 const REF={C:0,R:1,E:2,L:4},STAR={C:"★",R:"★★",E:"★★★",L:"★★★★"},KEY=(window.__KEY||"gacha-pkmn-v3"),TICK=30000;
 let S={g:[0,0,0,0,0],cl:0,lt:Date.now(),lv:{},ab:{},balls:{},mv:{},hp:{},ofd:{},when:{},team:["","","","","",""],sets:[],lg:null,lgDone:{},bag:{pot:3,spot:0,hpot:0,mpot:0,rev:1,mrev:0,pb:5,sb:0,ub:0,mb:0},t:3,last:Date.now(),owned:{},pity:0,daily:"",pulls:0};
-try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const _hs=str=>{let h1=0xdeadbeef^0x5f3a,h2=0x41c6ce57^0x2b9d;for(let i=0;i<str.length;i++){const c=str.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return (4294967296*(2097151&h2)+(h1>>>0)).toString(36)};const _sgk="pgc·"+KEY.length*7919+"·brisa";const sigAdd=j=>{if(typeof j!=="string"||j.slice(-1)!=="}")return j;return j.slice(0,-1)+',"_h":"'+_hs(j+_sgk)+'"}'};function sigCheck(r){const m=/,"_h":"([0-9a-z]+)"\}$/.exec(r);if(!m)return /"_hv":1/.test(r)?"missing":"none";const base=r.slice(0,m.index)+"}";return _hs(base+_sgk)===m[1]?"ok":"bad"}var SIG0="none";/* firma de la partida: si alguien edita a mano los datos guardados, la firma deja de cuadrar */try{const r=localStorage.getItem(KEY);if(r){SIG0=sigCheck(r);S=Object.assign(S,JSON.parse(r));delete S._h}}catch(e){}S._hv=1;
 const $=id=>document.getElementById(id);
 const OD={skip:1,bg:1,rain:1,flt:1,fists:1,intro:1,fx:1,pColl:1,pBat:1,pBag:1,pShop:1,pHeal:1,pPvp:1,bgprod:0,vol:.5,song:9,sfx:1,svol:.7,auto:1,askip:0,bigmode:"",tkeys:["u"]};
 let O=Object.assign({},OD);try{Object.assign(O,JSON.parse(localStorage.getItem("gacha-opts")||"{}"))}catch(e){}
 const saveO=()=>{try{localStorage.setItem("gacha-opts",JSON.stringify(O))}catch(e){}};
-const save=()=>{const j=JSON.stringify(S);try{localStorage.setItem(KEY,j)}catch(e){}if(window.cloudSave)window.cloudSave(j)};
+const save=()=>{delete S._h;const j=sigAdd(JSON.stringify(S));try{localStorage.setItem(KEY,j)}catch(e){}if(window.cloudSave)window.cloudSave(j)};
 (function(){
   const R=window._ren||{};let ch=false;
   ["owned","lv","balls","when","hp","mv","ab","ofd","pp","ppu"].forEach(k=>{const o=S[k];if(!o)return;Object.keys(o).forEach(n=>{if(R[n]&&R[n]!==n){o[R[n]]=o[n];delete o[n];ch=true}})});
@@ -3105,7 +3105,7 @@ document.addEventListener("keydown",e=>{
 });
 </script>
 <script>
-window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script");sc.textContent=document.getElementById("game").textContent;document.body.appendChild(sc)};
+window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
 document.getElementById("alocal").onclick=function(){document.getElementById("auth").hidden=true;window.startGameOnce()};
 </script>
 <script type="module">

@@ -10,10 +10,12 @@
 // quieto hasta que la hora real lo alcanza, así que lo ganado antes de detectarlo también se compensa).
 (function(){
   var W=window,o=Date.now.bind(Date),K={on:false,r:1,peak:1,at:0,last:0,blk:0,n:0},S=[],ds=0,dl=0,off=0,rv=0;
-  W.PGC_SPD=K;
-  W.srvNow=function(){return Date.now()+(K.so||0)};
+  // solo lectura desde fuera: no se puede apagar el freno desde la consola
+  W.PGC_SPD=Object.freeze({get on(){return K.on},get r(){return K.r},get peak(){return K.peak},get at(){return K.at},get last(){return K.last},get blk(){return K.blk},get n(){return K.n},get so(){return K.so}});
+  Object.defineProperty(W,"srvNow",{value:function(){return Date.now()+(K.so||0)},writable:false,configurable:false});
   function srv(){return ds+(o()-dl)/K.r}                    // hora real estimada
-  Date.now=function(){var l=o();if(!K.on){if(l>rv)rv=l;return l}var v=Math.floor(srv()+off);if(v<rv)v=rv;rv=v;K.blk=Math.max(0,l-v);return v};
+  var DN=function(){var l=o();if(!K.on){if(l>rv)rv=l;return l}var v=Math.floor(srv()+off);if(v<rv)v=rv;rv=v;K.blk=Math.max(0,l-v);return v};
+  try{Object.defineProperty(Date,"now",{value:DN,writable:false,configurable:false})}catch(e){Date.now=DN}
   function sample(){
     var a=o(),u=location.origin+"/robots.txt?_v=clk"+a.toString(36)+Math.random().toString(36).slice(2,6);
     fetch(u,{method:"HEAD",cache:"no-store"}).then(function(res){
@@ -39,7 +41,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.29.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.30"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -74,7 +76,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794387785">
+<meta name="game-build" content="1794388168">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2572,7 +2574,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.29.1</small>
+    <small class="pcver">Versión 6.30</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -3132,13 +3134,13 @@ function icoSVG(p,s){
 var SHINY_G=1/500,SHINY_S=1/250,SHINY_W=1/400;const shinyTotal=()=>Object.values(S.shiny||{}).reduce((a,b)=>a+b,0);
 const REF={C:0,R:1,E:2,M:3,L:4},STAR={C:"★",R:"★★",E:"★★★",M:"★★★★",L:"★★★★★"},KEY=(window.__KEY||"gacha-pkmn-v3"),TICK=30000;
 let S={g:[0,0,0,0,0],cl:0,lt:Date.now(),lv:{},ab:{},balls:{},mv:{},hp:{},ofd:{},when:{},team:["","","","","",""],sets:[],lg:null,lgDone:{},bag:{pot:3,spot:0,hpot:0,mpot:0,rev:1,mrev:0,pb:5,sb:0,ub:0,mb:0},t:3,last:Date.now(),owned:{},pity:0,daily:"",pulls:0};
-try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const _hs=str=>{let h1=0xdeadbeef^0x5f3a,h2=0x41c6ce57^0x2b9d;for(let i=0;i<str.length;i++){const c=str.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return (4294967296*(2097151&h2)+(h1>>>0)).toString(36)};const _sgk="pgc·"+KEY.length*7919+"·brisa";const sigAdd=j=>{if(typeof j!=="string"||j.slice(-1)!=="}")return j;return j.slice(0,-1)+',"_h":"'+_hs(j+_sgk)+'"}'};function sigCheck(r){const m=/,"_h":"([0-9a-z]+)"\}$/.exec(r);if(!m)return /"_hv":1/.test(r)?"missing":"none";const base=r.slice(0,m.index)+"}";return _hs(base+_sgk)===m[1]?"ok":"bad"}var SIG0="none";/* firma de la partida: si alguien edita a mano los datos guardados, la firma deja de cuadrar */try{const r=localStorage.getItem(KEY);if(r){SIG0=sigCheck(r);S=Object.assign(S,JSON.parse(r));delete S._h}}catch(e){}S._hv=1;
 const $=id=>document.getElementById(id);
 const OD={skip:1,bg:1,rain:1,flt:1,fists:1,intro:1,fx:1,pColl:1,pBat:1,pBag:1,pShop:1,pHeal:1,pPvp:1,bgprod:1,vol:.5,song:9,sfx:1,cry:1,svol:.7,auto:1,askip:0,bigmode:"",tkeys:["u"]};
 let O=Object.assign({},OD);try{Object.assign(O,JSON.parse(localStorage.getItem("gacha-opts")||"{}"))}catch(e){}
 if(!O.m2){O.bgprod=1;O.m2=1;try{localStorage.setItem("gacha-opts",JSON.stringify(O))}catch(e){}}
 const saveO=()=>{try{localStorage.setItem("gacha-opts",JSON.stringify(O))}catch(e){}};
-const save=()=>{const j=JSON.stringify(S);try{localStorage.setItem(KEY,j)}catch(e){}if(window.cloudSave)window.cloudSave(j)};
+const save=()=>{delete S._h;const j=sigAdd(JSON.stringify(S));try{localStorage.setItem(KEY,j)}catch(e){}if(window.cloudSave)window.cloudSave(j)};
 (function(){
   const R=window._ren||{};let ch=false;
   ["owned","lv","balls","when","hp","mv","ab","ofd","pp","ppu"].forEach(k=>{const o=S[k];if(!o)return;Object.keys(o).forEach(n=>{if(R[n]&&R[n]!==n){o[R[n]]=o[n];delete o[n];ch=true}})});
@@ -7228,7 +7230,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.29.1";
+const GAME_VER="6.30";
 const NEWS=[
 {v:"2026-11-11-6.29.1",ver:"6.29.1",at:"2026-11-11T10:03",t:"🔧 Arreglos/Mejoras",l:["Tutorial: el combate ya no se queda escondido detrás. El tutorial se aparta mientras luchas y sigue cuando termina","Exploración: arrastra los Pokémon del equipo para ordenarlos, o entre el equipo y la caja para meterlos, sacarlos o cambiarlos"]},
 {v:"2026-11-11b",ver:"6.29",at:"2026-11-11T09:56",t:"🔴 Incursiones mejoradas",l:["Nuevo botón «🎯 Elegir los ataques de tu equipo» en la sala de espera: eliges el ataque rápido y los dos cargados de cada Pokémon","Cada ataque muestra su eficacia contra el jefe, y los de estado aparecen como «No sirve en incursiones»","Incursiones con amigos: el contador y el inicio van con la hora del servidor, así coinciden para todos aunque los relojes de cada móvil sean distintos","¿Cuál pesa más?: el contador de segundos ahora va bajando (antes parecía congelado)"]},
@@ -7454,7 +7456,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794387785";
+const GAME_B="1794388168";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -13545,6 +13547,13 @@ function spdCheck(){const K=window.PGC_SPD;if(!K||!K.on)return;
         "Producción actual: "+fmt(tps())+" 🎟️/s · Tickets: "+fmt(S.t)+" · Tiempo jugado: "+Math.floor((S.ptime||0)/3600)+" h").slice(0,300),
       img:0,at:Date.now()}).catch(()=>{S.spdRep=""})}}
 setInterval(()=>{try{spdCheck()}catch(e){}},20000);
+// ================= PARTIDA EDITADA A MANO: aviso al administrador =================
+// La partida se guarda firmada. Si al cargarla la firma no cuadra, alguien ha cambiado los datos a mano.
+function sigReport(){try{if(typeof SIG0==="undefined"||SIG0!=="bad")return;const d=new Date().toISOString().slice(0,10);
+  if(S.sigRep===d||!window.FB||!window.FB.reportAdd||!window.FB.uid||!window.FB.uid())return;S.sigRep=d;S.sigBad=(S.sigBad|0)+1;save();
+  window.FB.reportAdd({u:window.FB.uid(),un:pvClean(pvNick()).slice(0,30),by:window.FB.uid(),byn:"🤖 Sistema",why:"💾 Partida editada a mano",
+    t:("Los datos guardados de su partida se han modificado fuera del juego (la firma no coincide). Tickets: "+fmt(S.t)+" · Pokémon: "+Object.keys(S.owned||{}).length+" · Producción: "+fmt(tps())+" 🎟️/s · Veces detectado: "+S.sigBad).slice(0,300),img:0,at:Date.now()}).catch(()=>{S.sigRep=""})}catch(e){}}
+setTimeout(sigReport,15000);setInterval(sigReport,120000);
 
 // =====================================================================================
 // APP INSTALABLE (PWA) Y NOTIFICACIONES
@@ -14472,10 +14481,25 @@ document.addEventListener("pointerup",e=>xdEnd(e,false));document.addEventListen
 document.addEventListener("click",e=>{if(Date.now()-XD.skip<350){e.stopImmediatePropagation();e.preventDefault()}},true);
 {const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgs");if(h&&!box.querySelector(".xgdh")){const t=document.createElement("small");t.className="mut xgdh";t.textContent="💡 También puedes arrastrar las tarjetas: entre el equipo para ordenarlo, o entre el equipo y la caja para cambiarlos.";box.querySelector(".xgh").after(t)}}catch(e){}return r}}
 document.addEventListener("dragstart",e=>{if(e.target&&e.target.closest&&e.target.closest("#exTeam .xgc,.tmbtn"))e.preventDefault()},true);
+// ================= lo que el HTML y Firebase necesitan ver desde fuera del juego =================
+// (el resto del código queda encerrado y no se puede manipular desde la consola)
+if(typeof pvRender!=="undefined"&&window.pvRender!==pvRender)window.pvRender=function(){return pvRender.apply(this,arguments)};
+if(typeof save!=="undefined"&&window.save!==save)window.save=function(){return save.apply(this,arguments)};
+if(typeof render!=="undefined"&&window.render!==render)window.render=function(){return render.apply(this,arguments)};
+if(typeof updTeam!=="undefined"&&window.updTeam!==updTeam)window.updTeam=function(){return updTeam.apply(this,arguments)};
+if(typeof icoErr!=="undefined"&&window.icoErr!==icoErr)window.icoErr=function(){return icoErr.apply(this,arguments)};
+if(typeof badgeErr!=="undefined"&&window.badgeErr!==badgeErr)window.badgeErr=function(){return badgeErr.apply(this,arguments)};
+if(typeof chImgLd!=="undefined"&&window.chImgLd!==chImgLd)window.chImgLd=function(){return chImgLd.apply(this,arguments)};
+if(typeof icoHDErr!=="undefined"&&window.icoHDErr!==icoHDErr)window.icoHDErr=function(){return icoHDErr.apply(this,arguments)};
+if(typeof icoLoad!=="undefined"&&window.icoLoad!==icoLoad)window.icoLoad=function(){return icoLoad.apply(this,arguments)};
+if(typeof itemErr!=="undefined"&&window.itemErr!==itemErr)window.itemErr=function(){return itemErr.apply(this,arguments)};
+if(typeof srch!=="undefined"&&window.srch!==srch)window.srch=function(){return srch.apply(this,arguments)};
+if(typeof tImgErr!=="undefined"&&window.tImgErr!==tImgErr)window.tImgErr=function(){return tImgErr.apply(this,arguments)};
+if(typeof zImgErr!=="undefined"&&window.zImgErr!==zImgErr)window.zImgErr=function(){return zImgErr.apply(this,arguments)};
 
 </script>
 <script>
-window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script");sc.textContent=document.getElementById("game").textContent;document.body.appendChild(sc)};
+window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
 document.getElementById("alocal").onclick=function(){document.getElementById("auth").hidden=true;window.startGameOnce()};
 </script>
 <script type="module">

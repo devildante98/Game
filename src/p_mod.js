@@ -91,3 +91,10 @@ function spdCheck(){const K=window.PGC_SPD;if(!K||!K.on)return;
         "Producción actual: "+fmt(tps())+" 🎟️/s · Tickets: "+fmt(S.t)+" · Tiempo jugado: "+Math.floor((S.ptime||0)/3600)+" h").slice(0,300),
       img:0,at:Date.now()}).catch(()=>{S.spdRep=""})}}
 setInterval(()=>{try{spdCheck()}catch(e){}},20000);
+// ================= PARTIDA EDITADA A MANO: aviso al administrador =================
+// La partida se guarda firmada. Si al cargarla la firma no cuadra, alguien ha cambiado los datos a mano.
+function sigReport(){try{if(typeof SIG0==="undefined"||SIG0!=="bad")return;const d=new Date().toISOString().slice(0,10);
+  if(S.sigRep===d||!window.FB||!window.FB.reportAdd||!window.FB.uid||!window.FB.uid())return;S.sigRep=d;S.sigBad=(S.sigBad|0)+1;save();
+  window.FB.reportAdd({u:window.FB.uid(),un:pvClean(pvNick()).slice(0,30),by:window.FB.uid(),byn:"🤖 Sistema",why:"💾 Partida editada a mano",
+    t:("Los datos guardados de su partida se han modificado fuera del juego (la firma no coincide). Tickets: "+fmt(S.t)+" · Pokémon: "+Object.keys(S.owned||{}).length+" · Producción: "+fmt(tps())+" 🎟️/s · Veces detectado: "+S.sigBad).slice(0,300),img:0,at:Date.now()}).catch(()=>{S.sigRep=""})}catch(e){}}
+setTimeout(sigReport,15000);setInterval(sigReport,120000);

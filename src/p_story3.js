@@ -190,3 +190,18 @@ document.addEventListener("pointerup",e=>xdEnd(e,false));document.addEventListen
 document.addEventListener("click",e=>{if(Date.now()-XD.skip<350){e.stopImmediatePropagation();e.preventDefault()}},true);
 {const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgs");if(h&&!box.querySelector(".xgdh")){const t=document.createElement("small");t.className="mut xgdh";t.textContent="💡 También puedes arrastrar las tarjetas: entre el equipo para ordenarlo, o entre el equipo y la caja para cambiarlos.";box.querySelector(".xgh").after(t)}}catch(e){}return r}}
 document.addEventListener("dragstart",e=>{if(e.target&&e.target.closest&&e.target.closest("#exTeam .xgc,.tmbtn"))e.preventDefault()},true);
+// ================= lo que el HTML y Firebase necesitan ver desde fuera del juego =================
+// (el resto del código queda encerrado y no se puede manipular desde la consola)
+if(typeof pvRender!=="undefined"&&window.pvRender!==pvRender)window.pvRender=function(){return pvRender.apply(this,arguments)};
+if(typeof save!=="undefined"&&window.save!==save)window.save=function(){return save.apply(this,arguments)};
+if(typeof render!=="undefined"&&window.render!==render)window.render=function(){return render.apply(this,arguments)};
+if(typeof updTeam!=="undefined"&&window.updTeam!==updTeam)window.updTeam=function(){return updTeam.apply(this,arguments)};
+if(typeof icoErr!=="undefined"&&window.icoErr!==icoErr)window.icoErr=function(){return icoErr.apply(this,arguments)};
+if(typeof badgeErr!=="undefined"&&window.badgeErr!==badgeErr)window.badgeErr=function(){return badgeErr.apply(this,arguments)};
+if(typeof chImgLd!=="undefined"&&window.chImgLd!==chImgLd)window.chImgLd=function(){return chImgLd.apply(this,arguments)};
+if(typeof icoHDErr!=="undefined"&&window.icoHDErr!==icoHDErr)window.icoHDErr=function(){return icoHDErr.apply(this,arguments)};
+if(typeof icoLoad!=="undefined"&&window.icoLoad!==icoLoad)window.icoLoad=function(){return icoLoad.apply(this,arguments)};
+if(typeof itemErr!=="undefined"&&window.itemErr!==itemErr)window.itemErr=function(){return itemErr.apply(this,arguments)};
+if(typeof srch!=="undefined"&&window.srch!==srch)window.srch=function(){return srch.apply(this,arguments)};
+if(typeof tImgErr!=="undefined"&&window.tImgErr!==tImgErr)window.tImgErr=function(){return tImgErr.apply(this,arguments)};
+if(typeof zImgErr!=="undefined"&&window.zImgErr!==zImgErr)window.zImgErr=function(){return zImgErr.apply(this,arguments)};

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49.5"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.49.6"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794422491">
+<meta name="game-build" content="1794422869">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2624,6 +2624,7 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .xswb{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0;padding:8px 12px;border-radius:10px;background:#fff4d6;color:#7a5200;font-weight:700}
 .xgc.xgsw{outline:3px dashed #e64040;outline-offset:2px;animation:xgswp .6s ease-in-out infinite alternate}@keyframes xgswp{to{transform:translateY(-3px)}}
 .xgcapl{display:block;font-size:.68rem;font-weight:800;color:#b5651d}
+.xmenub{margin-left:auto!important;margin-right:8px}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2689,7 +2690,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.49.5</small>
+    <small class="pcver">Versión 6.49.6</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7363,8 +7364,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.49.5";
+const GAME_VER="6.49.6";
 const NEWS=[
+{v:"2026-11-11-6.49.6",ver:"6.49.6",at:"2026-11-11T19:47",t:"🔧 Arreglos/Mejoras",l:["Exploración: los paneles que abres desde el menú lateral (Equipo y Mochila, Pokédex y Controles) tienen un botón «◀ Menú» junto a «Cerrar» que te devuelve al menú, en la misma opción, sin tener que volver a abrirlo","Con el mando (B) o con Esc también vuelves al menú. Si estás dentro de una ficha o una subpantalla, primero vuelves al panel"]},
 {v:"2026-11-11-6.49.5",ver:"6.49.5",at:"2026-11-11T19:41",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas ×100 ahora se ve cuáles son los Pokémon nuevos, con la etiqueta «¡NUEVO!» y un borde rojo brillante. En las tiradas más pequeñas también se resaltan"]},
 {v:"2026-11-11-6.49.4",ver:"6.49.4",at:"2026-11-11T19:35",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al ganar un combate (contra entrenadores o salvajes) se quedaba parado después del botín y no aparecía el botón «Volver». Ahora el combate termina con normalidad y recibes la experiencia","Además, si algún día fallase algo al repartir los premios, el combate se cierra igualmente y aparece «Volver»"]},
 {v:"2026-11-11-6.49.3",ver:"6.49.3",at:"2026-11-11T17:23",t:"🔧 Arreglos/Mejoras",l:["Combate con mando: ahora se ve qué botón tienes seleccionado (borde amarillo y una flecha ▶), tanto en LUCHAR/MOCHILA/POKÉMON/HUIR como en los ataques. Al empezar el turno ya hay uno marcado","El recuadro de información del ataque mantiene siempre el mismo tamaño, tenga o no indicación de eficacia (×2, ×½…)"]},
@@ -7629,7 +7631,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794422491";
+const GAME_B="1794422869";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11992,8 +11994,8 @@ window.addEventListener("keydown",e=>{if(e.key!=="Escape"||!EX.cv||!EX.cv.isConn
   const vis=id=>{const el=document.getElementById(id);return el&&!el.hidden};let done=false;
   if(typeof XSH!=="undefined"&&XSH.open){xsClose();done=true}
   else if(typeof WM!=="undefined"&&WM.open){wmHide();done=true}
-  else if(vis("exCtl")){$("exCtl").hidden=true;snd("ui");done=true}
-  else if(vis("exTeam")){$("exTeam").hidden=true;snd("ui");done=true}
+  else if(vis("exCtl")){if(typeof ovBack==="function")ovBack($("exCtl"));else{$("exCtl").hidden=true;snd("ui")}done=true}
+  else if(vis("exTeam")){if(typeof ovBack==="function")ovBack($("exTeam"));else{$("exTeam").hidden=true;snd("ui")}done=true}
   else if(vis("exCh")){const bs=$("exCh").querySelectorAll("button");if(bs.length){bs[bs.length-1].click();done=true}}
   if(done||EX.fs){e.preventDefault();e.stopImmediatePropagation();try{EX.cv.focus({preventScroll:true})}catch(x){}}},true);
 // ---------- un combate de Exploración no se puede cerrar a medias (Esc o volver dejaban el combate oculto y la Exploración bloqueada) ----------
@@ -15421,6 +15423,23 @@ window.addEventListener("click",e=>{if(!XSW)return;const c=e.target.closest&&e.t
 // en el panel del equipo se avisa de a qué nivel luchan
 {const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam");if(!box)return r;const cap=xgRun(()=>lvCap());
   box.querySelectorAll(".xgc").forEach(c=>{const l=xgRun(()=>lvd(c.dataset.xg).l);if(l>cap&&!c.querySelector(".xgcapl")){const s=document.createElement("small");s.className="xgcapl";s.textContent="🔒 lucha a Nv"+cap;c.appendChild(s)}})}catch(e){}return r}}
+// =====================================================================================
+// VOLVER AL MENÚ: los paneles abiertos desde el menú lateral (Equipo, Pokédex, Controles) tienen «◀ Menú»
+// que cierra el panel y vuelve a abrir el menú en la misma opción. B (mando) y Esc también vuelven al menú.
+// =====================================================================================
+let XFM=null;// opción del menú desde la que se abrió el panel actual
+{const _md=exMenuDo;exMenuDo=function(k){const r=_md.apply(this,arguments);XFM=["team","dex","ctl"].includes(k)?k:null;setTimeout(xfmBtn,30);return r}}
+function xfmBtn(){const ov=exOverlay();if(!ov||!XFM)return;if(ov.querySelector("[data-xmenu]"))return;
+  const vis=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null),cl=vis.find(b=>/^\s*(✕\s*)?(Cerrar|Listo)/i.test(b.textContent));
+  const b=document.createElement("button");b.type="button";b.className="alt xmenub";b.dataset.xmenu="1";b.textContent="◀ Menú";b.title="Volver al menú";
+  if(cl&&cl.parentNode){cl.parentNode.insertBefore(b,cl)}else ov.insertBefore(b,ov.firstChild)}
+function xfmBack(){const k=XFM;XFM=null;OVSTK=[];OVL=null;XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});exMenu(true);
+  const m=$("exMenu");if(m&&k){m.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.exm===k))}}
+window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xmenu]");if(!b)return;e.preventDefault();e.stopPropagation();xfmBack()},true);
+// el panel se redibuja a menudo: se vuelve a poner el botón; si el panel se cierra, se olvida el menú
+setInterval(()=>{if(!XFM){document.querySelectorAll("[data-xmenu]").forEach(b=>b.remove());return}const ov=exOverlay();if(!ov){if(!exMenuOpen())XFM=null;return}xfmBtn()},150);
+// B / Esc: si no hay un «Volver» propio del panel (una ficha, una subpantalla…), vuelve al menú en vez de cerrar
+{const _ob=ovBack;ovBack=function(ov){if(XFM&&ov){const vis=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null&&!b.dataset.xmenu);if(!vis.some(b=>/Volver|Atrás|Cancelar/i.test(b.textContent))){snd("ui");xfmBack();return}}return _ob.apply(this,arguments)}}
 
 // =====================================================================================
 // HISTORIA MÁS VIVA: personajes que te guían andando (tú les sigues) y visitas guiadas por cada pueblo

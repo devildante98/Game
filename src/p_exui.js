@@ -259,3 +259,20 @@ window.addEventListener("click",e=>{if(!XSW)return;const c=e.target.closest&&e.t
 // en el panel del equipo se avisa de a qué nivel luchan
 {const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam");if(!box)return r;const cap=xgRun(()=>lvCap());
   box.querySelectorAll(".xgc").forEach(c=>{const l=xgRun(()=>lvd(c.dataset.xg).l);if(l>cap&&!c.querySelector(".xgcapl")){const s=document.createElement("small");s.className="xgcapl";s.textContent="🔒 lucha a Nv"+cap;c.appendChild(s)}})}catch(e){}return r}}
+// =====================================================================================
+// VOLVER AL MENÚ: los paneles abiertos desde el menú lateral (Equipo, Pokédex, Controles) tienen «◀ Menú»
+// que cierra el panel y vuelve a abrir el menú en la misma opción. B (mando) y Esc también vuelven al menú.
+// =====================================================================================
+let XFM=null;// opción del menú desde la que se abrió el panel actual
+{const _md=exMenuDo;exMenuDo=function(k){const r=_md.apply(this,arguments);XFM=["team","dex","ctl"].includes(k)?k:null;setTimeout(xfmBtn,30);return r}}
+function xfmBtn(){const ov=exOverlay();if(!ov||!XFM)return;if(ov.querySelector("[data-xmenu]"))return;
+  const vis=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null),cl=vis.find(b=>/^\s*(✕\s*)?(Cerrar|Listo)/i.test(b.textContent));
+  const b=document.createElement("button");b.type="button";b.className="alt xmenub";b.dataset.xmenu="1";b.textContent="◀ Menú";b.title="Volver al menú";
+  if(cl&&cl.parentNode){cl.parentNode.insertBefore(b,cl)}else ov.insertBefore(b,ov.firstChild)}
+function xfmBack(){const k=XFM;XFM=null;OVSTK=[];OVL=null;XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});exMenu(true);
+  const m=$("exMenu");if(m&&k){m.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.exm===k))}}
+window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xmenu]");if(!b)return;e.preventDefault();e.stopPropagation();xfmBack()},true);
+// el panel se redibuja a menudo: se vuelve a poner el botón; si el panel se cierra, se olvida el menú
+setInterval(()=>{if(!XFM){document.querySelectorAll("[data-xmenu]").forEach(b=>b.remove());return}const ov=exOverlay();if(!ov){if(!exMenuOpen())XFM=null;return}xfmBtn()},150);
+// B / Esc: si no hay un «Volver» propio del panel (una ficha, una subpantalla…), vuelve al menú en vez de cerrar
+{const _ob=ovBack;ovBack=function(ov){if(XFM&&ov){const vis=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null&&!b.dataset.xmenu);if(!vis.some(b=>/Volver|Atrás|Cancelar/i.test(b.textContent))){snd("ui");xfmBack();return}}return _ob.apply(this,arguments)}}

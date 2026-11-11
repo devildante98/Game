@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.49.5";
+const GAME_VER="6.49.6";
 const NEWS=[
+{v:"2026-11-11-6.49.6",ver:"6.49.6",at:"2026-11-11T19:47",t:"🔧 Arreglos/Mejoras",l:["Exploración: los paneles que abres desde el menú lateral (Equipo y Mochila, Pokédex y Controles) tienen un botón «◀ Menú» junto a «Cerrar» que te devuelve al menú, en la misma opción, sin tener que volver a abrirlo","Con el mando (B) o con Esc también vuelves al menú. Si estás dentro de una ficha o una subpantalla, primero vuelves al panel"]},
 {v:"2026-11-11-6.49.5",ver:"6.49.5",at:"2026-11-11T19:41",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas ×100 ahora se ve cuáles son los Pokémon nuevos, con la etiqueta «¡NUEVO!» y un borde rojo brillante. En las tiradas más pequeñas también se resaltan"]},
 {v:"2026-11-11-6.49.4",ver:"6.49.4",at:"2026-11-11T19:35",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al ganar un combate (contra entrenadores o salvajes) se quedaba parado después del botín y no aparecía el botón «Volver». Ahora el combate termina con normalidad y recibes la experiencia","Además, si algún día fallase algo al repartir los premios, el combate se cierra igualmente y aparece «Volver»"]},
 {v:"2026-11-11-6.49.3",ver:"6.49.3",at:"2026-11-11T17:23",t:"🔧 Arreglos/Mejoras",l:["Combate con mando: ahora se ve qué botón tienes seleccionado (borde amarillo y una flecha ▶), tanto en LUCHAR/MOCHILA/POKÉMON/HUIR como en los ataques. Al empezar el turno ya hay uno marcado","El recuadro de información del ataque mantiene siempre el mismo tamaño, tenga o no indicación de eficacia (×2, ×½…)"]},

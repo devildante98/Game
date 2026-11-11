@@ -519,8 +519,8 @@ window.addEventListener("keydown",e=>{if(e.key!=="Escape"||!EX.cv||!EX.cv.isConn
   const vis=id=>{const el=document.getElementById(id);return el&&!el.hidden};let done=false;
   if(typeof XSH!=="undefined"&&XSH.open){xsClose();done=true}
   else if(typeof WM!=="undefined"&&WM.open){wmHide();done=true}
-  else if(vis("exCtl")){$("exCtl").hidden=true;snd("ui");done=true}
-  else if(vis("exTeam")){$("exTeam").hidden=true;snd("ui");done=true}
+  else if(vis("exCtl")){if(typeof ovBack==="function")ovBack($("exCtl"));else{$("exCtl").hidden=true;snd("ui")}done=true}
+  else if(vis("exTeam")){if(typeof ovBack==="function")ovBack($("exTeam"));else{$("exTeam").hidden=true;snd("ui")}done=true}
   else if(vis("exCh")){const bs=$("exCh").querySelectorAll("button");if(bs.length){bs[bs.length-1].click();done=true}}
   if(done||EX.fs){e.preventDefault();e.stopImmediatePropagation();try{EX.cv.focus({preventScroll:true})}catch(x){}}},true);
 // ---------- un combate de Exploración no se puede cerrar a medias (Esc o volver dejaban el combate oculto y la Exploración bloqueada) ----------

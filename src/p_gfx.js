@@ -97,7 +97,7 @@ const XFURN_TXT={B:["Una cama mullidita. Da ganas de echarse una siesta."],C:["U
 {const _u=exUpdate;exUpdate=function(dt,ts){if(EX.climb||(EX.climbIn&&performance.now()-EX.climbIn.t0<380))return;return _u.apply(this,arguments)}}
 {const _t=exDrawTr;exDrawTr=function(g,code,face,x,y,fr,beat,me,ph){if(me&&(EX.climb||EX.climbIn)){const now=performance.now();let k=0,up=true;
   if(EX.climb){k=Math.min(1,(now-EX.climb.t0)/400);up=EX.climb.up}else{const t=(now-EX.climbIn.t0)/380;if(t>=1){EX.climbIn=null;return _t.apply(this,arguments)}k=1-Math.max(0,t);up=!EX.climbIn.up}
-  g.save();g.globalAlpha=Math.max(0,1-k*.85);const dy=up?-k*16:k*14;const r=_t.call(this,g,code,face,x,y+dy,(Math.floor(now/120)%2)?1:3,beat,me,ph);g.restore();return r}
+  g.save();g.globalAlpha=Math.max(0,1-k*.85);const dy=-k*(EX.climb?(up?16:9):12);const r=_t.call(this,g,code,face,x,y+dy,(Math.floor(now/120)%2)?1:3,beat,me,ph);g.restore();return r}
   return _t.apply(this,arguments)}}
 
 // =====================================================================================
@@ -151,3 +151,23 @@ xTree=function(v){const k="TR2"+v;if(XG[k])return XG[k];const c=xc(32,48),g=c.ge
   const n=xc(W,H),q=n.getContext("2d");q.drawImage(c,0,0);q.globalCompositeOperation="source-atop";q.fillStyle="rgba(20,24,60,.32)";q.fillRect(0,0,W,H);q.globalCompositeOperation="source-over";
   LITW.forEach(r=>{q.fillStyle="#ffcf5a";q.fillRect(r[0],r[1],r[2],r[3]);q.fillStyle="#fff1b0";q.fillRect(r[0],r[1],r[2],Math.max(2,r[3]/3))});c._n=n;
   return XG[k]=c}}
+// escalera de bajada (pisos de arriba): hueco de 2 casillas con peldaños que bajan y se oscurecen, barandillas con balaustres y postes
+function xStairWell(part,open){const k="SW"+part+open;if(XG[k])return XG[k];const F=xc(32,64),g=F.getContext("2d"),R=(a,b,w,h,col)=>xr(g,a,b,w,h,col);
+  // suelo de madera debajo (para los bordes)
+  g.drawImage(xFloor("wood",0,0),0,0);g.drawImage(xFloor("wood",0,1),0,32);
+  // hueco
+  R(4,0,24,46,xInk);
+  for(let i=0;i<8;i++){const y=44-i*6,dk=Math.max(.12,1-i*.12),w=24-Math.min(4,i),x0=4+(24-w)/2;
+    R(x0,y-4,w,4,`rgb(${Math.round(214*dk)},${Math.round(164*dk)},${Math.round(104*dk)})`);R(x0,y-4,w,1,`rgba(255,240,210,${.5*dk})`);R(x0,y,w,2,`rgb(${Math.round(120*dk)},${Math.round(80*dk)},${Math.round(44*dk)})`)}
+  const gr=g.createLinearGradient(0,0,0,30);gr.addColorStop(0,"rgba(0,0,0,.85)");gr.addColorStop(1,"rgba(0,0,0,0)");g.fillStyle=gr;g.fillRect(4,0,24,30);
+  // borde del primer peldaño (por donde se entra)
+  R(4,44,24,3,"#e8c890");R(4,47,24,1,xInk);
+  // barandillas a los dos lados, con balaustres y pasamanos; postes en la entrada
+  [[0,"l"],[28,"r"]].forEach(([x])=>{R(x,0,4,58,xInk);R(x+1,0,2,58,"#9a6236");for(let y=4;y<54;y+=7){R(x+1,y,2,4,"#e8d8b8")}R(x,0,4,2,"#c8905a")});
+  [[0],[27]].forEach(([x])=>{R(x-1,50,6,12,xInk);R(x,51,4,10,"#7a4a26");R(x,51,4,2,"#c8905a");R(x-1,48,6,3,"#5a3418")});
+  // sombra suave en el suelo junto a la entrada
+  R(4,48,24,2,"rgba(0,0,0,.18)");
+  const c=xc(32,32);c.getContext("2d").drawImage(F,0,part?32:0,32,32,0,0,32,32);return XG[k]=c}
+{const _g=xGround;xGround=function(x,y,fr){try{const c=exAt(x,y),M=EX.M,w=M&&M.w&&M.w[c];
+  if(w&&w.look==="stairsdown")return xStairWell(0,xStOpen(x));
+  if(c==="q")return xStairWell(1,xStOpen(x))}catch(e){}return _g.apply(this,arguments)}}

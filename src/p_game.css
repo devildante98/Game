@@ -856,3 +856,6 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .jgp.drag{filter:drop-shadow(0 8px 10px rgba(0,0,0,.5)) brightness(1.08)}.jgp.ok{filter:none}
 .jgw.jgdone .jgp{filter:none}
 .jgld{position:absolute;left:0;right:0;bottom:20%;text-align:center;color:var(--mute);font-weight:700}
+/* tickets de Exploración */
+.exmoney{position:absolute;left:8px;top:8px;z-index:4;padding:3px 10px;border-radius:999px;background:rgba(10,14,30,.72);color:#ffe27a;font-weight:800;font-size:.82rem;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.extitle:not([hidden])~.exmoney{display:none}

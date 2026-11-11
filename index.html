@@ -52,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.31.6"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.32"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794393279">
+<meta name="game-build" content="1794393687">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2537,6 +2537,9 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .jgp.drag{filter:drop-shadow(0 8px 10px rgba(0,0,0,.5)) brightness(1.08)}.jgp.ok{filter:none}
 .jgw.jgdone .jgp{filter:none}
 .jgld{position:absolute;left:0;right:0;bottom:20%;text-align:center;color:var(--mute);font-weight:700}
+/* tickets de Exploración */
+.exmoney{position:absolute;left:8px;top:8px;z-index:4;padding:3px 10px;border-radius:999px;background:rgba(10,14,30,.72);color:#ffe27a;font-weight:800;font-size:.82rem;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.extitle:not([hidden])~.exmoney{display:none}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2602,7 +2605,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.31.6</small>
+    <small class="pcver">Versión 6.32</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -4826,9 +4829,12 @@ async function finish(res){
   else if(res==="lose"){if(B.trainer){await trainerEnter("w");await say("¡"+B.trainer+" ha ganado el combate!")}snd("lose");await say(B.ff?"Has perdido el combate.":"¡Todo tu equipo se debilitó! Has perdido...");if(B.league){S.lg=null;await say("Has sido eliminado de la "+LEAGUES[B.league.li].n+". Puedes volver a intentarlo cuando quieras.")}}
   else{
     if(res==="win"){qEv("win");if(B.trainer){qEv("tr");await trainerDefeat()}}
+    // en Exploración el premio va a los tickets de Exploración (cartera aparte)
+    const xgw=typeof XGSW!=="undefined"&&!!XGSW&&typeof xTadd==="function"&&typeof EX!=="undefined"&&EX.battle&&EX.battle.rw;
+    if(xgw){const r=EX.battle.rw;if(!EX.battle.paid){EX.battle.paid=true;xTadd(r)}snd("win");await say("¡Recompensa: +"+fmt(r)+" 🎟️ de Exploración!")}else{
     const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL());S.t+=rw;
     snd("win");await say("¡Recompensa: +"+fmt(rw)+" 🎟️!"+(rw===33550336?" ¡¡PREMIO GORDO!!":""));
-    if(rw===33550336)await jackpot(rw);
+    if(rw===33550336)await jackpot(rw);}
     if(res==="win"){
       const got=[],b=WW[o[2]]>=3?2:1,dr=(id,ch,q)=>{if(Math.random()<ch){S.bag[id]=(S.bag[id]||0)+q;got.push(q+" "+ITEMS.find(i=>i[0]===id)[1])}};
       dr("pb",.55,1+(Math.random()<.4?1:0));dr("sb",.2*b,1);dr("ub",.06*b,1);dr("mb",.004*b,1);dr("pot",.4,1);dr("spot",.15*b,1);dr("hpot",.06*b,1);dr("rev",.1,1);dr("eter",.12,1);dr("elix",.04*b,1);
@@ -7260,8 +7266,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.31.6";
+const GAME_VER="6.32";
 const NEWS=[
+{v:"2026-11-11-6.32",ver:"6.32",at:"2026-11-11T11:41",t:"🗺️ Exploración: tickets propios y entrenadores que no se reinician",l:["Exploración tiene ahora su propia cartera de tickets 🎟️, aparte de la del juego normal. Arriba a la izquierda del mapa ves cuántos tienes","Se ganan en Exploración: ganando combates (los entrenadores dan más), con los premios de la historia y vendiendo en la tienda. Solo se gastan en Exploración","Para empezar recibes 30.000 tickets de Exploración, más 20.000 por cada medalla de gimnasio de Exploración que ya tengas","Los combates de Exploración ya no dan tickets del juego normal","El Centro Pokémon de Exploración ahora cura gratis, como en los juegos","Los entrenadores que derrotas ya no vuelven a retarte al día siguiente: se quedan derrotados"]},
 {v:"2026-11-11-6.31.6",ver:"6.31.6",at:"2026-11-11T11:31",t:"🔧 Arreglos/Mejoras",l:["El minijuego «¿Quién pesa más?» ahora se llama «Peso y altura», porque también pregunta cuál pesa menos y cuál es más alto o más bajo"]},
 {v:"2026-11-11-6.31.5",ver:"6.31.5",at:"2026-11-11T11:29",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett!: arreglado el reloj que a veces se quedaba parado y hacía la partida infinita. Ahora la partida siempre termina a los 30 segundos","Si la hora del móvil o del ordenador se ajusta de golpe, el juego ya no lo confunde con un acelerador"]},
 {v:"2026-11-11-6.31.4",ver:"6.31.4",at:"2026-11-11T11:18",t:"🔧 Arreglos/Mejoras",l:["Iconos intercambiados: el Puzle de piezas ahora lleva la pieza de puzle 🧩 y el Rompecabezas Pokémon el 🧷"]},
@@ -7495,7 +7502,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794393279";
+const GAME_B="1794393687";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11248,7 +11255,7 @@ const EXTL=32,EXS=2;// casilla de 32 px de pixel art, dibujada al doble
 const EXBLK="#mXpo~bkwuHfIhWYZVQJAN";
 const EX={on:false,raf:0,cv:null,g:null,map:null,x:0,y:0,f:"d",mv:null,keys:{},dlg:null,trans:null,npcs:[],fol:null,steps:0,battle:null,t:0,run:false,pend:[]};
 const exDay=()=>today();
-function exSt(){S.ex=S.ex&&EXM[S.ex.m]?S.ex:Object.assign({m:"ruta",x:14,y:18,f:"u"},S.ex&&S.ex.sto?{sto:S.ex.sto}:{});if(!S.ex.d||S.ex.d.day!==exDay())S.ex.d={day:exDay(),it:{},npc:{}};return S.ex}
+function exSt(){S.ex=S.ex&&EXM[S.ex.m]?S.ex:Object.assign({m:"ruta",x:14,y:18,f:"u"},S.ex&&S.ex.sto?{sto:S.ex.sto}:{});S.ex.npc=S.ex.npc||{};if(S.ex.d&&S.ex.d.npc)Object.assign(S.ex.npc,S.ex.d.npc);if(!S.ex.d||S.ex.d.day!==exDay())S.ex.d={day:exDay(),it:{},npc:{}};return S.ex}
 // ---------- casillas dibujadas a mano en pixel art ----------
 const EXTILE={};
 function exRnd(x,y,k){let h=(x*374761393+y*668265263+k*2147483647)|0;h=Math.imul(h^(h>>>13),1274126177);return ((h^(h>>>16))>>>0)/4294967296}
@@ -11301,7 +11308,7 @@ async function exTrainer(code,face){const k=code+face;if(EXSP[k])return EXSP[k];
 function exLoad(m,x,y,f){const M=EXM[m];EX.map=m;EX.M=M;EX.x=x;EX.y=y;EX.f=f||EX.f;EX.mv=null;EX.px=x;EX.py=y;EX.trail=[{x:x,y:y}];
   const st=exSt();st.m=m;st.x=x;st.y=y;st.f=EX.f;
   EX.grid=M.g.map(r=>r.split(""));for(const k in st.d.it)if(k.startsWith(m+":")){const[,xy]=k.split(":"),[ix,iy]=xy.split(",").map(Number);if(EX.grid[iy]&&EX.grid[iy][ix]==="I")EX.grid[iy][ix]=M.base}
-  EX.npcs=(M.npc||[]).map((n,i)=>Object.assign({},n,{id:m+":"+i,beat:!!st.d.npc[m+":"+i],px:n.x,py:n.y,f0:n.f,look:exNpcLook(m+":"+i)}));
+  EX.npcs=(M.npc||[]).map((n,i)=>Object.assign({},n,{id:m+":"+i,beat:!!st.npc[m+":"+i],px:n.x,py:n.y,f0:n.f,look:exNpcLook(m+":"+i)}));
   EX.banner={t:M.n,t0:performance.now()};EX.cam=null;save()}
 function exNpcLook(id){const r=rngS(pvHash("npc"+id)),L={};TRO.forEach(o=>{const n=trN(o);L[o[0]]=Math.floor(r()*n)});L.brd=r()<.8?0:L.brd;L.mk=0;L.hat=r()<.4?0:L.hat;L.gl=r()<.7?0:L.gl;TRO.forEach(o=>{if(!trOk(o[0],L[o[0]]))L[o[0]]=0});return trEnc(L)}
 const exAt=(x,y)=>EX.grid[y]&&EX.grid[y][x]!=null?EX.grid[y][x]:"#";
@@ -11375,7 +11382,7 @@ async function exBattle(cfg,npc){EX.battle={npc:npc?npc.id:null,win:false,map:EX
 // ¿has ganado? (cuenta las victorias de combate durante el combate de exploración)
 {const _q=qEv;qEv=function(k){if(EX.battle&&(k==="win"||k==="twin"||k==="tr"))EX.battle.win=true;return _q.apply(this,arguments)}}
 setInterval(()=>{if(EX.battle&&!fcd){const b=EX.battle;EX.battle=null;
-  if(b.npc&&b.win){exSt().d.npc[b.npc]=1;const n=EX.npcs.find(q=>q.id===b.npc);if(n)n.beat=true;save()}
+  if(b.npc&&b.win){exSt().npc[b.npc]=1;const n=EX.npcs.find(q=>q.id===b.npc);if(n)n.beat=true;save()}
   if(!exTeamOk())exFaint();
   EX.resume=true;hubOpen("adv","explP");exFsPark(false)}},120);
 // ---------- compañero que te sigue ----------
@@ -12666,7 +12673,7 @@ window.addEventListener("keydown",e=>{if(e.key!=="Escape"||!EX.on||EX.bind||WM.o
 
 // ================= Exploración: Tiendas Pokémon (comprar y vender) y usar objetos de la mochila =================
 // Cada pueblo tiene su tienda con un surtido propio que mejora región a región, como en los juegos.
-// Se paga con tickets; al vender te dan la mitad de su precio. Lo comprado va a la mochila de Exploración.
+// Se paga con los tickets de Exploración (aparte de los del juego normal); al vender te dan la mitad de su precio. Lo comprado va a la mochila de Exploración.
 const XS_P={pb:500,sb:1500,ub:4000,pot:1500,spot:4000,hpot:9000,mpot:20000,rev:8000,mrev:30000,eter:6000,meter:15000,elix:25000,melix:60000};
 const XS_TOWN={
   pueblo:{n:"Pueblo Brisa",it:["pb","pot","spot","rev","eter"],st:["oval-stone"],mt:[["normal",2]],ms:["Protección","Doble Equipo"],hold:["sitrus"],mint:[]},
@@ -12693,13 +12700,13 @@ const XSH={open:false,town:"",tab:"buy",msg:"",res:null};
 function xsUI(){const box=$("exShop");if(!box)return;const T=XS_TOWN[XSH.town]||{n:""};const bag=xgRun(()=>Object.assign({},S.bag||{}));
   const row=(id,mode)=>{const it=xsIt(id),pr=mode==="buy"?xsPrice(id):xsSell(id),have=bag[id]|0,m=xsMT(id);
     const ds=m?'MT · '+TIPO[m.t]+(m.pw?' · Potencia '+m.pw:''):it[6]||"";
-    const btn=mode==="buy"?[1,5,10].map(q=>'<button type="button" data-xsb="'+esc(id)+'" data-xsq="'+q+'"'+(S.t<pr*q?' disabled':'')+'>×'+q+'</button>').join(""):
+    const btn=mode==="buy"?[1,5,10].map(q=>'<button type="button" data-xsb="'+esc(id)+'" data-xsq="'+q+'"'+(xT()<pr*q?' disabled':'')+'>×'+q+'</button>').join(""):
       [1,have].filter((q,i,a)=>q>0&&a.indexOf(q)===i).map(q=>'<button type="button" class="alt" data-xss="'+esc(id)+'" data-xsq="'+q+'">'+(q===have&&q>1?'Todo ('+q+')':'×'+q)+'</button>').join("");
     return '<div class="xsr"><span class="xsi">'+itemIco(id,30)+'</span><div class="xsn"><b>'+esc(IN(id))+'</b><small>'+esc(ds)+'</small></div><div class="xsp"><b>'+fmt(pr)+' 🎟️</b><small>Tienes '+have+'</small></div><div class="xsbt">'+btn+'</div></div>'};
   let list;
   if(XSH.tab==="buy")list=xsStock(XSH.town).map(id=>row(id,"buy")).join("");
   else{const ids=Object.keys(bag).filter(k=>bag[k]>0&&xsIt(k)&&xsSell(k)>0);list=ids.length?ids.map(id=>row(id,"sell")).join(""):'<p class="mut xsempty">Tu mochila de Exploración está vacía.</p>'}
-  box.innerHTML='<div class="xsh"><b>🛒 Tienda Pokémon · '+esc(T.n)+'</b><span class="xst">🎟️ '+fmt(S.t)+'</span><button type="button" class="alt" data-xsx="1">Salir</button></div>'+
+  box.innerHTML='<div class="xsh"><b>🛒 Tienda Pokémon · '+esc(T.n)+'</b><span class="xst" title="Tickets de Exploración">🎟️ '+fmt(xT())+'</span><button type="button" class="alt" data-xsx="1">Salir</button></div>'+
     '<div class="xstabs"><button type="button" class="'+(XSH.tab==="buy"?"on":"alt")+'" data-xstab="buy">Comprar</button><button type="button" class="'+(XSH.tab==="sell"?"on":"alt")+'" data-xstab="sell">Vender</button></div>'+
     (XSH.msg?'<div class="xsmsg">'+esc(XSH.msg)+'</div>':'')+'<div class="xsl">'+list+'</div>'+
     '<small class="mut">Lo que compras va a tu mochila 🎒 de Exploración. Al vender te dan la mitad de su precio.</small>'}
@@ -12710,10 +12717,10 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
   if(d.xsx){xsClose();return}
   if(d.xstab){XSH.tab=d.xstab;XSH.msg="";snd("ui");xsUI();return}
   const q=+d.xsq||1;
-  if(d.xsb){const pr=xsPrice(d.xsb)*q;if(S.t<pr){XSH.msg="No tienes tickets suficientes.";snd("ui");xsUI();return}
-    S.t-=pr;xgRun(()=>{S.bag[d.xsb]=(S.bag[d.xsb]||0)+q});save();snd("capok");XSH.msg="✅ Has comprado "+q+" × "+IN(d.xsb)+" por "+fmt(pr)+" 🎟️.";xsUI();try{render()}catch(x){}return}
+  if(d.xsb){const pr=xsPrice(d.xsb)*q;if(xT()<pr){XSH.msg="No tienes tickets de Exploración suficientes.";snd("ui");xsUI();return}
+    xTadd(-pr);xgRun(()=>{S.bag[d.xsb]=(S.bag[d.xsb]||0)+q});save();snd("capok");XSH.msg="✅ Has comprado "+q+" × "+IN(d.xsb)+" por "+fmt(pr)+" 🎟️.";xsUI();try{render()}catch(x){}return}
   if(d.xss){let ok=0;xgRun(()=>{const h=S.bag[d.xss]|0,n=Math.min(h,q);if(n>0){S.bag[d.xss]=h-n;if(!S.bag[d.xss])delete S.bag[d.xss];ok=n}});
-    if(ok){const g=xsSell(d.xss)*ok;S.t+=g;save();snd("lvl");XSH.msg="💰 Has vendido "+ok+" × "+IN(d.xss)+" por "+fmt(g)+" 🎟️."}xsUI();try{render()}catch(x){}}});
+    if(ok){const g=xsSell(d.xss)*ok;xTadd(g);save();snd("lvl");XSH.msg="💰 Has vendido "+ok+" × "+IN(d.xss)+" por "+fmt(g)+" 🎟️."}xsUI();try{render()}catch(x){}}});
 // el dependiente
 {const _n=stNPCs;stNPCs=function(m){const L=_n(m);const mm=/^tienda_(.+)$/.exec(m||"");
   if(mm)L.push({sid:"dep",x:2,y:2,f:"d",n:"Dependiente",look:exNpcLook("dependiente-tienda-"+mm[1]),t:[],sight:0,txt:"",id:"sto:"+m+":dep",story:1,still:1,beat:true,px:2,py:2,f0:"d"});return L}}
@@ -14641,6 +14648,36 @@ if(typeof itemErr!=="undefined"&&window.itemErr!==itemErr)window.itemErr=functio
 if(typeof srch!=="undefined"&&window.srch!==srch)window.srch=function(){return srch.apply(this,arguments)};
 if(typeof tImgErr!=="undefined"&&window.tImgErr!==tImgErr)window.tImgErr=function(){return tImgErr.apply(this,arguments)};
 if(typeof zImgErr!=="undefined"&&window.zImgErr!==zImgErr)window.zImgErr=function(){return zImgErr.apply(this,arguments)};
+
+// =====================================================================================
+// TICKETS DE EXPLORACIÓN: una cartera aparte de la del juego normal.
+// En Exploración solo se gastan los tickets ganados en Exploración (combates, historia, ventas en la tienda).
+// Los tickets del juego normal no se pueden usar aquí, ni al revés.
+// =====================================================================================
+const XT0=30000;   // tickets para empezar
+function xT(){const X=xgData();if(typeof X.t!=="number"||!isFinite(X.t)||X.t<0){let b=0;try{b=typeof xbCount==="function"?xbCount():0}catch(e){}X.t=XT0+b*20000}return X.t}
+function xTadd(n){xT();S.xg.t=Math.max(0,Math.round(S.xg.t+(+n||0)))}
+const xTtxt=n=>fmt(Math.round(n))+" 🎟️";
+// premios de la historia: los tickets van a la cartera de Exploración y los objetos a la mochila de Exploración
+sGive=function(r){const t=Math.round(r.t||0);if(t)xTadd(t);if(r.it&&Object.keys(r.it).length)xgRun(()=>{grant({it:r.it})});save();try{render()}catch(e){}snd("lvl");
+  return [t?xTtxt(t):""].concat(Object.keys(r.it||{}).map(k=>r.it[k]+" "+IN(k))).filter(x=>x).join(" + ")};
+// premio por ganar combates en Exploración, como el dinero de los juegos
+{const _eb=exBattle;exBattle=function(cfg,npc){const pr=_eb.apply(this,arguments);try{if(EX.battle){let rw;
+    if(cfg&&cfg.eteam&&cfg.eteam.length){const sl=cfg.eteam.reduce((a,m)=>a+(m.l|0),0);rw=Math.round(sl*(cfg.trainer?60:30))}
+    else{const L=(S.team||[]).filter(n=>n&&S.owned[n]).map(n=>lvd(n).l);rw=Math.round((L.length?Math.max(...L):5)*25)}
+    EX.battle.rw=Math.max(50,rw)}}catch(e){}return pr}}
+// Centro Pokémon de Exploración: gratis, como en los juegos
+STX.enf=()=>stRun(async()=>{
+  await sSay(S_("Enfermera","¡Hola! Te damos la bienvenida al "+(EX.M&&EX.M.n&&EX.M.n!=="Centro Pokémon"?EX.M.n:"Centro Pokémon de Pueblo Brisa")+"."));
+  const i=await sChoice("¿Curar a tus Pokémon?",[{t:"Sí, por favor"},{t:"No, gracias"}]);
+  if(i!==0){await sSay(S_("Enfermera","¡Esperamos verte pronto!"));return}
+  try{qEv("heal")}catch(e){}
+  await sSay(S_("Enfermera","¡Muy bien! Deja tus Poké Balls aquí un momento…"));snd("heal");try{healJingle()}catch(e){}await sFade("fade",350);stHeal();await sW(900);await sFade("fadein",450);
+  await sSay(S_("Enfermera","¡Tus Pokémon están totalmente recuperados! ¡Esperamos verte pronto!"))});
+// marcador de tickets de Exploración en la pantalla del mapa
+setInterval(()=>{const sc=document.querySelector("#explPB .exscr");if(!sc)return;let e=$("exMoney");
+  if(!e){e=document.createElement("div");e.id="exMoney";e.className="exmoney";e.title="Tickets de Exploración (aparte de los del juego normal)";sc.appendChild(e)}
+  const t="🎟️ "+fmt(xT());if(e.textContent!==t)e.textContent=t},500);
 
 </script>
 <script>

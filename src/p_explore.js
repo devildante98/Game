@@ -4,7 +4,7 @@ const EXTL=32,EXS=2;// casilla de 32 px de pixel art, dibujada al doble
 const EXBLK="#mXpo~bkwuHfIhWYZVQJAN";
 const EX={on:false,raf:0,cv:null,g:null,map:null,x:0,y:0,f:"d",mv:null,keys:{},dlg:null,trans:null,npcs:[],fol:null,steps:0,battle:null,t:0,run:false,pend:[]};
 const exDay=()=>today();
-function exSt(){S.ex=S.ex&&EXM[S.ex.m]?S.ex:Object.assign({m:"ruta",x:14,y:18,f:"u"},S.ex&&S.ex.sto?{sto:S.ex.sto}:{});if(!S.ex.d||S.ex.d.day!==exDay())S.ex.d={day:exDay(),it:{},npc:{}};return S.ex}
+function exSt(){S.ex=S.ex&&EXM[S.ex.m]?S.ex:Object.assign({m:"ruta",x:14,y:18,f:"u"},S.ex&&S.ex.sto?{sto:S.ex.sto}:{});S.ex.npc=S.ex.npc||{};if(S.ex.d&&S.ex.d.npc)Object.assign(S.ex.npc,S.ex.d.npc);if(!S.ex.d||S.ex.d.day!==exDay())S.ex.d={day:exDay(),it:{},npc:{}};return S.ex}
 // ---------- casillas dibujadas a mano en pixel art ----------
 const EXTILE={};
 function exRnd(x,y,k){let h=(x*374761393+y*668265263+k*2147483647)|0;h=Math.imul(h^(h>>>13),1274126177);return ((h^(h>>>16))>>>0)/4294967296}
@@ -57,7 +57,7 @@ async function exTrainer(code,face){const k=code+face;if(EXSP[k])return EXSP[k];
 function exLoad(m,x,y,f){const M=EXM[m];EX.map=m;EX.M=M;EX.x=x;EX.y=y;EX.f=f||EX.f;EX.mv=null;EX.px=x;EX.py=y;EX.trail=[{x:x,y:y}];
   const st=exSt();st.m=m;st.x=x;st.y=y;st.f=EX.f;
   EX.grid=M.g.map(r=>r.split(""));for(const k in st.d.it)if(k.startsWith(m+":")){const[,xy]=k.split(":"),[ix,iy]=xy.split(",").map(Number);if(EX.grid[iy]&&EX.grid[iy][ix]==="I")EX.grid[iy][ix]=M.base}
-  EX.npcs=(M.npc||[]).map((n,i)=>Object.assign({},n,{id:m+":"+i,beat:!!st.d.npc[m+":"+i],px:n.x,py:n.y,f0:n.f,look:exNpcLook(m+":"+i)}));
+  EX.npcs=(M.npc||[]).map((n,i)=>Object.assign({},n,{id:m+":"+i,beat:!!st.npc[m+":"+i],px:n.x,py:n.y,f0:n.f,look:exNpcLook(m+":"+i)}));
   EX.banner={t:M.n,t0:performance.now()};EX.cam=null;save()}
 function exNpcLook(id){const r=rngS(pvHash("npc"+id)),L={};TRO.forEach(o=>{const n=trN(o);L[o[0]]=Math.floor(r()*n)});L.brd=r()<.8?0:L.brd;L.mk=0;L.hat=r()<.4?0:L.hat;L.gl=r()<.7?0:L.gl;TRO.forEach(o=>{if(!trOk(o[0],L[o[0]]))L[o[0]]=0});return trEnc(L)}
 const exAt=(x,y)=>EX.grid[y]&&EX.grid[y][x]!=null?EX.grid[y][x]:"#";
@@ -131,7 +131,7 @@ async function exBattle(cfg,npc){EX.battle={npc:npc?npc.id:null,win:false,map:EX
 // ¿has ganado? (cuenta las victorias de combate durante el combate de exploración)
 {const _q=qEv;qEv=function(k){if(EX.battle&&(k==="win"||k==="twin"||k==="tr"))EX.battle.win=true;return _q.apply(this,arguments)}}
 setInterval(()=>{if(EX.battle&&!fcd){const b=EX.battle;EX.battle=null;
-  if(b.npc&&b.win){exSt().d.npc[b.npc]=1;const n=EX.npcs.find(q=>q.id===b.npc);if(n)n.beat=true;save()}
+  if(b.npc&&b.win){exSt().npc[b.npc]=1;const n=EX.npcs.find(q=>q.id===b.npc);if(n)n.beat=true;save()}
   if(!exTeamOk())exFaint();
   EX.resume=true;hubOpen("adv","explP");exFsPark(false)}},120);
 // ---------- compañero que te sigue ----------

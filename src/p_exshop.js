@@ -1,6 +1,6 @@
 // ================= Exploración: Tiendas Pokémon (comprar y vender) y usar objetos de la mochila =================
 // Cada pueblo tiene su tienda con un surtido propio que mejora región a región, como en los juegos.
-// Se paga con tickets; al vender te dan la mitad de su precio. Lo comprado va a la mochila de Exploración.
+// Se paga con los tickets de Exploración (aparte de los del juego normal); al vender te dan la mitad de su precio. Lo comprado va a la mochila de Exploración.
 const XS_P={pb:500,sb:1500,ub:4000,pot:1500,spot:4000,hpot:9000,mpot:20000,rev:8000,mrev:30000,eter:6000,meter:15000,elix:25000,melix:60000};
 const XS_TOWN={
   pueblo:{n:"Pueblo Brisa",it:["pb","pot","spot","rev","eter"],st:["oval-stone"],mt:[["normal",2]],ms:["Protección","Doble Equipo"],hold:["sitrus"],mint:[]},
@@ -27,13 +27,13 @@ const XSH={open:false,town:"",tab:"buy",msg:"",res:null};
 function xsUI(){const box=$("exShop");if(!box)return;const T=XS_TOWN[XSH.town]||{n:""};const bag=xgRun(()=>Object.assign({},S.bag||{}));
   const row=(id,mode)=>{const it=xsIt(id),pr=mode==="buy"?xsPrice(id):xsSell(id),have=bag[id]|0,m=xsMT(id);
     const ds=m?'MT · '+TIPO[m.t]+(m.pw?' · Potencia '+m.pw:''):it[6]||"";
-    const btn=mode==="buy"?[1,5,10].map(q=>'<button type="button" data-xsb="'+esc(id)+'" data-xsq="'+q+'"'+(S.t<pr*q?' disabled':'')+'>×'+q+'</button>').join(""):
+    const btn=mode==="buy"?[1,5,10].map(q=>'<button type="button" data-xsb="'+esc(id)+'" data-xsq="'+q+'"'+(xT()<pr*q?' disabled':'')+'>×'+q+'</button>').join(""):
       [1,have].filter((q,i,a)=>q>0&&a.indexOf(q)===i).map(q=>'<button type="button" class="alt" data-xss="'+esc(id)+'" data-xsq="'+q+'">'+(q===have&&q>1?'Todo ('+q+')':'×'+q)+'</button>').join("");
     return '<div class="xsr"><span class="xsi">'+itemIco(id,30)+'</span><div class="xsn"><b>'+esc(IN(id))+'</b><small>'+esc(ds)+'</small></div><div class="xsp"><b>'+fmt(pr)+' 🎟️</b><small>Tienes '+have+'</small></div><div class="xsbt">'+btn+'</div></div>'};
   let list;
   if(XSH.tab==="buy")list=xsStock(XSH.town).map(id=>row(id,"buy")).join("");
   else{const ids=Object.keys(bag).filter(k=>bag[k]>0&&xsIt(k)&&xsSell(k)>0);list=ids.length?ids.map(id=>row(id,"sell")).join(""):'<p class="mut xsempty">Tu mochila de Exploración está vacía.</p>'}
-  box.innerHTML='<div class="xsh"><b>🛒 Tienda Pokémon · '+esc(T.n)+'</b><span class="xst">🎟️ '+fmt(S.t)+'</span><button type="button" class="alt" data-xsx="1">Salir</button></div>'+
+  box.innerHTML='<div class="xsh"><b>🛒 Tienda Pokémon · '+esc(T.n)+'</b><span class="xst" title="Tickets de Exploración">🎟️ '+fmt(xT())+'</span><button type="button" class="alt" data-xsx="1">Salir</button></div>'+
     '<div class="xstabs"><button type="button" class="'+(XSH.tab==="buy"?"on":"alt")+'" data-xstab="buy">Comprar</button><button type="button" class="'+(XSH.tab==="sell"?"on":"alt")+'" data-xstab="sell">Vender</button></div>'+
     (XSH.msg?'<div class="xsmsg">'+esc(XSH.msg)+'</div>':'')+'<div class="xsl">'+list+'</div>'+
     '<small class="mut">Lo que compras va a tu mochila 🎒 de Exploración. Al vender te dan la mitad de su precio.</small>'}
@@ -44,10 +44,10 @@ document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest
   if(d.xsx){xsClose();return}
   if(d.xstab){XSH.tab=d.xstab;XSH.msg="";snd("ui");xsUI();return}
   const q=+d.xsq||1;
-  if(d.xsb){const pr=xsPrice(d.xsb)*q;if(S.t<pr){XSH.msg="No tienes tickets suficientes.";snd("ui");xsUI();return}
-    S.t-=pr;xgRun(()=>{S.bag[d.xsb]=(S.bag[d.xsb]||0)+q});save();snd("capok");XSH.msg="✅ Has comprado "+q+" × "+IN(d.xsb)+" por "+fmt(pr)+" 🎟️.";xsUI();try{render()}catch(x){}return}
+  if(d.xsb){const pr=xsPrice(d.xsb)*q;if(xT()<pr){XSH.msg="No tienes tickets de Exploración suficientes.";snd("ui");xsUI();return}
+    xTadd(-pr);xgRun(()=>{S.bag[d.xsb]=(S.bag[d.xsb]||0)+q});save();snd("capok");XSH.msg="✅ Has comprado "+q+" × "+IN(d.xsb)+" por "+fmt(pr)+" 🎟️.";xsUI();try{render()}catch(x){}return}
   if(d.xss){let ok=0;xgRun(()=>{const h=S.bag[d.xss]|0,n=Math.min(h,q);if(n>0){S.bag[d.xss]=h-n;if(!S.bag[d.xss])delete S.bag[d.xss];ok=n}});
-    if(ok){const g=xsSell(d.xss)*ok;S.t+=g;save();snd("lvl");XSH.msg="💰 Has vendido "+ok+" × "+IN(d.xss)+" por "+fmt(g)+" 🎟️."}xsUI();try{render()}catch(x){}}});
+    if(ok){const g=xsSell(d.xss)*ok;xTadd(g);save();snd("lvl");XSH.msg="💰 Has vendido "+ok+" × "+IN(d.xss)+" por "+fmt(g)+" 🎟️."}xsUI();try{render()}catch(x){}}});
 // el dependiente
 {const _n=stNPCs;stNPCs=function(m){const L=_n(m);const mm=/^tienda_(.+)$/.exec(m||"");
   if(mm)L.push({sid:"dep",x:2,y:2,f:"d",n:"Dependiente",look:exNpcLook("dependiente-tienda-"+mm[1]),t:[],sight:0,txt:"",id:"sto:"+m+":dep",story:1,still:1,beat:true,px:2,py:2,f0:"d"});return L}}

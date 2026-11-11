@@ -495,9 +495,12 @@ async function finish(res){
   else if(res==="lose"){if(B.trainer){await trainerEnter("w");await say("¡"+B.trainer+" ha ganado el combate!")}snd("lose");await say(B.ff?"Has perdido el combate.":"¡Todo tu equipo se debilitó! Has perdido...");if(B.league){S.lg=null;await say("Has sido eliminado de la "+LEAGUES[B.league.li].n+". Puedes volver a intentarlo cuando quieras.")}}
   else{
     if(res==="win"){qEv("win");if(B.trainer){qEv("tr");await trainerDefeat()}}
+    // en Exploración el premio va a los tickets de Exploración (cartera aparte)
+    const xgw=typeof XGSW!=="undefined"&&!!XGSW&&typeof xTadd==="function"&&typeof EX!=="undefined"&&EX.battle&&EX.battle.rw;
+    if(xgw){const r=EX.battle.rw;if(!EX.battle.paid){EX.battle.paid=true;xTadd(r)}snd("win");await say("¡Recompensa: +"+fmt(r)+" 🎟️ de Exploración!")}else{
     const rw=Math.random()<1e-7?33550336:Math.round((100+Math.floor(Math.random()*99901))*RMUL());S.t+=rw;
     snd("win");await say("¡Recompensa: +"+fmt(rw)+" 🎟️!"+(rw===33550336?" ¡¡PREMIO GORDO!!":""));
-    if(rw===33550336)await jackpot(rw);
+    if(rw===33550336)await jackpot(rw);}
     if(res==="win"){
       const got=[],b=WW[o[2]]>=3?2:1,dr=(id,ch,q)=>{if(Math.random()<ch){S.bag[id]=(S.bag[id]||0)+q;got.push(q+" "+ITEMS.find(i=>i[0]===id)[1])}};
       dr("pb",.55,1+(Math.random()<.4?1:0));dr("sb",.2*b,1);dr("ub",.06*b,1);dr("mb",.004*b,1);dr("pot",.4,1);dr("spot",.15*b,1);dr("hpot",.06*b,1);dr("rev",.1,1);dr("eter",.12,1);dr("elix",.04*b,1);

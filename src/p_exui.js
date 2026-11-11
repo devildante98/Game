@@ -141,3 +141,51 @@ function xStairs(up){const k="ST"+(up?1:0);if(XG[k])return XG[k];const c=xc(32,3
   xr(g,0,0,32,32,"#7a5634");for(let i=0;i<5;i++){const y=i*6+1,sh=up?i:4-i;xr(g,2,y,28,6,ink);xr(g,3,y+1,26,4,sh%2?"#c8955a":"#b07a44");xr(g,3,y+1,26,1,"#e2b27a")}
   xr(g,0,0,3,32,ink);xr(g,29,0,3,32,ink);xr(g,1,0,1,32,"#9a6a3a");xr(g,30,0,1,32,"#9a6a3a");return XG[k]=c}
 {const _g=xGround;xGround=function(x,y,fr){try{const c=exAt(x,y),w=EX.M&&EX.M.w&&EX.M.w[c];if(w&&w.look==="stairs")return xStairs(/_h2$/.test(EX.map))}catch(e){}return _g.apply(this,arguments)}}
+
+// =====================================================================================
+// MAPA DE LA REGIÓN: islas bien separadas (nada se monta), dibujadas siguiendo sus caminos
+// =====================================================================================
+["pueblo","pe","pn","pb","vv","ct","pc","cl"].forEach(t=>{["_h1","_h2","_h2b"].forEach(s=>{WM_IN[t+s]=t})});
+{const POS={pe:[110,205],ruta2:[215,205],pn:[320,205],glaciar:[320,138],pico_e:[320,74],
+  liga:[500,76],victoria:[500,140],cl:[500,204],ruta5:[500,276],pc:[500,348],
+  pb:[660,205],ruta3:[760,205],vv:[860,205],crater:[860,138],cumbre:[860,74],
+  cima:[130,430],cueva:[255,430],pueblo:[130,515],ruta:[255,515],bosque:[370,515],playa:[255,592],
+  ct:[690,520],ruta4:[805,520],torre:[805,440]};
+ WM_N.forEach(n=>{const p=POS[n.k];if(p){n.x=p[0];n.y=p[1]}});
+ const LB={alba:[250,380],esc:[215,278],bra:[760,278],tor:[750,600],cel:[500,404]};for(const r in LB)if(WM_R[r]){WM_R[r].tx=LB[r][0];WM_R[r].ty=LB[r][1]}}
+const WM_DECO={alba:[[70,470,"🌳"],[420,470,"🌲"],[330,575,"🌴"],[190,470,"🌳"],[70,560,"🌳"]],esc:[[60,150,"❄️"],[260,130,"❄️"],[380,90,"❄️"],[160,235,"⛄"]],
+  bra:[[630,150,"🔥"],[945,240,"🌋"],[740,235,"🔥"],[840,90,"🔥"]],tor:[[640,470,"⚡"],[870,560,"🌩️"],[740,565,"⚡"]],cel:[[555,100,"✨"],[445,240,"✨"],[555,310,"🌙"]]};
+wmDraw=function(ts){const cv=$("wmCv");if(!cv)return;const g=cv.getContext("2d"),W=1000,H=640;g.setTransform(cv.width/W,0,0,cv.height/H,0,0);
+  const sea=g.createLinearGradient(0,0,0,H);sea.addColorStop(0,"#3e7fd0");sea.addColorStop(1,"#2a5aa8");g.fillStyle=sea;g.fillRect(0,0,W,H);
+  g.strokeStyle="rgba(255,255,255,.14)";g.lineWidth=2;for(let y=20;y<H;y+=34)for(let x=((y/34)%2)*40+((ts/90)%80);x<W+80;x+=80){g.beginPath();g.moveTo(x-80,y);g.quadraticCurveTo(x-70,y-5,x-60,y);g.stroke()}
+  const P=k=>wmNode(k);
+  // rutas en barco (por el mar, entre las islas)
+  const SC={pe:[60,330],pb:[600,420],ct:[470,600],pc:[420,470]};g.setLineDash([10,9]);g.lineWidth=3;g.strokeStyle="rgba(255,255,255,.7)";
+  WM_SEA.forEach(([a,b])=>{const A=P(a),B=P(b);if(!A||!B)return;const[mx,my]=SC[b]||[(A.x+B.x)/2,(A.y+B.y)/2];g.beginPath();g.moveTo(A.x,A.y+18);g.quadraticCurveTo(mx,my,B.x,B.y+22);g.stroke();
+    g.setLineDash([]);g.font="20px serif";g.textAlign="center";g.fillText("⛵",(A.x+2*mx+B.x)/4,(A.y+18+2*my+B.y+22)/4+6);g.setLineDash([10,9])});g.setLineDash([]);
+  // islas: cápsulas a lo largo de los caminos de cada región (borde, arena y hierba)
+  const reg={};WM_N.forEach(n=>{(reg[n.r]=reg[n.r]||[]).push(n)});
+  const segs=r=>WM_E.filter(([a,b])=>{const A=P(a),B=P(b);return A&&B&&A.r===r&&B.r===r}).map(([a,b])=>[P(a),P(b)]);
+  for(const r in reg){const R=WM_R[r];if(!R)continue;const N=reg[r],S2=segs(r);
+    [[R.d,64],["#f1dfae",58],[R.c,50]].forEach(([c,rad])=>{g.fillStyle=c;g.strokeStyle=c;g.lineCap="round";g.lineWidth=rad*2;
+      S2.forEach(([A,B])=>{g.beginPath();g.moveTo(A.x,A.y);g.lineTo(B.x,B.y);g.stroke()});N.forEach(n=>{g.beginPath();g.arc(n.x,n.y,rad+4,0,Math.PI*2);g.fill()})});
+    (WM_DECO[r]||[]).forEach(([x,y,t])=>{g.font="16px serif";g.textAlign="center";g.globalAlpha=.6;g.fillText(t,x,y);g.globalAlpha=1})}
+  // caminos
+  WM_E.forEach(([a,b])=>{const A=P(a),B=P(b);if(!A||!B)return;const op=wmOpenZone(a)&&wmOpenZone(b);[["#3a2a1c",14],[op?"#efd9a0":"#b8b0a0",8]].forEach(([c,w])=>{g.strokeStyle=c;g.lineWidth=w;g.lineCap="round";g.beginPath();g.moveTo(A.x,A.y);g.lineTo(B.x,B.y);g.stroke()})});
+  // nombres de región (con cartel)
+  g.textAlign="center";g.font="900 20px Fredoka,system-ui,sans-serif";for(const r in WM_R){const R2=WM_R[r],w=g.measureText(R2.n).width+22;g.fillStyle="rgba(15,23,58,.78)";g.beginPath();g.roundRect?g.roundRect(R2.tx-w/2,R2.ty-20,w,28,9):g.rect(R2.tx-w/2,R2.ty-20,w,28);g.fill();g.fillStyle="#fff";g.fillText(R2.n,R2.tx,R2.ty+1)}
+  // lugares
+  const here=wmHere(),vis=wmVis();
+  WM_N.forEach(n=>{const op=wmOpenZone(n.k),kn=op||vis[n.k]||here===n.k,sel=WM.sel===n.k,x=n.x,y=n.y;g.lineWidth=3;g.strokeStyle="#1b2340";
+    const col=kn?({town:"#ff5a5a",route:"#ffd35c",cave:"#8a6a4a",peak:"#cfd8e6",forest:"#3f9d4a",beach:"#58c8f0",tower:"#ffd94a"}[n.t]):"#8d8a9a";
+    if(sel){g.fillStyle="rgba(255,255,255,.55)";g.beginPath();g.arc(x,y,26+Math.sin(ts/200)*3,0,Math.PI*2);g.fill()}
+    g.fillStyle=col;g.beginPath();
+    if(n.t==="town"){g.roundRect?g.roundRect(x-17,y-14,34,28,6):g.rect(x-17,y-14,34,28);g.fill();g.stroke();if(kn){g.fillStyle="#fff";g.fillRect(x-11,y-2,22,10);g.fillStyle="#1b2340";g.fillRect(x-3,y+1,6,7)}}
+    else if(n.t==="peak"||n.t==="cave"){g.moveTo(x,y-19);g.lineTo(x+19,y+13);g.lineTo(x-19,y+13);g.closePath();g.fill();g.stroke();if(kn&&n.t==="cave"){g.fillStyle="#1b2340";g.beginPath();g.arc(x,y+13,7,Math.PI,0);g.fill()}if(kn&&n.t==="peak"){g.fillStyle="#fff";g.beginPath();g.moveTo(x,y-19);g.lineTo(x+6,y-9);g.lineTo(x-6,y-9);g.closePath();g.fill()}}
+    else if(n.t==="tower"){g.rect(x-9,y-22,18,36);g.fill();g.stroke();if(kn){g.font="14px serif";g.textAlign="center";g.fillText(n.k==="liga"?"🏆":"⚡",x,y)}}
+    else{g.arc(x,y,11,0,Math.PI*2);g.fill();g.stroke()}
+    if(!kn){g.fillStyle="#fff";g.font="900 16px Fredoka,system-ui,sans-serif";g.textAlign="center";g.fillText("?",x,y+5)}
+    const nm=kn?((EXM[n.k]||{}).n||n.k).replace(/ · .*/,""):"???";g.font="800 13px Fredoka,system-ui,sans-serif";g.textAlign="center";g.lineWidth=4;g.strokeStyle="rgba(15,23,58,.9)";
+    const side=n.r==="cel"||((n.t==="peak"||n.t==="cave")&&n.r!=="alba");const lft=side&&n.r==="bra",lx=side?(lft?x-28:x+28):x,ly=side?y+5:y+30;g.textAlign=side?(lft?"right":"left"):"center";
+    g.strokeText(nm,lx,ly);g.fillStyle=kn?"#fff":"#c9c6d6";g.fillText(nm,lx,ly)});
+  const H0=wmNode(here);if(H0){const b=Math.abs(Math.sin(ts/260))*8;g.font="30px serif";g.textAlign="center";g.fillText("📍",H0.x,H0.y-20-b)}};

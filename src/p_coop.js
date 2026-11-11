@@ -29,7 +29,7 @@ async function xoLeave(){const r=XO.room;XO.room=null;XO.key="";XO.peers={};if(r
 setInterval(()=>{try{
   // solo cuentas como «en el mapa» si la pantalla de Exploración está abierta y a la vista (o estás en un combate de Exploración)
   const vis=EX.cv&&EX.cv.isConnected&&EX.cv.offsetParent!==null&&!document.hidden;
-  const active=typeof EX!=="undefined"&&EX.map&&EX.map!=="casa"&&((EX.on&&vis)||EX.battle)&&!EX.title&&xoOn()&&xoUid();
+  const active=typeof EX!=="undefined"&&EX.map&&EX.map!=="casa"&&EX.map!=="casa_up"&&((EX.on&&vis)||EX.battle)&&!EX.title&&xoOn()&&xoUid();
   if(!active){if(XO.room&&!XO.leaveT)XO.leaveT=Date.now();if(XO.room&&Date.now()-XO.leaveT>(document.hidden?15000:1500)){XO.leaveT=0;xoLeave()}return}XO.leaveT=0;
   if(XO.key!=="ex_"+EX.map){xoJoin(EX.map);return}if(!XO.room)return;
   const p={n:pvNick(),lk:trEnc(myLook()),x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT},j=JSON.stringify(p);

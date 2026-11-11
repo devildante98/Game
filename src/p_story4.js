@@ -75,3 +75,22 @@ function stTour(t){const T=TOUR[t];if(!T)return;stRun(async()=>{const f=stSt().f
 {const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{let n=0;const tk=()=>{if(EX.map!==m||EX.title)return;if(EX.cut||EX.dlg||EX.trans||EX.choice){if(++n<40)setTimeout(tk,400);return}const s=stSt().s,f=stSt().f;
   if(m==="pueblo"&&s===2&&!f.tourV)STX.tourVega();
   else if(TOUR[m]&&!f["tour_"+m])stTour(m)};setTimeout(tk,700)}catch(e){}return r}}
+
+// ---------- tu casa: te despiertas arriba, en tu dormitorio, y mamá te espera abajo ----------
+WM_IN.casa_up="pueblo";
+STX.intro=()=>{const f=stSt().f;if(f.woke&&EX.map==="casa")return STX.introMama();if(f.woke&&EX.map==="casa_up")return;
+  return stRun(async()=>{await sFade("fade",300);exLoad("casa_up",4,3,"d");EX.banner=null;await sFade("fadein",700);await sCard(0);
+    await sSay(["…","¡Bip, bip, bip! El despertador suena sin parar.","¡Hoy es el día! La Profesora Vega te ha prometido tu primer Pokémon.","Desde abajo llega el olor del desayuno… y la voz de mamá llamándote."]);
+    await sSay(S_("Mamá","¡Venga, dormilón, baja ya! ¡Que se enfría el desayuno!"));
+    f.woke=1;save();await sSay(["(Baja por la escalera de la esquina para ir con mamá.)"])})};
+STX.introMama=()=>stRun(async()=>{const m=stN("mama");if(m){await sAlert(m);await sApproach(m)}
+  await sSay(S_("Mamá","¡Por fin te despiertas! Te he oído bajar la escalera como un Tauros.","¡Hoy es el gran día! La Profesora Vega ha llamado esta mañana. Dice que tiene algo muy importante que pedirte.","Su laboratorio es el edificio blanco de la parte de arriba del pueblo.","Ah, y llévate esto. ¡Quien sale de viaje nunca va sin Pociones!"));
+  await sSay(["¡Recibes "+sGive({it:{pot:5}})+"!"]);
+  await sSay(S_("Mamá","Si tus Pokémon se cansan, vuelve a casa a descansar. ¡Te espero con la comida hecha!","Y no te olvides de escribirme de vez en cuando… aunque sea con un Pidgey mensajero."));
+  sStep(1)});
+// al bajar a la cocina por primera vez, mamá te habla
+{const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{if(m==="casa"&&stSt().s===0&&stSt().f.woke){let n=0;const tk=()=>{if(EX.map!=="casa")return;if(EX.cut||EX.dlg||EX.trans){if(++n<30)setTimeout(tk,300);return}STX.introMama()};setTimeout(tk,900)}}catch(e){}return r}}
+// cosas que mirar en tu casa
+{const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&(EX.map==="casa"||EX.map==="casa_up")){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);
+  const T={B:["Tu cama. Todavía está calentita.","En la almohada hay un peluche de Pikachu."],O:["Tu ordenador. Tienes un correo de Dani: «¡Hoy nos dan Pokémon! ¡Llegaré pronto! (Seguro que me duermo)»."],C:["Tu armario. Ahí está tu ropa de viaje, lista desde hace semanas."],E:["Tu cómoda. En el espejo hay una foto tuya de pequeño con mamá en la Playa Coral."],V:["En la tele hablan de unas luces extrañas sobre la Cima Aurora…"],L:["La nevera. Mamá ha dejado una nota: «Bocadillo para el viaje, ¡no lo olvides!»."],G:["Huele a tortitas recién hechas."],Z:["Libros de mamá: «Recetas con bayas», «Cuidados del Pokémon»…"],S:["El sofá favorito de mamá."],D:["La mesa del desayuno. Hay un vaso de leche Mu-Mu."],K:["La encimera de la cocina."],M:["Una silla."]};
+  if(T[c]&&!EX.npcs.some(n=>n.px===EX.x+dx&&n.py===EX.y+dy)){snd("ui");exSay(T[c]);return}}}catch(e){}return _i.apply(this,arguments)}}

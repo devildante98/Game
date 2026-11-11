@@ -99,3 +99,55 @@ const XFURN_TXT={B:["Una cama mullidita. Da ganas de echarse una siesta."],C:["U
   if(EX.climb){k=Math.min(1,(now-EX.climb.t0)/400);up=EX.climb.up}else{const t=(now-EX.climbIn.t0)/380;if(t>=1){EX.climbIn=null;return _t.apply(this,arguments)}k=1-Math.max(0,t);up=!EX.climbIn.up}
   g.save();g.globalAlpha=Math.max(0,1-k*.85);const dy=up?-k*16:k*14;const r=_t.call(this,g,code,face,x,y+dy,(Math.floor(now/120)%2)?1:3,beat,me,ph);g.restore();return r}
   return _t.apply(this,arguments)}}
+
+// =====================================================================================
+// ÁRBOLES, CAMINOS Y FACHADAS (estilo clásico, dibujos propios)
+// =====================================================================================
+// árbol: copa redonda en capas con hojas en «escamas», brillo arriba a la izquierda y tronco con raíces
+xTree=function(v){const k="TR2"+v;if(XG[k])return XG[k];const c=xc(32,48),g=c.getContext("2d");
+  xdisc(g,16,44,13,3.5,"rgba(20,40,20,.3)");
+  // tronco
+  xr(g,12,31,8,12,"#2b1a10");xr(g,13,31,6,12,"#7a4a26");xr(g,13,31,2,12,"#9a6236");xr(g,17,31,1,12,"#5a3418");xr(g,10,41,12,3,"#2b1a10");xr(g,11,41,10,2,"#6a3e20");
+  const sh=v%2?1:0,O="#14381a",B1="#25622a",B2="#367e34",B3="#4e9e40",B4="#86cc5e";
+  const lobes=[[16,18,15,12],[8,22,8,7],[24,22,8,7],[16,8,11,8],[9-sh,13,7,6],[23+sh,13,7,6]];
+  lobes.forEach(b=>xdisc(g,b[0],b[1],b[2]+1,b[3]+1,O));lobes.forEach(b=>xdisc(g,b[0],b[1],b[2],b[3],B1));
+  // hojas en escamas (filas de arcos)
+  for(let y=6;y<30;y+=4)for(let x=4+(y/4%2)*3;x<29;x+=6){const d=g.getImageData(x,y,1,1).data;if(d[3]<200||(d[0]===0x14&&d[1]===0x38))continue;xr(g,x,y,4,1,B2);xr(g,x-1,y-1,1,1,B2);xr(g,x+4,y-1,1,1,B2)}
+  [[12,12,8,6],[18,7,5,4],[8,17,4,3]].forEach(b=>xdisc(g,b[0],b[1],b[2],b[3],B3));
+  [[10,10],[13,9],[17,5],[7,15],[11,13]].forEach(([x,y])=>xr(g,x,y,2,1,B4));
+  // sombra de la copa en la parte de abajo
+  for(let x=4;x<29;x++){for(let y=28;y>14;y--){const d=g.getImageData(x,y,1,1).data;if(d[3]>200&&!(d[0]===0x14&&d[1]===0x38)){xr(g,x,y,1,1,"#1d5222");break}}}
+  return XG[k]=c};
+// caminos: tierra más cálida, borde marcado y piedrecitas
+{const _p=xPath;xPath=function(m,v,bs){const k="P2"+m+"_"+v+(bs||"");if(XG[k])return XG[k];const src=_p.apply(this,arguments),c=xc(32,32),g=c.getContext("2d");g.drawImage(src,0,0);
+  const im=g.getImageData(0,0,32,32),d=im.data,MAP={"236,214,162":[232,198,138],"200,168,112":[160,112,64],"212,184,128":[204,162,102],"248,236,204":[248,226,176]};
+  for(let i=0;i<d.length;i+=4){const n=MAP[d[i]+","+d[i+1]+","+d[i+2]];if(n){d[i]=n[0];d[i+1]=n[1];d[i+2]=n[2]}}g.putImageData(im,0,0);
+  // piedrecitas
+  [[6,8],[20,5],[13,19],[25,24],[8,26]].forEach(([x,y],i)=>{if((v+i)%3)return;const q=g.getImageData(x,y,1,1).data;if(!(q[0]===232&&q[1]===198))return;xr(g,x,y,3,2,"#b89868");xr(g,x,y,2,1,"#e8d6b0");xr(g,x+1,y+2,2,1,"#9a7a4e")});
+  return XG[k]=c}}
+// fachadas de las casas: tejado de tejas en filas, chimenea, paredes de tablas, ventanas con cortinas y jardinera, puerta con marco y escalón
+{const _b=xBld;xBld=function(b){if(b.k!=="house"&&b.k!=="house2")return _b.apply(this,arguments);const k="BD2"+b.k+b.w+b.h+b.door+(b.x%3);if(XG[k])return XG[k];
+  const W=b.w*32,H=b.h*32+26,c=xc(W,H),g=c.getContext("2d"),ink="#2b2440",R=(x,y,w,h,col)=>xr(g,Math.round(x),Math.round(y),Math.round(w),Math.round(h),col),LITW=[];
+  const roofC=b.k==="house"?["#c8402f","#e05a40","#a8301f","#f08a6a"]:["#2f62c0","#4a80dc","#22489a","#7aa8f0"],wallC=b.k==="house"?["#f4e6c4","#e2d0a8","#fff6dc"]:["#eef0e6","#d8dcd0","#ffffff"];
+  const wy=Math.round(H*.5),base=H;
+  xdisc(g,W/2,H-3,W/2-2,5,"rgba(0,0,0,.22)");
+  // chimenea
+  R(W-34,2,12,22,ink);R(W-32,4,8,20,"#9a8a80");R(W-32,4,8,3,"#b8aaa0");R(W-34,2,12,3,"#6a5a50");
+  // tejado (con alero)
+  R(0,10,W,wy-6,ink);for(let r=0;r<(wy-10)/6;r++){const y=12+r*6,h=Math.min(6,wy-4-y);if(h<=0)break;R(2,y,W-4,h,r%2?roofC[0]:roofC[1]);R(2,y+h-1,W-4,1,roofC[2]);for(let x=2+(r%2)*6;x<W-4;x+=12)R(x,y,1,h-1,roofC[2])}
+  R(2,12,W-4,2,roofC[3]);R(0,wy-4,W,4,ink);R(2,wy-3,W-4,2,roofC[2]);
+  // pared de tablas
+  R(0,wy,W,base-wy-4,ink);R(2,wy,W-4,base-wy-6,wallC[0]);for(let y=wy+5;y<base-8;y+=5)R(2,y,W-4,1,wallC[1]);R(2,wy,W-4,2,"rgba(0,0,0,.18)");R(2,base-10,W-4,4,wallC[1]);
+  // ventanas con cortinas y jardinera
+  const win=(x,y)=>{R(x-2,y-2,22,18,ink);R(x,y,18,14,"#8fd0ff");R(x,y,18,4,"#d8f2ff");R(x+8,y,2,14,"#fff");R(x,y+6,18,2,"#fff");R(x,y,4,14,"#f6d8e0");R(x+14,y,4,14,"#f6d8e0");
+    R(x-3,y+15,24,4,ink);R(x-2,y+16,22,2,"#9a6236");[[1,"#ff6b8a"],[6,"#ffd23f"],[11,"#ff6b8a"],[16,"#b58aff"]].forEach(([dx,col])=>{R(x+dx-1,y+13,3,3,col);R(x+dx,y+12,1,1,"#4aa04a")});LITW.push([x,y,18,14])};
+  const dx=b.door*32,doorX=dx+6;
+  [[8],[W-26]].forEach(([x])=>{if(b.door<0||Math.abs(x-doorX)>24)win(x,wy+10)});if(b.door<0)win(W/2-9,wy+10);
+  // puerta
+  if(b.door>=0){const y=base-36;R(doorX-3,y-3,26,35,ink);R(doorX-1,y-1,22,33,"#e8d8b8");R(doorX,y,20,31,"#8a5a34");R(doorX+2,y+2,7,12,"#a8703c");R(doorX+11,y+2,7,12,"#a8703c");R(doorX+2,y+16,16,12,"#7a4a26");R(doorX+15,y+17,2,3,"#ffd34a");
+    R(doorX-5,base-6,30,4,"#b8b0a0");R(doorX-5,base-6,30,1,"#d8d0c0")}
+  // buzón
+  if(b.x%3===0){R(W-12,base-22,8,8,ink);R(W-11,base-21,6,5,"#e8414f");R(W-9,base-14,2,10,ink)}
+  const n=xc(W,H),q=n.getContext("2d");q.drawImage(c,0,0);q.globalCompositeOperation="source-atop";q.fillStyle="rgba(20,24,60,.32)";q.fillRect(0,0,W,H);q.globalCompositeOperation="source-over";
+  LITW.forEach(r=>{q.fillStyle="#ffcf5a";q.fillRect(r[0],r[1],r[2],r[3]);q.fillStyle="#fff1b0";q.fillRect(r[0],r[1],r[2],Math.max(2,r[3]/3))});c._n=n;
+  return XG[k]=c}}

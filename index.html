@@ -39,7 +39,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.29"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.29.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -74,7 +74,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794387374">
+<meta name="game-build" content="1794387785">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2501,6 +2501,12 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .rdmvb.f{border-color:#2fa36b;box-shadow:0 0 0 2px #2fa36b55}.rdmvb.f i{color:#2fa36b}
 .rdmvb.c{border-color:#e8414f;box-shadow:0 0 0 2px #e8414f55}.rdmvb.c i{color:#e8414f}
 .rdmvb.no{opacity:.5}
+/* exploración: arrastrar Pokémon del equipo */
+#exTeam .xgc{touch-action:none;cursor:grab}
+#exTeam .xgc.xgdrag{opacity:.35}
+#exTeam .xgover{outline:3px dashed var(--yel);outline-offset:2px}
+.xgghost{position:fixed;z-index:2147483000;pointer-events:none;opacity:.92;transform:rotate(-2deg) scale(1.05);box-shadow:0 12px 26px rgba(0,0,0,.45)}
+#exTeam .xgc img,.tmbtn img{-webkit-user-drag:none;user-select:none;pointer-events:none}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2566,7 +2572,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.29</small>
+    <small class="pcver">Versión 6.29.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7222,8 +7228,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.29";
+const GAME_VER="6.29.1";
 const NEWS=[
+{v:"2026-11-11-6.29.1",ver:"6.29.1",at:"2026-11-11T10:03",t:"🔧 Arreglos/Mejoras",l:["Tutorial: el combate ya no se queda escondido detrás. El tutorial se aparta mientras luchas y sigue cuando termina","Exploración: arrastra los Pokémon del equipo para ordenarlos, o entre el equipo y la caja para meterlos, sacarlos o cambiarlos"]},
 {v:"2026-11-11b",ver:"6.29",at:"2026-11-11T09:56",t:"🔴 Incursiones mejoradas",l:["Nuevo botón «🎯 Elegir los ataques de tu equipo» en la sala de espera: eliges el ataque rápido y los dos cargados de cada Pokémon","Cada ataque muestra su eficacia contra el jefe, y los de estado aparecen como «No sirve en incursiones»","Incursiones con amigos: el contador y el inicio van con la hora del servidor, así coinciden para todos aunque los relojes de cada móvil sean distintos","¿Cuál pesa más?: el contador de segundos ahora va bajando (antes parecía congelado)"]},
 {v:"2026-11-11-6.28.1",ver:"6.28.1",at:"2026-11-11T09:51",t:"🔧 Arreglos/Mejoras",l:["Móvil: botón 💾 para guardar en la pantalla principal","El juego se calla al cambiar de app o de pestaña (y vuelve a sonar al volver)","Fusiones (Calyrex, Kyurem, Necrozma, Hoopa): al transformarse aprenden su movimiento propio, como Lanza Glacial u Orbes Espectro, mientras dure el combate","Evolución: si un Pokémon ya tiene el nivel (por ejemplo, con un Caramelo Raro), te lo ofrece al acabar el siguiente combate. Si la cancelas, vuelve a intentarlo al subir otro nivel","Chat: los mensajes se ordenan con la hora real, aunque el reloj de tu móvil vaya adelantado o atrasado","Laboratorio de fósiles: ahora te explica qué mitades se pueden combinar (por ejemplo, el Fósil Dragón con el Pájaro o el Pez)"]},
 {v:"2026-11-11a",ver:"6.28",at:"2026-11-11T09:37",t:"🏟️ Exploración: gimnasios, región Celeste y Liga Pokémon",l:["8 gimnasios con su líder y sus entrenadores: Pueblo Brisa (Planta), Puerto Escarcha (Agua), Pueblo Nevado (Hielo), Puerto Brasa (Lucha), Villa Volcán (Fuego), Ciudad Trueno (Eléctrico), Puerto Celeste (Psíquico) y Ciudad Lunar (Dragón)","Las medallas de Exploración van con la historia: el marinero te pide 1, 3 y 5 medallas para viajar a cada región (si ya habías pasado por ella, no)","Acto V: nueva región Celeste con Puerto Celeste, la Ruta 5 y Ciudad Lunar, más tiendas con los objetos Elección","Con las 8 medallas, cruza la Calle Victoria y enfréntate al Alto Mando (Siniestro, Acero, Hada y Fantasma) y al Campeón… ¿adivinas quién es?","Al ganar entras en el Salón de la Fama y puedes revalidar el título una vez al día"]},
@@ -7447,7 +7454,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794387374";
+const GAME_B="1794387785";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -13607,7 +13614,7 @@ const TUT=[
  {el:"#p1",t:"🎰 Tu primera tirada",d:"Gasta tickets en una tirada para conseguir un Pokémon. ¡A ver qué te toca!",ok:()=>(S.pulls|0)>0},
  {el:"#out .card",t:"🔍 Míralo de cerca",d:"Toca el Pokémon que te ha salido para verlo en grande: ahí puedes ponerle mote y añadirlo a tu equipo.",ok:()=>{const m=$("pkv");return !!(m&&!m.hidden)},next:1},
  {el:"#team",t:"🧩 Forma tu equipo",d:"Pon al menos un Pokémon en tu equipo tocando una casilla. Con él lucharás en los combates.",ok:()=>(S.team||[]).some(n=>n&&S.owned[n])},
- {el:"#fgo",t:"⚔️ ¡A combatir!",d:"Pulsa «¡Combatir!» para luchar contra un Pokémon salvaje. Ganando, tus Pokémon suben de nivel y evolucionan.",ok:()=>!!fcd||(stt().win|0)>0},
+ {el:"#fgo",t:"⚔️ ¡A combatir!",d:"Pulsa «¡Combatir!» para luchar contra un Pokémon salvaje. Elige un ataque en cada turno. Ganando, tus Pokémon suben de nivel y evolucionan.",ok:()=>!fcd&&(!!TS.fought||(stt().win|0)>0)},
  {el:"#navb",t:"🧭 El menú",d:"Desde la Poké Ball MENÚ abres todo lo demás: Pokédex, Mochila, Gimnasios, Online, Minijuegos, Actividades… Los números rojos te avisan de lo pendiente.",ok:()=>{const g=$("hubG");return !!(g&&!g.hidden)}}];
 var TS={i:-1,box:null,spot:null,iv:0};
 const TUT_RW={t:20000,it:{pb:5,pot:3}};
@@ -13629,7 +13636,11 @@ function tutPos(){
     const bh=TS.box.offsetHeight||140,bw=Math.min(340,innerWidth-24),below=r.bottom+p+12+bh<innerHeight;
     TS.box.style.width=bw+"px";TS.box.style.left=Math.max(12,Math.min(innerWidth-bw-12,r.left+r.width/2-bw/2))+"px";TS.box.style.top=(below?r.bottom+p+12:Math.max(12,r.top-p-12-bh))+"px"}
 }
-function tutTick(){if(TS.i<0)return;const s=TUT[TS.i];if(s&&s.ok()){TS.i++;tutStep();return}tutPos()}
+function tutTick(){if(TS.i<0)return;
+  // durante un combate el tutorial se aparta (no tapa nada ni cambia de pantalla) y espera a que termine
+  if(typeof fcd!=="undefined"&&fcd){TS.fought=1;if(TS.box)TS.box.hidden=true;if(TS.spot)TS.spot.hidden=true;return}
+  if(TS.box&&TS.box.hidden&&TS.i<TUT.length){TS.box.hidden=false}
+  const s=TUT[TS.i];if(s&&s.ok()){TS.i++;tutStep();return}tutPos()}
 function tutEnd(done){clearInterval(TS.iv);TS.i=-1;if(TS.box)TS.box.hidden=true;if(TS.spot)TS.spot.hidden=true;S.tutDone=1;if(done&&!S.tutRw){S.tutRw=1;grant(TUT_RW);snd("win");toast("🎁 ¡Premio del tutorial: "+rwTxt(TUT_RW)+"!")}save();render()}
 document.addEventListener("click",e=>{if(TS.i>=0&&e.target.closest&&e.target.closest("#train"))window._tutCk=(window._tutCk|0)+1},true);
 document.addEventListener("keydown",e=>{if(TS.i>=0&&(O.tkeys||["u"]).includes(String(e.key).toLowerCase()))window._tutCk=(window._tutCk|0)+1},true);
@@ -13999,7 +14010,7 @@ function gmTown(t){const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$(
 // ---------- el tutorial de los jugadores nuevos abre la sección de cada paso ----------
 {const _ts=tutStep;tutStep=function(){const r=_ts.apply(this,arguments);try{if(gmOn()&&GM.init&&TS.i>=0&&TS.i<TUT.length){const s=TUT[TS.i];if(s.el==="#navb")s.el="#gnavb";
   const el=document.querySelector(s.el),pan=el&&el.closest&&el.closest("#stage,#batP,#shopP,#earnP");
-  if(pan&&GM.scr!==pan.id)gmOpen(pan.id);else if(!pan&&GM.scr&&(s.el==="#train"||s.el==="#gnavb"))gmClose();
+  if(typeof fcd!=="undefined"&&fcd){}else if(pan&&GM.scr!==pan.id)gmOpen(pan.id);else if(!pan&&GM.scr&&(s.el==="#train"||s.el==="#gnavb"))gmClose();
   if(el&&pan)setTimeout(()=>{try{el._siv({block:"center"})}catch(e){}},80)}}catch(e){}return r}}
 window.GM=GM;window.gmOpen=gmOpen;window.gmClose=gmClose;
 // la pantalla principal se marca como «inicio» desde el primer momento (si no, las animaciones del pueblo,
@@ -14432,6 +14443,35 @@ STX.champ=()=>stRun(async()=>{const f=stSt().f;
   const x=dx+4,y=H-38;R(x-2,y-2,28,34,ink);R(x,y,24,32,"#c0392b");R(x+11,y,2,32,ink);R(x,y,24,4,"#e8604f");R(x-4,H-8,32,4,"#c9c0ae");
   const n=xc(W,H),q=n.getContext("2d");q.drawImage(c,0,0);q.globalCompositeOperation="source-atop";q.fillStyle="rgba(20,24,60,.32)";q.fillRect(0,0,W,H);q.globalCompositeOperation="source-over";
   LW.forEach(r=>{q.fillStyle="#ffcf5a";q.fillRect(r[0],r[1],r[2],r[3])});c._n=n;return XG[k]=c}}
+// ================= EQUIPO DE EXPLORACIÓN: arrastrar para ordenar, meter o sacar Pokémon =================
+// Suelta una tarjeta del equipo sobre otra para intercambiarlas; una de la caja sobre una del equipo para cambiarlas;
+// una de la caja en la zona del equipo para meterla (si hay sitio) y una del equipo en la caja para sacarla.
+const XD={src:null,n:"",inT:false,on:false,x0:0,y0:0,gh:null,tgt:null,skip:0};
+function xdZone(x,y){if(XD.gh)XD.gh.style.display="none";const el=document.elementFromPoint(x,y);if(XD.gh)XD.gh.style.display="";if(!el||!el.closest)return null;
+  const c=el.closest("#exTeam .xgc");if(c&&c!==XD.src)return {c:c,n:c.dataset.xg,inT:c.classList.contains("on")};
+  const l=el.closest("#exTeam .xgl");if(l)return {list:l,inT:!!l.querySelector(".xgc.on")||(!l.querySelector(".xgc")&&false)};return null}
+document.addEventListener("pointerdown",e=>{if(e.button!==0)return;const c=e.target.closest&&e.target.closest("#exTeam .xgc");if(!c)return;XD.src=c;XD.n=c.dataset.xg;XD.inT=c.classList.contains("on");XD.x0=e.clientX;XD.y0=e.clientY;XD.on=false;XD.pid=e.pointerId});
+document.addEventListener("pointermove",e=>{if(!XD.src||e.pointerId!==XD.pid)return;
+  if(!XD.on){if(Math.hypot(e.clientX-XD.x0,e.clientY-XD.y0)<8)return;XD.on=true;const r=XD.src.getBoundingClientRect(),g=XD.src.cloneNode(true);g.classList.add("xgghost");g.style.width=r.width+"px";g.style.height=r.height+"px";XD.dx=XD.x0-r.left;XD.dy=XD.y0-r.top;document.body.appendChild(g);XD.gh=g;XD.src.classList.add("xgdrag")}
+  e.preventDefault();XD.gh.style.left=(e.clientX-XD.dx)+"px";XD.gh.style.top=(e.clientY-XD.dy)+"px";
+  const z=xdZone(e.clientX,e.clientY),t=z&&(z.c||z.list);if(t!==XD.tgt){if(XD.tgt)XD.tgt.classList.remove("xgover");XD.tgt=t;if(t)t.classList.add("xgover")}},{passive:false});
+function xdEnd(e,cancel){if(!XD.src)return;const was=XD.on,z=was&&!cancel?xdZone(e.clientX,e.clientY):null;
+  if(XD.gh)XD.gh.remove();XD.src.classList.remove("xgdrag");if(XD.tgt)XD.tgt.classList.remove("xgover");const n=XD.n,inT=XD.inT;XD.src=null;XD.gh=null;XD.tgt=null;XD.on=false;
+  if(!was)return;XD.skip=Date.now();if(!z)return;let msg="";
+  xgRun(()=>{let T=(S.team||[]).filter(x=>x&&S.owned[x]);const i=T.indexOf(n);
+    if(z.c){const j=T.indexOf(z.n);
+      if(inT&&z.inT&&i>=0&&j>=0){T[i]=z.n;T[j]=n;msg="🔄 "+nk(n)+" y "+nk(z.n)+" han intercambiado sus puestos"}
+      else if(!inT&&z.inT&&j>=0){T[j]=n;msg="🔄 "+nk(n)+" entra en el equipo y "+nk(z.n)+" va a la caja"}
+      else if(inT&&!z.inT&&i>=0){T[i]=z.n;msg="🔄 "+nk(z.n)+" entra en el equipo y "+nk(n)+" va a la caja"}}
+    else if(z.list){const toTeam=z.list===document.querySelector("#exTeam .xgl")&&!!document.querySelector("#exTeam .xgl .xgc.on");
+      if(!inT&&toTeam){if(T.length>=6){msg="Tu equipo ya tiene 6 Pokémon: suéltalo encima de uno para cambiarlos."}else{T.push(n);msg="✅ "+nk(n)+" entra en el equipo"}}
+      else if(inT&&!toTeam){if(T.length<=1)msg="Necesitas al menos un Pokémon en el equipo.";else{T.splice(i,1);msg="📦 "+nk(n)+" va a la caja"}}}
+    S.team=T.concat(["","","","","",""]).slice(0,6);save()});
+  if(msg)toast(msg);snd("ui");xgPanel()}
+document.addEventListener("pointerup",e=>xdEnd(e,false));document.addEventListener("pointercancel",e=>xdEnd(e,true));
+document.addEventListener("click",e=>{if(Date.now()-XD.skip<350){e.stopImmediatePropagation();e.preventDefault()}},true);
+{const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgs");if(h&&!box.querySelector(".xgdh")){const t=document.createElement("small");t.className="mut xgdh";t.textContent="💡 También puedes arrastrar las tarjetas: entre el equipo para ordenarlo, o entre el equipo y la caja para cambiarlos.";box.querySelector(".xgh").after(t)}}catch(e){}return r}}
+document.addEventListener("dragstart",e=>{if(e.target&&e.target.closest&&e.target.closest("#exTeam .xgc,.tmbtn"))e.preventDefault()},true);
 
 </script>
 <script>

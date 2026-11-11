@@ -359,7 +359,7 @@ function gmTown(t){const dt=Math.min(60,t-(GM.last||t));GM.last=t;if(GM.scr||!$(
 // ---------- el tutorial de los jugadores nuevos abre la sección de cada paso ----------
 {const _ts=tutStep;tutStep=function(){const r=_ts.apply(this,arguments);try{if(gmOn()&&GM.init&&TS.i>=0&&TS.i<TUT.length){const s=TUT[TS.i];if(s.el==="#navb")s.el="#gnavb";
   const el=document.querySelector(s.el),pan=el&&el.closest&&el.closest("#stage,#batP,#shopP,#earnP");
-  if(pan&&GM.scr!==pan.id)gmOpen(pan.id);else if(!pan&&GM.scr&&(s.el==="#train"||s.el==="#gnavb"))gmClose();
+  if(typeof fcd!=="undefined"&&fcd){}else if(pan&&GM.scr!==pan.id)gmOpen(pan.id);else if(!pan&&GM.scr&&(s.el==="#train"||s.el==="#gnavb"))gmClose();
   if(el&&pan)setTimeout(()=>{try{el._siv({block:"center"})}catch(e){}},80)}}catch(e){}return r}}
 window.GM=GM;window.gmOpen=gmOpen;window.gmClose=gmClose;
 // la pantalla principal se marca como «inicio» desde el primer momento (si no, las animaciones del pueblo,

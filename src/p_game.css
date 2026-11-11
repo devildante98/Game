@@ -833,3 +833,9 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .rdmvb.f{border-color:#2fa36b;box-shadow:0 0 0 2px #2fa36b55}.rdmvb.f i{color:#2fa36b}
 .rdmvb.c{border-color:#e8414f;box-shadow:0 0 0 2px #e8414f55}.rdmvb.c i{color:#e8414f}
 .rdmvb.no{opacity:.5}
+/* exploración: arrastrar Pokémon del equipo */
+#exTeam .xgc{touch-action:none;cursor:grab}
+#exTeam .xgc.xgdrag{opacity:.35}
+#exTeam .xgover{outline:3px dashed var(--yel);outline-offset:2px}
+.xgghost{position:fixed;z-index:2147483000;pointer-events:none;opacity:.92;transform:rotate(-2deg) scale(1.05);box-shadow:0 12px 26px rgba(0,0,0,.45)}
+#exTeam .xgc img,.tmbtn img{-webkit-user-drag:none;user-select:none;pointer-events:none}

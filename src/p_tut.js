@@ -7,7 +7,7 @@ const TUT=[
  {el:"#p1",t:"🎰 Tu primera tirada",d:"Gasta tickets en una tirada para conseguir un Pokémon. ¡A ver qué te toca!",ok:()=>(S.pulls|0)>0},
  {el:"#out .card",t:"🔍 Míralo de cerca",d:"Toca el Pokémon que te ha salido para verlo en grande: ahí puedes ponerle mote y añadirlo a tu equipo.",ok:()=>{const m=$("pkv");return !!(m&&!m.hidden)},next:1},
  {el:"#team",t:"🧩 Forma tu equipo",d:"Pon al menos un Pokémon en tu equipo tocando una casilla. Con él lucharás en los combates.",ok:()=>(S.team||[]).some(n=>n&&S.owned[n])},
- {el:"#fgo",t:"⚔️ ¡A combatir!",d:"Pulsa «¡Combatir!» para luchar contra un Pokémon salvaje. Ganando, tus Pokémon suben de nivel y evolucionan.",ok:()=>!!fcd||(stt().win|0)>0},
+ {el:"#fgo",t:"⚔️ ¡A combatir!",d:"Pulsa «¡Combatir!» para luchar contra un Pokémon salvaje. Elige un ataque en cada turno. Ganando, tus Pokémon suben de nivel y evolucionan.",ok:()=>!fcd&&(!!TS.fought||(stt().win|0)>0)},
  {el:"#navb",t:"🧭 El menú",d:"Desde la Poké Ball MENÚ abres todo lo demás: Pokédex, Mochila, Gimnasios, Online, Minijuegos, Actividades… Los números rojos te avisan de lo pendiente.",ok:()=>{const g=$("hubG");return !!(g&&!g.hidden)}}];
 var TS={i:-1,box:null,spot:null,iv:0};
 const TUT_RW={t:20000,it:{pb:5,pot:3}};
@@ -29,7 +29,11 @@ function tutPos(){
     const bh=TS.box.offsetHeight||140,bw=Math.min(340,innerWidth-24),below=r.bottom+p+12+bh<innerHeight;
     TS.box.style.width=bw+"px";TS.box.style.left=Math.max(12,Math.min(innerWidth-bw-12,r.left+r.width/2-bw/2))+"px";TS.box.style.top=(below?r.bottom+p+12:Math.max(12,r.top-p-12-bh))+"px"}
 }
-function tutTick(){if(TS.i<0)return;const s=TUT[TS.i];if(s&&s.ok()){TS.i++;tutStep();return}tutPos()}
+function tutTick(){if(TS.i<0)return;
+  // durante un combate el tutorial se aparta (no tapa nada ni cambia de pantalla) y espera a que termine
+  if(typeof fcd!=="undefined"&&fcd){TS.fought=1;if(TS.box)TS.box.hidden=true;if(TS.spot)TS.spot.hidden=true;return}
+  if(TS.box&&TS.box.hidden&&TS.i<TUT.length){TS.box.hidden=false}
+  const s=TUT[TS.i];if(s&&s.ok()){TS.i++;tutStep();return}tutPos()}
 function tutEnd(done){clearInterval(TS.iv);TS.i=-1;if(TS.box)TS.box.hidden=true;if(TS.spot)TS.spot.hidden=true;S.tutDone=1;if(done&&!S.tutRw){S.tutRw=1;grant(TUT_RW);snd("win");toast("🎁 ¡Premio del tutorial: "+rwTxt(TUT_RW)+"!")}save();render()}
 document.addEventListener("click",e=>{if(TS.i>=0&&e.target.closest&&e.target.closest("#train"))window._tutCk=(window._tutCk|0)+1},true);
 document.addEventListener("keydown",e=>{if(TS.i>=0&&(O.tkeys||["u"]).includes(String(e.key).toLowerCase()))window._tutCk=(window._tutCk|0)+1},true);

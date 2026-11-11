@@ -161,3 +161,32 @@ STX.champ=()=>stRun(async()=>{const f=stSt().f;
   const x=dx+4,y=H-38;R(x-2,y-2,28,34,ink);R(x,y,24,32,"#c0392b");R(x+11,y,2,32,ink);R(x,y,24,4,"#e8604f");R(x-4,H-8,32,4,"#c9c0ae");
   const n=xc(W,H),q=n.getContext("2d");q.drawImage(c,0,0);q.globalCompositeOperation="source-atop";q.fillStyle="rgba(20,24,60,.32)";q.fillRect(0,0,W,H);q.globalCompositeOperation="source-over";
   LW.forEach(r=>{q.fillStyle="#ffcf5a";q.fillRect(r[0],r[1],r[2],r[3])});c._n=n;return XG[k]=c}}
+// ================= EQUIPO DE EXPLORACIÓN: arrastrar para ordenar, meter o sacar Pokémon =================
+// Suelta una tarjeta del equipo sobre otra para intercambiarlas; una de la caja sobre una del equipo para cambiarlas;
+// una de la caja en la zona del equipo para meterla (si hay sitio) y una del equipo en la caja para sacarla.
+const XD={src:null,n:"",inT:false,on:false,x0:0,y0:0,gh:null,tgt:null,skip:0};
+function xdZone(x,y){if(XD.gh)XD.gh.style.display="none";const el=document.elementFromPoint(x,y);if(XD.gh)XD.gh.style.display="";if(!el||!el.closest)return null;
+  const c=el.closest("#exTeam .xgc");if(c&&c!==XD.src)return {c:c,n:c.dataset.xg,inT:c.classList.contains("on")};
+  const l=el.closest("#exTeam .xgl");if(l)return {list:l,inT:!!l.querySelector(".xgc.on")||(!l.querySelector(".xgc")&&false)};return null}
+document.addEventListener("pointerdown",e=>{if(e.button!==0)return;const c=e.target.closest&&e.target.closest("#exTeam .xgc");if(!c)return;XD.src=c;XD.n=c.dataset.xg;XD.inT=c.classList.contains("on");XD.x0=e.clientX;XD.y0=e.clientY;XD.on=false;XD.pid=e.pointerId});
+document.addEventListener("pointermove",e=>{if(!XD.src||e.pointerId!==XD.pid)return;
+  if(!XD.on){if(Math.hypot(e.clientX-XD.x0,e.clientY-XD.y0)<8)return;XD.on=true;const r=XD.src.getBoundingClientRect(),g=XD.src.cloneNode(true);g.classList.add("xgghost");g.style.width=r.width+"px";g.style.height=r.height+"px";XD.dx=XD.x0-r.left;XD.dy=XD.y0-r.top;document.body.appendChild(g);XD.gh=g;XD.src.classList.add("xgdrag")}
+  e.preventDefault();XD.gh.style.left=(e.clientX-XD.dx)+"px";XD.gh.style.top=(e.clientY-XD.dy)+"px";
+  const z=xdZone(e.clientX,e.clientY),t=z&&(z.c||z.list);if(t!==XD.tgt){if(XD.tgt)XD.tgt.classList.remove("xgover");XD.tgt=t;if(t)t.classList.add("xgover")}},{passive:false});
+function xdEnd(e,cancel){if(!XD.src)return;const was=XD.on,z=was&&!cancel?xdZone(e.clientX,e.clientY):null;
+  if(XD.gh)XD.gh.remove();XD.src.classList.remove("xgdrag");if(XD.tgt)XD.tgt.classList.remove("xgover");const n=XD.n,inT=XD.inT;XD.src=null;XD.gh=null;XD.tgt=null;XD.on=false;
+  if(!was)return;XD.skip=Date.now();if(!z)return;let msg="";
+  xgRun(()=>{let T=(S.team||[]).filter(x=>x&&S.owned[x]);const i=T.indexOf(n);
+    if(z.c){const j=T.indexOf(z.n);
+      if(inT&&z.inT&&i>=0&&j>=0){T[i]=z.n;T[j]=n;msg="🔄 "+nk(n)+" y "+nk(z.n)+" han intercambiado sus puestos"}
+      else if(!inT&&z.inT&&j>=0){T[j]=n;msg="🔄 "+nk(n)+" entra en el equipo y "+nk(z.n)+" va a la caja"}
+      else if(inT&&!z.inT&&i>=0){T[i]=z.n;msg="🔄 "+nk(z.n)+" entra en el equipo y "+nk(n)+" va a la caja"}}
+    else if(z.list){const toTeam=z.list===document.querySelector("#exTeam .xgl")&&!!document.querySelector("#exTeam .xgl .xgc.on");
+      if(!inT&&toTeam){if(T.length>=6){msg="Tu equipo ya tiene 6 Pokémon: suéltalo encima de uno para cambiarlos."}else{T.push(n);msg="✅ "+nk(n)+" entra en el equipo"}}
+      else if(inT&&!toTeam){if(T.length<=1)msg="Necesitas al menos un Pokémon en el equipo.";else{T.splice(i,1);msg="📦 "+nk(n)+" va a la caja"}}}
+    S.team=T.concat(["","","","","",""]).slice(0,6);save()});
+  if(msg)toast(msg);snd("ui");xgPanel()}
+document.addEventListener("pointerup",e=>xdEnd(e,false));document.addEventListener("pointercancel",e=>xdEnd(e,true));
+document.addEventListener("click",e=>{if(Date.now()-XD.skip<350){e.stopImmediatePropagation();e.preventDefault()}},true);
+{const _xp=xgPanel;xgPanel=function(){const r=_xp.apply(this,arguments);try{const box=$("exTeam"),h=box&&box.querySelector(".xgs");if(h&&!box.querySelector(".xgdh")){const t=document.createElement("small");t.className="mut xgdh";t.textContent="💡 También puedes arrastrar las tarjetas: entre el equipo para ordenarlo, o entre el equipo y la caja para cambiarlos.";box.querySelector(".xgh").after(t)}}catch(e){}return r}}
+document.addEventListener("dragstart",e=>{if(e.target&&e.target.closest&&e.target.closest("#exTeam .xgc,.tmbtn"))e.preventDefault()},true);

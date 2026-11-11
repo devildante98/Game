@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.50"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.50.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794423516">
+<meta name="game-build" content="1794424228">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2690,7 +2690,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.50</small>
+    <small class="pcver">Versión 6.50.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7364,8 +7364,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.50";
+const GAME_VER="6.50.1";
 const NEWS=[
+{v:"2026-11-11-6.50.1",ver:"6.50.1",at:"2026-11-11T20:10",t:"🔧 Arreglos/Mejoras",l:["Exploración: nuevo control configurable «Volver al menú anterior» (teclado: Retroceso; mando: LB). Te lleva un paso atrás: de una ficha al panel, del panel o del mapa al menú, o cierra el menú. En combate, de los ataques vuelve a LUCHAR/MOCHILA/POKÉMON/HUIR","Nuevo botón de mando configurable «Abrir la mochila» (por defecto Y). En el teclado sigue siendo la I, y ahora también funciona con el menú u otro panel abierto","Puedes cambiarlos en Exploración → Menú → Controles","Arreglado: con el mando, B en combate podía abrir la mochila en lugar de volver atrás"]},
 {v:"2026-11-11-6.50",ver:"6.50",at:"2026-11-11T19:57",t:"🎵 Música de Exploración al estilo clásico",l:["12 temas nuevos y originales al estilo de las consolas portátiles clásicas: pulso con vibrato, segunda voz, bajo y percusión de 8 bits","La música cambia sola según dónde estés: pueblos, rutas (pradera, nieve y ceniza volcánica), bosque, playa, cuevas, Centros Pokémon y tiendas, gimnasios, casas, laboratorio y Liga","En los combates de Exploración suena el tema de Pokémon salvaje, el de entrenador o uno nuevo para líderes de gimnasio, el Alto Mando y los jefes del Equipo Ocaso","Suena si tienes la música activada y la opción «Música distinta en cada sección» encendida (lo está por defecto). Los temas nuevos también están en la lista del reproductor"]},
 {v:"2026-11-11-6.49.7",ver:"6.49.7",at:"2026-11-11T19:51",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball con varias teclas a la vez ya no ralentiza el juego ni corta la música: cada toque es unas 100 veces más ligero y la pantalla se actualiza una vez por fotograma","Los números de tickets ya no se amontonan: los toques seguidos se suman en un solo número. Sigues ganando exactamente lo mismo por cada toque"]},
 {v:"2026-11-11-6.49.6",ver:"6.49.6",at:"2026-11-11T19:47",t:"🔧 Arreglos/Mejoras",l:["Exploración: los paneles que abres desde el menú lateral (Equipo y Mochila, Pokédex y Controles) tienen un botón «◀ Menú» junto a «Cerrar» que te devuelve al menú, en la misma opción, sin tener que volver a abrirlo","Con el mando (B) o con Esc también vuelves al menú. Si estás dentro de una ficha o una subpantalla, primero vuelves al panel"]},
@@ -7633,7 +7634,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794423516";
+const GAME_B="1794424228";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15236,10 +15237,10 @@ function gpPoll(){const L=navigator.getGamepads?[...navigator.getGamepads()].fil
   if(d!==GP.dir){if(GP.dir&&!inBattle)gpKey("keyup",gpKeyOf(GP.dir));if(d){if(inBattle)gpNav(d);else gpKey("keydown",gpKeyOf(d))}GP.dir=d;GP.rep=performance.now()+380}
   else if(d&&(inBattle||exMenuOpen()||EX.choice||exOverlay())&&performance.now()>GP.rep){GP.rep=performance.now()+160;if(inBattle)gpNav(d);else gpKey("keydown",gpKeyOf(d))}
   const edge=k=>{const i=P0[k];return i>=0&&pr(i)&&!GP.prev[i]},rel=k=>{const i=P0[k];return i>=0&&!pr(i)&&GP.prev[i]};
-  if(inBattle){if(edge("a"))gpClick();if(edge("b")){const bk=document.querySelector('#menu button[data-k="b"],#menu .mvback');if(bk)bk.click()}}
+  if(inBattle){if(edge("a"))gpClick();if(edge("b"))exBackBattle()}
   else{
     if(edge("a"))gpKey("keydown",exOverlay()?"Enter":gpKeyOf("a"));
-    if(edge("b")){const ovb=exOverlay();if(exMenuOpen())exMenuClose();else if(ovb)ovBack(ovb);else if(typeof WM!=="undefined"&&WM.open)wmHide();else gpKey("keydown",gpKeyOf("b"))}
+    if(edge("b")){const ovb=exOverlay();if(exMenuOpen())exMenuClose();else if(ovb)ovBack(ovb);else if(typeof WM!=="undefined"&&WM.open){wmHide();if(XFM==="map")xfmBack()}else gpKey("keydown",gpKeyOf("b"))}
     if(rel("b"))gpKey("keyup",gpKeyOf("b"));
     if(edge("menu"))gpKey("keydown",gpKeyOf("menu"));
     if(edge("sp"))gpKey("keydown",gpKeyOf("sp"))}
@@ -15441,9 +15442,37 @@ function xfmBack(){const k=XFM;XFM=null;OVSTK=[];OVL=null;XOV_IDS.forEach(id=>{c
   const m=$("exMenu");if(m&&k){m.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.exm===k))}}
 window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xmenu]");if(!b)return;e.preventDefault();e.stopPropagation();xfmBack()},true);
 // el panel se redibuja a menudo: se vuelve a poner el botón; si el panel se cierra, se olvida el menú
-setInterval(()=>{if(!XFM){document.querySelectorAll("[data-xmenu]").forEach(b=>b.remove());return}const ov=exOverlay();if(!ov){if(!exMenuOpen())XFM=null;return}xfmBtn()},150);
+setInterval(()=>{if(!XFM){document.querySelectorAll("[data-xmenu]").forEach(b=>b.remove());return}const ov=exOverlay();if(!ov){if(!exMenuOpen()&&!(XFM==="map"&&typeof WM!=="undefined"&&WM.open))XFM=null;return}xfmBtn()},150);
 // B / Esc: si no hay un «Volver» propio del panel (una ficha, una subpantalla…), vuelve al menú en vez de cerrar
 {const _ob=ovBack;ovBack=function(ov){if(XFM&&ov){const vis=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null&&!b.dataset.xmenu);if(!vis.some(b=>/Volver|Atrás|Cancelar/i.test(b.textContent))){snd("ui");xfmBack();return}}return _ob.apply(this,arguments)}}
+// =====================================================================================
+// ACCIONES CONFIGURABLES: «Volver al menú anterior» y «Abrir la mochila» (teclado y mando)
+// =====================================================================================
+EXKB0.back=["Backspace",""];EXKN.back="Volver al menú anterior";
+EXPAD0.bag=3;EXPADN.bag="Abrir la mochila";EXPAD0.back=4;EXPADN.back="Volver al menú anterior";
+// en combate: de los ataques vuelve a LUCHAR/MOCHILA/POKÉMON/HUIR (o sale de la mochila / del cambio de Pokémon)
+function exBackBattle(){const vis=b=>b&&b.offsetParent!==null;const L=[...document.querySelectorAll('#menu .bcback,#menu .mvback')].filter(vis);
+  const bk=L[0]||[...document.querySelectorAll("#menu button")].filter(vis).find(b=>/Atrás|Volver|Cancelar/i.test(b.textContent));if(bk){bk.click();return true}return false}
+function exBackAct(){if(typeof fcd!=="undefined"&&fcd)return exBackBattle();
+  if(exMenuOpen()){exMenuClose();return true}
+  if(typeof XSH!=="undefined"&&XSH.open){xsClose();return true}
+  if(typeof WM!=="undefined"&&WM.open){wmHide();if(XFM==="map")xfmBack();return true}
+  const ov=exOverlay();if(ov){ovBack(ov);return true}
+  return false}
+function exBagAct(){if(typeof fcd!=="undefined"&&fcd||!EX.on||EX.dlg||EX.cut||EX.trans||EX.choice)return;
+  if(exMenuOpen())exMenuClose();XFM=null;
+  ["exDexP","exCtl"].forEach(id=>{const e=$(id);if(e)e.hidden=true});if(typeof WM!=="undefined"&&WM.open)wmHide();if(typeof XSH!=="undefined"&&XSH.open)xsClose();
+  exBagToggle()}
+// el mapa abierto desde el menú también vuelve al menú
+{const _md=exMenuDo;exMenuDo=function(k){const r=_md.apply(this,arguments);if(k==="map")XFM="map";return r}}
+// teclado
+window.addEventListener("keydown",e=>{if(!EX.cv||!EX.cv.isConnected||EX.title||EX.bind||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t&&/INPUT|TEXTAREA|SELECT/.test(t.tagName))return;
+  const a=exAct(e.key);if(a==="back"){e.preventDefault();e.stopImmediatePropagation();if(!e.repeat&&exBackAct())snd("ui");return}
+  if(a==="bag"&&!e.repeat&&(exMenuOpen()||exOverlay()||(typeof WM!=="undefined"&&WM.open))){e.preventDefault();e.stopImmediatePropagation();exBagAct()}},true);
+// mando
+{const _gp=gpPoll;gpPoll=function(){const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[],gp=L[0];let eb=false,eg=false;
+  if(gp&&!GP.bind){const P0=exPad(),pr=i=>i>=0&&!!(gp.buttons[i]&&gp.buttons[i].pressed);GP.p3=GP.p3||{};eb=pr(P0.back)&&!GP.p3.back;eg=pr(P0.bag)&&!GP.p3.bag;GP.p3.back=pr(P0.back);GP.p3.bag=pr(P0.bag)}
+  const r=_gp.apply(this,arguments);try{if(eb&&exBackAct())snd("ui");if(eg)exBagAct()}catch(e){}return r}}
 
 // =====================================================================================
 // HISTORIA MÁS VIVA: personajes que te guían andando (tú les sigues) y visitas guiadas por cada pueblo

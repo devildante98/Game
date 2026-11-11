@@ -68,10 +68,10 @@ function gpPoll(){const L=navigator.getGamepads?[...navigator.getGamepads()].fil
   if(d!==GP.dir){if(GP.dir&&!inBattle)gpKey("keyup",gpKeyOf(GP.dir));if(d){if(inBattle)gpNav(d);else gpKey("keydown",gpKeyOf(d))}GP.dir=d;GP.rep=performance.now()+380}
   else if(d&&(inBattle||exMenuOpen()||EX.choice||exOverlay())&&performance.now()>GP.rep){GP.rep=performance.now()+160;if(inBattle)gpNav(d);else gpKey("keydown",gpKeyOf(d))}
   const edge=k=>{const i=P0[k];return i>=0&&pr(i)&&!GP.prev[i]},rel=k=>{const i=P0[k];return i>=0&&!pr(i)&&GP.prev[i]};
-  if(inBattle){if(edge("a"))gpClick();if(edge("b")){const bk=document.querySelector('#menu button[data-k="b"],#menu .mvback');if(bk)bk.click()}}
+  if(inBattle){if(edge("a"))gpClick();if(edge("b"))exBackBattle()}
   else{
     if(edge("a"))gpKey("keydown",exOverlay()?"Enter":gpKeyOf("a"));
-    if(edge("b")){const ovb=exOverlay();if(exMenuOpen())exMenuClose();else if(ovb)ovBack(ovb);else if(typeof WM!=="undefined"&&WM.open)wmHide();else gpKey("keydown",gpKeyOf("b"))}
+    if(edge("b")){const ovb=exOverlay();if(exMenuOpen())exMenuClose();else if(ovb)ovBack(ovb);else if(typeof WM!=="undefined"&&WM.open){wmHide();if(XFM==="map")xfmBack()}else gpKey("keydown",gpKeyOf("b"))}
     if(rel("b"))gpKey("keyup",gpKeyOf("b"));
     if(edge("menu"))gpKey("keydown",gpKeyOf("menu"));
     if(edge("sp"))gpKey("keydown",gpKeyOf("sp"))}
@@ -273,6 +273,34 @@ function xfmBack(){const k=XFM;XFM=null;OVSTK=[];OVL=null;XOV_IDS.forEach(id=>{c
   const m=$("exMenu");if(m&&k){m.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.exm===k))}}
 window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xmenu]");if(!b)return;e.preventDefault();e.stopPropagation();xfmBack()},true);
 // el panel se redibuja a menudo: se vuelve a poner el botón; si el panel se cierra, se olvida el menú
-setInterval(()=>{if(!XFM){document.querySelectorAll("[data-xmenu]").forEach(b=>b.remove());return}const ov=exOverlay();if(!ov){if(!exMenuOpen())XFM=null;return}xfmBtn()},150);
+setInterval(()=>{if(!XFM){document.querySelectorAll("[data-xmenu]").forEach(b=>b.remove());return}const ov=exOverlay();if(!ov){if(!exMenuOpen()&&!(XFM==="map"&&typeof WM!=="undefined"&&WM.open))XFM=null;return}xfmBtn()},150);
 // B / Esc: si no hay un «Volver» propio del panel (una ficha, una subpantalla…), vuelve al menú en vez de cerrar
 {const _ob=ovBack;ovBack=function(ov){if(XFM&&ov){const vis=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null&&!b.dataset.xmenu);if(!vis.some(b=>/Volver|Atrás|Cancelar/i.test(b.textContent))){snd("ui");xfmBack();return}}return _ob.apply(this,arguments)}}
+// =====================================================================================
+// ACCIONES CONFIGURABLES: «Volver al menú anterior» y «Abrir la mochila» (teclado y mando)
+// =====================================================================================
+EXKB0.back=["Backspace",""];EXKN.back="Volver al menú anterior";
+EXPAD0.bag=3;EXPADN.bag="Abrir la mochila";EXPAD0.back=4;EXPADN.back="Volver al menú anterior";
+// en combate: de los ataques vuelve a LUCHAR/MOCHILA/POKÉMON/HUIR (o sale de la mochila / del cambio de Pokémon)
+function exBackBattle(){const vis=b=>b&&b.offsetParent!==null;const L=[...document.querySelectorAll('#menu .bcback,#menu .mvback')].filter(vis);
+  const bk=L[0]||[...document.querySelectorAll("#menu button")].filter(vis).find(b=>/Atrás|Volver|Cancelar/i.test(b.textContent));if(bk){bk.click();return true}return false}
+function exBackAct(){if(typeof fcd!=="undefined"&&fcd)return exBackBattle();
+  if(exMenuOpen()){exMenuClose();return true}
+  if(typeof XSH!=="undefined"&&XSH.open){xsClose();return true}
+  if(typeof WM!=="undefined"&&WM.open){wmHide();if(XFM==="map")xfmBack();return true}
+  const ov=exOverlay();if(ov){ovBack(ov);return true}
+  return false}
+function exBagAct(){if(typeof fcd!=="undefined"&&fcd||!EX.on||EX.dlg||EX.cut||EX.trans||EX.choice)return;
+  if(exMenuOpen())exMenuClose();XFM=null;
+  ["exDexP","exCtl"].forEach(id=>{const e=$(id);if(e)e.hidden=true});if(typeof WM!=="undefined"&&WM.open)wmHide();if(typeof XSH!=="undefined"&&XSH.open)xsClose();
+  exBagToggle()}
+// el mapa abierto desde el menú también vuelve al menú
+{const _md=exMenuDo;exMenuDo=function(k){const r=_md.apply(this,arguments);if(k==="map")XFM="map";return r}}
+// teclado
+window.addEventListener("keydown",e=>{if(!EX.cv||!EX.cv.isConnected||EX.title||EX.bind||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t&&/INPUT|TEXTAREA|SELECT/.test(t.tagName))return;
+  const a=exAct(e.key);if(a==="back"){e.preventDefault();e.stopImmediatePropagation();if(!e.repeat&&exBackAct())snd("ui");return}
+  if(a==="bag"&&!e.repeat&&(exMenuOpen()||exOverlay()||(typeof WM!=="undefined"&&WM.open))){e.preventDefault();e.stopImmediatePropagation();exBagAct()}},true);
+// mando
+{const _gp=gpPoll;gpPoll=function(){const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[],gp=L[0];let eb=false,eg=false;
+  if(gp&&!GP.bind){const P0=exPad(),pr=i=>i>=0&&!!(gp.buttons[i]&&gp.buttons[i].pressed);GP.p3=GP.p3||{};eb=pr(P0.back)&&!GP.p3.back;eg=pr(P0.bag)&&!GP.p3.bag;GP.p3.back=pr(P0.back);GP.p3.bag=pr(P0.bag)}
+  const r=_gp.apply(this,arguments);try{if(eb&&exBackAct())snd("ui");if(eg)exBagAct()}catch(e){}return r}}

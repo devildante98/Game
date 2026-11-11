@@ -191,3 +191,14 @@ const xInBattle=()=>typeof XGSW!=="undefined"&&!!XGSW&&typeof EX!=="undefined"&&
 setInterval(()=>{try{if(!EX.on||EX.title||EX.cut||EX.dlg||EX.trans||EX.battle||(typeof fcd!=="undefined"&&fcd))return;const X=xgData(),n=xMedals();
   if(n>=1&&!X.dmxBand){X.dmxBand=1;save();snd("lvl");exSay(["📦 ¡Te llega un paquete de la Profesora Vega!","«¡Enhorabuena por tu primera medalla! Te envío una Maximuñequera.»","«Con ella, tus Pokémon pueden dinamaxizarse (o gigamaxizarse) una vez por combate en las zonas de poder: los combates contra líderes de gimnasio, el Alto Mando y el Campeón.»","¡Has conseguido la Maximuñequera!"]);return}
   if(n>=3&&!X.megaRing){X.megaRing=1;save();snd("lvl");exSay(["📦 ¡Otro paquete de la Profesora Vega!","«¡Ya tienes tres medallas! Has demostrado un vínculo muy fuerte con tus Pokémon, así que te envío un Mega-Aro con su Piedra Activadora.»","«Los Pokémon que tengan forma Mega podrán megaevolucionar una vez por combate.»","¡Has conseguido el Mega-Aro!"])}}catch(e){}},2000);
+// =====================================================================================
+// RENDIRSE ANTE UN ENTRENADOR: ese entrenador deja de detectarte mientras sigas en la misma zona,
+// para que puedas alejarte (si quieres la revancha, háblale). Al cambiar de zona vuelve a vigilar.
+// =====================================================================================
+const XSKIP={m:null,names:[]};
+{const _f=finish;finish=async function(res){try{if(res==="lose"&&B&&B.ff&&B.trainer&&typeof EX!=="undefined"&&EX.battle){const m=EX.battle.map||EX.map;
+    if(XSKIP.m!==m){XSKIP.m=m;XSKIP.names=[]}if(!XSKIP.names.includes(B.trainer))XSKIP.names.push(B.trainer)}}catch(e){}return _f.apply(this,arguments)}}
+const xSkipNpcs=()=>XSKIP.m&&XSKIP.m===EX.map?EX.npcs.filter(n=>XSKIP.names.includes(n.n)):[];
+{const _ns=exNpcSight;exNpcSight=function(){const L=xSkipNpcs().filter(n=>!n.beat);if(!L.length)return _ns.apply(this,arguments);L.forEach(n=>{n.beat=true});try{return _ns.apply(this,arguments)}finally{L.forEach(n=>{n.beat=false})}}}
+{const _ss=stSight;stSight=function(){const L=xSkipNpcs().filter(n=>n.sight);if(!L.length)return _ss.apply(this,arguments);const s0=L.map(n=>n.sight);L.forEach(n=>{n.sight=0});try{return _ss.apply(this,arguments)}finally{L.forEach((n,i)=>{n.sight=s0[i]})}}}
+{const _l=exLoad;exLoad=function(m){if(XSKIP.m&&m!==XSKIP.m){XSKIP.m=null;XSKIP.names=[]}return _l.apply(this,arguments)}}

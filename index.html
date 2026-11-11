@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.54.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.54.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794434700">
+<meta name="game-build" content="1794435189">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2781,7 +2781,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.54.2</small>
+    <small class="pcver">Versión 6.54.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7455,8 +7455,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.54.2";
+const GAME_VER="6.54.3";
 const NEWS=[
+{v:"2026-11-11-6.54.3",ver:"6.54.3",at:"2026-11-11T23:13",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al rendirte ante un entrenador en Exploración, te volvía a detectar nada más salir y no podías irte. Ahora ese entrenador te deja en paz mientras sigas en esa zona (si quieres la revancha, háblale). Al cambiar de zona vuelve a vigilar como siempre"]},
 {v:"2026-11-11-6.54.2",ver:"6.54.2",at:"2026-11-11T23:05",t:"🔧 Arreglos/Mejoras",l:["Exploración: la ventana de «Usar objeto» de la Mochila ahora se ajusta a su contenido y sale centrada, sin tanto espacio vacío, con la explicación del objeto arriba"]},
 {v:"2026-11-11-6.54.1",ver:"6.54.1",at:"2026-11-11T23:03",t:"🔧 Arreglos/Mejoras",l:["Exploración: al conseguir una MT u otro objeto (del suelo, de un mueble o de regalo), el diálogo te explica qué hace. En las MT dice el movimiento, su tipo, categoría, poder, precisión, PP y efecto","Mochila de Exploración: un recuadro muestra qué hace el objeto que tienes seleccionado, también con el mando. Al ir a usarlo, enseñarlo o equiparlo a un Pokémon, la información aparece arriba (también la de los Cristales Supremos, objetos equipables, piedras evolutivas, mentas…)"]},
 {v:"2026-11-11-6.54",ver:"6.54",at:"2026-11-11T22:54",t:"🧬 Megaevolución y Dinamax en Exploración, como en los juegos",l:["Dinamax y Gigamax: necesitas la Maximuñequera, que te envía la Profesora Vega al ganar tu primera medalla. Solo funcionan en las zonas de poder (combates contra líderes de gimnasio, el Alto Mando y el Campeón) y una vez por combate","Megaevolución: con la 3.ª medalla recibes el Mega-Aro. Desde entonces, cualquier Pokémon con forma Mega puede megaevolucionar una vez por combate (no hace falta tener capturada la forma Mega)","El botón de transformar con Cristal Supremo solo aparece en Exploración si tienes algún cristal","Si ya tienes esas medallas, el paquete te llega en cuanto vuelvas a Exploración. En el juego normal todo sigue igual"]},
@@ -7742,7 +7743,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794434700";
+const GAME_B="1794435189";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -16228,6 +16229,17 @@ const xInBattle=()=>typeof XGSW!=="undefined"&&!!XGSW&&typeof EX!=="undefined"&&
 setInterval(()=>{try{if(!EX.on||EX.title||EX.cut||EX.dlg||EX.trans||EX.battle||(typeof fcd!=="undefined"&&fcd))return;const X=xgData(),n=xMedals();
   if(n>=1&&!X.dmxBand){X.dmxBand=1;save();snd("lvl");exSay(["📦 ¡Te llega un paquete de la Profesora Vega!","«¡Enhorabuena por tu primera medalla! Te envío una Maximuñequera.»","«Con ella, tus Pokémon pueden dinamaxizarse (o gigamaxizarse) una vez por combate en las zonas de poder: los combates contra líderes de gimnasio, el Alto Mando y el Campeón.»","¡Has conseguido la Maximuñequera!"]);return}
   if(n>=3&&!X.megaRing){X.megaRing=1;save();snd("lvl");exSay(["📦 ¡Otro paquete de la Profesora Vega!","«¡Ya tienes tres medallas! Has demostrado un vínculo muy fuerte con tus Pokémon, así que te envío un Mega-Aro con su Piedra Activadora.»","«Los Pokémon que tengan forma Mega podrán megaevolucionar una vez por combate.»","¡Has conseguido el Mega-Aro!"])}}catch(e){}},2000);
+// =====================================================================================
+// RENDIRSE ANTE UN ENTRENADOR: ese entrenador deja de detectarte mientras sigas en la misma zona,
+// para que puedas alejarte (si quieres la revancha, háblale). Al cambiar de zona vuelve a vigilar.
+// =====================================================================================
+const XSKIP={m:null,names:[]};
+{const _f=finish;finish=async function(res){try{if(res==="lose"&&B&&B.ff&&B.trainer&&typeof EX!=="undefined"&&EX.battle){const m=EX.battle.map||EX.map;
+    if(XSKIP.m!==m){XSKIP.m=m;XSKIP.names=[]}if(!XSKIP.names.includes(B.trainer))XSKIP.names.push(B.trainer)}}catch(e){}return _f.apply(this,arguments)}}
+const xSkipNpcs=()=>XSKIP.m&&XSKIP.m===EX.map?EX.npcs.filter(n=>XSKIP.names.includes(n.n)):[];
+{const _ns=exNpcSight;exNpcSight=function(){const L=xSkipNpcs().filter(n=>!n.beat);if(!L.length)return _ns.apply(this,arguments);L.forEach(n=>{n.beat=true});try{return _ns.apply(this,arguments)}finally{L.forEach(n=>{n.beat=false})}}}
+{const _ss=stSight;stSight=function(){const L=xSkipNpcs().filter(n=>n.sight);if(!L.length)return _ss.apply(this,arguments);const s0=L.map(n=>n.sight);L.forEach(n=>{n.sight=0});try{return _ss.apply(this,arguments)}finally{L.forEach((n,i)=>{n.sight=s0[i]})}}}
+{const _l=exLoad;exLoad=function(m){if(XSKIP.m&&m!==XSKIP.m){XSKIP.m=null;XSKIP.names=[]}return _l.apply(this,arguments)}}
 
 // =====================================================================================
 // OBJETOS EN EL MUNDO DE EXPLORACIÓN

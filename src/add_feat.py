@@ -24,16 +24,16 @@ rep('''$("daily").onclick=()=>{if(S.daily===today())return;S.daily=today();const
 const yday=()=>new Date(Date.now()-864e5).toISOString().slice(0,10);
 // pase de 30 días: cada semana mejor que la anterior, días grandes el 7, 14, 21 y 28 y gran premio el 30.
 // Al completarlo empieza una temporada nueva con premios más grandes (hasta la temporada 5).
-// t = tickets extra (cada punto = 20 % del regalo diario) · evo = piedra evolutiva · mint = menta · hold = objeto equipable
-const STRK_T=[{pb:5},{pot:3},{t:1},{sb:5},{eter:2,cand:1},{t:2},{ub:3,cand:2},
-  {sb:8},{hpot:3},{t:3},{ppup:1,cand:1},{ub:5},{t:4},{cand:3,evo:1,hold:1},
-  {ub:6},{mrev:2,cand:1},{t:5},{mint:1},{ub:8},{t:6,cand:2},{cand:4,evo:1,ppmax:1},
-  {ub:10},{t:7},{hold:1,cand:2},{mint:1,ppup:2},{t:8,ub:5},{cand:5},{mb:1,evo:2},{t:10,cand:3},{mb:1,cand:6,hold:1,t:15}];
+// t = tickets extra (cada punto = 30 % del regalo diario) · evo = piedra evolutiva · mint = menta · hold = objeto equipable
+const STRK_T=[{pb:10,t:3},{pot:6,t:3},{t:5},{sb:10,t:4},{eter:4,cand:2,t:4},{t:7},{ub:6,cand:4,t:10},
+  {sb:15,t:6},{hpot:6,t:6},{t:9},{ppup:2,cand:2,t:7},{ub:10,t:7},{t:11},{cand:6,evo:1,hold:1,t:16},
+  {ub:12,t:8},{mrev:4,cand:2,t:8},{t:13},{mint:1,t:9},{ub:15,t:9},{t:15,cand:4},{cand:8,evo:1,ppmax:1,t:22},
+  {ub:20,t:10},{t:17},{hold:1,cand:4,t:11},{mint:1,ppup:3,t:11},{t:20,ub:10},{cand:10,t:12},{mb:1,evo:2,t:28},{t:24,cand:6},{mb:2,cand:12,hold:2,mint:1,t:60}];
 const strkSeason=d=>Math.floor((Math.max(1,d)-1)/30);
 const strkRw=d=>{const c=((d-1)%30)+1,ss=Math.min(4,strkSeason(d)),m=1+ss*.5,r={},b=STRK_T[c-1];
   for(const k in b)r[k]=k==="mb"||k==="mint"||k==="hold"||k==="ppmax"?b[k]+(ss>=2?1:0):Math.max(1,Math.round(b[k]*m));
   if(ss>=3&&c===30)r.mb=(r.mb||0)+1;return r};
-const strkTk=k=>Math.round(gift()*.2*k);
+const strkTk=k=>Math.round(gift()*.3*k);
 const STRK_N={t:"tickets extra",evo:"Piedra evolutiva",mint:"Menta",hold:"Objeto equipable"};
 const strkOk=(k,i)=>i[7]===k&&(k!=="evo"||/stone/.test(i[0]))&&(k!=="hold"||!/^z/.test(i[0]));
 const strkPick=k=>{const L=ITEMS.filter(i=>strkOk(k,i));return L.length?L[Math.floor(Math.random()*L.length)][0]:null};

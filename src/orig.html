@@ -753,7 +753,7 @@ const PRS=()=>S.prs||0,PMUL=()=>1+.5*PRS(),RMUL=()=>1+.25*PRS(),PDISC=()=>Math.m
 const cpc=()=>.1*Math.pow(2,S.cl)*PMUL(),clc=()=>Math.round(25*Math.pow(3,S.cl));
 const gc=i=>Math.ceil(G[i][1]*Math.pow(1.15,S.g[i]));
 const tps=()=>G.reduce((a,g,i)=>a+g[2]*S.g[i],0)*PMUL();
-const gift=()=>{const n=Math.min(60,S.dg||0);return Math.round((5000+1500*n+150*n*n)*RMUL())};
+const gift=()=>{const n=Math.min(60,S.dg||0);return Math.round((15000+4500*n+450*n*n)*RMUL())};
 const cost=(n,sup)=>{const b=sup?100:1,st=sup?300:30,q=sup?30:3,c=(sup?S.sp:S.np)||0;let t=0;for(let k=0;k<n;k++){const s=Math.floor((c+k)/10);t+=b+st*s+q*s*s}return Math.round(t*PDISC()*10)/10};
 const GI=["🧢","🐄","🏥","🥚","🏆"];
 function buildShop(){

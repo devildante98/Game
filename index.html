@@ -52,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.32"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.33"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794393687">
+<meta name="game-build" content="1794393780">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2605,7 +2605,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.32</small>
+    <small class="pcver">Versión 6.33</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -3188,7 +3188,7 @@ const PRS=()=>S.prs||0,PMUL=()=>1+.5*PRS(),RMUL=()=>1+.25*PRS(),PDISC=()=>Math.m
 const cpc=()=>.1*Math.pow(2,S.cl)*PMUL()*(typeof hhMul==="function"?hhMul("tk"):1),clc=()=>Math.round(25*Math.pow(3,S.cl));
 var gc=i=>Math.ceil(G[i][1]*Math.pow(1.15,S.g[i]));
 const tps=()=>G.reduce((a,g,i)=>a+g[2]*S.g[i],0)*PMUL();
-const gift=()=>{const n=Math.min(60,S.dg||0);return Math.round((5000+1500*n+150*n*n)*RMUL())};
+const gift=()=>{const n=Math.min(60,S.dg||0);return Math.round((15000+4500*n+450*n*n)*RMUL())};
 const cost=(n,sup)=>{const b=sup?100:1,st=sup?300:30,q=sup?30:3,c=(sup?S.sp:S.np)||0;let t=0;for(let k=0;k<n;k++){const s=Math.floor((c+k)/10);t+=b+st*s+q*s*s}return Math.round(t*PDISC()*10)/10};
 const GI=["🧢","🐄","🏥","🥚","🏆"];
 function buildShop(){
@@ -3309,16 +3309,16 @@ $("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");if(S.cl
 const yday=()=>new Date(Date.now()-864e5).toISOString().slice(0,10);
 // pase de 30 días: cada semana mejor que la anterior, días grandes el 7, 14, 21 y 28 y gran premio el 30.
 // Al completarlo empieza una temporada nueva con premios más grandes (hasta la temporada 5).
-// t = tickets extra (cada punto = 20 % del regalo diario) · evo = piedra evolutiva · mint = menta · hold = objeto equipable
-const STRK_T=[{pb:5},{pot:3},{t:1},{sb:5},{eter:2,cand:1},{t:2},{ub:3,cand:2},
-  {sb:8},{hpot:3},{t:3},{ppup:1,cand:1},{ub:5},{t:4},{cand:3,evo:1,hold:1},
-  {ub:6},{mrev:2,cand:1},{t:5},{mint:1},{ub:8},{t:6,cand:2},{cand:4,evo:1,ppmax:1},
-  {ub:10},{t:7},{hold:1,cand:2},{mint:1,ppup:2},{t:8,ub:5},{cand:5},{mb:1,evo:2},{t:10,cand:3},{mb:1,cand:6,hold:1,t:15}];
+// t = tickets extra (cada punto = 30 % del regalo diario) · evo = piedra evolutiva · mint = menta · hold = objeto equipable
+const STRK_T=[{pb:10,t:3},{pot:6,t:3},{t:5},{sb:10,t:4},{eter:4,cand:2,t:4},{t:7},{ub:6,cand:4,t:10},
+  {sb:15,t:6},{hpot:6,t:6},{t:9},{ppup:2,cand:2,t:7},{ub:10,t:7},{t:11},{cand:6,evo:1,hold:1,t:16},
+  {ub:12,t:8},{mrev:4,cand:2,t:8},{t:13},{mint:1,t:9},{ub:15,t:9},{t:15,cand:4},{cand:8,evo:1,ppmax:1,t:22},
+  {ub:20,t:10},{t:17},{hold:1,cand:4,t:11},{mint:1,ppup:3,t:11},{t:20,ub:10},{cand:10,t:12},{mb:1,evo:2,t:28},{t:24,cand:6},{mb:2,cand:12,hold:2,mint:1,t:60}];
 const strkSeason=d=>Math.floor((Math.max(1,d)-1)/30);
 const strkRw=d=>{const c=((d-1)%30)+1,ss=Math.min(4,strkSeason(d)),m=1+ss*.5,r={},b=STRK_T[c-1];
   for(const k in b)r[k]=k==="mb"||k==="mint"||k==="hold"||k==="ppmax"?b[k]+(ss>=2?1:0):Math.max(1,Math.round(b[k]*m));
   if(ss>=3&&c===30)r.mb=(r.mb||0)+1;return r};
-const strkTk=k=>Math.round(gift()*.2*k);
+const strkTk=k=>Math.round(gift()*.3*k);
 const STRK_N={t:"tickets extra",evo:"Piedra evolutiva",mint:"Menta",hold:"Objeto equipable"};
 const strkOk=(k,i)=>i[7]===k&&(k!=="evo"||/stone/.test(i[0]))&&(k!=="hold"||!/^z/.test(i[0]));
 const strkPick=k=>{const L=ITEMS.filter(i=>strkOk(k,i));return L.length?L[Math.floor(Math.random()*L.length)][0]:null};
@@ -7266,8 +7266,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.32";
+const GAME_VER="6.33";
 const NEWS=[
+{v:"2026-11-11-6.33",ver:"6.33",at:"2026-11-11T11:42",t:"🔥 Pase diario mucho mejor",l:["El regalo diario de tickets es 3 veces mayor (y sigue subiendo cada día de racha)","Ahora todos los días del Pase diario dan tickets extra, además de sus objetos, y los tickets extra valen más","Los objetos del Pase diario se duplican: el doble de Poké Balls, pociones y caramelos raros","El día 30 trae un premio enorme: 2 Master Balls, 12 caramelos raros, 2 objetos equipables, una menta y muchísimos tickets"]},
 {v:"2026-11-11-6.32",ver:"6.32",at:"2026-11-11T11:41",t:"🗺️ Exploración: tickets propios y entrenadores que no se reinician",l:["Exploración tiene ahora su propia cartera de tickets 🎟️, aparte de la del juego normal. Arriba a la izquierda del mapa ves cuántos tienes","Se ganan en Exploración: ganando combates (los entrenadores dan más), con los premios de la historia y vendiendo en la tienda. Solo se gastan en Exploración","Para empezar recibes 30.000 tickets de Exploración, más 20.000 por cada medalla de gimnasio de Exploración que ya tengas","Los combates de Exploración ya no dan tickets del juego normal","El Centro Pokémon de Exploración ahora cura gratis, como en los juegos","Los entrenadores que derrotas ya no vuelven a retarte al día siguiente: se quedan derrotados"]},
 {v:"2026-11-11-6.31.6",ver:"6.31.6",at:"2026-11-11T11:31",t:"🔧 Arreglos/Mejoras",l:["El minijuego «¿Quién pesa más?» ahora se llama «Peso y altura», porque también pregunta cuál pesa menos y cuál es más alto o más bajo"]},
 {v:"2026-11-11-6.31.5",ver:"6.31.5",at:"2026-11-11T11:29",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett!: arreglado el reloj que a veces se quedaba parado y hacía la partida infinita. Ahora la partida siempre termina a los 30 segundos","Si la hora del móvil o del ordenador se ajusta de golpe, el juego ya no lo confunde con un acelerador"]},
@@ -7502,7 +7503,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794393687";
+const GAME_B="1794393780";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

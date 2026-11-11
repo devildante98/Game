@@ -1,26 +1,35 @@
 // =====================================================================================
-// MINIJUEGOS NUEVOS: Puzle de sprites y Más o menos
+// MINIJUEGOS NUEVOS: Rompecabezas Pokémon, Puzle de piezas y Más o menos
 // =====================================================================================
 const mgImgSrc=p=>{const m=/src="([^"]+)"/.exec(icoHD(p,256,false,false));return m?m[1]:""};
 
-// ---------------- PUZLE DE SPRITES: recompón la imagen de un Pokémon intercambiando piezas ----------------
+// ---------------- guardar una partida a medias (Rompecabezas y Puzle de piezas) ----------------
+const mgSaveGet=id=>S.mgSave&&S.mgSave[id]?S.mgSave[id]:null;
+const mgSavePut=(id,v)=>{S.mgSave=S.mgSave||{};S.mgSave[id]=v;save()};
+const mgSaveDel=id=>{if(S.mgSave&&S.mgSave[id]){delete S.mgSave[id];save()}};
+const mgClk=ms=>{const s=Math.floor((ms|0)/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+function mgSaveHTML(sv,desc){if(!sv)return "";return '<div class="mgsave"><b>💾 Tienes una partida guardada</b><small>'+esc(desc(sv))+' · guardada el '+new Date(sv.at||Date.now()).toLocaleDateString("es")+'</small><div><button class="red" data-mgcont>▶ Continuar</button><button class="alt" data-mgdel>🗑️ Borrarla</button></div><small class="mut">Si empiezas una nueva, la guardada se borra.</small></div>'}
+function mgSaveBind(B,sv,cont){if(!sv)return;const c=B.querySelector("[data-mgcont]"),d=B.querySelector("[data-mgdel]");if(c)c.onclick=()=>{snd("ui");cont()};if(d)d.onclick=async()=>{if(!await askOk("¿Borrar la partida guardada?"))return;mgSaveDel(MG.g.id);const g=MG.g;g.start(B,mgEnd)}}
+
+// ---------------- ROMPECABEZAS POKÉMON (antes «Puzle de sprites»): recompón la imagen de un Pokémon intercambiando piezas ----------------
 const PZ_SIZES=[3,4,5,6,7,8,10];
-const G_PUZ={id:"puz",n:"Puzle de sprites",ic:"🧩",c:"#d8456f",d:"Recompón la imagen de un Pokémon intercambiando sus piezas. Elige de 9 a 100 piezas: cuantas más, más puntos.",
+const G_PUZ={id:"puz",n:"Rompecabezas Pokémon",ic:"🧩",c:"#d8456f",d:"Recompón la imagen de un Pokémon intercambiando sus piezas. Elige de 9 a 100 piezas: cuantas más, más puntos. Puedes guardar la partida y seguir otro día.",
   rw:s=>s*45,
   start(B,end){
-    const pick=()=>{
-      B.innerHTML='<div class="pzpick"><h3>¿Cuántas piezas?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-pzn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i>×'+(n*n*40>=1000?fmt(n*n*40):n*n*40)+' pts</i></button>').join("")+'</div><small class="mut">Toca dos piezas para intercambiarlas, o arrastra una encima de otra. Las piezas bien colocadas se quedan fijas en verde.</small></div>';
-      B.querySelectorAll("[data-pzn]").forEach(b=>b.onclick=()=>{snd("ui");play(+b.dataset.pzn)})};
-    const play=N=>{
-      const pool=P.filter(p=>p[2]!=="M");let mon=pool[Math.floor(Math.random()*pool.length)],src=mgImgSrc(mon),tries=0;
+    const pick=()=>{const sv=mgSaveGet("puz");
+      B.innerHTML=mgSaveHTML(sv,s=>s.N*s.N+" piezas · "+mgClk(s.el)+" · "+s.ord.filter((v,i)=>v===i).length+" bien colocadas")+'<div class="pzpick"><h3>¿Cuántas piezas?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-pzn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i>×'+(n*n*40>=1000?fmt(n*n*40):n*n*40)+' pts</i></button>').join("")+'</div><small class="mut">Toca dos piezas para intercambiarlas, o arrastra una encima de otra. Las piezas bien colocadas se quedan fijas en verde.</small></div>';
+      B.querySelectorAll("[data-pzn]").forEach(b=>b.onclick=()=>{snd("ui");if(sv)mgSaveDel("puz");play(+b.dataset.pzn)});
+      mgSaveBind(B,sv,()=>play(sv.N,sv))};
+    const play=(N,sv)=>{
+      const pool=P.filter(p=>p[2]!=="M");let mon=sv&&PM[sv.m]?PM[sv.m]:pool[Math.floor(Math.random()*pool.length)],src=sv&&sv.src?sv.src:mgImgSrc(mon),tries=0;
       const T=N*N;let ord=[...Array(T).keys()];
       // barajar sin dejar demasiadas piezas ya en su sitio
-      do{for(let i=T-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]]}}while(ord.filter((v,i)=>v===i).length>Math.max(1,T*.08));
+      if(sv&&Array.isArray(sv.ord)&&sv.ord.length===T)ord=sv.ord.slice();else do{for(let i=T-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ord[i],ord[j]]=[ord[j],ord[i]]}}while(ord.filter((v,i)=>v===i).length>Math.max(1,T*.08));
       const minSw=(()=>{const seen=new Array(T).fill(false);let c=0;for(let i=0;i<T;i++){if(seen[i])continue;let j=i;while(!seen[j]){seen[j]=true;j=ord[j]}c++}return T-c})();
-      let moves=0,sel=-1,t0=performance.now(),done=false;
+      let moves=sv?sv.mv|0:0,sel=-1,t0=performance.now()-(sv?sv.el|0:0),done=false;if(sv)mgSaveDel("puz");
       B.innerHTML='<div class="whohd"><span>🧩 <b>'+T+'</b> piezas</span><span>⏱️ <b id="pzT">0:00</b></span><span>🔄 <b id="pzM">0</b></span><span>✅ <b id="pzOk">0</b>/'+T+'</span></div>'+
         '<div class="pzwrap"><div class="pzb" id="pzB" style="--n:'+N+';--c1:'+(TC[tys(mon)[0]]||"#4a6ae0")+';--c2:'+(TC[tys(mon)[1]||"fairy"]||"#ff8ad8")+'"></div><img class="pzref" id="pzRef" alt=""></div>'+
-        '<div class="mgbtns"><button class="alt" id="pzPeek">👁️ Ver la imagen (mantén pulsado)</button></div>';
+        '<div class="mgbtns"><button class="alt" id="pzPeek">👁️ Ver la imagen (mantén pulsado)</button><button class="alt" id="pzSave">💾 Guardar y salir</button></div>';
       const box=$("pzB"),ref=$("pzRef");
       const draw=()=>{let ok=0;box.innerHTML=ord.map((v,i)=>{const good=v===i;if(good)ok++;const x=v%N,y=Math.floor(v/N);
           return '<div class="pzp'+(good?' ok':'')+(i===sel?' sel':'')+'" data-pz="'+i+'" style="--img:url(\''+src+'\');background-position:'+(N>1?x*100/(N-1):0)+'% '+(N>1?y*100/(N-1):0)+'%"></div>'}).join("");
@@ -40,6 +49,7 @@ const G_PUZ={id:"puz",n:"Puzle de sprites",ic:"🧩",c:"#d8456f",d:"Recompón la
       box.addEventListener("pointerup",e=>{if(down<0||done)return;const el=document.elementFromPoint(e.clientX,e.clientY),p=el&&el.closest&&el.closest("[data-pz]"),i=p?+p.dataset.pz:-1,d=down;down=-1;
         if(i>=0&&i!==d){swap(d,i);return}
         if(i===d){if(sel<0){sel=d;draw()}else if(sel===d){sel=-1;draw()}else swap(sel,d)}});
+      $("pzSave").onclick=()=>{if(done)return;mgSavePut("puz",{N:N,m:mon[0],src:src,ord:ord.slice(),mv:moves,el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Rompecabezas guardado. Puedes seguir cuando quieras.");mgClose()};
       const pk=$("pzPeek"),on=()=>{ref.classList.add("on")},off=()=>{ref.classList.remove("on")};
       pk.addEventListener("pointerdown",on);["pointerup","pointerleave","pointercancel"].forEach(ev=>pk.addEventListener(ev,off));
     };
@@ -77,10 +87,95 @@ const G_HL={id:"hl",n:"Más o menos",ic:"📊",c:"#3a7be0",d:"Mira la estadísti
 // teclas: flecha arriba = más, abajo = menos
 document.addEventListener("keydown",e=>{if(!MG.g||MG.g.id!=="hl")return;const b=e.key==="ArrowUp"?'[data-hl="1"]':e.key==="ArrowDown"?'[data-hl="-1"]':null;if(!b)return;const x=document.querySelector("#mgB "+b);if(x&&!x.disabled){e.preventDefault();x.click()}});
 
-MGS.push(G_PUZ,G_HL);
+// ---------------- PUZLE DE PIEZAS: un puzle de verdad, con piezas que encajan unas con otras ----------------
+// Las piezas empiezan sueltas debajo del tablero; se arrastran a su sitio y, si quedan cerca, encajan solas.
+// Coordenadas en «anchos de la zona de juego» (0-1) para que se vea igual en cualquier pantalla.
+const JG_BX=.17,JG_BY=.04,JG_BW=.66;
+// borde de una pieza de (x0,y0) a (x1,y1); t: 0 recto, 1 saliente, -1 entrante
+function jgEdge(g,x0,y0,x1,y1,t){const dx=x1-x0,dy=y1-y0;if(!t){g.lineTo(x1,y1);return}
+  const nx=dy*t,ny=-dx*t,P=(u,v)=>[x0+dx*u+nx*v,y0+dy*u+ny*v],L=(u,v)=>{const p=P(u,v);g.lineTo(p[0],p[1])},C=(a,b,c,d,e,f)=>{const p=P(a,b),q=P(c,d),r=P(e,f);g.bezierCurveTo(p[0],p[1],q[0],q[1],r[0],r[1])};
+  L(.36,0);C(.42,.02,.30,.22,.5,.22);C(.70,.22,.58,.02,.64,0);g.lineTo(x1,y1)}
+function jgPath(c,m,e){const g=new Path2D();g.moveTo(m,m);jgEdge(g,m,m,m+c,m,e[0]);jgEdge(g,m+c,m,m+c,m+c,e[1]);jgEdge(g,m+c,m+c,m,m+c,e[2]);jgEdge(g,m,m+c,m,m,e[3]);g.closePath();return g}
+const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧷",c:"#2f9e8f",d:"Un puzle como los de verdad: las piezas tienen salientes y huecos, empiezan sueltas y tienes que montarlo desde cero. Elige de 9 a 100 piezas. Puedes guardar la partida y seguir otro día.",
+  rw:s=>s*45,
+  start(B,end){
+    const pick=()=>{const sv=mgSaveGet("jig");
+      B.innerHTML=mgSaveHTML(sv,s=>s.N*s.N+" piezas · "+mgClk(s.el)+" · "+s.p.filter(q=>q[2]).length+" encajadas")+'<div class="pzpick"><h3>¿De cuántas piezas quieres el puzle?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-jgn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i>×'+fmt(n*n*50)+' pts</i></button>').join("")+'</div><small class="mut">Arrastra cada pieza a su sitio en el tablero: si la sueltas cerca, encaja sola.</small></div>';
+      B.querySelectorAll("[data-jgn]").forEach(b=>b.onclick=()=>{snd("ui");if(sv)mgSaveDel("jig");play(+b.dataset.jgn)});
+      mgSaveBind(B,sv,()=>play(sv.N,sv))};
+    const play=(N,sv)=>{
+      const pool=P.filter(p=>p[2]!=="M");let mon=sv&&PM[sv.m]?PM[sv.m]:pool[Math.floor(Math.random()*pool.length)],src=sv&&sv.src?sv.src:mgImgSrc(mon),tries=0;
+      const T=N*N,s=JG_BW/N,m=s*.25,rnd=()=>Math.random()<.5?1:-1;
+      // salientes de las uniones: h = entre una fila y la de debajo, v = entre una columna y la de la derecha
+      const okArr=(a,n)=>Array.isArray(a)&&a.length===n&&a.every(x=>x===1||x===-1);
+      const H=sv&&okArr(sv.h,(N-1)*N)?sv.h.slice():Array.from({length:(N-1)*N},rnd),V=sv&&okArr(sv.v,N*(N-1))?sv.v.slice():Array.from({length:N*(N-1)},rnd);
+      const edges=i=>{const r=Math.floor(i/N),c=i%N;return [r>0?-H[(r-1)*N+c]:0,c<N-1?V[r*(N-1)+c]:0,r<N-1?H[r*N+c]:0,c>0?-V[r*(N-1)+c-1]:0]};
+      const perRow=Math.max(3,Math.floor(1/(s*1.3))),rows=Math.ceil(T/perRow),trayH=Math.min(.62,Math.max(.34,rows*s*1.25+s*.7)),AH=JG_BY+JG_BW+.04+trayH;
+      // piezas: x,y = esquina del cuadrado (sin salientes); l = encajada; z = orden de dibujo
+      const PC=[...Array(T).keys()].map(i=>({i,x:0,y:0,l:false,z:i,cv:null,path:null}));
+      const home=i=>[JG_BX+(i%N)*s,JG_BY+Math.floor(i/N)*s];
+      const scatter=list=>{const L=list.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[L[i],L[j]]=[L[j],L[i]]}
+        const top=JG_BY+JG_BW+.04+m,rs=Math.min(s*1.25,(trayH-s-2*m)/Math.max(1,Math.ceil(L.length/perRow)-1||1)),cs=1/perRow;
+        L.forEach((p,k)=>{p.x=Math.min(1-s-m,Math.max(m,(k%perRow+.5)*cs-s/2+(Math.random()-.5)*cs*.25));p.y=Math.min(AH-s-m,Math.max(top,top+Math.floor(k/perRow)*rs+(Math.random()-.5)*s*.2))})};
+      if(sv&&Array.isArray(sv.p)&&sv.p.length===T)sv.p.forEach((q,i)=>{const p=PC[i];p.l=!!q[2];if(p.l){[p.x,p.y]=home(i)}else{p.x=+q[0]||0;p.y=+q[1]||0}});else scatter(PC);
+      let zTop=T+1,t0=performance.now()-(sv?sv.el|0:0),done=false,ready=false;if(sv)mgSaveDel("jig");
+      const c1=TC[tys(mon)[0]]||"#4a6ae0",c2=TC[tys(mon)[1]||"fairy"]||"#ff8ad8";
+      B.innerHTML='<div class="whohd"><span>🧷 <b>'+T+'</b> piezas</span><span>⏱️ <b id="jgT">0:00</b></span><span>✅ <b id="jgOk">0</b>/'+T+'</span></div>'+
+        '<div class="jgw" id="jgW" style="aspect-ratio:1/'+AH.toFixed(4)+'"><div class="jgbd" id="jgBd" style="left:'+JG_BX*100+'%;top:'+(JG_BY/AH*100)+'%;width:'+JG_BW*100+'%;height:'+(JG_BW/AH*100)+'%;--c1:'+c1+';--c2:'+c2+'"><img alt="" id="jgRef"></div><div class="jgld">Cargando las piezas…</div></div>'+
+        '<div class="mgbtns"><button class="alt" id="jgPeek">👁️ Ver la imagen</button><button class="alt" id="jgMix">🧺 Recoger las sueltas</button><button class="alt" id="jgSave">💾 Guardar y salir</button></div>';
+      const W=$("jgW"),ref=$("jgRef");let wpx=W.clientWidth||400;
+      const okN=()=>PC.filter(p=>p.l).length;
+      const place=p=>{const e=p.cv;if(!e)return;e.style.left=(p.x-m)*wpx+"px";e.style.top=(p.y-m)*wpx+"px";e.style.width=e.style.height=(s+2*m)*wpx+"px";e.style.zIndex=p.l?1:10+p.z;e.classList.toggle("ok",p.l)};
+      const layout=()=>{wpx=W.clientWidth||wpx;PC.forEach(place)};
+      const ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(()=>{if(!W.isConnected){ro.disconnect();return}layout()}):null;if(ro)ro.observe(W);
+      let cpx=0;
+      const build=img=>{
+        cpx=Math.max(28,Math.min(180,Math.round(JG_BW*wpx*(window.devicePixelRatio||1)/N)));const R=cpx*N,bd=document.createElement("canvas");bd.width=bd.height=R;const g=bd.getContext("2d");
+        // fondo con los colores del tipo y algo de dibujo, para que las piezas se distingan
+        const gr=g.createLinearGradient(0,0,R,R);gr.addColorStop(0,c1);gr.addColorStop(1,c2);g.fillStyle=gr;g.fillRect(0,0,R,R);
+        const rg=g.createRadialGradient(R*.5,R*.45,R*.05,R*.5,R*.5,R*.75);rg.addColorStop(0,"rgba(255,255,255,.45)");rg.addColorStop(1,"rgba(0,0,0,.25)");g.fillStyle=rg;g.fillRect(0,0,R,R);
+        g.strokeStyle="rgba(255,255,255,.18)";g.lineWidth=R*.012;for(let k=1;k<=5;k++){g.beginPath();g.arc(R*.5,R*.5,R*.11*k,0,Math.PI*2);g.stroke()}
+        for(let k=0;k<14;k++){g.fillStyle="rgba(255,255,255,"+(.06+.06*(k%3))+")";g.beginPath();g.arc(R*((k*37%100)/100),R*((k*61%100)/100),R*(.02+.015*(k%4)),0,Math.PI*2);g.fill()}
+        if(img&&img.naturalWidth){const pd=R*.06,sz=R-pd*2,k=Math.min(sz/img.naturalWidth,sz/img.naturalHeight),w=img.naturalWidth*k,h=img.naturalHeight*k;g.shadowColor="rgba(0,0,0,.35)";g.shadowBlur=R*.02;g.drawImage(img,(R-w)/2,(R-h)/2,w,h);g.shadowBlur=0}
+        const mp=Math.round(cpx*.25),S2=cpx+2*mp;
+        PC.forEach(p=>{const cv=document.createElement("canvas");cv.width=cv.height=S2;cv.className="jgp";const x=cv.getContext("2d"),path=jgPath(cpx,mp,edges(p.i));
+          x.save();x.clip(path);x.drawImage(bd,mp-(p.i%N)*cpx,mp-Math.floor(p.i/N)*cpx);x.restore();
+          x.lineWidth=Math.max(1,cpx*.025);x.strokeStyle="rgba(255,255,255,.55)";x.stroke(path);x.lineWidth=Math.max(1,cpx*.012);x.strokeStyle="rgba(0,0,0,.45)";x.stroke(path);
+          p.cv=cv;p.path=path;W.appendChild(cv)});
+        const ld=W.querySelector(".jgld");if(ld)ld.remove();ready=true;layout();$("jgOk").textContent=okN();if(okN()===T)win()};
+      const hc=document.createElement("canvas").getContext("2d");
+      const hit=(ux,uy)=>{const L=PC.filter(p=>!p.l&&p.path).sort((a,b)=>b.z-a.z);
+        for(const p of L){const lx=ux-(p.x-m),ly=uy-(p.y-m),sz=s+2*m;if(lx<0||ly<0||lx>sz||ly>sz)continue;const k=(cpx+2*Math.round(cpx*.25))/sz;if(hc.isPointInPath(p.path,lx*k,ly*k))return p}
+        return null};
+      const im=new Image();im.onload=()=>build(im);im.onerror=()=>{tries++;const id=(/\/(\d+)\.png/.exec(src)||[])[1];if(tries===1&&id&&typeof SPRU2!=="undefined"){src=SPRU2+"other/home/"+id+".png"}else if(tries<4&&!sv){mon=pool[Math.floor(Math.random()*pool.length)];src=mgImgSrc(mon)}else{build(null);return}im.src=src;ref.src=src};im.src=src;ref.src=src;
+      const tick=()=>{if(done)return;const e=$("jgT");if(!e)return;e.textContent=mgClk(performance.now()-t0);MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
+      // arrastrar
+      let dr=null;
+      const pt=e=>{const r=W.getBoundingClientRect();return [(e.clientX-r.left)/wpx,(e.clientY-r.top)/wpx]};
+      W.addEventListener("pointerdown",e=>{if(done||!ready)return;const [ux,uy]=pt(e),p=hit(ux,uy);if(!p)return;e.preventDefault();p.z=zTop++;dr={p,dx:ux-p.x,dy:uy-p.y,id:e.pointerId};p.cv.classList.add("drag");place(p);try{W.setPointerCapture(e.pointerId)}catch(x){}});
+      W.addEventListener("pointermove",e=>{if(!dr||e.pointerId!==dr.id)return;const [ux,uy]=pt(e),p=dr.p;p.x=Math.min(1-s*.5,Math.max(-s*.5,ux-dr.dx));p.y=Math.min(AH-s*.5,Math.max(-s*.5,uy-dr.dy));place(p)});
+      const up=e=>{if(!dr||e.pointerId!==dr.id)return;const p=dr.p;dr=null;p.cv.classList.remove("drag");const [hx,hy]=home(p.i);
+        if(Math.abs(p.x-hx)<s*.3&&Math.abs(p.y-hy)<s*.3){p.x=hx;p.y=hy;p.l=true;place(p);snd("lvl");if(!hubCalm())p.cv.animate([{filter:"brightness(1.7)"},{filter:"none"}],{duration:350});const k=okN();$("jgOk").textContent=k;if(k===T)win()}
+        else{place(p);snd("ui")}};
+      W.addEventListener("pointerup",up);W.addEventListener("pointercancel",up);
+      const win=()=>{if(done)return;done=true;cancelAnimationFrame(MG.raf);const t=(performance.now()-t0)/1000,par=T*6+20,spd=Math.min(1,par/Math.max(1,t)),sc=Math.round(T*50*(.5+.5*spd));
+        mgSet(sc);W.classList.add("jgdone");snd("win");mgConfetti();try{cry(mon[0])}catch(e){}
+        B.querySelector(".mgbtns").innerHTML='<p class="pzres">¡Es <b>'+esc(mon[0])+'</b>! · '+T+' piezas en '+mgClk(t*1000)+'</p>';
+        mgT(()=>end(sc),2600)};
+      $("jgPeek").onclick=()=>{$("jgBd").classList.toggle("peek")};
+      $("jgMix").onclick=()=>{if(done||!ready)return;snd("ui");scatter(PC.filter(p=>!p.l));layout()};
+      $("jgSave").onclick=()=>{if(done)return;const r4=v=>Math.round(v*1e4)/1e4;
+        mgSavePut("jig",{N:N,m:mon[0],src:src,h:H,v:V,p:PC.map(p=>p.l?[0,0,1]:[r4(p.x),r4(p.y),0]),el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Puzle guardado. Puedes seguir cuando quieras.");mgClose()};
+    };
+    mgSet(0);pick();
+  }};
+
+MGS.push(G_PUZ,G_JIG,G_HL);
 // entran en la rotación del Torneo semanal a partir de la semana que viene (no cambia el torneo en curso)
 TOUR_ROT.push(["2026-W46","who mem dig fish thr run exc wgt fos puz hl"]);
+TOUR_ROT.push(["2026-W47","who mem dig fish thr run exc wgt fos puz jig hl"]);
 Object.assign(MGHOW,{
+  jig:["Elige de <b>9 a 100 piezas</b>: cada pieza vale hasta <b>50 puntos</b> (con 100 piezas, hasta 5.000).","Las piezas empiezan sueltas debajo del tablero. Arrástralas a su sitio: si la sueltas cerca, <b>encaja sola</b> y se queda fija.","Fíjate en la forma: cada pieza tiene salientes y huecos que solo encajan con sus vecinas. Las de los bordes tienen un lado recto.","<b>Rapidez</b>: la mitad de los puntos dependen de lo rápido que termines.","<b>👁️ Ver la imagen</b> muestra el dibujo en el tablero; <b>🧺 Recoger las sueltas</b> vuelve a ordenar las piezas sueltas.","<b>💾 Guardar y salir</b> guarda el puzle tal cual, con el tiempo parado, para seguir otro día."],
   puz:["Elige de <b>9 a 100 piezas</b>: cada pieza vale <b>40 puntos</b> (con 100 piezas, hasta 4.000).","Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.","<b>Rapidez</b>: hasta la mitad de los puntos dependen de lo rápido que termines.","<b>Precisión</b>: cuantos menos cambios hagas (cerca del mínimo), más puntos.","Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo."],
   hl:["Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>. Si empatan, cuenta como acierto.","Con la racha, los valores se parecen cada vez más y tienes menos tiempo.","Teclado: <b>↑</b> más, <b>↓</b> menos."]});
 // =====================================================================================

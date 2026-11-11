@@ -217,3 +217,21 @@ function xDeco(ch,x,y){const now=performance.now(),fr=ch==="f"?Math.floor(now/14
   for(let i=0;i<d.length;i+=4){const r=d[i],gg=d[i+1],b=d[i+2];if(r>gg+60&&r>b+40&&!(r>230&&gg>180)){const l=r/200;d[i]=Math.min(255,T[0]*l);d[i+1]=Math.min(255,T[1]*l);d[i+2]=Math.min(255,T[2]*l)}}g.putImageData(im,0,0);return XG[k]=c}}
 Object.assign(XFURN_TXT,{P:["Una lámpara de pie. Da una luz muy acogedora."],i:["Una mesita de noche con una lamparita."],f:["La chimenea crepita. ¡Qué calentito se está aquí!"],x:["Un cuadro muy bonito. Lo pintó alguien de la familia."]});
 {const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&(EX.map==="casa"||EX.map==="casa_up")){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);if(XFURN_TXT[c]&&"Pifx".includes(c)){snd("ui");exSay(XFURN_TXT[c]);return}}}catch(e){}return _i.apply(this,arguments)}}
+
+// =====================================================================================
+// CENTROS POKÉMON Y TIENDAS: estanterías de tienda con productos y cosas que mirar
+// =====================================================================================
+function xShopShelf(x){const k="SS"+(x%3);if(XG[k])return XG[k];const c=xc(32,48),g=c.getContext("2d"),R=(a,b,w,h,col)=>xr(g,a,b,w,h,col);xdisc(g,16,45,13,3,"rgba(0,0,0,.2)");
+  R(1,4,30,41,xInk);R(2,5,28,39,"#d8dde6");R(2,5,28,3,"#f2f4f8");
+  [8,20,32].forEach((yy,r)=>{R(3,yy+9,26,2,"#9aa6b8");let xx=4;for(let i=0;i<5;i++){const t=(i+r+x)%4;
+    if(t===0){R(xx,yy+2,4,7,xInk);R(xx+1,yy+3,2,5,"#e8414f");R(xx+1,yy+2,2,1,"#fff")}                       // Poké Ball en caja
+    else if(t===1){R(xx,yy+1,4,8,xInk);R(xx+1,yy+2,2,6,"#8a5ad8");R(xx+1,yy+2,2,2,"#d8c8ff")}               // poción
+    else if(t===2){R(xx,yy+3,5,6,xInk);R(xx+1,yy+4,3,4,"#ffd23f")}                                          // caja amarilla
+    else{R(xx,yy+2,4,7,xInk);R(xx+1,yy+3,2,5,"#3a8cff");R(xx+1,yy+3,2,1,"#fff")}                            // refresco
+    xx+=5}});
+  return XG[k]=c}
+{const _o=xObj;xObj=function(c,x,y){if(c==="Z"&&/^tienda_/.test(EX.map||""))return xShopShelf(x);return _o.apply(this,arguments)}}
+const XCEN_TXT={O:["El PC del Centro Pokémon. Aquí los entrenadores guardan sus cosas… y consultan su correo."],Q:["Un banco para esperar mientras curan a tus Pokémon."],D:["Una mesa con revistas: «Entrenador del mes», «Bayas de temporada»…"],M:["Una silla."],V:["La máquina curativa. Sus luces parpadean suavemente."],J:["Una planta muy bien cuidada."],x:["Un cartel: «¡Cuida de tus Pokémon! Los Centros Pokémon curan gratis a todos los entrenadores»."]};
+const XTIE_TXT={L:["Una nevera llena de refrescos y zumos de bayas."],J:["Una planta decorativa."],x:["Un cartel de ofertas: «¡Esta semana, las Poké Balls brillan más que nunca!»."]};
+{const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&!EX.cut){const m=EX.map||"",[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy),T=/^centro/.test(m)?XCEN_TXT:/^tienda_/.test(m)?XTIE_TXT:null;
+  if(T&&T[c]&&!EX.npcs.some(n=>n.px===EX.x+dx&&n.py===EX.y+dy)){snd("ui");exSay(T[c]);return}}}catch(e){}return _i.apply(this,arguments)}}

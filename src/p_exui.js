@@ -57,7 +57,7 @@ const GP={prev:{},dir:null,bind:null,on:false};
 function gpKey(type,key){document.dispatchEvent(new KeyboardEvent(type,{key:key,bubbles:true,cancelable:true}))}
 function gpKeyOf(act){const kb=exKB();return (kb[act]&&kb[act].find(Boolean))||EXKB0[act][0]}
 function gpPoll(){const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[];const gp=L[0];if(!gp){GP.on=false;return}GP.on=true;
-  const pr=i=>!!(gp.buttons[i]&&gp.buttons[i].pressed),ax=gp.axes||[];
+  const pr=i=>!!(gp.buttons[i]&&gp.buttons[i].pressed),ax=gp.axes||[];if(gp.buttons.some(b=>b&&b.pressed)||ax.some(v=>Math.abs(v)>.5))GP.used=1;
   // configurar un botón: el siguiente botón pulsado se asigna a la acción
   if(GP.bind){for(let i=0;i<gp.buttons.length;i++)if(pr(i)&&!GP.prev[i]){const P0=exPad();for(const k in P0)if(P0[k]===i&&k!==GP.bind)P0[k]=-1;P0[GP.bind]=i;S.exPad=P0;save();GP.bind=null;snd("lvl");exCtlUI();break}
     for(let i=0;i<gp.buttons.length;i++)GP.prev[i]=pr(i);return}
@@ -78,12 +78,17 @@ function gpPoll(){const L=navigator.getGamepads?[...navigator.getGamepads()].fil
   for(let i=0;i<gp.buttons.length;i++)GP.prev[i]=pr(i)}
 // en los combates: la cruceta mueve la selección entre los botones y A pulsa
 function gpBtns(){return [...document.querySelectorAll("#menu button:not([disabled])")].filter(b=>b.offsetParent)}
-function gpNav(d){const L=gpBtns();if(!L.length)return;let i=L.indexOf(document.activeElement);if(i<0){L[0].focus();return}
-  const r=L[i].getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best=null,bd=1e9;
-  L.forEach((b,j)=>{if(j===i)return;const q=b.getBoundingClientRect(),x=q.left+q.width/2-cx,y=q.top+q.height/2-cy;const ok=d==="u"?y<-4:d==="d"?y>4:d==="l"?x<-4:x>4;if(!ok)return;const s=(d==="u"||d==="d")?Math.abs(y)+Math.abs(x)*2:Math.abs(x)+Math.abs(y)*2;if(s<bd){bd=s;best=b}});
-  if(best){best.focus();snd("ui")}}
-function gpClick(){const L=gpBtns();const a=document.activeElement;if(a&&L.includes(a)){a.click();return}if(L[0])L[0].focus();else{const s=document.querySelector("#bmsg,#say,.bsay");if(s)s.click()}}
-(function gpLoop(){try{gpPoll()}catch(e){}requestAnimationFrame(gpLoop)})();
+// marca visible del botón elegido con el mando (el foco por código no activa :focus-visible)
+function gpSel(b){document.querySelectorAll(".gpsel").forEach(x=>{if(x!==b)x.classList.remove("gpsel")});if(!b)return;b.classList.add("gpsel");try{b.focus({preventScroll:true})}catch(e){}}
+function gpCur(L){return L.find(b=>b.classList.contains("gpsel"))||(L.includes(document.activeElement)?document.activeElement:null)}
+function gpNav(d){const L=gpBtns();if(!L.length)return;const c=gpCur(L);if(!c){gpSel(L[0]);snd("ui");return}
+  const r=c.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best=null,bd=1e9;
+  L.forEach(b=>{if(b===c)return;const q=b.getBoundingClientRect(),x=q.left+q.width/2-cx,y=q.top+q.height/2-cy;const ok=d==="u"?y<-4:d==="d"?y>4:d==="l"?x<-4:x>4;if(!ok)return;const s=(d==="u"||d==="d")?Math.abs(y)+Math.abs(x)*2:Math.abs(x)+Math.abs(y)*2;if(s<bd){bd=s;best=b}});
+  if(best){gpSel(best);snd("ui")}}
+function gpClick(){const L=gpBtns();const c=gpCur(L);if(c){c.click();return}if(L[0])gpSel(L[0]);else{const s=document.querySelector("#bmsg,#say,.bsay");if(s)s.click()}}
+// si se está usando el mando en un combate, siempre hay un botón marcado
+function gpAuto(){if(!GP.on||!GP.used||!(typeof fcd!=="undefined"&&fcd))return;const L=gpBtns();if(L.length&&!L.some(b=>b.classList.contains("gpsel")))gpSel(gpCur(L)||L[0])}
+(function gpLoop(){try{gpPoll()}catch(e){}try{gpAuto()}catch(e){}requestAnimationFrame(gpLoop)})();
 window.addEventListener("gamepadconnected",()=>{toast("🎮 Mando conectado. Configúralo en Exploración → Menú → Controles.")});
 // controles: añadir la sección del mando
 {const _c=exCtlUI;exCtlUI=function(){_c.apply(this,arguments);const box=$("exCtl"),inn=box&&box.querySelector(".exctlin");if(!inn)return;const P0=exPad(),h=inn.querySelector("h3");if(h)h.textContent="🎮 Controles (teclado y mando)";
@@ -120,9 +125,9 @@ function bcLayout(){const mn=$("menu");if(!mn||mn.querySelector(".bcmd"))return;
   F.appendChild(G);F.appendChild(I);F.appendChild(X);
   mn.innerHTML="";mn.appendChild(C);mn.appendChild(F);mn.appendChild(hid);mn.classList.add("bclassic");
   const info=b=>{const k=b&&b.dataset.k&&/^m\d$/.test(b.dataset.k)?+b.dataset.k[1]:-1,mv=k>=0?m.m[k]:null;
-    I.innerHTML=mv?'<span class="bcty" style="--tc:'+(TC[mv.t]||"#999")+'">'+(EM[mv.t]||"")+' '+(TIPO[mv.t]||mv.t).toUpperCase()+'</span><b>PP: '+m.pp[k]+'/'+ppMax(m.p[0],mv.id)+'</b><small>'+(mv.cl===0?'Estado':mv.cl===1?'Físico':'Especial')+(mv.pw?' · Pot. '+mv.pw:'')+'</small>'+(()=>{try{const foe=beAct(B.E.sd[1]);return '<small class="bceff">'+effTag(mv,foe,m)+'</small>'}catch(e){return ''}})():'<small class="mut">Elige un ataque</small>'};
+    I.innerHTML=mv?'<span class="bcty" style="--tc:'+(TC[mv.t]||"#999")+'">'+(EM[mv.t]||"")+' '+(TIPO[mv.t]||mv.t).toUpperCase()+'</span><b>PP: '+m.pp[k]+'/'+ppMax(m.p[0],mv.id)+'</b><small>'+(mv.cl===0?'Estado':mv.cl===1?'Físico':'Especial')+(mv.pw?' · Pot. '+mv.pw:'')+'</small>'+(()=>{try{const foe=beAct(B.E.sd[1]);return '<small class="bceff">'+(effTag(mv,foe,m)||'&nbsp;')+'</small>'}catch(e){return '<small class="bceff">&nbsp;</small>'}})():'<small class="mut">Elige un ataque</small>'};
   G.querySelectorAll("button").forEach(b=>{b.addEventListener("mouseenter",()=>info(b));b.addEventListener("focus",()=>info(b))});info(mvs[0]);
-  const view=v=>{mn.classList.toggle("bcf",v==="fight");mn.classList.toggle("bcc",v!=="fight");B.bcv=v;const f=(v==="fight"?G:C).querySelector("button:not([disabled])");if(f&&GP.on)f.focus()};
+  const view=v=>{mn.classList.toggle("bcf",v==="fight");mn.classList.toggle("bcc",v!=="fight");B.bcv=v;const f=(v==="fight"?G:C).querySelector("button:not([disabled])");if(f&&GP.on){if(GP.used)gpSel(f);else f.focus()}};
   view(B.bcv==="fight"&&B.bcKeep?"fight":"cmd");B.bcKeep=false;
   mn.addEventListener("click",bcClick,true)}
 function bcClick(e){const b=e.target.closest&&e.target.closest("[data-cm]");if(!b)return;e.stopPropagation();const mn=$("menu"),k=b.dataset.cm;snd("ui");

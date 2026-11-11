@@ -14,8 +14,11 @@ const LKR=[
   ["shiny","✨ Cláusula variocolor","Los Pokémon variocolor se pueden capturar siempre, aunque ya hayas usado la captura de esa zona."],
   ["noitem","🎒 Sin objetos en combate","En combate solo puedes usar Poké Balls (nada de pociones ni curas)."],
   ["set","🔁 Modo Set","Cuando el rival va a sacar otro Pokémon, no se te ofrece cambiar el tuyo."],
-  ["hard","💪 Rivales más fuertes","Los Pokémon de los entrenadores tienen 2 niveles más."]];
-const LKDEF={mote:1,first:1,death:1,dupe:1,shiny:1,noitem:0,set:0,hard:0};
+  ["hard","💪 Rivales más fuertes","Los Pokémon de los entrenadores tienen 2 niveles más."],
+  ["leg","👑 Cláusula legendaria","Los legendarios y singulares se pueden capturar siempre: no gastan la captura de la zona ni cuentan como primer encuentro."],
+  ["noleg","🚫 Sin legendarios","No puedes usar legendarios ni singulares en tu equipo (incluida tu compañera legendaria de la historia). Puedes capturarlos, pero se quedan en la caja."]];
+const LKDEF={mote:1,first:1,death:1,dupe:1,shiny:1,noitem:0,set:0,hard:0,leg:1,noleg:0};
+const lkLeg=n=>!!(PM[n]&&PM[n][2]==="L");
 const RNDR=[["w","🌿 Pokémon salvajes aleatorios","Cada Pokémon salvaje es de una especie al azar de cualquier generación."],["t","🧢 Entrenadores aleatorios","Los equipos de todos los entrenadores (también líderes, Alto Mando y Equipo Ocaso) son aleatorios. Se mantienen sus niveles."],["l","👑 Incluir legendarios y singulares","Si está apagado, el azar no saca legendarios ni singulares."]];
 function lkD(){const X=xgData();if(!X.lk||typeof X.lk!=="object")X.lk={on:0,r:Object.assign({},LKDEF),z:{},dead:[],fail:0};const L=X.lk;L.r=L.r||Object.assign({},LKDEF);L.z=L.z||{};L.dead=L.dead||[];
   if(!X.rnd||typeof X.rnd!=="object")X.rnd={w:0,t:0,l:1};return L}
@@ -39,6 +42,7 @@ function rndMon(m,leg){const L=rndPool(leg),p=L[Math.floor(Math.random()*L.lengt
     const own=xgRun(()=>S.owned[sp]>0)||lkDead(sp);let lk;
     if(!L.r.first)lk={ok:1};
     else if(L.r.shiny&&m.sh)lk={ok:1,sh:1};
+    else if(L.r.leg&&lkLeg(sp))lk={ok:1,leg:1};
     else if(st)lk={ok:0,why:"used",st:st};
     else if(L.r.dupe&&own)lk={ok:0,why:"dupe"};
     else{L.z[z]={p:sp,s:"e",n:zn,t:Date.now()};lk={ok:1,z:z};save();setTimeout(()=>toast("🎯 Primer encuentro en "+zn+": ¡es tu única oportunidad de capturar aquí!"),900)}
@@ -128,3 +132,8 @@ setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr");if(!sc)re
     for(let i=0;i<gp.buttons.length;i++)GP.prev[i]=pr(i);const M=dl.closest(".uidlg");
     if(ea){const y=M.querySelector('[data-u="1"]');if(!dl.value.trim()){const n=M.querySelector('[data-u="0"]');if(n)n.click()}else if(y)y.click()}else if(eb){const n=M.querySelector('[data-u="0"]');if(n)n.click()}return}}
   return _gp.apply(this,arguments)}}
+// Sin legendarios: no pueden estar en el equipo de Exploración (se quedan en la caja)
+setInterval(()=>{try{if(!lkOn("noleg")||(typeof fcd!=="undefined"&&fcd))return;const tm=xgRun(()=>(S.team||[]).slice());const bad=tm.filter(n=>n&&lkLeg(n));if(!bad.length)return;
+  const rest=tm.filter(n=>n&&!lkLeg(n)&&!lkDead(n));if(!rest.length)return;
+  xgRun(()=>{S.team=S.team.map(n=>n&&lkLeg(n)?"":n)});save();toast("🚫 Regla Locke «Sin legendarios»: "+bad.join(", ")+" vuelve a la caja.");const t=$("exTeam");if(t&&!t.hidden)try{xgPanel()}catch(e){}}catch(e){}},800);
+{const _p2=xgPanel;xgPanel=function(){const r=_p2.apply(this,arguments);try{if(lkOn("noleg")){const box=$("exTeam");if(box)box.querySelectorAll(".xgc[data-xg]").forEach(c=>{if(lkLeg(c.dataset.xg)&&!c.querySelector(".lkrip")){c.classList.add("lkdead");c.title="Regla Locke: sin legendarios";c.insertAdjacentHTML("beforeend",'<small class="lkrip">🚫 Sin legendarios</small>')}})}}catch(e){}return r}}

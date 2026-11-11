@@ -175,3 +175,45 @@ function xStairWell(part,open){const k="SW"+part+open;if(XG[k])return XG[k];cons
 // en los interiores, lo que queda fuera de la casa es negro (no árboles)
 {const _g=xGround;xGround=function(x,y,fr){if(EX.M&&EX.M.base==="F"&&!(EX.grid[y]&&EX.grid[y][x]!=null)){const k="VOID";return XG[k]||(XG[k]=(()=>{const c=xc(32,32);xr(c.getContext("2d"),0,0,32,32,"#0c0a14");return c})())}return _g.apply(this,arguments)}}
 {const _o=xObj;xObj=function(c,x,y){if(EX.M&&EX.M.base==="F"&&!(EX.grid[y]&&EX.grid[y][x]!=null))return null;return _o.apply(this,arguments)}}
+
+// =====================================================================================
+// DECORACIÓN: cuadros (x, en la pared), chimenea (f), lámpara de pie (P), mesita con lámpara (i), alfombrita ovalada (y)
+// y alfombras de un color distinto en cada casa
+// =====================================================================================
+const XDECO_BLK="Pix";
+{const _b=exBlocked;exBlocked=function(x,y){const c=exAt(x,y);if(XDECO_BLK.includes(c))return true;return _b.apply(this,arguments)}}
+function xPainting(x,y){const fl=(EX.M&&EX.M.fl)||"wood",v=(x*7+String(EX.map||"").length)%5,k="PT"+fl+v+(x%2);if(XG[k])return XG[k];const c=xc(32,32),g=c.getContext("2d");g.drawImage(xWall(fl,x,1),0,0);
+  const R=(a,b,w,h,col)=>xr(g,a,b,w,h,col);R(5,3,22,19,xInk);R(6,4,20,17,"#c8905a");R(8,6,16,13,"#fff");
+  if(v===0){R(8,6,16,7,"#8fd0ff");R(8,13,16,6,"#5ab04a");xdisc(g,19,9,2,2,"#fff4b0");R(10,11,4,3,"#3a7a36");R(15,10,5,4,"#3a7a36")}            // paisaje
+  else if(v===1){R(8,6,16,13,"#3a4a7a");xdisc(g,16,12,5,5,xInk);xdisc(g,16,12,4,4,"#fff");g.save();g.beginPath();g.arc(16,12,4,0,7);g.clip();R(11,7,10,5,"#e8414f");g.restore();R(12,12,8,1,xInk)} // Poké Ball
+  else if(v===2){R(8,6,16,13,"#f6e2c8");xdisc(g,16,11,3,3,"#c8905a");R(12,14,8,5,"#e8414f");R(14,10,1,1,xInk);R(17,10,1,1,xInk)}               // retrato
+  else if(v===3){R(8,6,16,13,"#ffe7a0");[[11,10,"#e8414f"],[16,9,"#3a8cff"],[20,12,"#5ad1a0"]].forEach(([a,b,col])=>{xdisc(g,a,b,2,2,col);R(a,b+2,1,4,"#3a7a36")})}  // flores
+  else{R(8,6,16,13,"#1d2a5a");xdisc(g,20,9,2,2,"#fff4b0");[[10,8],[13,12],[18,15],[22,13],[11,16]].forEach(([a,b])=>R(a,b,1,1,"#fff"))}  // noche
+  R(6,4,20,1,"#e0b07a");return XG[k]=c}
+function xDeco(ch,x,y){const now=performance.now(),fr=ch==="f"?Math.floor(now/140)%3:0,L=exAt(x-1,y)===ch,Rt=exAt(x+1,y)===ch,k="DC"+ch+fr+(L?1:0)+(Rt?1:0);if(XG[k])return XG[k];
+  const c=xc(32,48),g=c.getContext("2d"),R=(a,b,w,h,col)=>xr(g,a,b,w,h,col),sh=()=>xdisc(g,16,45,12,3,"rgba(0,0,0,.2)");
+  if(ch==="P"){sh();R(13,42,6,3,xInk);R(15,14,2,29,xInk);R(15,14,1,29,"#9aa6b8");R(8,4,16,12,xInk);R(9,5,14,10,"#ffe9a8");R(9,5,14,3,"#fff6d0");R(9,13,14,2,"#e8c060");
+    g.fillStyle="rgba(255,226,140,.18)";g.beginPath();g.arc(16,16,15,0,7);g.fill()}
+  else if(ch==="i"){sh();R(5,24,22,20,xInk);R(6,25,20,18,"#b47c46");R(6,25,20,3,"#d29a60");R(8,33,16,6,"#9a6634");R(15,35,2,2,"#ffd34a");R(14,14,4,11,xInk);R(15,14,2,10,"#c8ccd2");R(9,6,14,9,xInk);R(10,7,12,7,"#ffcf8a");R(10,7,12,2,"#fff0c8")}
+  else if(ch==="f"){// chimenea de piedra de 2 casillas (izquierda / derecha)
+    const W0=L?0:2,W1=Rt?32:30;R(W0,4,W1-W0,42,xInk);
+    for(let yy=6;yy<44;yy+=6)for(let xx=W0+1+((yy/6)%2)*5;xx<W1-1;xx+=10){R(xx,yy,9,5,(xx+yy)%3?"#a8a0a0":"#8a8484");R(xx,yy,9,1,"#c8c2c2")}
+    R(W0,4,W1-W0,5,"#7a4a26");R(W0,4,W1-W0,2,"#a8703c");// repisa
+    const ox=L?0:12,ow=(L?20:20);R(L?0:12,22,L?20:20,22,"#1a1210");
+    if(!L){R(12,22,20,2,xInk)}else{R(0,22,20,2,xInk)}
+    // fuego animado
+    const fx=L?2:14,cols=["#ff7a2a","#ffb03c","#ffe27a"];for(let i=0;i<3;i++){const h=8+((fr+i)%3)*3;R(fx+i*5,44-h-2,4,h,cols[0]);R(fx+i*5+1,44-h,2,h-3,cols[1]);R(fx+i*5+1,44-4,2,2,cols[2])}
+    R(fx,42,16,2,"#5a3418");g.fillStyle="rgba(255,150,60,.15)";g.fillRect(L?0:10,18,22,28)}
+  return XG[k]=c}
+{const _g=xGround;xGround=function(x,y,fr){try{const c=exAt(x,y),M=EX.M;
+  if(c==="x")return xPainting(x,y);
+  if(c==="P"||c==="i"||c==="f"&&M&&M.base==="F")return xFloor(M.fl||"wood",x,y);
+  if(c==="y"){const v=xMapV(),k="OV"+v+(x+y)%2;if(XG[k])return XG[k];const cv=xc(32,32),g=cv.getContext("2d");g.drawImage(xFloor(M.fl||"wood",x,y),0,0);const col=["#5a8ad8","#d85a8a","#5ab07a","#d8a03a"][v];
+    xdisc(g,16,16,15,11,xInk);xdisc(g,16,16,14,10,col);xdisc(g,16,16,10,7,"rgba(255,255,255,.25)");xdisc(g,16,16,6,4,col);return XG[k]=cv}}catch(e){}return _g.apply(this,arguments)}}
+{const _o=xObj;xObj=function(c,x,y){if((c==="P"||c==="i"||(c==="f"&&EX.M&&EX.M.base==="F")))return xDeco(c,x,y);return _o.apply(this,arguments)}}
+// alfombras: un color distinto en cada casa
+{const _r=xRug;xRug=function(x,y,mat){const src=_r.apply(this,arguments);if(mat||!EX.map||!/_h|casa/.test(EX.map))return src;const v=xMapV();if(v===0)return src;
+  const k="RGC"+v+xMask(x,y,q=>q==="R");if(XG[k])return XG[k];const c=xc(32,32),g=c.getContext("2d");g.drawImage(src,0,0);const im=g.getImageData(0,0,32,32),d=im.data,T=[null,[60,110,200],[70,150,90],[150,80,190]][v];
+  for(let i=0;i<d.length;i+=4){const r=d[i],gg=d[i+1],b=d[i+2];if(r>gg+60&&r>b+40&&!(r>230&&gg>180)){const l=r/200;d[i]=Math.min(255,T[0]*l);d[i+1]=Math.min(255,T[1]*l);d[i+2]=Math.min(255,T[2]*l)}}g.putImageData(im,0,0);return XG[k]=c}}
+Object.assign(XFURN_TXT,{P:["Una lámpara de pie. Da una luz muy acogedora."],i:["Una mesita de noche con una lamparita."],f:["La chimenea crepita. ¡Qué calentito se está aquí!"],x:["Un cuadro muy bonito. Lo pintó alguien de la familia."]});
+{const _i=exInteract;exInteract=function(){try{if(!EX.dlg&&!EX.mv&&!EX.trans&&(EX.map==="casa"||EX.map==="casa_up")){const[dx,dy]=EXDIR[EX.f],c=exAt(EX.x+dx,EX.y+dy);if(XFURN_TXT[c]&&"Pifx".includes(c)){snd("ui");exSay(XFURN_TXT[c]);return}}}catch(e){}return _i.apply(this,arguments)}}

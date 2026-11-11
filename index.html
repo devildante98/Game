@@ -52,7 +52,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.36"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.36.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -87,7 +87,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794404412">
+<meta name="game-build" content="1794407645">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2622,7 +2622,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.36</small>
+    <small class="pcver">Versión 6.36.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7285,8 +7285,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.36";
+const GAME_VER="6.36.1";
 const NEWS=[
+{v:"2026-11-11-6.36.1",ver:"6.36.1",at:"2026-11-11T15:34",t:"🔧 Arreglos/Mejoras",l:["Exploración en compañía: arreglado que un jugador pudiera ver a otro pero no al revés cuando el reloj de uno de los móviles u ordenadores iba adelantado o atrasado","Puzle de piezas en equipo: el mismo arreglo para la lista de jugadores de la sala"]},
 {v:"2026-11-11-6.36",ver:"6.36",at:"2026-11-11T14:40",t:"👥 Juega en compañía en tiempo real",l:["Exploración en compañía: ahora ves en el mapa a los demás jugadores que están en la misma zona, con su nombre, moviéndose en tiempo real","Ponte delante de otro jugador y pulsa A para saludarle con un emoticono o retarle a un combate. Con el botón 💬 saludas a todos los que estén cerca","Con el botón 👥 ves cuántos jugadores hay en tu zona, y puedes ocultarlos si prefieres explorar solo","Nuevo modo cooperativo: Puzle de piezas en equipo. Crea una sala, pasa el código a tus amigos y montad el mismo puzle entre 2 y 4 jugadores, viendo moverse las piezas de los demás","Al terminar el puzle en equipo todos ganan premio, y quien más piezas encaja gana algo más"]},
 {v:"2026-11-11-6.35",ver:"6.35",at:"2026-11-11T14:33",t:"🎒 Más de 70 objetos equipables nuevos",l:["Repartir Experiencia: el Pokémon que lo lleva gana la mitad de la experiencia aunque no luche","Moneda Amuleto (el doble de tickets en los combates), Piedra Eterna (no evoluciona) y Amuleto (menos Pokémon salvajes en Exploración)","Los 18 objetos que potencian un tipo (Carbón, Agua Mística, Imán, Semilla Milagro…) y las 18 bayas que reducen un ataque supereficaz (Baya Caoca, Pasio, Chilan…)","Bayas Aranja, Higog, Lichi, Gonlan, Aslac, Yapati y Aricoc, y las que curan estados (Zreza, Atania, Meloc, Safre y Perasi)","Cinta Aguante, Seguro Debilidad, Seguro Fallo, Tubérculo, Pila, Bola de Nieve, Musgo Brillante, Telescopio, Raíz Grande, Paracontacto, Amuleto Puro, Capa Furtiva y Dado Trucado","Objetos de especie: Hueso Grueso, Puerro, Puño Suerte, Rocío Bondad, Diamansfera, Lustresfera, Griseosfera, Polvo Veloz y Polvo Metálico","Funcionan en el juego normal y en Exploración. En Exploración se compran en las Tiendas Pokémon, y cada pueblo vende los de su zona"]},
 {v:"2026-11-11-6.34",ver:"6.34",at:"2026-11-11T11:46",t:"🔥 Carrera de Rapidash renovada",l:["Nuevo aspecto: paisaje con montañas, colinas, árboles y nubes que se mueven a distinta velocidad, y el día pasa a atardecer y noche mientras corres","Rapidash galopa dejando una estela de fuego y levanta polvo al aterrizar","La velocidad ya tiene un máximo y los obstáculos se separan más cuanto más rápido vas: siempre se pueden saltar","Más control: mantén pulsado para saltar más alto, pulsa otra vez en el aire para un doble salto y agáchate para esquivar a los Zubat","Obstáculos nuevos: troncos, vallas altas, vallas dobles y Zubat voladores","Potenciadores: 🔥 Llamarada (atraviesas los obstáculos) y 🧲 Imán (atraes los tickets). Los saltos «¡Justos!» seguidos dan puntos extra"]},
@@ -7525,7 +7526,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794404412";
+const GAME_B="1794407645";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14907,11 +14908,20 @@ const xoOn=()=>O.exMp!==false;
 const xoUid=()=>{try{return window.FB&&window.FB.uid&&window.FB.uid()}catch(e){return null}};
 async function xoJoin(map){const key="ex_"+map;if(XO.key===key&&XO.room)return;if(XO.joining)return;XO.joining=true;
   try{await xoLeave();const lb=window.claude&&await window.claude.use("room");if(!lb||!lb.join)return;const r=await lb.join(key);XO.room=r;XO.key=key;XO.peers={};XO.lastJ="";
-    r.onPeers(({peers})=>{const now=typeof srvNow==="function"?srvNow():Date.now(),seen={};
-      peers.forEach(p=>{if(p.isMe||!p.presence||!p.presence.x&&p.presence.x!==0)return;if(now-(p.updatedAt||0)>75000)return;const q=p.presence,o=XO.peers[p.peer]||{dx:q.x,dy:q.y};
-        Object.assign(o,{id:p.peer,n:pvClean(q.n||"Jugador"),lk:q.lk||"",x:+q.x||0,y:+q.y||0,f:EXDIR[q.f]?q.f:"d",e:XO_EMO.includes(q.e)?q.e:"",et:+q.et||0});XO.peers[p.peer]=o;seen[p.peer]=1});
-      Object.keys(XO.peers).forEach(k=>{if(!seen[k])delete XO.peers[k]})})}
+    r.onPeers(({peers})=>{xoPeers(peers)});
+    // si nadie actualiza la sala, comprobamos igualmente quién sigue conectado
+    clearInterval(XO.chk);XO.chk=setInterval(()=>{if(XO.room&&XO.last)xoPeers(XO.last)},5000)}
   catch(e){XO.room=null;XO.key=""}finally{XO.joining=false}}
+// ¿sigue conectado? Se mide con la hora a la que NOS llega cada actualización (no con el reloj de cada móvil,
+// que puede ir adelantado o atrasado y hacía que uno viera al otro pero no al revés)
+XO.rc={};
+function xoFresh(p){const k=p.peer,u=+p.updatedAt||0,now=Date.now(),r=XO.rc[k];
+  if(!r||r.u!==u){const far=Math.abs((typeof srvNow==="function"?srvNow():now)-u)>15*60000&&!r;XO.rc[k]={u:u,at:far?0:now}}
+  return now-XO.rc[k].at<75000}
+function xoPeers(peers){XO.last=peers;const seen={};
+      peers.forEach(p=>{if(p.isMe||!p.presence||!p.presence.x&&p.presence.x!==0)return;if(!xoFresh(p))return;const q=p.presence,o=XO.peers[p.peer]||{dx:q.x,dy:q.y};
+        Object.assign(o,{id:p.peer,n:pvClean(q.n||"Jugador"),lk:q.lk||"",x:+q.x||0,y:+q.y||0,f:EXDIR[q.f]?q.f:"d",e:XO_EMO.includes(q.e)?q.e:"",et:+q.et||0});XO.peers[p.peer]=o;seen[p.peer]=1});
+      Object.keys(XO.peers).forEach(k=>{if(!seen[k])delete XO.peers[k]})}
 async function xoLeave(){const r=XO.room;XO.room=null;XO.key="";XO.peers={};if(r)try{await r.leave()}catch(e){}}
 // publicar mi posición (como mucho cada 350 ms y solo si ha cambiado)
 setInterval(()=>{try{
@@ -14919,7 +14929,7 @@ setInterval(()=>{try{
   if(!active){if(XO.room&&!XO.leaveT)XO.leaveT=Date.now();if(XO.room&&Date.now()-XO.leaveT>6000){XO.leaveT=0;xoLeave()}return}XO.leaveT=0;
   if(XO.key!=="ex_"+EX.map){xoJoin(EX.map);return}if(!XO.room)return;
   const p={n:pvNick(),lk:trEnc(myLook()),x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT},j=JSON.stringify(p);
-  if(j!==XO.lastJ&&Date.now()-XO.lastW>=350){XO.lastJ=j;XO.lastW=Date.now();XO.room.presence(p).catch(()=>{})}
+  const j2=j;if(j2!==XO.lastJ&&Date.now()-XO.lastW>=350){XO.lastJ=j2;XO.lastW=Date.now();XO.room.presence(p).catch(()=>{})}
 }catch(e){}},120);
 // dibujar a los demás jugadores encima del mapa
 {const _d=exDraw;exDraw=function(ts){_d.apply(this,arguments);try{if(!xoOn()||EX.title||!XO.room)return;const L=Object.values(XO.peers);if(!L.length)return;
@@ -14986,7 +14996,7 @@ async function jcRoom(B,end,code,cfg){
       (host?'<button class="red big" data-jcs="1"'+(ps.length<2?' disabled':'')+'>▶ Empezar'+(ps.length<2?' (espera a otro jugador)':'')+'</button>':'')+'<button class="alt" data-jcx="1">Salir de la sala</button></div>';
     const s=B.querySelector("[data-jcs]");if(s)s.onclick=()=>{J.mine.go=1;J.mine.t0=typeof srvNow==="function"?srvNow():Date.now();pub();start()};
     B.querySelector("[data-jcx]").onclick=()=>{MG.onClose=null;try{room.leave()}catch(e){}MG.jc=null;jgCoop(B,end)}};
-  room.onPeers(({peers})=>{const now=typeof srvNow==="function"?srvNow():Date.now();J.peers=peers.filter(p=>p.isMe||now-(p.updatedAt||0)<60000);if(!J.started)lobbyUI();else if(J.sync)J.sync()});
+  room.onPeers(({peers})=>{const now=typeof srvNow==="function"?srvNow():Date.now();J.peers=peers.filter(p=>p.isMe||Math.abs(now-(p.updatedAt||0))<15*60000);if(!J.started)lobbyUI();else if(J.sync)J.sync()});
   pub();lobbyUI();
   // ---------- partida ----------
   function start(){if(J.started)return;J.started=true;const c=J.cfg,N=c.N,T=N*N,s=JG_BW/N,m=s*.25,r=rngS(c.seed|0),rnd=()=>r()<.5?1:-1;

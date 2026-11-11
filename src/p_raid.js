@@ -21,6 +21,8 @@ async function rdCreate(){
   try{await window.FB.raidNew(id,d)}catch(e){toast("No se ha podido crear la sala.");return}rdJoinWatch(id);
 }
 function rdMe(boss){const t=(S.team||[]).filter(n=>n&&S.owned[n]);let pw=0;try{pw=Math.round(rdPow(rdBuildTeam(),PM[boss]||raidBoss()))}catch(e){}return{n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),dmg:0,lead:t[0]||"",pw:pw,at:Date.now()}}
+// hora común para todos los jugadores de la sala (la del servidor), así el contador y el inicio coinciden aunque los relojes de cada móvil no
+const rdNow=()=>typeof window.srvNow==="function"?window.srvNow():Date.now();
 async function rdJoin(id){
   if(!window.FB)return;if(fcd){toast("Termina el combate primero.");return}if(!(S.team||[]).some(n=>n&&S.owned[n])){toast("Necesitas un equipo para entrar en una incursión.");return}
   const it=(RD.list||[]).find(x=>x.id===id);try{await window.FB.raidJoin(id,window.FB.uid(),rdMe(it&&it.boss))}catch(e){toast("No se ha podido entrar: la sala está llena o ya ha empezado.");return}rdJoinWatch(id);
@@ -39,12 +41,13 @@ function rdLeave(){
 }
 const S_DEL=()=>window.FB.del();
 function rdTick(fromSnap){
-  const d=RD.d;if(!d||!$("mgB"))return;const now=Date.now(),me=RD.me,pl=d.pl||{},ids=Object.keys(pl);
+  const d=RD.d;if(!d||!$("mgB"))return;const now=rdNow(),me=RD.me,pl=d.pl||{},ids=Object.keys(pl);
   if(d.st==="lobby"){RD.phase="lobby";const b=PM[d.boss]||raidBoss();if(!fromSnap&&$("rdLob"))return;
     $("rdTm").textContent=ids.length+"/"+RD_MAX;
     $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+tyTxt(b)+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos. Toca para atacar, carga los ataques fuertes y esquiva cuando el jefe brille en amarillo.</p>'+(ids.length<RD_MAX?'<button class="rdinv" data-rdchat="inv">📨 Invitar a más gente por el chat</button>':'')+'<div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
-      (d.h===me?'<button class="red big" id="rdGo">⚔️ ¡Empezar la incursión!</button><small class="mut">Cuantos más seáis, más PS tendrá el jefe… ¡pero más probabilidades de ganar!</small>':'<p><b>Esperando a que el anfitrión empiece…</b></p>')+'</div>';
-    const g=$("rdGo");if(g)g.onclick=()=>{const mx=rdBossHP(RD.d);window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:Date.now()+3500,end:Date.now()+3500+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
+      '<button class="alt" id="rdMvSet">🎯 Elegir los ataques de tu equipo</button>'+(d.h===me?'<button class="red big" id="rdGo">⚔️ ¡Empezar la incursión!</button><small class="mut">Cuantos más seáis, más PS tendrá el jefe… ¡pero más probabilidades de ganar!</small>':'<p><b>Esperando a que el anfitrión empiece…</b></p>')+'</div>';
+    {const ms=$("rdMvSet");if(ms)ms.onclick=()=>rdMvOpen(d.boss)}
+    const g=$("rdGo");if(g)g.onclick=()=>{const mx=rdBossHP(RD.d);window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:rdNow()+3500,end:rdNow()+3500+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
     return}
   if(d.st==="fight"||d.st==="end"){
     if(RD.phase==="lobby"||RD.phase==="")rdFightUI();RD.phase=RD.phase==="catch"||RD.phase==="done"?RD.phase:"fight";
@@ -64,6 +67,9 @@ function rdBuildTeam(){return (S.team||[]).filter(n=>n&&S.owned[n]).map(n=>{cons
 // ataque rápido: el más flojo; ataques cargados: los dos más fuertes
 const RDFAST={normal:"Placaje",fire:"Ascuas",water:"Pistola Agua",grass:"Látigo Cepa",electric:"Impactrueno",ice:"Nieve Polvo",fighting:"Golpe Karate",poison:"Picotazo Veneno",ground:"Bofetón Lodo",flying:"Ataque Ala",psychic:"Confusión",bug:"Picadura",rock:"Lanzarrocas",ghost:"Lengüetazo",dragon:"Dragoaliento",dark:"Mordisco",steel:"Garra Metal",fairy:"Viento Feérico"};
 function rdPrep(m){const dm=m.m.filter(mv=>mv&&mv.cl>0&&(mv.pw|0)>0).sort((a,b)=>(a.pw|0)-(b.pw|0));
+  {const ch=S.rdMv&&S.rdMv[m.p[0]];if(ch){const byId=id=>dm.find(mv=>mv.id===id);const f=ch.f?byId(ch.f):null,cs=(ch.c||[]).map(byId).filter(Boolean).slice(0,2);
+    if(f||cs.length){const t0=tys(m.p)[0],sp0=bsSR(m.p)>1;m.fm=f||{n:RDFAST[t0]||"Placaje",pw:45,t:RDFAST[t0]?t0:"normal",cl:sp0?2:1};m.cm=(cs.length?cs:dm.filter(mv=>mv!==m.fm).reverse().slice(0,2)).map(mv=>({mv:mv,cost:(mv.pw|0)>=110?100:(mv.pw|0)>=80?50:34}));
+      m.en=0;m.fcd=Math.round(480+(m.fm.pw|0)*6);m.fen=Math.round(7+(m.fm.pw|0)/10);return}}}
   const t=tys(m.p)[0],sp=bsSR(m.p)>1;m.fm=dm.length>1&&(dm[0].pw|0)<=65?dm[0]:{n:RDFAST[t]||"Placaje",pw:45,t:RDFAST[t]?t:"normal",cl:sp?2:1};m.cm=dm.filter(mv=>mv!==m.fm).reverse().slice(0,2).map(mv=>({mv:mv,cost:(mv.pw|0)>=110?100:(mv.pw|0)>=80?50:34}));
   if(!m.cm.length&&dm.length)m.cm=[{mv:dm[dm.length-1],cost:50}];m.en=0;
   m.fcd=Math.round(480+(m.fm.pw|0)*6);m.fen=Math.round(7+(m.fm.pw|0)/10)}
@@ -80,7 +86,7 @@ function rdBossHP(d){const pl=d.pl||{},b=PM[d.boss],L=b&&b[2]==="L";let sum=0;Ob
 function rdBossMoves(b){let ids=[];try{ids=defMoves(b[0],100)}catch(e){}const L=ids.map(MVI).filter(mv=>mv&&mv.cl>0&&(mv.pw|0)>0).sort((a,c)=>(a.pw|0)-(c.pw|0));
   return {f:L[0]||RDTAP,c:L.length>1?L.slice(-2):[L[0]||{n:"Hiperrayo",pw:150,t:"normal",cl:2}]}}
 function rdFightUI(){
-  const d=RD.d,b=PM[d.boss],now=Date.now();RD.bm=rdBossMoves(b);RD.bNext=(d.go||now)+2200;RD.bAtk=null;RD.lastDodge=0;RD.busyUntil=0;RD.swUntil=0;RD.rejoinAt=0;RD.cAnim=null;RD.nBoss=0;
+  const d=RD.d,b=PM[d.boss],now=Date.now();RD.bm=rdBossMoves(b);RD.bNext=now+Math.max(0,(d.go||0)-rdNow())+2200;RD.bAtk=null;RD.lastDodge=0;RD.busyUntil=0;RD.swUntil=0;RD.rejoinAt=0;RD.cAnim=null;RD.nBoss=0;
   const env=b?(TC[tys(b)[0]]||"#4a6ae0"):"#4a6ae0";
   $("mgB").innerHTML='<div class="rdgo" id="rdGo" style="--rc:'+env+'"><div class="rdgtop"><div class="rdhpw"><b>'+esc(d.boss)+' <small class="rdcp">PC '+fmt(Math.round((d.mx|0)/3))+'</small></b><div class="rdhp"><i id="rdHp"></i></div><small id="rdHpT"></small></div></div>'+
     '<div class="rdgboss" id="rdBoss">'+icoHD(b,220,false,false)+'</div><div class="rdwarn" id="rdWarn"></div>'+
@@ -103,7 +109,7 @@ function rdMeUI(){const m=RD.team[RD.ai],box=$("rdMe");if(!box)return;const now=
     return '<button class="mvb rdcm'+(ok?' ok':'')+'" data-rdc="'+i+'" style="--tc:'+(TC[c.mv.t]||"#999")+'"'+(ok?'':' disabled')+'><span>'+esc(c.mv.n)+'</span><small>'+EM[c.mv.t]+' '+TIPO[c.mv.t]+effTag(c.mv,{p:foe})+'</small><span class="rden">'+Array.from({length:bars},(_,j)=>'<i style="--f:'+(Math.max(0,Math.min(1,(m.en-j*seg)/seg))*100)+'%"></i>').join("")+'</span></button>'}).join("")||'<small class="mut">Este Pokémon no tiene ataques cargados.</small>'}
 function rdFloat(txt,col,big){const bs=$("rdBoss");if(!bs)return;const r=bs.getBoundingClientRect();mgPop(r.left+r.width/2+Math.random()*90-45,r.top+r.height/3,txt,col);if(big)bs.classList.add("rdhitb"),setTimeout(()=>bs.classList.remove("rdhitb"),260)}
 // ataque rápido: tocar
-function rdTap(){if(RD.phase!=="fight"||RD.out||!RD.d)return;const now=Date.now(),m=RD.team[RD.ai];if(!m||m.mh<=0||now<(RD.d.go||0)||now<RD.busyUntil||now<RD.swUntil||RD.cAnim)return;
+function rdTap(){if(RD.phase!=="fight"||RD.out||!RD.d)return;const now=Date.now(),m=RD.team[RD.ai];if(!m||m.mh<=0||rdNow()<(RD.d.go||0)||now<RD.busyUntil||now<RD.swUntil||RD.cAnim)return;
   const foe=PM[RD.d.boss],r=rdFastDmg(m,foe),cr=Math.random()<(m.it==="scope"?.12:.06),dmg=Math.max(1,Math.round(r.d*(.85+Math.random()*.15)*(cr?1.5:1)));
   RD.acc+=dmg;RD.busyUntil=now+m.fcd;m.en=Math.min(100,m.en+m.fen);snd("hit",r.e);
   const ms=$("rdMeS");if(ms&&!hubCalm())ms.animate([{transform:"none"},{transform:"translate(18px,-14px)"},{transform:"none"}],{duration:Math.min(300,m.fcd-60)});
@@ -124,7 +130,7 @@ function rdDodge(dir){if(RD.phase!=="fight"||RD.out)return;const now=Date.now();
 // el jefe: avisa (brilla) y ataca
 function rdLoop(){if(RD.phase!=="fight"||!RD.d)return;const now=Date.now(),m=RD.team[RD.ai];
   if(RD.out){if(RD.rejoinAt&&now>=RD.rejoinAt){RD.team.forEach(t=>{t.mh=t.mx;t.en=0});RD.ai=0;RD.out=false;RD.rejoinAt=0;RD.swUntil=now+800;RD.bNext=now+2000;RD.bAtk=null;$("rdMsg").textContent="¡Has vuelto a la incursión!";rdMeUI()}else if(RD.rejoinAt)rdMeUI();return}
-  if(now<(RD.d.go||0))return;
+  if(rdNow()<(RD.d.go||0))return;
   if(!RD.bAtk&&now>=RD.bNext){RD.nBoss++;const ch=RD.nBoss>3&&Math.random()<.3,mv=ch?RD.bm.c[Math.floor(Math.random()*RD.bm.c.length)]:RD.bm.f,warn=ch?1150:650;
     RD.bAtk={mv:mv,ch:ch,land:now+warn,warn:warn};const w=$("rdWarn"),bs=$("rdBoss");if(bs)bs.classList.add(ch?"rdtell2":"rdtell");
     if(w){w.className="rdwarn on"+(ch?" big":"");w.textContent=ch?"⚠️ "+mv.n+"":"⚠️"}}
@@ -179,3 +185,18 @@ setInterval(()=>{try{if(nxOpen("raidP")&&!document.hidden)raidUI(false)}catch(e)
 // el chat se puede abrir encima de la incursión para invitar a más gente
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-rdchat]");if(!b||typeof chToggle!=="function")return;snd("ui");
   chToggle(true);if(b.dataset.rdchat==="inv"&&typeof CH!=="undefined"){CH.inv=true;CH.emo=CH.pick=false;try{chPanels()}catch(x){}}});
+
+// ---------- elegir los ataques para la incursión (y ver cuáles sirven contra el jefe) ----------
+function rdMvOpen(boss){const foe=PM[boss]||raidBoss(),names=(S.team||[]).filter(n=>n&&S.owned[n]);S.rdMv=S.rdMv||{};
+  const card=n=>{const p=PM[n],ids=moveIds(n),mvs=ids.map(id=>MVD[id]).filter(Boolean),m={p:p,m:mvs,l:blv(n)};rdPrep(Object.assign({},m,{m:mvs.slice()}));
+    const tmp=Object.assign({},m,{m:mvs.slice()});rdPrep(tmp);const fid=tmp.fm&&tmp.fm.id,cids=(tmp.cm||[]).map(c=>c.mv.id);
+    return '<div class="rdmvc"><b>'+ico(p,40)+' '+esc(nk(n))+'</b><div class="rdmvl">'+mvs.map(mv=>{const dmg=mv.cl>0&&(mv.pw|0)>0,role=mv.id===fid?"f":cids.includes(mv.id)?"c":"";
+      return '<button type="button" class="rdmvb '+role+(dmg?'':' no')+'" data-rmn="'+esc(n)+'" data-rmi="'+esc(mv.id)+'"'+(dmg?'':' disabled')+' style="--tc:'+(TC[mv.t]||"#999")+'"><span>'+esc(mv.n)+'</span><small>'+EM[mv.t]+' '+(dmg?'Poder '+mv.pw+effTag(mv,{p:foe}):'No sirve en incursiones')+'</small><i>'+(role==="f"?"⚡ Rápido":role==="c"?"💥 Cargado":"")+'</i></button>'}).join("")+
+      (fid?'':'<small class="mut">Ataque rápido: '+esc(tmp.fm.n)+' (por defecto)</small>')+'</div></div>'};
+  const draw=()=>{const M=$("nxM");if(!M)return;const B=M.querySelector(".rdmvbox");if(B)B.innerHTML=names.map(card).join("")};
+  nxModal('<h3>🎯 Ataques para la incursión contra '+esc(boss)+'</h3><p class="mut">Toca un ataque para cambiar su papel: <b>⚡ Rápido</b> (al tocar la pantalla, solo uno) → <b>💥 Cargado</b> (botones, máximo dos) → sin usar. Fíjate en la eficacia contra el jefe. Los de estado no sirven en las incursiones.</p><div class="rdmvbox"></div><button id="rdMvOk">Listo</button>');
+  draw();$("rdMvOk").onclick=()=>{nxModalClose();save()};
+  const M=$("nxM");if(M&&!M._rdm){M._rdm=1;M.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-rmi]");if(!b||b.disabled)return;const n=b.dataset.rmn,id=b.dataset.rmi;
+    const ids=moveIds(n),mvs=ids.map(x=>MVD[x]).filter(Boolean),tmp={p:PM[n],m:mvs.slice(),l:blv(n)};rdPrep(tmp);let f=tmp.fm&&tmp.fm.id||"",c=(tmp.cm||[]).map(q=>q.mv.id);
+    if(f===id){f="";if(c.length<2)c.push(id)}else if(c.includes(id)){c=c.filter(x=>x!==id)}else{if(f&&c.length<2&&!c.includes(f))c.push(f);f=id;c=c.filter(x=>x!==id)}
+    S.rdMv[n]={f:f,c:c.slice(0,2)};snd("ui");draw()})}}

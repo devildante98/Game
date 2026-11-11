@@ -823,3 +823,13 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .tcap{margin:10px 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,#e63950 14%,transparent);border:1px solid #e63950;font-size:.9rem}
 .tmoc{color:#ffb62e!important;font-weight:800}
 .ocnote{border-color:#ffb62e!important}
+/* incursiones: elegir ataques */
+.rdmvbox{display:flex;flex-direction:column;gap:10px;max-height:56vh;overflow:auto;margin:8px 0;text-align:left}
+.rdmvc{padding:8px 10px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.rdmvc>b{display:flex;align-items:center;gap:6px}
+.rdmvl{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:6px}
+.rdmvb{display:flex;flex-direction:column;align-items:flex-start;gap:1px;padding:6px 9px;border-radius:10px;background:var(--panel);color:var(--ink);border:2px solid var(--line);border-left:6px solid var(--tc);text-align:left}
+.rdmvb small{font-size:.7rem;color:var(--mute)}.rdmvb i{font-style:normal;font-size:.72rem;font-weight:800;min-height:1em}
+.rdmvb.f{border-color:#2fa36b;box-shadow:0 0 0 2px #2fa36b55}.rdmvb.f i{color:#2fa36b}
+.rdmvb.c{border-color:#e8414f;box-shadow:0 0 0 2px #e8414f55}.rdmvb.c i{color:#e8414f}
+.rdmvb.no{opacity:.5}

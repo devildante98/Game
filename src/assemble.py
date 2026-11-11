@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.52.7";
+const GAME_VER="6.52.8";
 const NEWS=[
+{v:"2026-11-11-6.52.8",ver:"6.52.8",at:"2026-11-11T22:14",t:"🔧 Arreglos/Mejoras",l:["Mando y teclado en las ventanas de confirmación («¿Activar…?», «¿Borrar…?»): ahora puedes elegir entre sus botones con la cruceta o las flechas (el elegido sale marcado), A confirma y B cancela. El panel de detrás ya no se mueve mientras están abiertas","PC de tu habitación: al marcar o desmarcar una casilla con el mando, la selección se queda en esa casilla en vez de saltar a «Cerrar»"]},
 {v:"2026-11-11-6.52.7",ver:"6.52.7",at:"2026-11-11T22:05",t:"🔧 Arreglos/Mejoras",l:["Arreglado: a veces «Salir al menú principal» no funcionaba (por ejemplo, con el Modo Locke o el Random activos), porque el juego creía que aún había una escena o un combate en marcha. Ahora solo se bloquea durante un combate. Si sales en mitad de una escena, al Continuar se retoma donde la dejaste"]},
 {v:"2026-11-11-6.52.6",ver:"6.52.6",at:"2026-11-11T21:57",t:"🔧 Arreglos/Mejoras",l:["Modo Random: los tres Pokémon iniciales que te ofrece la Profesora Vega en el laboratorio son totalmente aleatorios y distintos en cada partida. Se respeta la opción de incluir o no legendarios","Tu rival se queda con uno de los otros dos, y es el que usará en todos sus combates de la historia"]},
 {v:"2026-11-11-6.52.5",ver:"6.52.5",at:"2026-11-11T21:21",t:"🔧 Arreglos/Mejoras",l:["El botón «Pokémon» de la barra de abajo ahora se llama «Pokédex»"]},

@@ -211,7 +211,7 @@ function ovRestore(ov){const L=ovItems(ov);if(!L.length)return null;const o=OVL;
   if(o.card){const C=[...ov.querySelectorAll(".xgc")].filter(e=>e.offsetParent!==null);if(C.length)return C[Math.min(o.ci,C.length-1)]}
   const same=L.find(e=>{const ks=Object.keys(o.d);return ks.length&&ks.every(k=>e.dataset[k]===o.d[k])});if(same)return same;
   const tx=L.find(e=>(e.textContent||"").trim().slice(0,40)===o.t&&o.t);if(tx)return tx;return L[Math.max(0,Math.min(o.i,L.length-1))]}
-function ovFocus(el){document.querySelectorAll(".gpf").forEach(x=>x.classList.remove("gpf"));if(!el)return;try{const ov=el.closest("#exTeam,#exDexP,#exCtl");if(ov)OVL=ovDesc(el,ov)}catch(e){}if(!el.matches("button,input,select")&&!el.hasAttribute("tabindex"))el.setAttribute("tabindex","-1");el.classList.add("gpf");try{el.focus({preventScroll:true})}catch(e){}try{el.scrollIntoView({block:"nearest"})}catch(e){}}
+function ovFocus(el){document.querySelectorAll(".gpf").forEach(x=>x.classList.remove("gpf"));if(!el)return;try{const ov=el.closest(XOV_IDS.map(i=>"#"+i).join(","));if(ov)OVL=ovDesc(el,ov)}catch(e){}if(!el.matches("button,input,select")&&!el.hasAttribute("tabindex"))el.setAttribute("tabindex","-1");el.classList.add("gpf");try{el.focus({preventScroll:true})}catch(e){}try{el.scrollIntoView({block:"nearest"})}catch(e){}}
 function ovMove(ov,d){const L=ovItems(ov);if(!L.length)return;const cur=ovCur(ov);if(!cur||!L.includes(cur)){ovFocus(L[0]);return}
   const r=cur.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;let best=null,bd=1e9;
   L.forEach(b=>{if(b===cur)return;const q=b.getBoundingClientRect(),x=q.left+q.width/2-cx,y=q.top+q.height/2-cy;const ok=d==="u"?y<-4:d==="d"?y>4:d==="l"?x<-4:x>4;if(!ok)return;const s=(d==="u"||d==="d")?Math.abs(y)+Math.abs(x)*2.2:Math.abs(x)+Math.abs(y)*2.2;if(s<bd){bd=s;best=b}});
@@ -225,7 +225,7 @@ window.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind||exMenuOpen()
   if(a==="b"||e.key==="Escape"){e.preventDefault();e.stopPropagation();ovBack(ov);return}
   if(a)e.stopPropagation()},true);
 // al abrir un panel con el mando, se selecciona el primer elemento
-setInterval(()=>{const ov=exOverlay();if(!ov){OVL=null;OVSTK=[];return}if(!GP.on&&!OVL)return;if(!ovCur(ov)){const r=ovRestore(ov);if(r)ovFocus(r)}},150);
+setInterval(()=>{if(uiDlgOpen())return;const ov=exOverlay();if(!ov){OVL=null;OVSTK=[];return}if(!GP.on&&!OVL)return;if(!ovCur(ov)){const r=ovRestore(ov);if(r)ovFocus(r)}},150);
 
 // =====================================================================================
 // EQUIPO: cambiar de posición a un Pokémon sin arrastrar (sirve con mando, teclado, ratón y pantalla táctil)
@@ -304,3 +304,28 @@ window.addEventListener("keydown",e=>{if(!EX.cv||!EX.cv.isConnected||EX.title||E
 {const _gp=gpPoll;gpPoll=function(){const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[],gp=L[0];let eb=false,eg=false;
   if(gp&&!GP.bind){const P0=exPad(),pr=i=>i>=0&&!!(gp.buttons[i]&&gp.buttons[i].pressed);GP.p3=GP.p3||{};eb=pr(P0.back)&&!GP.p3.back;eg=pr(P0.bag)&&!GP.p3.bag;GP.p3.back=pr(P0.back);GP.p3.bag=pr(P0.bag)}
   const r=_gp.apply(this,arguments);try{if(eb&&exBackAct())snd("ui");if(eg)exBagAct()}catch(e){}return r}}
+// =====================================================================================
+// VENTANAS DE CONFIRMACIÓN (¿Activar…? ¿Borrar…?): con el mando o el teclado se elige entre sus botones,
+// y el panel de detrás se queda quieto mientras están abiertas
+// =====================================================================================
+const uiDlgOpen=()=>{const d=[...document.querySelectorAll(".uidlg")].find(x=>!x.hidden&&x.getClientRects().length>0);return d||null};
+{const _eo=exOverlay;exOverlay=function(){if(uiDlgOpen())return null;return _eo.apply(this,arguments)}}
+function udBtns(d){return [...d.querySelectorAll("button")].filter(b=>b.offsetParent!==null&&!b.disabled)}
+function udMove(d,dir){const L=udBtns(d);if(!L.length)return;const a=document.activeElement;let i=L.indexOf(a);
+  if(a&&a.classList&&a.classList.contains("uidin")){if(dir==="d"||dir==="r"){L[L.length-1].focus();udMark(L[L.length-1])}return}
+  if(i<0)i=L.length-1;else i=(i+(dir==="l"||dir==="u"?-1:1)+L.length)%L.length;L[i].focus();udMark(L[i]);snd("ui")}
+function udMark(b){document.querySelectorAll(".uidlg .gpf").forEach(x=>x.classList.remove("gpf"));if(b)b.classList.add("gpf")}
+// teclado: flechas entre los botones (Intro y Esc ya los entiende la ventana)
+window.addEventListener("keydown",e=>{const d=uiDlgOpen();if(!d)return;const t=e.target;if(t&&t.classList&&t.classList.contains("uidin")&&(e.key==="ArrowLeft"||e.key==="ArrowRight"))return;
+  const dir={ArrowUp:"u",ArrowDown:"d",ArrowLeft:"l",ArrowRight:"r"}[e.key];if(dir){e.preventDefault();e.stopImmediatePropagation();udMove(d,dir);return}
+  if(e.key==="Enter"&&t&&t.tagName==="BUTTON"&&d.contains(t)){e.preventDefault();e.stopImmediatePropagation();t.click()}},true);
+// mando: cruceta/stick mueve, A pulsa el botón elegido, B cancela
+{const _gp=gpPoll;gpPoll=function(){const d=uiDlgOpen();if(!d||d.querySelector(".uidin"))return _gp.apply(this,arguments);
+  const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[],gp=L[0];if(!gp)return;const P0=exPad(),pr=i=>i>=0&&!!(gp.buttons[i]&&gp.buttons[i].pressed),ax=gp.axes||[];
+  let dir=null;if(pr(12)||ax[1]<-.5)dir="u";else if(pr(13)||ax[1]>.5)dir="d";else if(pr(14)||ax[0]<-.5)dir="l";else if(pr(15)||ax[0]>.5)dir="r";
+  if(dir&&dir!==GP.udDir)udMove(d,dir);GP.udDir=dir;
+  const ea=pr(P0.a)&&!GP.prev[P0.a],eb=pr(P0.b)&&!GP.prev[P0.b];for(let i=0;i<gp.buttons.length;i++)GP.prev[i]=pr(i);
+  if(ea){const B=udBtns(d),a=document.activeElement;(B.includes(a)?a:B[B.length-1]).click();snd("ui")}
+  else if(eb){const n=d.querySelector('[data-u="0"]')||udBtns(d).pop();if(n)n.click();snd("ui")}}}
+// al abrirse, se marca el botón por defecto para que se vea qué está elegido
+setInterval(()=>{const d=uiDlgOpen();if(!d||d.querySelector(".gpf"))return;const a=document.activeElement;if(a&&d.contains(a)&&a.tagName==="BUTTON")udMark(a)},150);

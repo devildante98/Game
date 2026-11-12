@@ -17,7 +17,7 @@ const wxNight=()=>{const h=new Date().getHours();return h>=20||h<6};
 setInterval(()=>{try{if(EX.on&&EX.M)EX.wx=wxNow()}catch(e){}},60000);
 // lluvia y sol en las rutas que no tenían su propio clima
 {const _x=exExtraEnts;exExtraEnts=function(ents,g,cx,cy,ts){const r=_x.apply(this,arguments);try{const w=EX.wx,M=EX.M;if(!w||!M||M.pal||(typeof hubCalm==="function"&&hubCalm()))return r;const W=g.canvas.width/EXS,H=g.canvas.height/EXS;
-  ents.push({y:9997,d:()=>{const t=ts/1000;if(w==="rain"){g.fillStyle="rgba(20,30,60,.16)";g.fillRect(0,0,W,H);g.strokeStyle="rgba(190,215,255,.5)";g.lineWidth=1;g.beginPath();for(let i=0;i<70;i++){const x=((i*83.7+t*50)%(W+30))-15,y=((i*47.1+t*(240+i%5*30))%(H+20))-10;g.moveTo(x,y);g.lineTo(x-3,y+10)}g.stroke()}
+  ents.push({y:9997,d:()=>{const t=ts/1000;if(w==="rain"){g.fillStyle="rgba(20,30,60,.16)";g.fillRect(0,0,W,H);g.fillStyle="rgba(200,222,255,.62)";g.lineWidth=1;g.beginPath();for(let i=0;i<70;i++){const x=((i*83.7+t*50)%(W+30))-15,y=((i*47.1+t*(240+i%5*30))%(H+20))-10;n6Drop(g,x,y)}g.stroke()}
     else if(w==="sun"){const gr=g.createRadialGradient(W*.85,-20,10,W*.85,-20,W*.9);gr.addColorStop(0,"rgba(255,230,150,.35)");gr.addColorStop(1,"rgba(255,200,80,0)");g.fillStyle=gr;g.fillRect(0,0,W,H)}}})}catch(e){}return r}}
 // el clima en los combates de Exploración
 {const _sb=startBattle;startBattle=function(cfg){const pr=_sb.apply(this,arguments);try{if(typeof XGSW!=="undefined"&&XGSW&&typeof B!=="undefined"&&B&&B.E&&!B.E.wx){const w=EX.wx||wxNow();if(w&&w!=="sand")B.E.wx={t:w,n:999,pr:0};else if(w==="sand")B.E.wx={t:"sand",n:999,pr:0}}}catch(e){}return pr}}

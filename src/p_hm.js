@@ -92,4 +92,4 @@ function hmMount(g,face,x,y){const t=performance.now(),bob=Math.round(Math.sin(t
 {const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{if(!EX.on&&!EX.cv)return r;const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.height/EXS,cam=EX.cam||[0,0];g.setTransform(EXS,0,0,EXS,0,0);
   if(EX.poof){const p=EX.poof,e=(performance.now()-p.t0)/380,X=p.x*EXTL-cam[0]+16,Y=p.y*EXTL-cam[1]+12;g.fillStyle="rgba(240,236,228,"+(1-e)+")";for(let i=0;i<6;i++){const a=i*1.05+e*2,rr=6+e*14;g.fillRect(Math.round(X+Math.cos(a)*rr)-3,Math.round(Y+Math.sin(a)*rr*.7)-3,6,6)}}
   if(HM_DARK[EX.map]&&EX.lit!==EX.map&&!EX.title){const px=EX.px*EXTL-cam[0]+16,py=EX.py*EXTL-cam[1]+12,rad=EX.flashT&&performance.now()-EX.flashT<900?40+(performance.now()-EX.flashT)/2:44;
-    const gr=g.createRadialGradient(px,py,rad*.55,px,py,rad*1.25);gr.addColorStop(0,"rgba(0,0,8,0)");gr.addColorStop(1,"rgba(0,0,8,.94)");g.fillStyle=gr;g.fillRect(0,0,W,H)}}catch(e){}return r}}
+    n6Dark(g,W,H,px,py,rad*.6,rad*1.3,[0,0,8],.95,5)}}catch(e){}return r}}

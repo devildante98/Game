@@ -24,7 +24,7 @@ function stWeather(ents,g,ts){const pal=EX.M&&EX.M.pal;if(!pal||pal==="ice"||(ty
   ents.push({y:9998,d:()=>{const t=ts/1000;
     if(pal==="snow")for(let i=0;i<70;i++){const sp=12+(i%7)*4,x=((i*97.3+Math.sin(t*.8+i)*14+t*6)%(W+20)+W+20)%(W+20)-10,y=((i*53.7+t*sp)%(H+10))-5;g.fillStyle=i%3?"rgba(255,255,255,.9)":"rgba(230,240,255,.75)";const s=i%4?2:3;g.fillRect(Math.round(x),Math.round(y),s,s)}
     else if(pal==="ash"||pal==="magma")for(let i=0;i<46;i++){const up=i%3===0,x=((i*71.1+Math.sin(t+i)*10)%W+W)%W,y=up?H-((i*37+t*(18+i%5*5))%(H+10)):((i*41.3+t*(10+i%4*3))%(H+10))-5;g.fillStyle=up?"rgba(255,"+(120+i%4*30)+",40,.85)":"rgba(70,60,60,.55)";g.fillRect(Math.round(x),Math.round(y),2,2)}
-    else if(pal==="storm"){g.strokeStyle="rgba(190,210,255,.45)";g.lineWidth=1;g.beginPath();for(let i=0;i<60;i++){const x=((i*83.7+t*60)%(W+30))-15,y=((i*47.1+t*(260+i%5*30))%(H+20))-10;g.moveTo(x,y);g.lineTo(x-4,y+11)}g.stroke();
+    else if(pal==="storm"){g.fillStyle="rgba(200,220,255,.6)";g.lineWidth=1;g.beginPath();for(let i=0;i<60;i++){const x=((i*83.7+t*60)%(W+30))-15,y=((i*47.1+t*(260+i%5*30))%(H+20))-10;n6Drop(g,x,y)}g.stroke();
       const f=(t%7);if(f<.12||(f>.3&&f<.36)){g.fillStyle="rgba(230,240,255,.35)";g.fillRect(0,0,W,H)}}}})}
 {const _e=exExtraEnts;exExtraEnts=function(ents,g,cx,cy,ts){_e.apply(this,arguments);stWeather(ents,g,ts);stLegend(ents,g,cx,cy,ts)}}
 // aves legendarias sobre el lago de cada cumbre (y Zapdos en lo alto de la torre)

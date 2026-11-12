@@ -148,7 +148,7 @@ function exDraw(ts){const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.hei
   const x0=Math.floor(cx/EXTL),y0=Math.floor(cy/EXTL),x1=Math.ceil((cx+W)/EXTL),y1=Math.ceil((cy+H)/EXTL);
   const fr4=Math.floor(ts/350)%4;
   for(let y=y0;y<=y1+1;y++)for(let x=x0;x<=x1;x++){const c=exAt(x,y),w=EX.M.w&&EX.M.w[c];let t;
-    if(c==="w")t=xCavePuddle(Math.floor(exRnd(x,y,7)*4),fr);else if(w&&w.look==="ladder")t=xLadder();else if(w&&w.look==="cave")t=xCaveMouth();else t=xGround(x,y,c==="~"?fr4:fr);
+    if(w&&w.look==="ladder")t=xLadder();else if(w&&w.look==="cave")t=xCaveMouth();else t=xGround(x,y,c==="~"||c==="w"?fr4:fr);
     g.drawImage(t,x*EXTL-cx,y*EXTL-cy)}
   // personajes ordenados por profundidad
   const ents=[];for(let y=y0;y<=y1+2;y++)for(let x=x0;x<=x1;x++){const c=exAt(x,y),o=xObj(c,x,y);if(o){const X=x*EXTL-cx,Y=y*EXTL-cy-16;
@@ -170,7 +170,7 @@ function exDraw(ts){const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.hei
   if(EX.alert){const n=EX.alert.n,e=performance.now()-EX.alert.t0,k=e<120?e/120:e<220?1.25-(e-120)/400:1,X=n.px*EXTL-cx+16,Y=n.py*EXTL-cy-26-(e<160?(160-e)/16:0);
     g.save();g.translate(X,Y);g.scale(k,k);g.fillStyle="#fff";g.fillRect(-7,-16,14,20);g.fillStyle="#222";g.fillRect(-8,-17,16,1);g.fillRect(-8,4,16,1);g.fillRect(-8,-16,1,20);g.fillRect(7,-16,1,20);g.fillStyle="#e83a50";g.fillRect(-2,-13,4,10);g.fillRect(-2,-1,4,3);g.restore()}
   // cartel con el nombre de la zona
-  if(EX.banner&&!EX.title){const e=ts-EX.banner.t0;if(e<0){}else if(e>3200)EX.banner=null;else{const k=e<300?e/300:e>2800?(3200-e)/400:1;g.globalAlpha=Math.max(0,k);g.fillStyle="#f4e2b8";g.fillRect(8,8-(1-k)*30,170,30);g.strokeStyle="#7a4a26";g.lineWidth=3;g.strokeRect(8,8-(1-k)*30,170,30);g.fillStyle="#4a2a10";g.font="bold 13px system-ui,sans-serif";g.fillText(EX.banner.t,16,28-(1-k)*30);g.globalAlpha=1}}
+  if(EX.banner&&!EX.title){const e=ts-EX.banner.t0;if(e<0){}else if(e>3200)EX.banner=null;else{const k=e<300?e/300:e>2800?(3200-e)/400:1;g.globalAlpha=Math.max(0,k);g.font="bold 13px system-ui,sans-serif";const bw=Math.max(150,Math.ceil(g.measureText(EX.banner.t).width/2)*2+32),by=Math.round(8-(1-k)*34);n6Sign(g,8,by,bw,32);g.fillStyle="#4a2a10";g.fillText(EX.banner.t,24,by+21);g.globalAlpha=1}}
   // transiciones
   if(EX.trans){const p=Math.min(1,EX.trans.t/EX.trans.d),k=EX.trans.k;
     if(k==="fade"){g.fillStyle="rgba(0,0,0,"+p+")";g.fillRect(0,0,W,H)}

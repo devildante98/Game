@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.55"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.55.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794441509">
+<meta name="game-build" content="1794442134">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2781,7 +2781,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.55</small>
+    <small class="pcver">Versión 6.55.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7455,8 +7455,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.55";
+const GAME_VER="6.55.1";
 const NEWS=[
+{v:"2026-11-12-6.55.1",ver:"6.55.1",at:"2026-11-12T01:08",t:"🔧 Arreglos/Mejoras",l:["Los personajes de Exploración ahora siguen el diseño de la muestra: cabeza y gorra grandes al estilo de la saga, ojos marcados y cuerpo con brazos. Se mantienen la ropa de tu avatar y los trajes de cada clase de entrenador"]},
 {v:"2026-11-12-6.55",ver:"6.55",at:"2026-11-12T00:58",t:"🎨 Nuevos gráficos de Exploración (fase 1): personajes",l:["Todos los personajes de Exploración tienen un estilo nuevo, más parecido al de los juegos clásicos: contorno oscuro, sombreado y proporciones de la saga, con animación de andar en las cuatro direcciones","Tu personaje lleva en el mapa la ropa de tu avatar: gorra o gorro, peinado, colores, mochila, gafas, barba…","Los entrenadores de las rutas van vestidos según su clase, la misma que ves en su combate: Montañero con barba y mochila, Científico con bata y gafas, Obrero con casco, Nadadora, Pescador, Karateka… Cuando el navegador lo permite, también toman los colores de su imagen de combate","Los personajes de la historia (Dani, la Profesora, mamá…) salen en sus combates con el mismo aspecto que en el mapa","Próximas fases: exteriores (árboles, caminos, flores), edificios por fuera (Centros, tiendas, casas, gimnasios) e interiores"]},
 {v:"2026-11-11-6.54.4",ver:"6.54.4",at:"2026-11-11T23:21",t:"🔧 Arreglos/Mejoras",l:["Arreglado: si abrías la mochila (o el menú, el mapa, una tienda, el PC…) mientras andabas, tu personaje seguía avanzando. Ahora se para en cuanto se abre la ventana y no sigue andando solo al cerrarla"]},
 {v:"2026-11-11-6.54.3",ver:"6.54.3",at:"2026-11-11T23:13",t:"🔧 Arreglos/Mejoras",l:["Arreglado: al rendirte ante un entrenador en Exploración, te volvía a detectar nada más salir y no podías irte. Ahora ese entrenador te deja en paz mientras sigas en esa zona (si quieres la revancha, háblale). Al cambiar de zona vuelve a vigilar como siempre"]},
@@ -7745,7 +7746,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794441509";
+const GAME_B="1794442134";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -16488,67 +16489,68 @@ function chTraits(code){const L=trDec(code),P=(k,i)=>TRP[k][i]!=null?TRP[k][i]:T
   const t={skin:P("skin",L.sk),hair:P("hair",L.hc),eye:P("eye",L.ec),hatC:P("cl",L.hac),top:P("cl",L.tc),acc:P("cl",L.ac),bot:P("cl",L.bc),shoe:P("cl",L.sh),bag:P("cl",L.bpc),
     girl:L.b===1,long:CH_LONG.includes(L.hs),bald:L.hs===22,hat:chHatKind(L.hat),beard:L.brd>0&&L.brd!==1,glasses:L.gl>0&&L.gl!==5,shades:L.gl===3||L.hat===7,
     coat:L.top===12||L.top===8,dress:CH_DRESS.includes(L.top),skirt:CH_SKIRT.includes(L.bot),shorts:CH_SHORT.includes(L.bot),open:CH_OPEN.includes(L.top),
-    sleeveless:[6,10].includes(L.top),bagOn:L.bp>0&&L.bp!==3,kimono:L.top===16};
+    sleeveless:[6,10].includes(L.top),longSl:[1,2,5,8,9,11,12,15,16,17,18,19,20,25,27,28].includes(L.top),bagOn:L.bp>0&&L.bp!==3,kimono:L.top===16};
   if(t.coat&&L.top===12)t.top="#f4f2ff";return t}
-// ---------- dibujo de un fotograma ----------
-function chFrame(t,dir,fr){const W=16,H=24,G=[];for(let y=0;y<H;y++)G.push(new Array(W).fill(null));
-  const set=(x,y,c)=>{if(x>=0&&x<W&&y>=0&&y<H&&c)G[y][x]=c},box=(x,y,w,h,c)=>{for(let j=0;j<h;j++)for(let i=0;i<w;i++)set(x+i,y+j,c)};
-  const side=dir==="l"||dir==="r",back=dir==="u",step=fr===1?1:fr===3?-1:0;
-  const S=t.skin,sS=chDk(t.skin,.18),Hc=t.hair,T=t.top,Bc=t.dress?t.top:t.bot,Sh=t.shoe,A=t.hatC;
-  // --- piernas y calzado ---
-  if(!side){
-    const lh=step===1?1:0,rh=step===-1?1:0;
-    if(t.skirt||t.dress){box(4,18,8,2,Bc);box(3,20,10,1,Bc);box(5,21-lh,2,1,S);box(9,21-rh,2,1,S);box(5,22-lh,2,1,Sh);box(9,22-rh,2,1,Sh)}
-    else if(t.shorts){box(5,19,6,2,Bc);box(5,21-lh,2,1,S);box(9,21-rh,2,1,S);box(5,22-lh,2,1,Sh);box(9,22-rh,2,1,Sh)}
-    else{box(5,19,3,3-lh,Bc);box(8,19,3,3-rh,Bc);box(5,22-lh,3,1,Sh);box(8,22-rh,3,1,Sh);set(7,21,null);set(8,21,null);set(7,20,null);set(8,20,null)}
-  }else{
-    const legs=step?[[3,8],[9,4]]:[[6,4]];
-    if(t.skirt||t.dress){box(5,18,7,2,Bc);box(4,20,8,1,Bc)}
-    if(step){const fx=step===1?4:9,bx=step===1?9:4;const lc=(t.skirt||t.dress||t.shorts)?S:Bc;box(fx,19,3,3,lc);box(bx,19,3,2,chDk(lc,.15));box(fx-1,22,4,1,Sh);box(bx,21,3,1,chDk(Sh,.15));if(t.shorts){box(fx,19,3,1,Bc);box(bx,19,3,1,Bc)}}
-    else{const lc=(t.skirt||t.dress||t.shorts)?S:Bc;box(6,19,4,3,lc);if(t.shorts)box(6,19,4,1,Bc);box(5,22,5,1,Sh)}}
-  // --- cuerpo ---
-  if(!side){box(4,13,8,6,T);set(4,13,null);set(11,13,null);
-    if(t.open&&!back){box(7,14,2,5,t.acc)}
-    if(t.kimono&&!back){set(6,13,t.acc);set(7,14,t.acc);set(9,13,t.acc);set(8,14,t.acc);box(4,17,8,1,t.acc)}
-    if(t.coat){box(4,19,8,2,T);if(!back){set(7,19,null);set(8,19,null);set(7,20,null);set(8,20,null)}}
-    const sl=t.sleeveless?S:T;box(3,14,1,3,sl);box(12,14,1,3,sl);set(3,17,S);set(12,17,S);box(4,15,1,3,chDk(T,.18));box(11,15,1,3,chDk(T,.18));
-    if(t.bagOn){if(back){box(5,13,6,5,t.bag);box(5,13,6,1,chLt(t.bag));box(6,17,4,1,chDk(t.bag))}else{box(5,13,1,3,t.bag);box(10,13,1,3,t.bag)}}
-  }else{box(5,13,6,6,T);if(t.coat)box(5,19,6,2,T);const sl=t.sleeveless?S:T;box(7,14,2,3,chDk(sl,.1));set(7,17,S);set(8,17,S);if(t.bagOn){box(10,13,2,5,t.bag);set(10,13,chLt(t.bag))}}
-  // --- cabeza ---
-  if(!side){box(5,7,6,1,S);box(4,8,8,4,S);box(5,12,6,1,S);
-    if(back){box(4,7,8,5,Hc);box(5,12,6,1,sS)}
-    else{set(6,9,t.eye);set(6,10,t.eye);set(9,9,t.eye);set(9,10,t.eye);set(7,11,sS);set(8,11,sS);set(4,10,chMix(S,"#ff8080",.25));set(11,10,chMix(S,"#ff8080",.25))}
-    if(!t.bald){box(5,3,6,1,Hc);box(4,4,8,3,Hc);if(!back){box(4,7,8,1,Hc);set(4,8,Hc);set(11,8,Hc);set(6,7,S);set(9,7,S)}}
-    else box(5,4,6,3,S);
-    if(t.long){box(3,8,1,7,Hc);box(12,8,1,7,Hc);if(back)box(4,12,8,3,Hc)}
-    if(t.beard&&!back){box(5,11,6,2,Hc);set(7,11,chDk(Hc,.3));set(8,11,chDk(Hc,.3))}
-    if(t.glasses&&!back){const gc=t.shades?"#22222c":"#30303c";box(5,9,2,1,gc);box(9,9,2,1,gc);set(7,9,gc);set(8,9,gc);if(!t.shades){set(5,10,null);}}
-  }else{box(4,7,6,5,S);set(3,9,S);set(3,10,S);box(5,12,4,1,S);
-    set(4,9,t.eye);set(4,10,t.eye);set(4,11,sS);
-    if(!t.bald){box(5,3,6,1,Hc);box(4,4,8,3,Hc);box(4,7,2,1,Hc);box(8,7,4,5,Hc);set(9,12,Hc)}else box(5,4,6,3,S);
-    if(t.long)box(9,8,3,7,Hc);
-    if(t.beard){box(3,11,5,2,Hc)}
-    if(t.glasses){const gc=t.shades?"#22222c":"#30303c";box(3,9,3,1,gc)}}
-  // --- gorros ---
-  const hat=t.hat;
-  if(hat==="cap"){if(!side){box(5,2,6,1,A);box(4,3,8,3,A);if(!back){box(3,6,10,1,chDk(A,.3));set(7,4,chLt(A,.6));set(8,4,chLt(A,.6))}else box(4,6,8,1,chDk(A,.2))}
-    else{box(5,2,6,1,A);box(4,3,8,3,A);box(1,6,6,1,chDk(A,.3));set(6,4,chLt(A,.6))}}
-  else if(hat==="beanie"){box(5,1,6,1,A);box(4,2,8,4,A);box(4,6,8,1,chLt(A,.35));if(side)box(4,6,8,1,chLt(A,.35))}
-  else if(hat==="wide"){box(5,1,6,1,A);box(4,2,8,3,A);box(4,4,8,1,chDk(A,.25));box(1,5,14,1,chDk(A,.1));box(2,6,12,1,chDk(A,.3))}
-  else if(hat==="top"){box(5,0,6,5,A);box(5,4,6,1,t.acc);box(3,5,10,1,chDk(A,.2))}
-  else if(hat==="hard"){box(5,2,6,1,A);box(4,3,8,3,A);set(7,2,chLt(A,.5));set(8,2,chLt(A,.5));box(3,6,10,1,chDk(A,.2))}
-  else if(hat==="band"){box(4,5,8,1,A);if(back||side){set(side?12:11,6,A);set(side?12:12,7,A)}}
-  else if(hat==="bow"){box(10,2,3,2,A);set(11,4,chDk(A,.3))}
-  else if(hat==="ears"){box(4,1,2,2,Hc);box(10,1,2,2,Hc);set(4,2,chMix(Hc,"#ff9ec7",.5));set(11,2,chMix(Hc,"#ff9ec7",.5))}
-  // --- sombreado automático: borde derecho más oscuro y borde superior más claro ---
-  const out=G.map(r=>r.slice());
-  for(let y=0;y<H;y++)for(let x=0;x<W;x++){const c=G[y][x];if(!c)continue;
-    const r=x+1<W?G[y][x+1]:null,up=y>0?G[y-1][x]:null,lf=x>0?G[y][x-1]:null;
-    if(!r&&!side)out[y][x]=chDk(c,.22);else if(side&&!lf&&dir!=="r")out[y][x]=c;if(!up&&c!==t.eye)out[y][x]=chLt(out[y][x],.18)}
-  // --- contorno ---
-  const fin=out.map(r=>r.slice());
-  for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(out[y][x])continue;const n=[[1,0],[-1,0],[0,1],[0,-1]].some(([a,b])=>{const yy=y+b,xx=x+a;return yy>=0&&yy<H&&xx>=0&&xx<W&&out[yy][xx]});if(n)fin[y][x]=CH_K}
-  return fin}
+// ---------- dibujo de un fotograma (basado en el diseño de la muestra: cabeza grande, gorra ancha, cuerpo con brazos) ----------
+// letras: K contorno · R/r/W gorro (color, sombra, brillo) · H/h pelo (y brillo) · S/s piel · E ojos · B/b ropa de arriba · A detalle
+//         Y/y mochila · P/p ropa de abajo · G calzado
+const CHH={// cabezas (filas 0-12) por dirección y tipo de gorro
+ d:{cap:["......KKKK......","....KKRRRRKK....","...KRRRRWWRRK...","..KRRRRRWWRRRK..","..KRRRRRRRRRRK..",".KrrrrrrrrrrrrK.",".KKKKKKKKKKKKKK.","..KHHSSSSSSHHK..","..KHSSSSSSSSHK..","..KSSESSSSESSK..","..KSSESSSSESSK..","...KSSSSSSSSK...","....KKssssKK...."],
+    none:["................",".....KKKKKK.....","...KKHHhhHHHKK..","..KHHHhhHHHHHHK.","..KHHHHHHHHHHHK.",".KHHHHHHHHHHHHK.",".KHHHHHHHHHHHHK.","..KHHSSSSSSHHK..","..KHSSSSSSSSHK..","..KSSESSSSESSK..","..KSSESSSSESSK..","...KSSSSSSSSK...","....KKssssKK...."],
+    beanie:["................",".....KKKKKK.....","...KKRRWWRRRKK..","..KRRRRWWRRRRRK.","..KRRRRRRRRRRRK.",".KWWWWWWWWWWWWK.",".KHHHHHHHHHHHHK.","..KHHSSSSSSHHK..","..KHSSSSSSSSHK..","..KSSESSSSESSK..","..KSSESSSSESSK..","...KSSSSSSSSK...","....KKssssKK...."],
+    wide:["................","......KKKK......","....KKRRWRKK....","....KRRRRRRK....","....KrrrrrrK....","KKKKRRRRRRRRKKKK","KrrrrrrrrrrrrrrK",".KKHHSSSSSSHHKK.","..KHSSSSSSSSHK..","..KSSESSSSESSK..","..KSSESSSSESSK..","...KSSSSSSSSK...","....KKssssKK...."]},
+ u:{cap:["......KKKK......","....KKRRRRKK....","...KRRRRRRRRK...","..KRRRRRRRRRRK..","..KRRRRRRRRRRK..",".KrrrrrrrrrrrrK.",".KKKKKKKKKKKKKK.","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","..KSHHHHHHHHSK..","...KHHHHHHHHK...","....KKHHHHKK...."],
+    none:["................",".....KKKKKK.....","...KKHHhhHHHKK..","..KHHHhhHHHHHHK.","..KHHHHHHHHHHHK.",".KHHHHHHHHHHHHK.",".KHHHHHHHHHHHHK.","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","..KSHHHHHHHHSK..","...KHHHHHHHHK...","....KKHHHHKK...."],
+    beanie:["................",".....KKKKKK.....","...KKRRRRRRRKK..","..KRRRRRRRRRRRK.","..KRRRRRRRRRRRK.",".KWWWWWWWWWWWWK.",".KHHHHHHHHHHHHK.","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","..KSHHHHHHHHSK..","...KHHHHHHHHK...","....KKHHHHKK...."],
+    wide:["................","......KKKK......","....KKRRRRKK....","....KRRRRRRK....","....KrrrrrrK....","KKKKRRRRRRRRKKKK","KrrrrrrrrrrrrrrK",".KKHHHHHHHHHHKK.","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","..KSHHHHHHHHSK..","...KHHHHHHHHK...","....KKHHHHKK...."]},
+ l:{cap:["......KKKK......","....KKRRRRKK....","...KRRRRRRRRK...","..KRRWWRRRRRRK..","..KRRRRRRRRRRK..","..KrrrrrrrrrrK..",".KKKKKKKKKKKKK..","...KSSSHHHHHK...","..KSSSSSHHHHK...","..KSESSSSHHHK...","..KSESSSSSHHK...","...KSSSSSSHK....","....KKsssKK....."],
+    none:["................",".....KKKKKK.....","...KKHHhhHHKK...","..KHHHhhHHHHHK..","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","..KHHHHHHHHHHK..","...KSSSHHHHHK...","..KSSSSSHHHHK...","..KSESSSSHHHK...","..KSESSSSSHHK...","...KSSSSSSHK....","....KKsssKK....."],
+    beanie:["................",".....KKKKKK.....","...KKRWWRRRKK...","..KRRWWRRRRRRK..","..KRRRRRRRRRRK..","..KWWWWWWWWWWK..","..KHHHHHHHHHHK..","...KSSSHHHHHK...","..KSSSSSHHHHK...","..KSESSSSHHHK...","..KSESSSSSHHK...","...KSSSSSSHK....","....KKsssKK....."],
+    wide:["................","......KKKK......","....KKRWRRKK....","....KRRRRRRK....","....KrrrrrrK....","KKKKRRRRRRRRKKKK","KrrrrrrrrrrrrrrK","...KSSSHHHHHK...","..KSSSSSHHHHK...","..KSESSSSHHHK...","..KSESSSSSHHK...","...KSSSSSSHK....","....KKsssKK....."]}};
+const CHB={// cuerpos (filas 13-18)
+ d:["...KBBKSSKBBK...","..KBBBBKKBBBBK..",".KSKBBBBBBBBKSK.",".KSKbBBYYBBbKSK.","..KKbBBYYBBbKK..","...KbbBBBBbbK..."],
+ u:["...KBBKYYKBBK...","..KBBKYYYYKBBK..",".KSKBKYYYYKBKSK.",".KSKbKYYYYKbKSK.","..KKbKyyyyKbKK..","...KbbKKKKbbK..."],
+ l:["....KBBBBBYK....","...KBBBBBBYYK...","...KBSKBBBYYK...","...KBSKbBBYYK...","....KKKbBByK....","....KbbbbbbK...."]};
+const CHL={// piernas (filas 19-23): [quieto, paso 1, paso 2]
+ d:[["...KPPPPPPPPK...","...KPPPKKPPPK...","...KpPK..KPpK...","...KGGK..KGGK...","....KK....KK...."],["...KPPPPPPPPK...","...KPPPKKPPPK...","...KpPK..KPPK...","...KGGK..KpPK...","....KK...KGGK..."],["...KPPPPPPPPK...","...KPPPKKPPPK...","...KPPK..KPpK...","...KpPK..KGGK...","...KGGK...KK...."]],
+ l:[["....KPPPPPPK....","....KPPPPPPK....","....KpPKKPpK....","....KGGKKGGK....",".....KK..KK....."],["....KPPPPPPK....","...KPPKKKPPPK...","...KpPK.KPpK....","..KGGK...KGGK...","...KK.....KK...."],["....KPPPPPPK....","....KPPPPPPK....","....KpPKKPpK....","....KGGKKGGK....",".....KK..KK....."]]};
+const CHSK={// faldas y pantalón corto (filas 19-23)
+ d:[["..KPPPPPPPPPPK..",".KPPPPPPPPPPPPK.","..KKSSK..KSSKK..","...KGGK..KGGK...","....KK....KK...."],["..KPPPPPPPPPPK..",".KPPPPPPPPPPPPK.","..KKSSK..KSSKK..","...KGGK..KSSK...","....KK...KGGK..."],["..KPPPPPPPPPPK..",".KPPPPPPPPPPPPK.","..KKSSK..KSSKK..","...KSSK..KGGK...","...KGGK...KK...."]],
+ l:[["...KPPPPPPPK....","..KPPPPPPPPPK...","....KSSKKSSK....","....KGGKKGGK....",".....KK..KK....."],["...KPPPPPPPK....","..KPPPPPPPPPK...","...KSSK.KSSK....","..KGGK...KGGK...","...KK.....KK...."],["...KPPPPPPPK....","..KPPPPPPPPPK...","....KSSKKSSK....","....KGGKKGGK....",".....KK..KK....."]]};
+const CHSH={d:[["...KPPPPPPPPK...","...KPPPKKPPPK...","...KSSK..KSSK...","...KGGK..KGGK...","....KK....KK...."],["...KPPPPPPPPK...","...KPPPKKPPPK...","...KSSK..KSSK...","...KGGK..KSSK...","....KK...KGGK..."],["...KPPPPPPPPK...","...KPPPKKPPPK...","...KSSK..KSSK...","...KSSK..KGGK...","...KGGK...KK...."]],
+ l:[["....KPPPPPPK....","....KSSSSSSK....","....KSSKKSSK....","....KGGKKGGK....",".....KK..KK....."],["....KPPPPPPK....","...KSSKKKSSSK...","...KSSK.KSSK....","..KGGK...KGGK...","...KK.....KK...."],["....KPPPPPPK....","....KSSSSSSK....","....KSSKKSSK....","....KGGKKGGK....",".....KK..KK....."]]};
+function chFrame(t,dir,fr){const d=dir==="r"?"l":dir,side=d==="l",si=fr===1?1:fr===3?2:0;
+  const hk=t.hat==="cap"||t.hat==="hard"?"cap":t.hat==="beanie"?"beanie":t.hat==="wide"||t.hat==="top"?"wide":"none";
+  const head=CHH[d][hk].map(r=>r.split("")),body=CHB[d].map(r=>r.split(""));
+  const legsSrc=(t.skirt||t.dress)?CHSK:t.shorts?CHSH:CHL;const legs=(legsSrc[side?"l":"d"][si]).map(r=>r.split(""));
+  const G=head.concat(body,legs);
+  // pelo: calvo → piel
+  if(t.bald)for(let y=0;y<13;y++)for(let x=0;x<16;x++)if(G[y][x]==="H"||G[y][x]==="h")G[y][x]=d==="u"&&y>6?"s":"S";
+  // pelo largo por los hombros
+  if(t.long){if(d==="d"){for(let y=7;y<16;y++){G[y][2]="H";G[y][13]="H";G[y][1]=y<13?"K":G[y][1];G[y][14]=y<13?"K":G[y][14]}G[16][2]="K";G[16][13]="K"}
+    else if(d==="u"){for(let y=10;y<17;y++)for(let x=4;x<12;x++)G[y][x]="H";for(let y=10;y<17;y++){G[y][3]="K";G[y][12]="K"}G[17][4]="K";for(let x=4;x<12;x++)G[17][x]="K"}
+    else{for(let y=7;y<16;y++){G[y][10]="H";G[y][11]="H";G[y][12]="K"}}}
+  // barba
+  if(t.beard&&d!=="u"){if(d==="d"){for(let x=4;x<12;x++){G[11][x]="H"}for(let x=6;x<10;x++)G[12][x]="H";G[11][7]="s";G[11][8]="s"}else{G[11][4]="H";G[11][5]="H";G[11][6]="H";G[12][6]="H";G[12][7]="H"}}
+  // gafas
+  if(t.glasses&&d!=="u"){const g=t.shades?"Q":"q";if(d==="d"){[4,5,6,9,10,11].forEach(x=>G[9][x]=g);G[9][7]="q";G[9][8]="q"}else{G[9][3]=g;G[9][4]=g;G[9][5]="q"}}
+  // chaqueta abierta / bata / kimono
+  if(t.open&&d==="d"){for(let y=14;y<18;y++){G[y][7]="A";G[y][8]="A"}}
+  if(t.kimono&&d==="d"){G[14][6]="A";G[15][7]="A";G[14][9]="A";G[15][8]="A";for(let x=4;x<12;x++)G[17][x]="A"}
+  if(t.coat){const rows=d==="l"?[[19,4,11]]:[[19,3,12]];rows.forEach(([y,a,b])=>{for(let x=a+1;x<b;x++)G[y][x]="B";G[y][a]="K";G[y][b]="K"});if(d==="d"){G[19][7]="K";G[19][8]="K"}}
+  // manga larga
+  if(t.longSl){for(let y=15;y<18;y++){if(d==="d"||d==="u"){if(G[y][2]==="S")G[y][2]="b";if(G[y][13]==="S")G[y][13]="b"}else if(G[y][5]==="S"&&y<17)G[y][5]="b"}}
+  if(t.sleeveless&&d!=="l"){G[14][3]="S";G[14][12]="S"}
+  // sin mochila: la mochila pasa a ser ropa
+  if(!t.bagOn)for(let y=13;y<19;y++)for(let x=0;x<16;x++){if(G[y][x]==="Y")G[y][x]=d==="u"&&y<17?"b":"B";else if(G[y][x]==="y")G[y][x]="b";else if(d==="u"&&G[y][x]==="K"&&x>4&&x<11&&y>12&&y<18)G[y][x]="b"}
+  // gorro de copa / casco / cinta / lazo / orejas
+  if(t.hat==="top"&&d!=="u"){for(let y=0;y<4;y++)for(let x=5;x<11;x++)G[y][x]="R";G[3][5]="A";G[3][10]="A";for(let x=5;x<11;x++)G[4][x]="A"}
+  if(t.hat==="band"){const y=d==="u"?6:6;for(let x=2;x<14;x++)if(G[y][x]==="H"||G[y][x]==="h")G[y][x]="R"}
+  if(t.hat==="bow"){G[2][10]="R";G[2][11]="R";G[2][12]="R";G[3][11]="r";G[1][10]="K";G[1][12]="K"}
+  if(t.hat==="ears"){G[0][3]="K";G[1][3]="H";G[0][12]="K";G[1][12]="H"}
+  const A=t.hatC,P={K:CH_K,R:A,r:chDk(A,.3),W:chLt(A,.55),H:t.hair,h:chLt(t.hair,.25),S:t.skin,s:chDk(t.skin,.18),E:t.eye,B:t.top,b:chDk(t.top,.25),A:t.acc,
+    Y:t.bag,y:chDk(t.bag,.25),P:t.dress?t.top:t.bot,p:chDk(t.dress?t.top:t.bot,.25),G:t.shoe,q:"#30303c",Q:"#22222c"};
+  return G.map(r=>r.map(c=>c==="."?null:(P[c]||null)))}
 function chCanvas(grid,flip,bob){const c=xc(32,48),g=c.getContext("2d");for(let y=0;y<24;y++)for(let x=0;x<16;x++){const col=grid[y][flip?15-x:x];if(!col)continue;g.fillStyle=col;g.fillRect(x*2,y*2+(y<19?bob*2:0),2,2)}return c}
 // ---------- sustituye al dibujo anterior ----------
 const OVS2={};

@@ -9,7 +9,8 @@ const HM={cut:{n:"Corte",mo:"MO01",g:0,ty:["grass","bug","steel","dark","dragon"
   flash:{n:"Destello",mo:"MO05",g:0,ty:["electric","psychic","fairy","fire","normal"]},
   surf:{n:"Surf",mo:"MO03",g:1,ty:["water","ice","dragon","normal"]},
   str:{n:"Fuerza",mo:"MO04",g:2,ty:["fighting","rock","ground","steel","normal"]},
-  rock:{n:"Golpe Roca",mo:"MO06",g:3,ty:["fighting","rock","ground","steel","normal"]}};
+  rock:{n:"Golpe Roca",mo:"MO06",g:3,ty:["fighting","rock","ground","steel","normal"]},
+  fly:{n:"Vuelo",mo:"MO02",g:4,ty:["flying","dragon","normal"]}};
 const HM_DARK={cueva:1,victoria:1};
 const hmHas=k=>{try{return xbHas(HM[k].g)}catch(e){return false}};
 function hmUser(k){const T=xgTeam(),ty=HM[k].ty;for(const t of ty){const n=T.find(n=>{try{return tys(PM[n]).includes(t)}catch(e){return false}});if(n)return n}return T[0]||"Tu Pokémon"}
@@ -58,7 +59,7 @@ setInterval(()=>{try{if(!EX.on||EX.title||EX.cut||EX.dlg||EX.trans||EX.battle||(
   const nw=Object.keys(HM).filter(k=>hmHas(k)&&!f["mo_"+k]);if(!nw.length)return;nw.forEach(k=>f["mo_"+k]=1);save();
   stRun(async()=>{snd("lvl");for(const k of nw){const G=XGYM[HM[k].g];await sSay(["¡Has recibido la "+HM[k].mo+" "+HM[k].n+"!"+(G?" (regalo de "+G.n+")":""),
     {cut:"Con Corte puedes talar los arbolitos que tapan algunos caminos. Mira el arbolito y pulsa A.",flash:"Con Destello puedes iluminar las cuevas oscuras.",surf:"Con Surf puedes navegar por el agua: mira hacia el agua y pulsa A. ¡En el agua viven otros Pokémon!",
-     str:"Con Fuerza puedes empujar las rocas enormes andando hacia ellas.",rock:"Con Golpe Roca puedes romper las rocas agrietadas."}[k]])}})}catch(e){}},1500);
+     str:"Con Fuerza puedes empujar las rocas enormes andando hacia ellas.",rock:"Con Golpe Roca puedes romper las rocas agrietadas.",fly:"Con Vuelo puedes viajar al instante a cualquier pueblo que ya hayas visitado: abre el Mapa y elige el pueblo."}[k]])}})}catch(e){}},1500);
 // ---------- dibujo ----------
 function hmGround(x,y){const b=hmBaseCh(),v=Math.floor(exRnd(x,y,7)*4),k="HMG"+b+v+((EX.M&&EX.M.music)||"");if(XG[k])return XG[k];const c=xc(32,32),g=c.getContext("2d");
   if(b==="c")g.drawImage(xCave(v),0,0);else if(b==="s")g.drawImage(xSand(0,v),0,0);else xGrassBase(g,v);return XG[k]=c}

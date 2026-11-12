@@ -1055,3 +1055,6 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 @media (max-width:700px){.exmenu{width:min(250px,70%)!important}.exmenu button{padding:7px 10px 7px 28px!important;font-size:.95rem!important}.exmenu button span{font-size:1.05rem!important;width:22px!important}}
 .exmenu.exmsub{width:clamp(300px,40%,440px)!important}@media (max-width:700px){.exmenu.exmsub{width:min(300px,86%)!important}}
 .exmenu.exmsub{width:clamp(340px,46%,470px)!important}.exmenu button b{min-width:0}
+/* Vuelo desde el mapa */
+.wmfly{display:block;width:100%;margin-top:8px;padding:9px 12px;border-radius:10px;background:#3a8cff;color:#fff;font-weight:800;border:0;box-shadow:0 3px 0 #2050a8;cursor:pointer}
+.wmfly:hover{filter:brightness(1.08)}.wmflyno{display:block;margin-top:6px;opacity:.75}

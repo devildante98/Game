@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.63"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.64"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794473056">
+<meta name="game-build" content="1794473359">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2746,6 +2746,9 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 @media (max-width:700px){.exmenu{width:min(250px,70%)!important}.exmenu button{padding:7px 10px 7px 28px!important;font-size:.95rem!important}.exmenu button span{font-size:1.05rem!important;width:22px!important}}
 .exmenu.exmsub{width:clamp(300px,40%,440px)!important}@media (max-width:700px){.exmenu.exmsub{width:min(300px,86%)!important}}
 .exmenu.exmsub{width:clamp(340px,46%,470px)!important}.exmenu button b{min-width:0}
+/* Vuelo desde el mapa */
+.wmfly{display:block;width:100%;margin-top:8px;padding:9px 12px;border-radius:10px;background:#3a8cff;color:#fff;font-weight:800;border:0;box-shadow:0 3px 0 #2050a8;cursor:pointer}
+.wmfly:hover{filter:brightness(1.08)}.wmflyno{display:block;margin-top:6px;opacity:.75}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2811,7 +2814,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.63</small>
+    <small class="pcver">Versión 6.64</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7485,8 +7488,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.63";
+const GAME_VER="6.64";
 const NEWS=[
+{v:"2026-11-12-6.64",ver:"6.64",at:"2026-11-12T09:49",t:"🚲 Exploración: Bici y Vuelo",l:["Un ciclista de Pueblo Brisa te regala su Bici cuando ganas la primera medalla. Se monta desde el menú («Bici»): va mucho más rápido que correr y tiene su propia música","Ígnea te entrega la MO02 Vuelo: abre el Mapa, elige un pueblo que ya hayas visitado y pulsa «Volar». Llegas delante de su Centro Pokémon","Navegar con Surf ahora también tiene su propia música"]},
 {v:"2026-11-12-6.63",ver:"6.63",at:"2026-11-12T09:44",t:"🧩 Exploración: gimnasios con puzles",l:["Cada gimnasio tiene ahora su propio reto antes de llegar al Líder, con sus entrenadores repartidos por el camino:","Brezo: un laberinto de plantas · Marina: corrientes de agua que te arrastran · Albo: suelo de hielo en el que resbalas","Pedro: rocas que hay que apartar con Fuerza · Ígnea: máquinas de preguntas que apagan las barreras de fuego (si fallas, te reta un ayudante)","Voltio: interruptores que encienden y apagan las vallas eléctricas · Sibila: baldosas de teletransporte · Drakón: tapar agujeros empujando rocas con Fuerza","Si te atascas con las rocas, sal del gimnasio y vuelve a entrar para reiniciar el puzle"]},
 {v:"2026-11-12-6.62",ver:"6.62",at:"2026-11-12T09:36",t:"🎣 Exploración: pesca",l:["Tres pescadores te regalan sus cañas: la Caña Vieja en el estanque de Pueblo Brisa, la Caña Buena en Puerto Escarcha y la Súper Caña en Puerto Celeste","Mira hacia el agua y pulsa A para lanzar la caña. Cuando salga la «!» sobre tu cabeza, ¡pulsa A rápido o se escapará!","Cada caña pesca Pokémon distintos, y cambian según la región. Con la Súper Caña pican los más fuertes… y alguno muy raro","También puedes pescar mientras navegas con Surf"]},
 {v:"2026-11-12-6.61",ver:"6.61",at:"2026-11-12T09:32",t:"🌊 Exploración: MO como en la saga",l:["Cada Líder de Gimnasio te entrega una MO: Brezo te da Corte y Destello, Marina te da Surf, Albo te da Fuerza y el Líder de Puerto Brasa te da Golpe Roca","Corte: tala los arbolitos que tapan caminos y rincones con objetos","Surf: mira al agua y pulsa A para navegar montado en tu Pokémon. En el agua salen Pokémon acuáticos (y alguno muy raro…). Hay islas con objetos","Fuerza: empuja las rocas enormes andando hacia ellas. Golpe Roca: rompe las rocas agrietadas","Destello: la Cueva Roca y la Calle Victoria están a oscuras hasta que lo usas","Si ya tenías medallas, recibes sus MO automáticamente"]},
@@ -7791,7 +7795,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794473056";
+const GAME_B="1794473359";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -17067,7 +17071,8 @@ const HM={cut:{n:"Corte",mo:"MO01",g:0,ty:["grass","bug","steel","dark","dragon"
   flash:{n:"Destello",mo:"MO05",g:0,ty:["electric","psychic","fairy","fire","normal"]},
   surf:{n:"Surf",mo:"MO03",g:1,ty:["water","ice","dragon","normal"]},
   str:{n:"Fuerza",mo:"MO04",g:2,ty:["fighting","rock","ground","steel","normal"]},
-  rock:{n:"Golpe Roca",mo:"MO06",g:3,ty:["fighting","rock","ground","steel","normal"]}};
+  rock:{n:"Golpe Roca",mo:"MO06",g:3,ty:["fighting","rock","ground","steel","normal"]},
+  fly:{n:"Vuelo",mo:"MO02",g:4,ty:["flying","dragon","normal"]}};
 const HM_DARK={cueva:1,victoria:1};
 const hmHas=k=>{try{return xbHas(HM[k].g)}catch(e){return false}};
 function hmUser(k){const T=xgTeam(),ty=HM[k].ty;for(const t of ty){const n=T.find(n=>{try{return tys(PM[n]).includes(t)}catch(e){return false}});if(n)return n}return T[0]||"Tu Pokémon"}
@@ -17116,7 +17121,7 @@ setInterval(()=>{try{if(!EX.on||EX.title||EX.cut||EX.dlg||EX.trans||EX.battle||(
   const nw=Object.keys(HM).filter(k=>hmHas(k)&&!f["mo_"+k]);if(!nw.length)return;nw.forEach(k=>f["mo_"+k]=1);save();
   stRun(async()=>{snd("lvl");for(const k of nw){const G=XGYM[HM[k].g];await sSay(["¡Has recibido la "+HM[k].mo+" "+HM[k].n+"!"+(G?" (regalo de "+G.n+")":""),
     {cut:"Con Corte puedes talar los arbolitos que tapan algunos caminos. Mira el arbolito y pulsa A.",flash:"Con Destello puedes iluminar las cuevas oscuras.",surf:"Con Surf puedes navegar por el agua: mira hacia el agua y pulsa A. ¡En el agua viven otros Pokémon!",
-     str:"Con Fuerza puedes empujar las rocas enormes andando hacia ellas.",rock:"Con Golpe Roca puedes romper las rocas agrietadas."}[k]])}})}catch(e){}},1500);
+     str:"Con Fuerza puedes empujar las rocas enormes andando hacia ellas.",rock:"Con Golpe Roca puedes romper las rocas agrietadas.",fly:"Con Vuelo puedes viajar al instante a cualquier pueblo que ya hayas visitado: abre el Mapa y elige el pueblo."}[k]])}})}catch(e){}},1500);
 // ---------- dibujo ----------
 function hmGround(x,y){const b=hmBaseCh(),v=Math.floor(exRnd(x,y,7)*4),k="HMG"+b+v+((EX.M&&EX.M.music)||"");if(XG[k])return XG[k];const c=xc(32,32),g=c.getContext("2d");
   if(b==="c")g.drawImage(xCave(v),0,0);else if(b==="s")g.drawImage(xSand(0,v),0,0);else xGrassBase(g,v);return XG[k]=c}
@@ -17294,6 +17299,58 @@ function gymBar(th){const fr=th==="fire"?Math.floor(performance.now()/160)%2:0,k
 function gymQuiz(){const k="GYQ";if(XG[k])return XG[k];const cv=xc(32,48),g=cv.getContext("2d"),R=(a,b,w,h,col)=>X2(g,a,b,w,h,col),O="#28202c";xdisc(g,16,45,11,3,"rgba(0,0,0,.22)");
   R(2,6,12,17,O);R(3,7,10,15,"#e05030");R(3,7,10,2,"#ff8060");R(4,9,8,5,"#1a2a40");R(5,10,1,3,"#5ad1a0");R(7,10,2,1,"#ffe27a");R(9,11,2,1,"#ffe27a");R(5,16,2,2,"#ffe040");R(9,16,2,2,"#40c0ff");R(6,19,4,1,"#a83020");return XG[k]=cv}
 {const _o=xObj;xObj=function(c,x,y){try{if(gymOn()){if(c==="e")return gymBar(GYMP[EX.map]==="electric"?"electric":GYMP[EX.map]==="fire"?"fire":"psychic");if(c==="?")return gymQuiz();if(c==="v")return hmObjV();if("zla@^".includes(c)||GYM_CUR[c])return null}}catch(e){}return _o.apply(this,arguments)}}
+
+// =====================================================================================
+// BICICLETA Y VUELO (como en la saga)
+// · La Bici te la regala un ciclista de Pueblo Brisa cuando ganas tu primera medalla. Se monta desde el menú (BICI).
+//   Va mucho más rápido que correr y tiene su propia música. No se puede usar dentro de los edificios.
+// · Vuelo (MO02, la da Ígnea): desde el Mapa, viaja al instante a cualquier pueblo que ya hayas visitado.
+// · Surf también tiene su propia música.
+// =====================================================================================
+const bkHas=()=>{try{return !!stSt().f.bike}catch(e){return false}};
+const bkOk=()=>!!(EX.M&&EX.M.base!=="F"&&!EX.surf);
+function bkSet(on){if(on&&!bkOk()){exSay([EX.surf?"No puedes montar en bici mientras navegas.":"¡Aquí dentro no se puede ir en bici!"]);return}EX.bike=!!on;snd("ui");try{toast(on?"🚲 ¡Montas en la Bici!":"🚶 Te bajas de la Bici")}catch(e){}}
+// más rápida que correr
+{const _u=exUpdate;exUpdate=function(dt,ts){const r=_u.apply(this,arguments);try{if(EX.bike&&EX.mv&&!EX.mv._bk&&!EX.slide&&!EX.cut){EX.mv.d=Math.min(EX.mv.d,82);EX.mv._bk=1}}catch(e){}return r}}
+// te bajas al entrar en un edificio o al navegar
+{const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{if(EX.bike&&!bkOk())EX.bike=false}catch(e){}return r}}
+setInterval(()=>{try{if(EX.bike&&EX.surf)EX.bike=false}catch(e){}},500);
+// dibujo: la bici debajo del personaje
+function bkDraw(g,face,x,y){const X=Math.round(x),Y=Math.round(y),O="#1c1c26",F="#e8414f",M="#9aa6b8",R=(a,b,w,h,c)=>{g.fillStyle=c;g.fillRect(X+a,Y+b,w,h)};
+  if(face==="l"||face==="r"){const wh=(cx)=>{R(cx-5,24,10,10,O);R(cx-4,25,8,8,"#3a3f58");R(cx-1,28,2,2,M)};wh(6);wh(26);R(6,27,20,2,F);R(14,22,2,7,F);R(face==="r"?22:8,19,2,8,F);R(face==="r"?20:6,18,6,2,O);R(12,21,6,2,O)}
+  else{R(13,22,6,13,O);R(14,23,4,11,"#3a3f58");R(15,26,2,5,M);R(8,20,16,2,O);R(9,20,14,1,M);R(14,19,4,3,F)}}
+{const _t=exDrawTr;exDrawTr=function(g,code,face,x,y,fr,beat,me,ph){if(me&&EX.bike&&!EX.surf){bkDraw(g,face,x,y+6);return _t.call(this,g,code,face,x,y-3,0,beat,me,ph)}return _t.apply(this,arguments)}}
+// en bici, el compañero no te sigue (como en los juegos)
+{const _f=exDrawFol;exDrawFol=function(){if(EX.bike)return;return _f.apply(this,arguments)}}
+// opción BICI en el menú (solo si la tienes)
+{const _m=exMenu;exMenu=function(){try{const i=EXM_IT.findIndex(x=>x[0]==="bike");if(bkHas()&&i<0)EXM_IT.splice(EXM_IT.findIndex(x=>x[0]==="save"),0,["bike","🚲","Bici"]);else if(!bkHas()&&i>=0)EXM_IT.splice(i,1)}catch(e){}return _m.apply(this,arguments)}}
+{const _md=exMenuDo;exMenuDo=function(k){if(k==="bike"){try{exMenuClose(true)}catch(e){}bkSet(!EX.bike);return}return _md.apply(this,arguments)}}
+// ---------- el ciclista de Pueblo Brisa ----------
+{const _n=stNPCs;stNPCs=function(m){const L=_n.apply(this,arguments);try{if(m==="pueblo"&&stSt().s>=2){const x=34,y=10;
+  L.push({sid:"bici",x:x,y:y,f:"l",n:"Ciclista",look:chClassLook("cyclist","bici"),t:[],sight:0,txt:"",id:"sto:pueblo:bici",story:1,still:1,beat:true,px:x,py:y,f0:"l"})}}catch(e){}return L}}
+STX.bici=()=>stRun(async()=>{const f=stSt().f,n=stN("bici");if(n)sFaceTo(n);
+  if(f.bike){await sSay(S_("Ciclista","¿Qué tal va mi vieja Bici? Recuerda: la sacas desde el menú, en «Bici».","¡Con ella llegarás a todas partes en un momento!"));return}
+  if(!xbHas(0)){await sSay(S_("Ciclista","¡Hola! Me encantan las bicis… ¡y los combates de gimnasio!","Tengo una Bici que ya no uso. Te la regalo cuando ganes tu primera medalla en el Gimnasio de Pueblo Brisa."));return}
+  await sSay(S_("Ciclista","¡Anda! ¡Esa es la Medalla Brote! ¡Has ganado a Brezo!","Te lo prometí: toma mi Bici. ¡Cuídala mucho!"));snd("lvl");f.bike=1;save();
+  await sSay(["¡Has recibido la Bici!","Ábrela desde el menú, en «Bici». Va mucho más rápido que correr."])});
+// ---------- música: un tema para la bici y otro para Surf ----------
+try{const BK={k:"bike",n:"Exploración · Bici",bpm:160,duty:0.25,bass:"pump",drum:"k.hsk.h.k.hsk.hs",prog:"D G A D Bm G A D",cls:1,
+  lead:"A5:2 D6:2 F#6:2 A6:2 G6:2 F#6:2 E6:4 D6:2 E6:2 F#6:2 D6:2 B5:4 A5:4 G5:2 B5:2 D6:2 G6:2 F#6:2 E6:2 D6:4 C#6:2 D6:2 E6:2 A5:2 C#6:4 E6:4 F#6:2 E6:2 D6:2 B5:2 D6:2 F#6:2 B6:4 A6:2 G6:2 F#6:2 E6:2 D6:4 B5:4 G5:2 A5:2 B5:2 D6:2 E6:2 F#6:2 G6:2 E6:2 F#6:4 E6:4 D6:8",
+  harm:"F#5:8 A5:8 B5:8 G5:8 A5:8 E5:8 F#5:8 A5:8 D5:8 F#5:8 B5:8 G5:8 D5:8 A5:8 A5:8 F#5:8"};
+  const SU={k:"surf",n:"Exploración · Surf",bpm:96,duty:0.5,bass:"walk",drum:"k.......h.......",prog:"F C Dm Bb F C Bb C",cls:1,
+  lead:"A5:4 C6:4 F6:6 E6:2 D6:4 C6:4 G5:8 A5:2 Bb5:2 C6:4 D6:4 F6:4 E6:4 D6:4 C6:8 A5:4 C6:4 F6:4 A6:4 G6:4 F6:2 E6:2 C6:8 D6:4 F6:4 Bb6:4 A6:2 G6:2 G6:4 E6:4 C6:8",
+  harm:"C5:8 A4:8 E5:8 C5:8 F5:8 D5:8 D5:8 Bb4:8 C5:8 A4:8 E5:8 G4:8 D5:8 F5:8 E5:8 G5:8"};
+  [BK,SU].forEach(s=>{if(XMI[s.k]==null){XMI[s.k]=SG.length;SG.push(s)}});
+  const _xm=xmusMap;xmusMap=function(){try{if(EX.surf)return XMI.surf;if(EX.bike)return XMI.bike}catch(e){}return _xm.apply(this,arguments)}}catch(e){console.error(e)}
+// ---------- Vuelo: desde el Mapa, a los pueblos que ya has visitado ----------
+const flyHas=()=>{try{return xbHas(HM.fly.g)}catch(e){return false}};
+function flySpot(k){const M=EXM[k];if(!M)return null;for(let y=0;y<M.g.length;y++){const x=M.g[y].indexOf("6");if(x>=0&&M.w&&M.w["6"])return[x,y+1]}return null}
+{const _wi=wmInfo;wmInfo=function(k){let h=_wi.apply(this,arguments);try{const n=wmNode(k);if(n&&n.t==="town"&&flyHas()&&(wmVis()[k]||wmHere()===k)&&wmOpenZone(k)&&wmHere()!==k&&flySpot(k))
+  h+='<button type="button" class="wmfly" data-fly="'+k+'">🕊️ Volar a '+esc((EXM[k]&&EXM[k].n)||k)+'</button>';else if(n&&n.t==="town"&&!flyHas()&&wmVis()[k]&&wmHere()!==k)h+='<small class="wmflyno">🕊️ Con la MO02 Vuelo (la da Ígnea) podrás volar aquí.</small>'}catch(e){}return h}}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-fly]");if(!b)return;e.preventDefault();e.stopPropagation();flyTo(b.dataset.fly)},true);
+function flyTo(k){const t=flySpot(k);if(!t)return;try{wmHide()}catch(e){}
+  if(EX.M&&EX.M.base==="F"){exSay(["Aquí dentro no puedes usar Vuelo. ¡Sal fuera primero!"]);return}
+  stRun(async()=>{const u=hmUser("fly");snd("lvl");await sSay(["¡"+hmName(u)+" ha usado Vuelo!"]);await sFade("fade",450);EX.bike=false;EX.surf=0;exLoad(k,t[0],t[1],"d");EX.banner={t:EXM[k].n,t0:performance.now()};try{exFollowerReset()}catch(e){}await sFade("fadein",500)})}
 
 </script>
 <script>

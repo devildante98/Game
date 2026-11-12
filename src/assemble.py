@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.70";
+const GAME_VER="6.70.1";
 const NEWS=[
+{v:"2026-11-12-6.70.1",ver:"6.70.1",at:"2026-11-12T11:51",t:"🔧 Arreglos/Mejoras",l:["Bici redibujada: ruedas redondas con radios que giran, cuadro, sillín y manillar"]},
 {v:"2026-11-12-6.70",ver:"6.70",at:"2026-11-12T11:13",t:"🎨 Exploración: gráficos renovados (fase 6)",l:["Agua con orilla, espuma y olas animadas en estanques, mares, lava y charcas de cueva","Cuevas nuevas: paredes de roca, suelo, estalagmitas y entradas redibujadas","Hierba alta, arena, rocas, arbustos, palmeras, setas, carteles y objetos del suelo con el mismo estilo de píxel que el resto","Pinos nevados en las regiones de nieve, árboles quemados en las de ceniza y nieve en los tejados","Huellas en la arena y en la nieve, hojas al pisar la hierba alta y flores que se mecen","Luz de las cuevas, oscuridad y lluvia hechas con píxeles, y cartel de madera con el nombre de cada zona"]},
 {v:"2026-11-12-6.69.1",ver:"6.69.1",at:"2026-11-12T10:25",t:"🔧 Arreglos/Mejoras",l:["Lanzamiento perfecto: el círculo de lanzamiento ahora se ve por delante del Pokémon"]},
 {v:"2026-11-12-6.69",ver:"6.69",at:"2026-11-12T10:03",t:"🪪 Exploración: Tarjeta de entrenador",l:["Nueva opción en el menú con tu nombre: abre tu Tarjeta de entrenador","Muestra tu aspecto, tu número de ID, el dinero, la Pokédex, el tiempo de juego, las medallas, tu rival y si eres Campeón/a de la Liga","Frota tus medallas con el ratón o el dedo para sacarles brillo. ¡Con los días se vuelven a ensuciar!"]},

@@ -14,10 +14,23 @@ function bkSet(on){if(on&&!bkOk()){exSay([EX.surf?"No puedes montar en bici mien
 {const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{if(EX.bike&&!bkOk())EX.bike=false}catch(e){}return r}}
 setInterval(()=>{try{if(EX.bike&&EX.surf)EX.bike=false}catch(e){}},500);
 // dibujo: la bici debajo del personaje
-function bkDraw(g,face,x,y){const X=Math.round(x),Y=Math.round(y),O="#1c1c26",F="#e8414f",M="#9aa6b8",R=(a,b,w,h,c)=>{g.fillStyle=c;g.fillRect(X+a,Y+b,w,h)};
-  if(face==="l"||face==="r"){const wh=(cx)=>{R(cx-5,24,10,10,O);R(cx-4,25,8,8,"#3a3f58");R(cx-1,28,2,2,M)};wh(6);wh(26);R(6,27,20,2,F);R(14,22,2,7,F);R(face==="r"?22:8,19,2,8,F);R(face==="r"?20:6,18,6,2,O);R(12,21,6,2,O)}
-  else{R(13,22,6,13,O);R(14,23,4,11,"#3a3f58");R(15,26,2,5,M);R(8,20,16,2,O);R(9,20,14,1,M);R(14,19,4,3,F)}}
-{const _t=exDrawTr;exDrawTr=function(g,code,face,x,y,fr,beat,me,ph){if(me&&EX.bike&&!EX.surf){bkDraw(g,face,x,y+6);return _t.call(this,g,code,face,x,y-3,0,beat,me,ph)}return _t.apply(this,arguments)}}
+function bkDraw(g,face,x,y,top){const X=Math.round(x),Y=Math.round(y),O="#1c1c26",F="#e8414f",Fd="#a82a3a",M="#b4bed0",T="#3a3f58",R=(a,b,w,h,c)=>{g.fillStyle=c;g.fillRect(X+a*2,Y+b*2,w*2,h*2)};
+  // manillar por delante del personaje
+  if(top){if(face==="d"){R(3,8,10,1,O);R(4,8,8,1,M);R(2,8,2,1,O);R(12,8,2,1,O);R(7,7,2,2,F)}else if(face==="l"||face==="r"){const fl=face==="l",B=(a,b,w,h,c)=>R(fl?16-a-w:a,b,w,h,c);B(11,8,1,3,O);B(10,7,3,1,O)}return}
+  const sp=EX.mv?Math.floor((EX.dist||0)*6)%2:0;
+  if(face==="l"||face==="r"){
+    // rueda redonda: neumático, llanta y radios que giran
+    const wh=cx=>{[[2,0,3],[1,1,5],[0,2,7],[0,3,7],[0,4,7],[1,5,5],[2,6,3]].forEach(([a,b,w])=>R(cx+a,11+b,w,1,O));
+      [[2,1,3],[1,2,5],[1,3,5],[1,4,5],[2,5,3]].forEach(([a,b,w])=>R(cx+a,11+b,w,1,M));[[2,2,3],[2,3,3],[2,4,3]].forEach(([a,b,w])=>R(cx+a,11+b,w,1,"#e4eaf4"));
+      if(sp){R(cx+3,12,1,5,T);R(cx+1,14,5,1,T)}else{R(cx+2,13,1,1,T);R(cx+4,13,1,1,T);R(cx+2,15,1,1,T);R(cx+4,15,1,1,T)}R(cx+3,14,1,1,O)};
+    wh(0);wh(9);const fl=face==="l",fx=a=>fl?15-a:a,B=(a,b,w,h,c)=>R(fl?16-a-w:a,b,w,h,c);
+    // cuadro: del eje trasero al sillín, barra, horquilla delantera y manillar
+    B(3,13,1,1,F);B(4,12,1,1,F);B(5,11,1,1,F);B(5,10,7,1,F);B(5,11,6,1,Fd);B(6,12,1,1,F);B(7,13,1,1,F);B(4,14,4,1,Fd);B(11,10,1,2,F);B(12,12,1,2,F);
+    B(11,8,1,2,O);B(10,7,3,1,O);B(4,9,3,1,O);B(5,10,1,1,O);B(7,13,2,1,O)}
+  else{// de frente o de espaldas: rueda estrecha y redondeada, guardabarros y manillar
+    R(7,10,2,1,O);R(6,11,4,6,O);R(7,17,2,1,O);R(7,11,2,6,T);R(7,12,1,4,M);R(6,10,4,1,F);R(7,9,2,1,F);
+    R(3,8,10,1,O);R(4,8,8,1,M);R(2,8,2,1,O);R(12,8,2,1,O);if(face==="d"){R(7,7,2,2,F);R(7,8,2,1,"#ffe9a8")}else R(7,7,2,1,Fd)}}
+{const _t=exDrawTr;exDrawTr=function(g,code,face,x,y,fr,beat,me,ph){if(me&&EX.bike&&!EX.surf){bkDraw(g,face,x,y+4);const r=_t.call(this,g,code,face,x,y-3,0,beat,me,ph);bkDraw(g,face,x,y+4,1);return r}return _t.apply(this,arguments)}}
 // en bici, el compañero no te sigue (como en los juegos)
 {const _f=exDrawFol;exDrawFol=function(){if(EX.bike)return;return _f.apply(this,arguments)}}
 // opción BICI en el menú (solo si la tienes)

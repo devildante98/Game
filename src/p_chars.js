@@ -55,7 +55,7 @@ function chFrame(t,dir,fr){const d=dir==="r"?"l":dir,side=d==="l",si=fr===1?1:fr
   const legsSrc=(t.skirt||t.dress)?CHSK:t.shorts?CHSH:CHL;const legs=(legsSrc[side?"l":"d"][si]).map(r=>r.split(""));
   const G=head.concat(body,legs);
   // pelo: calvo → piel
-  if(t.bald)for(let y=0;y<13;y++)for(let x=0;x<16;x++)if(G[y][x]==="H"||G[y][x]==="h")G[y][x]=d==="u"&&y>6?"s":"S";
+  if(t.bald)for(let y=0;y<13;y++)for(let x=0;x<16;x++)if((G[y][x]==="H"||G[y][x]==="h")&&y<7)G[y][x]="S";
   // pelo largo por los hombros
   if(t.long){if(d==="d"){for(let y=7;y<16;y++){G[y][2]="H";G[y][13]="H";G[y][1]=y<13?"K":G[y][1];G[y][14]=y<13?"K":G[y][14]}G[16][2]="K";G[16][13]="K"}
     else if(d==="u"){for(let y=10;y<17;y++)for(let x=4;x<12;x++)G[y][x]="H";for(let y=10;y<17;y++){G[y][3]="K";G[y][12]="K"}G[17][4]="K";for(let x=4;x<12;x++)G[17][x]="K"}
@@ -127,3 +127,7 @@ function chSample(key){if(!key||CH_TRY[key]||typeof TSPR==="undefined")return;CH
 // ---------- personajes de la historia: en combate salen con su mismo aspecto ----------
 {const _xb=exBattle;exBattle=function(cfg,npc){try{if(cfg&&cfg.trainer&&cfg.tsrc&&!cfg.tsrc.c){const n=(npc&&npc.story?npc:null)||EX.npcs.find(q=>q.story&&q.n===cfg.trainer&&q.look);
     if(n&&n.look&&!(n.t&&n.t.length&&!n.story))cfg.tsrc=Object.assign({},cfg.tsrc,{c:n.look})}}catch(e){}return _xb.apply(this,arguments)}}
+
+// personajes de la historia con un aspecto diseñado (la Profesora Vega: melena, gafas y bata de laboratorio)
+try{const chFix=(k,o)=>{const L=trDec(STO_L[k]);Object.assign(L,o);STO_L[k]=trEnc(L)};
+  chFix("vega",{b:1,sk:1,hs:17,hc:2,hat:0,gl:2,glc:11,top:12,tc:9,bot:5,bc:10,sh:11,ec:0,brd:0,mk:0,ear:0,nk:0,bp:0});}catch(e){}

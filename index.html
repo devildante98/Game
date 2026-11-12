@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.70.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.71"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794480663">
+<meta name="game-build" content="1794480740">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2841,7 +2841,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.70.1</small>
+    <small class="pcver">Versión 6.71</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7515,8 +7515,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.70.1";
+const GAME_VER="6.71";
 const NEWS=[
+{v:"2026-11-12-6.71",ver:"6.71",at:"2026-11-12T11:52",t:"🚲 Exploración: acceso directo a la Bici",l:["Pulsa la tecla B o el botón RB del mando para subir o bajar de la Bici al momento, sin abrir el menú","Puedes cambiar la tecla y el botón en Controles"]},
 {v:"2026-11-12-6.70.1",ver:"6.70.1",at:"2026-11-12T11:51",t:"🔧 Arreglos/Mejoras",l:["Bici redibujada: ruedas redondas con radios que giran, cuadro, sillín y manillar"]},
 {v:"2026-11-12-6.70",ver:"6.70",at:"2026-11-12T11:13",t:"🎨 Exploración: gráficos renovados (fase 6)",l:["Agua con orilla, espuma y olas animadas en estanques, mares, lava y charcas de cueva","Cuevas nuevas: paredes de roca, suelo, estalagmitas y entradas redibujadas","Hierba alta, arena, rocas, arbustos, palmeras, setas, carteles y objetos del suelo con el mismo estilo de píxel que el resto","Pinos nevados en las regiones de nieve, árboles quemados en las de ceniza y nieve en los tejados","Huellas en la arena y en la nieve, hojas al pisar la hierba alta y flores que se mecen","Luz de las cuevas, oscuridad y lluvia hechas con píxeles, y cartel de madera con el nombre de cada zona"]},
 {v:"2026-11-12-6.69.1",ver:"6.69.1",at:"2026-11-12T10:25",t:"🔧 Arreglos/Mejoras",l:["Lanzamiento perfecto: el círculo de lanzamiento ahora se ve por delante del Pokémon"]},
@@ -7830,7 +7831,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794480663";
+const GAME_B="1794480740";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -17399,6 +17400,14 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 function flyTo(k){const t=flySpot(k);if(!t)return;try{wmHide()}catch(e){}
   if(EX.M&&EX.M.base==="F"){exSay(["Aquí dentro no puedes usar Vuelo. ¡Sal fuera primero!"]);return}
   stRun(async()=>{const u=hmUser("fly");snd("lvl");await sSay(["¡"+hmName(u)+" ha usado Vuelo!"]);await sFade("fade",450);EX.bike=false;EX.surf=0;exLoad(k,t[0],t[1],"d");EX.banner={t:EXM[k].n,t0:performance.now()};try{exFollowerReset()}catch(e){}await sFade("fadein",500)})}
+// ---------- acceso directo a la Bici: tecla B o botón RB del mando (se pueden cambiar en Controles) ----------
+EXKB0.bike=["b",""];EXKN.bike="Bici (subir / bajar)";EXPAD0.bike=5;EXPADN.bike="Bici (subir / bajar)";
+function bkQuick(){try{if(!EX.on||EX.title||EX.dlg||EX.cut||EX.trans||EX.battle||EX.choice||EX.mv&&EX.slide||EX.bind||(typeof GP!=="undefined"&&GP.bind)||(typeof fcd!=="undefined"&&fcd)||exPaused())return false;
+  if(!bkHas()){exSay(["Todavía no tienes Bici.","(Un ciclista de Pueblo Brisa te la regala cuando ganas tu primera medalla.)"]);return true}bkSet(!EX.bike);return true}catch(e){return false}}
+window.addEventListener("keydown",e=>{try{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable))return;
+  if(exAct(e.key)==="bike"&&bkQuick())e.preventDefault()}catch(_){}});
+{const _gp=gpPoll;gpPoll=function(){let eb=false;try{const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[],gp=L[0];if(gp&&!GP.bind){const i=exPad().bike,p=i>=0&&!!(gp.buttons[i]&&gp.buttons[i].pressed);eb=p&&!GP.pBk;GP.pBk=p}}catch(e){}
+  const r=_gp.apply(this,arguments);if(eb)bkQuick();return r}}
 
 // =====================================================================================
 // OBJETOS DE CAMPO (como en la saga)

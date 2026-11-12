@@ -62,3 +62,11 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 function flyTo(k){const t=flySpot(k);if(!t)return;try{wmHide()}catch(e){}
   if(EX.M&&EX.M.base==="F"){exSay(["Aquí dentro no puedes usar Vuelo. ¡Sal fuera primero!"]);return}
   stRun(async()=>{const u=hmUser("fly");snd("lvl");await sSay(["¡"+hmName(u)+" ha usado Vuelo!"]);await sFade("fade",450);EX.bike=false;EX.surf=0;exLoad(k,t[0],t[1],"d");EX.banner={t:EXM[k].n,t0:performance.now()};try{exFollowerReset()}catch(e){}await sFade("fadein",500)})}
+// ---------- acceso directo a la Bici: tecla B o botón RB del mando (se pueden cambiar en Controles) ----------
+EXKB0.bike=["b",""];EXKN.bike="Bici (subir / bajar)";EXPAD0.bike=5;EXPADN.bike="Bici (subir / bajar)";
+function bkQuick(){try{if(!EX.on||EX.title||EX.dlg||EX.cut||EX.trans||EX.battle||EX.choice||EX.mv&&EX.slide||EX.bind||(typeof GP!=="undefined"&&GP.bind)||(typeof fcd!=="undefined"&&fcd)||exPaused())return false;
+  if(!bkHas()){exSay(["Todavía no tienes Bici.","(Un ciclista de Pueblo Brisa te la regala cuando ganas tu primera medalla.)"]);return true}bkSet(!EX.bike);return true}catch(e){return false}}
+window.addEventListener("keydown",e=>{try{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const t=e.target;if(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable))return;
+  if(exAct(e.key)==="bike"&&bkQuick())e.preventDefault()}catch(_){}});
+{const _gp=gpPoll;gpPoll=function(){let eb=false;try{const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[],gp=L[0];if(gp&&!GP.bind){const i=exPad().bike,p=i>=0&&!!(gp.buttons[i]&&gp.buttons[i].pressed);eb=p&&!GP.pBk;GP.pBk=p}}catch(e){}
+  const r=_gp.apply(this,arguments);if(eb)bkQuick();return r}}

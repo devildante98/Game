@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.57";
+const GAME_VER="6.57.1";
 const NEWS=[
+{v:"2026-11-12-6.57.1",ver:"6.57.1",at:"2026-11-12T01:23",t:"🔧 Arreglos/Mejoras",l:["El Gimnasio de Pueblo Brisa ya no está pegado al Laboratorio: ahora hay espacio entre los dos edificios"]},
 {v:"2026-11-12-6.57",ver:"6.57",at:"2026-11-12T01:14",t:"🎨 Nuevos gráficos de Exploración (fase 3): edificios",l:["Todos los edificios de los pueblos tienen un estilo nuevo, al estilo de la saga:","Centro Pokémon con tejado rojo de tejas y la Poké Ball, puertas de cristal y franja roja","Tienda con tejado azul y cartel «TIENDA»","Casas con tejado de tejas y chimenea, o de pizarra con buhardilla, ventanas con jardinera y puerta de madera","Gimnasio con columnas, cartel «GIMNASIO» y gran puerta","Laboratorio blanco con antena y cartel","De noche, las ventanas se encienden. Próxima fase: interiores"]},
 {v:"2026-11-12-6.56",ver:"6.56",at:"2026-11-12T01:11",t:"🎨 Nuevos gráficos de Exploración (fase 2): exteriores",l:["Hierba nueva con matas, pinos en capas al estilo clásico (los bosques y los bordes de los mapas lucen mucho más) y flores de colores","En los pueblos y ciudades, los caminos son ahora calles de baldosa con bordillo. En las rutas siguen siendo de tierra, con borde de hierba","Próximas fases: edificios por fuera (Centros, tiendas, casas, gimnasios, laboratorio, Liga) e interiores"]},
 {v:"2026-11-12-6.55.1",ver:"6.55.1",at:"2026-11-12T01:08",t:"🔧 Arreglos/Mejoras",l:["Los personajes de Exploración ahora siguen el diseño de la muestra: cabeza y gorra grandes al estilo de la saga, ojos marcados y cuerpo con brazos. Se mantienen la ropa de tu avatar y los trajes de cada clase de entrenador"]},

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.71.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.72"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794481314">
+<meta name="game-build" content="1794482234">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2777,6 +2777,9 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 /* Lanzamiento perfecto: el círculo se ve por delante del Pokémon */
 .thmon .thring{z-index:3;pointer-events:none}.thmon .thspr{z-index:1}
 
+.xcbox{display:flex;flex-direction:column;gap:6px;width:min(340px,80vw)}.xclog{display:flex;flex-direction:column;gap:2px;max-height:86px;overflow:auto;font-size:.78rem;text-align:left}.xclog:empty{display:none}.xclog div{background:rgba(255,255,255,.08);border-radius:8px;padding:2px 8px;word-break:break-word}.xclog div.me{background:rgba(90,200,160,.2)}.xclog b{color:#9fe6ff}
+.xcrow{display:flex;gap:6px}.xcin{flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:2px solid #6d8592;background:#fff;color:#1c2430;font:inherit;font-size:.95rem}.xcsend{min-height:0;padding:6px 12px}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -2841,7 +2844,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.71.1</small>
+    <small class="pcver">Versión 6.72</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7515,8 +7518,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.71.1";
+const GAME_VER="6.72";
 const NEWS=[
+{v:"2026-11-12-6.72",ver:"6.72",at:"2026-11-12T12:15",t:"💬 Exploración: chat con bocadillos y una tecla para cada función",l:["Nuevo chat propio de Exploración: escribe un mensaje desde el botón 💬 (donde los emoticonos) y aparecerá unos segundos en un bocadillo sobre tu cabeza","Lo ven los jugadores que están en tu mismo mapa. No tiene nada que ver con el chat del juego base y no se guarda","Pulsa T (o LT en el mando) para abrir el chat directamente; Intro envía y Esc cierra","Atajos nuevos: Pokédex (O), Tarjeta (K), Guardar (G) y Pantalla completa (F), que se suman a Mapa (N), minimapa (M), Mochila (I), Bici (B) y Controles (C). Todos se pueden cambiar en Controles"]},
 {v:"2026-11-12-6.71.1",ver:"6.71.1",at:"2026-11-12T12:01",t:"🔧 Arreglos/Mejoras",l:["Parejas de entrenadores: sus Pokémon tienen ahora el nivel de la ruta (antes podían salir a nivel 99)","Si te rindes ante un entrenador, ya no te vuelve a retar al momento: puedes alejarte, o hablarle si quieres la revancha","El aspecto de las Gemelas, la Patinadora y la Domadora coincide con su nombre, y las parejas ya no están pegadas"]},
 {v:"2026-11-12-6.71",ver:"6.71",at:"2026-11-12T11:52",t:"🚲 Exploración: acceso directo a la Bici",l:["Pulsa la tecla B o el botón RB del mando para subir o bajar de la Bici al momento, sin abrir el menú","Puedes cambiar la tecla y el botón en Controles"]},
 {v:"2026-11-12-6.70.1",ver:"6.70.1",at:"2026-11-12T11:51",t:"🔧 Arreglos/Mejoras",l:["Bici redibujada: ruedas redondas con radios que giran, cuadro, sillín y manillar"]},
@@ -7832,7 +7836,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794481314";
+const GAME_B="1794482234";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15252,7 +15256,7 @@ setInterval(()=>{try{
   const active=typeof EX!=="undefined"&&EX.map&&EX.map!=="casa"&&EX.map!=="casa_up"&&((EX.on&&vis)||EX.battle)&&!EX.title&&xoOn()&&xoUid();
   if(!active){if(XO.room&&!XO.leaveT)XO.leaveT=Date.now();if(XO.room&&Date.now()-XO.leaveT>(document.hidden?15000:1500)){XO.leaveT=0;xoLeave()}return}XO.leaveT=0;
   if(XO.key!=="ex_"+EX.map){xoJoin(EX.map);return}if(!XO.room)return;
-  const p={n:pvNick(),lk:trEnc(myLook()),x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT},j=JSON.stringify(p);
+  const p={n:pvNick(),lk:trEnc(myLook()),x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT,m:XO.msg&&Date.now()-XO.msgT<7000?XO.msg:"",mt:XO.msg&&Date.now()-XO.msgT<7000?XO.msgT:0},j=JSON.stringify(p);
   const j2=j;if(j2!==XO.lastJ&&Date.now()-XO.lastW>=350){XO.lastJ=j2;XO.lastW=Date.now();XO.room.presence(p).catch(()=>{})}
 }catch(e){}},120);
 // dibujar a los demás jugadores encima del mapa
@@ -17806,6 +17810,53 @@ function n6Sign(g,x,y,w,h){const R=(a,b,c,d,col)=>{g.fillStyle=col;g.fillRect(a,
       else if(p.f==="u"||p.f==="d"){g.fillRect(X+10,Y+12,4,6);g.fillRect(X+18,Y+20,4,6)}else{g.fillRect(X+8,Y+18,6,4);g.fillRect(X+18,Y+24,6,4)}})})}catch(e){}return r}}
 // las casillas ya dibujadas con el estilo antiguo se rehacen
 Object.keys(XG).forEach(k=>{if(!/^N\d/.test(k))delete XG[k]});
+
+// =====================================================================================
+// CHAT DE EXPLORACIÓN (independiente del chat del juego base) Y ATAJOS DE TECLADO PARA CADA FUNCIÓN
+// · Desde el botón 💬 (donde los emoticonos) o con la tecla T se escribe un mensaje corto: aparece unos segundos
+//   en un bocadillo sobre tu cabeza y lo ven los jugadores que están en tu mismo mapa. No se guarda en ningún sitio.
+// · Atajos nuevos (se cambian en Controles): Chat, Pokédex, Tarjeta, Guardar y Pantalla completa (el Mapa, el minimapa, la Mochila y los Controles ya tenían).
+// =====================================================================================
+const XC_MAX=60,XC_MS=7000,XC={log:[],last:0};
+function xcClean(t){try{t=chClean(t)}catch(e){t=String(t||"").replace(/[\u0000-\u001f]/g," ").replace(/\s+/g," ").trim()}return t.replace(/[<>]/g,"").slice(0,XC_MAX)}
+function xcLog(n,t,me){XC.log.push({n:n,t:t,me:!!me});if(XC.log.length>6)XC.log.shift();const p=XO.panel&&XO.panel.querySelector(".xclog");if(p)p.innerHTML=xcLogH()}
+const xcLogH=()=>XC.log.map(m=>'<div'+(m.me?' class="me"':'')+'><b>'+esc(m.n)+':</b> '+esc(m.t)+'</div>').join("");
+function xcSend(t){t=xcClean(t);if(!t)return false;if(Date.now()-XC.last<1200){toast("Espera un momento antes de enviar otro mensaje");return false}XC.last=Date.now();XO.msg=t;XO.msgT=Date.now();XO.emoT=0;snd("ui");xcLog(pvNick(),t,true);return true}
+// los mensajes de los demás: se anota la hora a la que NOS llegan (los relojes de cada móvil pueden no coincidir)
+{const _p=xoPeers;xoPeers=function(peers){const r=_p.apply(this,arguments);try{(peers||[]).forEach(p=>{const o=XO.peers[p.peer],q=p.presence;if(!o||!q)return;const mt=+q.mt||0,m=mt?xcClean(q.m):"";
+    if(m&&mt!==o.mt){o.mt=mt;o.m=m;o.mAt=Date.now();xcLog(o.n,m)}else if(!m)o.m=""})}catch(e){}return r}}
+// bocadillo de texto sobre la cabeza
+function xcWrap(g,t,w){const L=[];let cur="";t.split(" ").forEach(wd=>{while(g.measureText(wd).width>w){let i=wd.length;while(i>1&&g.measureText(wd.slice(0,i)).width>w)i--;if(cur){L.push(cur);cur=""}L.push(wd.slice(0,i));wd=wd.slice(i)}
+    const n=cur?cur+" "+wd:wd;if(g.measureText(n).width>w&&cur){L.push(cur);cur=wd}else cur=n});if(cur)L.push(cur);if(L.length>3){L.length=3;L[2]=L[2].replace(/.{0,2}$/,"…")}return L}
+function xcBubble(g,X,Y,t,W){g.font="bold 8px system-ui,sans-serif";g.textAlign="left";g.textBaseline="top";const L=xcWrap(g,t,118),tw=Math.ceil(Math.max(...L.map(l=>g.measureText(l).width))),w=tw+10,h=L.length*10+7;
+  let x=Math.round(X-w/2);x=Math.max(3,Math.min(W-w-3,x));const y=Math.round(Y-h-5),R=(a,b,c,d,col)=>{g.fillStyle=col;g.fillRect(a,b,c,d)};
+  R(x+1,y-1,w-2,h+2,"#202838");R(x-1,y+1,w+2,h-2,"#202838");R(x,y,w,h,"#202838");R(x+1,y,w-2,h,"#fff");R(x,y+1,w,h-2,"#fff");R(x+1,y+h-2,w-2,2,"#d8e0ee");
+  const tx=Math.max(x+4,Math.min(x+w-8,Math.round(X)-2));R(tx-1,y+h,6,1,"#202838");R(tx,y+h,4,1,"#fff");R(tx,y+h+1,4,1,"#202838");R(tx+1,y+h+1,2,1,"#fff");R(tx+1,y+h+2,2,1,"#202838");
+  g.fillStyle="#202838";L.forEach((l,i)=>g.fillText(l,x+5,y+4+i*10))}
+{const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{if(EX.title||!EX.cv||!EX.cam)return r;const g=EX.cv.getContext("2d"),W=EX.cv.width/EXS;g.setTransform(EXS,0,0,EXS,0,0);const cx=Math.round(EX.cam[0]*2)/2,cy=Math.round(EX.cam[1]*2)/2,now=Date.now();
+    if(xoOn()&&XO.room)Object.values(XO.peers).forEach(o=>{if(o.m&&now-(o.mAt||0)<XC_MS)xcBubble(g,o.dx*EXTL-cx+16,o.dy*EXTL-cy-12,o.m,W)});
+    if(XO.msg&&now-XO.msgT<XC_MS)xcBubble(g,EX.px*EXTL-cx+16,EX.py*EXTL-cy-12,XO.msg,W)}catch(e){}return r}}
+// el panel 💬 gana una caja para escribir y los últimos mensajes
+{const _p=xoPanel;xoPanel=function(o){_p.apply(this,arguments);const d=XO.panel;if(!d)return;const row=document.createElement("div");row.className="xcbox";
+    row.innerHTML='<div class="xclog">'+xcLogH()+'</div><div class="xcrow"><input class="xcin" type="text" maxlength="'+XC_MAX+'" placeholder="Escribe un mensaje…" autocomplete="off" enterkeyhint="send" aria-label="Mensaje"><button type="button" class="grn xcsend">Enviar</button></div>';
+    d.insertBefore(row,d.querySelector(".xoemo"));const inp=row.querySelector(".xcin"),go=()=>{if(xcSend(inp.value)){xoClose();try{EX.cv.focus({preventScroll:true})}catch(e){}}};
+    row.querySelector(".xcsend").addEventListener("click",e=>{e.stopPropagation();go()});row.addEventListener("click",e=>e.stopPropagation());
+    inp.addEventListener("keydown",e=>{e.stopPropagation();if(e.key==="Enter"){e.preventDefault();go()}else if(e.key==="Escape"){e.preventDefault();xoClose();try{EX.cv.focus({preventScroll:true})}catch(_){}}});
+    inp.addEventListener("keyup",e=>e.stopPropagation());EX.keys={};EX.kst=[]}}
+function xcOpen(){if(XO.panel){xoClose();return}xoPanel(null);const i=XO.panel&&XO.panel.querySelector(".xcin");if(i)setTimeout(()=>{try{i.focus()}catch(e){}},30)}
+// mientras se escribe, el personaje no se mueve
+setInterval(()=>{try{if(XO.panel&&document.activeElement&&document.activeElement.classList.contains("xcin")){EX.keys={};EX.kst=[]}}catch(e){}},100);
+// ---------- una tecla para cada función ----------
+Object.assign(EXKB0,{chat:["t",""],dex:["o",""],card:["k",""],save:["g",""],fs:["f",""]});
+Object.assign(EXKN,{chat:"Chat (escribir un mensaje)",dex:"Pokédex",card:"Tarjeta de entrenador",save:"Guardar partida",fs:"Pantalla completa"});
+EXPAD0.chat=6;EXPADN.chat="Chat (escribir un mensaje)";EXPAD0.wm=7;EXPADN.wm="Mapa de la región";
+function xcFree(){try{return !!(EX.on&&!EX.title&&!EX.dlg&&!EX.cut&&!EX.trans&&!EX.battle&&!EX.choice&&!EX.bind&&!(typeof GP!=="undefined"&&GP.bind)&&!(typeof fcd!=="undefined"&&fcd)&&!exPaused())}catch(e){return false}}
+function xcKeyDo(a){if(a==="fs"){if(EX.on&&!EX.bind){exFsToggle();return true}return false}if(!xcFree())return false;EX.keys={};EX.kst=[];
+  if(a==="chat")xcOpen();else if(a==="card")tcOpen();else if(a==="wm")exMenuDo("map");else exMenuDo(a);return true}
+window.addEventListener("keydown",e=>{try{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey||XO.panel)return;const t=e.target;if(t&&(/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)||t.isContentEditable))return;
+  const a=exAct(e.key);if(a&&["chat","dex","card","save","fs"].includes(a)&&xcKeyDo(a))e.preventDefault()}catch(_){}});
+{const _gp=gpPoll;gpPoll=function(){let ec=false,em=false;try{const L=navigator.getGamepads?[...navigator.getGamepads()].filter(Boolean):[],gp=L[0];if(gp&&!GP.bind){const P0=exPad(),pr=i=>i>=0&&!!(gp.buttons[i]&&gp.buttons[i].pressed),c=pr(P0.chat),m=pr(P0.wm);ec=c&&!GP.pCh;em=m&&!GP.pMp;GP.pCh=c;GP.pMp=m}}catch(e){}
+  const r=_gp.apply(this,arguments);try{if(ec&&!XO.panel)xcKeyDo("chat");if(em)xcKeyDo("wm")}catch(e){}return r}}
 
 </script>
 <script>

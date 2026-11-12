@@ -32,7 +32,7 @@ setInterval(()=>{try{
   const active=typeof EX!=="undefined"&&EX.map&&EX.map!=="casa"&&EX.map!=="casa_up"&&((EX.on&&vis)||EX.battle)&&!EX.title&&xoOn()&&xoUid();
   if(!active){if(XO.room&&!XO.leaveT)XO.leaveT=Date.now();if(XO.room&&Date.now()-XO.leaveT>(document.hidden?15000:1500)){XO.leaveT=0;xoLeave()}return}XO.leaveT=0;
   if(XO.key!=="ex_"+EX.map){xoJoin(EX.map);return}if(!XO.room)return;
-  const p={n:pvNick(),lk:trEnc(myLook()),x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT},j=JSON.stringify(p);
+  const p={n:pvNick(),lk:trEnc(myLook()),x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT,m:XO.msg&&Date.now()-XO.msgT<7000?XO.msg:"",mt:XO.msg&&Date.now()-XO.msgT<7000?XO.msgT:0},j=JSON.stringify(p);
   const j2=j;if(j2!==XO.lastJ&&Date.now()-XO.lastW>=350){XO.lastJ=j2;XO.lastW=Date.now();XO.room.presence(p).catch(()=>{})}
 }catch(e){}},120);
 // dibujar a los demás jugadores encima del mapa

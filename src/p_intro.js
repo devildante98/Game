@@ -33,11 +33,14 @@ async function labIntro(){const f=stSt().f;rstRoll();rstSync();
 const ST_BLURB={Planta:"Los Pokémon de tipo Planta son tranquilos y resistentes. Aguantan muy bien los golpes y se curan con el sol.",
   Fuego:"Los Pokémon de tipo Fuego son enérgicos y pegan muy fuerte. Al principio cuesta un poco, ¡pero merece la pena!",
   Agua:"Los Pokémon de tipo Agua son equilibrados y fáciles de criar. ¡Una elección muy segura para empezar!"};
-function stBallShow(n,tt){const sc=document.querySelector("#explPB .exscr");if(!sc)return null;const d=document.createElement("div");d.className="stball";
+function stBallShow(n,tt){const sc=(EX.cv&&EX.cv.closest(".exscr"))||document.querySelector(".exwrap .exscr")||document.querySelector("#explPB .exscr");if(!sc)return null;const d=document.createElement("div");d.className="stball";
   let im="";try{im=(typeof icoHD==="function"?icoHD:ico)(PM[n],120)}catch(e){try{im=ico(PM[n],120)}catch(e2){}}
+  im=String(im||"").replace(/\sloading="lazy"/,"");
   d.innerHTML='<div class="stbt">Poké Ball</div><div class="stbi">'+im+'</div><b>'+esc(n)+'</b><small>Tipo '+esc(tt||"")+'</small>';sc.appendChild(d);return d}
 async function stBall(i){const f=stSt().f;rstSync();const S0=STARTERS[i];if(!S0)return;const[n,tt]=S0;
-  snd("ui");await sSay(["Es una Poké Ball. ¡Dentro hay un Pokémon!"]);
+  // la imagen se carga mientras lees la primera frase, para que la ventana no salga vacía
+  let pre=Promise.resolve();try{const h=(typeof icoHD==="function"?icoHD:ico)(PM[n],120),m=String(h).match(/src="([^"]+)"/);if(m){const q=new Image();q.src=m[1];pre=Promise.race([q.decode().catch(()=>{}),sW(2500)])}}catch(e){}
+  snd("ui");await sSay(["Es una Poké Ball. ¡Dentro hay un Pokémon!"]);await pre;
   const box=stBallShow(n,tt);try{try{cry(n)}catch(e){}
     await sSay(S_("Profesora Vega","¡Ah, "+n+"! Es un Pokémon de tipo "+tt+".",ST_BLURB[tt]||("Es un Pokémon muy especial. ¡Seguro que os entendéis de maravilla!")));
     const c=await sChoice("¿Eliges a "+n+" como tu compañero?",[{t:"¡Sí, elijo a "+n+"!"},{t:"Ver las demás"}]);

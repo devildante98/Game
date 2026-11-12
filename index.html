@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794445342">
+<meta name="game-build" content="1794446054">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2789,7 +2789,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.60</small>
+    <small class="pcver">Versión 6.60.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7463,8 +7463,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.60";
+const GAME_VER="6.60.1";
 const NEWS=[
+{v:"2026-11-12-6.60.1",ver:"6.60.1",at:"2026-11-12T02:14",t:"🔧 Arreglos/Mejoras",l:["Al mirar cada Poké Ball del laboratorio, la ventana con la imagen del Pokémon ahora también aparece en pantalla completa, junto al diálogo","La imagen se carga antes de abrir la ventana, para que nunca salga vacía"]},
 {v:"2026-11-12-6.60",ver:"6.60",at:"2026-11-12T02:02",t:"🎨 Nuevos gráficos de Exploración (fase 5): Pokémon en el mapa",l:["El Pokémon que te sigue ya no se ve «realista»: ahora tiene el mismo estilo de píxel grueso, colores planos y contorno oscuro que los personajes y los edificios","También los Pokémon de la historia que aparecen en el mapa (como los legendarios)","En los combates se siguen viendo igual que antes"]},
 {v:"2026-11-12-6.59",ver:"6.59",at:"2026-11-12T01:53",t:"🧪 Nuevo comienzo de la historia, como en la saga",l:["Al salir de casa, la Profesora Vega viene a buscarte y te lleva andando hasta su laboratorio","Allí te explica la historia y puedes mirar las tres Poké Balls de la mesa una a una: verás el Pokémon que hay dentro, su tipo y un consejo de la Profesora antes de decidirte","Después llega su sobrino, tu rival, y la Profesora te lo presenta… aunque no se acuerda de su nombre: puedes dejarle «Dani» o ponerle el que quieras, y se usará en toda la historia (diálogos, combates y créditos)","No puedes salir del laboratorio sin tu Pokémon. Si ya habías empezado la historia, no cambia nada"]},
 {v:"2026-11-12-6.58.1",ver:"6.58.1",at:"2026-11-12T01:47",t:"🔧 Arreglos/Mejoras",l:["La Profesora Vega tiene ahora un aspecto de científica: melena, gafas y bata de laboratorio","Las puertas de las casas, tiendas, gimnasios y del laboratorio son más bajas y anchas (la del Centro Pokémon se mantiene)","Los personajes calvos ya no se ven como una bola sin cara: conservan el pelo de los lados"]},
@@ -7761,7 +7762,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794445342";
+const GAME_B="1794446054";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -16962,11 +16963,14 @@ async function labIntro(){const f=stSt().f;rstRoll();rstSync();
 const ST_BLURB={Planta:"Los Pokémon de tipo Planta son tranquilos y resistentes. Aguantan muy bien los golpes y se curan con el sol.",
   Fuego:"Los Pokémon de tipo Fuego son enérgicos y pegan muy fuerte. Al principio cuesta un poco, ¡pero merece la pena!",
   Agua:"Los Pokémon de tipo Agua son equilibrados y fáciles de criar. ¡Una elección muy segura para empezar!"};
-function stBallShow(n,tt){const sc=document.querySelector("#explPB .exscr");if(!sc)return null;const d=document.createElement("div");d.className="stball";
+function stBallShow(n,tt){const sc=(EX.cv&&EX.cv.closest(".exscr"))||document.querySelector(".exwrap .exscr")||document.querySelector("#explPB .exscr");if(!sc)return null;const d=document.createElement("div");d.className="stball";
   let im="";try{im=(typeof icoHD==="function"?icoHD:ico)(PM[n],120)}catch(e){try{im=ico(PM[n],120)}catch(e2){}}
+  im=String(im||"").replace(/\sloading="lazy"/,"");
   d.innerHTML='<div class="stbt">Poké Ball</div><div class="stbi">'+im+'</div><b>'+esc(n)+'</b><small>Tipo '+esc(tt||"")+'</small>';sc.appendChild(d);return d}
 async function stBall(i){const f=stSt().f;rstSync();const S0=STARTERS[i];if(!S0)return;const[n,tt]=S0;
-  snd("ui");await sSay(["Es una Poké Ball. ¡Dentro hay un Pokémon!"]);
+  // la imagen se carga mientras lees la primera frase, para que la ventana no salga vacía
+  let pre=Promise.resolve();try{const h=(typeof icoHD==="function"?icoHD:ico)(PM[n],120),m=String(h).match(/src="([^"]+)"/);if(m){const q=new Image();q.src=m[1];pre=Promise.race([q.decode().catch(()=>{}),sW(2500)])}}catch(e){}
+  snd("ui");await sSay(["Es una Poké Ball. ¡Dentro hay un Pokémon!"]);await pre;
   const box=stBallShow(n,tt);try{try{cry(n)}catch(e){}
     await sSay(S_("Profesora Vega","¡Ah, "+n+"! Es un Pokémon de tipo "+tt+".",ST_BLURB[tt]||("Es un Pokémon muy especial. ¡Seguro que os entendéis de maravilla!")));
     const c=await sChoice("¿Eliges a "+n+" como tu compañero?",[{t:"¡Sí, elijo a "+n+"!"},{t:"Ver las demás"}]);

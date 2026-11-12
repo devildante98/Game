@@ -22,6 +22,7 @@ function fdUse(k,quiet){const f=fdF();
   if(k==="esc"){if(!fdCave()){exSay(["La Cuerda Huida solo se puede usar dentro de una cueva."]);return}const w=EX.M.w&&EX.M.w["1"];if(!w){exSay(["Aquí no funciona."]);return}if(!fdN("esc"))return;fdAdd("esc",-1);
     stRun(async()=>{snd("ui");await sSay(["¡Usas la Cuerda Huida!"]);await sFade("fade",400);EX.surf=0;exLoad(w.to,w.x,w.y,w.f||"d");try{exFollowerReset()}catch(e){}await sFade("fadein",450)});return}
   if(k==="zah")fdScan();
+  if(k==="vs"&&typeof vsUse==="function")vsUse();
   if(k==="bike"&&typeof bkSet==="function")bkSet(!EX.bike);
   if(k==="rod")exSay(["Mira hacia el agua y pulsa A para pescar."])}
 // ---------- objetos ocultos (2 por mapa exterior, siempre en el mismo sitio) ----------
@@ -56,7 +57,7 @@ setInterval(()=>{try{if(!EX.on||EX.title||EX.cut||EX.dlg||EX.battle)return;const
 // ---------- en la Mochila: objetos de campo y objetos clave ----------
 {const _p=xgPanel;xgPanel=function(){const r=_p.apply(this,arguments);try{const box=$("exTeam");if(!box||box.querySelector(".fdsec"))return r;const f=fdF(),tiles=[];
   Object.keys(FD_IT).forEach(k=>{if(fdN(k)>0)tiles.push([k,FD_IT[k].ic,FD_IT[k].n,"×"+fdN(k),FD_IT[k].d])});
-  if(f.zah)tiles.push(["zah","📡","Zahorí","","Pita si hay objetos escondidos cerca."]);if(f.bike)tiles.push(["bike","🚲","Bici","",EX.bike?"Pulsa para bajarte.":"Pulsa para montar."]);
+  if(f.zah)tiles.push(["zah","📡","Zahorí","","Pita si hay objetos escondidos cerca."]);if(f.vs)tiles.push(["vs","📻","Buscapelea",typeof vsLeft==="function"&&vsLeft()>0?"("+vsLeft()+" pasos)":"lista","Los entrenadores a los que ya ganaste te piden la revancha."]);if(f.bike)tiles.push(["bike","🚲","Bici","",EX.bike?"Pulsa para bajarte.":"Pulsa para montar."]);
   if(f.rod)tiles.push(["rod","🎣",FISH_RN[f.rod|0]||"Caña","","Mira hacia el agua y pulsa A para pescar."]);
   if(f.repN>0)tiles.push(["","🛡️","Repelente activo",f.repN+" pasos","No salen Pokémon salvajes."]);
   if(!tiles.length)return r;

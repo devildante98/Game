@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.65"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.66"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794473608">
+<meta name="game-build" content="1794473712">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2819,7 +2819,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.65</small>
+    <small class="pcver">Versión 6.66</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7493,8 +7493,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.65";
+const GAME_VER="6.66";
 const NEWS=[
+{v:"2026-11-12-6.66",ver:"6.66",at:"2026-11-12T09:55",t:"📻 Exploración: Buscapelea y revanchas",l:["Al ganar tu primera medalla, la Enfermera de Pueblo Brisa te manda el Buscapelea","Úsalo en una ruta desde la Mochila (Objetos de campo): los entrenadores a los que ya ganaste te piden la revancha y levantan la mano con una «!»","En la revancha llevan Pokémon más fuertes y uno más en el equipo","Se recarga andando 100 pasos entre uso y uso"]},
 {v:"2026-11-12-6.65",ver:"6.65",at:"2026-11-12T09:53",t:"📡 Exploración: objetos ocultos y objetos de campo",l:["En casi todos los mapas hay objetos escondidos en el suelo: mira la casilla y pulsa A","Lía te da el Zahorí: úsalo desde la Mochila y pitará si hay algo escondido cerca, diciéndote hacia dónde","Nuevos objetos en las Tiendas de Exploración: Repelente (100 pasos sin Pokémon salvajes), Superrepelente (200 pasos) y Cuerda Huida (sales al instante de una cueva)","En la Mochila hay una nueva sección «Objetos de campo» con estos objetos, la Bici, tu caña y el Zahorí"]},
 {v:"2026-11-12-6.64",ver:"6.64",at:"2026-11-12T09:49",t:"🚲 Exploración: Bici y Vuelo",l:["Un ciclista de Pueblo Brisa te regala su Bici cuando ganas la primera medalla. Se monta desde el menú («Bici»): va mucho más rápido que correr y tiene su propia música","Ígnea te entrega la MO02 Vuelo: abre el Mapa, elige un pueblo que ya hayas visitado y pulsa «Volar». Llegas delante de su Centro Pokémon","Navegar con Surf ahora también tiene su propia música"]},
 {v:"2026-11-12-6.63",ver:"6.63",at:"2026-11-12T09:44",t:"🧩 Exploración: gimnasios con puzles",l:["Cada gimnasio tiene ahora su propio reto antes de llegar al Líder, con sus entrenadores repartidos por el camino:","Brezo: un laberinto de plantas · Marina: corrientes de agua que te arrastran · Albo: suelo de hielo en el que resbalas","Pedro: rocas que hay que apartar con Fuerza · Ígnea: máquinas de preguntas que apagan las barreras de fuego (si fallas, te reta un ayudante)","Voltio: interruptores que encienden y apagan las vallas eléctricas · Sibila: baldosas de teletransporte · Drakón: tapar agujeros empujando rocas con Fuerza","Si te atascas con las rocas, sal del gimnasio y vuelve a entrar para reiniciar el puzle"]},
@@ -7801,7 +7802,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794473608";
+const GAME_B="1794473712";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -17382,6 +17383,7 @@ function fdUse(k,quiet){const f=fdF();
   if(k==="esc"){if(!fdCave()){exSay(["La Cuerda Huida solo se puede usar dentro de una cueva."]);return}const w=EX.M.w&&EX.M.w["1"];if(!w){exSay(["Aquí no funciona."]);return}if(!fdN("esc"))return;fdAdd("esc",-1);
     stRun(async()=>{snd("ui");await sSay(["¡Usas la Cuerda Huida!"]);await sFade("fade",400);EX.surf=0;exLoad(w.to,w.x,w.y,w.f||"d");try{exFollowerReset()}catch(e){}await sFade("fadein",450)});return}
   if(k==="zah")fdScan();
+  if(k==="vs"&&typeof vsUse==="function")vsUse();
   if(k==="bike"&&typeof bkSet==="function")bkSet(!EX.bike);
   if(k==="rod")exSay(["Mira hacia el agua y pulsa A para pescar."])}
 // ---------- objetos ocultos (2 por mapa exterior, siempre en el mismo sitio) ----------
@@ -17416,7 +17418,7 @@ setInterval(()=>{try{if(!EX.on||EX.title||EX.cut||EX.dlg||EX.battle)return;const
 // ---------- en la Mochila: objetos de campo y objetos clave ----------
 {const _p=xgPanel;xgPanel=function(){const r=_p.apply(this,arguments);try{const box=$("exTeam");if(!box||box.querySelector(".fdsec"))return r;const f=fdF(),tiles=[];
   Object.keys(FD_IT).forEach(k=>{if(fdN(k)>0)tiles.push([k,FD_IT[k].ic,FD_IT[k].n,"×"+fdN(k),FD_IT[k].d])});
-  if(f.zah)tiles.push(["zah","📡","Zahorí","","Pita si hay objetos escondidos cerca."]);if(f.bike)tiles.push(["bike","🚲","Bici","",EX.bike?"Pulsa para bajarte.":"Pulsa para montar."]);
+  if(f.zah)tiles.push(["zah","📡","Zahorí","","Pita si hay objetos escondidos cerca."]);if(f.vs)tiles.push(["vs","📻","Buscapelea",typeof vsLeft==="function"&&vsLeft()>0?"("+vsLeft()+" pasos)":"lista","Los entrenadores a los que ya ganaste te piden la revancha."]);if(f.bike)tiles.push(["bike","🚲","Bici","",EX.bike?"Pulsa para bajarte.":"Pulsa para montar."]);
   if(f.rod)tiles.push(["rod","🎣",FISH_RN[f.rod|0]||"Caña","","Mira hacia el agua y pulsa A para pescar."]);
   if(f.repN>0)tiles.push(["","🛡️","Repelente activo",f.repN+" pasos","No salen Pokémon salvajes."]);
   if(!tiles.length)return r;
@@ -17429,6 +17431,36 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
   l.insertAdjacentHTML("afterbegin",Object.keys(FD_IT).map(k=>{const I=FD_IT[k];return '<div class="xsr"><span class="xsi fdico">'+I.ic+'</span><div class="xsn"><b>'+esc(I.n)+'</b><small>'+esc(I.d)+'</small></div><div class="xsp"><b>'+fmt(I.p)+' 🎟️</b><small>Tienes '+fdN(k)+'</small></div><div class="xsbt">'+[1,5].map(q=>'<button type="button" data-fdb="'+k+'" data-xsq="'+q+'"'+(xT()<I.p*q?' disabled':'')+'>×'+q+'</button>').join("")+'</div></div>'}).join(""))}catch(e){}return r}}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#exShop [data-fdb]");if(!b)return;e.stopPropagation();const k=b.dataset.fdb,q=+b.dataset.xsq||1,pr=FD_IT[k].p*q;
   if(xT()<pr){XSH.msg="No tienes tickets de Exploración suficientes.";snd("ui");xsUI();return}xTadd(-pr);fdAdd(k,q);snd("capok");XSH.msg="✅ Has comprado "+q+" × "+FD_IT[k].n+" por "+fmt(pr)+" 🎟️.";xsUI()},true);
+
+// =====================================================================================
+// BUSCAPELEA (como en la saga): úsalo en una ruta y los entrenadores a los que ya ganaste querrán la revancha,
+// con Pokémon más fuertes. Hay que cargarlo andando 100 pasos entre uso y uso.
+// =====================================================================================
+const VS_STEP=100;
+const vsLeft=()=>{try{const f=stSt().f;return Math.max(0,VS_STEP-((EX.steps|0)-(f.vsAt==null?-1e9:f.vsAt|0)))}catch(e){return 0}};
+function vsUse(){const f=stSt().f;if(EX.M&&EX.M.base==="F"){exSay(["Aquí dentro no hay entrenadores a los que retar."]);return}
+  const left=vsLeft();if(left>0){exSay(["La batería del Buscapelea se está cargando…","Anda "+left+" pasos más y podrás volver a usarlo."]);return}
+  const L=EX.npcs.filter(n=>!n.story&&n.t&&n.t.length&&n.beat);snd("lvl");EX.vsT=performance.now();
+  if(!L.length){exSay(["¡Bip, bip! El Buscapelea busca entrenadores…","…pero aquí no hay nadie a quien ya hayas ganado."]);return}
+  f.vsAt=EX.steps|0;save();let w=L.filter(()=>Math.random()<.6);if(!w.length)w=[L[Math.floor(Math.random()*L.length)]];
+  w.forEach(n=>{n.beat=false;n.rematch=1;n.txt=exPick(["¡Te estaba esperando! ¡Quiero la revancha!","¡He entrenado muchísimo desde la última vez! ¡Combate!","¡Esta vez no pienso perder!","¡Revancha! ¡Mis Pokémon son mucho más fuertes ahora!"])});
+  exSay(["¡Bip, bip! El Buscapelea busca entrenadores…","¡"+(w.length===1?"Un entrenador quiere":w.length+" entrenadores quieren")+" la revancha!"])}
+// revancha: equipo más fuerte (+3 niveles y un Pokémon más)
+{const _t=exTrainerBattle;exTrainerBattle=function(n){if(!n||!n.rematch)return _t.apply(this,arguments);
+  if(!exTeamOk()){exSay(["Tus Pokémon están debilitados. ¡Vuelve cuando estén curados!"]);return}
+  const names=(S.team||[]).filter(x=>x&&S.owned[x]),lead=Math.min(...names.map(x=>lvd(x).l)),cap=lvCap(),lv=Math.max(3,Math.min(cap,lead+3)-1);
+  const sp=n.t.filter(x=>PM[x]);if(sp.length<6)sp.push(sp[sp.length-1]);
+  const team=sp.map((x,i)=>{const l=clampL(lv+Math.min(i,3));return mkEnemy(stageFor(PM[x],l)||PM[x],l)});
+  EX.trans={t:0,d:1300,k:"trainer",done:()=>exBattle({eteam:team,trainer:n.n,tsrc:{k:exTrKey(n.n),n:n.n}},n)}}}
+// al ganar la revancha, el entrenador vuelve a quedar vencido
+setInterval(()=>{try{(EX.npcs||[]).forEach(n=>{if(n.rematch&&n.beat)n.rematch=0})}catch(e){}},700);
+// los que quieren la revancha levantan la mano (una «!» que bota)
+{const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{if(!EX.cv||EX.title)return r;const L=(EX.npcs||[]).filter(n=>n.rematch&&!n.beat);const g=EX.cv.getContext("2d"),cam=EX.cam||[0,0];g.setTransform(EXS,0,0,EXS,0,0);
+  L.forEach(n=>{const X=Math.round(n.px*EXTL-cam[0]+16),Y=Math.round(n.py*EXTL-cam[1]-26+Math.abs(Math.sin(ts/220))*-3);g.fillStyle="#222";g.fillRect(X-6,Y-12,12,15);g.fillStyle="#ffe040";g.fillRect(X-5,Y-11,10,13);g.fillStyle="#c83020";g.fillRect(X-1,Y-9,3,7);g.fillRect(X-1,Y-1,3,2)});
+  if(EX.vsT){const e=(performance.now()-EX.vsT)/900;if(e>1)EX.vsT=0;else{const X=EX.px*EXTL-cam[0]+16,Y=EX.py*EXTL-cam[1]+16;g.strokeStyle="rgba(255,224,64,"+(1-e)+")";g.lineWidth=3;g.beginPath();g.arc(X,Y,12+e*140,0,7);g.stroke()}}}catch(x){}return r}}
+// la Enfermera de Pueblo Brisa te lo regala al ganar tu primera medalla
+setInterval(()=>{try{if(!EX.on||EX.title||EX.cut||EX.dlg||EX.battle||(typeof fcd!=="undefined"&&fcd))return;const f=stSt().f;if(f.vs||!xbHas(0))return;f.vs=1;save();
+  stRun(async()=>{snd("lvl");await sSay(["📦 Te llega un paquete de la Enfermera del Centro Pokémon de Pueblo Brisa.","«¡Enhorabuena por tu primera medalla! Te mando un Buscapelea para que entrenes todavía más.»","¡Has recibido el Buscapelea!","Úsalo en una ruta desde la Mochila (Objetos de campo): los entrenadores a los que ya ganaste te pedirán la revancha."])})}catch(e){}},3000);
 
 </script>
 <script>

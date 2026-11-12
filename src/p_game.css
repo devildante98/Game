@@ -1025,3 +1025,11 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 /* ventana de «Usar objeto» de Exploración: se ajusta a su contenido y queda centrada */
 .exteam.xucomp{inset:auto 12%;top:50%;transform:translateY(-50%);max-height:86%;height:auto}
 @media (max-width:700px){.exteam.xucomp{inset:auto 4%;top:50%}}
+/* Poké Ball del laboratorio: se ve el Pokémon que hay dentro */
+.stball{position:absolute;left:50%;top:5%;transform:translateX(-50%);z-index:8;min-width:190px;padding:8px 18px 10px;border-radius:12px;background:#fbf6e8;color:#2b2440;border:4px solid #2b2440;box-shadow:0 0 0 3px #fff,0 6px 0 3px #2b2440;text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;animation:stballIn .35s ease-out}
+.stball .stbt{font-size:.7rem;font-weight:800;letter-spacing:.06em;color:#c8303c;text-transform:uppercase}
+.stball .stbi{width:132px;height:132px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,#fff 0 55%,#f0e6cc 56% 100%);border:3px solid #2b2440}
+.stball .stbi img{width:120px!important;height:120px!important;margin:0!important;image-rendering:pixelated;object-fit:contain}
+.stball b{font-size:1.15rem}.stball small{font-size:.75rem;opacity:.8}
+@keyframes stballIn{from{opacity:0;transform:translateX(-50%) scale(.6)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+@media (max-width:700px){.stball{top:3%;min-width:150px;padding:6px 12px}.stball .stbi{width:96px;height:96px}.stball .stbi img{width:86px!important;height:86px!important}}

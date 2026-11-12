@@ -202,7 +202,7 @@ STX.lab8=()=>stRun(async()=>{await sCard(6);const v=stN("vega");const d=sAdd("da
   await sSay(S_("Profesora Vega","Y ahora… ¡a seguir explorando! La región de Alba todavía guarda muchos secretos."));
   sStep(9);sDel("dani");await stCredits()});
 async function stCredits(){const box=$("exEnd");if(!box)return;snd("win");
-  box.innerHTML='<div class="exroll"><b class="exfin">LA LEYENDA DE LA PIEDRA AURORA</b><p>Región de Alba</p><p><i>Protagonista</i><br>'+esc(S.nick||"Tú")+'</p><p><i>Compañera legendaria</i><br>Latias</p><p><i>Rival</i><br>Dani</p><p><i>Profesora</i><br>Vega · con la ayuda de Lía</p><p><i>Equipo Ocaso</i><br>Noctis · Bruma · y sus reclutas</p><p><i>Mamá</i><br>Siempre esperando en Pueblo Brisa</p><b class="exfin">¡GRACIAS POR JUGAR!</b><p>Poke Gacha Online</p></div><button type="button" class="red" id="exEndX">Seguir explorando</button>';
+  box.innerHTML='<div class="exroll"><b class="exfin">LA LEYENDA DE LA PIEDRA AURORA</b><p>Región de Alba</p><p><i>Protagonista</i><br>'+esc(S.nick||"Tú")+'</p><p><i>Compañera legendaria</i><br>Latias</p><p><i>Rival</i><br>'+esc(typeof rvName==="function"?rvName():"Dani")+'</p><p><i>Profesora</i><br>Vega · con la ayuda de Lía</p><p><i>Equipo Ocaso</i><br>Noctis · Bruma · y sus reclutas</p><p><i>Mamá</i><br>Siempre esperando en Pueblo Brisa</p><b class="exfin">¡GRACIAS POR JUGAR!</b><p>Poke Gacha Online</p></div><button type="button" class="red" id="exEndX">Seguir explorando</button>';
   box.hidden=false;await new Promise(r=>{$("exEndX").onclick=()=>{box.hidden=true;snd("ui");r()}})}
 // --- después de la historia: Dani te reta cada día ---
 STX.dani9=()=>stRun(async()=>{const d=stN("dani"),t=stSt();if(t.dd===today()){await sSay(S_("Dani","¡Hoy ya hemos combatido! Mañana te espero aquí otra vez."));return}
@@ -339,7 +339,7 @@ function exExtraEnts(ents,g,cx,cy,ts){const M=EX.M,night=(()=>{const h=new Date(
   (M.bld||[]).forEach(b=>{const im=xBld(b),X=b.x*32-cx,Y=(b.y+b.h)*32-im.height-cy;ents.push({y:b.y+b.h-1+.45,d:()=>g.drawImage(night&&im._n?im._n:im,X,Y)})});
   const s=stSt().s;
   // Poké Balls sobre la mesa del laboratorio
-  if(EX.map==="lab"){const f=stSt().f;STARTERS.map((q,i)=>[q[0],6+i]).forEach(([n,x])=>{if(s>=2&&(f.st===n||f.rv===n))return;const X=x*32-cx+16,Y=5*32-cy+4;ents.push({y:5.1,d:()=>{xdisc(g,X,Y+5,5,1.5,"rgba(0,0,0,.25)");xdisc(g,X,Y,6,6,"#2b2440");xdisc(g,X,Y,5,5,"#fff");g.fillStyle="#ee3b4b";g.fillRect(X-5,Y-5,10,5);g.fillStyle="#2b2440";g.fillRect(X-6,Y-1,12,2);xdisc(g,X,Y,2,2,"#2b2440");xdisc(g,X,Y,1,1,"#fff")}})})}
+  if(EX.map==="lab"){const f=stSt().f;STARTERS.map((q,i)=>[q[0],6+i]).forEach(([n,x])=>{if(f.st===n||((s>=2||f.rvT)&&f.rv===n))return;const X=x*32-cx+16,Y=5*32-cy+4;ents.push({y:5.1,d:()=>{xdisc(g,X,Y+5,5,1.5,"rgba(0,0,0,.25)");xdisc(g,X,Y,6,6,"#2b2440");xdisc(g,X,Y,5,5,"#fff");g.fillStyle="#ee3b4b";g.fillRect(X-5,Y-5,10,5);g.fillStyle="#2b2440";g.fillRect(X-6,Y-1,12,2);xdisc(g,X,Y,2,2,"#2b2440");xdisc(g,X,Y,1,1,"#fff")}})})}
   // Latias sobre el lago de la cima
   if(EX.map==="cima"&&(s===6||s===7)){const im=stMonImg("Latias");if(im.complete&&im.naturalWidth){const X=14*32-cx+16,bob=Math.sin(ts/500)*5,Y=5*32-cy+2+bob;ents.push({y:5.5,d:()=>{xdisc(g,X,5*32-cy+28,14-bob/2,4,"rgba(0,40,80,.3)");g.drawImage(im,X-40,Y-48,80,80)}})}}
   // brillo de la Escama Celeste en la cueva y de la Piedra Aurora

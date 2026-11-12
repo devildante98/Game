@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.60.5";
+const GAME_VER="6.61";
 const NEWS=[
+{v:"2026-11-12-6.61",ver:"6.61",at:"2026-11-12T09:32",t:"🌊 Exploración: MO como en la saga",l:["Cada Líder de Gimnasio te entrega una MO: Brezo te da Corte y Destello, Marina te da Surf, Albo te da Fuerza y el Líder de Puerto Brasa te da Golpe Roca","Corte: tala los arbolitos que tapan caminos y rincones con objetos","Surf: mira al agua y pulsa A para navegar montado en tu Pokémon. En el agua salen Pokémon acuáticos (y alguno muy raro…). Hay islas con objetos","Fuerza: empuja las rocas enormes andando hacia ellas. Golpe Roca: rompe las rocas agrietadas","Destello: la Cueva Roca y la Calle Victoria están a oscuras hasta que lo usas","Si ya tenías medallas, recibes sus MO automáticamente"]},
 {v:"2026-11-12-6.60.5",ver:"6.60.5",at:"2026-11-12T09:01",t:"🔧 Arreglos/Mejoras",l:["El menú de Exploración es más grande: ocupa una franja más ancha a la derecha, con letras e iconos más grandes, sin dejar de ser compacto"]},
 {v:"2026-11-12-6.60.4",ver:"6.60.4",at:"2026-11-12T02:51",t:"🔧 Arreglos/Mejoras",l:["Nuevo menú de Exploración al estilo de la saga: un recuadro compacto arriba a la derecha con Pokédex, Equipo, Mapa, Guardar, Opciones, Menú principal y Cerrar, con la flecha ▶","Minimapa, velocidad, controles y otros jugadores están ahora dentro de «Opciones». Con B o Esc vuelves al menú anterior"]},
 {v:"2026-11-12-6.60.3",ver:"6.60.3",at:"2026-11-12T02:33",t:"🔧 Arreglos/Mejoras",l:["Cuando un personaje te lleva andando a algún sitio (como la Profesora Vega al principio), ya no parpadea el símbolo de «A» sobre su cabeza. Solo aparece cuando puedes hablar de verdad"]},

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.5"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794448263">
+<meta name="game-build" content="1794470507">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2736,6 +2736,16 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 .exmenu button.on,.exmenu button:hover{background:#eaf0ff!important}
 .exmenu button.on::before{content:"▶"!important;position:absolute;left:8px;top:50%;transform:translateY(-50%);margin:0!important;color:#2c3048!important;font-size:.7rem!important;animation:exmArr .6s steps(2) infinite}
 @keyframes exmArr{50%{transform:translate(2px,-50%)}}
+/* menú más grande: ocupa una buena franja a la derecha (sigue sin ocupar más alto del necesario) */
+.exmenu{top:10px!important;right:10px!important;width:clamp(250px,32%,380px)!important;max-width:calc(100% - 20px);padding:12px 10px!important;border-width:5px!important;border-radius:10px!important}
+.exmenu button{padding:11px 14px 11px 34px!important;font-size:1.18rem!important;gap:12px!important}
+.exmenu button span{font-size:1.3rem!important;width:28px!important}
+.exmenu button small{font-size:.85rem!important}
+.exmenu button.on::before{left:10px;font-size:.9rem!important}
+.exmenu .exmh{font-size:.85rem!important;padding:4px 14px 8px 34px!important}
+@media (max-width:700px){.exmenu{width:min(250px,70%)!important}.exmenu button{padding:7px 10px 7px 28px!important;font-size:.95rem!important}.exmenu button span{font-size:1.05rem!important;width:22px!important}}
+.exmenu.exmsub{width:clamp(300px,40%,440px)!important}@media (max-width:700px){.exmenu.exmsub{width:min(300px,86%)!important}}
+.exmenu.exmsub{width:clamp(340px,46%,470px)!important}.exmenu button b{min-width:0}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2801,7 +2811,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.60.4</small>
+    <small class="pcver">Versión 6.60.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7475,8 +7485,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.60.4";
+const GAME_VER="6.60.5";
 const NEWS=[
+{v:"2026-11-12-6.60.5",ver:"6.60.5",at:"2026-11-12T09:01",t:"🔧 Arreglos/Mejoras",l:["El menú de Exploración es más grande: ocupa una franja más ancha a la derecha, con letras e iconos más grandes, sin dejar de ser compacto"]},
 {v:"2026-11-12-6.60.4",ver:"6.60.4",at:"2026-11-12T02:51",t:"🔧 Arreglos/Mejoras",l:["Nuevo menú de Exploración al estilo de la saga: un recuadro compacto arriba a la derecha con Pokédex, Equipo, Mapa, Guardar, Opciones, Menú principal y Cerrar, con la flecha ▶","Minimapa, velocidad, controles y otros jugadores están ahora dentro de «Opciones». Con B o Esc vuelves al menú anterior"]},
 {v:"2026-11-12-6.60.3",ver:"6.60.3",at:"2026-11-12T02:33",t:"🔧 Arreglos/Mejoras",l:["Cuando un personaje te lleva andando a algún sitio (como la Profesora Vega al principio), ya no parpadea el símbolo de «A» sobre su cabeza. Solo aparece cuando puedes hablar de verdad"]},
 {v:"2026-11-12-6.60.2",ver:"6.60.2",at:"2026-11-12T02:22",t:"🔧 Arreglos/Mejoras",l:["El sobrino de la Profesora (tu rival) sale en combate con una imagen de entrenador de la saga, como el resto de entrenadores, también si le cambias el nombre","En el mapa tiene un aspecto a juego: pelo azul de punta y chaqueta azul marino","Lo mismo para los villanos de la historia (Equipo Ocaso y Equipo Tempestad): en combate salen con su imagen de la saga y en el mapa llevan sus colores"]},
@@ -7777,7 +7788,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794448263";
+const GAME_B="1794470507";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

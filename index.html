@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794446579">
+<meta name="game-build" content="1794447193">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2789,7 +2789,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.60.2</small>
+    <small class="pcver">Versión 6.60.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7463,8 +7463,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.60.2";
+const GAME_VER="6.60.3";
 const NEWS=[
+{v:"2026-11-12-6.60.3",ver:"6.60.3",at:"2026-11-12T02:33",t:"🔧 Arreglos/Mejoras",l:["Cuando un personaje te lleva andando a algún sitio (como la Profesora Vega al principio), ya no parpadea el símbolo de «A» sobre su cabeza. Solo aparece cuando puedes hablar de verdad"]},
 {v:"2026-11-12-6.60.2",ver:"6.60.2",at:"2026-11-12T02:22",t:"🔧 Arreglos/Mejoras",l:["El sobrino de la Profesora (tu rival) sale en combate con una imagen de entrenador de la saga, como el resto de entrenadores, también si le cambias el nombre","En el mapa tiene un aspecto a juego: pelo azul de punta y chaqueta azul marino","Lo mismo para los villanos de la historia (Equipo Ocaso y Equipo Tempestad): en combate salen con su imagen de la saga y en el mapa llevan sus colores"]},
 {v:"2026-11-12-6.60.1",ver:"6.60.1",at:"2026-11-12T02:14",t:"🔧 Arreglos/Mejoras",l:["Al mirar cada Poké Ball del laboratorio, la ventana con la imagen del Pokémon ahora también aparece en pantalla completa, junto al diálogo","La imagen se carga antes de abrir la ventana, para que nunca salga vacía"]},
 {v:"2026-11-12-6.60",ver:"6.60",at:"2026-11-12T02:02",t:"🎨 Nuevos gráficos de Exploración (fase 5): Pokémon en el mapa",l:["El Pokémon que te sigue ya no se ve «realista»: ahora tiene el mismo estilo de píxel grueso, colores planos y contorno oscuro que los personajes y los edificios","También los Pokémon de la historia que aparecen en el mapa (como los legendarios)","En los combates se siguen viendo igual que antes"]},
@@ -7763,7 +7764,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794446579";
+const GAME_B="1794447193";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11773,7 +11774,7 @@ function exDraw(ts){const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.hei
   if(EX.fol&&!EX.title)ents.push({y:exFolPos().y-.01,d:()=>exDrawFol(g,cx,cy,ts)});
   ents.sort((a,b)=>a.y-b.y).forEach(e=>e.d());
   exFxDraw(g,cx,cy,ts);
-  if(!EX.mv&&!EX.dlg&&!EX.trans&&!EX.title){const[dx,dy]=EXDIR[EX.f],ax=EX.x+dx,ay=EX.y+dy,c=exAt(ax,ay),npc=EX.npcs.some(n=>n.px===ax&&n.py===ay);
+  if(!EX.mv&&!EX.dlg&&!EX.trans&&!EX.title&&!EX.cut&&!EX.choice&&!EX.alert){const[dx,dy]=EXDIR[EX.f],ax=EX.x+dx,ay=EX.y+dy,c=exAt(ax,ay),npc=EX.npcs.some(n=>n.px===ax&&n.py===ay);
     if(c==="I"||c==="H"||npc){const X=Math.round((ax*EXTL-cx+16)*2)/2,Y=Math.round((ay*EXTL-cy-(npc?22:2)+Math.sin(ts/220)*2)*2)/2;g.fillStyle="#222";g.fillRect(X-7,Y-8,14,13);g.fillStyle="#fff";g.fillRect(X-6,Y-7,12,11);g.fillStyle="#e83a50";g.fillRect(X-3,Y-5,6,1);g.fillRect(X-4,Y-4,2,6);g.fillRect(X+2,Y-4,2,6);g.fillRect(X-3,Y-2,6,1)}}
   // hierba alta por encima de los pies
   const gr=(x,y)=>{const c=exAt(Math.round(x),Math.round(y));return c==="T"||c==="d"||c==="g"};

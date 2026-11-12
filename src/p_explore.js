@@ -161,7 +161,7 @@ function exDraw(ts){const cv=EX.cv,g=cv.getContext("2d"),W=cv.width/EXS,H=cv.hei
   if(EX.fol&&!EX.title)ents.push({y:exFolPos().y-.01,d:()=>exDrawFol(g,cx,cy,ts)});
   ents.sort((a,b)=>a.y-b.y).forEach(e=>e.d());
   exFxDraw(g,cx,cy,ts);
-  if(!EX.mv&&!EX.dlg&&!EX.trans&&!EX.title){const[dx,dy]=EXDIR[EX.f],ax=EX.x+dx,ay=EX.y+dy,c=exAt(ax,ay),npc=EX.npcs.some(n=>n.px===ax&&n.py===ay);
+  if(!EX.mv&&!EX.dlg&&!EX.trans&&!EX.title&&!EX.cut&&!EX.choice&&!EX.alert){const[dx,dy]=EXDIR[EX.f],ax=EX.x+dx,ay=EX.y+dy,c=exAt(ax,ay),npc=EX.npcs.some(n=>n.px===ax&&n.py===ay);
     if(c==="I"||c==="H"||npc){const X=Math.round((ax*EXTL-cx+16)*2)/2,Y=Math.round((ay*EXTL-cy-(npc?22:2)+Math.sin(ts/220)*2)*2)/2;g.fillStyle="#222";g.fillRect(X-7,Y-8,14,13);g.fillStyle="#fff";g.fillRect(X-6,Y-7,12,11);g.fillStyle="#e83a50";g.fillRect(X-3,Y-5,6,1);g.fillRect(X-4,Y-4,2,6);g.fillRect(X+2,Y-4,2,6);g.fillRect(X-3,Y-2,6,1)}}
   // hierba alta por encima de los pies
   const gr=(x,y)=>{const c=exAt(Math.round(x),Math.round(y));return c==="T"||c==="d"||c==="g"};

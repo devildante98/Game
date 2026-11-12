@@ -45,9 +45,15 @@ const BR_C={oran:"#4a8ae8",sitrus:"#f0d040",pecha:"#f090c0",cheri:"#e84848",ches
 // ---------- parejas de entrenadores ----------
 {const _t=exTrainerBattle;exTrainerBattle=function(n){if(!n||!n.pair)return _t.apply(this,arguments);const o=EX.npcs.find(q=>q!==n&&q.pair===n.pair);if(!o)return _t.apply(this,arguments);
   if(!exTeamOk()){exSay(["Tus Pokémon están debilitados. ¡Vuelve cuando estén curados!"]);return}
-  const names=(S.team||[]).filter(x=>x&&S.owned[x]),lead=Math.min(...names.map(x=>lvd(x).l)),cap=lvCap(),lv=Math.max(2,Math.min(cap,lead))-1+(n.rematch?3:0);
+  const lv=((typeof XGZ!=="undefined"&&XGZ[EX.map])||[5,8,6])[2]+(n.rematch?3:0);
   const sp=n.t.concat(o.t).filter(x=>PM[x]).slice(0,6),team=sp.map((x,i)=>{const l=clampL(lv+(i%2));return mkEnemy(stageFor(PM[x],l)||PM[x],l)});o.beat=true;
   EX.trans={t:0,d:1300,k:"trainer",done:()=>exBattle({eteam:team,trainer:n.pn||n.n,tsrc:{k:exTrKey(n.n),n:n.pn||n.n}},n)}}}
 // al ganar a una, la otra también queda vencida (y al perder, las dos siguen esperando)
 setInterval(()=>{try{if(EX.battle)return;const st=exSt();(EX.npcs||[]).forEach(n=>{if(!n.pair)return;const o=EX.npcs.find(q=>q!==n&&q.pair===n.pair);if(!o)return;
   const won=!!st.npc[n.id]||!!st.npc[o.id];if(won){if(!st.npc[n.id]||!st.npc[o.id]){st.npc[n.id]=1;st.npc[o.id]=1;save()}if(!n.rematch)n.beat=true;if(!o.rematch)o.beat=true}else if(!n.rematch&&!o.rematch){n.beat=false;o.beat=false}})}catch(e){}},600);
+// ---------- nombres de clase que faltaban: su aspecto (y su imagen de combate) coincide con el nombre ----------
+try{EXTRK.unshift([/^Gemela/,"twins"],[/^Patinadora/,"skierf"],[/^Domadora/,"battlegirl"]);CH_CLS.unshift([/^twins/,{b:1,hs:2,hc:2,top:4,tc:8,bot:4,bc:8}])}catch(e){}
+// ---------- si te rindes o huyes de un entrenador, no te vuelve a retar hasta que te alejes (puedes hablarle para luchar) ----------
+{let prev=null;setInterval(()=>{try{const b=EX.battle;if(prev&&!b&&prev.npc&&!exSt().npc[prev.npc]){const n=(EX.npcs||[]).find(q=>q.id===prev.npc);if(n){n.skip=1;if(n.pair)(EX.npcs||[]).forEach(o=>{if(o.pair===n.pair)o.skip=1})}}prev=b}catch(e){}},40)}
+{const _ns=exNpcSight;exNpcSight=function(){const L=(EX.npcs||[]).filter(n=>{if(!n.skip)return false;if(Math.abs(n.px-EX.x)+Math.abs(n.py-EX.y)>(n.sight||3)+2){n.skip=0;return false}return !n.beat});
+  if(!L.length)return _ns.apply(this,arguments);L.forEach(n=>{n.beat=true});try{return _ns.apply(this,arguments)}finally{L.forEach(n=>{n.beat=false})}}}

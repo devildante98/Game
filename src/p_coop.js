@@ -19,12 +19,14 @@ function xoFresh(p){const k=p.peer,u=+p.updatedAt||0,now=Date.now(),r=XO.rc[k];
   if(!r||r.u!==u){const far=Math.abs((typeof srvNow==="function"?srvNow():now)-u)>15*60000&&!r;XO.rc[k]={u:u,at:far?0:now}}
   return now-XO.rc[k].at<50000}
 function xoPeers(peers){XO.last=peers;const seen={};
-      peers.forEach(p=>{if(p.isMe||!p.presence||!p.presence.x&&p.presence.x!==0)return;if(!xoFresh(p))return;const q=p.presence,o=XO.peers[p.peer]||{dx:q.x,dy:q.y};
+      peers.forEach(p=>{if(p.isMe||!p.presence||!p.presence.x&&p.presence.x!==0)return;if(!xoFresh(p))return;if(p.presence.gone||(p.presence.mp&&p.presence.mp!==EX.map))return;const q=p.presence,o=XO.peers[p.peer]||{dx:q.x,dy:q.y};
         Object.assign(o,{id:p.peer,n:pvClean(q.n||"Jugador"),lk:q.lk||"",x:+q.x||0,y:+q.y||0,f:EXDIR[q.f]?q.f:"d",e:XO_EMO.includes(q.e)?q.e:"",et:+q.et||0});XO.peers[p.peer]=o;seen[p.peer]=1});
       Object.keys(XO.peers).forEach(k=>{if(!seen[k])delete XO.peers[k]})}
 // al cerrar o recargar la página, salir de la sala para no dejar un «fantasma»
 window.addEventListener("pagehide",()=>{if(XO.room)xoLeave()});
-async function xoLeave(){const r=XO.room;XO.room=null;XO.key="";XO.peers={};if(r)try{await r.leave()}catch(e){}}
+async function xoLeave(){const r=XO.room;XO.room=null;XO.key="";XO.peers={};if(r){
+  // antes de salir se avisa de que ya no estás en ese mapa: así desapareces al momento para los demás (p. ej. al entrar en un edificio)
+  try{await Promise.race([r.presence({gone:1}),new Promise(z=>setTimeout(z,400))])}catch(e){}try{await r.leave()}catch(e){}}}
 // publicar mi posición (como mucho cada 350 ms y solo si ha cambiado)
 setInterval(()=>{try{
   // solo cuentas como «en el mapa» si la pantalla de Exploración está abierta y a la vista (o estás en un combate de Exploración)
@@ -32,7 +34,7 @@ setInterval(()=>{try{
   const active=typeof EX!=="undefined"&&EX.map&&EX.map!=="casa"&&EX.map!=="casa_up"&&((EX.on&&vis)||EX.battle)&&!EX.title&&xoOn()&&xoUid();
   if(!active){if(XO.room&&!XO.leaveT)XO.leaveT=Date.now();if(XO.room&&Date.now()-XO.leaveT>(document.hidden?15000:1500)){XO.leaveT=0;xoLeave()}return}XO.leaveT=0;
   if(XO.key!=="ex_"+EX.map){xoJoin(EX.map);return}if(!XO.room)return;
-  const p={n:pvNick(),lk:trEnc(myLook()),x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT,m:XO.msg&&Date.now()-XO.msgT<7000?XO.msg:"",mt:XO.msg&&Date.now()-XO.msgT<7000?XO.msgT:0},j=JSON.stringify(p);
+  const p={n:pvNick(),lk:trEnc(myLook()),mp:EX.map,x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT,m:XO.msg&&Date.now()-XO.msgT<7000?XO.msg:"",mt:XO.msg&&Date.now()-XO.msgT<7000?XO.msgT:0},j=JSON.stringify(p);
   const j2=j;if(j2!==XO.lastJ&&Date.now()-XO.lastW>=350){XO.lastJ=j2;XO.lastW=Date.now();XO.room.presence(p).catch(()=>{})}
 }catch(e){}},120);
 // dibujar a los demás jugadores encima del mapa

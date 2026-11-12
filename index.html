@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794446054">
+<meta name="game-build" content="1794446579">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2789,7 +2789,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.60.1</small>
+    <small class="pcver">Versión 6.60.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7463,8 +7463,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.60.1";
+const GAME_VER="6.60.2";
 const NEWS=[
+{v:"2026-11-12-6.60.2",ver:"6.60.2",at:"2026-11-12T02:22",t:"🔧 Arreglos/Mejoras",l:["El sobrino de la Profesora (tu rival) sale en combate con una imagen de entrenador de la saga, como el resto de entrenadores, también si le cambias el nombre","En el mapa tiene un aspecto a juego: pelo azul de punta y chaqueta azul marino","Lo mismo para los villanos de la historia (Equipo Ocaso y Equipo Tempestad): en combate salen con su imagen de la saga y en el mapa llevan sus colores"]},
 {v:"2026-11-12-6.60.1",ver:"6.60.1",at:"2026-11-12T02:14",t:"🔧 Arreglos/Mejoras",l:["Al mirar cada Poké Ball del laboratorio, la ventana con la imagen del Pokémon ahora también aparece en pantalla completa, junto al diálogo","La imagen se carga antes de abrir la ventana, para que nunca salga vacía"]},
 {v:"2026-11-12-6.60",ver:"6.60",at:"2026-11-12T02:02",t:"🎨 Nuevos gráficos de Exploración (fase 5): Pokémon en el mapa",l:["El Pokémon que te sigue ya no se ve «realista»: ahora tiene el mismo estilo de píxel grueso, colores planos y contorno oscuro que los personajes y los edificios","También los Pokémon de la historia que aparecen en el mapa (como los legendarios)","En los combates se siguen viendo igual que antes"]},
 {v:"2026-11-12-6.59",ver:"6.59",at:"2026-11-12T01:53",t:"🧪 Nuevo comienzo de la historia, como en la saga",l:["Al salir de casa, la Profesora Vega viene a buscarte y te lleva andando hasta su laboratorio","Allí te explica la historia y puedes mirar las tres Poké Balls de la mesa una a una: verás el Pokémon que hay dentro, su tipo y un consejo de la Profesora antes de decidirte","Después llega su sobrino, tu rival, y la Profesora te lo presenta… aunque no se acuerda de su nombre: puedes dejarle «Dani» o ponerle el que quieras, y se usará en toda la historia (diálogos, combates y créditos)","No puedes salir del laboratorio sin tu Pokémon. Si ya habías empezado la historia, no cambia nada"]},
@@ -7762,7 +7763,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794446054";
+const GAME_B="1794446579";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -16611,7 +16612,9 @@ function chSample(key){if(!key||CH_TRY[key]||typeof TSPR==="undefined")return;CH
   im.onerror=()=>{};im.src=TSPR+key+".png"}
 {const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{EX.npcs.forEach(n=>{if(n.t&&n.t.length&&!n.story&&n.n)n.look=chClassLook(exTrKey(n.n),n.id)})}catch(e){console.error(e)}return r}}
 // ---------- personajes de la historia: en combate salen con su mismo aspecto ----------
-{const _xb=exBattle;exBattle=function(cfg,npc){try{if(cfg&&cfg.trainer&&cfg.tsrc&&!cfg.tsrc.c){const n=(npc&&npc.story?npc:null)||EX.npcs.find(q=>q.story&&q.n===cfg.trainer&&q.look);
+// el rival y los villanos de la historia usan en combate una imagen de la saga, como el resto de entrenadores
+const CH_SPRK=["hugh","jupiter","cyrus","mars","saturn","colress","galacticgrunt","plasmagrunt"];
+{const _xb=exBattle;exBattle=function(cfg,npc){try{if(cfg&&cfg.trainer&&cfg.tsrc&&!cfg.tsrc.c&&!CH_SPRK.includes(cfg.tsrc.k)){const n=(npc&&npc.story?npc:null)||EX.npcs.find(q=>q.story&&q.n===cfg.trainer&&q.look);
     if(n&&n.look&&!(n.t&&n.t.length&&!n.story))cfg.tsrc=Object.assign({},cfg.tsrc,{c:n.look})}}catch(e){}return _xb.apply(this,arguments)}}
 
 // personajes de la historia con un aspecto diseñado (la Profesora Vega: melena, gafas y bata de laboratorio)
@@ -16938,7 +16941,7 @@ const rvName=()=>{try{const n=stSt().f.rn;return n&&typeof n==="string"?n:"Dani"
 const rvTx=s=>{if(typeof s!=="string")return s;const n=rvName();return n==="Dani"?s:s.replace(/\bDani\b/g,n)};
 // el nombre del rival se cambia en todos los diálogos, en los combates y en el objetivo de la historia
 {const _s=exSay;exSay=function(lines,cb){try{if(Array.isArray(lines))lines=lines.map(rvTx);else lines=rvTx(lines)}catch(e){}return _s.call(this,lines,cb)}}
-{const _b=exBattle;exBattle=function(cfg,npc){try{const n=rvName();if(n!=="Dani"&&cfg&&typeof cfg.trainer==="string"&&/^Dani\b/.test(cfg.trainer)){cfg.tsrc=cfg.tsrc||{};if(!cfg.tsrc.c)cfg.tsrc.c=STO_L.dani;
+{const _b=exBattle;exBattle=function(cfg,npc){try{const n=rvName();if(n!=="Dani"&&cfg&&typeof cfg.trainer==="string"&&/^Dani\b/.test(cfg.trainer)){cfg.tsrc=cfg.tsrc||{};
   cfg.trainer=cfg.trainer.replace(/^Dani/,n);cfg.tsrc.n=cfg.trainer}}catch(e){}return _b.apply(this,arguments)}}
 {const _h=stHud;stHud=function(){const r=_h.apply(this,arguments);try{if(rvName()!=="Dani"){const o=$("exObj");if(o){const w=document.createTreeWalker(o,NodeFilter.SHOW_TEXT);let t;while((t=w.nextNode()))if(/\bDani\b/.test(t.nodeValue))t.nodeValue=rvTx(t.nodeValue)}}}catch(e){}return r}}
 // ---------- la Profesora te busca en el pueblo ----------
@@ -17017,6 +17020,10 @@ STX.lab1=()=>stRun(async()=>{const f=stSt().f;rstRoll();rstSync();
 // no puedes irte del laboratorio sin tu Pokémon
 {const _a=exArrive;exArrive=function(){try{const t=stSt();if(EX.map==="lab"&&t.s===1&&!EX.cut&&exAt(EX.x,EX.y)==="1"){const st=exSt();
   exSay([t.f.st?"§Profesora Vega|¡Eh, espera! Todavía no te vayas, que quiero presentarte a alguien.":"§Profesora Vega|¡Eh, espera! No te vayas sin tu Pokémon. Mira las Poké Balls que hay en la mesa."],()=>{exStepBack();st.x=EX.x;st.y=EX.y;st.f=EX.f;if(t.f.st)setTimeout(()=>STX.lab1(),200)});return}}catch(e){}return _a.apply(this,arguments)}}
+// ---------- el rival y los villanos: en el mapa llevan los colores de su imagen de combate ----------
+try{const L=trDec(STO_L.dani);Object.assign(L,{b:0,sk:1,hs:1,hc:7,ec:5,hat:0,gl:0,top:11,tc:16,ac:0,bot:0,bc:13,sh:0,brd:0,mk:0,bp:1,bpc:0,nk:0,ear:0});STO_L.dani=trEnc(L);STO_L.champ=STO_L.dani;
+  const K={dani:"hugh",bruma:"jupiter",noctis:"cyrus",ocaso:"galacticgrunt",temp:"plasmagrunt",gelida:"mars",ascua:"saturn",icaro:"colress"};
+  Object.keys(K).forEach(k=>{if(STO_L[k]){CH_CLSOF[STO_L[k]]=K[k];chSample(K[k])}})}catch(e){console.error(e)}
 
 </script>
 <script>

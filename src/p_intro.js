@@ -8,7 +8,7 @@ const rvName=()=>{try{const n=stSt().f.rn;return n&&typeof n==="string"?n:"Dani"
 const rvTx=s=>{if(typeof s!=="string")return s;const n=rvName();return n==="Dani"?s:s.replace(/\bDani\b/g,n)};
 // el nombre del rival se cambia en todos los diálogos, en los combates y en el objetivo de la historia
 {const _s=exSay;exSay=function(lines,cb){try{if(Array.isArray(lines))lines=lines.map(rvTx);else lines=rvTx(lines)}catch(e){}return _s.call(this,lines,cb)}}
-{const _b=exBattle;exBattle=function(cfg,npc){try{const n=rvName();if(n!=="Dani"&&cfg&&typeof cfg.trainer==="string"&&/^Dani\b/.test(cfg.trainer)){cfg.tsrc=cfg.tsrc||{};if(!cfg.tsrc.c)cfg.tsrc.c=STO_L.dani;
+{const _b=exBattle;exBattle=function(cfg,npc){try{const n=rvName();if(n!=="Dani"&&cfg&&typeof cfg.trainer==="string"&&/^Dani\b/.test(cfg.trainer)){cfg.tsrc=cfg.tsrc||{};
   cfg.trainer=cfg.trainer.replace(/^Dani/,n);cfg.tsrc.n=cfg.trainer}}catch(e){}return _b.apply(this,arguments)}}
 {const _h=stHud;stHud=function(){const r=_h.apply(this,arguments);try{if(rvName()!=="Dani"){const o=$("exObj");if(o){const w=document.createTreeWalker(o,NodeFilter.SHOW_TEXT);let t;while((t=w.nextNode()))if(/\bDani\b/.test(t.nodeValue))t.nodeValue=rvTx(t.nodeValue)}}}catch(e){}return r}}
 // ---------- la Profesora te busca en el pueblo ----------
@@ -87,3 +87,7 @@ STX.lab1=()=>stRun(async()=>{const f=stSt().f;rstRoll();rstSync();
 // no puedes irte del laboratorio sin tu Pokémon
 {const _a=exArrive;exArrive=function(){try{const t=stSt();if(EX.map==="lab"&&t.s===1&&!EX.cut&&exAt(EX.x,EX.y)==="1"){const st=exSt();
   exSay([t.f.st?"§Profesora Vega|¡Eh, espera! Todavía no te vayas, que quiero presentarte a alguien.":"§Profesora Vega|¡Eh, espera! No te vayas sin tu Pokémon. Mira las Poké Balls que hay en la mesa."],()=>{exStepBack();st.x=EX.x;st.y=EX.y;st.f=EX.f;if(t.f.st)setTimeout(()=>STX.lab1(),200)});return}}catch(e){}return _a.apply(this,arguments)}}
+// ---------- el rival y los villanos: en el mapa llevan los colores de su imagen de combate ----------
+try{const L=trDec(STO_L.dani);Object.assign(L,{b:0,sk:1,hs:1,hc:7,ec:5,hat:0,gl:0,top:11,tc:16,ac:0,bot:0,bc:13,sh:0,brd:0,mk:0,bp:1,bpc:0,nk:0,ear:0});STO_L.dani=trEnc(L);STO_L.champ=STO_L.dani;
+  const K={dani:"hugh",bruma:"jupiter",noctis:"cyrus",ocaso:"galacticgrunt",temp:"plasmagrunt",gelida:"mars",ascua:"saturn",icaro:"colress"};
+  Object.keys(K).forEach(k=>{if(STO_L[k]){CH_CLSOF[STO_L[k]]=K[k];chSample(K[k])}})}catch(e){console.error(e)}

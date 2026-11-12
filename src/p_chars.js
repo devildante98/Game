@@ -125,7 +125,9 @@ function chSample(key){if(!key||CH_TRY[key]||typeof TSPR==="undefined")return;CH
   im.onerror=()=>{};im.src=TSPR+key+".png"}
 {const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{EX.npcs.forEach(n=>{if(n.t&&n.t.length&&!n.story&&n.n)n.look=chClassLook(exTrKey(n.n),n.id)})}catch(e){console.error(e)}return r}}
 // ---------- personajes de la historia: en combate salen con su mismo aspecto ----------
-{const _xb=exBattle;exBattle=function(cfg,npc){try{if(cfg&&cfg.trainer&&cfg.tsrc&&!cfg.tsrc.c){const n=(npc&&npc.story?npc:null)||EX.npcs.find(q=>q.story&&q.n===cfg.trainer&&q.look);
+// el rival y los villanos de la historia usan en combate una imagen de la saga, como el resto de entrenadores
+const CH_SPRK=["hugh","jupiter","cyrus","mars","saturn","colress","galacticgrunt","plasmagrunt"];
+{const _xb=exBattle;exBattle=function(cfg,npc){try{if(cfg&&cfg.trainer&&cfg.tsrc&&!cfg.tsrc.c&&!CH_SPRK.includes(cfg.tsrc.k)){const n=(npc&&npc.story?npc:null)||EX.npcs.find(q=>q.story&&q.n===cfg.trainer&&q.look);
     if(n&&n.look&&!(n.t&&n.t.length&&!n.story))cfg.tsrc=Object.assign({},cfg.tsrc,{c:n.look})}}catch(e){}return _xb.apply(this,arguments)}}
 
 // personajes de la historia con un aspecto diseñado (la Profesora Vega: melena, gafas y bata de laboratorio)

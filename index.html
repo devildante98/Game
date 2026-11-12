@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.68"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.69"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794474099">
+<meta name="game-build" content="1794474194">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2754,6 +2754,26 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 .fdit{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:#f6f8ff;border:2px solid #d8def0;color:#1d2440}
 .fdit>span{font-size:1.5rem;width:30px;text-align:center}.fdit>div{flex:1;min-width:0}.fdit b{display:block}.fdit small{display:block;opacity:.75;font-size:.72rem}.fdit b small{display:inline;opacity:.8}
 .fdico{font-size:1.4rem;display:grid;place-items:center}
+/* tarjeta de entrenador de Exploración */
+.extcard{position:absolute;inset:0;z-index:12;display:grid;place-items:center;background:rgba(10,14,30,.55);padding:12px}
+.tcbox{width:min(560px,96%);max-height:96%;overflow:auto;border-radius:18px;padding:14px 16px;color:#1c2240;background:linear-gradient(160deg,#9fd0ff 0%,#5aa0f0 55%,#3a78d8 100%);border:4px solid #1c2a5a;box-shadow:inset 0 0 0 3px #d8ecff,0 8px 0 rgba(0,0,0,.35);animation:tcIn .25s ease-out}
+@keyframes tcIn{from{transform:scale(.85);opacity:0}}
+.tchd{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px solid rgba(28,42,90,.35);padding-bottom:6px;margin-bottom:10px}
+.tchd b{font:900 1.05rem Fredoka,system-ui,sans-serif;letter-spacing:.08em;color:#fff;text-shadow:2px 2px 0 #1c2a5a}.tchd small{font-weight:800;color:#e8f4ff}
+.tcbody{display:flex;gap:12px;align-items:stretch}.tcinfo{flex:1;display:flex;flex-direction:column;gap:6px}
+.tcrow{display:flex;justify-content:space-between;gap:10px;padding:6px 10px;border-radius:10px;background:rgba(255,255,255,.85);border:2px solid #1c2a5a}
+.tcrow span{font-weight:800;font-size:.75rem;letter-spacing:.06em;color:#4a5a8a}.tcrow b{font-weight:900}.tcch{background:#fff4c0}
+.tcav{width:150px;border-radius:12px;background:rgba(255,255,255,.55);border:2px solid #1c2a5a;display:grid;place-items:end center;overflow:hidden}.tcav img{width:100%;height:auto;max-height:230px;object-fit:contain}
+.tcmeds{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin-top:12px;padding:10px;border-radius:12px;background:rgba(28,42,90,.55);border:2px solid #1c2a5a}
+.tcm{position:relative;aspect-ratio:1;border-radius:50%;background:rgba(0,0,0,.35);border:2px dashed rgba(255,255,255,.35);display:grid;place-items:center;font-size:1.5rem;user-select:none;touch-action:none}
+.tcm.on{background:radial-gradient(circle at 35% 30%,#fff6c8,#e8b830 60%,#a87810);border:2px solid #fff3b0;filter:saturate(.45) brightness(.8);cursor:grab}
+.tcm.on.s1{filter:saturate(.75) brightness(.92)}.tcm.on.s2{filter:none}.tcm.on.s3{filter:brightness(1.12);box-shadow:0 0 12px 3px rgba(255,240,150,.9)}
+.tcm.on.s3 i{position:absolute;inset:0;border-radius:50%;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.85) 45%,transparent 60%);background-size:250% 100%;animation:tcShine 1.6s linear infinite}
+@keyframes tcShine{from{background-position:150% 0}to{background-position:-100% 0}}
+.tcm.pop{transform:scale(1.12);transition:transform .15s}
+.tchint{display:block;text-align:center;margin-top:8px;color:#fff;font-weight:700;text-shadow:1px 1px 0 #1c2a5a}
+.tcbt{display:flex;justify-content:center;margin-top:10px}.tcbt button{min-width:140px}
+@media (max-width:560px){.tcbody{flex-direction:column-reverse}.tcav{width:100%;max-height:160px}.tcmeds{grid-template-columns:repeat(4,1fr)}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2819,7 +2839,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.68</small>
+    <small class="pcver">Versión 6.69</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7493,8 +7513,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.68";
+const GAME_VER="6.69";
 const NEWS=[
+{v:"2026-11-12-6.69",ver:"6.69",at:"2026-11-12T10:03",t:"🪪 Exploración: Tarjeta de entrenador",l:["Nueva opción en el menú con tu nombre: abre tu Tarjeta de entrenador","Muestra tu aspecto, tu número de ID, el dinero, la Pokédex, el tiempo de juego, las medallas, tu rival y si eres Campeón/a de la Liga","Frota tus medallas con el ratón o el dedo para sacarles brillo. ¡Con los días se vuelven a ensuciar!"]},
 {v:"2026-11-12-6.68",ver:"6.68",at:"2026-11-12T10:01",t:"🌦️ Exploración: clima, día y noche, bayas y parejas",l:["Cada zona tiene su clima: nieve en Escarcha, ceniza en Brasa, sol abrasador en el Cráter y lluvia en Tormenta. En el resto de rutas cambia cada pocas horas (lluvia o sol fuerte). Lo verás junto al nombre de la zona","El clima pasa a los combates de Exploración (lluvia, sol, nieve o tormenta de arena)","Con lluvia salen más Pokémon de Agua y Eléctricos, con nieve de Hielo, con sol de Fuego y Planta… y de noche, más Pokémon Siniestros, Fantasma, Veneno y Psíquicos","Árboles de bayas en las rutas y en Pueblo Brisa: dan bayas una vez al día","Parejas de entrenadores (gemelas, novios, hermanos…): si te ve una, combates contra las dos a la vez, con sus equipos juntos"]},
 {v:"2026-11-12-6.67",ver:"6.67",at:"2026-11-12T09:58",t:"💤 Exploración: Pokémon especiales en el mapa",l:["Un Snorlax dormido tapa un rincón de la Ruta 4 lleno de objetos. Para despertarlo necesitas la Poké Flauta: te la da el Abuelo de Pueblo Brisa cuando tengas 5 medallas. ¡Puedes capturarlo!","Cuidado con algunos objetos del suelo en la Cueva Roca, la Calle Victoria, la Torre Relámpago y el Bosque Verde: ¡son Pokémon disfrazados!","Con 4 medallas, un Pokémon legendario empieza a recorrer las rutas. Cambia de sitio cada vez que cambias de mapa y huye si no lo capturas. El Mapa te dice por dónde lo han visto"]},
 {v:"2026-11-12-6.66",ver:"6.66",at:"2026-11-12T09:55",t:"📻 Exploración: Buscapelea y revanchas",l:["Al ganar tu primera medalla, la Enfermera de Pueblo Brisa te manda el Buscapelea","Úsalo en una ruta desde la Mochila (Objetos de campo): los entrenadores a los que ya ganaste te piden la revancha y levantan la mano con una «!»","En la revancha llevan Pokémon más fuertes y uno más en el equipo","Se recarga andando 100 pasos entre uso y uso"]},
@@ -7804,7 +7825,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794474099";
+const GAME_B="1794474194";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -17564,6 +17585,41 @@ const BR_C={oran:"#4a8ae8",sitrus:"#f0d040",pecha:"#f090c0",cheri:"#e84848",ches
 // al ganar a una, la otra también queda vencida (y al perder, las dos siguen esperando)
 setInterval(()=>{try{if(EX.battle)return;const st=exSt();(EX.npcs||[]).forEach(n=>{if(!n.pair)return;const o=EX.npcs.find(q=>q!==n&&q.pair===n.pair);if(!o)return;
   const won=!!st.npc[n.id]||!!st.npc[o.id];if(won){if(!st.npc[n.id]||!st.npc[o.id]){st.npc[n.id]=1;st.npc[o.id]=1;save()}if(!n.rematch)n.beat=true;if(!o.rematch)o.beat=true}else if(!n.rematch&&!o.rematch){n.beat=false;o.beat=false}})}catch(e){}},600);
+
+// =====================================================================================
+// TARJETA DE ENTRENADOR (como en la saga): tu nombre, tu aspecto, el tiempo de juego, la Pokédex, el dinero,
+// las medallas… y puedes frotar las medallas para que brillen (con el tiempo se vuelven a ensuciar).
+// Se abre desde el menú de Exploración: «Tarjeta».
+// =====================================================================================
+// tiempo de juego en Exploración
+setInterval(()=>{try{if(EX.on&&!EX.title&&document.visibilityState==="visible"){const f=stSt().f;f.play=(f.play|0)+5}}catch(e){}},5000);
+const tcF=()=>stSt().f;
+function tcShine(i){const f=tcF(),s=(f.shine||{})[i];if(!s)return 0;const days=Math.floor((Date.now()-s.t)/(864e5*2));return Math.max(0,s.l-days)}
+function tcTime(sec){sec=sec|0;const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60);return h+" h "+String(m).padStart(2,"0")+" min"}
+function tcHTML(){const f=tcF(),nm=(typeof S!=="undefined"&&S.nick)||"Entrenador";let look="";try{look=trImg(myLook(),"front")}catch(e){}
+  const own=xgRun(()=>Object.keys(S.owned||{}).filter(k=>S.owned[k]>0).length),seen=xgRun(()=>Object.keys(S.seen||S.owned||{}).length),id=String((pvHash("id"+nm)>>>0)%100000).padStart(5,"0");
+  const start=stSt().t0||f.t0;const meds=XGYM.map((g,i)=>{const has=xbHas(i),sh=has?tcShine(i):0;return '<div class="tcm'+(has?" on":"")+' s'+sh+'" data-tcm="'+i+'" title="'+esc(g.b)+'"><span>'+(has?g.ic:"")+'</span>'+(has?'<i></i>':'')+'</div>'}).join("");
+  return '<div class="tcbox" role="dialog" aria-label="Tarjeta de entrenador"><div class="tchd"><b>TARJETA DE ENTRENADOR</b><small>ID Nº '+id+'</small></div>'+
+    '<div class="tcbody"><div class="tcinfo"><div class="tcrow"><span>NOMBRE</span><b>'+esc(nm)+'</b></div><div class="tcrow"><span>DINERO</span><b>'+fmt(xT())+' 🎟️</b></div>'+
+    '<div class="tcrow"><span>POKÉDEX</span><b>'+own+'</b></div><div class="tcrow"><span>TIEMPO</span><b>'+tcTime(f.play)+'</b></div>'+
+    '<div class="tcrow"><span>MEDALLAS</span><b>'+xbCount()+' / 8</b></div>'+(f.champ?'<div class="tcrow tcch"><span>LIGA</span><b>🏆 Campeón/a</b></div>':'')+
+    (typeof rvName==="function"?'<div class="tcrow"><span>RIVAL</span><b>'+esc(rvName())+'</b></div>':'')+'</div><div class="tcav">'+look+'</div></div>'+
+    '<div class="tcmeds">'+meds+'</div><small class="tchint">✨ Frota tus medallas con el ratón o el dedo para sacarles brillo.</small>'+
+    '<div class="tcbt"><button type="button" data-tcx="1">Cerrar</button></div></div>'}
+function tcOpen(){const sc=(EX.cv&&EX.cv.closest(".exscr"))||document.querySelector(".exwrap .exscr");if(!sc)return;let o=$("exTCard");if(!o){o=document.createElement("div");o.id="exTCard";o.className="extcard";sc.appendChild(o)}else if(o.parentElement!==sc)sc.appendChild(o);
+  o.innerHTML=tcHTML();o.hidden=false;EX.keys={};EX.kst=[];snd("ui");tcBind(o)}
+function tcClose(){const o=$("exTCard");if(o&&!o.hidden){o.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
+function tcBind(o){o.querySelector("[data-tcx]").onclick=e=>{e.stopPropagation();tcClose()};
+  o.querySelectorAll(".tcm.on").forEach(el=>{let acc=0,last=null;const rub=(x,y)=>{if(last){acc+=Math.hypot(x-last[0],y-last[1])}last=[x,y];
+      if(acc>260){acc=0;const i=+el.dataset.tcm,f=tcF();f.shine=f.shine||{};const cur=tcShine(i);if(cur<3){f.shine[i]={l:cur+1,t:Date.now()};save();snd(cur+1>=3?"lvl":"ui");el.className="tcm on s"+(cur+1)}else{f.shine[i]={l:3,t:Date.now()};el.classList.add("pop");setTimeout(()=>el.classList.remove("pop"),300)}}};
+    el.addEventListener("mousemove",e=>rub(e.clientX,e.clientY));el.addEventListener("mouseleave",()=>{last=null});
+    el.addEventListener("touchmove",e=>{const t=e.touches[0];if(t){e.preventDefault();rub(t.clientX,t.clientY)}},{passive:false});el.addEventListener("touchend",()=>{last=null})})}
+window.addEventListener("keydown",e=>{const o=$("exTCard");if(!o||o.hidden)return;if(e.key==="Escape"||(typeof exAct==="function"&&["b","a","menu"].includes(exAct(e.key)))){e.preventDefault();e.stopPropagation();tcClose()}else e.stopPropagation()},true);
+setInterval(()=>{const o=$("exTCard");if(o&&!o.hidden){EX.keys={};EX.kst=[]}},100);
+// opción «Tarjeta» en el menú, justo debajo de Mochila/Equipo
+try{if(!EXM_IT.some(x=>x[0]==="card"))EXM_IT.splice(EXM_IT.findIndex(x=>x[0]==="map"),0,["card","🪪",((typeof S!=="undefined"&&S.nick)||"Tarjeta")])}catch(e){}
+{const _m=exMenu;exMenu=function(){try{const it=EXM_IT.find(x=>x[0]==="card");if(it)it[2]=(typeof S!=="undefined"&&S.nick)||"Tarjeta"}catch(e){}return _m.apply(this,arguments)}}
+{const _md=exMenuDo;exMenuDo=function(k){if(k==="card"){try{exMenuClose(true)}catch(e){}tcOpen();return}return _md.apply(this,arguments)}}
 
 </script>
 <script>

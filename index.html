@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.73"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.73.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794483309">
+<meta name="game-build" content="1794483413">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2598,13 +2598,13 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .bcmv{display:grid;grid-template-columns:1fr 1fr;gap:8px;grid-row:1}
 .bcmv .mvb{display:flex!important;align-items:center;justify-content:center;font-size:1rem}.bcmv .mvb small{display:none}.bcmv .mvb span{font-weight:800;color:#fff}
 .bcmv .mvb[disabled]{filter:grayscale(.8) brightness(.7)}
-.bcinfo{grid-row:1;grid-column:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;color:#fff;background:#30333f;border:3px solid #e8e8f0;
+#menu .bcinfo{grid-row:1;grid-column:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;color:#fff;background:#30333f;border:3px solid #e8e8f0;
   clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}
-#menu.bclassic .bcinfo{height:112px;box-sizing:border-box;overflow:hidden}.bceff{min-height:1.2em;line-height:1.2em;white-space:nowrap}.bcinfo .bceff b{font-size:.85rem;text-shadow:1px 1px 0 #000}
-.bcinfo b{font-size:1.1rem;text-shadow:2px 2px 0 #000}.bcinfo small{color:#c9cde0;font-size:.75rem;text-align:center}
+#menu.bclassic .bcinfo{height:112px;box-sizing:border-box;overflow:hidden}.bceff{min-height:1.2em;line-height:1.2em;white-space:nowrap}#menu .bcinfo .bceff b{font-size:.85rem;text-shadow:1px 1px 0 #000}
+#menu .bcinfo b{font-size:1.1rem;text-shadow:2px 2px 0 #000}#menu .bcinfo small{color:#c9cde0;font-size:.75rem;text-align:center}
 .bcty{padding:3px 10px;border-radius:6px;background:var(--tc);color:#fff;font-weight:900;font-size:.8rem;text-shadow:1px 1px 0 rgba(0,0,0,.5)}
 .bcx{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}.bcx button{min-height:0;padding:6px 12px}
-@media (max-width:620px){.bcmd{grid-template-columns:1fr}.bcq{font-size:1rem;text-align:center}.bfight{grid-template-columns:1fr}.bcinfo{grid-row:auto;grid-column:auto;flex-direction:row;flex-wrap:wrap}#menu.bclassic .bcinfo{height:auto;min-height:64px}}
+@media (max-width:620px){.bcmd{grid-template-columns:1fr}.bcq{font-size:1rem;text-align:center}.bfight{grid-template-columns:1fr}#menu .bcinfo{grid-row:auto;grid-column:auto;flex-direction:row;flex-wrap:wrap}#menu.bclassic .bcinfo{height:auto;min-height:64px}}
 #menu.bclassic>.bcmd,#menu.bclassic>.bfight{grid-column:1/-1;width:100%;box-sizing:border-box}
 #menu.bclassic .bcq{white-space:normal}
 .bshq{grid-column:1/-1;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.bshq button{min-width:200px;padding:12px 16px;font-size:1rem}
@@ -2844,7 +2844,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.73</small>
+    <small class="pcver">Versión 6.73.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7518,8 +7518,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.73";
+const GAME_VER="6.73.1";
 const NEWS=[
+{v:"2026-11-12-6.73.1",ver:"6.73.1",at:"2026-11-12T12:36",t:"🔧 Arreglos/Mejoras",l:["Compañero: vuelve a verse la barra de progreso de la amistad y el panel recupera su aspecto claro"]},
 {v:"2026-11-12-6.73",ver:"6.73",at:"2026-11-12T12:35",t:"🏘️ Exploración: pueblos y rutas con más detalles de la saga",l:["Desniveles en las rutas: se saltan hacia abajo de un brinco, pero no se pueden subir (hay que rodearlos)","Pueblos con farolas junto a las calles (se encienden de noche), buzón al lado de la puerta de cada casa y bancos cerca del agua","Tocones sueltos por la hierba de las rutas","Los caminos que cruzan el agua se ven ahora como puentes de madera"]},
 {v:"2026-11-12-6.72.2",ver:"6.72.2",at:"2026-11-12T12:25",t:"🔧 Arreglos/Mejoras",l:["Exploración en línea: los jugadores que van rápido (bici, velocidad x2 o x3) se ven moverse de forma fluida en vez de a saltos"]},
 {v:"2026-11-12-6.72.1",ver:"6.72.1",at:"2026-11-12T12:24",t:"🔧 Arreglos/Mejoras",l:["Exploración en línea: cuando otro jugador entra en un edificio o cambia de zona, deja de verse al momento; solo le ves si sale o si entras tú también"]},
@@ -7839,7 +7840,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794483309";
+const GAME_B="1794483413";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

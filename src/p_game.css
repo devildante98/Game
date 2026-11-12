@@ -907,13 +907,13 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .bcmv{display:grid;grid-template-columns:1fr 1fr;gap:8px;grid-row:1}
 .bcmv .mvb{display:flex!important;align-items:center;justify-content:center;font-size:1rem}.bcmv .mvb small{display:none}.bcmv .mvb span{font-weight:800;color:#fff}
 .bcmv .mvb[disabled]{filter:grayscale(.8) brightness(.7)}
-.bcinfo{grid-row:1;grid-column:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;color:#fff;background:#30333f;border:3px solid #e8e8f0;
+#menu .bcinfo{grid-row:1;grid-column:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;color:#fff;background:#30333f;border:3px solid #e8e8f0;
   clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}
-#menu.bclassic .bcinfo{height:112px;box-sizing:border-box;overflow:hidden}.bceff{min-height:1.2em;line-height:1.2em;white-space:nowrap}.bcinfo .bceff b{font-size:.85rem;text-shadow:1px 1px 0 #000}
-.bcinfo b{font-size:1.1rem;text-shadow:2px 2px 0 #000}.bcinfo small{color:#c9cde0;font-size:.75rem;text-align:center}
+#menu.bclassic .bcinfo{height:112px;box-sizing:border-box;overflow:hidden}.bceff{min-height:1.2em;line-height:1.2em;white-space:nowrap}#menu .bcinfo .bceff b{font-size:.85rem;text-shadow:1px 1px 0 #000}
+#menu .bcinfo b{font-size:1.1rem;text-shadow:2px 2px 0 #000}#menu .bcinfo small{color:#c9cde0;font-size:.75rem;text-align:center}
 .bcty{padding:3px 10px;border-radius:6px;background:var(--tc);color:#fff;font-weight:900;font-size:.8rem;text-shadow:1px 1px 0 rgba(0,0,0,.5)}
 .bcx{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}.bcx button{min-height:0;padding:6px 12px}
-@media (max-width:620px){.bcmd{grid-template-columns:1fr}.bcq{font-size:1rem;text-align:center}.bfight{grid-template-columns:1fr}.bcinfo{grid-row:auto;grid-column:auto;flex-direction:row;flex-wrap:wrap}#menu.bclassic .bcinfo{height:auto;min-height:64px}}
+@media (max-width:620px){.bcmd{grid-template-columns:1fr}.bcq{font-size:1rem;text-align:center}.bfight{grid-template-columns:1fr}#menu .bcinfo{grid-row:auto;grid-column:auto;flex-direction:row;flex-wrap:wrap}#menu.bclassic .bcinfo{height:auto;min-height:64px}}
 #menu.bclassic>.bcmd,#menu.bclassic>.bfight{grid-column:1/-1;width:100%;box-sizing:border-box}
 #menu.bclassic .bcq{white-space:normal}
 .bshq{grid-column:1/-1;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.bshq button{min-width:200px;padding:12px 16px;font-size:1rem}

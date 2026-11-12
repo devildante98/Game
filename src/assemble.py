@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.73";
+const GAME_VER="6.73.1";
 const NEWS=[
+{v:"2026-11-12-6.73.1",ver:"6.73.1",at:"2026-11-12T12:36",t:"🔧 Arreglos/Mejoras",l:["Compañero: vuelve a verse la barra de progreso de la amistad y el panel recupera su aspecto claro"]},
 {v:"2026-11-12-6.73",ver:"6.73",at:"2026-11-12T12:35",t:"🏘️ Exploración: pueblos y rutas con más detalles de la saga",l:["Desniveles en las rutas: se saltan hacia abajo de un brinco, pero no se pueden subir (hay que rodearlos)","Pueblos con farolas junto a las calles (se encienden de noche), buzón al lado de la puerta de cada casa y bancos cerca del agua","Tocones sueltos por la hierba de las rutas","Los caminos que cruzan el agua se ven ahora como puentes de madera"]},
 {v:"2026-11-12-6.72.2",ver:"6.72.2",at:"2026-11-12T12:25",t:"🔧 Arreglos/Mejoras",l:["Exploración en línea: los jugadores que van rápido (bici, velocidad x2 o x3) se ven moverse de forma fluida en vez de a saltos"]},
 {v:"2026-11-12-6.72.1",ver:"6.72.1",at:"2026-11-12T12:24",t:"🔧 Arreglos/Mejoras",l:["Exploración en línea: cuando otro jugador entra en un edificio o cambia de zona, deja de verse al momento; solo le ves si sale o si entras tú también"]},

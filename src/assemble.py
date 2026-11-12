@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.73.1";
+const GAME_VER="6.74";
 const NEWS=[
+{v:"2026-11-12-6.74",ver:"6.74",at:"2026-11-12T16:10",t:"🗺️ Exploración: pueblos y rutas mucho más grandes",l:["Los 8 pueblos y las 10 rutas y cumbres son ahora unas tres veces más grandes, a lo ancho y a lo largo","Cada pueblo tiene un barrio nuevo con 3 casas más en las que se puede entrar, vecinos con los que hablar y lugares propios: plaza con fuente, huerto de bayas, parque, mercado, termas, círculo de piedras…","Los puertos tienen una isla nueva unida por un puente de madera, con su faro","Las rutas ganan una senda nueva que las rodea, con más hierba alta, estanques, desniveles, objetos, árboles de bayas y entrenadores","El Bosque Verde crece con un laberinto de árboles, y en Playa Coral hay islotes con objetos a los que se llega con Surf","Tu partida sigue donde estaba: lo que ya conocías no se ha movido de sitio"]},
 {v:"2026-11-12-6.73.1",ver:"6.73.1",at:"2026-11-12T12:36",t:"🔧 Arreglos/Mejoras",l:["Compañero: vuelve a verse la barra de progreso de la amistad y el panel recupera su aspecto claro"]},
 {v:"2026-11-12-6.73",ver:"6.73",at:"2026-11-12T12:35",t:"🏘️ Exploración: pueblos y rutas con más detalles de la saga",l:["Desniveles en las rutas: se saltan hacia abajo de un brinco, pero no se pueden subir (hay que rodearlos)","Pueblos con farolas junto a las calles (se encienden de noche), buzón al lado de la puerta de cada casa y bancos cerca del agua","Tocones sueltos por la hierba de las rutas","Los caminos que cruzan el agua se ven ahora como puentes de madera"]},
 {v:"2026-11-12-6.72.2",ver:"6.72.2",at:"2026-11-12T12:25",t:"🔧 Arreglos/Mejoras",l:["Exploración en línea: los jugadores que van rápido (bici, velocidad x2 o x3) se ven moverse de forma fluida en vez de a saltos"]},

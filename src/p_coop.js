@@ -35,14 +35,15 @@ setInterval(()=>{try{
   if(!active){if(XO.room&&!XO.leaveT)XO.leaveT=Date.now();if(XO.room&&Date.now()-XO.leaveT>(document.hidden?15000:1500)){XO.leaveT=0;xoLeave()}return}XO.leaveT=0;
   if(XO.key!=="ex_"+EX.map){xoJoin(EX.map);return}if(!XO.room)return;
   const p={n:pvNick(),lk:trEnc(myLook()),mp:EX.map,x:EX.x,y:EX.y,f:EX.f,e:Date.now()-XO.emoT<4000?XO.emo:"",et:XO.emoT,m:XO.msg&&Date.now()-XO.msgT<7000?XO.msg:"",mt:XO.msg&&Date.now()-XO.msgT<7000?XO.msgT:0},j=JSON.stringify(p);
-  const j2=j;if(j2!==XO.lastJ&&Date.now()-XO.lastW>=350){XO.lastJ=j2;XO.lastW=Date.now();XO.room.presence(p).catch(()=>{})}
+  const j2=j;if(j2!==XO.lastJ&&Date.now()-XO.lastW>=220){XO.lastJ=j2;XO.lastW=Date.now();XO.room.presence(p).catch(()=>{})}
 }catch(e){}},120);
 // dibujar a los demás jugadores encima del mapa
 {const _d=exDraw;exDraw=function(ts){_d.apply(this,arguments);try{if(!xoOn()||EX.title||!XO.room)return;const L=Object.values(XO.peers);if(!L.length)return;
   const cv=EX.cv,g=cv.getContext("2d");g.setTransform(EXS,0,0,EXS,0,0);const cx=Math.round(EX.cam[0]*2)/2,cy=Math.round(EX.cam[1]*2)/2,dt=Math.min(.1,(ts-(XO.lt||ts))/1000);XO.lt=ts;
   L.sort((a,b)=>a.dy-b.dy).forEach(o=>{const ddx=o.x-o.dx,ddy=o.y-o.dy,dd=Math.hypot(ddx,ddy);let mv=false;
-    if(dd>6){o.dx=o.x;o.dy=o.y}else if(dd>.01){const s=Math.min(dd,dt*6.5);o.dx+=ddx/dd*s;o.dy+=ddy/dd*s;mv=true}
-    const fr=mv?(Math.floor(ts/130)%2?1:3):0,x=o.dx*EXTL-cx,y=o.dy*EXTL-cy;
+    // la velocidad se adapta a lo lejos que vaya (bici, x2, x3…): alcanza su posición real en ~1/3 de segundo, sin saltos
+    if(dd>16){o.dx=o.x;o.dy=o.y}else if(dd>.01){const s=Math.min(dd,dt*Math.max(6.5,dd*3.4));o.dx+=ddx/dd*s;o.dy+=ddy/dd*s;mv=true;o.fast=dd>2.2}
+    const fr=mv?(Math.floor(ts/(o.fast?80:130))%2?1:3):0,x=o.dx*EXTL-cx,y=o.dy*EXTL-cy;
     try{exDrawTr(g,o.lk||"acetrainer",o.f,x,y,fr,false,false,0)}catch(e){}
     g.font="bold 7px sans-serif";g.textAlign="center";g.textBaseline="bottom";const w=g.measureText(o.n).width+6;
     g.fillStyle="rgba(10,14,30,.7)";g.fillRect(Math.round(x+16-w/2),Math.round(y-9),Math.round(w),9);g.fillStyle="#9fe6ff";g.fillText(o.n,Math.round(x+16),Math.round(y-1));

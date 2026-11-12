@@ -46,7 +46,7 @@ function hmWaterMon(){try{const R=typeof rnD==="function"?rnD():null;if(R&&R.w&&
   const z=(EX.M&&EX.M.z)||(EX.M&&EX.M.music==="town"?"pra":"pra"),L=(HM_WATER[z]||HM_WATER.pra).filter(n=>PM[n]);if(Math.random()<.03&&HM_RARE[z]&&PM[HM_RARE[z]])return HM_RARE[z];return L[Math.floor(Math.random()*L.length)]||"Magikarp"}
 {const _a=exArrive;exArrive=function(){const r=_a.apply(this,arguments);try{if(EX.surf&&!EX.cut){const c=exAt(EX.x,EX.y);
   if(c!=="~")EX.surf=0;
-  else if(!EX.dlg&&!EX.trans&&EX.steps-(EX.encAt||-99)>=6&&Math.random()<1/14){EX.encAt=EX.steps;if(!exTeamOk()){exSay(["¡Algo se mueve bajo el agua!","…pero tus Pokémon están demasiado cansados para luchar."]);return r}
+  else if(!EX.dlg&&!EX.trans&&!(typeof fdRep==="function"&&fdRep())&&EX.steps-(EX.encAt||-99)>=6&&Math.random()<1/14){EX.encAt=EX.steps;if(!exTeamOk()){exSay(["¡Algo se mueve bajo el agua!","…pero tus Pokémon están demasiado cansados para luchar."]);return r}
     const n=hmWaterMon(),lv=clampL(sLv(0)+Math.floor(Math.random()*4)-2);const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W)m.sh=1;
     EX.keys={};EX.kst=[];snd("wild");EX.trans={t:0,d:1300,k:"wild",done:()=>exBattle({eteam:[m]})}}}}catch(e){console.error(e)}return r}}
 // al cambiar de mapa se baja del agua y la Fuerza se apaga (como en los juegos)

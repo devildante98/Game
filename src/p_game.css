@@ -1058,3 +1058,8 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 /* Vuelo desde el mapa */
 .wmfly{display:block;width:100%;margin-top:8px;padding:9px 12px;border-radius:10px;background:#3a8cff;color:#fff;font-weight:800;border:0;box-shadow:0 3px 0 #2050a8;cursor:pointer}
 .wmfly:hover{filter:brightness(1.08)}.wmflyno{display:block;margin-top:6px;opacity:.75}
+/* objetos de campo en la mochila de Exploración */
+.fdsec{margin-top:10px}.fdl{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px}
+.fdit{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:#f6f8ff;border:2px solid #d8def0;color:#1d2440}
+.fdit>span{font-size:1.5rem;width:30px;text-align:center}.fdit>div{flex:1;min-width:0}.fdit b{display:block}.fdit small{display:block;opacity:.75;font-size:.72rem}.fdit b small{display:inline;opacity:.8}
+.fdico{font-size:1.4rem;display:grid;place-items:center}

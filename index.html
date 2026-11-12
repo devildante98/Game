@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.61"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.62"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794472375">
+<meta name="game-build" content="1794472568">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2811,7 +2811,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.61</small>
+    <small class="pcver">Versión 6.62</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7485,8 +7485,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.61";
+const GAME_VER="6.62";
 const NEWS=[
+{v:"2026-11-12-6.62",ver:"6.62",at:"2026-11-12T09:36",t:"🎣 Exploración: pesca",l:["Tres pescadores te regalan sus cañas: la Caña Vieja en el estanque de Pueblo Brisa, la Caña Buena en Puerto Escarcha y la Súper Caña en Puerto Celeste","Mira hacia el agua y pulsa A para lanzar la caña. Cuando salga la «!» sobre tu cabeza, ¡pulsa A rápido o se escapará!","Cada caña pesca Pokémon distintos, y cambian según la región. Con la Súper Caña pican los más fuertes… y alguno muy raro","También puedes pescar mientras navegas con Surf"]},
 {v:"2026-11-12-6.61",ver:"6.61",at:"2026-11-12T09:32",t:"🌊 Exploración: MO como en la saga",l:["Cada Líder de Gimnasio te entrega una MO: Brezo te da Corte y Destello, Marina te da Surf, Albo te da Fuerza y el Líder de Puerto Brasa te da Golpe Roca","Corte: tala los arbolitos que tapan caminos y rincones con objetos","Surf: mira al agua y pulsa A para navegar montado en tu Pokémon. En el agua salen Pokémon acuáticos (y alguno muy raro…). Hay islas con objetos","Fuerza: empuja las rocas enormes andando hacia ellas. Golpe Roca: rompe las rocas agrietadas","Destello: la Cueva Roca y la Calle Victoria están a oscuras hasta que lo usas","Si ya tenías medallas, recibes sus MO automáticamente"]},
 {v:"2026-11-12-6.60.5",ver:"6.60.5",at:"2026-11-12T09:01",t:"🔧 Arreglos/Mejoras",l:["El menú de Exploración es más grande: ocupa una franja más ancha a la derecha, con letras e iconos más grandes, sin dejar de ser compacto"]},
 {v:"2026-11-12-6.60.4",ver:"6.60.4",at:"2026-11-12T02:51",t:"🔧 Arreglos/Mejoras",l:["Nuevo menú de Exploración al estilo de la saga: un recuadro compacto arriba a la derecha con Pokédex, Equipo, Mapa, Guardar, Opciones, Menú principal y Cerrar, con la flecha ▶","Minimapa, velocidad, controles y otros jugadores están ahora dentro de «Opciones». Con B o Esc vuelves al menú anterior"]},
@@ -7789,7 +7790,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794472375";
+const GAME_B="1794472568";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -17148,6 +17149,68 @@ function hmMount(g,face,x,y){const t=performance.now(),bob=Math.round(Math.sin(t
   if(EX.poof){const p=EX.poof,e=(performance.now()-p.t0)/380,X=p.x*EXTL-cam[0]+16,Y=p.y*EXTL-cam[1]+12;g.fillStyle="rgba(240,236,228,"+(1-e)+")";for(let i=0;i<6;i++){const a=i*1.05+e*2,rr=6+e*14;g.fillRect(Math.round(X+Math.cos(a)*rr)-3,Math.round(Y+Math.sin(a)*rr*.7)-3,6,6)}}
   if(HM_DARK[EX.map]&&EX.lit!==EX.map&&!EX.title){const px=EX.px*EXTL-cam[0]+16,py=EX.py*EXTL-cam[1]+12,rad=EX.flashT&&performance.now()-EX.flashT<900?40+(performance.now()-EX.flashT)/2:44;
     const gr=g.createRadialGradient(px,py,rad*.55,px,py,rad*1.25);gr.addColorStop(0,"rgba(0,0,8,0)");gr.addColorStop(1,"rgba(0,0,8,.94)");g.fillStyle=gr;g.fillRect(0,0,W,H)}}catch(e){}return r}}
+
+// =====================================================================================
+// PESCA (como en la saga): Caña Vieja (Pueblo Brisa), Caña Buena (Puerto Escarcha) y Súper Caña (Puerto Celeste).
+// Mira al agua y pulsa A: lanzas la caña y, cuando salga la «!», pulsa A rápido para que no se escape.
+// =====================================================================================
+const FISH_RN=["","Caña Vieja","Caña Buena","Súper Caña"];
+const fRod=()=>{try{return stSt().f.rod|0}catch(e){return 0}};
+const FISH_TZ={pueblo:"pra",pe:"nie",pn:"nie",pb:"vol",vv:"vol",ct:"ciu",pc:"mar",cl:"ciu"};
+const FISH_G={pra:["Poliwag","Goldeen","Magikarp","Psyduck","Barboach"],bos:["Poliwag","Goldeen","Magikarp"],mar:["Krabby","Horsea","Shellder","Tentacool","Staryu","Magikarp"],
+  nie:["Seel","Shellder","Horsea","Magikarp","Spheal"],vol:["Barboach","Goldeen","Magikarp","Tentacool"],ciu:["Chinchou","Remoraid","Horsea","Magikarp"],cue:["Goldeen","Magikarp","Barboach"]};
+const FISH_S={pra:["Seaking","Poliwhirl","Gyarados","Corphish","Whiscash"],mar:["Kingler","Seadra","Starmie","Gyarados","Wailmer","Sharpedo"],nie:["Dewgong","Cloyster","Gyarados","Sealeo","Seadra"],
+  vol:["Whiscash","Seaking","Gyarados","Tentacruel"],ciu:["Lanturn","Octillery","Seadra","Gyarados"]};
+const FISH_RARE=["Dratini","Lapras","Feebas"];
+function fishZone(){const m=EX.map||"";return FISH_TZ[m]||(EX.M&&EX.M.z)||"pra"}
+function fishMon(rod){let n=null;
+  try{const R=typeof rnD==="function"?rnD():null;if(R&&R.w&&typeof rndPool==="function"){const P=rndPool(!!R.l),p=P[Math.floor(Math.random()*P.length)];if(p)n=p[0]}}catch(e){}
+  const z=fishZone(),pick=L=>{L=(L||[]).filter(q=>PM[q]);return L[Math.floor(Math.random()*L.length)]};
+  if(!n){if(rod<=1)n=Math.random()<.8?"Magikarp":pick((FISH_G[z]||FISH_G.pra).slice(0,2));
+    else if(rod===2)n=pick(FISH_G[z]||FISH_G.pra);
+    else n=Math.random()<.05?pick(FISH_RARE):pick(FISH_S[z]||FISH_S.pra)}
+  n=n&&PM[n]?n:"Magikarp";const b=sLv(0),lv=clampL(rod<=1?Math.max(2,Math.min(b,10)+Math.floor(Math.random()*3)-1):rod===2?Math.max(3,b-3+Math.floor(Math.random()*3)):b-1+Math.floor(Math.random()*4));
+  const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W)m.sh=1;return m}
+// esperar a que pulses A en cuanto pica
+function fishReact(ms){return new Promise(res=>{let done=false;const fin=v=>{if(done)return;done=true;document.removeEventListener("keydown",kd,true);EX.fishWait=null;clearTimeout(t);res(v)};
+  const kd=e=>{const a=typeof exAct==="function"?exAct(e.key):"";if(a==="a"||e.key==="Enter"||e.key===" "){e.preventDefault();e.stopPropagation();fin(true)}};
+  document.addEventListener("keydown",kd,true);EX.fishWait=fin;const t=setTimeout(()=>fin(false),ms)})}
+async function fishRun(x,y){const rod=fRod();if(!exTeamOk()){await sSay(["Tus Pokémon están demasiado cansados. Cúralos antes de ponerte a pescar."]);return}
+  EX.fish={x:x,y:y,t0:performance.now(),bite:0};snd("ui");await sSay(["Lanzas la "+FISH_RN[rod]+" al agua…"]);
+  await sW(1300+Math.random()*2400);if(!EX.fish)return;
+  if(Math.random()<.18){EX.fish=null;await sSay(["…","No pica nada. Prueba otra vez o en otro sitio."]);return}
+  EX.fish.bite=performance.now();snd("lvl");const ok=await fishReact(rod>=3?1000:1150);EX.fish=null;
+  if(!ok){await sSay(["¡Oh, no! Se ha escapado…","(Pulsa A en cuanto veas la «!» sobre tu cabeza.)"]);return}
+  await sSay(["¡Ha picado algo!"]);await sBattle({eteam:[fishMon(rod)]},"wild")}
+// mirar el agua: pescar, navegar o nada
+{const _i=exInteract;exInteract=function(){if(EX.fishWait){EX.fishWait(true);return}
+  try{if(!EX.dlg&&!EX.mv&&!EX.trans&&!EX.cut&&EX.M&&EX.M.base!=="F"&&fRod()){const[dx,dy]=EXDIR[EX.f],x=EX.x+dx,y=EX.y+dy;
+    if(exAt(x,y)==="~"&&!EX.npcs.some(n=>n.px===x&&n.py===y)){
+      if(EX.surf||!hmHas("surf")){stRun(()=>fishRun(x,y));return}
+      stRun(async()=>{const c=await sChoice("El agua está tranquila. ¿Qué quieres hacer?",[{t:"🎣 Pescar"},{t:"🌊 Surf"},{t:"Nada"}]);
+        if(c===0)await fishRun(x,y);else if(c===1){const u=hmUser("surf");snd("lvl");await sSay(["¡"+hmName(u)+" ha usado Surf!"]);EX.surf=1;await sPStep(EX.f)}});return}}}catch(e){console.error(e)}
+  return _i.apply(this,arguments)}}
+// la caña, el sedal y el corcho; y la «!» cuando pica
+{const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{const F=EX.fish;if(!F||!EX.cv)return r;const g=EX.cv.getContext("2d"),cam=EX.cam||[0,0],now=performance.now();g.setTransform(EXS,0,0,EXS,0,0);
+  const px=EX.px*EXTL-cam[0]+16,py=EX.py*EXTL-cam[1]+8,[dx,dy]=EXDIR[EX.f],hx=Math.round(px+dx*12),hy=Math.round(py+dy*10+2),bx=Math.round(F.x*EXTL-cam[0]+16),by=Math.round(F.y*EXTL-cam[1]+16+(F.bite?3:Math.sin(now/300)*1.5));
+  g.strokeStyle="#5a3a1c";g.lineWidth=2;g.beginPath();g.moveTo(px+dx*4,py+2);g.lineTo(hx,hy);g.stroke();
+  g.strokeStyle="rgba(255,255,255,.85)";g.lineWidth=1;g.beginPath();g.moveTo(hx,hy);g.quadraticCurveTo((hx+bx)/2,Math.max(hy,by)+6,bx,by);g.stroke();
+  g.fillStyle="#1c1c26";g.fillRect(bx-3,by-3,6,6);g.fillStyle="#e83a50";g.fillRect(bx-2,by-2,4,2);g.fillStyle="#fff";g.fillRect(bx-2,by,4,2);
+  if(F.bite){g.fillStyle="rgba(255,255,255,.7)";g.fillRect(bx-7,by+3,4,1);g.fillRect(bx+3,by+3,4,1);
+    const X=Math.round(px),Y=Math.round(py-30+Math.sin(now/60)*1.5);g.fillStyle="#222";g.fillRect(X-8,Y-17,16,22);g.fillStyle="#fff";g.fillRect(X-7,Y-16,14,20);g.fillStyle="#e83a50";g.fillRect(X-2,Y-13,4,10);g.fillRect(X-2,Y-1,4,3)}}catch(e){}return r}}
+// ---------- los pescadores que te dan las cañas ----------
+const FISH_NPC={pueblo:["fish1",30,11,"d",1],pe:["fish2",31,11,"d",2],pc:["fish3",31,11,"d",3]};
+{const _n=stNPCs;stNPCs=function(m){const L=_n.apply(this,arguments);try{const F=FISH_NPC[m];if(F&&stSt().s>=2){const[id,x,y,f]=F;
+  L.push({sid:id,x:x,y:y,f:f,n:"Pescador",look:chClassLook("fisherman",id),t:[],sight:0,txt:"",id:"sto:"+m+":"+id,story:1,still:1,beat:true,px:x,py:y,f0:f})}}catch(e){console.error(e)}return L}}
+function fishGive(lv,hi){return stRun(async()=>{const f=stSt().f,n=stN(["","fish1","fish2","fish3"][lv]);if(n)sFaceTo(n);
+  if(fRod()>=lv){await sSay(S_("Pescador",...(lv===1?["¿Qué tal pican? Recuerda: en cuanto veas la «!», ¡pulsa A rápido!","Con la Caña Vieja casi todo son Magikarp… pero un Magikarp bien criado da muchas sorpresas."]
+    :lv===2?["Con la Caña Buena pican Pokémon distintos según el sitio: no es lo mismo el mar que un lago.","¡Prueba a pescar en todas las regiones!"]:["Con la Súper Caña pican los Pokémon más fuertes… y alguno muy raro.","Dicen que en estas aguas vive un Pokémon que casi nadie ha visto."])));return}
+  await sSay(S_("Pescador",...hi));snd("lvl");f.rod=Math.max(fRod(),lv);save();
+  await sSay(["¡Has recibido la "+FISH_RN[lv]+"!","Mira hacia el agua y pulsa A para pescar."]);
+  await sSay(S_("Pescador","Cuando pique, saldrá una «!» encima de tu cabeza. ¡Pulsa A rápido o se escapará!"))})}
+STX.fish1=()=>fishGive(1,["¡Hola! ¿A que es bonito este estanque?","Yo vengo cada mañana a pescar. Es lo más relajante del mundo.","Toma, te regalo mi Caña Vieja. ¡Ya me he comprado una nueva!"]);
+STX.fish2=()=>fishGive(2,["¡Eh, tú! Tienes pinta de que te gusta pescar.","Aquí en el puerto pican Pokémon muy distintos a los del interior.","Llévate esta Caña Buena. ¡Con ella pescarás mucho más que Magikarp!"]);
+STX.fish3=()=>fishGive(3,["Llevo toda la vida pescando en Puerto Celeste. Ya he visto de todo…","Veo que eres una persona entrenadora de verdad. Te mereces esto.","Es mi Súper Caña. Con ella pican los Pokémon más fuertes del mar."]);
 
 </script>
 <script>

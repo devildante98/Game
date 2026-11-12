@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.60.3";
+const GAME_VER="6.60.4";
 const NEWS=[
+{v:"2026-11-12-6.60.4",ver:"6.60.4",at:"2026-11-12T02:51",t:"🔧 Arreglos/Mejoras",l:["Nuevo menú de Exploración al estilo de la saga: un recuadro compacto arriba a la derecha con Pokédex, Equipo, Mapa, Guardar, Opciones, Menú principal y Cerrar, con la flecha ▶","Minimapa, velocidad, controles y otros jugadores están ahora dentro de «Opciones». Con B o Esc vuelves al menú anterior"]},
 {v:"2026-11-12-6.60.3",ver:"6.60.3",at:"2026-11-12T02:33",t:"🔧 Arreglos/Mejoras",l:["Cuando un personaje te lleva andando a algún sitio (como la Profesora Vega al principio), ya no parpadea el símbolo de «A» sobre su cabeza. Solo aparece cuando puedes hablar de verdad"]},
 {v:"2026-11-12-6.60.2",ver:"6.60.2",at:"2026-11-12T02:22",t:"🔧 Arreglos/Mejoras",l:["El sobrino de la Profesora (tu rival) sale en combate con una imagen de entrenador de la saga, como el resto de entrenadores, también si le cambias el nombre","En el mapa tiene un aspecto a juego: pelo azul de punta y chaqueta azul marino","Lo mismo para los villanos de la historia (Equipo Ocaso y Equipo Tempestad): en combate salen con su imagen de la saga y en el mapa llevan sus colores"]},
 {v:"2026-11-12-6.60.1",ver:"6.60.1",at:"2026-11-12T02:14",t:"🔧 Arreglos/Mejoras",l:["Al mirar cada Poké Ball del laboratorio, la ventana con la imagen del Pokémon ahora también aparece en pantalla completa, junto al diálogo","La imagen se carga antes de abrir la ventana, para que nunca salga vacía"]},

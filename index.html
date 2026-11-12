@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.60.4"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794447193">
+<meta name="game-build" content="1794448263">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2724,6 +2724,18 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 .stball b{font-size:1.15rem}.stball small{font-size:.75rem;opacity:.8}
 @keyframes stballIn{from{opacity:0;transform:translateX(-50%) scale(.6)}to{opacity:1;transform:translateX(-50%) scale(1)}}
 @media (max-width:700px){.stball{top:3%;min-width:150px;padding:6px 12px}.stball .stbi{width:96px;height:96px}.stball .stbi img{width:86px!important;height:86px!important}}
+/* menú de Exploración al estilo de la saga: recuadro compacto con doble borde, opciones en mayúsculas y flecha ▶ */
+.exmenu{bottom:auto!important;width:auto!important;min-width:178px;max-width:62%;max-height:calc(100% - 16px);gap:0!important;padding:8px 6px!important;border-radius:8px!important;background:#fbfbfd!important;
+  border:4px solid #34407a!important;box-shadow:inset 0 0 0 2px #fff,inset 0 0 0 4px #9fb2e6,0 5px 0 rgba(0,0,0,.35)!important;animation:exmIn2 .12s ease-out!important}
+@keyframes exmIn2{from{transform:translateY(-6px);opacity:0}}
+.exmenu .exmh{font:800 .7rem/1 Fredoka,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7a84aa;padding:2px 10px 6px 26px;border-bottom:2px dashed #d8def0;margin-bottom:4px}
+.exmenu button{position:relative;gap:8px!important;padding:6px 12px 6px 26px!important;border:0!important;border-radius:4px!important;background:transparent!important;box-shadow:none!important;color:#2c3048!important;
+  font:800 .9rem/1.15 Fredoka,system-ui,sans-serif!important;letter-spacing:.05em;text-transform:uppercase;text-shadow:1px 1px 0 #d4d8e6;white-space:nowrap}
+.exmenu button span{font-size:.95rem!important;width:20px!important;text-shadow:none}
+.exmenu button small{margin-left:10px;font-size:.72rem;text-shadow:none}
+.exmenu button.on,.exmenu button:hover{background:#eaf0ff!important}
+.exmenu button.on::before{content:"▶"!important;position:absolute;left:8px;top:50%;transform:translateY(-50%);margin:0!important;color:#2c3048!important;font-size:.7rem!important;animation:exmArr .6s steps(2) infinite}
+@keyframes exmArr{50%{transform:translate(2px,-50%)}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2789,7 +2801,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.60.3</small>
+    <small class="pcver">Versión 6.60.4</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7463,8 +7475,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.60.3";
+const GAME_VER="6.60.4";
 const NEWS=[
+{v:"2026-11-12-6.60.4",ver:"6.60.4",at:"2026-11-12T02:51",t:"🔧 Arreglos/Mejoras",l:["Nuevo menú de Exploración al estilo de la saga: un recuadro compacto arriba a la derecha con Pokédex, Equipo, Mapa, Guardar, Opciones, Menú principal y Cerrar, con la flecha ▶","Minimapa, velocidad, controles y otros jugadores están ahora dentro de «Opciones». Con B o Esc vuelves al menú anterior"]},
 {v:"2026-11-12-6.60.3",ver:"6.60.3",at:"2026-11-12T02:33",t:"🔧 Arreglos/Mejoras",l:["Cuando un personaje te lleva andando a algún sitio (como la Profesora Vega al principio), ya no parpadea el símbolo de «A» sobre su cabeza. Solo aparece cuando puedes hablar de verdad"]},
 {v:"2026-11-12-6.60.2",ver:"6.60.2",at:"2026-11-12T02:22",t:"🔧 Arreglos/Mejoras",l:["El sobrino de la Profesora (tu rival) sale en combate con una imagen de entrenador de la saga, como el resto de entrenadores, también si le cambias el nombre","En el mapa tiene un aspecto a juego: pelo azul de punta y chaqueta azul marino","Lo mismo para los villanos de la historia (Equipo Ocaso y Equipo Tempestad): en combate salen con su imagen de la saga y en el mapa llevan sus colores"]},
 {v:"2026-11-12-6.60.1",ver:"6.60.1",at:"2026-11-12T02:14",t:"🔧 Arreglos/Mejoras",l:["Al mirar cada Poké Ball del laboratorio, la ventana con la imagen del Pokémon ahora también aparece en pantalla completa, junto al diálogo","La imagen se carga antes de abrir la ventana, para que nunca salga vacía"]},
@@ -7764,7 +7777,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794447193";
+const GAME_B="1794448263";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15325,16 +15338,19 @@ setInterval(()=>{const sc=document.querySelector("#explPB .exscr")||document.que
     $("exSpdB").onclick=e=>{e.stopPropagation();exSpdNext()};$("exMenuB").onclick=e=>{e.stopPropagation();exMenu()}}
   exSpdUI()},600);
 // ---------- menú lateral ----------
-const EXM_IT=[["team","👥","Equipo y Mochila"],["dex","📖","Pokédex"],["map","🗺️","Mapa"],["mini","🧭","Minimapa"],["sp","⏩","Velocidad"],["ctl","🎮","Controles"],["mp","👫","Otros jugadores"],["save","💾","Guardar"],["x","✖","Cerrar"]];
+// menú al estilo de la saga: pocas opciones y un submenú de opciones
+const EXM_IT=[["dex","📖","Pokédex"],["team","🎒","Equipo"],["map","🗺️","Mapa"],["save","💾","Guardar"],["opt","⚙️","Opciones"],["x","✖","Cerrar"]];
+const EXM_OPT=[["mini","🧭","Minimapa"],["sp","⏩","Velocidad"],["ctl","🎮","Controles"],["mp","👫","Otros jugadores"],["back","◀","Volver"]];let EXM_SUB=0;
 function exMenu(force){const sc=document.querySelector("#explPB .exscr")||document.querySelector(".exwrap .exscr");if(!sc)return;let m=$("exMenu");
-  if(m&&!m.hidden&&!force){exMenuClose();return}
+  if(m&&!m.hidden&&!force){exMenuClose(true);return}
   if(!m){m=document.createElement("div");m.id="exMenu";m.className="exmenu";sc.appendChild(m);
     m.addEventListener("click",e=>{const b=e.target.closest("[data-exm]");if(!b)return;e.stopPropagation();exMenuDo(b.dataset.exm)})}
-  m.innerHTML=EXM_IT.map(([k,i,t],j)=>'<button type="button" data-exm="'+k+'"'+(j===0?' class="on"':'')+'><span>'+i+'</span><b>'+t+'</b>'+(k==="sp"?'<small>x'+exSpd()+'</small>':k==="mp"?'<small>'+(O.exMp===false?'ocultos':'visibles')+'</small>':'')+'</button>').join("");
+  m.classList.toggle("exmsub",!!EXM_SUB);m.innerHTML=(EXM_SUB?'<div class="exmh">Opciones</div>':"")+(EXM_SUB?EXM_OPT:EXM_IT).map(([k,i,t],j)=>'<button type="button" data-exm="'+k+'"'+(j===0?' class="on"':'')+'><span>'+i+'</span><b>'+t+'</b>'+(k==="sp"?'<small>x'+exSpd()+'</small>':k==="mp"?'<small>'+(O.exMp===false?'ocultos':'visibles')+'</small>':'')+'</button>').join("");
   m.hidden=false;EX.kst=[];EX.keys={};snd("ui")}
-function exMenuClose(){const m=$("exMenu");if(m&&!m.hidden){m.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
+function exMenuClose(full){const m=$("exMenu");if(m&&!m.hidden&&EXM_SUB&&!full){EXM_SUB=0;exMenu(true);return}EXM_SUB=0;if(m&&!m.hidden){m.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
 const exMenuOpen=()=>{const m=$("exMenu");return !!m&&!m.hidden};
-function exMenuDo(k){if(k!=="sp"&&k!=="mp")exMenuClose();
+function exMenuDo(k){if(k==="opt"){EXM_SUB=1;exMenu(true);return}if(k==="back"){EXM_SUB=0;exMenu(true);const m=$("exMenu");if(m)m.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.exm==="opt"));return}
+  if(k!=="sp"&&k!=="mp")exMenuClose(true);
   if(k==="team"){try{xgPanel()}catch(e){}}
   else if(k==="dex")exDex();
   else if(k==="map"){try{wmShow()}catch(e){}}
@@ -15355,7 +15371,7 @@ window.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind)return;const 
   if(exMenuOpen()){const bs=[...$("exMenu").querySelectorAll("button")],i=Math.max(0,bs.findIndex(b=>b.classList.contains("on")));
     if(a==="u"||a==="d"){e.preventDefault();e.stopPropagation();bs[i].classList.remove("on");bs[(i+(a==="d"?1:-1)+bs.length)%bs.length].classList.add("on");snd("ui");return}
     if(a==="a"){e.preventDefault();e.stopPropagation();bs[i].click();return}
-    if(a==="b"||a==="menu"||e.key==="Escape"){e.preventDefault();e.stopPropagation();exMenuClose();return}
+    if(a==="b"||a==="menu"||e.key==="Escape"){e.preventDefault();e.stopPropagation();exMenuClose(a==="menu");return}
     e.stopPropagation();return}
   if(e.repeat)return;
   if(a==="menu"&&!EX.dlg&&!EX.choice){e.preventDefault();e.stopPropagation();exMenu();return}
@@ -15580,7 +15596,7 @@ function xfmBtn(){const ov=exOverlay();if(!ov||!XFM)return;if(ov.querySelector("
   const vis=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null),cl=vis.find(b=>/^\s*(✕\s*)?(Cerrar|Listo)/i.test(b.textContent));
   const b=document.createElement("button");b.type="button";b.className="alt xmenub";b.dataset.xmenu="1";b.textContent="◀ Menú";b.title="Volver al menú";
   if(cl&&cl.parentNode){cl.parentNode.insertBefore(b,cl)}else ov.insertBefore(b,ov.firstChild)}
-function xfmBack(){const k=XFM;XFM=null;OVSTK=[];OVL=null;XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});exMenu(true);
+function xfmBack(){const k=XFM;XFM=null;OVSTK=[];OVL=null;XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});EXM_SUB=EXM_OPT.some(x=>x[0]===k)?1:0;exMenu(true);
   const m=$("exMenu");if(m&&k){m.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.exm===k))}}
 window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xmenu]");if(!b)return;e.preventDefault();e.stopPropagation();xfmBack()},true);
 // el panel se redibuja a menudo: se vuelve a poner el botón; si el panel se cierra, se olvida el menú
@@ -15602,7 +15618,7 @@ function exBackAct(){if(typeof fcd!=="undefined"&&fcd)return exBackBattle();
   const ov=exOverlay();if(ov){ovBack(ov);return true}
   return false}
 function exBagAct(){if(typeof fcd!=="undefined"&&fcd||!EX.on||EX.dlg||EX.cut||EX.trans||EX.choice)return;
-  if(exMenuOpen())exMenuClose();XFM=null;
+  if(exMenuOpen())exMenuClose(true);XFM=null;
   ["exDexP","exCtl"].forEach(id=>{const e=$(id);if(e)e.hidden=true});if(typeof WM!=="undefined"&&WM.open)wmHide();if(typeof XSH!=="undefined"&&XSH.open)xsClose();
   exBagToggle()}
 // el mapa abierto desde el menú también vuelve al menú
@@ -16477,12 +16493,12 @@ window.addEventListener("keydown",e=>{const b=$("exStartM");if(!b||b.hidden||!EX
   if(a==="a"||e.key==="Enter"||e.key===" "){if(L[i])L[i].click();return}
   if(a==="b"||a==="back"||e.key==="Escape"||e.key==="Backspace"){if(SM.v==="main")smClose();else{SM.v="main";smRender()}snd("ui")}},true);
 // ---------- «Salir al menú principal» desde el menú del juego ----------
-EXM_IT.splice(EXM_IT.findIndex(x=>x[0]==="x"),0,["title","🏠","Salir al menú principal"]);
+EXM_IT.splice(EXM_IT.findIndex(x=>x[0]==="x"),0,["title","🏠","Menú principal"]);
 function exToTitle(){if((typeof fcd!=="undefined"&&fcd)||EX.trans){toast("Termina el combate para salir al menú principal.");return}
   try{exMenuClose()}catch(e){}XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});try{if(typeof WM!=="undefined"&&WM.open)wmHide()}catch(e){}try{if(typeof XSH!=="undefined"&&XSH.open)xsClose()}catch(e){}
   try{XFM=null}catch(e){}if(!EX.cut){EX.dlg=null;EX.choice=null}EX.keys={};EX.kst=[];save();try{if(window.cloudFlush)window.cloudFlush()}catch(e){}
   SM.lock=performance.now()+350;EX.title=true;exTitleUI();smOpen("main");toast("💾 Partida guardada")}
-{const _md=exMenuDo;exMenuDo=function(k){if(k==="title"){try{exMenuClose()}catch(e){}exToTitle();return}return _md.apply(this,arguments)}}
+{const _md=exMenuDo;exMenuDo=function(k){if(k==="title"){try{exMenuClose(true)}catch(e){}exToTitle();return}return _md.apply(this,arguments)}}
 // el texto de la pantalla de título habla de la ranura activa
 {const _t=exTitleUI;exTitleUI=function(){const r=_t.apply(this,arguments);try{if(EX.title){const w=$("exWhere"),L=slD();if(w&&!slHas(L.cur))w.textContent="✨ Pulsa Iniciar para empezar una partida nueva";else if(w&&!/^Partida/.test(w.textContent))w.textContent="Partida "+L.cur+" · "+w.textContent}else smClose(true)}catch(e){}return r}}
 

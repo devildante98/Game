@@ -14,16 +14,19 @@ setInterval(()=>{const sc=document.querySelector("#explPB .exscr")||document.que
     $("exSpdB").onclick=e=>{e.stopPropagation();exSpdNext()};$("exMenuB").onclick=e=>{e.stopPropagation();exMenu()}}
   exSpdUI()},600);
 // ---------- menú lateral ----------
-const EXM_IT=[["team","👥","Equipo y Mochila"],["dex","📖","Pokédex"],["map","🗺️","Mapa"],["mini","🧭","Minimapa"],["sp","⏩","Velocidad"],["ctl","🎮","Controles"],["mp","👫","Otros jugadores"],["save","💾","Guardar"],["x","✖","Cerrar"]];
+// menú al estilo de la saga: pocas opciones y un submenú de opciones
+const EXM_IT=[["dex","📖","Pokédex"],["team","🎒","Equipo"],["map","🗺️","Mapa"],["save","💾","Guardar"],["opt","⚙️","Opciones"],["x","✖","Cerrar"]];
+const EXM_OPT=[["mini","🧭","Minimapa"],["sp","⏩","Velocidad"],["ctl","🎮","Controles"],["mp","👫","Otros jugadores"],["back","◀","Volver"]];let EXM_SUB=0;
 function exMenu(force){const sc=document.querySelector("#explPB .exscr")||document.querySelector(".exwrap .exscr");if(!sc)return;let m=$("exMenu");
-  if(m&&!m.hidden&&!force){exMenuClose();return}
+  if(m&&!m.hidden&&!force){exMenuClose(true);return}
   if(!m){m=document.createElement("div");m.id="exMenu";m.className="exmenu";sc.appendChild(m);
     m.addEventListener("click",e=>{const b=e.target.closest("[data-exm]");if(!b)return;e.stopPropagation();exMenuDo(b.dataset.exm)})}
-  m.innerHTML=EXM_IT.map(([k,i,t],j)=>'<button type="button" data-exm="'+k+'"'+(j===0?' class="on"':'')+'><span>'+i+'</span><b>'+t+'</b>'+(k==="sp"?'<small>x'+exSpd()+'</small>':k==="mp"?'<small>'+(O.exMp===false?'ocultos':'visibles')+'</small>':'')+'</button>').join("");
+  m.classList.toggle("exmsub",!!EXM_SUB);m.innerHTML=(EXM_SUB?'<div class="exmh">Opciones</div>':"")+(EXM_SUB?EXM_OPT:EXM_IT).map(([k,i,t],j)=>'<button type="button" data-exm="'+k+'"'+(j===0?' class="on"':'')+'><span>'+i+'</span><b>'+t+'</b>'+(k==="sp"?'<small>x'+exSpd()+'</small>':k==="mp"?'<small>'+(O.exMp===false?'ocultos':'visibles')+'</small>':'')+'</button>').join("");
   m.hidden=false;EX.kst=[];EX.keys={};snd("ui")}
-function exMenuClose(){const m=$("exMenu");if(m&&!m.hidden){m.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
+function exMenuClose(full){const m=$("exMenu");if(m&&!m.hidden&&EXM_SUB&&!full){EXM_SUB=0;exMenu(true);return}EXM_SUB=0;if(m&&!m.hidden){m.hidden=true;snd("ui");try{EX.cv.focus({preventScroll:true})}catch(e){}}}
 const exMenuOpen=()=>{const m=$("exMenu");return !!m&&!m.hidden};
-function exMenuDo(k){if(k!=="sp"&&k!=="mp")exMenuClose();
+function exMenuDo(k){if(k==="opt"){EXM_SUB=1;exMenu(true);return}if(k==="back"){EXM_SUB=0;exMenu(true);const m=$("exMenu");if(m)m.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.exm==="opt"));return}
+  if(k!=="sp"&&k!=="mp")exMenuClose(true);
   if(k==="team"){try{xgPanel()}catch(e){}}
   else if(k==="dex")exDex();
   else if(k==="map"){try{wmShow()}catch(e){}}
@@ -44,7 +47,7 @@ window.addEventListener("keydown",e=>{if(!EX.on||EX.title||EX.bind)return;const 
   if(exMenuOpen()){const bs=[...$("exMenu").querySelectorAll("button")],i=Math.max(0,bs.findIndex(b=>b.classList.contains("on")));
     if(a==="u"||a==="d"){e.preventDefault();e.stopPropagation();bs[i].classList.remove("on");bs[(i+(a==="d"?1:-1)+bs.length)%bs.length].classList.add("on");snd("ui");return}
     if(a==="a"){e.preventDefault();e.stopPropagation();bs[i].click();return}
-    if(a==="b"||a==="menu"||e.key==="Escape"){e.preventDefault();e.stopPropagation();exMenuClose();return}
+    if(a==="b"||a==="menu"||e.key==="Escape"){e.preventDefault();e.stopPropagation();exMenuClose(a==="menu");return}
     e.stopPropagation();return}
   if(e.repeat)return;
   if(a==="menu"&&!EX.dlg&&!EX.choice){e.preventDefault();e.stopPropagation();exMenu();return}
@@ -269,7 +272,7 @@ function xfmBtn(){const ov=exOverlay();if(!ov||!XFM)return;if(ov.querySelector("
   const vis=[...ov.querySelectorAll("button")].filter(b=>b.offsetParent!==null),cl=vis.find(b=>/^\s*(✕\s*)?(Cerrar|Listo)/i.test(b.textContent));
   const b=document.createElement("button");b.type="button";b.className="alt xmenub";b.dataset.xmenu="1";b.textContent="◀ Menú";b.title="Volver al menú";
   if(cl&&cl.parentNode){cl.parentNode.insertBefore(b,cl)}else ov.insertBefore(b,ov.firstChild)}
-function xfmBack(){const k=XFM;XFM=null;OVSTK=[];OVL=null;XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});exMenu(true);
+function xfmBack(){const k=XFM;XFM=null;OVSTK=[];OVL=null;XOV_IDS.forEach(id=>{const e=$(id);if(e)e.hidden=true});EXM_SUB=EXM_OPT.some(x=>x[0]===k)?1:0;exMenu(true);
   const m=$("exMenu");if(m&&k){m.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.exm===k))}}
 window.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-xmenu]");if(!b)return;e.preventDefault();e.stopPropagation();xfmBack()},true);
 // el panel se redibuja a menudo: se vuelve a poner el botón; si el panel se cierra, se olvida el menú
@@ -291,7 +294,7 @@ function exBackAct(){if(typeof fcd!=="undefined"&&fcd)return exBackBattle();
   const ov=exOverlay();if(ov){ovBack(ov);return true}
   return false}
 function exBagAct(){if(typeof fcd!=="undefined"&&fcd||!EX.on||EX.dlg||EX.cut||EX.trans||EX.choice)return;
-  if(exMenuOpen())exMenuClose();XFM=null;
+  if(exMenuOpen())exMenuClose(true);XFM=null;
   ["exDexP","exCtl"].forEach(id=>{const e=$(id);if(e)e.hidden=true});if(typeof WM!=="undefined"&&WM.open)wmHide();if(typeof XSH!=="undefined"&&XSH.open)xsClose();
   exBagToggle()}
 // el mapa abierto desde el menú también vuelve al menú

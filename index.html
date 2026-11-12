@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.69"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.69.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794474194">
+<meta name="game-build" content="1794475502">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2774,6 +2774,8 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 .tchint{display:block;text-align:center;margin-top:8px;color:#fff;font-weight:700;text-shadow:1px 1px 0 #1c2a5a}
 .tcbt{display:flex;justify-content:center;margin-top:10px}.tcbt button{min-width:140px}
 @media (max-width:560px){.tcbody{flex-direction:column-reverse}.tcav{width:100%;max-height:160px}.tcmeds{grid-template-columns:repeat(4,1fr)}}
+/* Lanzamiento perfecto: el círculo se ve por delante del Pokémon */
+.thmon .thring{z-index:3;pointer-events:none}.thmon .thspr{z-index:1}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2839,7 +2841,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.69</small>
+    <small class="pcver">Versión 6.69.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7513,8 +7515,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.69";
+const GAME_VER="6.69.1";
 const NEWS=[
+{v:"2026-11-12-6.69.1",ver:"6.69.1",at:"2026-11-12T10:25",t:"🔧 Arreglos/Mejoras",l:["Lanzamiento perfecto: el círculo de lanzamiento ahora se ve por delante del Pokémon"]},
 {v:"2026-11-12-6.69",ver:"6.69",at:"2026-11-12T10:03",t:"🪪 Exploración: Tarjeta de entrenador",l:["Nueva opción en el menú con tu nombre: abre tu Tarjeta de entrenador","Muestra tu aspecto, tu número de ID, el dinero, la Pokédex, el tiempo de juego, las medallas, tu rival y si eres Campeón/a de la Liga","Frota tus medallas con el ratón o el dedo para sacarles brillo. ¡Con los días se vuelven a ensuciar!"]},
 {v:"2026-11-12-6.68",ver:"6.68",at:"2026-11-12T10:01",t:"🌦️ Exploración: clima, día y noche, bayas y parejas",l:["Cada zona tiene su clima: nieve en Escarcha, ceniza en Brasa, sol abrasador en el Cráter y lluvia en Tormenta. En el resto de rutas cambia cada pocas horas (lluvia o sol fuerte). Lo verás junto al nombre de la zona","El clima pasa a los combates de Exploración (lluvia, sol, nieve o tormenta de arena)","Con lluvia salen más Pokémon de Agua y Eléctricos, con nieve de Hielo, con sol de Fuego y Planta… y de noche, más Pokémon Siniestros, Fantasma, Veneno y Psíquicos","Árboles de bayas en las rutas y en Pueblo Brisa: dan bayas una vez al día","Parejas de entrenadores (gemelas, novios, hermanos…): si te ve una, combates contra las dos a la vez, con sus equipos juntos"]},
 {v:"2026-11-12-6.67",ver:"6.67",at:"2026-11-12T09:58",t:"💤 Exploración: Pokémon especiales en el mapa",l:["Un Snorlax dormido tapa un rincón de la Ruta 4 lleno de objetos. Para despertarlo necesitas la Poké Flauta: te la da el Abuelo de Pueblo Brisa cuando tengas 5 medallas. ¡Puedes capturarlo!","Cuidado con algunos objetos del suelo en la Cueva Roca, la Calle Victoria, la Torre Relámpago y el Bosque Verde: ¡son Pokémon disfrazados!","Con 4 medallas, un Pokémon legendario empieza a recorrer las rutas. Cambia de sitio cada vez que cambias de mapa y huye si no lo capturas. El Mapa te dice por dónde lo han visto"]},
@@ -7825,7 +7828,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794474194";
+const GAME_B="1794475502";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

@@ -1083,3 +1083,5 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 .tchint{display:block;text-align:center;margin-top:8px;color:#fff;font-weight:700;text-shadow:1px 1px 0 #1c2a5a}
 .tcbt{display:flex;justify-content:center;margin-top:10px}.tcbt button{min-width:140px}
 @media (max-width:560px){.tcbody{flex-direction:column-reverse}.tcav{width:100%;max-height:160px}.tcmeds{grid-template-columns:repeat(4,1fr)}}
+/* Lanzamiento perfecto: el círculo se ve por delante del Pokémon */
+.thmon .thring{z-index:3;pointer-events:none}.thmon .thspr{z-index:1}

@@ -8,7 +8,7 @@ setInterval(()=>{try{if(EX.on&&!EX.title&&document.visibilityState==="visible"){
 const tcF=()=>stSt().f;
 function tcShine(i){const f=tcF(),s=(f.shine||{})[i];if(!s)return 0;const days=Math.floor((Date.now()-s.t)/(864e5*2));return Math.max(0,s.l-days)}
 function tcTime(sec){sec=sec|0;const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60);return h+" h "+String(m).padStart(2,"0")+" min"}
-function tcHTML(){const f=tcF(),nm=(typeof S!=="undefined"&&S.nick)||"Entrenador";let look="";try{look=trImg(myLook(),"front")}catch(e){}
+function tcHTML(){const f=tcF(),nm=(typeof S!=="undefined"&&S.nick)||"Entrenador";let look="";try{const u=typeof av3URL==="function"?av3URL(myLook(),240,360,{yaw:.3}):null;look=u?'<img class="trimg tc3d" src="'+u+'" alt="" draggable="false">':trImg(myLook(),"front")}catch(e){}
   const own=xgRun(()=>Object.keys(S.owned||{}).filter(k=>S.owned[k]>0).length),seen=xgRun(()=>Object.keys(S.seen||S.owned||{}).length),id=String((pvHash("id"+nm)>>>0)%100000).padStart(5,"0");
   const start=stSt().t0||f.t0;const meds=XGYM.map((g,i)=>{const has=xbHas(i),sh=has?tcShine(i):0;return '<div class="tcm'+(has?" on":"")+' s'+sh+'" data-tcm="'+i+'" title="'+esc(g.b)+'"><span>'+(has?g.ic:"")+'</span>'+(has?'<i></i>':'')+'</div>'}).join("");
   return '<div class="tcbox" role="dialog" aria-label="Tarjeta de entrenador"><div class="tchd"><b>TARJETA DE ENTRENADOR</b><small>ID Nº '+id+'</small></div>'+

@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794603626">
+<meta name="game-build" content="1794604017">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -7890,7 +7890,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794603626";
+const GAME_B="1794604017";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -18264,7 +18264,7 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
     gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,"precision mediump float;varying vec3 vn;varying vec3 vc;uniform vec3 L;void main(){float u=step(.01,dot(vn,vn));vec3 n=normalize(vn+vec3(0.,0.,.0001));float d=dot(n,L);float s=smoothstep(-.35,.55,d);float rim=pow(1.-max(n.z,0.),3.)*.1;vec3 lit=vc*(.66+.34*s)+vec3(rim)*s;gl_FragColor=vec4(mix(vc,lit,u),1.);}"));
     gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return null}catch(e){return null}
   gl.useProgram(pr);const uM=gl.getUniformLocation(pr,"m"),uL=gl.getUniformLocation(pr,"L"),aP=gl.getAttribLocation(pr,"p"),aN=gl.getAttribLocation(pr,"n"),aC=gl.getAttribLocation(pr,"c");
-  const MAXV=140000,buf=new Float32Array(MAXV*9),vbo=gl.createBuffer();let nv=0;gl.bindBuffer(gl.ARRAY_BUFFER,vbo);gl.bufferData(gl.ARRAY_BUFFER,buf.byteLength,gl.DYNAMIC_DRAW);
+  const MAXV=260000,buf=new Float32Array(MAXV*9),vbo=gl.createBuffer();let nv=0;gl.bindBuffer(gl.ARRAY_BUFFER,vbo);gl.bufferData(gl.ARRAY_BUFFER,buf.byteLength,gl.DYNAMIC_DRAW);
   gl.enableVertexAttribArray(aP);gl.enableVertexAttribArray(aN);gl.enableVertexAttribArray(aC);gl.vertexAttribPointer(aP,3,gl.FLOAT,false,36,0);gl.vertexAttribPointer(aN,3,gl.FLOAT,false,36,12);gl.vertexAttribPointer(aC,3,gl.FLOAT,false,36,24);
   gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
   let R0=m4I();// giro del modelo (las normales se dejan en el espacio de la cámara para que la luz no gire con él)
@@ -18282,6 +18282,8 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
         V(M[0]*x+M[4]*r[0]+M[8]*z+M[12],M[1]*x+M[5]*r[0]+M[9]*z+M[13],M[2]*x+M[6]*r[0]+M[10]*z+M[14],M[0]*nx+M[8]*nz,M[1]*nx+M[9]*nz,M[2]*nx+M[10]*nz,vt.c)};
       for(let k=0;k<rings.length-1;k++){const A=rings[k],B=rings[k+1];vt.c=A[3];for(let i=0;i<segs;i++){const t0=a0+(a1-a0)*i/segs,t1=a0+(a1-a0)*(i+1)/segs;vt(A,t0);vt(A,t1);vt(B,t1);vt(A,t0);vt(B,t1);vt(B,t0)}}
       if(cap){const r=rings[rings.length-1],ny=r[0]>rings[0][0]?1:-1,c=cap===true?r[3]:cap;for(let i=0;i<segs;i++){const t0=Math.PI*2*i/segs,t1=Math.PI*2*(i+1)/segs,P3=(x,z)=>V(M[0]*x+M[4]*r[0]+M[8]*z+M[12],M[1]*x+M[5]*r[0]+M[9]*z+M[13],M[2]*x+M[6]*r[0]+M[10]*z+M[14],M[4]*ny,M[5]*ny,M[6]*ny,c);P3(0,0);P3(Math.cos(t0)*r[1],Math.sin(t0)*r[2]);P3(Math.cos(t1)*r[1],Math.sin(t1)*r[2])}}},
+    // malla modelada (posiciones, normales e índices de un .glb), con su matriz y un color liso
+    mesh(M,P,N,I,c){for(let k=0;k<I.length;k++){const i=I[k]*3,x=P[i],y=P[i+1],z=P[i+2],a=N[i],b=N[i+1],d=N[i+2];V(M[0]*x+M[4]*y+M[8]*z+M[12],M[1]*x+M[5]*y+M[9]*z+M[13],M[2]*x+M[6]*y+M[10]*z+M[14],M[0]*a+M[4]*b+M[8]*d,M[1]*a+M[5]*b+M[9]*d,M[2]*a+M[6]*b+M[10]*d,c)}},
     box(M,hx,hy,hz,c){const F=[[0,0,1,[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],[0,0,-1,[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]],[1,0,0,[1,-1,1],[1,-1,-1],[1,1,-1],[1,1,1]],[-1,0,0,[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]],[0,1,0,[-1,1,1],[1,1,1],[1,1,-1],[-1,1,-1]],[0,-1,0,[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]]];
       for(const f of F){const nx=M[0]*f[0]+M[4]*f[1]+M[8]*f[2],ny=M[1]*f[0]+M[5]*f[1]+M[9]*f[2],nz=M[2]*f[0]+M[6]*f[1]+M[10]*f[2],Q=[];for(let k=3;k<7;k++){const x=f[k][0]*hx,y=f[k][1]*hy,z=f[k][2]*hz;Q.push([M[0]*x+M[4]*y+M[8]*z+M[12],M[1]*x+M[5]*y+M[9]*z+M[13],M[2]*x+M[6]*y+M[10]*z+M[14]])}
         for(const k of[0,1,2,0,2,3])V(Q[k][0],Q[k][1],Q[k][2],nx,ny,nz,c)}},
@@ -18289,7 +18291,7 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
     disc(M,rx,ry,c,n){n=n||14;for(let i=0;i<n;i++){const t0=Math.PI*2*i/n,t1=Math.PI*2*(i+1)/n,P3=(x,y)=>V(M[0]*x+M[4]*y+M[12],M[1]*x+M[5]*y+M[13],M[2]*x+M[6]*y+M[14],0,0,0,c);P3(0,0);P3(Math.cos(t0)*rx,Math.sin(t0)*ry);P3(Math.cos(t1)*rx,Math.sin(t1)*ry)}}};
   return{ok:true,cv,
     draw(L,o){o=o||{};nv=0;const w=cv.width,h=cv.height;gl.viewport(0,0,w,h);const zoom=o.zoom||1,cy=o.cy==null?.97:o.cy,dist=(o.dist||5.15)/zoom;
-      R0=m4RY(m4I(),o.yaw||0);WP=!o.chibi;av3Model(E,L,o);
+      R0=m4RY(m4I(),o.yaw||0);WP=!o.chibi&&!av3Model.nowarp;av3Model(E,L,o);
       const VP=m4Mul(m4Persp((o.fov||24)*Math.PI/180,w/h,.3,30),m4Look([0,cy+(o.elev!=null?o.elev*dist:.25/zoom),dist],[0,cy,0]));
       gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);const l=Math.hypot(.38,.5,.78);gl.uniform3f(uL,.38/l,.5/l,.78/l);
       gl.bufferSubData(gl.ARRAY_BUFFER,0,buf.subarray(0,nv*9));gl.drawArrays(gl.TRIANGLES,0,nv);return nv}}}

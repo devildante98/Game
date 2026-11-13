@@ -1091,3 +1091,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 
 .jgbd.nog canvas{opacity:0!important}.jgngb{color:var(--mc,#2f9e8f);font-weight:800}.jgngb b{color:inherit}
 .jgng{display:flex;flex-direction:column;gap:2px;align-items:center;width:100%;max-width:640px;padding:10px 12px;border-radius:14px;background:var(--bg);color:var(--ink);border:2px dashed var(--line);min-height:0}.jgng small{color:var(--mute);font-size:.78rem;font-weight:600}.jgng.on{border-style:solid;border-color:var(--mc,#2f9e8f);box-shadow:0 0 0 3px rgba(47,158,143,.22)}.jgng.on>b::after{content:" · ACTIVADO";color:var(--mc,#2f9e8f)}
+
+.mgw.mgxl{width:min(1500px,100%)}.jgsc{scroll-behavior:auto!important;overflow:auto;max-height:calc(100vh - 262px);border-radius:14px;border:2px solid var(--line);overscroll-behavior:contain;background:var(--bg)}
+.jgw.jgwbig{max-width:none;margin:0 auto;border:0;border-radius:0;cursor:grab}.jgw.jgwbig.pan{cursor:grabbing}.pzsz button.jgbig{border-style:dashed}
+@media (max-width:620px){.jgsc{max-height:calc(100vh - 300px)}}

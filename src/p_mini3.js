@@ -98,11 +98,14 @@ function jgEdge(g,x0,y0,x1,y1,t){const dx=x1-x0,dy=y1-y0;if(!t){g.lineTo(x1,y1);
   const nx=dy*t,ny=-dx*t,P=(u,v)=>[x0+dx*u+nx*v,y0+dy*u+ny*v],L=(u,v)=>{const p=P(u,v);g.lineTo(p[0],p[1])},C=(a,b,c,d,e,f)=>{const p=P(a,b),q=P(c,d),r=P(e,f);g.bezierCurveTo(p[0],p[1],q[0],q[1],r[0],r[1])};
   L(.36,0);C(.42,.02,.30,.22,.5,.22);C(.70,.22,.58,.02,.64,0);g.lineTo(x1,y1)}
 function jgPath(c,m,e){const g=new Path2D();g.moveTo(m,m);jgEdge(g,m,m,m+c,m,e[0]);jgEdge(g,m+c,m,m+c,m+c,e[1]);jgEdge(g,m+c,m+c,m,m+c,e[2]);jgEdge(g,m,m+c,m,m,e[3]);g.closePath();return g}
-const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como los de verdad: las piezas tienen salientes y huecos, empiezan sueltas y tienes que montarlo desde cero. Elige de 9 a 100 piezas. Puedes guardar la partida y seguir otro día.",
+// tamaños del Puzle de piezas: hasta 10×10 caben en la ventana normal; los grandes (196, 484 y 1.024 piezas) se abren en ventana ancha con zoom
+const JG_SIZES=[3,4,5,6,7,8,10,14,22,32];
+const jgSvOk=s=>Array.isArray(s.p2)?s.p2.filter((v,i)=>i%2===0&&v<0).length:(s.p||[]).filter(q=>q[2]).length;
+const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como los de verdad: las piezas tienen salientes y huecos, empiezan sueltas y tienes que montarlo desde cero. Elige de 9 a 1.024 piezas. Puedes guardar la partida y seguir otro día.",
   rw:s=>s/(G_JIG._b||1)*45,// el extra por jugar sin ayuda da más puntuación, no más tickets
   start(B,end){G_JIG._b=1;
-    const pick=()=>{const sv=mgSaveGet("jig");let ng=!!O.jgNg;
-      B.innerHTML=mgSaveHTML(sv,s=>s.N*s.N+" piezas · "+mgClk(s.el)+" · "+s.p.filter(q=>q[2]).length+" encajadas"+(s.ng?" · sin ayuda":""))+'<div class="pzpick"><h3>¿De cuántas piezas quieres el puzle?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-jgn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i data-jgpts="'+(n*n*50)+'">×'+fmt(n*n*50)+' pts</i></button>').join("")+'</div><button type="button" class="jgng" id="jgNg" aria-pressed="false"><b>🙈 Sin fondo de ayuda</b><small>No se ve la silueta en el tablero ni se puede mirar la imagen. Más difícil: <b>+50 % de puntuación</b>.</small></button><small class="mut">Arrastra cada pieza a su sitio en el tablero: si la sueltas cerca, encaja sola.</small><button type="button" class="alt big" data-jgco="1">👥 Jugar en equipo, en tiempo real</button></div>';
+    const pick=()=>{const sv=mgSaveGet("jig");try{$("mgM").querySelector(".mgw").classList.remove("mgxl")}catch(e){}let ng=!!O.jgNg;
+      B.innerHTML=mgSaveHTML(sv,s=>s.N*s.N+" piezas · "+mgClk(s.el)+" · "+jgSvOk(s)+" encajadas"+(s.ng?" · sin ayuda":""))+'<div class="pzpick"><h3>¿De cuántas piezas quieres el puzle?</h3><div class="pzsz">'+JG_SIZES.map(n=>'<button data-jgn="'+n+'"'+(n>10?' class="jgbig"':'')+'><b>'+fmt(n*n)+'</b><small>'+n+'×'+n+'</small><i data-jgpts="'+(n*n*50)+'">×'+fmt(n*n*50)+' pts</i></button>').join("")+'</div><button type="button" class="jgng" id="jgNg" aria-pressed="false"><b>🙈 Sin fondo de ayuda</b><small>No se ve la silueta en el tablero ni se puede mirar la imagen. Más difícil: <b>+50 % de puntuación</b>.</small></button><small class="mut">Arrastra cada pieza a su sitio en el tablero: si la sueltas cerca, encaja sola. Los puzles de <b>196, 484 y 1.024 piezas</b> se abren en una ventana ancha con zoom: son muy largos, pero puedes guardarlos y seguir otro día.</small><button type="button" class="alt big" data-jgco="1">👥 Jugar en equipo, en tiempo real</button></div>';
       B.querySelector("[data-jgco]").onclick=()=>{snd("ui");if(typeof jgCoop==="function")jgCoop(B,end)};
       const ngUI=()=>{const b=$("jgNg");b.classList.toggle("on",ng);b.setAttribute("aria-pressed",ng?"true":"false");B.querySelectorAll("[data-jgpts]").forEach(i=>{i.textContent="×"+fmt(Math.round(+i.dataset.jgpts*(ng?1.5:1)))+" pts"})};
       $("jgNg").onclick=()=>{ng=!ng;O.jgNg=ng;save();snd("ui");ngUI()};ngUI();
@@ -112,30 +115,42 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como
       const pool=P.filter(p=>p[2]!=="M");let mon=sv&&PM[sv.m]?PM[sv.m]:pool[Math.floor(Math.random()*pool.length)],src=sv&&sv.src?sv.src:mgImgSrc(mon),tries=0;
       const T=N*N,s=JG_BW/N,m=s*.25,rnd=()=>Math.random()<.5?1:-1;
       // salientes de las uniones: h = entre una fila y la de debajo, v = entre una columna y la de la derecha
+      const big=N>10;
       const okArr=(a,n)=>Array.isArray(a)&&a.length===n&&a.every(x=>x===1||x===-1);
+      // en los puzles grandes los salientes se guardan como texto («1» saliente, «0» entrante) para ocupar menos
+      if(sv&&typeof sv.h==="string")sv.h=[...sv.h].map(c=>c==="1"?1:-1);if(sv&&typeof sv.v==="string")sv.v=[...sv.v].map(c=>c==="1"?1:-1);
       const H=sv&&okArr(sv.h,(N-1)*N)?sv.h.slice():Array.from({length:(N-1)*N},rnd),V=sv&&okArr(sv.v,N*(N-1))?sv.v.slice():Array.from({length:N*(N-1)},rnd);
       const edges=i=>{const r=Math.floor(i/N),c=i%N;return [r>0?-H[(r-1)*N+c]:0,c<N-1?V[r*(N-1)+c]:0,r<N-1?H[r*N+c]:0,c>0?-V[r*(N-1)+c-1]:0]};
-      const perRow=Math.max(3,Math.floor(1/(s*1.3))),rows=Math.ceil(T/perRow),trayH=Math.min(.62,Math.max(.34,rows*s*1.25+s*.7)),AH=JG_BY+JG_BW+.04+trayH;
+      const perRow=Math.max(3,Math.floor(1/(s*1.3))),rows=Math.ceil(T/perRow),trayH=Math.min(big?3:.62,Math.max(.34,rows*s*1.25+s*.7)),AH=JG_BY+JG_BW+.04+trayH;
       // piezas: x,y = esquina del cuadrado (sin salientes); l = encajada; z = orden de dibujo
       const PC=[...Array(T).keys()].map(i=>({i,x:0,y:0,l:false,z:i,cv:null,path:null}));
       const home=i=>[JG_BX+(i%N)*s,JG_BY+Math.floor(i/N)*s];
-      const scatter=list=>{const L=list.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[L[i],L[j]]=[L[j],L[i]]}
+      const isEdge=i=>{const r=Math.floor(i/N),c=i%N;return r===0||c===0||r===N-1||c===N-1};
+      const scatter=(list,edgesFirst)=>{let L=list.slice();for(let i=L.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[L[i],L[j]]=[L[j],L[i]]}
+        if(edgesFirst)L=L.filter(p=>isEdge(p.i)).concat(L.filter(p=>!isEdge(p.i)));
         const top=JG_BY+JG_BW+.04+m,rs=Math.min(s*1.25,(trayH-s-2*m)/Math.max(1,Math.ceil(L.length/perRow)-1||1)),cs=1/perRow;
         L.forEach((p,k)=>{p.x=Math.min(1-s-m,Math.max(m,(k%perRow+.5)*cs-s/2+(Math.random()-.5)*cs*.25));p.y=Math.min(AH-s-m,Math.max(top,top+Math.floor(k/perRow)*rs+(Math.random()-.5)*s*.2))})};
-      if(sv&&Array.isArray(sv.p)&&sv.p.length===T)sv.p.forEach((q,i)=>{const p=PC[i];p.l=!!q[2];if(p.l){[p.x,p.y]=home(i)}else{p.x=+q[0]||0;p.y=+q[1]||0}});else scatter(PC);
+      if(sv&&Array.isArray(sv.p2)&&sv.p2.length===T*2)PC.forEach((p,i)=>{const a=sv.p2[i*2],b=sv.p2[i*2+1];p.l=a<0;if(p.l){[p.x,p.y]=home(i)}else{p.x=a/1e4;p.y=b/1e4}});
+      else if(sv&&Array.isArray(sv.p)&&sv.p.length===T)sv.p.forEach((q,i)=>{const p=PC[i];p.l=!!q[2];if(p.l){[p.x,p.y]=home(i)}else{p.x=+q[0]||0;p.y=+q[1]||0}});else scatter(PC);
       let zTop=T+1,t0=performance.now()-(sv?sv.el|0:0),done=false,ready=false;if(sv)mgSaveDel("jig");
       const c1=TC[tys(mon)[0]]||"#4a6ae0",c2=TC[tys(mon)[1]||"fairy"]||"#ff8ad8";
       B.innerHTML='<div class="whohd"><span>🧩 <b>'+T+'</b> piezas</span><span>⏱️ <b id="jgT">0:00</b></span><span>✅ <b id="jgOk">0</b>/'+T+'</span><span class="jgngb" id="jgNgB"'+(ng?'':' hidden')+'>🙈 Sin ayuda <b>×1,5</b></span></div>'+
-        '<div class="jgw" id="jgW" style="aspect-ratio:1/'+AH.toFixed(4)+'"><div class="jgbd'+(ng?' nog':'')+'" id="jgBd" style="left:'+JG_BX*100+'%;top:'+(JG_BY/AH*100)+'%;width:'+JG_BW*100+'%;height:'+(JG_BW/AH*100)+'%;--c1:'+c1+';--c2:'+c2+'"><img alt="" id="jgRef"></div><div class="jgld">Cargando las piezas…</div></div>'+
-        '<div class="mgbtns"><button class="alt" id="jgPeek">'+(ng?'💡 Mostrar la ayuda':'👁️ Ver la imagen')+'</button><button class="alt" id="jgMix">🧺 Recoger las sueltas</button><button class="alt" id="jgSave">💾 Guardar y salir</button></div>';
-      const W=$("jgW"),ref=$("jgRef");let wpx=W.clientWidth||400;
+        (big?'<div class="jgsc" id="jgSc">':'')+'<div class="jgw'+(big?' jgwbig':'')+'" id="jgW" style="aspect-ratio:1/'+AH.toFixed(4)+'"><div class="jgbd'+(ng?' nog':'')+'" id="jgBd" style="left:'+JG_BX*100+'%;top:'+(JG_BY/AH*100)+'%;width:'+JG_BW*100+'%;height:'+(JG_BW/AH*100)+'%;--c1:'+c1+';--c2:'+c2+'"><img alt="" id="jgRef"></div><div class="jgld">Cargando las piezas…</div></div>'+(big?'</div>':'')+
+        '<div class="mgbtns"><button class="alt" id="jgPeek">'+(ng?'💡 Mostrar la ayuda':'👁️ Ver la imagen')+'</button><button class="alt" id="jgMix">🧺 Recoger las sueltas</button>'+(big?'<button class="alt" id="jgEdge">🔲 Bordes primero</button><button class="alt" id="jgZo" aria-label="Alejar">🔍−</button><button class="alt" id="jgZi" aria-label="Acercar">🔍+</button>':'')+'<button class="alt" hidden></button><button class="alt" id="jgSave">💾 Guardar y salir</button></div>';
+      const W=$("jgW"),ref=$("jgRef"),SC=big?$("jgSc"):null;
+      // puzles grandes: ventana ancha, tablero con desplazamiento y zoom (zs = tamaño de cada pieza en píxeles)
+      let zs=N>=30?30:N>=20?34:40;
+      const zoom=k=>{const cxr=SC.clientWidth?(SC.scrollLeft+SC.clientWidth/2)/SC.scrollWidth:.5,cyr=SC.clientHeight?(SC.scrollTop+SC.clientHeight/2)/SC.scrollHeight:0;zs=Math.max(16,Math.min(72,Math.round(zs*k)));W.style.width=Math.round(zs/s)+"px";
+        SC.scrollLeft=cxr*SC.scrollWidth-SC.clientWidth/2;SC.scrollTop=cyr*SC.scrollHeight-SC.clientHeight/2};
+      if(big){try{$("mgM").querySelector(".mgw").classList.add("mgxl")}catch(e){}W.style.width=Math.round(zs/s)+"px";setTimeout(()=>{SC.scrollLeft=(SC.scrollWidth-SC.clientWidth)/2},60)}
+      let wpx=W.clientWidth||400;
       const okN=()=>PC.filter(p=>p.l).length;
       const place=p=>{const e=p.cv;if(!e)return;e.style.left=(p.x-m)*wpx+"px";e.style.top=(p.y-m)*wpx+"px";e.style.width=e.style.height=(s+2*m)*wpx+"px";e.style.zIndex=p.l?1:10+p.z;e.classList.toggle("ok",p.l)};
       const layout=()=>{wpx=W.clientWidth||wpx;PC.forEach(place)};
       const ro=typeof ResizeObserver!=="undefined"?new ResizeObserver(()=>{if(!W.isConnected){ro.disconnect();return}layout()}):null;if(ro)ro.observe(W);
       let cpx=0;
       const build=img=>{
-        cpx=Math.max(28,Math.min(180,Math.round(JG_BW*wpx*(window.devicePixelRatio||1)/N)));const R=cpx*N,bd=document.createElement("canvas");bd.width=bd.height=R;const g=bd.getContext("2d");
+        cpx=big?(N>=30?48:N>=20?56:64):Math.max(28,Math.min(180,Math.round(JG_BW*wpx*(window.devicePixelRatio||1)/N)));const R=cpx*N,bd=document.createElement("canvas");bd.width=bd.height=R;const g=bd.getContext("2d");
         // fondo con un paisaje sencillo (sol, nubes, colinas y luz que cambia de un lado a otro): cada zona es distinta y se sabe dónde va cada pieza
         const lg=g.createLinearGradient(0,0,0,R),mix=(a,b,k)=>{const h=x=>[1,3,5].map(o=>parseInt(x.slice(o,o+2),16));try{const A=h(a),Bc=h(b);return "rgb("+A.map((v,n)=>Math.round(v+(Bc[n]-v)*k)).join(",")+")"}catch(e){return a}};
         lg.addColorStop(0,mix(c1,"#ffffff",.55));lg.addColorStop(.55,c1);lg.addColorStop(1,c2);g.fillStyle=lg;g.fillRect(0,0,R,R);
@@ -160,9 +175,15 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como
       // arrastrar
       let dr=null;
       const pt=e=>{const r=W.getBoundingClientRect();return [(e.clientX-r.left)/wpx,(e.clientY-r.top)/wpx]};
-      W.addEventListener("pointerdown",e=>{if(done||!ready)return;const [ux,uy]=pt(e),p=hit(ux,uy);if(!p)return;e.preventDefault();p.z=zTop++;dr={p,dx:ux-p.x,dy:uy-p.y,id:e.pointerId};p.cv.classList.add("drag");place(p);try{W.setPointerCapture(e.pointerId)}catch(x){}});
-      W.addEventListener("pointermove",e=>{if(!dr||e.pointerId!==dr.id)return;const [ux,uy]=pt(e),p=dr.p;p.x=Math.min(1-s*.5,Math.max(-s*.5,ux-dr.dx));p.y=Math.min(AH-s*.5,Math.max(-s*.5,uy-dr.dy));place(p)});
-      const up=e=>{if(!dr||e.pointerId!==dr.id)return;const p=dr.p;dr=null;p.cv.classList.remove("drag");const [hx,hy]=home(p.i);
+      // en los puzles grandes: arrastrar el fondo mueve la vista, y al llevar una pieza hasta el borde la vista se desplaza sola
+      let pan=null,lastXY=null,asRaf=0;
+      const moveTo=(cx,cy)=>{if(!dr)return;const r=W.getBoundingClientRect(),ux=(cx-r.left)/wpx,uy=(cy-r.top)/wpx,p=dr.p;p.x=Math.min(1-s*.5,Math.max(-s*.5,ux-dr.dx));p.y=Math.min(AH-s*.5,Math.max(-s*.5,uy-dr.dy));place(p)};
+      const autoScroll=()=>{asRaf=0;if(!dr||!SC||!lastXY)return;const r=SC.getBoundingClientRect(),E=46,[cx,cy]=lastXY;let vx=0,vy=0;
+        if(cy>r.bottom-E)vy=Math.min(22,(cy-(r.bottom-E))*.5+3);else if(cy<r.top+E)vy=-Math.min(22,((r.top+E)-cy)*.5+3);if(cx>r.right-E)vx=Math.min(22,(cx-(r.right-E))*.5+3);else if(cx<r.left+E)vx=-Math.min(22,((r.left+E)-cx)*.5+3);
+        if(vx||vy){SC.scrollLeft+=vx;SC.scrollTop+=vy;moveTo(cx,cy)}asRaf=requestAnimationFrame(autoScroll)};
+      W.addEventListener("pointerdown",e=>{if(done||!ready)return;const [ux,uy]=pt(e),p=hit(ux,uy);if(!p){if(SC){pan={id:e.pointerId,x:e.clientX,y:e.clientY,l:SC.scrollLeft,t:SC.scrollTop};W.classList.add("pan");try{W.setPointerCapture(e.pointerId)}catch(x){}}return}e.preventDefault();if(SC){lastXY=[e.clientX,e.clientY];if(!asRaf)asRaf=requestAnimationFrame(autoScroll)}p.z=zTop++;dr={p,dx:ux-p.x,dy:uy-p.y,id:e.pointerId};p.cv.classList.add("drag");place(p);try{W.setPointerCapture(e.pointerId)}catch(x){}});
+      W.addEventListener("pointermove",e=>{if(pan&&e.pointerId===pan.id){SC.scrollLeft=pan.l-(e.clientX-pan.x);SC.scrollTop=pan.t-(e.clientY-pan.y);return}if(dr&&SC)lastXY=[e.clientX,e.clientY];if(!dr||e.pointerId!==dr.id)return;const [ux,uy]=pt(e),p=dr.p;p.x=Math.min(1-s*.5,Math.max(-s*.5,ux-dr.dx));p.y=Math.min(AH-s*.5,Math.max(-s*.5,uy-dr.dy));place(p)});
+      const up=e=>{if(pan&&e.pointerId===pan.id){pan=null;W.classList.remove("pan");return}if(!dr||e.pointerId!==dr.id)return;const p=dr.p;dr=null;p.cv.classList.remove("drag");const [hx,hy]=home(p.i);
         if(Math.abs(p.x-hx)<s*.3&&Math.abs(p.y-hy)<s*.3){p.x=hx;p.y=hy;p.l=true;place(p);snd("lvl");if(!hubCalm())p.cv.animate([{filter:"brightness(1.7)"},{filter:"none"}],{duration:350});const k=okN();$("jgOk").textContent=k;if(k===T)win()}
         else{place(p);snd("ui")}};
       W.addEventListener("pointerup",up);W.addEventListener("pointercancel",up);
@@ -176,9 +197,11 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como
         if(Date.now()-ngAsk>4000){ngAsk=Date.now();b.textContent="¿Seguro? Pierdes el +50 %";snd("ui");mgT(()=>{if(ng&&b.isConnected)b.textContent="💡 Mostrar la ayuda"},4000);return}
         ng=false;ngAsk=0;$("jgBd").classList.remove("nog");const g=$("jgNgB");if(g)g.hidden=true;b.textContent="👁️ Ver la imagen";snd("ui");toast("💡 Ayuda activada: este puzle ya no da el extra de puntuación")};
       $("jgMix").onclick=()=>{if(done||!ready)return;snd("ui");scatter(PC.filter(p=>!p.l));layout()};
+      if(big){$("jgEdge").onclick=()=>{if(done||!ready)return;snd("ui");scatter(PC.filter(p=>!p.l),true);layout();toast("🔲 Las piezas del borde están ahora arriba, las primeras")};
+        $("jgZo").onclick=()=>{snd("ui");zoom(.8)};$("jgZi").onclick=()=>{snd("ui");zoom(1.25)}}
       // se guarda con «Guardar y salir», al cerrar con la ✕ o Esc, y si se cierra la página
       MG.onClose=()=>{if(done)return;const r4=v=>Math.round(v*1e4)/1e4;
-        mgSavePut("jig",{N:N,ng:ng?1:0,m:mon[0],src:src,h:H,v:V,p:PC.map(p=>p.l?[0,0,1]:[r4(p.x),r4(p.y),0]),el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Puzle guardado. Puedes seguir cuando quieras.")};
+        mgSavePut("jig",big?{N:N,ng:ng?1:0,m:mon[0],src:src,h:H.map(x=>x>0?1:0).join(""),v:V.map(x=>x>0?1:0).join(""),p2:PC.flatMap(p=>p.l?[-1,-1]:[Math.round(p.x*1e4),Math.round(p.y*1e4)]),el:Math.round(performance.now()-t0),at:Date.now()}:{N:N,ng:ng?1:0,m:mon[0],src:src,h:H,v:V,p:PC.map(p=>p.l?[0,0,1]:[r4(p.x),r4(p.y),0]),el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Puzle guardado. Puedes seguir cuando quieras.")};
       $("jgSave").onclick=()=>{if(!done)mgClose()};
     };
     mgSet(0);pick();
@@ -191,7 +214,7 @@ MGS.push(G_PUZ,G_JIG,G_HL);
 TOUR_ROT.push(["2026-W46","who mem dig fish thr run exc wgt fos puz hl"]);
 TOUR_ROT.push(["2026-W47","who mem dig fish thr run exc wgt fos puz jig hl"]);
 Object.assign(MGHOW,{
-  jig:["Elige de <b>9 a 100 piezas</b>: cada pieza vale hasta <b>50 puntos</b> (con 100 piezas, hasta 5.000).","Activa <b>🙈 Sin fondo de ayuda</b> para jugar sin la silueta del tablero: es más difícil y da un <b>50 % más de puntuación</b> (los tickets son los mismos). Si muestras la ayuda a mitad, pierdes el extra.","Las piezas empiezan sueltas debajo del tablero. Arrástralas a su sitio: si la sueltas cerca, <b>encaja sola</b> y se queda fija.","Fíjate en la forma: cada pieza tiene salientes y huecos que solo encajan con sus vecinas. Las de los bordes tienen un lado recto.","<b>Rapidez</b>: la mitad de los puntos dependen de lo rápido que termines.","<b>👁️ Ver la imagen</b> muestra el dibujo en el tablero; <b>🧺 Recoger las sueltas</b> vuelve a ordenar las piezas sueltas.","<b>💾 Guardar y salir</b> (o cerrar con la ✕) guarda el puzle tal cual, con el tiempo parado, para seguir otro día."],
+  jig:["Elige de <b>9 a 1.024 piezas</b>: cada pieza vale hasta <b>50 puntos</b> (con 100 piezas, hasta 5.000). Los puzles de 196, 484 y 1.024 piezas se abren en una ventana ancha: usa 🔍 para acercar o alejar, arrastra el fondo para moverte y «Bordes primero» para empezar por el marco.","Activa <b>🙈 Sin fondo de ayuda</b> para jugar sin la silueta del tablero: es más difícil y da un <b>50 % más de puntuación</b> (los tickets son los mismos). Si muestras la ayuda a mitad, pierdes el extra.","Las piezas empiezan sueltas debajo del tablero. Arrástralas a su sitio: si la sueltas cerca, <b>encaja sola</b> y se queda fija.","Fíjate en la forma: cada pieza tiene salientes y huecos que solo encajan con sus vecinas. Las de los bordes tienen un lado recto.","<b>Rapidez</b>: la mitad de los puntos dependen de lo rápido que termines.","<b>👁️ Ver la imagen</b> muestra el dibujo en el tablero; <b>🧺 Recoger las sueltas</b> vuelve a ordenar las piezas sueltas.","<b>💾 Guardar y salir</b> (o cerrar con la ✕) guarda el puzle tal cual, con el tiempo parado, para seguir otro día."],
   puz:["Elige de <b>9 a 100 piezas</b>: cada pieza vale <b>40 puntos</b> (con 100 piezas, hasta 4.000).","Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.","<b>Rapidez</b>: hasta la mitad de los puntos dependen de lo rápido que termines.","<b>Precisión</b>: cuantos menos cambios hagas (cerca del mínimo), más puntos.","Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo."],
   hl:["Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>. Si empatan, cuenta como acierto.","Con la racha, los valores se parecen cada vez más y tienes menos tiempo.","Teclado: <b>↑</b> más, <b>↓</b> menos."]});
 // =====================================================================================

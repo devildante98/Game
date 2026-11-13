@@ -579,7 +579,7 @@ const trSexTag=(k,v)=>{const x=trSex(k,v);return x==="m"?' <i class="trsx trsxm"
 function trUI(){
   const L=myLook(),box=$("trOpts");if(!box)return;
   const use3=typeof av3Attach==="function"&&av3Attach.ready&&!(AV3V.ed&&AV3V.ed.bad);
-  $("trPrev").innerHTML=(use3?'<div class="trv trv3d"><span>En 3D ↔ gírame</span><div class="trv3" id="trV3"></div></div>':'<div class="trv"><span>De frente</span>'+trImg(L,"f","i","idle")+'</div>')+'<div class="trv"><span>En combate</span>'+trImg(L,"b","i","idle")+'</div>'+
+  $("trPrev").innerHTML=(use3?'<div class="trv trv3d"><span>En 3D ↔ gírame</span><div class="trv3" id="trV3"></div><div class="trvz"><button type="button" onclick="av3Zoom(\'ed\',1.3)" aria-label="Acercar">＋</button><button type="button" onclick="av3Zoom(\'ed\',.77)" aria-label="Alejar">－</button><button type="button" onclick="av3Big(\'ed\')" aria-label="Ver en grande">⤢</button></div></div>':'<div class="trv"><span>De frente</span>'+trImg(L,"f","i","idle")+'</div>')+'<div class="trv"><span>En combate</span>'+trImg(L,"b","i","idle")+'</div>'+
     (typeof chSpriteImg==="function"?'<div class="trv trvmap"><span>En el mapa</span><div class="trvsp">'+["d","l","u","r"].map(d=>chSpriteImg(L,d)).join("")+'</div></div>':'');
   if(use3&&!av3Attach($("trV3"),"ed",()=>myLook(),{yaw:.35})){const h=$("trV3");if(h)h.parentNode.outerHTML='<div class="trv"><span>De frente</span>'+trImg(L,"f","i","idle")+'</div>'}
   const opts=TRO.filter(o=>o[3]===TRTAB),used=new Set();

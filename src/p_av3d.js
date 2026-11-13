@@ -30,7 +30,7 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
   let WP=false;const V=(x,y,z,nx,ny,nz,c)=>{if(nv>=MAXV)return;if(WP)y=y<.9?y*1.1:y<1.34?.99+(y-.9)*.79545:y;const i=nv*9,m=R0;buf[i]=m[0]*x+m[4]*y+m[8]*z+m[12];buf[i+1]=m[1]*x+m[5]*y+m[9]*z+m[13];buf[i+2]=m[2]*x+m[6]*y+m[10]*z+m[14];
     buf[i+3]=m[0]*nx+m[4]*ny+m[8]*nz;buf[i+4]=m[1]*nx+m[5]*ny+m[9]*nz;buf[i+5]=m[2]*nx+m[6]*ny+m[10]*nz;buf[i+6]=c[0];buf[i+7]=c[1];buf[i+8]=c[2];nv++};
   // esfera unidad en rejilla (dos resoluciones)
-  const mkS=(S,Rg)=>{const P=[];for(let j=0;j<=Rg;j++){const v=j/Rg*Math.PI,row=[];for(let i=0;i<=S;i++){const u=i/S*Math.PI*2;row.push([Math.sin(v)*Math.cos(u),Math.cos(v),Math.sin(v)*Math.sin(u)])}P.push(row)}return P},SH=mkS(20,12),SL=mkS(10,7);
+  const mkS=(S,Rg)=>{const P=[];for(let j=0;j<=Rg;j++){const v=j/Rg*Math.PI,row=[];for(let i=0;i<=S;i++){const u=i/S*Math.PI*2;row.push([Math.sin(v)*Math.cos(u),Math.cos(v),Math.sin(v)*Math.sin(u)])}P.push(row)}return P},SH=mkS(26,15),SL=mkS(10,7);
   const E={
     // elipsoide; pred(x,y,z) sobre la esfera unidad decide qué trozos se dibujan (para cascos de pelo, gorras…)
     ell(M,rx,ry,rz,c,pred,lo){const P=lo?SL:SH,Rg=P.length-1,S=P[0].length-1;const vt=q=>{const x=q[0]*rx,y=q[1]*ry,z=q[2]*rz;let nx=q[0]/rx,ny=q[1]/ry,nz=q[2]/rz;const l=Math.hypot(nx,ny,nz)||1;nx/=l;ny/=l;nz/=l;
@@ -147,7 +147,7 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   for(const s of[-1,1]){const x=s*.096,legC=y=>y<bootTop?shc:y>=pantEnd?bc:(y<sockTop&&!sandal)?sckc:sk,R=[];
     const cuts=[pantEnd,sockTop,bootTop].filter(c=>c>.09&&c<.88),YS=LY.filter(y=>!cuts.some(c=>Math.abs(c-y)<.012)).concat(cuts).sort((a,b)=>b-a);
     for(const y of YS){if(cuts.includes(y)){const a=legR(y+.008),b=legR(y-.012);R.push([y+.001,a,a,legC(y+.008)],[y,b,b,legC(y-.012)])}else{const r=legR(y-.004);R.push([y,r,r,legC(y-.004)])}}
-    const LM=wk?m4T(m4RX(T(x,.9+(s*wk>0?.06:0),0),-s*wk*.3),0,-.9,0):T(x,0,0);E.lathe(LM,R,14);
+    const LM=wk?m4T(m4RX(T(x,.9+(s*wk>0?.06:0),0),-s*wk*.3),0,-.9,0):T(x,0,0);E.lathe(LM,R,18);
     // bajo del pantalón: vuelta más clara, como en los vaqueros remangados
     if(pantEnd>.09&&pantEnd<.8){const r=legR(pantEnd+.01)*1.07,h=pantEnd<.2?.06:.045;E.lathe(LM,[[pantEnd+h,r,r,lt(bc,.22)],[pantEnd,r,r,lt(bc,.22)],[pantEnd-.004,r*.8,r*.8,dk(bc,.3)]],14)}
     if(bot===14&&pantEnd<.8)E.box(m4T(LM,s*.098,.56,0),.012,.06,.05,dk(bc,.12));
@@ -165,9 +165,9 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
     if(bot===9||bot===13)for(let i=0;i<12;i++){const a=i/12*Math.PI*2;E.box(m4RY(T(Math.cos(a)*w*.99,hem+.12,Math.sin(a)*w*.82),-a+Math.PI/2),.006,.11,.004,dk(c,.14))}}
   const tr=(y,k)=>{const f=(y-.98)/.38,x=WA+(SH*.94-WA)*Math.min(1,f*1.25),z=TZ*.82+.022*Math.sin(Math.min(1,f)*Math.PI)+(girl&&y>1.14&&y<1.27?.014:0);return[y,x*(k||1)+(y>1.1?br:0),z*(k||1)+(y>1.1?br:0)]};
   const band=y=>{if(inner)return inner;if(crop&&y<1.13)return sk;if(stripes)return Math.floor((y-.98)/.062)%2?(top===14?ac:pcc):tc;return tc};
-  {const R=[];for(let y=.97;y<1.335;y+=.031){const q=tr(y);R.push([q[0],q[1],q[2],band(y)])}const q=tr(1.34);R.push([1.34,q[1],q[2],band(1.34)]);R.push([1.39,SH*.6,.078,band(1.37)]);R.push([1.412,.07,.064,band(1.39)]);E.lathe(I,R,22)}
+  {const R=[];for(let y=.97;y<1.335;y+=.031){const q=tr(y);R.push([q[0],q[1],q[2],band(y)])}const q=tr(1.34);R.push([1.34,q[1],q[2],band(1.34)]);R.push([1.39,SH*.6,.078,band(1.37)]);R.push([1.412,.07,.064,band(1.39)]);E.lathe(I,R,30)}
   // chaqueta, chaleco o abrigo abiertos: una capa por encima de la camiseta, con el frente sin cerrar y el cuello subido
-  if(open){const g0=Math.PI/2+.42,g1=Math.PI/2+Math.PI*2-.42,hem=top===8||top===12?.58:.9,R=[];const longC=hem<.8;for(const y of longC?[hem,.8,.98,1.1,1.22,1.34]:[hem,.98,1.1,1.22,1.34]){const q=y<.7?[y,.262,.205]:y<.9?[y,.24,.185]:y<.99?(longC?[y,WA*1.3,TZ*1.22]:tr(y,1.09)):tr(y,1.09);R.push([y,q[1],q[2],y<hem+.03?dk(tc,.1):tc])}R.push([1.4,SH*.66,.086,tc]);E.lathe(I,R,22,null,g0,g1);
+  if(open){const g0=Math.PI/2+.42,g1=Math.PI/2+Math.PI*2-.42,hem=top===8||top===12?.58:.9,R=[];const longC=hem<.8;for(const y of longC?[hem,.8,.98,1.1,1.22,1.34]:[hem,.98,1.1,1.22,1.34]){const q=y<.7?[y,.262,.205]:y<.9?[y,.24,.185]:y<.99?(longC?[y,WA*1.3,TZ*1.22]:tr(y,1.09)):tr(y,1.09);R.push([y,q[1],q[2],y<hem+.03?dk(tc,.1):tc])}R.push([1.4,SH*.66,.086,tc]);E.lathe(I,R,30,null,g0,g1);
     for(const s of[-1,1]){E.box(m4RY(m4RZ(T(s*.062,1.4,.062),s*-.35),s*.5),.03,.05,.008,lt(tc,.55));E.box(m4RY(T(s*(tr(1.15,1.09)[1]*.47),1.15,tr(1.15,1.09)[2]*.93),s*.42),.006,.2,.006,dk(tc,.2))}
     if(top!==3&&top!==12)E.box(T(-SH*.55,1.12,TZ*1.03),.03,.006,.004,lt(tc,.6))}
   // hombros redondeados
@@ -186,7 +186,7 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   const AP={i:[.06,-.22,.16],t:[1.0,-2.0,.5],m:[-2.75,-.25,.25],u:[-1.55,-.12,.12],f:[-.75,-.35,.1],w:[-2.7,-.5,.3],l:[.05,-.08,.1]}[pose]||[.06,-.22,.16];
   for(const s of[-1,1]){const act=s<0&&pose!=="i"&&pose!=="l",a=act?AP:[.06+Math.sin(t*1.6+s)*.02+s*wk*.38,pose==="l"?-.08:-.22,pose==="w"?.55:.16],k=sleeve===2?1.16:1,ac2=y=>sleeve===2?arC:sleeve===1&&y>-.13?arC:sk;
     const M=m4RX(m4RZ(T(s*(SH+.016),1.33,0),s*a[2]),a[0]);
-    E.lathe(M,[[0,.064*k,.064*k,ac2(0)],[-.13,.058*(sleeve?1.16:1),.058*(sleeve?1.16:1),ac2(-.12)],[-.131,.058*(sleeve===1?1.02:k),.058*(sleeve===1?1.02:k),ac2(-.14)],[-.27,.05*k,.05*k,ac2(-.3)]],12);
+    E.ell(M,.064*k,.05,.064*k,ac2(0),(x,y)=>y>-.1,1);E.lathe(M,[[0,.064*k,.064*k,ac2(0)],[-.13,.058*(sleeve?1.16:1),.058*(sleeve?1.16:1),ac2(-.12)],[-.131,.058*(sleeve===1?1.02:k),.058*(sleeve===1?1.02:k),ac2(-.14)],[-.27,.05*k,.05*k,ac2(-.3)]],12);
     if(sleeve===1)E.lathe(M,[[-.1,.07,.07,lt(arC,.35)],[-.135,.07,.07,lt(arC,.35)]],12);
     E.ell(m4T(M,0,-.27,0),.05*k,.05*k,.05*k,ac2(-.3),null,1);
     const M2=m4RX(m4T(M,0,-.27,0),a[1]);E.lathe(M2,[[0,.05*k,.05*k,ac2(-.3)],[-.21,.04*k,.04*k,sleeve===2?arC:sk],[-.212,.04*(sleeve===2?1.22:1),.04*(sleeve===2?1.22:1),sleeve===2?dk(arC,.14):sk],[-.24,.037,.037,sk]],12);
@@ -221,7 +221,7 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   // nariz y boca
   E.disc(F(0,-.058,.004),.006,.004,dk(sk,.22),8);
   {const mc=[1,4].includes(L.mk)?P("cl",L.mkc):dk(sk,.55),my=-.092;if(L.mo===2||L.mo===5)E.disc(F(0,my,.004),.014,L.mo===5?.012:.016,[.45,.12,.15],10);
-    else{E.box(F(0,my,.004),.017,.003,.002,mc);if(L.mo===0||L.mo===3||L.mo===4||L.mo===6)for(const s of[-1,1])E.box(m4RZ(F(s*.02,my+.004,.004),s*.6),.006,.003,.002,mc);if(L.mo===4)E.disc(F(0,my-.008,.005),.007,.008,[.95,.45,.5],8);if(L.mo===6)E.box(F(.008,my-.006,.005),.003,.005,.002,W)}}
+    else{const sm=L.mo===1?0:L.mo===3?1.5:1;for(let k=-4;k<=4;k++){const x=k*.0048,u=x/.02,tl=L.mo===3?u*.5+.5:1;E.box(m4RZ(F(x,my+u*u*.0075*sm*tl-.002,.004),2*u*.0075*sm/.02*tl),.0034,.0026,.002,mc)}if(L.mo===4)E.disc(F(0,my-.008,.005),.007,.008,[.95,.45,.5],8);if(L.mo===6)E.box(F(.008,my-.006,.005),.003,.005,.002,W)}}
   // barba
   if(L.brd===1)E.ell(m4T(HM,0,-.05,.006),hrx*.86,hry*.76,hrz*.92,av3Mix(sk,hc,.28),(x,y,z)=>y<-.15&&z>-.1);
   if(L.brd===2||L.brd===6)E.ell(m4T(HM,0,-.122,zs(0,-.118)-.004),.022,.024,.014,hc,null,1);
@@ -269,14 +269,34 @@ function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=o||{};const k=trEnc(L
 const AV3V={};
 function av3Attach(host,key,getLook,o){if(!av3Attach.ready)return false;o=o||{};if(!host)return false;let v=AV3V[key];
   if(!v){const cv=document.createElement("canvas");cv.className="av3cv";const r=AV3(cv);if(!r){AV3V[key]={bad:1};return false}v=AV3V[key]={cv,r,yaw:o.yaw==null?.35:o.yaw,drag:null,run:false,last:0};
-    if(o.drag!==false){cv.style.touchAction="none";cv.style.cursor="grab";cv.addEventListener("pointerdown",e=>{v.drag={x:e.clientX,y0:v.yaw};try{cv.setPointerCapture(e.pointerId)}catch(x){}});
-      cv.addEventListener("pointermove",e=>{if(v.drag)v.yaw=v.drag.y0+(e.clientX-v.drag.x)*.012});const up=()=>{v.drag=null};cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up)}}
+    if(o.drag!==false){cv.style.touchAction="none";cv.style.cursor="grab";v.zoom=1;v.cy=.97;const PT=new Map();
+      // arrastrar gira (y, con zoom, sube y baja la vista); rueda, pellizco o doble clic cambian el zoom
+      cv.addEventListener("pointerdown",e=>{PT.set(e.pointerId,{x:e.clientX,y:e.clientY});try{cv.setPointerCapture(e.pointerId)}catch(x){}
+        if(PT.size===1)v.drag={x:e.clientX,y:e.clientY,y0:v.yaw,c0:v.cy};else if(PT.size===2){const a=[...PT.values()];v.drag={pinch:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)||1,z0:v.zoom}}});
+      cv.addEventListener("pointermove",e=>{if(!PT.has(e.pointerId)||!v.drag)return;PT.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        if(v.drag.pinch){const a=[...PT.values()];if(a.length>1)av3Zoom(v,v.drag.z0*Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)/v.drag.pinch/v.zoom,.4)}
+        else{v.yaw=v.drag.y0+(e.clientX-v.drag.x)*.012;const h=cv.getBoundingClientRect().height||1;v.cy=v.drag.c0+(e.clientY-v.drag.y)/h*2*1.0947/v.zoom;av3Zoom(v,1)}});
+      const up=e=>{PT.delete(e.pointerId);v.drag=PT.size===1?{x:[...PT.values()][0].x,y:[...PT.values()][0].y,y0:v.yaw,c0:v.cy}:null};cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up);
+      cv.addEventListener("wheel",e=>{e.preventDefault();const b=cv.getBoundingClientRect();av3Zoom(v,e.deltaY<0?1.15:1/1.15,(e.clientY-b.top)/(b.height||1))},{passive:false});
+      cv.addEventListener("dblclick",()=>{av3Zoom(v,(v.zoom>1.05?1:2)/v.zoom)})}}
+  if(v.big&&host.id!=="av3BigH")return true;
   if(v.bad)return false;v.get=getLook;v.o=o;if(v.cv.parentNode!==host){host.innerHTML="";host.appendChild(v.cv)}
   if(!v.run){v.run=true;v.last=0;const calm=()=>typeof hubCalm==="function"&&hubCalm(),gap=o.fps?1000/o.fps:33;
     const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
       const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
-      try{const L=v.get();v.sig2=v.sig;v.sig=trEnc(L)+v.yaw;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:v.o.zoom,cy:v.o.cy})}catch(e){}};requestAnimationFrame(loop)}
+      try{const L=v.get();v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy})}catch(e){}};requestAnimationFrame(loop)}
   return true}
+// zoom de una vista viva: k multiplica el zoom actual (1 = solo recolocar) y f es la altura del puntero (0 arriba, 1 abajo),
+// que se queda quieta al acercar. La vista nunca se sale del modelo.
+function av3Zoom(v,k,f){if(typeof v==="string")v=AV3V[v];if(!v||v.bad||!v.cv)return;f=f==null?.19:f;const z0=v.zoom||1,z=Math.max(1,Math.min(4.5,z0*k)),h0=1.0947/z0,h1=1.0947/z;
+  v.cy=(v.cy==null?.97:v.cy)+(.5-f)*2*(h0-h1);v.zoom=z;v.cy=Math.max(Math.min(.97,h1-.12),Math.min(Math.max(.97,1.97-h1),v.cy));if(z<=1.001)v.cy=.97}
+// vista grande: el mismo lienzo pasa a una ventana a pantalla casi completa y vuelve a su sitio al cerrarla
+function av3Big(key,getLook){const v=AV3V[key];if(!v||v.bad||!v.cv)return;let d=document.getElementById("av3Big");if(d)d.remove();
+  d=document.createElement("div");d.id="av3Big";d.innerHTML='<div class="av3bx"><div class="av3bh" id="av3BigH"></div><div class="trvz"><button type="button" data-z="1.3" aria-label="Acercar">＋</button><button type="button" data-z="0.77" aria-label="Alejar">－</button></div><button type="button" class="av3bc" aria-label="Cerrar">✕</button><div class="av3bt">Arrastra para girar · rueda o pellizco para acercar</div></div>';
+  document.body.appendChild(d);const get=getLook||v.get,o=v.o;
+  const close=()=>{document.removeEventListener("keydown",key2);v.big=false;d.remove();av3Zoom(v,1/v.zoom);const h=document.getElementById("trV3");if(h)av3Attach(h,key,get,o)},key2=e=>{if(e.key==="Escape"){e.stopPropagation();close()}};
+  d.addEventListener("click",e=>{const z=e.target.closest("[data-z]");if(z){av3Zoom(v,parseFloat(z.dataset.z));return}if(e.target===d||e.target.closest(".av3bc"))close()});document.addEventListener("keydown",key2);
+  v.big=false;av3Attach(document.getElementById("av3BigH"),key,get,o);v.big=true}
 // ---------- todas las imágenes del entrenador (frente, espaldas y poses de combate) salen del modelo 3D ----------
 // La figura de píxel solo se sigue generando por dentro para sacar de ella el personaje del modo Exploración.
 {const _tu=trURL;trURL=function(L,view,pose){if(trURL.want||!av3Attach.ready)return _tu.apply(this,arguments);let u=null;try{u=av3URL(L,288,432,{yaw:view==="b"?Math.PI-.42:.0,pose:pose||"i"})}catch(e){}return u||_tu.apply(this,arguments)}}

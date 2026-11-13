@@ -1110,3 +1110,11 @@ button,a,input,select,label,summary,[role="button"],[onclick],.ball,#ball,.gview
 #gTr:has(.av3cv){display:block;width:150px;height:240px;bottom:-14px}@media (max-width:700px){#gTr:has(.av3cv){width:104px;height:166px}}.tcav img.tc3d{image-rendering:auto}
 
 body.av3 img.trimg,body.av3 #psp img,body.av3 .tsprc,body.av3 img.sctr,body.av3 .pvav img,body.av3 .profav img,body.av3 .hudav img,body.av3 #gAv img{image-rendering:auto!important}
+
+/* zoom y vista grande del entrenador en 3D */
+.trv3d{position:relative}.trvz{display:flex;gap:4px;justify-content:center;margin-top:3px}.trvz button{width:26px;height:26px;border-radius:50%;border:2px solid rgba(20,30,60,.35);background:rgba(255,255,255,.92);color:#1c2540;font:800 15px/1 system-ui,sans-serif;cursor:pointer;padding:0;display:grid;place-items:center;touch-action:manipulation}.trvz button:active{transform:scale(.92)}
+#av3Big{position:fixed;inset:0;z-index:100000;background:rgba(8,12,28,.72);display:grid;place-items:center;backdrop-filter:blur(3px)}
+#av3Big .av3bx{position:relative;width:min(94vw,62vh);height:min(92vh,141vw);border-radius:22px;overflow:hidden;border:3px solid #fff;box-shadow:0 18px 50px rgba(0,0,0,.55);background:linear-gradient(#8fd0ff 0%,#d9f0ff 58%,#8fd66a 58%,#6fbf52 100%)}
+#av3Big .av3bh{position:absolute;inset:0}#av3Big .trvz{position:absolute;right:12px;bottom:44px;flex-direction:column;gap:8px;margin:0}#av3Big .trvz button{width:44px;height:44px;font-size:24px}
+#av3Big .av3bc{position:absolute;right:10px;top:10px;width:42px;height:42px;border-radius:50%;border:2px solid rgba(20,30,60,.35);background:rgba(255,255,255,.94);color:#1c2540;font:800 18px/1 system-ui,sans-serif;cursor:pointer}
+#av3Big .av3bt{position:absolute;left:0;right:0;bottom:10px;text-align:center;font:700 13px system-ui,sans-serif;color:#17324a;text-shadow:0 1px 0 rgba(255,255,255,.7);pointer-events:none;padding:0 60px}

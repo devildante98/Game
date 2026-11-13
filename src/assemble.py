@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.77";
+const GAME_VER="6.77.1";
 const NEWS=[
+{v:"2026-11-13-6.77.1",ver:"6.77.1",at:"2026-11-13T09:55",t:"🔧 Arreglos/Mejoras",l:["Carrera de Rapidash: los tickets de encima de los obstáculos siguen ahora la trayectoria real del salto, así que con un buen salto se cogen todos","Los tickets que pasan cerca se acercan solos a Rapidash: ya no hace falta clavar el salto"]},
 {v:"2026-11-13-6.77",ver:"6.77",at:"2026-11-13T09:23",t:"🔥 Carrera de Rapidash, ahora en 3D",l:["La carrera se ve en 3D, con la cámara detrás de Rapidash","Rapidash es un modelo animado: galopa, recoge las patas al saltar, se agacha, y su crin y su cola de fuego ondean","Entorno nuevo: pista con vallas, árboles, rocas, flores, montañas, nubes, sol, luna y estrellas, con día, atardecer y noche","El paisaje cambia cada 450 m: pradera, otoño, nieve y desierto","Vallas, rocas, troncos y Zubat en 3D, con sombras; los tickets y potenciadores giran","Los controles y la puntuación son los mismos de siempre"]},
 {v:"2026-11-13-6.76.1",ver:"6.76.1",at:"2026-11-13T09:15",t:"🔧 Arreglos/Mejoras",l:["Móvil: al tocar muchas veces seguidas la Poké Ball (o cualquier botón) la pantalla ya no hace zoom"]},
 {v:"2026-11-13-6.76",ver:"6.76",at:"2026-11-13T08:27",t:"🧩 Puzle de piezas: puzles gigantes de 196, 484 y 1.024 piezas",l:["Tres tamaños nuevos: 14×14 (196 piezas), 22×22 (484) y 32×32 (1.024)","Se abren en una ventana ancha: acerca o aleja con 🔍, arrastra el fondo para moverte y, si llevas una pieza hasta el borde, la vista se desplaza sola","Botón «Bordes primero» para colocar arriba las piezas del marco","Se pueden guardar y seguir otro día, y también jugar sin fondo de ayuda"]},

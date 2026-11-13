@@ -52,7 +52,12 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       else if(dist>60&&k<.9)o={k:"high",w:26,h:62};else o={k:"fence2",w:24,h:40,gap:72};
       o.x=r3?PX+PW/2+RU3_FAR*RU3_S:W+30;if(o.y==null)o.y=G-o.h;obs.push(o);
       // tickets en arco por encima del obstáculo (o por debajo del Zubat)
-      if(Math.random()<.6){const n=3+Math.floor(Math.random()*3),cx=o.x+(o.k==="fence2"?o.w+o.gap/2:o.w/2);for(let i=0;i<n;i++){const a=(i/(n-1))-.5;items.push({k:"tk",x:cx+a*110,y:o.k==="bat"?G-22:G-o.h-58+Math.abs(a)*70})}}
+      if(Math.random()<.6){const cx=o.x+(o.k==="fence2"?o.w+o.gap/2:o.w/2);
+        if(o.k==="bat"){const n=3+Math.floor(Math.random()*3);for(let i=0;i<n;i++)items.push({k:"tk",x:cx+((i/(n-1))-.5)*110,y:G-22})}
+        else{// los tickets siguen la trayectoria real de un salto bien hecho (corto, o largo si el obstáculo lo pide), con el punto más alto justo encima
+          const long=o.k==="fence2"||o.k==="high"||o.k==="log",sA=Math.min(RU_SPDMAX,spd+(o.x-PX-PW/2)/20*.42),ht=long?.24:.09,P2=[];let yy=0,v=-620,tt=0,ap=0,apH=0;
+          while(tt<2){v+=((tt<ht&&v<0)?950:2100)*.004;yy+=v*.004;tt+=.004;if(yy>=0)break;P2.push([tt,-yy]);if(-yy>apH){apH=-yy;ap=tt}}
+          const n=long?5:3+Math.floor(Math.random()*2);for(let i=0;i<n;i++){const f=.2+.6*i/(n-1),q=P2[Math.min(P2.length-1,Math.floor(f*P2.length))];items.push({k:"tk",x:cx+(q[0]-ap)*sA,y:G-q[1]-26})}}}
       else if(Math.random()<.18)items.push({k:Math.random()<.5?"fire":"mag",x:o.x+o.w+140,y:G-110})};
     const crash=()=>{dead=true;deadAt=performance.now();snd("hit",1);shake=.4;msg.textContent="¡Has chocado! "+Math.floor(dist)+" m";MG.runKey=null;
       for(let i=0;i<24;i++)parts.push({x:PX+PW/2,y:GY()+y-PH/2,vx:rnd(-220,220),vy:rnd(-260,40),l:.9,t:0,c:i%2?"#ff9a3c":"#ffd35c",r:rnd(3,7),gr:1});
@@ -80,7 +85,9 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       obs=obs.filter(o=>o.x>(r3?-320:-160)&&!o.smash);
       for(const it of items){it.x-=mv;
         if(magnet>0&&it.k==="tk"){const dx=PX+PW/2-it.x,dy=G+y-PH/2-it.y,d=Math.hypot(dx,dy);if(d<260){it.x+=dx/d*520*dt;it.y+=dy/d*520*dt}}
-        if(!it.got&&it.x>L-14&&it.x<Rr+14&&it.y>top-14&&it.y<bot+10){it.got=1;
+        // sin imán, los tickets que pasan cerca también se acercan un poco: no hace falta clavar el salto
+        else if(it.k==="tk"){const dx=PX+PW/2-it.x,dy=G+y-PH/2-it.y,d=Math.hypot(dx,dy);if(d<78&&d>1){const k2=Math.min(d,330*dt);it.x+=dx/d*k2;it.y+=dy/d*k2}}
+        if(!it.got&&it.x>L-18&&it.x<Rr+18&&it.y>top-18&&it.y<bot+14){it.got=1;
           if(it.k==="tk"){bonus+=15;snd("click")}else if(it.k==="fire"){shield=5;snd("lvl");toast("🔥 ¡Llamarada! Atraviesas los obstáculos durante 5 s")}else{magnet=7;snd("lvl");toast("🧲 ¡Imán! Atraes los tickets durante 7 s")}
           for(let i=0;i<6;i++)parts.push({x:it.x,y:it.y,vx:rnd(-60,60),vy:rnd(-120,-20),l:.4,t:0,c:"#ffd35c",r:rnd(2,4)})}}
       items=items.filter(it=>!it.got&&it.x>-40);

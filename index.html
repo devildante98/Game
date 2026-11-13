@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.76"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.76.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794555368">
+<meta name="game-build" content="1794557751">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2787,6 +2787,11 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 .jgw.jgwbig{max-width:none;margin:0 auto;border:0;border-radius:0;cursor:grab}.jgw.jgwbig.pan{cursor:grabbing}.pzsz button.jgbig{border-style:dashed}
 @media (max-width:620px){.jgsc{max-height:calc(100vh - 300px)}}
 
+/* móvil: tocar rápido varias veces (la Poké Ball, botones…) no debe hacer zoom; se sigue pudiendo ampliar con dos dedos */
+html,body{touch-action:manipulation}
+button,a,input,select,label,summary,[role="button"],[onclick],.ball,#ball,.gview{touch-action:manipulation}
+.ball,#ball,.gview{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -2851,7 +2856,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.76</small>
+    <small class="pcver">Versión 6.76.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7525,8 +7530,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.76";
+const GAME_VER="6.76.1";
 const NEWS=[
+{v:"2026-11-13-6.76.1",ver:"6.76.1",at:"2026-11-13T09:15",t:"🔧 Arreglos/Mejoras",l:["Móvil: al tocar muchas veces seguidas la Poké Ball (o cualquier botón) la pantalla ya no hace zoom"]},
 {v:"2026-11-13-6.76",ver:"6.76",at:"2026-11-13T08:27",t:"🧩 Puzle de piezas: puzles gigantes de 196, 484 y 1.024 piezas",l:["Tres tamaños nuevos: 14×14 (196 piezas), 22×22 (484) y 32×32 (1.024)","Se abren en una ventana ancha: acerca o aleja con 🔍, arrastra el fondo para moverte y, si llevas una pieza hasta el borde, la vista se desplaza sola","Botón «Bordes primero» para colocar arriba las piezas del marco","Se pueden guardar y seguir otro día, y también jugar sin fondo de ayuda"]},
 {v:"2026-11-13-6.75",ver:"6.75",at:"2026-11-13T08:00",t:"🧩 Puzle de piezas: modo sin fondo de ayuda",l:["Nueva opción «🙈 Sin fondo de ayuda» al elegir el tamaño: no se ve la silueta en el tablero ni se puede mirar la imagen","Es más difícil y da un 50 % más de puntuación (los tickets son los mismos)","Si te atascas puedes mostrar la ayuda, pero ese puzle pierde el extra"]},
 {v:"2026-11-12-6.74",ver:"6.74",at:"2026-11-12T16:10",t:"🗺️ Exploración: pueblos y rutas mucho más grandes",l:["Los 8 pueblos y las 10 rutas y cumbres son ahora unas tres veces más grandes, a lo ancho y a lo largo","Cada pueblo tiene un barrio nuevo con 3 casas más en las que se puede entrar, vecinos con los que hablar y lugares propios: plaza con fuente, huerto de bayas, parque, mercado, termas, círculo de piedras…","Los puertos tienen una isla nueva unida por un puente de madera, con su faro","Las rutas ganan una senda nueva que las rodea, con más hierba alta, estanques, desniveles, objetos, árboles de bayas y entrenadores","El Bosque Verde crece con un laberinto de árboles, y en Playa Coral hay islotes con objetos a los que se llega con Surf","Tu partida sigue donde estaba: lo que ya conocías no se ha movido de sitio"]},
@@ -7850,7 +7856,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794555368";
+const GAME_B="1794557751";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

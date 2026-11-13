@@ -1095,3 +1095,8 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 .mgw.mgxl{width:min(1500px,100%)}.jgsc{scroll-behavior:auto!important;overflow:auto;max-height:calc(100vh - 262px);border-radius:14px;border:2px solid var(--line);overscroll-behavior:contain;background:var(--bg)}
 .jgw.jgwbig{max-width:none;margin:0 auto;border:0;border-radius:0;cursor:grab}.jgw.jgwbig.pan{cursor:grabbing}.pzsz button.jgbig{border-style:dashed}
 @media (max-width:620px){.jgsc{max-height:calc(100vh - 300px)}}
+
+/* móvil: tocar rápido varias veces (la Poké Ball, botones…) no debe hacer zoom; se sigue pudiendo ampliar con dos dedos */
+html,body{touch-action:manipulation}
+button,a,input,select,label,summary,[role="button"],[onclick],.ball,#ball,.gview{touch-action:manipulation}
+.ball,#ball,.gview{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}

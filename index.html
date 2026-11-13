@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.77.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.78"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794561028">
+<meta name="game-build" content="1794561386">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2794,6 +2794,9 @@ button,a,input,select,label,summary,[role="button"],[onclick],.ball,#ball,.gview
 
 .ruw2 canvas.ru3{position:absolute;inset:0;cursor:default}.ruw2.ru3on canvas#ruC{position:relative;z-index:1}.ruw2.ru3on{height:min(400px,54vh)}
 
+.chspr{image-rendering:pixelated}.trv.trvmap .trvsp{display:grid;grid-template-columns:repeat(2,auto);gap:2px 6px}.trv.trvmap img{width:56px;height:84px}
+#gTr img.chspr{height:150px;width:100px}@media (max-width:700px){#gTr img.chspr{height:112px;width:75px}}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -2858,7 +2861,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.77.2</small>
+    <small class="pcver">Versión 6.78</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -6314,7 +6317,8 @@ const TRGRP={b:["sk"],ey:["ec"],mk:["mkc"],hs:["hc"],mch:["mcc"],hat:["hac"],top
 const trSexTag=(k,v)=>{const x=trSex(k,v);return x==="m"?' <i class="trsx trsxm" title="De chico">♂ Chico</i>':x==="f"?' <i class="trsx trsxf" title="De chica">♀ Chica</i>':' <i class="trsx trsxu" title="Unisex">⚥ Unisex</i>'};
 function trUI(){
   const L=myLook(),box=$("trOpts");if(!box)return;
-  $("trPrev").innerHTML='<div class="trv"><span>De frente</span>'+trImg(L,"f","i","idle")+'</div><div class="trv"><span>En combate</span>'+trImg(L,"b","i","idle")+'</div>';
+  $("trPrev").innerHTML='<div class="trv"><span>De frente</span>'+trImg(L,"f","i","idle")+'</div><div class="trv"><span>En combate</span>'+trImg(L,"b","i","idle")+'</div>'+
+    (typeof chSpriteImg==="function"?'<div class="trv trvmap"><span>En el mapa</span><div class="trvsp">'+["d","l","u","r"].map(d=>chSpriteImg(L,d)).join("")+'</div></div>':'');
   const opts=TRO.filter(o=>o[3]===TRTAB),used=new Set();
   const sw=o=>{const v=L[o[0]];return '<div class="trcol"><small>'+o[1]+'</small><div class="trsw">'+TRP[o[2]].map((c,i)=>'<button style="background:'+c+'" class="'+(i===v?"on":"")+'" data-tr="'+o[0]+'" data-v="'+i+'" aria-label="'+o[1]+' '+(i+1)+'" title="'+o[1]+' '+(i+1)+'"></button>').join("")+'</div></div>'};
   const cards=[];
@@ -7537,8 +7541,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.77.2";
+const GAME_VER="6.78";
 const NEWS=[
+{v:"2026-11-13-6.78",ver:"6.78",at:"2026-11-13T10:15",t:"🧍 Entrenadores al estilo de la saga, idénticos a tu avatar",l:["En Exploración, tu personaje sale ahora directamente del dibujo de tu entrenador: el mismo peinado, gorro, gafas, barba, ropa, mochila y colores","Lo mismo para los demás jugadores y para todos los personajes del mapa","En el juego base, los entrenadores del pueblo y el que está junto a la Poké Ball usan esa misma figura, como en los juegos","El editor de aspecto enseña cómo te verás en el mapa, por los cuatro lados"]},
 {v:"2026-11-13-6.77.2",ver:"6.77.2",at:"2026-11-13T10:10",t:"🔧 Arreglos/Mejoras",l:["Arreglado un fallo que apareció en la versión 6.73: vuelven a funcionar la cartera de tickets de Exploración, los premios por ganar combates y por la historia en Exploración, y los objetos equipables de la saga","Tus tickets y objetos guardados no se han perdido"]},
 {v:"2026-11-13-6.77.1",ver:"6.77.1",at:"2026-11-13T09:55",t:"🔧 Arreglos/Mejoras",l:["Carrera de Rapidash: los tickets de encima de los obstáculos siguen ahora la trayectoria real del salto, así que con un buen salto se cogen todos","Los tickets que pasan cerca se acercan solos a Rapidash: ya no hace falta clavar el salto"]},
 {v:"2026-11-13-6.77",ver:"6.77",at:"2026-11-13T09:23",t:"🔥 Carrera de Rapidash, ahora en 3D",l:["La carrera se ve en 3D, con la cámara detrás de Rapidash","Rapidash es un modelo animado: galopa, recoge las patas al saltar, se agacha, y su crin y su cola de fuego ondean","Entorno nuevo: pista con vallas, árboles, rocas, flores, montañas, nubes, sol, luna y estrellas, con día, atardecer y noche","El paisaje cambia cada 450 m: pradera, otoño, nieve y desierto","Vallas, rocas, troncos y Zubat en 3D, con sombras; los tickets y potenciadores giran","Los controles y la puntuación son los mismos de siempre"]},
@@ -7866,7 +7871,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794561028";
+const GAME_B="1794561386";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14480,7 +14485,7 @@ function gmTop(){
   try{if(GM.scr==="stage"){const pm=+(($("pityM")||{}).textContent)||30,pv=+(($("pity")||{}).textContent)||0,left=Math.max(0,pm-pv);$("gPityN").textContent=left;$("gPityB").style.width=Math.min(100,pv/pm*100)+"%";$("gPity").classList.toggle("gnear",left<=5)}}catch(e){}
   try{const nk=S.nick?String(S.nick).slice(0,18):"Entrenador";if($("gNick").textContent!==nk)$("gNick").textContent=nk}catch(e){}
   try{const cv=parseFloat(($("cpsv")||{}).textContent)||0,cb=$("gCombo");if(cv>=1){$("gCmb").textContent=cv.toFixed(1);if(!cb.classList.contains("on"))cb.classList.add("on");cb.classList.toggle("hot",cv>=6)}else cb.classList.remove("on","hot")}catch(e){}
-  try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr)tr.innerHTML=trImg(myLook(),"f","i")}}catch(e){}
+  try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr)tr.innerHTML=typeof chSpriteImg==="function"?chSpriteImg(myLook(),"d"):trImg(myLook(),"f","i")}}catch(e){}
 }
 function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   const set=(el,v)=>{if(!el)return;const i=el.querySelector(".gbd");if(!i)return;i.hidden=!v;if(v)i.textContent=v===true?"!":v};
@@ -14518,7 +14523,7 @@ function gmTownBuild(){const box=$("gBs");if(!box)return;const sc0=innerWidth>=9
       if(c._meta&&c._meta.smk){const sm=document.createElement("i");sm.className="gsmk";sm.style.left=(c._meta.smk[0]*sc)+"px";sm.style.top=(c._meta.smk[1]*sc)+"px";sm.innerHTML="<b></b><b></b><b></b>";bc.appendChild(sm)}
       let ov="";
       if(i===0){const L=gmTrLooks(),cnt=t?Math.min(5,t):1,X=[50,24,76,37,63],th=Math.round(30*sc),tw=Math.round(th*TW/TH);
-        for(let q=0;q<cnt&&q<L.length;q++)ov+='<span class="gsp gtrn" style="left:'+X[q]+'%;bottom:'+Math.round((3+(q%2)*2)*sc)+'px;width:'+tw+'px;height:'+th+'px;animation-delay:-'+(q*0.7)+'s"><img src="'+trURL(L[q],"f",q%2?"w":"i")+'" alt=""></span>'}
+        for(let q=0;q<cnt&&q<L.length;q++)ov+='<span class="gsp gtrn" style="left:'+X[q]+'%;bottom:'+Math.round((3+(q%2)*2)*sc)+'px;width:'+tw+'px;height:'+th+'px;animation-delay:-'+(q*0.7)+'s"><img src="'+(typeof chSpriteURL==="function"?chSpriteURL(L[q],"d"):trURL(L[q],"f",q%2?"w":"i"))+'" alt=""></span>'}
       (GBP[i]||[]).forEach(p=>{if(Math.max(1,t)>=p[2]&&PM[p[0]]){const z=Math.round((i===1?17:14)*sc);ov+='<span class="gsp gpk" style="left:'+(i===1?(p[1]/c.width*100):p[1])+'%;bottom:'+Math.round(2*sc)+'px">'+ico(PM[p[0]],z)+'</span>'}});
       if(!t)ov+='<span class="glk">🔒</span>';
       if(ov){bc.insertAdjacentHTML("beforeend",ov);const K=gmScale();bc.querySelectorAll(".gpk img").forEach(im=>gmSz(im,K.k,K.cap))}
@@ -18156,6 +18161,64 @@ function RU3D(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alpha
       gl.clearColor(hor[0],hor[1],hor[2],1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);gl.uniform3f(uL,.42,.8,-.42);gl.uniform3fv(uA,amb);gl.uniform3fv(uS,sun);gl.uniform2f(uF,26,74);gl.uniform3fv(uFc,hor);
       gl.bufferSubData(gl.ARRAY_BUFFER,0,buf.subarray(0,nv*9));gl.drawArrays(gl.TRIANGLES,0,nv)}};
   return R}
+
+// =====================================================================================
+// PERSONAJES DE EXPLORACIÓN SACADOS DEL AVATAR REAL
+// La cabeza (peinado, gorro, gafas, barba, cara) y el torso (ropa, mangas, mochila, bufanda, pelo largo) de cada
+// figura del mapa se obtienen reduciendo el dibujo de verdad del entrenador (el del editor), de frente y de espaldas,
+// así que la figura se parece a su entrenador. De perfil, la cabeza se compone con media cara y media nuca.
+// Las piernas siguen usando las plantillas animadas, con los colores del avatar a cada altura (pantalón corto,
+// calcetines, botas…). Vale igual para tu personaje, los demás jugadores y todos los NPC.
+// =====================================================================================
+const CH2_W=64,CH2_H=96;
+function ch2Edge(px){const e=new Uint8Array(CH2_W*CH2_H);for(let y=0;y<CH2_H;y++)for(let x=0;x<CH2_W;x++){const i=y*CH2_W+x;if(!px[i])continue;
+    if(x===0||y===0||x===CH2_W-1||y===CH2_H-1||!px[i-1]||!px[i+1]||!px[i-CH2_W]||!px[i+CH2_W])e[i]=1}return e}
+// las líneas de tinta (muy oscuras) cuentan poco: así no ensucian la ropa al reducir, pero la ropa negra sigue siendo negra
+const CH2_INK={};const ch2Ink=c=>{let v=CH2_INK[c];if(v==null){const a=chHex(c);v=CH2_INK[c]=(a[0]*.3+a[1]*.59+a[2]*.11)<58?1:0}return v};
+// color dominante de un rectángulo del avatar (los píxeles del contorno cuentan menos); null si está casi vacío
+function ch2Dom(px,e,x0,y0,x1,y1,min){const cnt={};let n=0,tot=0;for(let y=Math.floor(y0);y<Math.ceil(y1);y++)for(let x=Math.floor(x0);x<Math.ceil(x1);x++){tot++;if(x<0||y<0||x>=CH2_W||y>=CH2_H)continue;const i=y*CH2_W+x,c=px[i];if(!c)continue;n++;cnt[c]=(cnt[c]||0)+(e[i]?.3:ch2Ink(c)?.3:1)}
+  if(n<tot*(min==null?.45:min))return null;let b=null,bw=-1;for(const c in cnt)if(cnt[c]>bw){bw=cnt[c];b=c}return b}
+// cabeza 16×13 (filas 0-12) a mitad de tamaño y torso 12×6 (filas 13-18) comprimido
+function ch2Parts(px){const e=ch2Edge(px),head=[],torso=[];
+  for(let j=0;j<13;j++){const r=[];for(let i=0;i<16;i++)r.push(ch2Dom(px,e,16+i*2,4+j*2,18+i*2,6+j*2,.5));head.push(r)}
+  for(let j=0;j<6;j++){const r=new Array(16).fill(null);for(let i=0;i<12;i++)r[2+i]=ch2Dom(px,e,15.5+i*2.667,34+j*4.17,15.5+(i+1)*2.667,34+(j+1)*4.17,.42);torso.push(r)}
+  // colores de las piernas a cada altura (izquierda y derecha) y del calzado
+  const leg=(cx,a,b)=>ch2Dom(px,e,cx-3,a,cx+3,b,.2),legs=[26.5,36.5].map(cx=>[leg(cx,60,67),leg(cx,67,74),leg(cx,74,81),leg(cx,81,88),leg(cx,88,92)]);
+  return{head,torso,legs,skirt:ch2Dom(px,e,23,58,40,66,.2)}}
+const CH2_DARK=c=>{const a=chHex(c);return a[0]+a[1]+a[2]<200};
+function ch2Frame(t,P,dir,fr){const d=dir==="r"?"l":dir,G=chFrame(t,d,fr),F=P.f,B=P.b;
+  // piernas: mismos dibujos, con el color real del avatar a cada altura
+  const src=d==="u"?B:F;
+  for(let y=19;y<24;y++)for(let x=0;x<16;x++){const c=G[y][x];if(!c||c===CH_K)continue;const L=src.legs[d==="l"?0:x<8?0:1],wide=(t.skirt||t.dress)&&y<21;let col=wide?(src.skirt||L[0]):y===23?(L[4]||L[3]):L[Math.min(3,y-19)]||L[0];
+      if(!col)continue;const shoe=c===t.shoe,dk=c!==t.bot&&c!==t.top&&c!==t.shoe&&c!==t.skin;if(shoe&&L[4])col=L[4];G[y][x]=dk&&!shoe?chDk(col,.22):col}
+  if(d==="l"){// de perfil: media cara (la mitad izquierda del frente) y media nuca (la mitad derecha de la espalda)
+    for(let y=0;y<13;y++)for(let x=0;x<16;x++)G[y][x]=x<8?F.head[y][x]:B.head[y][x];
+  }
+  else{const S=d==="u"?B:F;for(let y=0;y<13;y++)for(let x=0;x<16;x++)G[y][x]=S.head[y][x];for(let y=13;y<19;y++)for(let x=0;x<16;x++)G[y][x]=S.torso[y-13][x];
+    // al andar, los brazos se mueven un píxel
+    if(fr===1||fr===3){const sh=(x0,x1,dy)=>{for(let x=x0;x<=x1;x++){if(dy>0){for(let y=18;y>14;y--)G[y][x]=G[y-1][x]}else{for(let y=14;y<18;y++)G[y][x]=G[y+1][x]}}};if(fr===1){sh(2,3,1);sh(12,13,-1)}else{sh(2,3,-1);sh(12,13,1)}}}
+  // ojos: si al reducir se han perdido, se vuelven a marcar
+  // ojos: siempre se marcan (al reducir el dibujo se pierden), dos píxeles de alto como en los juegos
+  const eye=chMix(t.eye,"#101018",.62),skinLike=c=>c&&!CH2_DARK(c);
+  if(d==="d"){for(const x of[5,10])if(skinLike(G[9][x])||skinLike(G[10][x])||G[9][x]){G[9][x]=eye;G[10][x]=eye}if(t.shades){for(let x=4;x<=11;x++)if(G[9][x])G[9][x]="#22222c"}}
+  else if(d==="l"){if(G[9][4]){G[9][4]=eye;G[10][4]=eye}if(t.shades){for(let x=3;x<=6;x++)if(G[9][x])G[9][x]="#22222c"}}
+  // contorno oscuro alrededor de lo que viene del avatar
+  const top=d==="l"?13:19,add=[];for(let y=0;y<top;y++)for(let x=0;x<16;x++){if(G[y][x])continue;
+      if((x>0&&G[y][x-1]&&G[y][x-1]!==CH_K)||(x<15&&G[y][x+1]&&G[y][x+1]!==CH_K)||(y>0&&G[y-1][x]&&G[y-1][x]!==CH_K)||(y<top-1&&G[y+1][x]&&G[y+1][x]!==CH_K)||(y===top-1&&d!=="l"&&false))add.push([x,y])}
+  add.forEach(([x,y])=>{G[y][x]=CH_K});
+  return G}
+const OVS3={};
+{const _ov=ovSprite;ovSprite=function(code){if(OVS3[code])return OVS3[code];let P=null,t=null;
+  try{const L=trDec(code);t=chTraits(code);P={f:ch2Parts(trPix(L,"f")),b:ch2Parts(trPix(L,"b"))}}catch(e){console.error(e);return _ov.apply(this,arguments)}
+  const out={},mk=(dir,flip)=>{let arr=null;Object.defineProperty(out,dir,{enumerable:true,get(){if(!arr)arr=[0,1,2,3,4,5,6,7].map(fr=>{const ff=fr>=4?[0,1,0,3][fr-4]:fr===2?0:fr;return chCanvas(ch2Frame(t,P,flip?"l":dir,ff),flip,0)});return arr}})};
+  mk("d");mk("l");mk("u");mk("r",true);return OVS3[code]=out}}
+// ---------- la misma figura fuera del mapa: pueblo del juego base, junto a la Poké Ball y en el editor ----------
+// (se puede llamar mientras el juego aún se está cargando: hasta que este módulo está listo, devuelve el avatar de siempre)
+function chSpriteURL(L,dir,fr){if(!chSpriteURL.ready)return trURL(L,"f","i");const C=chSpriteURL.c||(chSpriteURL.c={}),k=trEnc(L)+(dir||"d")+(fr|0);if(C[k])return C[k];try{return C[k]=ovSprite(trEnc(L))[dir||"d"][fr|0].toDataURL()}catch(e){return trURL(L,"f","i")}}
+function chSpriteImg(L,dir,cls){return '<img class="'+(chSpriteURL.ready?"chspr":"trimg")+(cls?" "+cls:"")+'" src="'+chSpriteURL(L,dir)+'" alt="" draggable="false">'}
+chSpriteURL.ready=1;
+// lo que se haya dibujado antes de tiempo (pueblo y entrenador del juego base) se vuelve a dibujar con la figura nueva
+setTimeout(()=>{try{if(typeof GM!=="undefined"&&GM){GM.look=null;GM.town="";dispatchEvent(new Event("resize"))}}catch(e){}},50);
 
 </script>
 <script>

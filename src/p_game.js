@@ -292,7 +292,7 @@ function gmTop(){
   try{if(GM.scr==="stage"){const pm=+(($("pityM")||{}).textContent)||30,pv=+(($("pity")||{}).textContent)||0,left=Math.max(0,pm-pv);$("gPityN").textContent=left;$("gPityB").style.width=Math.min(100,pv/pm*100)+"%";$("gPity").classList.toggle("gnear",left<=5)}}catch(e){}
   try{const nk=S.nick?String(S.nick).slice(0,18):"Entrenador";if($("gNick").textContent!==nk)$("gNick").textContent=nk}catch(e){}
   try{const cv=parseFloat(($("cpsv")||{}).textContent)||0,cb=$("gCombo");if(cv>=1){$("gCmb").textContent=cv.toFixed(1);if(!cb.classList.contains("on"))cb.classList.add("on");cb.classList.toggle("hot",cv>=6)}else cb.classList.remove("on","hot")}catch(e){}
-  try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr)tr.innerHTML=trImg(myLook(),"f","i")}}catch(e){}
+  try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr)tr.innerHTML=typeof chSpriteImg==="function"?chSpriteImg(myLook(),"d"):trImg(myLook(),"f","i")}}catch(e){}
 }
 function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   const set=(el,v)=>{if(!el)return;const i=el.querySelector(".gbd");if(!i)return;i.hidden=!v;if(v)i.textContent=v===true?"!":v};
@@ -330,7 +330,7 @@ function gmTownBuild(){const box=$("gBs");if(!box)return;const sc0=innerWidth>=9
       if(c._meta&&c._meta.smk){const sm=document.createElement("i");sm.className="gsmk";sm.style.left=(c._meta.smk[0]*sc)+"px";sm.style.top=(c._meta.smk[1]*sc)+"px";sm.innerHTML="<b></b><b></b><b></b>";bc.appendChild(sm)}
       let ov="";
       if(i===0){const L=gmTrLooks(),cnt=t?Math.min(5,t):1,X=[50,24,76,37,63],th=Math.round(30*sc),tw=Math.round(th*TW/TH);
-        for(let q=0;q<cnt&&q<L.length;q++)ov+='<span class="gsp gtrn" style="left:'+X[q]+'%;bottom:'+Math.round((3+(q%2)*2)*sc)+'px;width:'+tw+'px;height:'+th+'px;animation-delay:-'+(q*0.7)+'s"><img src="'+trURL(L[q],"f",q%2?"w":"i")+'" alt=""></span>'}
+        for(let q=0;q<cnt&&q<L.length;q++)ov+='<span class="gsp gtrn" style="left:'+X[q]+'%;bottom:'+Math.round((3+(q%2)*2)*sc)+'px;width:'+tw+'px;height:'+th+'px;animation-delay:-'+(q*0.7)+'s"><img src="'+(typeof chSpriteURL==="function"?chSpriteURL(L[q],"d"):trURL(L[q],"f",q%2?"w":"i"))+'" alt=""></span>'}
       (GBP[i]||[]).forEach(p=>{if(Math.max(1,t)>=p[2]&&PM[p[0]]){const z=Math.round((i===1?17:14)*sc);ov+='<span class="gsp gpk" style="left:'+(i===1?(p[1]/c.width*100):p[1])+'%;bottom:'+Math.round(2*sc)+'px">'+ico(PM[p[0]],z)+'</span>'}});
       if(!t)ov+='<span class="glk">🔒</span>';
       if(ov){bc.insertAdjacentHTML("beforeend",ov);const K=gmScale();bc.querySelectorAll(".gpk img").forEach(im=>gmSz(im,K.k,K.cap))}

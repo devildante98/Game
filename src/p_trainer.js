@@ -578,7 +578,8 @@ const TRGRP={b:["sk"],ey:["ec"],mk:["mkc"],hs:["hc"],mch:["mcc"],hat:["hac"],top
 const trSexTag=(k,v)=>{const x=trSex(k,v);return x==="m"?' <i class="trsx trsxm" title="De chico">♂ Chico</i>':x==="f"?' <i class="trsx trsxf" title="De chica">♀ Chica</i>':' <i class="trsx trsxu" title="Unisex">⚥ Unisex</i>'};
 function trUI(){
   const L=myLook(),box=$("trOpts");if(!box)return;
-  $("trPrev").innerHTML='<div class="trv"><span>De frente</span>'+trImg(L,"f","i","idle")+'</div><div class="trv"><span>En combate</span>'+trImg(L,"b","i","idle")+'</div>';
+  $("trPrev").innerHTML='<div class="trv"><span>De frente</span>'+trImg(L,"f","i","idle")+'</div><div class="trv"><span>En combate</span>'+trImg(L,"b","i","idle")+'</div>'+
+    (typeof chSpriteImg==="function"?'<div class="trv trvmap"><span>En el mapa</span><div class="trvsp">'+["d","l","u","r"].map(d=>chSpriteImg(L,d)).join("")+'</div></div>':'');
   const opts=TRO.filter(o=>o[3]===TRTAB),used=new Set();
   const sw=o=>{const v=L[o[0]];return '<div class="trcol"><small>'+o[1]+'</small><div class="trsw">'+TRP[o[2]].map((c,i)=>'<button style="background:'+c+'" class="'+(i===v?"on":"")+'" data-tr="'+o[0]+'" data-v="'+i+'" aria-label="'+o[1]+' '+(i+1)+'" title="'+o[1]+' '+(i+1)+'"></button>').join("")+'</div></div>'};
   const cards=[];

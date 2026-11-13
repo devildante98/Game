@@ -42,7 +42,10 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
       for(let k=0;k<rings.length-1;k++){const A=rings[k],B=rings[k+1];vt.c=A[3];for(let i=0;i<segs;i++){const t0=a0+(a1-a0)*i/segs,t1=a0+(a1-a0)*(i+1)/segs;vt(A,t0);vt(A,t1);vt(B,t1);vt(A,t0);vt(B,t1);vt(B,t0)}}
       if(cap){const r=rings[rings.length-1],ny=r[0]>rings[0][0]?1:-1,c=cap===true?r[3]:cap;for(let i=0;i<segs;i++){const t0=Math.PI*2*i/segs,t1=Math.PI*2*(i+1)/segs,P3=(x,z)=>V(M[0]*x+M[4]*r[0]+M[8]*z+M[12],M[1]*x+M[5]*r[0]+M[9]*z+M[13],M[2]*x+M[6]*r[0]+M[10]*z+M[14],M[4]*ny,M[5]*ny,M[6]*ny,c);P3(0,0);P3(Math.cos(t0)*r[1],Math.sin(t0)*r[2]);P3(Math.cos(t1)*r[1],Math.sin(t1)*r[2])}}},
     // malla modelada (posiciones, normales e índices de un .glb), con su matriz y un color liso
-    mesh(M,P,N,I,c){for(let k=0;k<I.length;k++){const i=I[k]*3,x=P[i],y=P[i+1],z=P[i+2],a=N[i],b=N[i+1],d=N[i+2];V(M[0]*x+M[4]*y+M[8]*z+M[12],M[1]*x+M[5]*y+M[9]*z+M[13],M[2]*x+M[6]*y+M[10]*z+M[14],M[0]*a+M[4]*b+M[8]*d,M[1]*a+M[5]*b+M[9]*d,M[2]*a+M[6]*b+M[10]*d,c)}},
+    mesh(M,P,N,I,c,cf){for(let k=0;k<I.length;k++){const i=I[k]*3,x=P[i],y=P[i+1],z=P[i+2],a=N[i],b=N[i+1],d=N[i+2];if(cf)c=cf(y,x,z);V(M[0]*x+M[4]*y+M[8]*z+M[12],M[1]*x+M[5]*y+M[9]*z+M[13],M[2]*x+M[6]*y+M[10]*z+M[14],M[0]*a+M[4]*b+M[8]*d,M[1]*a+M[5]*b+M[9]*d,M[2]*a+M[6]*b+M[10]*d,c)}},
+    // formas planas sin sombreado, con un color por vértice (degradados): abanico alrededor de P[0] y tira entre dos bordes
+    fan(M,P,C){const one=typeof C[0]==="number",v=i=>{const p=P[i];V(M[0]*p[0]+M[4]*p[1]+M[8]*p[2]+M[12],M[1]*p[0]+M[5]*p[1]+M[9]*p[2]+M[13],M[2]*p[0]+M[6]*p[1]+M[10]*p[2]+M[14],0,0,0,one?C:C[i])};for(let i=1;i<P.length;i++){v(0);v(i);v(i+1<P.length?i+1:1)}},
+    strip(M,A,B,C,C2){const v=(p,c)=>V(M[0]*p[0]+M[4]*p[1]+M[8]*p[2]+M[12],M[1]*p[0]+M[5]*p[1]+M[9]*p[2]+M[13],M[2]*p[0]+M[6]*p[1]+M[10]*p[2]+M[14],0,0,0,c);C2=C2||C;for(let i=0;i<A.length-1;i++){v(A[i],C);v(B[i],C2);v(B[i+1],C2);v(A[i],C);v(B[i+1],C2);v(A[i+1],C)}},
     box(M,hx,hy,hz,c){const F=[[0,0,1,[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]],[0,0,-1,[1,-1,-1],[-1,-1,-1],[-1,1,-1],[1,1,-1]],[1,0,0,[1,-1,1],[1,-1,-1],[1,1,-1],[1,1,1]],[-1,0,0,[-1,-1,-1],[-1,-1,1],[-1,1,1],[-1,1,-1]],[0,1,0,[-1,1,1],[1,1,1],[1,1,-1],[-1,1,-1]],[0,-1,0,[-1,-1,-1],[1,-1,-1],[1,-1,1],[-1,-1,1]]];
       for(const f of F){const nx=M[0]*f[0]+M[4]*f[1]+M[8]*f[2],ny=M[1]*f[0]+M[5]*f[1]+M[9]*f[2],nz=M[2]*f[0]+M[6]*f[1]+M[10]*f[2],Q=[];for(let k=3;k<7;k++){const x=f[k][0]*hx,y=f[k][1]*hy,z=f[k][2]*hz;Q.push([M[0]*x+M[4]*y+M[8]*z+M[12],M[1]*x+M[5]*y+M[9]*z+M[13],M[2]*x+M[6]*y+M[10]*z+M[14]])}
         for(const k of[0,1,2,0,2,3])V(Q[k][0],Q[k][1],Q[k][2],nx,ny,nz,c)}},
@@ -50,8 +53,8 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
     disc(M,rx,ry,c,n){n=n||14;for(let i=0;i<n;i++){const t0=Math.PI*2*i/n,t1=Math.PI*2*(i+1)/n,P3=(x,y)=>V(M[0]*x+M[4]*y+M[12],M[1]*x+M[5]*y+M[13],M[2]*x+M[6]*y+M[14],0,0,0,c);P3(0,0);P3(Math.cos(t0)*rx,Math.sin(t0)*ry);P3(Math.cos(t1)*rx,Math.sin(t1)*ry)}}};
   return{ok:true,cv,
     draw(L,o){o=o||{};nv=0;const w=cv.width,h=cv.height;gl.viewport(0,0,w,h);const zoom=o.zoom||1,cy=o.cy==null?.97:o.cy,dist=(o.dist||5.15)/zoom;
-      R0=m4RY(m4I(),o.yaw||0);WP=!o.chibi&&!av3Model.nowarp;av3Model(E,L,o);
-      const VP=m4Mul(m4Persp((o.fov||24)*Math.PI/180,w/h,.3,30),m4Look([0,cy+(o.elev!=null?o.elev*dist:.25/zoom),dist],[0,cy,0]));
+      R0=m4RY(m4I(),o.yaw||0);WP=!o.chibi&&!(av3Model.nowarp&&av3Model.nowarp(L,o));av3Model(E,L,o);
+      const VP=m4Mul(m4Persp((o.fov||24)*Math.PI/180,w/h,Math.max(.2,dist-1.5),dist+1.8),m4Look([0,cy+(o.elev!=null?o.elev*dist:.25/zoom),dist],[0,cy,0]));
       gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);const l=Math.hypot(.38,.5,.78);gl.uniform3f(uL,.38/l,.5/l,.78/l);
       gl.bufferSubData(gl.ARRAY_BUFFER,0,buf.subarray(0,nv*9));gl.drawArrays(gl.TRIANGLES,0,nv);return nv}}}
 // ---------- peinados: cada uno con su forma (casco, flequillo, melena en mechones, puntas, coletas, trenzas, moños…) ----------
@@ -130,6 +133,19 @@ function av3Hair(E,L,C){const hs=L.hs;if(hs===22)return;
       for(let j=0;j<=6;j++)R.push([-ln*j/6,.019,.019,j%2?hd:hc]);E.lathe(M,R,6,true);if(k%4===1)E.ell(m4T(M,0,-ln,0),.022,.016,.022,hac,null,1)}
     if(top)for(let k=0;k<7;k++){const u=(k/6-.5)*2;lock(u*.085,.125-Math.abs(u)*.03,-.01,.016,.016,.1,-.12,0,k%2?hd:hc)}}
   if(L.ha>0&&top)E.ell(m4T(HM,hrx*.86,.05,.085),.024,.017,.013,L.ha===3?[1,.85,.3]:hac,null,1)}
+// ---------- gorros (sobre la cabeza que se le pase) ----------
+function av3Hat(E,L,C){const{HM,hrx,hry,hrz,hac,hc,ac,hk}=C,W=[1,1,1],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k);
+  if(hk){const rev=L.hat===2,HH=rev?m4RY(HM,Math.PI):HM,hc2=hac,hdk=dk(hac,.22);
+    if(hk==="cap"){E.ell(HH,hrx*1.17,hry*1.17,hrz*1.17,hc2,(x,y,z)=>y>.18);E.ell(m4RX(m4T(HH,0,.04,hrz*1.2),.14),hrx*.98,.012,.1,hc2);E.ell(m4RX(m4T(HH,0,.032,hrz*1.2),.14),hrx*.96,.008,.098,hdk);E.ell(m4T(HH,0,hry*1.18,0),.014,.008,.014,hdk,null,1);
+      if(L.hat===1||L.hat===24)E.ell(HH,hrx*1.175,hry*1.175,hrz*1.175,[.97,.97,.99],(x,y,z)=>y>.18&&y<.62&&z>.55&&Math.abs(x)<.5)}
+    else if(hk==="beanie"){E.ell(HM,hrx*1.15,hry*1.2,hrz*1.15,hc2,(x,y,z)=>y>.12);E.lathe(HM,[[.065,hrx*1.18,hrz*1.18,lt(hc2,.3)],[.02,hrx*1.19,hrz*1.19,lt(hc2,.3)],[.005,hrx*1.15,hrz*1.15,lt(hc2,.3)]],20);if(L.hat===20||L.hat===3)E.ell(m4T(HM,0,hry*1.24,0),.03,.03,.03,L.hat===20?W:lt(hc2,.3),null,1)}
+    else if(hk==="wide"||hk==="top"||hk==="hard"){const tall=hk==="top"?.2:hk==="hard"?.1:.12,br2=hk==="top"?.16:hk==="hard"?.16:L.hat===19?.25:.22,y0=.075;
+      E.ell(m4T(HM,0,y0,0),br2,.012,br2,hk==="top"?hc2:hdk);
+      if(hk==="hard")E.ell(m4T(HM,0,y0-.02,0),hrx*1.17,.115,hrz*1.17,hc2,(x,y,z)=>y>.05);
+      else E.lathe(HM,[[y0,hrx*1.02,hrz*1.02,ac],[y0+.03,hrx*1.01,hrz*1.01,hc2],[y0+tall,hrx*(hk==="top"?.98:.85),hrz*(hk==="top"?.98:.85),hc2]],20,true)}
+    else if(hk==="band"){E.lathe(HM,[[.09,hrx*1.14,hrz*1.14,hc2],[.06,hrx*1.15,hrz*1.15,hc2]],20);if(L.hat===12)for(let k=0;k<7;k++)E.ell(m4T(HM,Math.cos(k/6*Math.PI)*hrx*1.12,.09,Math.sin(k/6*Math.PI)*hrz*1.12),.018,.018,.018,k%2?[1,.6,.75]:[1,.9,.4],null,1)}
+    else if(hk==="bow"){for(const s of[-1,1])E.ell(m4RZ(m4T(HM,s*.045,hry*1.14,0),s*.5),.05,.03,.02,hc2,null,1);E.ell(m4T(HM,0,hry*1.13,0),.018,.018,.018,hdk,null,1)}
+    else if(hk==="ears")for(const s of[-1,1])E.lathe(m4RZ(m4T(HM,s*.07,hry*.95,0),s*-.25),[[0,.035,.025,hc],[.07,.003,.003,hc]],8)}}
 // ---------- el modelo ----------
 // Proporciones de figura de la saga: cabeza grande (unas 5 cabezas de alto), cuerpo robusto, ropa holgada y manos y
 // zapatillas grandes. o.pose: i quieto · t preparando el lanzamiento · m brazo arriba · u lanzando · f después de lanzar ·
@@ -244,18 +260,7 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   // ----- pelo (cada peinado tiene su forma: ver av3Hair) -----
   const hk=typeof chHatKind==="function"?chHatKind(L.hat):"",hatOn=["cap","beanie","wide","top","hard"].includes(hk);
   av3Hair(E,L,{HM,hrx,hry,hrz,hc,sk,hac,hatOn,zs,flat:chibi});
-  // ----- gorros -----
-  if(hk){const rev=L.hat===2,HH=rev?m4RY(HM,Math.PI):HM,hc2=hac,hdk=dk(hac,.22);
-    if(hk==="cap"){E.ell(HH,hrx*1.17,hry*1.17,hrz*1.17,hc2,(x,y,z)=>y>.18);E.ell(m4RX(m4T(HH,0,.04,hrz*1.2),.14),hrx*.98,.012,.1,hc2);E.ell(m4RX(m4T(HH,0,.032,hrz*1.2),.14),hrx*.96,.008,.098,hdk);E.ell(m4T(HH,0,hry*1.18,0),.014,.008,.014,hdk,null,1);
-      if(L.hat===1||L.hat===24)E.ell(HH,hrx*1.175,hry*1.175,hrz*1.175,[.97,.97,.99],(x,y,z)=>y>.18&&y<.62&&z>.55&&Math.abs(x)<.5)}
-    else if(hk==="beanie"){E.ell(HM,hrx*1.15,hry*1.2,hrz*1.15,hc2,(x,y,z)=>y>.12);E.lathe(HM,[[.065,hrx*1.18,hrz*1.18,lt(hc2,.3)],[.02,hrx*1.19,hrz*1.19,lt(hc2,.3)],[.005,hrx*1.15,hrz*1.15,lt(hc2,.3)]],20);if(L.hat===20||L.hat===3)E.ell(m4T(HM,0,hry*1.24,0),.03,.03,.03,L.hat===20?W:lt(hc2,.3),null,1)}
-    else if(hk==="wide"||hk==="top"||hk==="hard"){const tall=hk==="top"?.2:hk==="hard"?.1:.12,br2=hk==="top"?.16:hk==="hard"?.16:L.hat===19?.25:.22,y0=.075;
-      E.ell(m4T(HM,0,y0,0),br2,.012,br2,hk==="top"?hc2:hdk);
-      if(hk==="hard")E.ell(m4T(HM,0,y0-.02,0),hrx*1.17,.115,hrz*1.17,hc2,(x,y,z)=>y>.05);
-      else E.lathe(HM,[[y0,hrx*1.02,hrz*1.02,ac],[y0+.03,hrx*1.01,hrz*1.01,hc2],[y0+tall,hrx*(hk==="top"?.98:.85),hrz*(hk==="top"?.98:.85),hc2]],20,true)}
-    else if(hk==="band"){E.lathe(HM,[[.09,hrx*1.14,hrz*1.14,hc2],[.06,hrx*1.15,hrz*1.15,hc2]],20);if(L.hat===12)for(let k=0;k<7;k++)E.ell(m4T(HM,Math.cos(k/6*Math.PI)*hrx*1.12,.09,Math.sin(k/6*Math.PI)*hrz*1.12),.018,.018,.018,k%2?[1,.6,.75]:[1,.9,.4],null,1)}
-    else if(hk==="bow"){for(const s of[-1,1])E.ell(m4RZ(m4T(HM,s*.045,hry*1.14,0),s*.5),.05,.03,.02,hc2,null,1);E.ell(m4T(HM,0,hry*1.13,0),.018,.018,.018,hdk,null,1)}
-    else if(hk==="ears")for(const s of[-1,1])E.lathe(m4RZ(m4T(HM,s*.07,hry*.95,0),s*-.25),[[0,.035,.025,hc],[.07,.003,.003,hc]],8)}
+  av3Hat(E,L,{HM,hrx,hry,hrz,hac,hc,ac,hk});
   // ----- mochila -----
   if([1,4,6].includes(L.bp)){E.ell(T(0,1.17,-TZ-.065),.135,.18,.085,bpc);E.ell(T(0,1.1,-TZ-.135),.095,.085,.034,dk(bpc,.12));for(const s of[-1,1]){E.box(T(s*.1,1.22,TZ*.93+(open?.012:0)+br),.016,.16,.005,dk(bpc,.25));E.box(m4RX(T(s*.1,1.395,.0),1.35),.016,.12,.005,dk(bpc,.25))}
     if(L.bp===6){const M=m4RY(T(0,1.21,-TZ-.152),Math.PI);E.disc(M,.04,.04,W);E.disc(m4T(M,0,.013,.001),.04,.026,[.9,.2,.25]);E.disc(m4T(M,0,0,.002),.04,.005,K);E.disc(m4T(M,0,0,.003),.011,.011,W,8)}}
@@ -286,7 +291,7 @@ function av3Attach(host,key,getLook,o){if(!av3Attach.ready)return false;o=o||{};
   if(!v.run){v.run=true;v.last=0;const calm=()=>typeof hubCalm==="function"&&hubCalm(),gap=o.fps?1000/o.fps:33;
     const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
       const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
-      try{const L=v.get();v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy})}catch(e){}};requestAnimationFrame(loop)}
+      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L)){v.sig=null;return}v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy})}catch(e){}};requestAnimationFrame(loop)}
   return true}
 // zoom de una vista viva: k multiplica el zoom actual (1 = solo recolocar) y f es la altura del puntero (0 arriba, 1 abajo),
 // que se queda quieta al acercar. La vista nunca se sale del modelo.

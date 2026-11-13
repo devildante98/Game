@@ -1100,3 +1100,5 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 html,body{touch-action:manipulation}
 button,a,input,select,label,summary,[role="button"],[onclick],.ball,#ball,.gview{touch-action:manipulation}
 .ball,#ball,.gview{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+
+.ruw2 canvas.ru3{position:absolute;inset:0;cursor:default}.ruw2.ru3on canvas#ruC{position:relative;z-index:1}.ruw2.ru3on{height:min(400px,54vh)}

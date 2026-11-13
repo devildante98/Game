@@ -8,7 +8,8 @@ const pkW=p=>WTH[pkId(p)]||0,pkH=p=>(typeof HDH!=="undefined"&&HDH[pkId(p)])||0;
 const kgTxt=hg=>(hg/10).toLocaleString("es",{maximumFractionDigits:1})+" kg",mTxt=dm=>(dm/10).toLocaleString("es",{maximumFractionDigits:1})+" m";
 
 // ---------------- CARRERA DE RAPIDASH ----------------
-// Paisaje en capas que se mueven a distinta velocidad, ciclo de día/atardecer/noche y Rapidash galopando con su llama.
+// Se dibuja en 3D (p_run3d.js) con la cámara detrás de Rapidash; si no hay WebGL, se usa el dibujo clásico en 2D de este archivo:
+// paisaje en capas que se mueven a distinta velocidad, ciclo de día/atardecer/noche y Rapidash galopando con su llama.
 // La velocidad tiene un máximo y la separación entre obstáculos crece con ella, así que siempre se pueden saltar.
 // Controles: tocar/espacio = saltar (mantén para más alto, otra vez en el aire = doble salto) · deslizar abajo/↓ = agacharse.
 const RU_SPD0=250,RU_SPDMAX=520;
@@ -17,15 +18,18 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
   start(B,end){
     const R=PM.Rapidash||PM.Ponyta||P[0],Z=PM.Zubat||null;
     B.innerHTML='<div class="whohd"><span>📏 <b id="ruD">0</b> m</span><span id="ruT"></span><span id="ruPw"></span></div>'+
-      '<div class="ruw2" id="ruW"><canvas id="ruC"></canvas><div class="rumsg" id="ruM">Toca o pulsa espacio para empezar</div></div>'+
+      '<div class="ruw2" id="ruW"><canvas id="ruC3" class="ru3"></canvas><canvas id="ruC"></canvas><div class="rumsg" id="ruM">Toca o pulsa espacio para empezar</div></div>'+
       '<div class="rubtn"><button type="button" class="alt" id="ruDn">⬇ Agacharse</button><button type="button" class="red" id="ruUp">⬆ Saltar</button></div>'+
       '<small class="mut rukeys">Espacio o ↑: saltar (mantén para más alto; pulsa otra vez en el aire para un doble salto) · ↓ o desliza hacia abajo: agacharse</small>';
     const cv=$("ruC"),g=cv.getContext("2d"),msg=$("ruM");let W=300,H=280,dpr=1;
-    const fit=()=>{const r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=Math.max(200,r.width);H=Math.max(160,r.height);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)};fit();
+    // dibujo en 3D si el navegador tiene WebGL; si no, el clásico en 2D
+    let r3=null;try{r3=typeof RU3D==="function"?RU3D($("ruC3")):null}catch(e){r3=null}
+    if(r3)$("ruW").classList.add("ru3on");else{const c3=$("ruC3");if(c3)c3.remove()}
+    const fit=()=>{const r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=Math.max(200,r.width);H=Math.max(160,r.height);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);if(r3)r3.resize(W,H,dpr)};fit();
     const im=new Image(),zi=new Image();im.src=mgImgSrc(R);if(Z)zi.src=mgImgSrc(Z);
     const PX=70,PW=64,PH=64,GH=46;const GY=()=>H-GH;
     let y=0,vy=0,jumps=0,hold=false,holdT=0,duck=false,started=false,dead=false,spd=RU_SPD0,dist=0,bonus=0,cam=0,t=0,last=0,nextO=400,shield=0,magnet=0,combo=0,shake=0,landFx=false;
-    let obs=[],items=[],parts=[];
+    let obs=[],items=[],parts=[],deadAt=0;
     const rnd=(a,b)=>a+Math.random()*(b-a),hash=n=>{const x=Math.sin(n*127.1)*43758.5453;return x-Math.floor(x)};
     // ---------- controles ----------
     const press=()=>{if(dead)return;if(!started){started=true;msg.textContent="";last=performance.now();MG.raf=requestAnimationFrame(loop);return}
@@ -46,17 +50,17 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       if(far&&k<.18)o={k:"bat",w:40,h:30,y:G-74};
       else if(k<.42)o={k:"fence",w:24,h:40};else if(k<.62)o={k:"rock",w:40,h:28};else if(k<.78)o={k:"log",w:70,h:26};
       else if(dist>60&&k<.9)o={k:"high",w:26,h:62};else o={k:"fence2",w:24,h:40,gap:72};
-      o.x=W+30;if(o.y==null)o.y=G-o.h;obs.push(o);
+      o.x=r3?PX+PW/2+RU3_FAR*RU3_S:W+30;if(o.y==null)o.y=G-o.h;obs.push(o);
       // tickets en arco por encima del obstáculo (o por debajo del Zubat)
       if(Math.random()<.6){const n=3+Math.floor(Math.random()*3),cx=o.x+(o.k==="fence2"?o.w+o.gap/2:o.w/2);for(let i=0;i<n;i++){const a=(i/(n-1))-.5;items.push({k:"tk",x:cx+a*110,y:o.k==="bat"?G-22:G-o.h-58+Math.abs(a)*70})}}
       else if(Math.random()<.18)items.push({k:Math.random()<.5?"fire":"mag",x:o.x+o.w+140,y:G-110})};
-    const crash=()=>{dead=true;snd("hit",1);shake=.4;msg.textContent="¡Has chocado! "+Math.floor(dist)+" m";MG.runKey=null;
+    const crash=()=>{dead=true;deadAt=performance.now();snd("hit",1);shake=.4;msg.textContent="¡Has chocado! "+Math.floor(dist)+" m";MG.runKey=null;
       for(let i=0;i<24;i++)parts.push({x:PX+PW/2,y:GY()+y-PH/2,vx:rnd(-220,220),vy:rnd(-260,40),l:.9,t:0,c:i%2?"#ff9a3c":"#ffd35c",r:rnd(3,7),gr:1});
       const fin=performance.now(),tail=n=>{if(n<=0||!cv.isConnected)return;const now=performance.now(),dt=Math.min(.05,(now-last)/1000);last=now;stepParts(dt);draw();requestAnimationFrame(()=>tail(n-1))};last=fin;tail(70);
       mgT(()=>end(MG.score),1500)};
     const stepParts=dt=>{for(const p of parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.gr)p.vy+=900*dt}parts=parts.filter(p=>p.t<p.l)};
     // ---------- bucle ----------
-    const loop=ts=>{if(dead||!cv.isConnected)return;const dt=Math.min(.05,(ts-last)/1000);last=ts;t+=dt;
+    const loop=ts=>{if(dead||!cv.isConnected)return;const dt=Math.max(0,Math.min(.05,(ts-last)/1000));last=ts;t+=dt;
       spd=Math.min(RU_SPDMAX,RU_SPD0+dist*.42);const mv=spd*dt;dist+=mv/20;cam+=mv;
       // salto: mantener pulsado = menos gravedad un momento; agachado en el aire = cae más rápido
       const air=y<-.5;let grav=2100;if(hold&&vy<0&&holdT<.24){holdT+=dt;grav=950}if(duck&&air)grav=4200;
@@ -72,8 +76,8 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
           if(shield>0){o.hit=1;o.smash=1;bonus+=5;snd("hit");for(let i=0;i<14;i++)parts.push({x:ox+ow/2,y:o.y+o.h/2,vx:rnd(-80,260),vy:rnd(-260,-40),l:.7,t:0,c:o.k==="bat"?"#7a5bd6":o.k==="rock"?"#9aa0a8":"#a0703a",r:rnd(2,5),gr:1})}
           else{crash();return}}}
         // ¡justo! = pasar muy cerca por encima
-        const ex=o.k==="fence2"?o.x+o.w*2+o.gap:o.x+o.w;if(!o.hit&&!o.pass&&ex<L){o.pass=1;if(o.k!=="bat"&&air&&o.y-bot<16){combo++;const p=3+Math.min(7,combo);bonus+=p;mgPop(cv.getBoundingClientRect().left+PX+PW,cv.getBoundingClientRect().top+G+y-PH,"¡Justo! +"+p,"#7df9ff")}else if(o.k!=="bat")combo=0}}
-      obs=obs.filter(o=>o.x>-160&&!o.smash);
+        const ex=o.k==="fence2"?o.x+o.w*2+o.gap:o.x+o.w;if(!o.hit&&!o.pass&&ex<L){o.pass=1;if(o.k!=="bat"&&air&&o.y-bot<16){combo++;const p=3+Math.min(7,combo);bonus+=p;const pp=r3?r3.playerScreen(-y/RU3_S):[cv.getBoundingClientRect().left+PX+PW,cv.getBoundingClientRect().top+G+y-PH];mgPop(pp[0],pp[1],"¡Justo! +"+p,"#7df9ff")}else if(o.k!=="bat")combo=0}}
+      obs=obs.filter(o=>o.x>(r3?-320:-160)&&!o.smash);
       for(const it of items){it.x-=mv;
         if(magnet>0&&it.k==="tk"){const dx=PX+PW/2-it.x,dy=G+y-PH/2-it.y,d=Math.hypot(dx,dy);if(d<260){it.x+=dx/d*520*dt;it.y+=dy/d*520*dt}}
         if(!it.got&&it.x>L-14&&it.x<Rr+14&&it.y>top-14&&it.y<bot+10){it.got=1;
@@ -93,7 +97,9 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       const D=[[110,190,255],[200,235,255]],S2=[[255,140,90],[255,214,150]],N=[[18,24,60],[52,60,120]];
       let c;if(ph<.55)c=D;else if(ph<.7){const k=(ph-.55)/.15;c=[mix(D[0],S2[0],k),mix(D[1],S2[1],k)]}else if(ph<.78){const k=(ph-.7)/.08;c=[mix(S2[0],N[0],k),mix(S2[1],N[1],k)]}else if(ph<.92)c=N;else{const k=(ph-.92)/.08;c=[mix(N[0],D[0],k),mix(N[1],D[1],k)]}
       return {c,ph,night:ph>.72&&ph<.95}};
-    const draw=()=>{g.setTransform(dpr,0,0,dpr,0,0);const G=GY();let sx=0,sy=0;if(shake>0){sx=rnd(-5,5)*shake*2;sy=rnd(-4,4)*shake*2;shake=Math.max(0,shake-.016)}g.translate(sx,sy);
+    const draw=()=>{if(r3){g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cv.width,cv.height);if(shake>0)shake=Math.max(0,shake-.016);
+        r3.draw({t:started?t:performance.now()/1000,dist,cam,spd,y,vy,duck,started,dead,deadT:dead?(performance.now()-deadAt)/1000:0,shield,magnet,obs,items,parts,sky:sky(),shake,PX,PW,PH,G:GY()});return}
+      g.setTransform(dpr,0,0,dpr,0,0);const G=GY();let sx=0,sy=0;if(shake>0){sx=rnd(-5,5)*shake*2;sy=rnd(-4,4)*shake*2;shake=Math.max(0,shake-.016)}g.translate(sx,sy);
       const s=sky(),sg=g.createLinearGradient(0,0,0,G);sg.addColorStop(0,"rgb("+s.c[0]+")");sg.addColorStop(1,"rgb("+s.c[1]+")");g.fillStyle=sg;g.fillRect(-10,-10,W+20,G+20);
       // estrellas y sol/luna
       if(s.night){g.fillStyle="#fff";for(let i=0;i<40;i++){const x=(hash(i)*W*1.3-cam*.02)%(W*1.3);g.globalAlpha=.4+.6*hash(i+9);g.fillRect((x+W*1.3)%(W*1.3),hash(i+3)*G*.6,1.5,1.5)}g.globalAlpha=1;
@@ -131,6 +137,8 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       if(im.complete&&im.naturalWidth){const sz=PW*1.5;g.drawImage(im,-sz/2,-sz/2-(ducking?-6:6),sz,sz)}else{g.font="54px serif";g.textAlign="center";g.textBaseline="middle";g.fillText("🐴",0,0)}
       g.restore();g.setTransform(1,0,0,1,0,0)};
     mgSet(0);draw();im.onload=()=>{if(!started)draw()};
+    // en 3D, Rapidash respira y la llama se mueve también antes de empezar
+    if(r3){const idle=()=>{if(started||!cv.isConnected)return;draw();requestAnimationFrame(idle)};requestAnimationFrame(idle)}
   }};
 // teclas: espacio/↑ saltar (mantener = más alto), ↓ agacharse
 document.addEventListener("keydown",e=>{if(!MG.runKey)return;const m=$("mgM");if(!m||m.hidden)return;const k=e.code==="Space"||e.key==="ArrowUp"||e.key===" "?"u":e.key==="ArrowDown"?"d":null;if(!k)return;e.preventDefault();e.stopPropagation();if(!e.repeat)MG.runKey.down(k)},true);

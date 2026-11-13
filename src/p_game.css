@@ -1088,3 +1088,6 @@ html.gmpre body:not(.gm):has(#auth[hidden])::after{content:"";position:fixed;lef
 
 .xcbox{display:flex;flex-direction:column;gap:6px;width:min(340px,80vw)}.xclog{display:flex;flex-direction:column;gap:2px;max-height:86px;overflow:auto;font-size:.78rem;text-align:left}.xclog:empty{display:none}.xclog div{background:rgba(255,255,255,.08);border-radius:8px;padding:2px 8px;word-break:break-word}.xclog div.me{background:rgba(90,200,160,.2)}.xclog b{color:#9fe6ff}
 .xcrow{display:flex;gap:6px}.xcin{flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:2px solid #6d8592;background:#fff;color:#1c2430;font:inherit;font-size:.95rem}.xcsend{min-height:0;padding:6px 12px}
+
+.jgbd.nog canvas{opacity:0!important}.jgngb{color:var(--mc,#2f9e8f);font-weight:800}.jgngb b{color:inherit}
+.jgng{display:flex;flex-direction:column;gap:2px;align-items:center;width:100%;max-width:640px;padding:10px 12px;border-radius:14px;background:var(--bg);color:var(--ink);border:2px dashed var(--line);min-height:0}.jgng small{color:var(--mute);font-size:.78rem;font-weight:600}.jgng.on{border-style:solid;border-color:var(--mc,#2f9e8f);box-shadow:0 0 0 3px rgba(47,158,143,.22)}.jgng.on>b::after{content:" · ACTIVADO";color:var(--mc,#2f9e8f)}

@@ -99,14 +99,16 @@ function jgEdge(g,x0,y0,x1,y1,t){const dx=x1-x0,dy=y1-y0;if(!t){g.lineTo(x1,y1);
   L(.36,0);C(.42,.02,.30,.22,.5,.22);C(.70,.22,.58,.02,.64,0);g.lineTo(x1,y1)}
 function jgPath(c,m,e){const g=new Path2D();g.moveTo(m,m);jgEdge(g,m,m,m+c,m,e[0]);jgEdge(g,m+c,m,m+c,m+c,e[1]);jgEdge(g,m+c,m+c,m,m+c,e[2]);jgEdge(g,m,m+c,m,m,e[3]);g.closePath();return g}
 const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como los de verdad: las piezas tienen salientes y huecos, empiezan sueltas y tienes que montarlo desde cero. Elige de 9 a 100 piezas. Puedes guardar la partida y seguir otro día.",
-  rw:s=>s*45,
-  start(B,end){
-    const pick=()=>{const sv=mgSaveGet("jig");
-      B.innerHTML=mgSaveHTML(sv,s=>s.N*s.N+" piezas · "+mgClk(s.el)+" · "+s.p.filter(q=>q[2]).length+" encajadas")+'<div class="pzpick"><h3>¿De cuántas piezas quieres el puzle?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-jgn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i>×'+fmt(n*n*50)+' pts</i></button>').join("")+'</div><small class="mut">Arrastra cada pieza a su sitio en el tablero: si la sueltas cerca, encaja sola.</small><button type="button" class="alt big" data-jgco="1">👥 Jugar en equipo, en tiempo real</button></div>';
+  rw:s=>s/(G_JIG._b||1)*45,// el extra por jugar sin ayuda da más puntuación, no más tickets
+  start(B,end){G_JIG._b=1;
+    const pick=()=>{const sv=mgSaveGet("jig");let ng=!!O.jgNg;
+      B.innerHTML=mgSaveHTML(sv,s=>s.N*s.N+" piezas · "+mgClk(s.el)+" · "+s.p.filter(q=>q[2]).length+" encajadas"+(s.ng?" · sin ayuda":""))+'<div class="pzpick"><h3>¿De cuántas piezas quieres el puzle?</h3><div class="pzsz">'+PZ_SIZES.map(n=>'<button data-jgn="'+n+'"><b>'+(n*n)+'</b><small>'+n+'×'+n+'</small><i data-jgpts="'+(n*n*50)+'">×'+fmt(n*n*50)+' pts</i></button>').join("")+'</div><button type="button" class="jgng" id="jgNg" aria-pressed="false"><b>🙈 Sin fondo de ayuda</b><small>No se ve la silueta en el tablero ni se puede mirar la imagen. Más difícil: <b>+50 % de puntuación</b>.</small></button><small class="mut">Arrastra cada pieza a su sitio en el tablero: si la sueltas cerca, encaja sola.</small><button type="button" class="alt big" data-jgco="1">👥 Jugar en equipo, en tiempo real</button></div>';
       B.querySelector("[data-jgco]").onclick=()=>{snd("ui");if(typeof jgCoop==="function")jgCoop(B,end)};
-      B.querySelectorAll("[data-jgn]").forEach(b=>b.onclick=()=>{snd("ui");if(sv)mgSaveDel("jig");play(+b.dataset.jgn)});
+      const ngUI=()=>{const b=$("jgNg");b.classList.toggle("on",ng);b.setAttribute("aria-pressed",ng?"true":"false");B.querySelectorAll("[data-jgpts]").forEach(i=>{i.textContent="×"+fmt(Math.round(+i.dataset.jgpts*(ng?1.5:1)))+" pts"})};
+      $("jgNg").onclick=()=>{ng=!ng;O.jgNg=ng;save();snd("ui");ngUI()};ngUI();
+      B.querySelectorAll("[data-jgn]").forEach(b=>b.onclick=()=>{snd("ui");if(sv)mgSaveDel("jig");play(+b.dataset.jgn,null,ng)});
       mgSaveBind(B,sv,()=>play(sv.N,sv))};
-    const play=(N,sv)=>{
+    const play=(N,sv,ngSel)=>{let ng=sv?!!sv.ng:!!ngSel;
       const pool=P.filter(p=>p[2]!=="M");let mon=sv&&PM[sv.m]?PM[sv.m]:pool[Math.floor(Math.random()*pool.length)],src=sv&&sv.src?sv.src:mgImgSrc(mon),tries=0;
       const T=N*N,s=JG_BW/N,m=s*.25,rnd=()=>Math.random()<.5?1:-1;
       // salientes de las uniones: h = entre una fila y la de debajo, v = entre una columna y la de la derecha
@@ -123,9 +125,9 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como
       if(sv&&Array.isArray(sv.p)&&sv.p.length===T)sv.p.forEach((q,i)=>{const p=PC[i];p.l=!!q[2];if(p.l){[p.x,p.y]=home(i)}else{p.x=+q[0]||0;p.y=+q[1]||0}});else scatter(PC);
       let zTop=T+1,t0=performance.now()-(sv?sv.el|0:0),done=false,ready=false;if(sv)mgSaveDel("jig");
       const c1=TC[tys(mon)[0]]||"#4a6ae0",c2=TC[tys(mon)[1]||"fairy"]||"#ff8ad8";
-      B.innerHTML='<div class="whohd"><span>🧩 <b>'+T+'</b> piezas</span><span>⏱️ <b id="jgT">0:00</b></span><span>✅ <b id="jgOk">0</b>/'+T+'</span></div>'+
-        '<div class="jgw" id="jgW" style="aspect-ratio:1/'+AH.toFixed(4)+'"><div class="jgbd" id="jgBd" style="left:'+JG_BX*100+'%;top:'+(JG_BY/AH*100)+'%;width:'+JG_BW*100+'%;height:'+(JG_BW/AH*100)+'%;--c1:'+c1+';--c2:'+c2+'"><img alt="" id="jgRef"></div><div class="jgld">Cargando las piezas…</div></div>'+
-        '<div class="mgbtns"><button class="alt" id="jgPeek">👁️ Ver la imagen</button><button class="alt" id="jgMix">🧺 Recoger las sueltas</button><button class="alt" id="jgSave">💾 Guardar y salir</button></div>';
+      B.innerHTML='<div class="whohd"><span>🧩 <b>'+T+'</b> piezas</span><span>⏱️ <b id="jgT">0:00</b></span><span>✅ <b id="jgOk">0</b>/'+T+'</span><span class="jgngb" id="jgNgB"'+(ng?'':' hidden')+'>🙈 Sin ayuda <b>×1,5</b></span></div>'+
+        '<div class="jgw" id="jgW" style="aspect-ratio:1/'+AH.toFixed(4)+'"><div class="jgbd'+(ng?' nog':'')+'" id="jgBd" style="left:'+JG_BX*100+'%;top:'+(JG_BY/AH*100)+'%;width:'+JG_BW*100+'%;height:'+(JG_BW/AH*100)+'%;--c1:'+c1+';--c2:'+c2+'"><img alt="" id="jgRef"></div><div class="jgld">Cargando las piezas…</div></div>'+
+        '<div class="mgbtns"><button class="alt" id="jgPeek">'+(ng?'💡 Mostrar la ayuda':'👁️ Ver la imagen')+'</button><button class="alt" id="jgMix">🧺 Recoger las sueltas</button><button class="alt" id="jgSave">💾 Guardar y salir</button></div>';
       const W=$("jgW"),ref=$("jgRef");let wpx=W.clientWidth||400;
       const okN=()=>PC.filter(p=>p.l).length;
       const place=p=>{const e=p.cv;if(!e)return;e.style.left=(p.x-m)*wpx+"px";e.style.top=(p.y-m)*wpx+"px";e.style.width=e.style.height=(s+2*m)*wpx+"px";e.style.zIndex=p.l?1:10+p.z;e.classList.toggle("ok",p.l)};
@@ -164,15 +166,19 @@ const G_JIG={id:"jig",n:"Puzle de piezas",ic:"🧩",c:"#2f9e8f",d:"Un puzle como
         if(Math.abs(p.x-hx)<s*.3&&Math.abs(p.y-hy)<s*.3){p.x=hx;p.y=hy;p.l=true;place(p);snd("lvl");if(!hubCalm())p.cv.animate([{filter:"brightness(1.7)"},{filter:"none"}],{duration:350});const k=okN();$("jgOk").textContent=k;if(k===T)win()}
         else{place(p);snd("ui")}};
       W.addEventListener("pointerup",up);W.addEventListener("pointercancel",up);
-      const win=()=>{if(done)return;done=true;MG.onClose=null;cancelAnimationFrame(MG.raf);const t=(performance.now()-t0)/1000,par=T*6+20,spd=Math.min(1,par/Math.max(1,t)),sc=Math.round(T*50*(.5+.5*spd));
+      const win=()=>{if(done)return;done=true;MG.onClose=null;cancelAnimationFrame(MG.raf);const t=(performance.now()-t0)/1000,par=T*6+20,spd=Math.min(1,par/Math.max(1,t)),sc=Math.round(T*50*(.5+.5*spd)*(ng?1.5:1));G_JIG._b=ng?1.5:1;
         mgSet(sc);W.classList.add("jgdone");snd("win");mgConfetti();try{cry(mon[0])}catch(e){}
-        B.querySelector(".mgbtns").innerHTML='<p class="pzres">¡Es <b>'+esc(mon[0])+'</b>! · '+T+' piezas en '+mgClk(t*1000)+'</p>';
+        B.querySelector(".mgbtns").innerHTML='<p class="pzres">¡Es <b>'+esc(mon[0])+'</b>! · '+T+' piezas en '+mgClk(t*1000)+(ng?' · 🙈 sin ayuda: <b>+50 %</b> de puntuación':'')+'</p>';
         mgT(()=>end(sc),2600)};
-      $("jgPeek").onclick=()=>{$("jgBd").classList.toggle("peek")};
+      // sin ayuda: el botón sirve para rendirse y mostrarla (hay que pulsarlo dos veces); con ayuda, enseña la imagen entera
+      let ngAsk=0;
+      $("jgPeek").onclick=()=>{const b=$("jgPeek");if(!ng){$("jgBd").classList.toggle("peek");return}
+        if(Date.now()-ngAsk>4000){ngAsk=Date.now();b.textContent="¿Seguro? Pierdes el +50 %";snd("ui");mgT(()=>{if(ng&&b.isConnected)b.textContent="💡 Mostrar la ayuda"},4000);return}
+        ng=false;ngAsk=0;$("jgBd").classList.remove("nog");const g=$("jgNgB");if(g)g.hidden=true;b.textContent="👁️ Ver la imagen";snd("ui");toast("💡 Ayuda activada: este puzle ya no da el extra de puntuación")};
       $("jgMix").onclick=()=>{if(done||!ready)return;snd("ui");scatter(PC.filter(p=>!p.l));layout()};
       // se guarda con «Guardar y salir», al cerrar con la ✕ o Esc, y si se cierra la página
       MG.onClose=()=>{if(done)return;const r4=v=>Math.round(v*1e4)/1e4;
-        mgSavePut("jig",{N:N,m:mon[0],src:src,h:H,v:V,p:PC.map(p=>p.l?[0,0,1]:[r4(p.x),r4(p.y),0]),el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Puzle guardado. Puedes seguir cuando quieras.")};
+        mgSavePut("jig",{N:N,ng:ng?1:0,m:mon[0],src:src,h:H,v:V,p:PC.map(p=>p.l?[0,0,1]:[r4(p.x),r4(p.y),0]),el:Math.round(performance.now()-t0),at:Date.now()});toast("💾 Puzle guardado. Puedes seguir cuando quieras.")};
       $("jgSave").onclick=()=>{if(!done)mgClose()};
     };
     mgSet(0);pick();
@@ -185,7 +191,7 @@ MGS.push(G_PUZ,G_JIG,G_HL);
 TOUR_ROT.push(["2026-W46","who mem dig fish thr run exc wgt fos puz hl"]);
 TOUR_ROT.push(["2026-W47","who mem dig fish thr run exc wgt fos puz jig hl"]);
 Object.assign(MGHOW,{
-  jig:["Elige de <b>9 a 100 piezas</b>: cada pieza vale hasta <b>50 puntos</b> (con 100 piezas, hasta 5.000).","Las piezas empiezan sueltas debajo del tablero. Arrástralas a su sitio: si la sueltas cerca, <b>encaja sola</b> y se queda fija.","Fíjate en la forma: cada pieza tiene salientes y huecos que solo encajan con sus vecinas. Las de los bordes tienen un lado recto.","<b>Rapidez</b>: la mitad de los puntos dependen de lo rápido que termines.","<b>👁️ Ver la imagen</b> muestra el dibujo en el tablero; <b>🧺 Recoger las sueltas</b> vuelve a ordenar las piezas sueltas.","<b>💾 Guardar y salir</b> (o cerrar con la ✕) guarda el puzle tal cual, con el tiempo parado, para seguir otro día."],
+  jig:["Elige de <b>9 a 100 piezas</b>: cada pieza vale hasta <b>50 puntos</b> (con 100 piezas, hasta 5.000).","Activa <b>🙈 Sin fondo de ayuda</b> para jugar sin la silueta del tablero: es más difícil y da un <b>50 % más de puntuación</b> (los tickets son los mismos). Si muestras la ayuda a mitad, pierdes el extra.","Las piezas empiezan sueltas debajo del tablero. Arrástralas a su sitio: si la sueltas cerca, <b>encaja sola</b> y se queda fija.","Fíjate en la forma: cada pieza tiene salientes y huecos que solo encajan con sus vecinas. Las de los bordes tienen un lado recto.","<b>Rapidez</b>: la mitad de los puntos dependen de lo rápido que termines.","<b>👁️ Ver la imagen</b> muestra el dibujo en el tablero; <b>🧺 Recoger las sueltas</b> vuelve a ordenar las piezas sueltas.","<b>💾 Guardar y salir</b> (o cerrar con la ✕) guarda el puzle tal cual, con el tiempo parado, para seguir otro día."],
   puz:["Elige de <b>9 a 100 piezas</b>: cada pieza vale <b>40 puntos</b> (con 100 piezas, hasta 4.000).","Toca dos piezas para intercambiarlas o arrastra una encima de otra. Las bien colocadas se quedan fijas en verde.","<b>Rapidez</b>: hasta la mitad de los puntos dependen de lo rápido que termines.","<b>Precisión</b>: cuantos menos cambios hagas (cerca del mínimo), más puntos.","Mantén pulsado «👁️ Ver la imagen» para mirar el Pokémon completo."],
   hl:["Se compara una estadística base oficial: PS, Ataque, Defensa, Ataque Especial, Defensa Especial, Velocidad o el Total.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>. Si empatan, cuenta como acierto.","Con la racha, los valores se parecen cada vez más y tienes menos tiempo.","Teclado: <b>↑</b> más, <b>↓</b> menos."]});
 // =====================================================================================

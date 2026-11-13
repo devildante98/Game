@@ -82,7 +82,7 @@ const _trc={};
 const TW=64,TH=96,TCX=31.5;
 // view: "f" frente, "b" espaldas · pose: "i" quieto, "t" preparando el lanzamiento, "m" brazo arriba, "u" lanzando, "w" victoria, "l" derrota
 function trURL(L,view,pose){
-  const key=trEnc(L)+view+pose;if(_trc[key])return _trc[key];
+  const key=trEnc(L)+view+pose;if(_trc[key]&&!trURL.want)return _trc[key];
   const px=new Array(TW*TH).fill(null),tg=new Array(TW*TH).fill(null);
   const put=(x,y,c,t)=>{x=Math.round(x);y=Math.round(y);if(x>=0&&y>=0&&x<TW&&y<TH&&c){px[y*TW+x]=c;if(t!==undefined)tg[y*TW+x]=t}};
   const get=(x,y)=>x>=0&&y>=0&&x<TW&&y<TH?px[y*TW+x]:null,gtag=(x,y)=>x>=0&&y>=0&&x<TW&&y<TH?tg[y*TW+x]:null;
@@ -558,6 +558,7 @@ function trURL(L,view,pose){
   // ---- pokeball en la mano ----
   if(ballAt){const[bx,by]=ballAt;map(Math.round(bx-1.5),Math.round(by-1.5),[".rr.","rrrr","kkwk",".ww."],{r:"#e83a50",k:ink,w:white})}
   // ---- contorno exterior (silueta) ----
+  if(trURL.want)trURL.px=px.slice();// píxeles sin contorno, para generar la figura del mapa
   const out=px.slice(),dk={};
   const darker=c=>dk[c]||(dk[c]=(()=>{let[h,s2,l]=trHsl(c);return trRgb(h,Math.min(1,s2*.7+.1),Math.min(l*.45,.16))})());
   for(let y=0;y<TH;y++)for(let x=0;x<TW;x++)if(px[y*TW+x]){const n=[[1,0],[-1,0],[0,1],[0,-1]].some(d=>{const X=x+d[0],Y=y+d[1];return X<0||Y<0||X>=TW||Y>=TH||!px[Y*TW+X]});if(n)out[y*TW+x]=darker(px[y*TW+x])}
@@ -565,6 +566,10 @@ function trURL(L,view,pose){
   out.forEach((c,i)=>{if(c){g2.fillStyle=c;g2.fillRect((i%TW)*s,Math.floor(i/TW)*s,s,s)}});
   return _trc[key]=cv.toDataURL();
 }
+// píxeles del avatar (64×96, sin contorno) de frente «f» o de espaldas «b»: de aquí sale la figura del modo Exploración
+const _trpx={};let _trpxN=0;
+function trPix(L,view){const k=trEnc(L)+view;if(_trpx[k])return _trpx[k];if(_trpxN>160){for(const q in _trpx)delete _trpx[q];_trpxN=0}
+  trURL.want=1;try{trURL(L,view,"i")}finally{trURL.want=0}const p=trURL.px;trURL.px=null;_trpxN++;return _trpx[k]=p}
 function trImg(L,view,pose,cls){return '<img class="trimg'+(cls?" "+cls:"")+'" src="'+trURL(L,view,pose)+'" alt="" draggable="false">'}
 // ---- panel de personalizacion ----
 let TRTAB="c";

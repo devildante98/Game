@@ -20,14 +20,14 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
   let pr;try{const sh=(t,s)=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o};pr=gl.createProgram();
     gl.attachShader(pr,sh(gl.VERTEX_SHADER,"attribute vec3 p;attribute vec3 n;attribute vec3 c;uniform mat4 m;varying vec3 vn;varying vec3 vc;void main(){gl_Position=m*vec4(p,1.);vn=n;vc=c;}"));
     // sombreado en dos tonos (luz / sombra) con un borde suave, y un poco de luz de contorno
-    gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,"precision mediump float;varying vec3 vn;varying vec3 vc;uniform vec3 L;void main(){float u=step(.01,dot(vn,vn));vec3 n=normalize(vn+vec3(0.,0.,.0001));float d=dot(n,L);float s=smoothstep(-.02,.1,d);float rim=pow(1.-max(n.z,0.),3.)*.1;vec3 lit=vc*(.7+.3*s)+vec3(rim)*s;gl_FragColor=vec4(mix(vc,lit,u),1.);}"));
+    gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,"precision mediump float;varying vec3 vn;varying vec3 vc;uniform vec3 L;void main(){float u=step(.01,dot(vn,vn));vec3 n=normalize(vn+vec3(0.,0.,.0001));float d=dot(n,L);float s=smoothstep(-.35,.55,d);float rim=pow(1.-max(n.z,0.),3.)*.1;vec3 lit=vc*(.66+.34*s)+vec3(rim)*s;gl_FragColor=vec4(mix(vc,lit,u),1.);}"));
     gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return null}catch(e){return null}
   gl.useProgram(pr);const uM=gl.getUniformLocation(pr,"m"),uL=gl.getUniformLocation(pr,"L"),aP=gl.getAttribLocation(pr,"p"),aN=gl.getAttribLocation(pr,"n"),aC=gl.getAttribLocation(pr,"c");
   const MAXV=140000,buf=new Float32Array(MAXV*9),vbo=gl.createBuffer();let nv=0;gl.bindBuffer(gl.ARRAY_BUFFER,vbo);gl.bufferData(gl.ARRAY_BUFFER,buf.byteLength,gl.DYNAMIC_DRAW);
   gl.enableVertexAttribArray(aP);gl.enableVertexAttribArray(aN);gl.enableVertexAttribArray(aC);gl.vertexAttribPointer(aP,3,gl.FLOAT,false,36,0);gl.vertexAttribPointer(aN,3,gl.FLOAT,false,36,12);gl.vertexAttribPointer(aC,3,gl.FLOAT,false,36,24);
   gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
   let R0=m4I();// giro del modelo (las normales se dejan en el espacio de la cámara para que la luz no gire con él)
-  const V=(x,y,z,nx,ny,nz,c)=>{if(nv>=MAXV)return;const i=nv*9,m=R0;buf[i]=m[0]*x+m[4]*y+m[8]*z+m[12];buf[i+1]=m[1]*x+m[5]*y+m[9]*z+m[13];buf[i+2]=m[2]*x+m[6]*y+m[10]*z+m[14];
+  let WP=false;const V=(x,y,z,nx,ny,nz,c)=>{if(nv>=MAXV)return;if(WP)y=y<.9?y*1.1:y<1.34?.99+(y-.9)*.79545:y;const i=nv*9,m=R0;buf[i]=m[0]*x+m[4]*y+m[8]*z+m[12];buf[i+1]=m[1]*x+m[5]*y+m[9]*z+m[13];buf[i+2]=m[2]*x+m[6]*y+m[10]*z+m[14];
     buf[i+3]=m[0]*nx+m[4]*ny+m[8]*nz;buf[i+4]=m[1]*nx+m[5]*ny+m[9]*nz;buf[i+5]=m[2]*nx+m[6]*ny+m[10]*nz;buf[i+6]=c[0];buf[i+7]=c[1];buf[i+8]=c[2];nv++};
   // esfera unidad en rejilla (dos resoluciones)
   const mkS=(S,Rg)=>{const P=[];for(let j=0;j<=Rg;j++){const v=j/Rg*Math.PI,row=[];for(let i=0;i<=S;i++){const u=i/S*Math.PI*2;row.push([Math.sin(v)*Math.cos(u),Math.cos(v),Math.sin(v)*Math.sin(u)])}P.push(row)}return P},SH=mkS(20,12),SL=mkS(10,7);
@@ -48,7 +48,7 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
     disc(M,rx,ry,c,n){n=n||14;for(let i=0;i<n;i++){const t0=Math.PI*2*i/n,t1=Math.PI*2*(i+1)/n,P3=(x,y)=>V(M[0]*x+M[4]*y+M[12],M[1]*x+M[5]*y+M[13],M[2]*x+M[6]*y+M[14],0,0,0,c);P3(0,0);P3(Math.cos(t0)*rx,Math.sin(t0)*ry);P3(Math.cos(t1)*rx,Math.sin(t1)*ry)}}};
   return{ok:true,cv,
     draw(L,o){o=o||{};nv=0;const w=cv.width,h=cv.height;gl.viewport(0,0,w,h);const zoom=o.zoom||1,cy=o.cy==null?.97:o.cy,dist=(o.dist||5.15)/zoom;
-      R0=m4RY(m4I(),o.yaw||0);av3Model(E,L,o);
+      R0=m4RY(m4I(),o.yaw||0);WP=!o.chibi;av3Model(E,L,o);
       const VP=m4Mul(m4Persp((o.fov||24)*Math.PI/180,w/h,.3,30),m4Look([0,cy+(o.elev!=null?o.elev*dist:.25/zoom),dist],[0,cy,0]));
       gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);const l=Math.hypot(.38,.5,.78);gl.uniform3f(uL,.38/l,.5/l,.78/l);
       gl.bufferSubData(gl.ARRAY_BUFFER,0,buf.subarray(0,nv*9));gl.drawArrays(gl.TRIANGLES,0,nv);return nv}}}
@@ -137,16 +137,21 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   const girl=L.b===1,t=o.t||0,br=Math.sin(t*1.6)*.006,top=L.top,bot=L.bot,pose=o.pose||"i";
   const SH=girl?.172:.2,WA=girl?.122:.148,HIP=girl?.168:.164,TZ=girl?.105:.118;
   // ----- piernas, calcetines y calzado -----
-  const skirtHem={2:.55,9:.56,13:.55,12:.66,4:.17}[bot],dress=[4,23,26].includes(top),gown=top===26,pantEnd=[1,15].includes(bot)?.6:bot===7?.5:bot===3?.27:skirtHem!=null?1:.105,
-    wide=bot===6?1.55:bot===14?1.42:bot===5?1.0:bot===11?1.18:[1,7,15].includes(bot)?1.3:1.3,
+  const dress=[4,23,26].includes(top),gown=top===26,skirtHem=dress?null:{2:.55,9:.56,13:.55,12:.66,4:.17}[bot],pantEnd=dress||skirtHem!=null?1:[1,15].includes(bot)?.6:bot===7?.5:bot===3?.27:.105,
     sockTop=L.sck===3?.8:L.sck===1?.44:L.sck===2?.36:.2,bootTop=[1,5,7,11].includes(L.shs)?.3:L.shs===4?.47:L.shs===6?.2:0,sandal=L.shs===2;
-  for(const s of[-1,1]){const x=s*.096,legC=y=>y<bootTop?shc:y>=pantEnd?bc:(y<sockTop&&!sandal)?sckc:sk,
-      ys=[.88,.7,.5,.36,.22,.105,.08],rs=[.078,.076,.064,.062,.054,.048,.048],rad=(y,r)=>r*(y<bootTop?1.2:y>=pantEnd?wide:1),R=[];
-    for(let i=0;i<ys.length;i++){const r=rad(ys[i]-.01,rs[i]);R.push([ys[i],r,r,legC(ys[i]-.02)])}
-    // cortes de color exactos (bajo del pantalón, calcetín, bota)
-    [pantEnd,sockTop,bootTop].forEach(c=>{if(c>.09&&c<.88&&!ys.includes(c)){const i=R.findIndex(q=>q[0]<c),a=R[i-1],b=R[i],k=(a[0]-c)/(a[0]-b[0]),r0=rs[ys.indexOf(a[0])]||.06,r1=rs[ys.indexOf(b[0])]||.06,rb=r0+(r1-r0)*k;R.splice(i,0,[c+.001,rad(c+.01,rb),rad(c+.01,rb),legC(c+.01)],[c,rad(c-.02,rb),rad(c-.02,rb),legC(c-.02)])}});
+  // perfil de la pierna desnuda y de cada tipo de pantalón (radio a cada altura): los pantalones son holgados y caen rectos hasta el bajo
+  const LY=[.88,.7,.5,.36,.22,.105,.08],LR=[.078,.076,.064,.062,.054,.048,.048],
+    PR={5:[.082,.08,.068,.066,.058,.052,.052],6:[.1,.106,.112,.12,.13,.138,.138],10:[.102,.102,.094,.092,.086,.062,.058],11:[.096,.092,.082,.078,.074,.072,.072],14:[.104,.106,.1,.1,.102,.104,.104]}[bot]||[.1,.1,.092,.092,.096,.1,.1],
+    lerpY=(A,y)=>{if(y>=LY[0])return A[0];for(let i=1;i<LY.length;i++)if(y>=LY[i]){const k=(LY[i-1]-y)/(LY[i-1]-LY[i]);return A[i-1]+(A[i]-A[i-1])*k}return A[A.length-1]},
+    legR=y=>y<bootTop?lerpY(LR,y)*1.22:y>=pantEnd?lerpY(PR,y):lerpY(LR,y);
+  for(const s of[-1,1]){const x=s*.096,legC=y=>y<bootTop?shc:y>=pantEnd?bc:(y<sockTop&&!sandal)?sckc:sk,R=[];
+    const cuts=[pantEnd,sockTop,bootTop].filter(c=>c>.09&&c<.88),YS=LY.filter(y=>!cuts.some(c=>Math.abs(c-y)<.012)).concat(cuts).sort((a,b)=>b-a);
+    for(const y of YS){if(cuts.includes(y)){const a=legR(y+.008),b=legR(y-.012);R.push([y+.001,a,a,legC(y+.008)],[y,b,b,legC(y-.012)])}else{const r=legR(y-.004);R.push([y,r,r,legC(y-.004)])}}
     const LM=wk?m4T(m4RX(T(x,.9+(s*wk>0?.06:0),0),-s*wk*.3),0,-.9,0):T(x,0,0);E.lathe(LM,R,14);
-    if(pantEnd>.09&&pantEnd<.8&&skirtHem==null){const q=R.find(z=>z[0]<=pantEnd+.002)||R[0],r=Math.max(q[1],.05*wide)*1.07;E.lathe(LM,[[pantEnd+.045,r,r,lt(bc,.2)],[pantEnd,r,r,lt(bc,.2)]],14)}
+    // bajo del pantalón: vuelta más clara, como en los vaqueros remangados
+    if(pantEnd>.09&&pantEnd<.8){const r=legR(pantEnd+.01)*1.07,h=pantEnd<.2?.06:.045;E.lathe(LM,[[pantEnd+h,r,r,lt(bc,.22)],[pantEnd,r,r,lt(bc,.22)],[pantEnd-.004,r*.8,r*.8,dk(bc,.3)]],14)}
+    if(bot===14&&pantEnd<.8)E.box(m4T(LM,s*.098,.56,0),.012,.06,.05,dk(bc,.12));
+    if(bot===8)for(const y of[.52,.66])E.box(m4T(LM,0,y,lerpY(PR,y)*.99),.035,.008,.004,sk);
     // pie grande, como en las figuras de la saga
     const sole=sandal?dk(shc,.2):L.shs===3||L.shs===10||L.shs===8?dk(shc,.45):[.97,.97,.99],FM=m4RY(LM,s*.14);
     E.ell(m4T(FM,0,.03,.06),.078,.032,.17,sole,null,1);
@@ -162,17 +167,20 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   const band=y=>{if(inner)return inner;if(crop&&y<1.13)return sk;if(stripes)return Math.floor((y-.98)/.062)%2?(top===14?ac:pcc):tc;return tc};
   {const R=[];for(let y=.97;y<1.335;y+=.031){const q=tr(y);R.push([q[0],q[1],q[2],band(y)])}const q=tr(1.34);R.push([1.34,q[1],q[2],band(1.34)]);R.push([1.39,SH*.6,.078,band(1.37)]);R.push([1.412,.07,.064,band(1.39)]);E.lathe(I,R,22)}
   // chaqueta, chaleco o abrigo abiertos: una capa por encima de la camiseta, con el frente sin cerrar y el cuello subido
-  if(open){const g0=Math.PI/2+.42,g1=Math.PI/2+Math.PI*2-.42,hem=top===8||top===12?.58:.9,R=[];for(const y of[hem,.98,1.1,1.22,1.34]){const q=y<.98?[y,HIP*1.12,TZ*1.12]:tr(y,1.09);R.push([y,q[1],q[2],y<hem+.03?dk(tc,.1):tc])}R.push([1.4,SH*.66,.086,tc]);E.lathe(I,R,22,null,g0,g1);
+  if(open){const g0=Math.PI/2+.42,g1=Math.PI/2+Math.PI*2-.42,hem=top===8||top===12?.58:.9,R=[];const longC=hem<.8;for(const y of longC?[hem,.8,.98,1.1,1.22,1.34]:[hem,.98,1.1,1.22,1.34]){const q=y<.7?[y,.262,.205]:y<.9?[y,.24,.185]:y<.99?(longC?[y,WA*1.3,TZ*1.22]:tr(y,1.09)):tr(y,1.09);R.push([y,q[1],q[2],y<hem+.03?dk(tc,.1):tc])}R.push([1.4,SH*.66,.086,tc]);E.lathe(I,R,22,null,g0,g1);
     for(const s of[-1,1]){E.box(m4RY(m4RZ(T(s*.062,1.4,.062),s*-.35),s*.5),.03,.05,.008,lt(tc,.55));E.box(m4RY(T(s*(tr(1.15,1.09)[1]*.47),1.15,tr(1.15,1.09)[2]*.93),s*.42),.006,.2,.006,dk(tc,.2))}
     if(top!==3&&top!==12)E.box(T(-SH*.55,1.12,TZ*1.03),.03,.006,.004,lt(tc,.6))}
   // hombros redondeados
   for(const s of[-1,1])E.ell(T(s*(SH-.004),1.325,0),.064,.056,.07,[6,10].includes(top)?sk:top===3?ac:tc,null,1);
-  if(top===16)E.lathe(I,[[.99,WA*1.1,TZ*1.05,tc],[.6,HIP*1.25,.15,tc],[.56,HIP*1.27,.152,dk(tc,.12)]],20,null,Math.PI*.62,Math.PI*2.38);
+  if(top===16){E.lathe(I,[[1.0,WA*1.24,TZ*1.16,tc],[.8,.235,.18,tc],[.56,.255,.2,tc],[.545,.25,.196,dk(tc,.15)]],20,null,Math.PI*.56,Math.PI*2.44);E.lathe(I,[[1.03,WA*1.13,TZ*.98,ac],[.97,WA*1.15,TZ*1.0,ac]],20)}
   if(top===2||top===19||top===20)E.ell(T(0,1.41,-.095),.13,.085,.07,dk(tc,.1));
   if(top===18||top===5||top===7||top===17){for(const s of[-1,1])E.box(m4RZ(T(s*.04,1.4,.07),s*-.6),.034,.014,.01,top===18?W:lt(tc,.3))}
   if(top===13){E.box(T(0,1.2,TZ+.004),.08,.1,.006,bc);for(const s of[-1,1])E.box(T(s*.07,1.34,TZ*.9),.014,.07,.006,bc)}
   if(L.pat>1&&!open){const q=tr(1.22);E.disc(T(0,1.22,q[2]+.012),.04,.04,pcc,L.pat===2?5:L.pat===4?3:10)}
-  if(L.blt>0){E.lathe(I,[[1.005,WA*1.09,TZ*.92,dk(bc,.55)],[.975,WA*1.11,TZ*.94,dk(bc,.55)]],20);E.box(T(0,.99,TZ*.95),.02,.016,.004,[.9,.75,.25]);if(L.blt===2)for(const s of[-1,1])E.ell(T(s*.1,.975,TZ*.8),.024,.024,.024,[.9,.2,.25],null,1)}
+  if(L.blt>0){E.lathe(I,[[1.005,WA*1.09,TZ*.92,dk(bc,.55)],[.975,WA*1.11,TZ*.94,dk(bc,.55)]],20);E.box(T(0,.99,TZ*.95),.02,.016,.004,[.9,.75,.25]);if(L.blt===2)for(const s of[-1,1]){const B=T(s*.075,.985,TZ*.9);E.ell(B,.022,.022,.022,[.9,.2,.25],(x,y)=>y>=0,1);E.ell(B,.022,.022,.022,[.97,.97,.99],(x,y)=>y<0,1)}}
+  // prenda atada a la cintura: banda, nudo con las mangas por delante y la prenda cayendo por detrás
+  if(L.wst>0){const wc=P("cl",L.wsc),w2=dk(wc,.14);E.lathe(I,[[1.0,WA*1.2,TZ*1.08,wc],[.93,HIP*1.12,TZ*1.16,wc]],20);E.lathe(I,[[.95,HIP*1.16,TZ*1.2,wc],[.74,.235,.19,wc],[.725,.225,.18,w2]],16,null,Math.PI+.25,Math.PI*2-.25);
+    E.ell(T(0,.955,TZ*1.12),.04,.032,.026,w2,null,1);for(const s of[-1,1])E.lathe(m4RZ(T(s*.03,.94,TZ*1.14),s*.3),[[0,.03,.022,wc],[-.15,.034,.024,wc],[-.16,.028,.02,L.wst===2?w2:lt(wc,.4)]],10,true)}
   // ----- brazos: hombro, codo y mano; la postura depende de la pose -----
   const sleeve=[6,10].includes(top)?0:[1,2,5,8,9,11,12,15,16,17,18,19,20,25,27,28].includes(top)?2:1,arC=top===3?ac:tc;
   const AP={i:[.06,-.22,.16],t:[1.0,-2.0,.5],m:[-2.75,-.25,.25],u:[-1.55,-.12,.12],f:[-.75,-.35,.1],w:[-2.7,-.5,.3],l:[.05,-.08,.1]}[pose]||[.06,-.22,.16];
@@ -193,16 +201,20 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   else if(L.nk===5||L.nk===11||L.nk===8){for(const s of[-1,1])E.ell(T(s*.034,1.395,.095),.034,.022,.012,nkc,null,1);E.ell(T(0,1.395,.1),.014,.014,.014,dk(nkc),null,1)}
   else if(L.nk>0)E.lathe(I,[[1.415,.07,.066,nkc],[1.398,.074,.07,nkc]],14);
   // ----- cabeza: cráneo redondo y mandíbula más estrecha -----
-  const HS=1.5,hrx=L.fs===2?.118:L.fs===1?.108:.114,hry=L.fs===1?.134:.128,hrz=.118,hy=chibi?1.475*.6+hry*2.25*.86:1.475+hry*HS*.93,HM=m4S(m4RX(m4T(m4I(),0,hy,0),chibi?0:Math.sin(t*.9)*.015+(pose==="l"?.38:0)),chibi?2.25:HS);
-  E.ell(HM,hrx,hry,hrz,sk);E.ell(m4T(HM,0,-.05,.006),hrx*(L.fs===2?.92:.84),hry*.74,hrz*.9,sk);for(const s of[-1,1])E.ell(m4T(HM,s*hrx,-.02,-.005),.02,.034,.024,sk,null,1);
-  const zs=(x,y)=>hrz*Math.sqrt(Math.max(.02,1-(x/hrx)*(x/hrx)-(y/hry)*(y/hry))),F=(x,y,dz,ry)=>m4RY(m4T(HM,x,y,zs(x,y)+(dz||.003)),ry||0);
+  const HS=1.56,JW=L.fs===2?.9:L.fs===1?.74:.8,hrx=L.fs===2?.118:L.fs===1?.108:.114,hry=L.fs===1?.134:.128,hrz=.118,hy=chibi?1.475*.6+hry*2.25*.86:1.475+hry*HS*.93,HM=m4S(m4RX(m4T(m4I(),0,hy,0),chibi?0:Math.sin(t*.9)*.015+(pose==="l"?.38:0)),chibi?2.25:HS);
+  E.ell(HM,hrx,hry,hrz,sk);E.ell(m4T(HM,0,-.056,.007),hrx*JW,hry*.74,hrz*.88,sk);for(const s of[-1,1])E.ell(m4T(HM,s*hrx,-.02,-.005),.02,.034,.024,sk,null,1);
+  const zs=(x,y)=>Math.max(hrz*Math.sqrt(Math.max(.02,1-(x/hrx)*(x/hrx)-(y/hry)*(y/hry))),.007+hrz*.88*Math.sqrt(Math.max(0,1-(x/(hrx*JW))**2-((y+.056)/(hry*.74))**2))),F=(x,y,dz,ry)=>m4RY(m4T(HM,x,y,zs(x,y)+(dz||.003)),ry||0);
   // ojos
   const blink=(t%3.7)>3.58||L.ey===5,es=(L.ey===1||L.ey===4?1.12:L.ey===2||L.ey===6?.88:1)*.9,lash=dk(hc,.6),EY=-.03;
-  for(const s of[-1,1]){const ex=s*.046,ey=EY,ry=s*.36;if(chibi){E.disc(F(s*.066,ey-.014,.006,s*.78),.02,.03,[1,0,1]);continue}
+  for(const s of[-1,1]){const ex=s*.046,ey=EY,ry=s*.36;if(chibi){E.disc(F(s*.05,ey-.014,.006,s*.7),.02,.03,[1,0,1]);continue}
     if(blink)E.box(F(ex,ey,.004,ry),.03*es,.005,.002,K);
-    else{E.disc(F(ex,ey,.003,ry),.03*es,.038*es,[.99,.99,1]);E.disc(F(ex+s*-.003,ey-.003,.005,ry),.022*es,.031*es,dk(ec,.25));E.disc(F(ex+s*-.003,ey-.005,.006,ry),.018*es,.026*es,lt(ec,.12));E.disc(F(ex+s*-.003,ey-.015,.0065,ry),.012*es,.012*es,lt(ec,.4),10);E.disc(F(ex+s*-.003,ey-.003,.007,ry),.009*es,.015*es,[.08,.07,.1]);E.disc(F(ex+s*-.003+.008,ey+.012,.009,ry),.007*es,.008*es,W,8);
-      E.box(m4RZ(F(ex,ey+.036*es,.006,ry),s*(L.ey===2||L.ey===6?-.22:-.08)),.033*es,.0065,.002,K);if(L.ey===7)for(let k=0;k<3;k++)E.box(m4RZ(F(ex+s*(.02+k*.008),ey+.038*es+k*.002,.006,ry),s*-.9),.008,.003,.002,K)}
-    const bt={0:-.1,1:-.1,2:-.05,3:.35,4:-.35}[L.brw]||0;E.box(m4RZ(F(ex,ey+.062,.005,ry),s*bt),.026,L.brw===1?.006:L.brw===2?.0022:.0036,.002,av3Mix(lash,sk,.15));
+    else{const ew=.0275*es,eh=.043*es,ix=ex-s*.0015;
+      // el párpado es un óvalo oscuro detrás del blanco: solo asoma como una línea curva por arriba y por fuera (no es una ceja)
+      E.disc(F(ex+s*.004,ey+.0055,.003,ry),ew*1.13,eh*1.0,K);E.disc(F(ex,ey,.0045,ry),ew,eh,[.99,.99,1]);
+      E.disc(F(ix,ey-.003,.006,ry),ew*.86,eh*.9,dk(ec,.35));E.disc(F(ix,ey-.006,.007,ry),ew*.72,eh*.76,lt(ec,.08));E.disc(F(ix,ey-.02,.0075,ry),ew*.48,eh*.3,lt(ec,.4),10);E.disc(F(ix,ey-.001,.008,ry),ew*.34,eh*.42,[.08,.07,.1]);E.disc(F(ix+.009,ey+.015,.0095,ry),.008*es,.0095*es,W,8);
+      if(L.ey===2||L.ey===6)E.box(m4RZ(F(ex,ey+eh*.82,.0105,ry),s*.24),ew*1.25,.0055,.002,K);
+      if(L.ey===7)for(let k=0;k<3;k++)E.box(m4RZ(F(ex+s*(.022+k*.008),ey+eh*.95+k*.002,.006,ry),s*-.9),.008,.003,.002,K)}
+    const bt={0:.07,1:.07,2:0,3:.35,4:-.3}[L.brw]||0;E.box(m4RZ(F(ex,ey+.072,.005,ry),s*bt),.024,L.brw===1?.0058:L.brw===2?.002:.0032,.002,av3Mix(dk(hc,.35),sk,.12));
     if(L.bl===1||[4,5].includes(L.mk))E.disc(F(s*.068,-.066,.004,s*.6),.02,.012,av3Mix(sk,[1,.5,.55],.45),10);
     if(L.bl===2)for(let k=0;k<3;k++)E.disc(F(s*(.052+k*.011),-.058-(k%2)*.008,.004,s*.5),.003,.003,dk(sk,.3),6)}
   if(L.bl===3)E.box(F(.06,-.066,.004,.5),.016,.007,.002,[.95,.85,.7]);if(L.bl===4)E.disc(F(.05,-.09,.004,.4),.004,.004,dk(sk,.6),6);
@@ -212,7 +224,7 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
     else{E.box(F(0,my,.004),.017,.003,.002,mc);if(L.mo===0||L.mo===3||L.mo===4||L.mo===6)for(const s of[-1,1])E.box(m4RZ(F(s*.02,my+.004,.004),s*.6),.006,.003,.002,mc);if(L.mo===4)E.disc(F(0,my-.008,.005),.007,.008,[.95,.45,.5],8);if(L.mo===6)E.box(F(.008,my-.006,.005),.003,.005,.002,W)}}
   // barba
   if(L.brd===1)E.ell(m4T(HM,0,-.05,.006),hrx*.86,hry*.76,hrz*.92,av3Mix(sk,hc,.28),(x,y,z)=>y<-.15&&z>-.1);
-  if(L.brd===2||L.brd===6)E.ell(m4T(HM,0,-.128,.07),.03,.03,.03,hc,null,1);
+  if(L.brd===2||L.brd===6)E.ell(m4T(HM,0,-.122,zs(0,-.118)-.004),.022,.024,.014,hc,null,1);
   if(L.brd===3||L.brd===4||L.brd===6)for(const s of[-1,1])E.ell(F(s*.018,-.076,.002),.02,.008,.008,hc,null,1);
   if(L.brd===4||L.brd===6)E.ell(m4T(HM,0,-.05,.006),hrx*.9,hry*.8,hrz*.96,hc,(x,y,z)=>y<-.2&&z>-.3&&!(y>-.6&&Math.abs(x)<.32&&z>.5));
   if(L.brd===6)E.ell(m4T(HM,0,-.18,.055),.06,.07,.045,hc);

@@ -1108,3 +1108,5 @@ button,a,input,select,label,summary,[role="button"],[onclick],.ball,#ball,.gview
 
 .av3cv{width:100%;height:100%;display:block}.trv3{width:118px;height:224px}#trPrev:has(.trv3) .trv>img.trimg{width:96px}#trPrev:has(.trv3) .trvmap img{width:38px;height:57px}#trPrev:has(.trv3){gap:4px;padding-left:4px;padding-right:4px}#gTr .av3cv{filter:drop-shadow(0 6px 4px rgba(0,0,0,.25))}
 #gTr:has(.av3cv){display:block;width:150px;height:240px;bottom:-14px}@media (max-width:700px){#gTr:has(.av3cv){width:104px;height:166px}}.tcav img.tc3d{image-rendering:auto}
+
+body.av3 img.trimg,body.av3 #psp img,body.av3 .tsprc,body.av3 img.sctr,body.av3 .pvav img,body.av3 .profav img,body.av3 .hudav img,body.av3 #gAv img{image-rendering:auto!important}

@@ -1210,10 +1210,11 @@ def HB(el, off):
 
 
 def visor(name, el_edge, off, az_half, L, droop=0.025, slot="hat", rot=0.0, th=0.012):
+    """Visera pegada al borde de la copa: el_edge es la elevación del borde (número o función del ángulo)."""
     G = []
     for j in range(17):
         az = -az_half + 2 * az_half * j / 16
-        e = hs(az + rot, el_edge, off)
+        e = hs(az + rot, el_edge(az + rot) if callable(el_edge) else el_edge, off)
         a = math.radians(az + rot)
         d = Vector((sin(a), -cos(a), 0))
         ln = L * math.sqrt(max(0.0, 1 - (az / az_half) ** 2)) + 0.012
@@ -1279,7 +1280,7 @@ def cap(rot=0.0, panel=None, crown_slot="hat", visor_slot="hat", btn="hatd", fla
     dome("dome", HOFF, 12, 4, 0, slot=crown_slot, zs=1.0 - flat * 0.45)
     if rot:
         pass
-    visor("visor", 12, HOFF, 62, L, slot=visor_slot, rot=rot)
+    visor("visor", lambda a: hairline(a, 12, 4, 0), HOFF, 62, L, slot=visor_slot, rot=rot)
     ball("button", hs(0, 90, HOFF + 0.004) - Vector((0, 0, (HR[2] + HOFF) * flat * 0.45)), 0.02, btn, k=(1, 1, 0.5))
     if panel:
         hpatch("panel", -40 + rot, 40 + rot, 16, 58, HOFF + 0.003, panel, cols=16, rows=6, th=0.004)
@@ -1293,7 +1294,7 @@ def hat(n):
         cap(panel="white")
     elif n == 2:
         dome("dome", HOFF, 30, 8, -6)
-        visor("visor", -4, HOFF, 62, 0.13, droop=0.04, rot=180)
+        visor("visor", lambda a: hairline(a, 30, 8, -6), HOFF, 62, 0.13, droop=0.04, rot=180)
         ball("button", hs(0, 90, HOFF + 0.004), 0.02, "hatd", k=(1, 1, 0.5))
         hpatch("strap", -26, 26, 30, 40, HOFF + 0.003, "hatd", cols=8, rows=2, th=0.004)
     elif n == 3:      # gorro de lana
@@ -1505,7 +1506,7 @@ def hat(n):
         ball("gem", arc_pt(0, 0, 0.07, -22) + (arc_pt(0, 0, 0.07, -22) - HC).normalized() * 0.02, 0.016, "hat", k=(1, 0.6, 1.3))
     elif n == 39:     # gorra plana
         dome("dome", HOFF + 0.01, 14, 6, 2, zs=0.95, top_flat=0.12)
-        visor("visor", 14, HOFF, 58, 0.08, droop=0.012)
+        visor("visor", lambda a: hairline(a, 14, 6, 2), HOFF, 58, 0.08, droop=0.012)
         ball("button", Vector((0, -0.04, HC.z + (HR[2] + HOFF) * 0.86)), 0.014, "hatd", k=(1, 1, 0.5))
     elif n == 40:     # gorra Poké Ball
         cap(panel="white", crown_slot="red", visor_slot="red", btn="black")

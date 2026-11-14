@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.91"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.91.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794667903">
+<meta name="game-build" content="1794673463">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2884,7 +2884,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.91</small>
+    <small class="pcver">Versión 6.91.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7566,8 +7566,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.91";
+const GAME_VER="6.91.1";
 const NEWS=[
+{v:"2026-11-14-6.91.1",ver:"6.91.1",at:"2026-11-14T17:24",t:"🔧 Arreglos/Mejoras",l:["Entrenador 3D: la visera de las gorras (normal, al revés y plana) ahora sale justo del borde de la gorra en toda su anchura; antes quedaba descolocada en los lados"]},
 {v:"2026-11-14-6.91",ver:"6.91",at:"2026-11-14T15:51",t:"🏞️ Paisaje en 3D en la pantalla principal",l:["Detrás del pueblo y de tu entrenador ahora hay un paisaje 3D: un valle con lago, colinas con bosques de pinos y árboles frondosos, rocas, montañas nevadas al fondo, nubes que se mueven y pájaros","La luz sigue la hora real: amanecer, día, atardecer y noche con luna y estrellas, y cambia poco a poco","El lago tiene olas, refleja el color del cielo y brilla con el sol","Para no gastar batería se queda quieto cuando hay una ventana abierta encima o la pestaña está oculta, y con «Animaciones ligeras» va más suave","Gorra al revés: ahora se ve más frente y por detrás baja hasta la nuca"]},
 {v:"2026-11-14-6.90",ver:"6.90",at:"2026-11-14T15:32",t:"🔥 Carrera de Rapidash con carriles y Pesca en 3D",l:["Carrera de Rapidash: ahora hay tres carriles. Columnas de roca y carros cargados de paja no se pueden saltar: hay que cambiar de carril para esquivarlos","La dificultad sube por niveles según la distancia: aparecen Zubat en carriles concretos, columnas dobles, carros que ocupan dos carriles y columnas con una valla en el único carril libre","La velocidad sigue subiendo cuanto más lejos llegas, pero los obstáculos siempre dejan sitio para saltar o esquivar","Controles: W, Espacio o ↑ para saltar; S o ↓ para agacharte; A/D o ←/→ para cambiar de carril. En el móvil, desliza hacia los lados, arriba o abajo, o usa los botones ◀ ▶","Pesca en 3D: un lago con olas y brillos del sol, embarcadero, orilla con árboles y montañas, juncos y nenúfares. La caña se lanza, el flotador cabecea, verás la sombra del pez acercarse y el agua salpica cuando pica","La pesca puede tocarte de día, al atardecer o de noche","Arreglado: las puntuaciones altas de los minijuegos sin final (Carrera de Rapidash, Peso y altura y Más o menos) no se guardaban en la clasificación si pasaban de un tope fijo. Ahora no tienen tope"]},
 {v:"2026-11-14-6.89",ver:"6.89",at:"2026-11-14T15:15",t:"🧢 Gorros 3D modelados en Blender",l:["Los 42 gorros y adornos de cabeza del entrenador 3D son ahora modelos de verdad: gorras con visera y panel, gorros de lana con vuelta, borla y canalé, sombreros con copa, cinta y ala, boina, casco, bruja, copa, vaquero, pamela, fedora, chef, coronas, tiara, halo, diademas con orejas, lazos, flores, auriculares…","Cada uno asienta sobre el peinado: los que tapan la cabeza ocultan el pelo de arriba y dejan ver el de los lados y la nuca","Las gafas de sol y de aviador siguen siendo gafas"]},
@@ -7909,7 +7910,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794667903";
+const GAME_B="1794673463";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -18928,7 +18929,7 @@ function ch3Grid(L,dir,fr){if(CH3.ok===false)return null;const S=CH3.S,W=16*S,H=
 // pinta pegada al relieve de la cabeza, y el pelo, los gorros y los complementos se acoplan encima.
 // Las figuras pequeñas del mapa siguen saliendo del modelo de siempre: a ese tamaño no se nota y no descarga nada.
 // =====================================================================================
-const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"8",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
+const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"9",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
 function av3mParse(buf){const dv=new DataView(buf);let off=12,json=null,bin=null;
   while(off<dv.byteLength){const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),ch=buf.slice(off+8,off+8+len);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(ch));else bin=ch;off+=8+len}
   const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],o=(bv.byteOffset||0)+(a.byteOffset||0),n=a.count*{SCALAR:1,VEC3:3}[a.type];

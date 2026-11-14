@@ -1292,10 +1292,10 @@ def hat(n):
     if n == 1:
         cap(panel="white")
     elif n == 2:
-        dome("dome", HOFF, 0, 4, 12)
-        visor("visor", 12, HOFF, 62, 0.13, rot=180)
+        dome("dome", HOFF, 30, 8, -6)
+        visor("visor", -4, HOFF, 62, 0.13, droop=0.04, rot=180)
         ball("button", hs(0, 90, HOFF + 0.004), 0.02, "hatd", k=(1, 1, 0.5))
-        hpatch("strap", 150, 210, 12, 22, HOFF + 0.003, "hatd", cols=8, rows=2, th=0.004)
+        hpatch("strap", -26, 26, 30, 40, HOFF + 0.003, "hatd", cols=8, rows=2, th=0.004)
     elif n == 3:      # gorro de lana
         dome("dome", HOFF, 16, 8, 2, zs=1.22)
         hpatch("cuff", -180, 180, lambda a: 4 + 12 * max(0, cos(math.radians(a))) ** 1.5, lambda a: 20 + 12 * max(0, cos(math.radians(a))) ** 1.5, HOFF + 0.012, "hatl", closed=True, th=0.02, rows=3)

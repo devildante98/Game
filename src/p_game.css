@@ -1140,3 +1140,41 @@ body.calm #gBud .gbst,body.glite #gBud .gbst{animation:none}
 #gBud .gbhd img{animation:gbhdIdle 3.6s ease-in-out infinite!important;transform-origin:50% 100%}
 @keyframes gbhdIdle{0%,100%{transform:scale(1,1) rotate(0deg)}25%{transform:scale(1.012,.985) rotate(-.8deg)}50%{transform:scale(.995,1.02) rotate(0deg)}75%{transform:scale(1.012,.985) rotate(.8deg)}}
 body.calm #gBud .gbhd img,body.glite #gBud .gbhd img{animation:none!important}
+
+/* pueblo en 3D: carteles sobre los edificios (los edificios los dibuja el paisaje) */
+body.land3 #gTown{display:none}
+#gTown3{position:absolute;inset:0;z-index:3;pointer-events:none}
+body:not(.land3) #gTown3{display:none}
+#gTown3 .g3band{position:absolute;left:0;right:0;bottom:0;height:var(--gtown);pointer-events:auto;touch-action:pan-y}
+.gb3{position:absolute;pointer-events:auto;background:none!important;border:0!important;box-shadow:none!important;padding:0!important;margin:0;min-width:0!important;border-radius:14px!important;cursor:pointer;touch-action:pan-y;transition:background .15s}
+.gb3:hover,.gb3:focus-visible{background:rgba(255,255,255,.12)!important;outline:none}
+.gb3 .gb3l{position:absolute;left:50%;bottom:-6px;transform:translate(-50%,100%);display:flex;flex-direction:column;align-items:center;gap:0;padding:3px 10px 4px;border-radius:10px;background:linear-gradient(#5a3d22,#3f2a16);border:2px solid #2a1a0c;box-shadow:0 3px 0 rgba(0,0,0,.35);white-space:nowrap;pointer-events:none}
+.gb3 .gb3l b{font:800 12px/1.1 'Baloo 2',system-ui,sans-serif;color:#fff3dc;text-shadow:0 1px 0 #000}
+.gb3 .gb3l em{font:700 10px/1.1 system-ui,sans-serif;font-style:normal;color:#ffe29a}.gb3 .gb3l em i{color:#ffd23f;font-style:normal;letter-spacing:-1px;margin-right:3px}
+.gb3.lock .gb3l{background:linear-gradient(#5b6378,#3c4256);border-color:#22273a}.gb3.lock .gb3l em{color:#dfe5ff}
+.gb3.g3new{animation:g3new 1.4s ease-out}@keyframes g3new{0%{background:rgba(255,230,120,.0)}20%{background:rgba(255,230,120,.45)}100%{background:rgba(255,230,120,0)}}
+#gTown3 .gpop{position:absolute;transform:translate(-50%,0);pointer-events:none}
+@media (max-width:700px){.gb3 .gb3l{padding:2px 7px 3px}.gb3 .gb3l b{font-size:10px}.gb3 .gb3l em{font-size:9px}}
+body.land3 #farm.g3l #gTL,body.land3 #farm.g3r #gTR{display:grid;place-items:center}
+body.land3 #farm:not(.g3l) #gTL,body.land3 #farm:not(.g3r) #gTR{display:none}
+/* ventana de mejoras */
+#upgM{position:fixed;inset:0;z-index:9000;display:grid;place-items:center;background:rgba(8,12,30,.6);backdrop-filter:blur(3px);padding:12px}
+#upgM .upgw{width:min(560px,100%);max-height:min(86vh,760px);display:flex;flex-direction:column;border-radius:22px;overflow:hidden;background:#141b38;border:3px solid #fff;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+#upgM .upgh{display:flex;align-items:center;gap:10px;padding:12px 14px;background:linear-gradient(#ff9a3c,#f0731f)}
+#upgM .upgt{flex:1;display:flex;flex-direction:column;color:#fff}#upgM .upgt b{font:800 20px/1.1 'Baloo 2',system-ui,sans-serif;text-shadow:0 2px 0 rgba(0,0,0,.25)}#upgM .upgt small{font-size:12px;opacity:.92}
+#upgM .upgx{width:38px;height:38px;border-radius:50%;border:2px solid rgba(0,0,0,.25);background:#fff;color:#1c2540;font-weight:800;cursor:pointer}
+#upgM .upgq{display:flex;align-items:center;gap:6px;padding:8px 14px;background:#1b2448;color:#c9d3ff;flex-wrap:wrap}
+#upgM .upgq button{padding:4px 10px;border-radius:9px;border:2px solid #3a4680;background:#232d5c;color:#fff;font-weight:800;cursor:pointer}#upgM .upgq button.on{background:#ffd23f;color:#3a2a00;border-color:#b8901a}
+#upgM .upgtot{margin-left:auto;font-size:13px}#upgM .upgtot b{color:#ffe29a}
+#upgM .upgl{overflow:auto;padding:10px 12px 14px;display:flex;flex-direction:column;gap:8px}
+#upgM .upgc{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:14px;background:#202a55;border:2px solid #2f3a72}
+#upgM .upgc.lock{opacity:.85;background:#1d2446}#upgM .upgc.upgf{border-color:#ffd23f;box-shadow:0 0 0 3px rgba(255,210,63,.3)}
+#upgM .upgc.upgok{animation:upgok .6s ease-out}@keyframes upgok{30%{background:#2f6a3c}}
+#upgM .upgic{font-size:30px;width:44px;text-align:center}
+#upgM .upgm{flex:1;min-width:0;display:flex;flex-direction:column;color:#fff}#upgM .upgm>b{font-size:15px}#upgM .upgm small{font-size:11.5px;color:#aab6e8}
+#upgM .upgs{font-size:12px;color:#dfe5ff}#upgM .upgs i{color:#ffd23f;font-style:normal;margin-right:4px}
+#upgM .upgb{min-width:118px;padding:6px 10px;border-radius:12px;border:2px solid #0d5a2a;background:linear-gradient(#3fd06a,#22a34a);color:#fff;font-weight:800;display:flex;flex-direction:column;align-items:center;cursor:pointer;box-shadow:0 3px 0 #0d5a2a}
+#upgM .upgb small{font-size:11px;font-weight:700;display:flex;align-items:center;gap:3px}#upgM .upgb:disabled{background:#3a4268;border-color:#262c4a;box-shadow:none;color:#aab;cursor:default}
+@media (max-width:520px){#upgM .upgb{min-width:96px}#upgM .upgic{font-size:24px;width:32px}}
+/* con el pueblo en 3D, la franja de abajo es algo más alta (la Poké Ball sube un poco) */
+body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px}}@media (max-height:620px){body.gm.land3{--gtown:128px}}

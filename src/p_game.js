@@ -12,6 +12,7 @@ const GMSCR={stage:{n:"Gacha",d:"Tiradas y máquina de Poké Balls",i:"gacha",c:
 // ---------- iconos dibujados (sin emojis) ----------
 const GMK='stroke="#1b2340" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"';
 const GMI={
+  build:'<path d="M6 24L24 9l18 15" fill="none" '+GMK+'/><path d="M11 21v21h26V21" fill="#ffd9a0" '+GMK+'/><path d="M24 40V25m-6 6l6-6 6 6" fill="none" stroke="#16a34a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 24L24 9l18 15" fill="#ff7a2a" '+GMK+'/>',
   ball:'<circle cx="24" cy="24" r="19" fill="#fff" '+GMK+'/><path d="M5 24a19 19 0 0 1 38 0z" fill="#ee3b4b" '+GMK+'/><path d="M5 24h38" '+GMK+'/><circle cx="24" cy="24" r="6" fill="#fff" '+GMK+'/><path d="M12 15a12 12 0 0 1 6-5" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity=".8"/>',
   gacha:'<path d="M11 26h26l3 17H8z" fill="#ee3b4b" '+GMK+'/><circle cx="24" cy="18" r="14" fill="#cfeeff" '+GMK+'/><circle cx="18" cy="20" r="4" fill="#ffd23f" '+GMK.replace('3"','2"')+'/><circle cx="27" cy="13" r="4" fill="#ff7aa8" '+GMK.replace('3"','2"')+'/><circle cx="29" cy="22" r="4" fill="#5ad1a0" '+GMK.replace('3"','2"')+'/><rect x="20" y="33" width="8" height="5" rx="1.5" fill="#1b2340"/><path d="M14 9a12 12 0 0 1 5-3" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none"/>',
   vs:'<g transform="rotate(45 24 24)"><path d="M21 3h6v27h-6z" fill="#e7eef8" '+GMK+'/><path d="M14 30h20v5H14z" fill="#ffc83a" '+GMK+'/><path d="M21.5 35h5v9h-5z" fill="#9a5f2e" '+GMK+'/></g><g transform="rotate(-45 24 24)"><path d="M21 3h6v27h-6z" fill="#e7eef8" '+GMK+'/><path d="M14 30h20v5H14z" fill="#ffc83a" '+GMK+'/><path d="M21.5 35h5v9h-5z" fill="#9a5f2e" '+GMK+'/></g>',
@@ -179,7 +180,7 @@ function gmInit(){
   const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");
   // escenario: botones laterales, entrenador y compañero, y el pueblo
   const farm=$("farm");
-  const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["bag","Mochila","bagU","#f0a020"]];
+  const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["build","Mejoras","upg","#ff7a2a"],["bag","Mochila","bagU","#f0a020"]];
   gmEl("div","gSideL","gside",SL.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   gmEl("div","gSideR","gside",SR.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   const orb=farm.querySelector(".orb");if(orb){gmEl("div","gRays","",'',orb);gmEl("div","gPed","",'<i></i>',orb);gmEl("div","gTr","",'',orb);gmEl("div","gBud","",'',orb);gmEl("i","gGround","",'',orb)}
@@ -267,8 +268,8 @@ function gmClick(e){const t=e.target;if(!t.closest||!gmOn())return;
     setTimeout(gmNav,40);return}
   const sb=t.closest("[data-gs]");if(sb){e.stopPropagation();const k=sb.dataset.gs;snd("ui");gmVib(10);
     if(k==="earnP")gmOpen("earnP");else if(k==="mg")$("mgBan")&&$("mgBan").click();else if(k==="pass")$("passMini")&&$("passMini").click();else if(k==="hh")$("hhBan")&&$("hhBan").click();
-    else if(k==="qP")hubOpen("prg","qP");else if(k==="bagU")hubOpen("bag","bagU");return}
-  const bd=t.closest("[data-gb]");if(bd){e.stopPropagation();const i=+bd.dataset.gb;snd("ui");gmVib(8);gmOpen("shopP");
+    else if(k==="qP")hubOpen("prg","qP");else if(k==="upg"&&typeof upgOpen==="function")upgOpen();else if(k==="bagU")hubOpen("bag","bagU");return}
+  const bd=t.closest("[data-gb]");if(bd){e.stopPropagation();const i=+bd.dataset.gb;snd("ui");gmVib(8);if(typeof upgOpen==="function"){upgOpen(i);return}gmOpen("shopP");
     setTimeout(()=>{const tl=$("bg"+i);if(!tl)return;try{tl._siv({block:"center",behavior:"smooth"})}catch(x){}tl.classList.remove("gflash");void tl.offsetWidth;tl.classList.add("gflash")},90);return}
   if(t.closest("#gMed")){e.stopPropagation();e.preventDefault();snd("ui");hubOpen("adv","gymP");return}
   if(t.closest("#gTk")){snd("ui");gmOpen("earnP");return}
@@ -381,8 +382,8 @@ function gmTown(t){if(document.getElementById("gLoad"))return;const dt=Math.min(
     o.e.style.transform="translate("+o.x.toFixed(1)+"px,"+(-o.y).toFixed(0)+"px)";o.e.firstChild.style.transform=o.v>0?"scaleX(-1)":"";o.e.style.zIndex=String(20-Math.round(o.y))});
   if(t-GM.pop>1400&&!calm){GM.pop=t;let tot=0;const ws=G.map((g,i)=>{const p=g[2]*(S.g[i]||0);tot+=p;return p});if(tot<=0)return;
     let r=Math.random()*tot,i=0;while(i<ws.length-1&&r>ws[i]){r-=ws[i];i++}
-    const b=document.querySelector('.gbld[data-gb="'+i+'"]');if(!b)return;const amt=ws[i]*PMUL()*1.4,s=document.createElement("span");s.className="gpop";s.innerHTML="+"+gmK(amt)+" "+gI("ticket",16);
-    s.style.left=(b.offsetLeft+b.offsetWidth/2)+"px";s.style.top=(b.offsetTop+8)+"px";$("gBs").appendChild(s);setTimeout(()=>s.remove(),1500)}}
+    const b3=document.querySelector('body.land3 .gb3[data-gb="'+i+'"]'),b=b3||document.querySelector('.gbld[data-gb="'+i+'"]');if(!b)return;const amt=ws[i]*PMUL()*1.4,s=document.createElement("span");s.className="gpop";s.innerHTML="+"+gmK(amt)+" "+gI("ticket",16);
+    s.style.left=(b.offsetLeft+b.offsetWidth/2)+"px";s.style.top=(b.offsetTop+(b3?0:8))+"px";(b3?b.parentNode:$("gBs")).appendChild(s);setTimeout(()=>s.remove(),1500)}}
 // arranca cuando la partida está cargada
 {const iv=setInterval(()=>{try{if(!GM.init&&$("auth")&&$("auth").hidden&&$("hubM")&&typeof S!=="undefined"&&S&&S.owned&&$("farm")){clearInterval(iv);gmInit()}}catch(e){}},50)}
 // ---------- el tutorial de los jugadores nuevos abre la sección de cada paso ----------

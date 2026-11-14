@@ -6,7 +6,7 @@
 // pinta pegada al relieve de la cabeza, y el pelo, los gorros y los complementos se acoplan encima.
 // Las figuras pequeñas del mapa siguen saliendo del modelo de siempre: a ese tamaño no se nota y no descarga nada.
 // =====================================================================================
-const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"2",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
+const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"3",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
 function av3mParse(buf){const dv=new DataView(buf);let off=12,json=null,bin=null;
   while(off<dv.byteLength){const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),ch=buf.slice(off+8,off+8+len);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(ch));else bin=ch;off+=8+len}
   const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],o=(bv.byteOffset||0)+(a.byteOffset||0),n=a.count*{SCALAR:1,VEC3:3}[a.type];

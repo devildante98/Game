@@ -163,39 +163,45 @@ def lerp_tab(T, z):
 
 
 # ================================================================ CUERPO BASE
-# Formas de la cara (opción del editor): 0 redonda, 1 ovalada, 2 cuadrada.
-#   wx ancho · taper/tp cuánto y cómo se estrecha hacia la barbilla · chin largo de la parte baja ·
-#   cheek mejillas · jaw ángulo de la mandíbula · chinw ancho de la barbilla
-FS = {0: dict(wx=1.0, taper=0.4, tp=1.9, chin=0.95, cheek=0.1, jaw=0.0, chinw=1.0),
-      1: dict(wx=0.93, taper=0.52, tp=1.55, chin=1.06, cheek=0.03, jaw=0.0, chinw=0.8),
-      2: dict(wx=1.03, taper=0.3, tp=2.7, chin=0.98, cheek=0.04, jaw=0.13, chinw=1.3)}
+# Formas de la cara (opción del editor): 0 redonda, 1 ovalada, 2 cuadrada. Todas tienen la estructura de una cara
+# de verdad: cráneo ancho, mejillas que bajan casi rectas, mandíbula marcada y barbilla pequeña. Cambian:
+#   wx ancho · W perfil de anchura de la cara de los ojos (t=0) a la barbilla (t=1) · chin largo de la parte baja ·
+#   slope / k inclinación de la línea de la mandíbula hacia atrás y hacia los lados
+FS = {0: dict(wx=1.0, chin=0.9, slope=0.5, k=0.1, W=[(0, 1), (0.2, 0.99), (0.4, 0.955), (0.55, 0.9), (0.7, 0.8), (0.85, 0.63), (0.95, 0.47), (1, 0.4)]),
+      1: dict(wx=0.95, chin=0.97, slope=0.56, k=0.14, W=[(0, 1), (0.2, 0.985), (0.4, 0.94), (0.55, 0.87), (0.7, 0.75), (0.85, 0.57), (0.95, 0.4), (1, 0.32)]),
+      2: dict(wx=0.99, chin=0.93, slope=0.5, k=0.03, W=[(0, 1), (0.2, 0.99), (0.4, 0.96), (0.55, 0.925), (0.7, 0.86), (0.82, 0.74), (0.92, 0.57), (1, 0.46)])}
+DF = [(0, 1), (0.3, 1), (0.6, 0.975), (0.8, 0.93), (0.95, 0.86), (1, 0.82)]     # fondo de la cara (por delante)
+DB = [(0, 1), (0.25, 0.93), (0.5, 0.74), (0.75, 0.52), (1, 0.4)]                # fondo de la nuca (por detrás)
 
 
 def head_shape(x, y, z, f):
-    """De la esfera unidad a la cabeza: cráneo redondo, mandíbula según la forma elegida, barbilla adelantada
-    y relieve en la cara (frente, arco de las cejas, cuencas de los ojos, pómulos, boca y barbilla)."""
+    """De la esfera unidad a la cabeza. Arriba, un cráneo redondo. De los ojos para abajo la cabeza es una columna
+    cuya anchura y fondo siguen los perfiles W, DF y DB; por debajo la corta el plano de la mandíbula, que sube hacia
+    atrás y hacia los lados y deja la barbilla como punto más bajo. Encima va el relieve de la cara."""
     g = lambda a, s: math.exp(-(a / s) ** 2)
-    fwd = 0.0
     if z < 0:
         t = -z
-        x *= 1 - f["taper"] * t ** f["tp"]
-        y *= (1 - 0.1 * t ** 1.8) if y < 0 else (1 - 0.5 * t ** 1.3)
-        if y < 0.15:
-            x *= 1 + f["cheek"] * g(z + 0.4, 0.26) + f["jaw"] * g(z + 0.7, 0.2)
-        fwd = 0.34 * t ** 1.6          # la parte baja de la cabeza se adelanta: la barbilla queda bajo la cara
+        r = max(1e-3, math.sqrt(max(0.0, 1 - z * z)))
+        x = x / r * lerp_tab(f["W"], t)[0]
+        y = y / r * lerp_tab(DF if y < 0 else DB, t)[0]
         z *= f["chin"]
-    x *= f["wx"]
-    p = Vector((HC.x + x * HR[0], HC.y + (y - fwd) * HR[1], HC.z + z * HR[2]))
+    p = Vector((HC.x + x * f["wx"] * HR[0], HC.y + y * HR[1], HC.z + z * HR[2]))
+    # plano de la mandíbula (borde redondeado)
+    zc, yc = HC.z - HR[2] * f["chin"], HC.y - 0.82 * HR[1]
+    zl = zc + f["slope"] * max(0.0, p.y - yc) + f["k"] * abs(p.x)
+    e = 0.012
+    d = (p.z - zl) / e
+    p.z = zl + (e * math.log1p(math.exp(d)) if d < 30 else p.z - zl)
     if y < 0:
         w = min(1.0, -y * 1.7) ** 1.5
         u, v = p.x / HR[0], (p.z - HC.z) / HR[2]
         au = abs(u)
-        d = 0.007 * g(v - 0.36, 0.3) * g(u, 0.75)            # frente
-        d += 0.0075 * g(v - 0.01, 0.075) * g(au - 0.36, 0.32)  # arco de las cejas
-        d -= 0.0075 * g(v + 0.2, 0.13) * g(au - 0.42, 0.2)     # cuencas de los ojos
-        d += 0.01 * g(v + 0.5, 0.2) * g(au - 0.5, 0.26)        # pómulos
-        d += 0.009 * g(v + 0.71, 0.13) * g(u, 0.36)            # boca
-        d += 0.012 * g(v + 0.95, 0.14) * g(u, 0.3 * f["chinw"])  # barbilla
+        d = 0.006 * g(v - 0.36, 0.3) * g(u, 0.75)              # frente
+        d += 0.007 * g(v - 0.01, 0.075) * g(au - 0.36, 0.32)   # arco de las cejas
+        d -= 0.008 * g(v + 0.2, 0.13) * g(au - 0.42, 0.2)      # cuencas de los ojos
+        d += 0.006 * g(v + 0.46, 0.18) * g(au - 0.52, 0.22)    # pómulos
+        d += 0.008 * g(v + 0.7, 0.12) * g(u, 0.3)              # boca
+        d += 0.008 * g(v + 0.93, 0.1) * g(u, 0.22)             # barbilla
         p.y -= d * w
     return p
 

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.84"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.85"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794647348">
+<meta name="game-build" content="1794656748">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2874,7 +2874,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.84</small>
+    <small class="pcver">Versión 6.85</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7556,8 +7556,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.84";
+const GAME_VER="6.85";
 const NEWS=[
+{v:"2026-11-14-6.85",ver:"6.85",at:"2026-11-14T12:45",t:"👤 Caras con forma más real",l:["La cabeza del entrenador 3D tiene ahora la estructura de una cara de verdad: cráneo redondo, mejillas que bajan casi rectas, mandíbula marcada y barbilla pequeña","Las tres formas de cara se estrechan siempre hacia la barbilla: la cuadrada tiene la mandíbula más angulosa sin parecer más gruesa, la ovalada es más fina y alargada y la redonda más suave"]},
 {v:"2026-11-14-6.84",ver:"6.84",at:"2026-11-14T10:08",t:"👤 Cara con perfil y formas de cara de verdad",l:["La cabeza del entrenador 3D tiene ahora relieve: nariz, arco de las cejas, pómulos, zona de la boca y barbilla adelantada, así que de lado ya se ve un perfil y la cara no queda hundida bajo el pelo o el gorro","La opción «Forma de la cara» vuelve a notarse: redonda, ovalada (barbilla fina) y cuadrada (mandíbula ancha) son tres cabezas distintas","El pelo rapado, la cresta, el undercut y las barbas van pintados sobre la propia cabeza, así que siguen su forma exacta","Patillas más discretas con los peinados cortos"]},
 {v:"2026-11-14-6.83",ver:"6.83",at:"2026-11-13T22:38",t:"🧍 Entrenador 3D nuevo, modelado en Blender",l:["El cuerpo del entrenador es ahora un modelo de verdad hecho en Blender: formas suaves, hombros y piernas bien unidos y manos con sus dedos","Ojos completamente nuevos, al estilo de la saga: iris con degradado, pupila, reflejos, párpado y pestañas; cada tipo de ojos (serios, alegres, afilados, brillantes, cerrados…) tiene su forma","Las 29 prendas de arriba, las 16 de abajo y los 12 calzados están modelados uno a uno: chaquetas abiertas con cuello, sudaderas con capucha, vestidos, faldas plisadas, botas, sandalias…","Cuerpo de chica y de chico, cejas con forma, boca según la opción elegida, calcetines, medias, guantes, cinturón, mochilas y prenda atada a la cintura","Las piezas se descargan solas la primera vez que hacen falta; mientras llegan se ve el modelo anterior","El pelo y los gorros siguen con las formas de antes sobre la cabeza nueva: son lo siguiente en pasar a Blender"]},
 {v:"2026-11-13-6.82",ver:"6.82",at:"2026-11-13T22:00",t:"🔍 Zoom en tu entrenador 3D",l:["En «Tu entrenador» puedes acercar el modelo: rueda del ratón, pellizco con dos dedos, doble clic o los botones ＋ y －","Con zoom, arrastra hacia arriba o abajo para moverte por el modelo (y a los lados para girarlo)","Botón ⤢ para verlo en grande, a casi toda la pantalla","Modelo más redondeado al verlo de cerca: hombros sin cortes, sonrisa en arco y formas más suaves"]},
@@ -7892,7 +7893,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794647348";
+const GAME_B="1794656748";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -18584,7 +18585,7 @@ function ch3Grid(L,dir,fr){if(CH3.ok===false)return null;const S=CH3.S,W=16*S,H=
 // pinta pegada al relieve de la cabeza, y el pelo, los gorros y los complementos se acoplan encima.
 // Las figuras pequeñas del mapa siguen saliendo del modelo de siempre: a ese tamaño no se nota y no descarga nada.
 // =====================================================================================
-const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"2",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
+const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"3",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
 function av3mParse(buf){const dv=new DataView(buf);let off=12,json=null,bin=null;
   while(off<dv.byteLength){const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),ch=buf.slice(off+8,off+8+len);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(ch));else bin=ch;off+=8+len}
   const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],o=(bv.byteOffset||0)+(a.byteOffset||0),n=a.count*{SCALAR:1,VEC3:3}[a.type];

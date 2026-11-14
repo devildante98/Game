@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794665725">
+<meta name="game-build" content="1794665797">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -7897,7 +7897,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794665725";
+const GAME_B="1794665797";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -18653,7 +18653,7 @@ function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k]
   const wxF=({1:.95,2:.99})[fsn]||1,MHh=m4T(m4Mul(m4T(MH,0,hcy,0),new Float32Array([wxF,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1])),0,-hcy,0);
   if(HP){const mcc=P("hair",L.mcc),mch=L.mch|0;
     const HCOL={hair:hc,haird:dk(hc,.24),hairl:lt(hc,.16),tie:hac};
-    for(const p of HP){if(p.tag==="top"&&hatOn)continue;if(p.tag==="hat"&&!hatOn)continue;let c=HCOL[p.slot]||hc,cf=null;
+    for(const p of HP){if(p.tag==="top"&&hatOn)continue;if(hatOn&&/^s[ab]\d/.test(p.name))continue;if(p.tag==="hat"&&!hatOn)continue;let c=HCOL[p.slot]||hc,cf=null;
       if(mch===2&&p.tag==="streak")c=mcc;
       else if(mch===1&&p.slot!=="tie"){const base=c,y0=p.ymin;cf=(y,x,z)=>{const q=Math.hypot(x/hr[0],(y-hcy)/hr[2],z/hr[1]);return q>1.36||y<y0+.035?mcc:base}}
       else if(mch===3&&p.slot!=="tie"){const base=c,hl=av3Mix(hc,mcc,.62);cf=(y,x,z)=>Math.floor((Math.atan2(x,-z)+Math.PI)/Math.PI*7)%2?hl:base}

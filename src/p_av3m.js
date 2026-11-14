@@ -70,7 +70,7 @@ function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k]
   const wxF=({1:.95,2:.99})[fsn]||1,MHh=m4T(m4Mul(m4T(MH,0,hcy,0),new Float32Array([wxF,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1])),0,-hcy,0);
   if(HP){const mcc=P("hair",L.mcc),mch=L.mch|0;
     const HCOL={hair:hc,haird:dk(hc,.24),hairl:lt(hc,.16),tie:hac};
-    for(const p of HP){if(p.tag==="top"&&hatOn)continue;if(p.tag==="hat"&&!hatOn)continue;let c=HCOL[p.slot]||hc,cf=null;
+    for(const p of HP){if(p.tag==="top"&&hatOn)continue;if(hatOn&&/^s[ab]\d/.test(p.name))continue;if(p.tag==="hat"&&!hatOn)continue;let c=HCOL[p.slot]||hc,cf=null;
       if(mch===2&&p.tag==="streak")c=mcc;
       else if(mch===1&&p.slot!=="tie"){const base=c,y0=p.ymin;cf=(y,x,z)=>{const q=Math.hypot(x/hr[0],(y-hcy)/hr[2],z/hr[1]);return q>1.36||y<y0+.035?mcc:base}}
       else if(mch===3&&p.slot!=="tie"){const base=c,hl=av3Mix(hc,mcc,.62);cf=(y,x,z)=>Math.floor((Math.atan2(x,-z)+Math.PI)/Math.PI*7)%2?hl:base}

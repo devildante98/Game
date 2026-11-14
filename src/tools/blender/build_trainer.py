@@ -170,6 +170,8 @@ def lerp_tab(T, z):
 FS = {0: dict(wx=1.0, chin=0.9, slope=0.5, k=0.1, W=[(0, 1), (0.2, 0.99), (0.4, 0.955), (0.55, 0.9), (0.7, 0.8), (0.85, 0.63), (0.95, 0.47), (1, 0.4)]),
       1: dict(wx=0.95, chin=0.97, slope=0.56, k=0.14, W=[(0, 1), (0.2, 0.985), (0.4, 0.94), (0.55, 0.87), (0.7, 0.75), (0.85, 0.57), (0.95, 0.4), (1, 0.32)]),
       2: dict(wx=0.99, chin=0.93, slope=0.5, k=0.03, W=[(0, 1), (0.2, 0.99), (0.4, 0.96), (0.55, 0.925), (0.7, 0.86), (0.82, 0.74), (0.92, 0.57), (1, 0.46)])}
+# perfil de debajo de la mandíbula: distancia hacia atrás desde la barbilla → cuánto sube
+JAWY = [(0, 0), (0.03, 0.003), (0.07, 0.012), (0.11, 0.026), (0.15, 0.046), (0.2, 0.07), (0.25, 0.085), (0.3, 0.09), (0.5, 0.09)]
 DF = [(0, 1), (0.3, 1), (0.6, 0.975), (0.8, 0.93), (0.95, 0.86), (1, 0.82)]     # fondo de la cara (por delante)
 DB = [(0, 1), (0.25, 0.93), (0.5, 0.74), (0.75, 0.52), (1, 0.4)]                # fondo de la nuca (por detrás)
 
@@ -186,10 +188,12 @@ def head_shape(x, y, z, f):
         y = y / r * lerp_tab(DF if y < 0 else DB, t)[0]
         z *= f["chin"]
     p = Vector((HC.x + x * f["wx"] * HR[0], HC.y + y * HR[1], HC.z + z * HR[2]))
-    # plano de la mandíbula (borde redondeado)
+    # parte de abajo de la mandíbula: bajo la barbilla va casi horizontal y con volumen (papada), se curva hacia el
+    # cuello y sube hacia los lados hasta el ángulo de la mandíbula, bajo las orejas
     zc, yc = HC.z - HR[2] * f["chin"], HC.y - 0.82 * HR[1]
-    zl = zc + f["slope"] * max(0.0, p.y - yc) + f["k"] * abs(p.x)
-    e = 0.012
+    dy = max(0.0, p.y - yc)
+    zl = zc + lerp_tab(JAWY, dy)[0] * f["slope"] / 0.5 + f["k"] * abs(p.x) + 0.55 * p.x * p.x
+    e = 0.022
     d = (p.z - zl) / e
     p.z = zl + (e * math.log1p(math.exp(d)) if d < 30 else p.z - zl)
     if y < 0:
@@ -240,7 +244,7 @@ def base(girl):
     ak = 0.86 if girl else 1.0      # grosor de brazos
     lk = 0.92 if girl else 1.0      # grosor de piernas
     nk = 0.9 if girl else 1.0
-    V, F = tube([(0, 0.014, 1.31), (0, 0.014, 1.39), (0, 0.016, 1.47), (0, 0.02, 1.56)], [(0.058 * nk, 0.056 * nk), (0.05 * nk, 0.05 * nk), (0.052 * nk, 0.052 * nk), (0.056 * nk, 0.056 * nk)], X, 12, cap0=False, cap1=True)
+    V, F = tube([(0, 0.014, 1.31), (0, 0.012, 1.39), (0, 0.006, 1.46), (0, 0.004, 1.53)], [(0.058 * nk, 0.056 * nk), (0.051 * nk, 0.053 * nk), (0.054 * nk, 0.062 * nk), (0.058 * nk, 0.068 * nk)], X, 12, cap0=False, cap1=True)
     mk("neck", V, F, "skin", "body")
     # torso
     T = [(0.86, 0.135, 0.09), (0.93, 0.15, 0.098), (1.0, 0.134, 0.086), (1.1, 0.146, 0.094), (1.2, 0.162, 0.1), (1.27, 0.168, 0.098), (1.31, 0.14, 0.086), (1.345, 0.075, 0.062)]

@@ -6,7 +6,7 @@
     pip install bpy
     python src/tools/blender/build_trainer.py -- models
 
-Piezas: `head0`, `head1`, `head2` (cabeza con nariz y relieve: cara redonda, ovalada y cuadrada), `hair0`…`hair32` (peinados; el rapado y el calvo van pintados), `base_m`, `base_f` (cuerpo con manos y dedos), `top0`…`top28`, `bot0`…`bot15`, `shoe0`…`shoe11`.
+Piezas: `head0`, `head1`, `head2` (cabeza con nariz y relieve: cara redonda, ovalada y cuadrada), `hair0`…`hair32` (peinados; el rapado y el calvo van pintados), `hat1`…`hat44` (gorros; `cover` en tr_meta.json dice si tapa el pelo de arriba), `base_m`, `base_f` (cuerpo con manos y dedos), `top0`…`top28`, `bot0`…`bot15`, `shoe0`…`shoe11`.
 Los números son los mismos que los de las opciones del editor de aspecto.
 
 Cada objeto se llama `segmento.color.nombre[.etiqueta]`:
@@ -20,4 +20,4 @@ retocar y volver a exportar con el mismo nombre de archivo y los mismos nombres 
 incluir normales ni coordenadas de textura.
 
 En el pelo, la etiqueta `top` marca lo que tapa un gorro y `hat` lo que solo se ve con gorro; `streak` es el mechón de «Mechas: Mechón».
-Los gorros y los complementos todavía se dibujan con las formas de siempre, acopladas a la cabeza nueva.
+Los complementos del cuerpo (mochilas, bufandas, cinturón…) todavía se dibujan con las formas de siempre.

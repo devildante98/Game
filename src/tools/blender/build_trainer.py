@@ -1129,10 +1129,422 @@ def hair(n):
     save(f"hair{n}")
 
 
+# ================================================================ GORROS
+# Se apoyan sobre el pelo (el casquete de pelo sube como mucho unos 5 cm). «cover» = tapa la parte de arriba del pelo.
+HOFF = 0.06          # separación de la copa de un gorro respecto a la cabeza
+
+
+def dome(name, off, front, side, back, slot="hat", zs=1.0, tag="", th=0.012, top_flat=0.0):
+    """Copa: la cabeza agrandada 'off' por encima de la línea front/side/back (grados)."""
+    V, F = sphere(44, 30)
+    A = []
+    for v in V:
+        az = math.degrees(math.atan2(v.x, -v.y))
+        el = math.degrees(math.asin(max(-1.0, min(1.0, v.z))))
+        A.append((az, el, hairline(az, front, side, back)))
+    keep = [a[1] >= a[2] for a in A]
+    F2 = [f for f in F if any(keep[i] for i in f)]
+    P = []
+    for az, el, emin in A:
+        p = hs(az, max(el, emin), off)
+        if p.z > HC.z:
+            p.z = HC.z + (p.z - HC.z) * zs
+            if top_flat:
+                zt = HC.z + (HR[2] + off) * zs * (1 - top_flat)
+                p.z = min(p.z, zt + (p.z - zt) * 0.15) if p.z > zt else p.z
+        P.append(p)
+    mk(name, P, F2, slot, "head", ss=1, solid=th, soff=-1, tag=tag)
+
+
+def hpatch(name, az0, az1, el0, el1, off, slot, cols=32, rows=3, th=0.01, closed=False, tag=""):
+    f0 = el0 if callable(el0) else (lambda a, e=el0: e)
+    f1 = el1 if callable(el1) else (lambda a, e=el1: e)
+    m = cols if closed else cols + 1
+    G = []
+    for j in range(m):
+        az = az0 + (az1 - az0) * j / cols
+        G.append([hs(az, f0(az) + (f1(az) - f0(az)) * i / rows, off) for i in range(rows + 1)])
+    n = rows + 1
+    F = [(j * n + i, ((j + 1) % m) * n + i, ((j + 1) % m) * n + i + 1, j * n + i + 1) for j in range(m if closed else m - 1) for i in range(rows)]
+    mk(name, [p for c in G for p in c], F, slot, "head", ss=1, solid=th, tag=tag)
+
+
+def arc_pt(phi, w, off, tilt=-12.0):
+    """Punto de una diadema: phi recorre de oreja a oreja por encima (0 = arriba), w hacia delante/atrás (grados)."""
+    p, q, t = math.radians(phi), math.radians(w), math.radians(tilt)
+    v = Vector((sin(p) * cos(q), -sin(q), cos(p) * cos(q)))
+    v = Vector((v.x, v.y * cos(t) - v.z * sin(t), v.y * sin(t) + v.z * cos(t)))   # inclinada hacia delante
+    return hsu(v.normalized(), off)
+
+
+def arcband(name, off=0.055, half_w=4.0, tilt=-12.0, slot="hat", th=0.012, phi=98, n=28):
+    G = [[arc_pt(-phi + 2 * phi * i / n, w, off, tilt) for w in (-half_w, 0.0, half_w)] for i in range(n + 1)]
+    F = [(i * 3 + k, (i + 1) * 3 + k, (i + 1) * 3 + k + 1, i * 3 + k + 1) for i in range(n) for k in range(2)]
+    mk(name, [p for r in G for p in r], F, slot, "head", ss=1, solid=th)
+
+
+def hring(z, rx, ry, zf=None, cy=0.0, n=36):
+    return [Vector((cos(a) * rx, HC.y + cy + sin(a) * ry, z + (zf(a) if zf else 0.0))) for a in (2 * pi * i / n for i in range(n))]
+
+
+def crown(name, rings, slot="hat", cap=True, th=0.0, tag=""):
+    """Copa por anillos: (z, rx, ry[, cy])."""
+    V, F = loft([hring(r[0], r[1], r[2], cy=r[3] if len(r) > 3 else 0.0) for r in rings], True, False, cap)
+    mk(name, V, F, slot, "head", ss=1, solid=th, soff=-1, tag=tag)
+
+
+def brim(name, z, rin, rout, slot="hat", droop=0.0, zf=None, th=0.012, steps=4):
+    R = []
+    for k in range(steps + 1):
+        t = k / steps
+        rx = rin[0] + (rout[0] - rin[0]) * t
+        ry = rin[1] + (rout[1] - rin[1]) * t
+        R.append(hring(z - droop * t * t, rx, ry, zf=(lambda a, t=t: zf(a) * t * t) if zf else None))
+    V, F = loft(R, True)
+    mk(name, V, F, slot, "head", ss=1, solid=th)
+
+
+def HB(el, off):
+    e = math.radians(el)
+    return HC.z + (HR[2] + off) * sin(e), (HR[0] + off) * cos(e), (HR[1] + off) * cos(e)
+
+
+def visor(name, el_edge, off, az_half, L, droop=0.025, slot="hat", rot=0.0, th=0.012):
+    G = []
+    for j in range(17):
+        az = -az_half + 2 * az_half * j / 16
+        e = hs(az + rot, el_edge, off)
+        a = math.radians(az + rot)
+        d = Vector((sin(a), -cos(a), 0))
+        ln = L * math.sqrt(max(0.0, 1 - (az / az_half) ** 2)) + 0.012
+        G.append([e - d * 0.012 + Vector((0, 0, 0.004))] + [e + d * ln * v + Vector((0, 0, -droop * v * v)) for v in (0.25, 0.5, 0.75, 1.0)])
+    n = 5
+    F = [(j * n + i, (j + 1) * n + i, (j + 1) * n + i + 1, j * n + i + 1) for j in range(16) for i in range(4)]
+    mk(name, [p for c in G for p in c], F, slot, "head", ss=1, solid=th)
+
+
+def ball(name, c, r, slot, us=14, vs=10, k=(1, 1, 1), bumpy=0.0):
+    V, F = sphere(us, vs)
+    c = Vector(c)
+    P = []
+    for v in V:
+        b = 1 + bumpy * sin(v.x * 9) * sin(v.y * 8) * sin(v.z * 7)
+        P.append(c + Vector((v.x * r * k[0], v.y * r * k[1], v.z * r * k[2])) * b)
+    mk(name, P, F, slot, "head", ss=1)
+
+
+def cone(name, pts, radii, slot, side=X, n=10, flat=1.0):
+    V, F = tube([Vector(p) for p in pts], [(r, r * flat) for r in radii], side, n, 2.0, True, True)
+    mk(name, V, F, slot, "head", ss=1)
+
+
+def bow(name, c, s=1.0, slot="hat", up=(0, 0, 1), fwd=(0, -1, 0)):
+    c, u, f = Vector(c), Vector(up).normalized(), Vector(fwd).normalized()
+    r = u.cross(f).normalized()
+    for k in (-1, 1):
+        V, F = sphere(14, 9)
+        P = [c + r * (k * 0.05 * s) + r * (v.x * 0.05 * s) + u * (v.y * 0.032 * s + k * v.x * 0.012 * s) + f * (v.z * 0.016 * s) for v in V]
+        mk(f"{name}{k}", P, F, slot, "head", ss=1)
+        V, F = sphere(10, 7)
+        P = [c + r * (k * 0.022 * s) - u * 0.045 * s + r * (v.x * 0.014 * s) + u * (v.y * 0.035 * s) + f * (v.z * 0.008 * s) for v in V]
+        mk(f"{name}t{k}", P, F, slot, "head", ss=1)
+    ball(f"{name}k", c, 0.018 * s, slot, k=(1.1, 1.0, 0.9))
+
+
+def star(name, c, r, slot="gold", th=0.008, normal=(0, -1, 0), up=(0, 0, 1)):
+    c, nrm, u = Vector(c), Vector(normal).normalized(), Vector(up).normalized()
+    rt = u.cross(nrm).normalized()
+    V = [c] + [c + (rt * sin(2 * pi * i / 10) + u * cos(2 * pi * i / 10)) * (r if i % 2 == 0 else r * 0.45) for i in range(10)]
+    F = [(0, 1 + i, 1 + (i + 1) % 10) for i in range(10)]
+    mk(name, V, F, slot, "head", ss=0, solid=th)
+
+
+def flower(name, c, r, petal="pink", center="yellow", normal=None):
+    c = Vector(c)
+    nrm = Vector(normal).normalized() if normal else (c - HC).normalized()
+    a = nrm.cross(Vector((0, 0, 1)))
+    if a.length < 0.2:
+        a = nrm.cross(Vector((1, 0, 0)))
+    a.normalize()
+    b = nrm.cross(a).normalized()
+    for k in range(5):
+        t = 2 * pi * k / 5
+        d = a * cos(t) + b * sin(t)
+        V, F = sphere(10, 7)
+        mk(f"{name}p{k}", [c + d * r * 0.62 + d * v.x * r * 0.55 + d.cross(nrm) * v.y * r * 0.4 + nrm * v.z * r * 0.18 for v in V], F, petal, "head", ss=1)
+    ball(f"{name}c", c + nrm * 0.006, r * 0.32, center)
+
+
+def cap(rot=0.0, panel=None, crown_slot="hat", visor_slot="hat", btn="hatd", flat=0.0, L=0.15):
+    dome("dome", HOFF, 12, 4, 0, slot=crown_slot, zs=1.0 - flat * 0.45)
+    if rot:
+        pass
+    visor("visor", 12, HOFF, 62, L, slot=visor_slot, rot=rot)
+    ball("button", hs(0, 90, HOFF + 0.004) - Vector((0, 0, (HR[2] + HOFF) * flat * 0.45)), 0.02, btn, k=(1, 1, 0.5))
+    if panel:
+        hpatch("panel", -40 + rot, 40 + rot, 16, 58, HOFF + 0.003, panel, cols=16, rows=6, th=0.004)
+
+
+def hat(n):
+    reset()
+    cover = n in (1, 2, 3, 4, 8, 10, 11, 15, 17, 18, 19, 20, 23, 24, 25, 28, 31, 34, 36, 39, 40, 42, 43)
+    z0, rx, ry = HB(20, 0.05)
+    if n == 1:
+        cap(panel="white")
+    elif n == 2:
+        dome("dome", HOFF, 0, 4, 12)
+        visor("visor", 12, HOFF, 62, 0.13, rot=180)
+        ball("button", hs(0, 90, HOFF + 0.004), 0.02, "hatd", k=(1, 1, 0.5))
+        hpatch("strap", 150, 210, 12, 22, HOFF + 0.003, "hatd", cols=8, rows=2, th=0.004)
+    elif n == 3:      # gorro de lana
+        dome("dome", HOFF, 16, 8, 2, zs=1.22)
+        hpatch("cuff", -180, 180, lambda a: 4 + 12 * max(0, cos(math.radians(a))) ** 1.5, lambda a: 20 + 12 * max(0, cos(math.radians(a))) ** 1.5, HOFF + 0.012, "hatl", closed=True, th=0.02, rows=3)
+        for k in range(12):
+            az = k * 30
+            hpatch(f"rib{k}", az - 3, az + 3, lambda a: 36 + 10 * max(0, cos(math.radians(a))), 80, HOFF + 0.002, "hatd", cols=2, rows=5, th=0.003)
+        ball("pompom", Vector((0, 0.0, HC.z + (HR[2] + HOFF) * 1.22 + 0.03)), 0.048, "hatl", us=16, vs=12, bumpy=0.12)
+    elif n == 4:      # sombrero
+        crown("crown", [(z0, rx, ry), (z0 + 0.1, rx * 0.98, ry * 0.98), (z0 + 0.2, rx * 0.92, ry * 0.9), (z0 + 0.225, rx * 0.84, ry * 0.82)])
+        crown("band", [(z0 + 0.002, rx * 1.012, ry * 1.012), (z0 + 0.038, rx * 1.008, ry * 1.008)], "hatd", cap=False, th=0.006)
+        brim("brim", z0 + 0.004, (rx * 0.92, ry * 0.92), (0.31, 0.3), droop=0.012)
+    elif n == 5:      # cinta
+        e0 = lambda a: 22 - 14 * (1 - cos(math.radians(a))) / 2
+        hpatch("band", -180, 180, e0, lambda a: e0(a) + 9, 0.055, "hat", closed=True, th=0.012, rows=2)
+    elif n == 6:      # lazo
+        bow("bow", hs(34, 66, 0.07), 1.25, up=hunit(34, 66), fwd=(0, -1, 0.3))
+    elif n == 8:      # boina
+        V, F = sphere(32, 20)
+        P = []
+        for v in V:
+            p = Vector((v.x * 0.27, v.y * 0.26, v.z * 0.07))
+            ang = -0.22
+            p = Vector((p.x * cos(ang) - p.z * sin(ang), p.y, p.x * sin(ang) + p.z * cos(ang)))
+            P.append(p + Vector((0.025, 0.012, HC.z + HR[2] + 0.02)))
+        mk("beret", P, F, "hat", "head", ss=1)
+        hpatch("rim", -180, 180, 30, 38, 0.055, "hatd", closed=True, th=0.012, rows=2)
+        cone("stem", [Vector((0.0, 0.012, HC.z + HR[2] + 0.085)), Vector((0.0, 0.012, HC.z + HR[2] + 0.11))], [0.008, 0.004], "hatd")
+    elif n == 9:      # visera
+        hpatch("band", -180, 180, 14, 24, 0.05, "hat", closed=True, th=0.012, rows=2)
+        visor("visor", 16, 0.05, 66, 0.17, droop=0.03)
+    elif n == 10:     # gorro de pescador
+        crown("crown", [(z0, rx, ry), (z0 + 0.1, rx * 0.97, ry * 0.97), (z0 + 0.18, rx * 0.88, ry * 0.88), (z0 + 0.205, rx * 0.7, ry * 0.7)])
+        brim("brim", z0 + 0.004, (rx * 0.95, ry * 0.95), (0.29, 0.29), droop=0.06)
+        crown("band", [(z0 + 0.002, rx * 1.01, ry * 1.01), (z0 + 0.03, rx * 1.0, ry * 1.0)], "hatd", cap=False, th=0.006)
+    elif n == 11:     # sombrero de paja
+        crown("crown", [(z0, rx, ry), (z0 + 0.1, rx * 0.97, ry * 0.97), (z0 + 0.18, rx * 0.9, ry * 0.88), (z0 + 0.2, rx * 0.8, ry * 0.78)])
+        crown("band", [(z0 + 0.002, rx * 1.012, ry * 1.012), (z0 + 0.034, rx * 1.008, ry * 1.008)], "red", cap=False, th=0.006)
+        brim("brim", z0 + 0.004, (rx * 0.92, ry * 0.92), (0.35, 0.34), droop=0.02, zf=lambda a: 0.012 * sin(5 * a))
+    elif n == 12:     # corona de flores
+        for k in range(11):
+            az = -180 + k * (360 / 11)
+            e = 26 - 16 * (1 - cos(math.radians(az))) / 2
+            flower(f"f{k}", hs(az, e, 0.06), 0.034, petal=("pink", "white", "yellow")[k % 3], center="orange" if k % 3 == 2 else "yellow")
+        hpatch("vine", -180, 180, lambda a: 23 - 16 * (1 - cos(math.radians(a))) / 2, lambda a: 27 - 16 * (1 - cos(math.radians(a))) / 2, 0.05, "green", closed=True, th=0.008, rows=1)
+    elif n == 14:     # diadema
+        arcband("band", 0.055, 3.5, -16)
+    elif n == 15:     # pañuelo
+        dome("dome", 0.055, 26, 8, -14)
+        ball("knot", hs(180, -6, 0.07), 0.03, "hat", k=(1.2, 0.9, 0.9))
+        for s in (1, -1):
+            cone(f"tail{s}", [hs(180, -6, 0.07), hs(180, -6, 0.07) + Vector((s * 0.04, 0.03, -0.06)), hs(180, -6, 0.07) + Vector((s * 0.06, 0.04, -0.12))], [0.024, 0.02, 0.008], "hat", side=BK, flat=0.35)
+        for k in range(5):
+            ball(f"dot{k}", hs(-40 + k * 20, 40 + (k % 2) * 10, 0.06), 0.012, "white", k=(1, 1, 0.4))
+    elif n == 16:     # orejas de gato
+        arcband("band", 0.055, 3.5, -14)
+        for s in (1, -1):
+            b = arc_pt(s * 42, 0, 0.06, -14)
+            d = (b - HC).normalized() + Vector((s * 0.15, 0, 0.2))
+            d.normalize()
+            cone(f"ear{s}", [b - d * 0.01, b + d * 0.05, b + d * 0.105], [0.055, 0.032, 0.003], "hat", side=X, flat=0.38)
+            cone(f"in{s}", [b - d * 0.005 + Vector((0, -0.016, 0)), b + d * 0.045 + Vector((0, -0.016, 0)), b + d * 0.088 + Vector((0, -0.016, 0))], [0.034, 0.02, 0.002], "pink", side=X, flat=0.3)
+    elif n == 17:     # casco de explorador
+        dome("dome", HOFF, 6, 2, 0, zs=1.08)
+        zb, bx, by = HB(4, HOFF)
+        brim("brim", zb, (bx * 0.98, by * 0.98), (0.29, 0.3), droop=0.035)
+        hpatch("band", -180, 180, 5, 14, HOFF + 0.004, "hatd", closed=True, th=0.008, rows=2)
+        ball("button", hs(0, 90, HOFF + 0.02), 0.022, "hatd", k=(1, 1, 0.5))
+    elif n == 18:     # sombrero de copa
+        crown("crown", [(z0, rx * 0.98, ry * 0.98), (z0 + 0.15, rx * 0.97, ry * 0.97), (z0 + 0.3, rx * 1.04, ry * 1.04)])
+        crown("band", [(z0 + 0.002, rx * 0.995, ry * 0.995), (z0 + 0.045, rx * 0.99, ry * 0.99)], "hatd", cap=False, th=0.006)
+        brim("brim", z0 + 0.004, (rx * 0.9, ry * 0.9), (0.27, 0.27), zf=lambda a: 0.03 * cos(a) ** 2)
+    elif n == 19:     # sombrero vaquero
+        crown("crown", [(z0, rx, ry), (z0 + 0.12, rx * 0.97, ry * 0.97), (z0 + 0.215, rx * 0.86, ry * 0.86), (z0 + 0.19, rx * 0.3, ry * 0.55)])
+        crown("band", [(z0 + 0.002, rx * 1.012, ry * 1.012), (z0 + 0.03, rx * 1.008, ry * 1.008)], "hatd", cap=False, th=0.006)
+        brim("brim", z0 + 0.004, (rx * 0.92, ry * 0.92), (0.33, 0.31), zf=lambda a: 0.075 * cos(a) ** 2 - 0.02 * max(0.0, -sin(a)))
+    elif n == 20:     # gorro de Navidad
+        hpatch("cuff", -180, 180, lambda a: 6 + 10 * max(0, cos(math.radians(a))) ** 1.5, lambda a: 24 + 10 * max(0, cos(math.radians(a))) ** 1.5, HOFF + 0.014, "white", closed=True, th=0.024, rows=3)
+        dome("dome", HOFF, 20, 10, 4, zs=1.15)
+        top = Vector((0, 0.0, HC.z + (HR[2] + HOFF) * 1.15))
+        cone("tip", [top - Vector((0, 0, 0.06)), top + Vector((0.0, 0.03, 0.05)), top + Vector((0.07, 0.1, 0.04)), top + Vector((0.12, 0.14, -0.04))], [0.13, 0.07, 0.035, 0.012], "hat", side=X)
+        ball("pompom", top + Vector((0.125, 0.145, -0.07)), 0.04, "white", bumpy=0.12)
+    elif n == 21:     # auriculares
+        arcband("band", 0.06, 5, 0, "hatd", phi=86)
+        for s in (1, -1):
+            c = Vector((s * (HR[0] + 0.03), 0.02, HC.z - 0.03))
+            V, F = tube([c - Vector((s * 0.01, 0, 0)), c + Vector((s * 0.03, 0, 0))], [(0.06, 0.07), (0.055, 0.065)], BK, 18, 2.0, True, True)
+            mk(f"cup{s}", V, F, "hat", "head", ss=1)
+            V, F = tube([c - Vector((s * 0.022, 0, 0)), c - Vector((s * 0.008, 0, 0))], [(0.058, 0.068), (0.06, 0.07)], BK, 18, 2.0, True, True)
+            mk(f"pad{s}", V, F, "black", "head", ss=1)
+            cone(f"arm{s}", [arc_pt(s * 84, 0, 0.06, 0), c + Vector((s * 0.01, 0, 0.06))], [0.01, 0.01], "hatd", side=BK)
+    elif n == 22:     # bandana
+        e0 = lambda a: 22 - 16 * (1 - cos(math.radians(a))) / 2
+        hpatch("band", -180, 180, e0, lambda a: e0(a) + 12, 0.055, "hat", closed=True, th=0.012, rows=2)
+        k = hs(180, 9, 0.07)
+        ball("knot", k, 0.026, "hat", k=(1.2, 0.9, 1))
+        for s in (1, -1):
+            cone(f"tail{s}", [k, k + Vector((s * 0.03, 0.04, -0.05)), k + Vector((s * 0.045, 0.05, -0.11))], [0.022, 0.02, 0.01], "hat", side=BK, flat=0.3)
+    elif n == 23:     # sombrero de bruja
+        crown("crown", [(z0, rx, ry, 0), (z0 + 0.09, rx * 0.95, ry * 0.95, 0.005), (z0 + 0.15, rx * 0.66, ry * 0.66, 0.015), (z0 + 0.2, rx * 0.4, ry * 0.4, 0.035), (z0 + 0.29, 0.045, 0.045, 0.08), (z0 + 0.34, 0.008, 0.008, 0.13)])
+        crown("band", [(z0 + 0.002, rx * 1.01, ry * 1.01), (z0 + 0.04, rx * 0.88, ry * 0.88)], "hatd", cap=False, th=0.006)
+        brim("brim", z0 + 0.004, (rx * 0.92, ry * 0.92), (0.33, 0.33), droop=0.025, zf=lambda a: 0.01 * sin(3 * a))
+    elif n == 24:     # gorra de capitán
+        zc, cx, cyy = HB(16, 0.052)
+        crown("band", [(zc, cx, cyy), (zc + 0.065, cx * 1.01, cyy * 1.01)], "black", cap=False)
+        crown("top", [(zc + 0.06, cx * 1.0, cyy * 1.0), (zc + 0.1, cx * 1.13, cyy * 1.18, -0.01), (zc + 0.118, cx * 1.08, cyy * 1.12, -0.01)], "hat")
+        crown("cord", [(zc + 0.05, cx * 1.02, cyy * 1.02), (zc + 0.06, cx * 1.02, cyy * 1.02)], "gold", cap=False, th=0.004)
+        visor("visor", 18, 0.052, 60, 0.12, droop=0.035, slot="black")
+        ball("emblem", hs(0, 30, 0.07), 0.024, "gold", k=(1, 0.4, 1))
+    elif n == 25:     # gorra de Prestigio
+        cap(panel=None, btn="gold")
+        star("star", hs(0, 36, HOFF + 0.006), 0.04, "gold", normal=hunit(0, 36), up=(0, 0.3, 1))
+    elif n == 26:     # cinta de Prestigio
+        e0 = lambda a: 22 - 14 * (1 - cos(math.radians(a))) / 2
+        hpatch("band", -180, 180, e0, lambda a: e0(a) + 9, 0.055, "hat", closed=True, th=0.012, rows=2)
+        hpatch("trim", -180, 180, lambda a: e0(a) + 3.5, lambda a: e0(a) + 5.5, 0.06, "gold", closed=True, th=0.006, rows=1)
+        ball("gem", hs(0, 26, 0.072), 0.022, "gold", k=(1, 0.6, 1.3))
+    elif n == 27:     # corona de laurel
+        for s in (1, -1):
+            for k in range(9):
+                az = s * (22 + k * 17)
+                e = 24 - 14 * (1 - cos(math.radians(az))) / 2
+                c = hs(az, e, 0.062)
+                tang = (hs(az + s * 5, e, 0.062) - c).normalized()
+                up = Vector((0, 0, 1))
+                for j, side in enumerate((1, -1)):
+                    V, F = sphere(10, 6)
+                    d = (tang * 0.6 + up * side * 0.8).normalized()
+                    mk(f"leaf{s}{k}{j}", [c + d * 0.022 + d * v.x * 0.024 + d.cross((c - HC).normalized()) * v.y * 0.01 + (c - HC).normalized() * v.z * 0.004 for v in V], F, "gold", "head", ss=1)
+        hpatch("stem", -175, 175, lambda a: 23 - 14 * (1 - cos(math.radians(a))) / 2, lambda a: 25 - 14 * (1 - cos(math.radians(a))) / 2, 0.055, "gold", cols=34, th=0.006, rows=1)
+    elif n == 28:     # sombrero de Campeón
+        cap(panel="white", btn="gold", L=0.16)
+        visor("trim", 12, HOFF + 0.002, 63, 0.162, slot="gold", th=0.004)
+        star("star", hs(0, 36, HOFF + 0.008), 0.036, "gold", normal=hunit(0, 36), up=(0, 0.3, 1))
+    elif n == 29:     # halo
+        ztop = HC.z + HR[2] + 0.13
+        R = [ring(Vector((cos(t) * 0.15, sin(t) * 0.15, ztop)), Vector((-sin(t), cos(t), 0)), Vector((0, 0, 1)), 0.018, 0.014, 10) for t in (2 * pi * i / 40 for i in range(40))]
+        V, F = loft(R + [R[0]], True)
+        mk("halo", V, F, "gold", "head", ss=1)
+    elif n == 30:     # corona suprema
+        zc, cx, cyy = HB(42, 0.055)
+        crown("band", [(zc, cx, cyy), (zc + 0.06, cx * 1.06, cyy * 1.06)], "gold", cap=False, th=0.012)
+        crown("velvet", [(zc + 0.01, cx * 0.95, cyy * 0.95), (zc + 0.07, cx * 0.8, cyy * 0.8), (zc + 0.1, cx * 0.4, cyy * 0.4)], "red")
+        for k in range(8):
+            t = 2 * pi * k / 8
+            b = Vector((cos(t) * cx * 1.06, sin(t) * cyy * 1.06, zc + 0.055))
+            cone(f"pt{k}", [b, b + Vector((cos(t) * 0.006, sin(t) * 0.006, 0.05)), b + Vector((cos(t) * 0.01, sin(t) * 0.01, 0.075))], [0.02, 0.01, 0.002], "gold", side=Vector((-sin(t), cos(t), 0)), flat=0.4)
+            ball(f"tip{k}", b + Vector((cos(t) * 0.01, sin(t) * 0.01, 0.08)), 0.008, "gold")
+            ball(f"gem{k}", Vector((cos(t + pi / 8) * cx * 1.08, sin(t + pi / 8) * cyy * 1.08, zc + 0.03)), 0.012, "red" if k % 2 else "lens", k=(1, 1, 1.2))
+        ball("cross", Vector((0, 0, zc + 0.12)), 0.018, "gold")
+    elif n == 31:     # gorro de calabaza
+        V, F = sphere(36, 22)
+        P = []
+        for v in V:
+            a = math.atan2(v.y, v.x)
+            k = 1 + 0.06 * cos(10 * a) * (1 - abs(v.z) ** 2)
+            P.append(Vector((v.x * 0.27 * k, v.y * 0.27 * k, v.z * 0.17 * k)) + Vector((0, 0.0, HC.z + 0.12)))
+        keep = [not (p.z < HC.z + 0.06) for p in P]
+        mk("pumpkin", P, [f for f in F if all(keep[i] for i in f)], "orange", "head", ss=1, solid=0.012, soff=-1)
+        cone("stem", [Vector((0, 0, HC.z + 0.27)), Vector((0.01, 0.0, HC.z + 0.31)), Vector((0.03, 0.0, HC.z + 0.33))], [0.016, 0.013, 0.011], "green")
+        V, F = sphere(10, 6)
+        mk("leaf", [Vector((0.05 + v.x * 0.04, v.y * 0.025, HC.z + 0.29 + v.z * 0.006)) for v in V], F, "green", "head", ss=1)
+    elif n == 32:     # cuernos de reno
+        arcband("band", 0.055, 3.5, -14, "hatd")
+        for s in (1, -1):
+            b = arc_pt(s * 40, 0, 0.06, -14)
+            m1 = b + Vector((s * 0.04, 0.0, 0.08))
+            m2 = m1 + Vector((s * 0.05, 0.02, 0.07))
+            cone(f"ant{s}", [b - Vector((0, 0, 0.01)), m1, m2, m2 + Vector((s * 0.02, 0.01, 0.05))], [0.014, 0.012, 0.009, 0.005], "brown", side=BK)
+            cone(f"tine{s}", [m1, m1 + Vector((-s * 0.025, -0.01, 0.06))], [0.009, 0.004], "brown", side=BK)
+            cone(f"tine2{s}", [m2, m2 + Vector((-s * 0.01, -0.02, 0.05))], [0.008, 0.003], "brown", side=BK)
+    elif n == 33:     # diadema de corazones
+        arcband("band", 0.055, 3.5, -14, "hat")
+        for s in (1, -1):
+            b = arc_pt(s * 30, 0, 0.06, -14)
+            top = b + Vector((s * 0.03, -0.01, 0.1))
+            cone(f"spring{s}", [b, b + Vector((s * 0.015, -0.005, 0.05)), top], [0.004, 0.004, 0.004], "hatd", side=BK)
+            for k in (-1, 1):
+                ball(f"heart{s}{k}", top + Vector((k * 0.018, 0, 0.012)), 0.024, "pink", k=(1, 0.5, 1))
+            cone(f"hp{s}", [top + Vector((0, 0, 0.012)), top + Vector((0, 0, -0.03))], [0.035, 0.003], "pink", side=X, flat=0.45)
+    elif n == 34:     # sombrero con flor
+        crown("crown", [(z0, rx, ry), (z0 + 0.1, rx * 0.96, ry * 0.96), (z0 + 0.175, rx * 0.88, ry * 0.88), (z0 + 0.195, rx * 0.76, ry * 0.76)])
+        crown("band", [(z0 + 0.002, rx * 1.012, ry * 1.012), (z0 + 0.034, rx * 1.008, ry * 1.008)], "hatd", cap=False, th=0.006)
+        brim("brim", z0 + 0.004, (rx * 0.92, ry * 0.92), (0.33, 0.32), droop=0.035, zf=lambda a: 0.012 * sin(4 * a))
+        flower("flower", Vector((rx * 0.75, -ry * 0.75, z0 + 0.025)), 0.045, petal="pink", normal=(0.7, -0.7, 0.1))
+    elif n == 35:     # gafas de buceo sobre la frente
+        e0 = lambda a: 26 - 14 * (1 - cos(math.radians(a))) / 2
+        hpatch("strap", -180, 180, e0, lambda a: e0(a) + 7, 0.05, "black", closed=True, th=0.01, rows=1)
+        c = hs(0, 30, 0.08)
+        V, F = tube([c + Vector((0, 0.025, 0)), c - Vector((0, 0.01, 0))], [(0.12, 0.06), (0.125, 0.064)], X, 28, 3.0, False, False)
+        mk("frame", V, F, "hat", "head", ss=1, solid=0.012)
+        ball("lens", c + Vector((0, 0.005, 0)), 0.11, "lens", k=(1.05, 0.12, 0.52))
+    elif n == 36:     # pamela
+        crown("crown", [(z0, rx, ry), (z0 + 0.1, rx * 0.96, ry * 0.96), (z0 + 0.17, rx * 0.88, ry * 0.88), (z0 + 0.19, rx * 0.76, ry * 0.76)])
+        crown("band", [(z0 + 0.002, rx * 1.012, ry * 1.012), (z0 + 0.03, rx * 1.008, ry * 1.008)], "hatd", cap=False, th=0.006)
+        brim("brim", z0 + 0.004, (rx * 0.92, ry * 0.92), (0.43, 0.42), droop=0.05, zf=lambda a: 0.02 * sin(4 * a + 0.5), steps=6)
+    elif n == 37:     # diadema con lazo
+        arcband("band", 0.055, 3.5, -14)
+        bow("bow", arc_pt(-34, 0, 0.075, -14), 0.9, up=(-0.5, 0, 1), fwd=(0, -1, 0.2))
+    elif n == 38:     # tiara
+        arcband("band", 0.055, 3.0, -22, "gold", phi=80)
+        for k in range(5):
+            phi = -24 + k * 12
+            b = arc_pt(phi, 0, 0.06, -22)
+            h = 0.06 - abs(k - 2) * 0.016
+            d = (b - HC).normalized()
+            cone(f"pt{k}", [b, b + d * h], [0.012, 0.002], "gold", side=X, flat=0.5)
+        ball("gem", arc_pt(0, 0, 0.07, -22) + (arc_pt(0, 0, 0.07, -22) - HC).normalized() * 0.02, 0.016, "hat", k=(1, 0.6, 1.3))
+    elif n == 39:     # gorra plana
+        dome("dome", HOFF + 0.01, 14, 6, 2, zs=0.95, top_flat=0.12)
+        visor("visor", 14, HOFF, 58, 0.08, droop=0.012)
+        ball("button", Vector((0, -0.04, HC.z + (HR[2] + HOFF) * 0.86)), 0.014, "hatd", k=(1, 1, 0.5))
+    elif n == 40:     # gorra Poké Ball
+        cap(panel="white", crown_slot="red", visor_slot="red", btn="black")
+        c = hs(0, 34, HOFF + 0.008)
+        ball("emb", c, 0.032, "black", k=(1, 0.3, 1))
+        ball("embw", c - Vector((0, 0.006, 0)), 0.018, "white", k=(1, 0.3, 1))
+    elif n == 41:     # orejas de conejo
+        arcband("band", 0.055, 3.5, -14)
+        for s in (1, -1):
+            b = arc_pt(s * 22, 0, 0.06, -14)
+            pts = [b - Vector((0, 0, 0.01)), b + Vector((s * 0.02, 0.0, 0.1)), b + Vector((s * 0.05, 0.02, 0.2)), b + Vector((s * 0.08, 0.05, 0.27))]
+            cone(f"ear{s}", pts, [0.032, 0.04, 0.036, 0.008], "hat", side=X, flat=0.35)
+            cone(f"in{s}", [p + Vector((0, -0.012, 0)) for p in pts[1:]], [0.026, 0.024, 0.005], "pink", side=X, flat=0.25)
+    elif n == 42:     # fedora
+        crown("crown", [(z0, rx, ry), (z0 + 0.12, rx * 0.95, ry * 0.92), (z0 + 0.2, rx * 0.82, ry * 0.72), (z0 + 0.175, rx * 0.35, ry * 0.4)])
+        crown("band", [(z0 + 0.002, rx * 1.012, ry * 1.012), (z0 + 0.034, rx * 1.008, ry * 1.008)], "hatd", cap=False, th=0.006)
+        brim("brim", z0 + 0.004, (rx * 0.92, ry * 0.92), (0.29, 0.29), zf=lambda a: 0.028 * sin(a))
+    elif n == 43:     # gorro de chef
+        crown("band", [(z0 - 0.01, rx * 1.0, ry * 1.0), (z0 + 0.12, rx * 1.04, ry * 1.04)], "hat", cap=False, th=0.012)
+        for k in range(7):
+            t = 2 * pi * k / 7
+            ball(f"puff{k}", Vector((cos(t) * rx * 0.62, sin(t) * ry * 0.62, z0 + 0.2)), 0.11, "hat")
+        ball("puffc", Vector((0, 0, z0 + 0.24)), 0.12, "hat")
+    elif n == 44:     # orejas de oso
+        arcband("band", 0.055, 3.5, -14)
+        for s in (1, -1):
+            b = arc_pt(s * 46, 0, 0.065, -14)
+            d = (b - HC).normalized()
+            ball(f"ear{s}", b + d * 0.035, 0.05, "hat", k=(1, 0.45, 1))
+            ball(f"in{s}", b + d * 0.035 + Vector((0, -0.016, 0)), 0.03, "hatl", k=(1, 0.3, 1))
+    save(f"hat{n}", cover=cover)
+
+
 # ================================================================ generar todo
 heads()
 for n in [k for k in range(33) if k not in (5, 22)]:
     hair(n)
+for n in [k for k in range(1, 45) if k not in (7, 13)]:
+    hat(n)
 base(False)
 base(True)
 for n in range(29):

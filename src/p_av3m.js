@@ -6,7 +6,7 @@
 // pinta pegada al relieve de la cabeza, y el pelo, los gorros y los complementos se acoplan encima.
 // Las figuras pequeñas del mapa siguen saliendo del modelo de siempre: a ese tamaño no se nota y no descarga nada.
 // =====================================================================================
-const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"6",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
+const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"7",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
 function av3mParse(buf){const dv=new DataView(buf);let off=12,json=null,bin=null;
   while(off<dv.byteLength){const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),ch=buf.slice(off+8,off+8+len);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(ch));else bin=ch;off+=8+len}
   const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],o=(bv.byteOffset||0)+(a.byteOffset||0),n=a.count*{SCALAR:1,VEC3:3}[a.type];
@@ -31,7 +31,9 @@ function av3mGet(n){const s=AV3M.st[n];if(s===2)return true;if(!s){AV3M.st[n]=1;
 // piezas que necesita un aspecto: datos, cabeza (según la forma de la cara), cuerpo, parte de arriba, calzado y parte de abajo
 // peinados sin pieza: rapado y calvo (van pintados sobre la cabeza)
 const AV3M_NOHAIR=[5,22];
-function av3mNeed(L){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0)].concat(AV3M_NOHAIR.includes(L.hs)?[]:["hair"+L.hs]).concat([L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs]).concat([4,23,26].includes(L.top)?[]:["bot"+L.bot])}
+// gorros con pieza (las gafas de sol y de aviador se dibujan como gafas)
+const av3mHat=L=>L.hat>0&&L.hat!==7&&L.hat!==13;
+function av3mNeed(L){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0)].concat(AV3M_NOHAIR.includes(L.hs)?[]:["hair"+L.hs]).concat(av3mHat(L)?["hat"+L.hat]:[]).concat([L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs]).concat([4,23,26].includes(L.top)?[]:["bot"+L.bot])}
 function av3mReady(L){if(typeof fetch!=="function")return false;let ok=true;for(const n of av3mNeed(L))if(!av3mGet(n))ok=false;return ok}
 // ---------- el modelo ----------
 function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][0]),W=[1,1,1],K=[.1,.09,.12],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k),I=m4I();
@@ -62,10 +64,11 @@ function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k]
       return(v(ix,iy)*(1-fx)+v(ix+1,iy)*fx)*(1-fy)+(v(ix,iy+1)*(1-fx)+v(ix+1,iy+1)*fx)*fy};
   av3mFace(E,L,{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W});
   // ----- pelo y gorro (formas de siempre, acopladas a la cabeza nueva) -----
-  const k0=hr[0]/.114,HM=m4S(m4T(MH,0,hcy,0),k0),hk=typeof chHatKind==="function"?chHatKind(L.hat):"",hatOn=["cap","beanie","wide","top","hard"].includes(hk),hx=.114,hy=.128,hz=.118;
+  const k0=hr[0]/.114,HM=m4S(m4T(MH,0,hcy,0),k0),hk=typeof chHatKind==="function"?chHatKind(L.hat):"",hatP=av3mHat(L)?AV3M.pc["hat"+L.hat]:null,hatOn=hatP?!!(meta.pieces["hat"+L.hat]||{}).cover:["cap","beanie","wide","top","hard"].includes(hk),hx=.114,hy=.128,hz=.118;
   // pelo modelado: con gorro se ocultan las partes de arriba («top») y salen las versiones bajas («hat»)
   const HP=AV3M_NOHAIR.includes(L.hs)?null:AV3M.pc["hair"+L.hs];
-  if(HP){const wx=({1:.95,2:.99})[fsn]||1,MHh=m4T(m4Mul(m4T(MH,0,hcy,0),new Float32Array([wx,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1])),0,-hcy,0),mcc=P("hair",L.mcc),mch=L.mch|0;
+  const wxF=({1:.95,2:.99})[fsn]||1,MHh=m4T(m4Mul(m4T(MH,0,hcy,0),new Float32Array([wxF,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1])),0,-hcy,0);
+  if(HP){const mcc=P("hair",L.mcc),mch=L.mch|0;
     const HCOL={hair:hc,haird:dk(hc,.24),hairl:lt(hc,.16),tie:hac};
     for(const p of HP){if(p.tag==="top"&&hatOn)continue;if(p.tag==="hat"&&!hatOn)continue;let c=HCOL[p.slot]||hc,cf=null;
       if(mch===2&&p.tag==="streak")c=mcc;
@@ -81,8 +84,10 @@ function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k]
     else if(ha===4||ha===6){const k=ha===6?1.9:1,B=ha===6?S(0,hr[2]*1.12,-.08):S(R*.92,.09,.04);for(const s of[-1,1])E.ell(m4RZ(m4T(B,s*.034*k,0,0),s*.5),.036*k,.022*k,.014*k,c,null,1);E.ell(B,.013*k,.013*k,.013*k,dk(c,.2),null,1)}
     else if(ha===5)E.lathe(m4RX(S(0,.035,-.004),-.18),[[.016,hr[0]*1.13,hr[1]*1.13,c],[-.016,hr[0]*1.13,hr[1]*1.13,c]],24);
     else if(ha===7)for(let k=0;k<3;k++)E.box(m4RZ(S(R*.93,.04+k*.035,.04+k*.012),-.3),.01,.024,.006,k%2?c:lt(c,.4))}
-  // gorros de siempre, algo más grandes para que asienten sobre el pelo modelado
-  {const hk2=HP&&hatOn?1.13:HP?1.08:1,MHh2=m4S(m4T(MH,0,hcy+(HP&&hatOn?.012:0),0),k0*hk2);av3Hat(E,L,{HM:MHh2,hrx:hx,hry:hy,hrz:hz,hac,hc,ac,hk})}
+  // gorro modelado (si no ha llegado, el de siempre algo más grande para que asiente sobre el pelo)
+  if(hatP){const HT={hat:hac,hatd:dk(hac,.25),hatl:lt(hac,.42),white:[.97,.97,.99],black:[.13,.13,.16],gold:[.93,.76,.26],red:[.86,.17,.2],pink:[.98,.62,.76],yellow:[1,.86,.3],orange:[.96,.55,.15],green:[.32,.64,.3],brown:[.46,.31,.19],lens:[.62,.86,.96]};
+    for(const p of hatP)E.mesh(MHh,p.P,p.N,p.I,HT[p.slot]||hac)}
+  else{const hk2=HP&&hatOn?1.13:HP?1.08:1,MHh2=m4S(m4T(MH,0,hcy+(HP&&hatOn?.012:0),0),k0*hk2);av3Hat(E,L,{HM:MHh2,hrx:hx,hry:hy,hrz:hz,hac,hc,ac,hk})}
   // barba
   if(L.brd===2||L.brd===6)E.ell(m4T(MH,0,hcy-.93*hr[2],zAt(0,hcy-.9*hr[2])-.004),.03,.03,.018,hc,null,1);
   if(L.brd===3||L.brd===4||L.brd===6)for(const s of[-1,1])E.ell(m4T(MH,s*.026,hcy-.6*hr[2],zAt(s*.026,hcy-.6*hr[2])+.002),.03,.011,.008,hc,null,1);

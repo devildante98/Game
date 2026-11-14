@@ -323,8 +323,8 @@ function gmBudSize(){const B=GM.bud,b=$("gBud"),im=b&&b.querySelector("img"),tr=
   if(bb===undefined){GM.bb[im.src]=null;const q=new Image();q.crossOrigin="anonymous";q.onload=()=>{try{const c=document.createElement("canvas"),W=c.width=Math.min(160,q.naturalWidth),H=c.height=Math.round(W*q.naturalHeight/q.naturalWidth),g=c.getContext("2d");g.drawImage(q,0,0,W,H);const d=g.getImageData(0,0,W,H).data;let x0=W,x1=0,y0=H,y1=0;
       for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>40){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}if(x1>x0&&y1>y0){GM.bb[q.src]={t:y0/H,b:(y1+1)/H,w:(x1-x0+1)/W}}}catch(e){}gmBudSize()};q.onerror=()=>{};q.src=im.src}
   const hd=im.classList.contains("hd"),k=bb?bb.b-bb.t:hd?.84:.8;
-  // si la imagen animada (que es pequeña) tuviera que ampliarse más del triple se vería borrosa: se cambia por la grande en alta definición
-  if(!hd&&!B.hdTry&&px/(im.naturalHeight*k)>3.2&&typeof icoHD==="function"){B.hdTry=1;const w=document.createElement("div");w.innerHTML=icoHD(PM[B.n]||[B.n],92,false,B.sh);const ni=w.querySelector("img");
+  // si la imagen animada (que es pequeña) tuviera que ampliarse más de vez y media se vería borrosa: se cambia por la grande en alta definición
+  if(!hd&&!B.hdTry&&px/(im.naturalHeight*k)>1.5*(window.devicePixelRatio>1.4?.75:1)&&typeof icoHD==="function"){B.hdTry=1;const w=document.createElement("div");w.innerHTML=icoHD(PM[B.n]||[B.n],92,false,B.sh);const ni=w.querySelector("img");
     if(ni&&ni.classList.contains("hd")){ni.addEventListener("load",gmBudSize);im.replaceWith(ni);b.firstChild.classList.add("gbhd");return}}
   const asp=bb?bb.w*im.naturalWidth/((bb.b-bb.t)*im.naturalHeight):hd?1:im.naturalWidth/im.naturalHeight,maxW=Math.min(fig*2.3,innerWidth*.34);if(px*asp>maxW)px=Math.max(44,maxW/asp);
   const hh=Math.round(px/k/sc),set=(p,v)=>im.style.setProperty(p,v,"important");

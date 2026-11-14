@@ -1136,3 +1136,7 @@ body.land3 #gBg .pcbg,body.land3 #gTod,body.land3 #gStars{display:none}
 body.calm #gBud .gbst,body.glite #gBud .gbst{animation:none}
 #gBud .gbhd img{max-height:130px;margin:0!important}
 #gBud .gbst img{display:block}
+/* con la imagen en alta definición (que no se mueve sola) el compañero respira y se balancea con suavidad */
+#gBud .gbhd img{animation:gbhdIdle 3.6s ease-in-out infinite!important;transform-origin:50% 100%}
+@keyframes gbhdIdle{0%,100%{transform:scale(1,1) rotate(0deg)}25%{transform:scale(1.012,.985) rotate(-.8deg)}50%{transform:scale(.995,1.02) rotate(0deg)}75%{transform:scale(1.012,.985) rotate(.8deg)}}
+body.calm #gBud .gbhd img,body.glite #gBud .gbhd img{animation:none!important}

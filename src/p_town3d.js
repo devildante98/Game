@@ -51,5 +51,3 @@ function upgDraw(){const M=document.getElementById("upgM");if(!M)return;const bo
   G.forEach((g,i)=>{const n=S.g[i]||0,t=gbTier(n);h+=card(i,GI[i]||"🏠",GBS[i]||g[0],"+"+gmK(g[2]*PMUL())+" 🎟️/s por nivel",n,t,n?"+"+gmK(g[2]*n*PMUL())+" 🎟️/s":"")});
   // solo se rehace si algo cambia (así no parpadea ni pierde el foco)
   if(box._h!==h){const y=box.scrollTop;box.innerHTML=h;box._h=h;box.scrollTop=y}}
-// botón lateral y aviso cuando se puede mejorar algo
-setInterval(()=>{try{const b=document.querySelector('#gSideR [data-gs="upg"] .gbd');if(!b)return;let any=false;for(let i=-1;i<G.length;i++){if(i<0&&(S.cl|0)>=GLMAX)continue;const lv=i<0?(S.cl|0):(S.g[i]|0),u=i<0?Math.round(25*Math.pow(3,lv)):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv));if(S.t>=u){any=true;break}}b.hidden=!any}catch(e){}},1500);

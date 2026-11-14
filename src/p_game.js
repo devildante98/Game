@@ -174,13 +174,13 @@ function gmInit(){
     '<button class="gres" id="gStk" title="Racha diaria"><span class="gic">'+gI("flame",26)+'</span><b id="gStkN">0</b></button>'+
     '<button class="gres gpass" id="gPass" title="Pase de temporada"><span class="gic">'+gI("pass",26)+'</span><span class="gpb"><b id="gPassN">Nv 0</b><i><u id="gPassB"></u></i></span></button>');
   // barra de navegación inferior
-  const NAV=[["dex","dex","Pokédex"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","shop","Tienda"],["soc","soc","Social"],["menu","menu","Menú"]];
+  const NAV=[["dex","dex","Pokédex"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","build","Mejoras"],["soc","soc","Social"],["menu","menu","Menú"]];
   gmEl("nav","gNav","",NAV.map(n=>'<button data-gn="'+n[0]+'"'+(n[0]==="menu"?' id="gnavb"':'')+' class="'+(n[0]==="gacha"?"gbig":"")+'"><span class="gni">'+gI(n[1],n[0]==="gacha"?44:30)+'</span><b>'+n[2]+'</b><i class="gbd" hidden></i></button>').join(""));
   // pantallas de sección (mismo aspecto que las ventanas del menú)
   const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");
   // escenario: botones laterales, entrenador y compañero, y el pueblo
   const farm=$("farm");
-  const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["build","Mejoras","upg","#ff7a2a"],["bag","Mochila","bagU","#f0a020"]];
+  const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["bag","Mochila","bagU","#f0a020"]];
   gmEl("div","gSideL","gside",SL.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   gmEl("div","gSideR","gside",SR.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   const orb=farm.querySelector(".orb");if(orb){gmEl("div","gRays","",'',orb);gmEl("div","gPed","",'<i></i>',orb);gmEl("div","gTr","",'',orb);gmEl("div","gBud","",'',orb);gmEl("i","gGround","",'',orb)}
@@ -301,7 +301,7 @@ function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   let dl=false;try{dl=S.daily!==today()}catch(e){}set(document.querySelector('[data-gs="earnP"]'),dl);
   set(document.querySelector('[data-gs="qP"]'),bd.prg);set(document.querySelector('[data-gs="bagU"]'),bd.bag);
   const hh=$("hhBan"),ev=document.querySelector('[data-gs="hh"]');if(ev)ev.hidden=!(hh&&hh.classList.contains("on")&&hh.offsetParent!==null||hh&&hh.classList.contains("on"));
-  const sh=document.querySelector('[data-gn="shop"]');if(sh){let can=0;try{can=G.some((g,i)=>S.t>=gc(i))?1:0}catch(e){}set(sh,can?"↑":0)}}
+  const sh=document.querySelector('[data-gn="shop"]');if(sh){let can=0;try{can=(G.some((g,i)=>S.t>=gc(i))||(typeof GLMAX!=="undefined"&&(S.cl|0)<GLMAX&&S.t>=Math.round(25*Math.pow(3,S.cl|0))))?1:0}catch(e){}set(sh,can?"↑":0)}}
 // ---------- hora del día ----------
 function gmTod(){const h=new Date().getHours()+new Date().getMinutes()/60;let k=GM.todF||"day";if(!GM.todF)
   if(h>=21||h<6)k="night";else if(h<8.5)k="dawn";else if(h>=18.5)k="dusk";if(document.body.dataset.tod!==k)document.body.dataset.tod=k}

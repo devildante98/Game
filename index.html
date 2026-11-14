@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.93"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.93.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794690159">
+<meta name="game-build" content="1794690260">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2934,7 +2934,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.93</small>
+    <small class="pcver">Versión 6.93.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7616,8 +7616,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.93";
+const GAME_VER="6.93.1";
 const NEWS=[
+{v:"2026-11-14-6.93.1",ver:"6.93.1",at:"2026-11-14T22:04",t:"🔧 Arreglos/Mejoras",l:["La pestaña «Tienda» de abajo pasa a llamarse «Mejoras» y es el único botón para mejorar el pueblo (se quita el botón lateral «Mejoras»); los edificios del pueblo siguen abriendo la misma ventana","El aviso ↑ de esa pestaña también sale cuando puedes mejorar los Guantes de entrenador"]},
 {v:"2026-11-14-6.93",ver:"6.93",at:"2026-11-14T22:02",t:"🏘️ Edificios del pueblo más detallados y un solo menú de mejoras",l:["Los edificios del pueblo 3D tienen mucho más detalle: zócalo de piedra, esquinas remarcadas, ventanas con marco, cruceta, alféizar, contraventanas y jardineras, puertas con escalón y tejadillo, tejados de tejas en hileras con cumbrera y aleros, y chimeneas","La Granja tiene tejado de establo de doble pendiente, portón con cruces, pajar y silo con aros; el Centro Pokémon, fachada acristalada con marquesina, tejado a cuatro aguas y emblema; la Liga, escalinata, columnas acanaladas con basa y capitel, frontón y estandartes; el Estadio, gradas escalonadas, muro con arcos, campo marcado y focos; y el Laboratorio, ventanales corridos, máquinas en la azotea, parabólica, antena y placas solares","El paisaje y el pueblo ya no se balancean: la vista queda fija, y en pantallas muy anchas o altas se ajusta para que ningún edificio quede bajo la base de la Poké Ball","Un solo menú de mejoras: el botón «Tienda» de abajo, el botón «Mejoras» y los propios edificios abren la misma ventana"]},
 {v:"2026-11-14-6.92",ver:"6.92",at:"2026-11-14T21:30",t:"🏘️ Pueblo en 3D y botón de Mejoras",l:["Las casas pixeladas de abajo se han sustituido por un pueblo en 3D dentro del propio paisaje: Escuela de entrenadores, Granja Miltank con su establo, silo y Miltank, Centro Pokémon, Guardería con huevos en el jardín, Liga Pokémon con columnas y copa, Estadio con gradas y focos, y Laboratorio con antena y placas solares","Cada edificio está asentado en el prado con su explanada, girado a su manera (unos de frente, otros de lado o de perfil) y unidos por un camino de tierra que baja al lago","Tienen siempre el mismo tamaño: al subir de nivel ganan detalles (flores, farolas, banderas, más Miltank o huevos, remates dorados) sin crecer ni tapar el paisaje; los que aún no tienes se ven en obras","De noche se encienden las ventanas, las farolas y los focos del estadio","Toca un edificio (o su cartel) para mejorarlo, y siguen soltando sus tickets","Nuevo botón «Mejoras» en el lateral derecho: todas las mejoras y los guantes en una ventana, con nivel, producción, precio y compra ×1, ×10, ×50 o el máximo. Se marca cuando puedes comprar algo","En pantallas estrechas el pueblo se recorre deslizando o con las flechas"]},
 {v:"2026-11-14-6.91.5",ver:"6.91.5",at:"2026-11-14T17:42",t:"🔧 Arreglos/Mejoras",l:["Tu compañero junto a la Poké Ball se ve ahora a su tamaño real comparado con tu entrenador: Charizard (1,7 m) es algo más alto que él y Pikachu (0,4 m) le llega por la rodilla","Los Pokémon gigantes (Wailord, Eternatus…) se limitan para que quepan en la pantalla, y los diminutos no bajan de un tamaño mínimo para que se vean","Todos los compañeros, pequeños o grandes, se ven con su imagen en alta definición: nítidos a cualquier tamaño, respirando, balanceándose y dando saltitos","Las nubes del paisaje 3D se han rehecho: ahora son cúmulos esponjosos de bordes suaves, más claros arriba y algo más oscuros abajo, con el color del amanecer, el atardecer o la noche, y unos más cerca y otros más lejos"]},
@@ -7964,7 +7965,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794690159";
+const GAME_B="1794690260";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14506,13 +14507,13 @@ function gmInit(){
     '<button class="gres" id="gStk" title="Racha diaria"><span class="gic">'+gI("flame",26)+'</span><b id="gStkN">0</b></button>'+
     '<button class="gres gpass" id="gPass" title="Pase de temporada"><span class="gic">'+gI("pass",26)+'</span><span class="gpb"><b id="gPassN">Nv 0</b><i><u id="gPassB"></u></i></span></button>');
   // barra de navegación inferior
-  const NAV=[["dex","dex","Pokédex"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","shop","Tienda"],["soc","soc","Social"],["menu","menu","Menú"]];
+  const NAV=[["dex","dex","Pokédex"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","build","Mejoras"],["soc","soc","Social"],["menu","menu","Menú"]];
   gmEl("nav","gNav","",NAV.map(n=>'<button data-gn="'+n[0]+'"'+(n[0]==="menu"?' id="gnavb"':'')+' class="'+(n[0]==="gacha"?"gbig":"")+'"><span class="gni">'+gI(n[1],n[0]==="gacha"?44:30)+'</span><b>'+n[2]+'</b><i class="gbd" hidden></i></button>').join(""));
   // pantallas de sección (mismo aspecto que las ventanas del menú)
   const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");
   // escenario: botones laterales, entrenador y compañero, y el pueblo
   const farm=$("farm");
-  const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["build","Mejoras","upg","#ff7a2a"],["bag","Mochila","bagU","#f0a020"]];
+  const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["bag","Mochila","bagU","#f0a020"]];
   gmEl("div","gSideL","gside",SL.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   gmEl("div","gSideR","gside",SR.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   const orb=farm.querySelector(".orb");if(orb){gmEl("div","gRays","",'',orb);gmEl("div","gPed","",'<i></i>',orb);gmEl("div","gTr","",'',orb);gmEl("div","gBud","",'',orb);gmEl("i","gGround","",'',orb)}
@@ -14633,7 +14634,7 @@ function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   let dl=false;try{dl=S.daily!==today()}catch(e){}set(document.querySelector('[data-gs="earnP"]'),dl);
   set(document.querySelector('[data-gs="qP"]'),bd.prg);set(document.querySelector('[data-gs="bagU"]'),bd.bag);
   const hh=$("hhBan"),ev=document.querySelector('[data-gs="hh"]');if(ev)ev.hidden=!(hh&&hh.classList.contains("on")&&hh.offsetParent!==null||hh&&hh.classList.contains("on"));
-  const sh=document.querySelector('[data-gn="shop"]');if(sh){let can=0;try{can=G.some((g,i)=>S.t>=gc(i))?1:0}catch(e){}set(sh,can?"↑":0)}}
+  const sh=document.querySelector('[data-gn="shop"]');if(sh){let can=0;try{can=(G.some((g,i)=>S.t>=gc(i))||(typeof GLMAX!=="undefined"&&(S.cl|0)<GLMAX&&S.t>=Math.round(25*Math.pow(3,S.cl|0))))?1:0}catch(e){}set(sh,can?"↑":0)}}
 // ---------- hora del día ----------
 function gmTod(){const h=new Date().getHours()+new Date().getMinutes()/60;let k=GM.todF||"day";if(!GM.todF)
   if(h>=21||h<6)k="night";else if(h<8.5)k="dawn";else if(h>=18.5)k="dusk";if(document.body.dataset.tod!==k)document.body.dataset.tod=k}
@@ -18887,8 +18888,6 @@ function upgDraw(){const M=document.getElementById("upgM");if(!M)return;const bo
   G.forEach((g,i)=>{const n=S.g[i]||0,t=gbTier(n);h+=card(i,GI[i]||"🏠",GBS[i]||g[0],"+"+gmK(g[2]*PMUL())+" 🎟️/s por nivel",n,t,n?"+"+gmK(g[2]*n*PMUL())+" 🎟️/s":"")});
   // solo se rehace si algo cambia (así no parpadea ni pierde el foco)
   if(box._h!==h){const y=box.scrollTop;box.innerHTML=h;box._h=h;box.scrollTop=y}}
-// botón lateral y aviso cuando se puede mejorar algo
-setInterval(()=>{try{const b=document.querySelector('#gSideR [data-gs="upg"] .gbd');if(!b)return;let any=false;for(let i=-1;i<G.length;i++){if(i<0&&(S.cl|0)>=GLMAX)continue;const lv=i<0?(S.cl|0):(S.g[i]|0),u=i<0?Math.round(25*Math.pow(3,lv)):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv));if(S.t>=u){any=true;break}}b.hidden=!any}catch(e){}},1500);
 
 // =====================================================================================
 // PERSONAJES DE EXPLORACIÓN SACADOS DEL AVATAR REAL

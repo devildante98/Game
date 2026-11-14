@@ -262,7 +262,7 @@ function gmNav(){const n=$("gNav");if(!n)return;let a="";
 function gmClick(e){const t=e.target;if(!t.closest||!gmOn())return;
   const nb=t.closest("[data-gn]");if(nb){e.stopPropagation();const k=nb.dataset.gn;snd("ui");gmVib(10);nb.animate([{transform:"scale(.86)"},{transform:"scale(1.08)"},{transform:"none"}],{duration:260});
     if(nb.classList.contains("on")){if(k==="menu")hubMenu(false);else if(GM.scr)gmClose();else hubClose();setTimeout(gmNav,40);return}
-    if(k==="gacha")gmOpen("stage");else if(k==="bat")gmOpen("batP");else if(k==="shop")gmOpen("shopP");
+    if(k==="gacha")gmOpen("stage");else if(k==="bat")gmOpen("batP");else if(k==="shop"){if(typeof upgOpen==="function")upgOpen();else gmOpen("shopP")}
     else if(k==="dex")hubOpen("dex");else if(k==="soc")hubOpen("soc");else if(k==="exp")hubOpen("adv","explP");
     else if(k==="menu"){if(GM.scr)gmClose(1);hubClose();hubMenu(true)}
     setTimeout(gmNav,40);return}

@@ -677,8 +677,462 @@ def bottom(n):
     save(f"bot{n}", hide=hide)
 
 
+# ================================================================ PELO
+# Todos los peinados se modelan sobre la cabeza redonda; el juego los estrecha un poco con las otras formas de cara.
+# Etiquetas: «top» = lo que un gorro tapa (se oculta con gorra, gorro, sombrero…); «hat» = solo se ve con gorro
+# (versión baja de moños y coletas altas); «streak» = el mechón que se colorea con «Mechas: Mechón».
+HF = FS[0]
+
+
+def hunit(az, el):
+    a, e = math.radians(az), math.radians(el)
+    return Vector((sin(a) * cos(e), -cos(a) * cos(e), sin(e)))
+
+
+def hnorm(p):
+    q = p - HC
+    return Vector((q.x / HR[0] ** 2, q.y / HR[1] ** 2, q.z / HR[2] ** 2)).normalized()
+
+
+def hsu(u, off=0.0):
+    p = head_shape(u.x, u.y, u.z, HF)
+    return p + hnorm(p) * off
+
+
+def hs(az, el, off=0.0):
+    """Punto sobre la cabeza: az 0 = frente, 90 = izquierda, 180 = nuca; el = elevación en grados."""
+    return hsu(hunit(az, el), off)
+
+
+def hairline(az, front, side, back):
+    c = cos(math.radians(az))
+    return side + (front - side) * max(0.0, c) ** 1.5 + (back - side) * max(0.0, -c) ** 1.2
+
+
+def shell(name, front, side, back, th=0.016, top=0.03, slot="hair", tag="", bump=0.0, groove=0.0, ng=16, part=None, sweep=0.0):
+    """Casquete de pelo pegado a la cabeza; front/side/back = elevación (grados) del nacimiento del pelo."""
+    V, F = sphere(48, 32)
+    A = []
+    for v in V:
+        az = math.degrees(math.atan2(v.x, -v.y))
+        el = math.degrees(math.asin(max(-1.0, min(1.0, v.z))))
+        A.append((az, el, hairline(az, front, side, back)))
+    keep = [a[1] >= a[2] for a in A]
+    F2 = [f for f in F if any(keep[i] for i in f)]
+    P = []
+    for az, el, emin in A:
+        if el < emin:
+            P.append(hs(az, emin, 0.002))
+            continue
+        k = min(1.0, (el - emin) / 14.0)
+        off = 0.002 + (th + top * max(0.0, sin(math.radians(el))) - 0.002) * k ** 0.7
+        if bump:
+            off += bump * k * (0.55 + 0.25 * sin(az * 0.21 + el * 0.13) * sin(el * 0.29) + 0.2 * sin(az * 0.47 - el * 0.31))
+        if groove:
+            off += groove * k * (0.5 + 0.5 * cos(math.radians(az + sweep * max(0.0, 1 - el / 90)) * ng))
+        if part is not None:      # raya: surco a lo largo de la cabeza
+            off -= 0.01 * math.exp(-((az - part) / 5.0) ** 2) * max(0.0, (el - 20) / 70)
+        P.append(hs(az, el, off))
+    mk(name, P, F2, slot, "head", ss=1, tag=tag)
+
+
+def strand(name, pts, w, th, tip=0.12, slot="hair", tag="", n=7, round_=False, ss=1):
+    """Mechón: sección aplanada (o redonda) que sigue los puntos y se afila hacia la punta."""
+    R = []
+    m = len(pts)
+    for i, c in enumerate(pts):
+        c = Vector(c)
+        a, b = Vector(pts[max(0, i - 1)]), Vector(pts[min(m - 1, i + 1)])
+        t = (b - a).normalized()
+        nr = (c - HC).normalized()
+        side = t.cross(nr)
+        if side.length < 0.15:
+            side = t.cross(Vector((0, 1, 0)))
+        if side.length < 0.15:
+            side = Vector((1, 0, 0))
+        s = i / (m - 1)
+        k = 1.0 - (1.0 - tip) * s ** 1.5
+        R.append(ring(c, t, side, w * k, (w if round_ else th) * k, n, 2.0 if round_ else 2.4))
+    V, F = loft(R, True, True, True)
+    mk(name, V, F, slot, "head", ss=ss, tag=tag)
+
+
+def comb(az, el0, el1, off0, off1, drift=0.0, n=6, lift=0.0):
+    """Camino pegado a la cabeza de (az, el0) a (az + drift, el1); 'lift' lo separa en el centro (volumen)."""
+    out = []
+    for i in range(n + 1):
+        t = i / n
+        out.append(hs(az + drift * t ** 1.3, el0 + (el1 - el0) * t, off0 + (off1 - off0) * t + lift * sin(pi * t)))
+    return out
+
+
+def spike(name, base, d, L, w, th=None, bend=(0, 0, 0), slot="hair", tag="", n=6):
+    d = Vector(d).normalized()
+    bend = Vector(bend)
+    base = Vector(base)
+    pts = [base - d * 0.03] + [base + d * L * s + bend * L * s * s for s in (0.0, 0.3, 0.6, 0.85, 1.0)]
+    strand(name, pts, w, th or w * 0.62, tip=0.03, slot=slot, tag=tag, n=n)
+
+
+def resample(pts, n):
+    P = [Vector(p) for p in pts]
+    L = [0.0]
+    for a, b in zip(P, P[1:]):
+        L.append(L[-1] + (b - a).length)
+    out = []
+    for i in range(n):
+        d = L[-1] * i / (n - 1)
+        for j in range(len(L) - 1):
+            if d <= L[j + 1] + 1e-9:
+                k = (d - L[j]) / max(1e-9, L[j + 1] - L[j])
+                out.append(P[j].lerp(P[j + 1], k))
+                break
+    return out
+
+
+def tail(name, pts, rmax, rmin=0.006, slot="hair", tag="", lobes=7, n=12, bulge=0.25):
+    """Coleta: tubo redondo con mechones marcados que se ensancha y acaba en punta."""
+    P = resample(pts, n)
+    rad = []
+    for i in range(n):
+        s = i / (n - 1)
+        r = rmax * (0.62 + 0.38 * sin(min(1.0, s / bulge) * pi / 2)) if s < bulge else rmin + (rmax - rmin) * (1 - (s - bulge) / (1 - bulge)) ** 1.1
+        rad.append((r, r))
+    fn = lambda a, x, y: (x * (1 + 0.11 * cos(lobes * a)), y * (1 + 0.11 * cos(lobes * a)))
+    V, F = tube(P, rad, X if abs((P[-1] - P[0]).normalized().x) < 0.8 else BK, 14, 2.0, True, True, fn=fn)
+    mk(name, V, F, slot, "head", ss=1, tag=tag)
+
+
+def tie(name, c, d, r, slot="tie", tag=""):
+    d = Vector(d).normalized()
+    c = Vector(c)
+    V, F = tube([c - d * 0.013, c + d * 0.013], [(r, r), (r, r)], X if abs(d.x) < 0.8 else BK, 14, 2.0, True, True)
+    mk(name, V, F, slot, "head", ss=1, tag=tag)
+
+
+def braid(name, pts, r, tag="", n=11):
+    P = resample(pts, n)
+    for k, c in enumerate(P):
+        s = k / (n - 1)
+        rr = r * (1 - 0.3 * s)
+        a, b = P[max(0, k - 1)], P[min(n - 1, k + 1)]
+        t = (b - a).normalized()
+        side = t.cross(Vector((0, 1, 0)))
+        if side.length < 0.2:
+            side = t.cross(Vector((1, 0, 0)))
+        side.normalize()
+        V, F = sphere(12, 8)
+        u, w = side, t.cross(side).normalized()
+        q = c + side * rr * 0.32 * (1 if k % 2 else -1)
+        P2 = [q + u * v.x * rr * 1.05 + w * v.y * rr * 0.85 + t * v.z * rr * 1.4 for v in V]
+        mk(f"{name}{k}", P2, F, "haird" if k % 2 else "hair", "head", ss=0, tag=tag)
+    return P[-1]
+
+
+def bun(name, c, r, tag="", tilt=(0, 0, 1)):
+    V, F = sphere(18, 12)
+    c = Vector(c)
+    P = []
+    for v in V:
+        a = math.atan2(v.y, v.x)
+        k = 1 + 0.07 * sin(5 * a + 5 * v.z)
+        P.append(c + Vector((v.x * r * k, v.y * r * k, v.z * r * 0.9 * k)))
+    mk(name, P, F, "hair", "head", ss=1, tag=tag)
+
+
+def curtain(name, az0, az1, ends, el_top=48, off=0.03, cols=34, rows=16, wave=0.0, jag=0.03, ridge=0.01, curl=0.0, tag="", th=0.015, flare=0.0):
+    """Melena: lámina que baja desde la coronilla pegada a la cabeza y luego cae recta por fuera del cuerpo.
+    ends(az) = altura de las puntas en cada dirección."""
+    G = []
+    for j in range(cols + 1):
+        az = az0 + (az1 - az0) * j / cols
+        a = math.radians(az)
+        ztop = hs(az, el_top, off).z
+        ze = ends(az) - (jag if j % 2 else 0.0)
+        col = []
+        rmax = 0.0
+        for i in range(rows + 1):
+            t = i / rows
+            z = ztop + (ze - ztop) * t
+            if z >= HC.z:
+                e = math.degrees(math.asin(min(1.0, (z - HC.z) / (HR[2] + off))))
+                p = hs(az, e, off)
+                rh = math.hypot(p.x - HC.x, p.y - HC.y)
+            else:
+                p = hs(az, 0, off)
+                rh = math.hypot(p.x - HC.x, p.y - HC.y)
+            rmax = max(rmax, rh)
+            r = max(rmax, body_r(z, az))
+            hang = max(0.0, (HC.z - z) / 0.35)
+            r += ridge * (1 if j % 2 == 0 else 0) * min(1.0, t * 4) + flare * min(1.0, hang) ** 1.5
+            if wave:
+                r += wave * sin((ztop - z) * 26 + j * 0.3) * min(1.0, t * 3)
+            if curl:
+                r -= curl * max(0.0, (t - 0.72) / 0.28) ** 2
+            col.append(Vector((HC.x + sin(a) * r, HC.y - cos(a) * r, z)))
+        G.append(col)
+    V = [p for col in G for p in col]
+    n = rows + 1
+    F = [(j * n + i, (j + 1) * n + i, (j + 1) * n + i + 1, j * n + i + 1) for j in range(cols) for i in range(rows)]
+    mk(name, V, F, "hair", "head", ss=1, solid=th, soff=-1, tag=tag)
+
+
+def body_r(z, az):
+    """Radio del cuerpo con ropa holgada en esa dirección y altura: el pelo largo cae por fuera."""
+    if z > 1.44:
+        return 0.0
+    if z > 1.395:
+        rx, ry = 0.1, 0.095
+    else:
+        rx, ry = lerp_tab(GP, z)
+        rx, ry = rx * 1.12, ry * 1.12
+    a = math.radians(az)
+    return 1.0 / math.sqrt((sin(a) / rx) ** 2 + (cos(a) / ry) ** 2) + 0.03
+
+
+def ends3(front, side, back):
+    def f(az):
+        a = abs(((az + 180) % 360) - 180)
+        sm = lambda e0, e1, x: max(0.0, min(1.0, (x - e0) / (e1 - e0))) ** 2 * (3 - 2 * max(0.0, min(1.0, (x - e0) / (e1 - e0))))
+        z = front + (side - front) * sm(58, 78, a)
+        return z + (back - z) * sm(112, 150, a)
+    return f
+
+
+# ---------------------------------------------------------------- piezas que se repiten
+def bangs(kind, tag="", s=1):
+    if kind == "straight" or kind == "long" or kind == "blunt":
+        e1 = {"straight": 6, "long": -4, "blunt": 8}[kind]
+        for k in range(9):
+            az = -60 + 15 * k
+            strand(f"bang{k}", comb(az * 0.5, 64, e1 - (k % 2) * 3.5, 0.034, 0.013, drift=az * 0.5, lift=0.006), 0.036, 0.012, tip=0.55 if kind == "blunt" else 0.3, tag="streak" if k == 3 else tag)
+    elif kind == "short":
+        for k in range(7):
+            az = -54 + 18 * k
+            strand(f"bang{k}", comb(az * 0.6, 58, 24 - (k % 2) * 4, 0.032, 0.014, drift=az * 0.4, lift=0.005), 0.036, 0.013, tip=0.2, tag="streak" if k == 2 else tag)
+    elif kind == "side":
+        for k in range(8):
+            az = -56 + 15 * k
+            e1 = 24 - 26 * k / 7
+            strand(f"bang{k}", comb(az * 0.6 - 10 * s, 64, e1, 0.034, 0.013, drift=az * 0.4 + 26 * s, lift=0.007), 0.04, 0.012, tip=0.2, tag="streak" if k == 4 else tag)
+    elif kind == "part":
+        for side in (1, -1):
+            for k in range(4):
+                strand(f"bang{side}{k}", comb(side * (5 + 7 * k), 70, 16 - 4 * k, 0.034, 0.013, drift=side * (28 + 9 * k), lift=0.008), 0.04, 0.013, tip=0.25, tag="streak" if (side, k) == (1, 0) else tag)
+    elif kind == "spiky":
+        for k in range(6):
+            az = -50 + 20 * k
+            strand(f"bang{k}", comb(az * 0.6, 56, 4 - (k % 2) * 8, 0.032, 0.016, drift=az * 0.4 + 6 * ((k % 2) * 2 - 1), lift=0.01), 0.04, 0.013, tip=0.03, tag="streak" if k == 2 else tag)
+    elif kind == "eye":
+        for k in range(6):
+            az = -10 + 14 * k
+            strand(f"bang{k}", comb(az * 0.6, 62, 18 - 3 * k, 0.034, 0.013, drift=az * 0.4 + 16, lift=0.006), 0.038, 0.012, tip=0.25, tag=tag)
+        strand("bangeye", comb(-4, 66, -24, 0.036, 0.016, drift=-24, n=8, lift=0.012), 0.062, 0.016, tip=0.2, tag="streak")
+        strand("bangeye2", comb(-18, 60, -14, 0.03, 0.014, drift=-20, n=7, lift=0.008), 0.042, 0.013, tip=0.15, tag=tag)
+
+
+def sidelocks(e1=-14, w=0.03, tag=""):
+    for s in (1, -1):
+        strand(f"side{s}", comb(s * 76, 22, e1, 0.022, 0.01, drift=-s * 6, n=5), w, 0.012, tip=0.25, tag=tag)
+
+
+def nape(n=5, e1=-40, w=0.04):
+    for k in range(n):
+        az = 180 + (k - (n - 1) / 2) * (80 / max(1, n - 1))
+        strand(f"nape{k}", comb(az, -12, e1, 0.022, 0.014, n=4), w, 0.014, tip=0.2)
+
+
+def spikes_ring(prefix, el, azs, L, w, up, tag="", out=1.0, back=0.18, bend=0.05):
+    for i, az in enumerate(azs):
+        o = hunit(az, el)
+        d = o * out + Vector((0, back, up))
+        spike(f"{prefix}{i}", hs(az, el, 0.0), d, L * (0.9 + 0.2 * ((i * 7) % 3) / 2), w, bend=Vector((0, bend, bend * 2)) - o * 0.04, tag=tag)
+
+
+def hair(n):
+    reset()
+    FULL = (30, -6, -38)            # nacimiento del pelo corto: frente, lados, nuca
+    LONG = (30, -40, -40)
+    if n == 0:        # Corto
+        shell("shell", *FULL); bangs("short"); sidelocks(); nape()
+    elif n == 1:      # Puntiagudo
+        shell("shell", 30, -6, -30, top=0.03); bangs("spiky"); sidelocks(-10)
+        spikes_ring("sa", 16, (68, 110, 150, 180, 210, 250, 292), 0.13, 0.05, 0.45)
+        spikes_ring("sb", 48, (35, 90, 145, 200, 255, 320), 0.14, 0.052, 0.8, tag="top")
+        spikes_ring("sc", 78, (20, 140, 260), 0.13, 0.05, 1.0, tag="top")
+        nape(5, -36)
+    elif n == 2:      # Melena
+        shell("shell", *LONG, part=0); curtain("curtain", 46, 314, ends3(1.25, 1.37, 1.15)); bangs("part")
+    elif n == 3:      # Coleta
+        shell("shell", 30, -8, -30, part=None); bangs("side"); sidelocks()
+        c = hs(180, -4, 0.03)
+        tie("tie", c, (0, 1, -0.2), 0.03)
+        tail("tail", [c + Vector((0, 0.01, 0)), c + Vector((0, 0.06, -0.03)), c + Vector((0, 0.09, -0.12)), c + Vector((0, 0.1, -0.24)), c + Vector((0, 0.08, -0.33))], 0.064)
+    elif n == 4:      # Dos coletas
+        shell("shell", 30, -8, -32); bangs("straight"); sidelocks()
+        for s in (1, -1):
+            c = hs(s * 104, 26, 0.03)
+            tie(f"tie{s}", c, (s, 0.2, 0.1), 0.028)
+            tail(f"tail{s}", [c, c + Vector((s * 0.06, 0.03, 0.0)), c + Vector((s * 0.1, 0.07, -0.08)), c + Vector((s * 0.11, 0.1, -0.22)), c + Vector((s * 0.09, 0.11, -0.36))], 0.048)
+    elif n == 6:      # Rizado
+        shell("shell", 32, -4, -34, bump=0.02, top=0.035)
+        for k in range(20):
+            az = -170 + k * 17
+            el = hairline(az, 32, -4, -34) + 4
+            V, F = sphere(10, 7)
+            c = hs(az, el, 0.026)
+            mk(f"curl{k}", [c + Vector((v.x, v.y, v.z)) * 0.034 for v in V], F, "hair" if k % 2 else "haird", "head", ss=1)
+        for k in range(5):
+            az = -40 + 20 * k
+            V, F = sphere(10, 7)
+            c = hs(az, 34, 0.036)
+            mk(f"fcurl{k}", [c + v * 0.036 for v in V], F, "hair", "head", ss=1, tag="streak" if k == 2 else "")
+    elif n == 7:      # Flequillo largo
+        shell("shell", *LONG); curtain("curtain", 46, 314, ends3(1.36, 1.38, 1.33), jag=0.025); bangs("long")
+    elif n == 8:      # Moño
+        shell("shell", 36, -6, -34, groove=0.006, ng=20)
+        bun("bun", hs(180, 46, 0.085), 0.088, tag="top"); tie("tieb", hs(180, 40, 0.035), hunit(180, 40), 0.042, tag="top")
+        bun("bunh", hs(180, -10, 0.06), 0.062, tag="hat"); tie("tiebh", hs(180, -8, 0.025), hunit(180, -8), 0.036, tag="hat")
+        for s in (1, -1):
+            strand(f"wisp{s}", comb(s * 62, 30, -20, 0.02, 0.008, drift=s * 4, n=6), 0.014, 0.006, tip=0.2)
+    elif n == 9:      # Afro
+        V, F = sphere(44, 30)
+        P, keep = [], []
+        for v in V:
+            nz = 0.07 * sin(v.x * 13) * sin(v.y * 11) * sin(v.z * 12) + 0.045 * sin(v.x * 19 + v.z * 15) + 0.04 * sin(v.y * 17 - v.z * 9)
+            P.append(HC + Vector((0, 0.012, 0.035)) + Vector((v.x * HR[0] * 1.5, v.y * HR[1] * 1.45, v.z * HR[2] * 1.42)) * (1 + nz))
+            keep.append(not (v.y < -0.45 and v.z < 0.32) and v.z > -0.62)
+        mk("afro", P, [f for f in F if all(keep[i] for i in f)], "hair", "head", ss=1, solid=0.03, soff=-1, tag="top")
+        shell("under", 30, -6, -36, bump=0.02, tag="hat")
+        for k in range(9):
+            az = 100 + k * 20
+            V, F = sphere(10, 7)
+            c = hs(az, -6 - (k % 2) * 8, 0.04)
+            mk(f"puff{k}", [c + v * 0.055 for v in V], F, "hair", "head", ss=1, tag="hat")
+    elif n == 10:     # Cresta (los lados rapados los pinta el juego)
+        for k in range(9):
+            el = 30 + k * 20
+            az = 0 if el <= 90 else 180
+            e = el if el <= 90 else 180 - el
+            o = hunit(az, e)
+            spike(f"fin{k}", hs(az, e, 0.0), o + Vector((0, 0.15, 0.25)), 0.12 - abs(k - 3.5) * 0.008, 0.045, th=0.03, tag="top")
+    elif n == 11:     # Media melena
+        shell("shell", *LONG); curtain("curtain", 46, 314, ends3(1.3, 1.35, 1.3), jag=0.03); bangs("side")
+    elif n == 12:     # Trenza
+        shell("shell", 30, -8, -36, groove=0.006); bangs("part"); sidelocks()
+        c = hs(180, -18, 0.02)
+        end = braid("braid", [c, c + Vector((0, 0.04, -0.06)), Vector((0, 0.19, 1.36)), Vector((0, 0.19, 1.15)), Vector((0, 0.18, 0.98))], 0.036)
+        tie("tie", end + Vector((0, 0, -0.03)), (0, 0, 1), 0.022)
+        tail("tip", [end + Vector((0, 0, -0.04)), end + Vector((0, 0, -0.1))], 0.024, n=5, bulge=0.3)
+    elif n == 13:     # Dos moños
+        shell("shell", 30, -6, -34, part=0); bangs("straight")
+        for s in (1, -1):
+            bun(f"bun{s}", hs(s * 62, 56, 0.065), 0.062, tag="top"); tie(f"tie{s}", hs(s * 62, 50, 0.03), hunit(s * 62, 50), 0.038, tag="top")
+            bun(f"bunh{s}", hs(s * 128, -14, 0.055), 0.055, tag="hat")
+    elif n == 14:     # Despeinado
+        shell("shell", 30, -6, -32, top=0.03, bump=0.008); sidelocks(-12); nape(5, -34)
+        import random
+        rnd = random.Random(14)
+        for k in range(22):
+            az = rnd.uniform(-180, 180)
+            el = rnd.uniform(10, 80)
+            if el < 40 and abs(az) < 60:
+                continue
+            o = hunit(az, el)
+            d = o + Vector((rnd.uniform(-0.6, 0.6), rnd.uniform(-0.3, 0.5), rnd.uniform(-0.2, 0.6)))
+            spike(f"sp{k}", hs(az, el, 0.0), d, rnd.uniform(0.07, 0.11), 0.045, tag="top" if el > 34 else "")
+        for k in range(6):
+            az = -50 + 20 * k
+            strand(f"bang{k}", comb(az * 0.6 + (k % 2) * 8, 56, 8 - (k % 3) * 6, 0.032, 0.016, drift=az * 0.4 + ((k % 3) - 1) * 14, lift=0.012), 0.04, 0.013, tip=0.03, tag="streak" if k == 2 else "")
+    elif n == 15:     # Tupé
+        shell("shell", 36, -6, -36, groove=0.005); sidelocks(); nape(4, -32)
+        pts = [hs(0, 40, 0.0), hs(0, 34, 0.07), hs(0, 48, 0.13), hs(0, 66, 0.1), hs(0, 84, 0.06), hs(180, 70, 0.035)]
+        strand("quiff", pts, 0.1, 0.06, tip=0.4, tag="top")
+        strand("quiff2", [hs(10, 42, 0.0), hs(14, 40, 0.06), hs(18, 52, 0.1), hs(20, 70, 0.07)], 0.06, 0.04, tip=0.2, tag="top")
+    elif n == 16:     # Bob
+        shell("shell", *LONG); curtain("curtain", 50, 310, ends3(1.42, 1.42, 1.42), jag=0.01, curl=0.025, ridge=0.006); bangs("blunt")
+    elif n == 17:     # Ondulado largo
+        shell("shell", *LONG, part=0); curtain("curtain", 46, 314, ends3(1.12, 1.37, 1.0), wave=0.012, jag=0.035); bangs("part")
+    elif n == 18:     # Hacia atrás
+        shell("shell", 40, -6, -36, groove=0.008, ng=22, top=0.035); sidelocks(-6, 0.024)
+        for k in range(5):
+            az = 150 + 15 * k
+            strand(f"back{k}", comb(az, 0, -32, 0.03, 0.03, n=4), 0.045, 0.016, tip=0.3)
+    elif n == 19:     # Mechón en el ojo
+        shell("shell", *LONG); curtain("curtain", 46, 314, ends3(1.36, 1.38, 1.34), jag=0.025); bangs("eye")
+    elif n == 20:     # Coleta alta
+        shell("shell", 32, -8, -34, groove=0.006); bangs("side", s=-1); sidelocks()
+        c = hs(180, 52, 0.035)
+        tie("tie", c, hunit(180, 60), 0.034, tag="top")
+        tail("tail", [c, c + Vector((0, 0.07, 0.03)), c + Vector((0, 0.16, -0.04)), c + Vector((0, 0.2, -0.18)), c + Vector((0, 0.2, -0.36)), c + Vector((0, 0.18, -0.5))], 0.068, tag="top")
+        c2 = hs(180, -6, 0.03)
+        tie("tieh", c2, (0, 1, -0.2), 0.03, tag="hat")
+        tail("tailh", [c2, c2 + Vector((0, 0.06, -0.04)), c2 + Vector((0, 0.09, -0.15)), c2 + Vector((0, 0.09, -0.3))], 0.05, tag="hat")
+    elif n == 21:     # Dos trenzas
+        shell("shell", 30, -8, -36, part=0); bangs("straight")
+        for s in (1, -1):
+            c = hs(s * 112, -16, 0.02)
+            end = braid(f"braid{s}", [c, Vector((s * 0.2, 0.05, 1.42)), Vector((s * 0.21, -0.06, 1.32)), Vector((s * 0.19, -0.15, 1.18)), Vector((s * 0.17, -0.16, 1.04))], 0.032)
+            tie(f"tie{s}", end + Vector((0, 0, -0.025)), (0, 0, 1), 0.02)
+            tail(f"tip{s}", [end + Vector((0, 0, -0.03)), end + Vector((0, -0.005, -0.09))], 0.022, n=5, bulge=0.3)
+    elif n == 23:     # Melena salvaje
+        shell("shell", *LONG, top=0.035); curtain("curtain", 46, 314, ends3(1.25, 1.36, 1.12), jag=0.07, flare=0.04); bangs("spiky")
+        spikes_ring("sa", 22, (55, 90, 125, 160, 200, 235, 270, 305), 0.13, 0.055, 0.15, out=1.2, back=0.05)
+        spikes_ring("sb", 55, (20, 80, 140, 200, 260, 320), 0.13, 0.055, 0.7, tag="top")
+    elif n == 24:     # Pelo largo liso
+        shell("shell", *LONG); curtain("curtain", 46, 314, ends3(1.02, 1.37, 0.86), jag=0.02, ridge=0.008); bangs("straight")
+    elif n == 25:     # Coletas bajas
+        shell("shell", 30, -8, -38, part=0); bangs("straight")
+        for s in (1, -1):
+            c = hs(s * 128, -24, 0.03)
+            tie(f"tie{s}", c, (s * 0.6, 0.5, -0.3), 0.026)
+            tail(f"tail{s}", [c, Vector((s * 0.2, 0.06, 1.42)), Vector((s * 0.215, -0.06, 1.33)), Vector((s * 0.2, -0.155, 1.22)), Vector((s * 0.18, -0.165, 1.1))], 0.045)
+    elif n == 26:     # Rastas
+        shell("shell", 32, -6, -36, bump=0.01)
+        for k in range(24):
+            az = 60 + k * (240 / 23)
+            base = hs(az, hairline(az, 32, -6, -36) + 18, 0.02)
+            a = math.radians(az)
+            out = Vector((sin(a), -cos(a), 0))
+            ln = 0.22 + ((k * 7) % 4) * 0.025
+            rz = max(1.38, base.z - ln)
+            pts = [base, base + out * 0.05 + Vector((0, 0, -0.04)), Vector((base.x, base.y, 0)) * 1.0 + out * 0.075 + Vector((0, 0, base.z - 0.12))]
+            q = pts[-1]
+            r_need = max(body_r(rz, az), math.hypot(q.x, q.y))
+            pts.append(Vector((sin(a) * r_need, -cos(a) * r_need, rz)))
+            strand(f"dread{k}", resample(pts, 7), 0.017, 0.017, tip=0.7, round_=True, slot="hair" if k % 3 else "haird", n=6)
+        for k in range(6):
+            az = -50 + 20 * k
+            strand(f"fdread{k}", comb(az * 0.6, 58, 14, 0.03, 0.02, drift=az * 0.4, n=5), 0.016, 0.016, tip=0.7, round_=True, n=6)
+    elif n == 27:     # Undercut (los lados rapados los pinta el juego)
+        shell("top", 34, 30, 26, top=0.05, groove=0.006, sweep=40, tag="top")
+        strand("sweep", [hs(-10, 40, 0.02), hs(-6, 44, 0.07), hs(4, 60, 0.08), hs(30, 74, 0.06), hs(80, 70, 0.04)], 0.08, 0.035, tip=0.3, tag="top")
+    elif n == 28:     # Media cola
+        shell("shell", *LONG); curtain("curtain", 46, 314, ends3(1.3, 1.36, 1.24), jag=0.03); bangs("side")
+        c = hs(180, 34, 0.04)
+        tie("tie", c, hunit(180, 30), 0.028, tag="top")
+        tail("tail", [c, c + Vector((0, 0.05, -0.02)), c + Vector((0, 0.07, -0.08)), c + Vector((0, 0.07, -0.15))], 0.04, tag="top")
+    elif n == 29:     # Puntas largas
+        shell("shell", 30, -6, -30, top=0.03); bangs("spiky"); sidelocks(-12)
+        spikes_ring("sa", 14, (66, 105, 140, 180, 220, 255, 294), 0.19, 0.06, 0.35, back=0.25)
+        spikes_ring("sb", 46, (30, 85, 140, 200, 260, 320), 0.2, 0.062, 0.85, tag="top")
+        spikes_ring("sc", 78, (0, 120, 240), 0.18, 0.06, 1.0, tag="top")
+    elif n == 30:     # Ondulado con flequillo
+        shell("shell", *LONG); curtain("curtain", 46, 314, ends3(1.15, 1.37, 1.05), wave=0.013, jag=0.03); bangs("straight")
+    elif n == 31:     # Raya al lado
+        shell("shell", 30, -6, -36, part=28, groove=0.004); sidelocks(); nape(4, -34)
+        for k in range(7):
+            az = 22 - 12 * k
+            strand(f"bang{k}", comb(az, 66, 30 - 3 * k, 0.034, 0.016, drift=-30 - 6 * k, lift=0.012), 0.044, 0.014, tip=0.25, tag="streak" if k == 1 else "")
+    elif n == 32:     # Melena ondulada corta
+        shell("shell", *LONG, part=0); curtain("curtain", 46, 314, ends3(1.36, 1.38, 1.36), wave=0.012, jag=0.03, curl=0.012); bangs("part")
+    save(f"hair{n}")
+
+
 # ================================================================ generar todo
 heads()
+for n in [k for k in range(33) if k not in (5, 22)]:
+    hair(n)
 base(False)
 base(True)
 for n in range(29):

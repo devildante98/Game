@@ -6,7 +6,7 @@
     pip install bpy
     python src/tools/blender/build_trainer.py -- models
 
-Piezas: `head0`, `head1`, `head2` (cabeza con nariz y relieve: cara redonda, ovalada y cuadrada), `base_m`, `base_f` (cuerpo con manos y dedos), `top0`…`top28`, `bot0`…`bot15`, `shoe0`…`shoe11`.
+Piezas: `head0`, `head1`, `head2` (cabeza con nariz y relieve: cara redonda, ovalada y cuadrada), `hair0`…`hair32` (peinados; el rapado y el calvo van pintados), `base_m`, `base_f` (cuerpo con manos y dedos), `top0`…`top28`, `bot0`…`bot15`, `shoe0`…`shoe11`.
 Los números son los mismos que los de las opciones del editor de aspecto.
 
 Cada objeto se llama `segmento.color.nombre[.etiqueta]`:
@@ -19,4 +19,5 @@ El juego las carga con `src/p_av3m.js`. Cualquier `.glb` se puede abrir en Blend
 retocar y volver a exportar con el mismo nombre de archivo y los mismos nombres de objeto. Al exportar no hace falta
 incluir normales ni coordenadas de textura.
 
-El pelo, los gorros y los complementos todavía se dibujan con las formas de siempre, acopladas a la cabeza nueva.
+En el pelo, la etiqueta `top` marca lo que tapa un gorro y `hat` lo que solo se ve con gorro; `streak` es el mechón de «Mechas: Mechón».
+Los gorros y los complementos todavía se dibujan con las formas de siempre, acopladas a la cabeza nueva.

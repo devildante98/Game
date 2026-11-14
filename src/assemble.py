@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.86";
+const GAME_VER="6.87";
 const NEWS=[
+{v:"2026-11-14-6.87",ver:"6.87",at:"2026-11-14T14:14",t:"🔧 Arreglos/Mejoras",l:["Entrenador 3D: cuello más ancho, sobre todo de perfil","El cuello alto del jersey, las bufandas y los collares se han ajustado al cuello nuevo"]},
 {v:"2026-11-14-6.86",ver:"6.86",at:"2026-11-14T14:05",t:"🔧 Arreglos/Mejoras",l:["Entrenador 3D: la zona de debajo de la barbilla ya tiene volumen; antes se cortaba con un plano recto en diagonal hasta la nuca","La mandíbula baja casi horizontal bajo la barbilla, se redondea hacia los lados y se une suave con el cuello, y la nuca queda redonda","El cuello se adelanta un poco por la garganta para enlazar con la barbilla"]},
 {v:"2026-11-14-6.85",ver:"6.85",at:"2026-11-14T12:45",t:"👤 Caras con forma más real",l:["La cabeza del entrenador 3D tiene ahora la estructura de una cara de verdad: cráneo redondo, mejillas que bajan casi rectas, mandíbula marcada y barbilla pequeña","Las tres formas de cara se estrechan siempre hacia la barbilla: la cuadrada tiene la mandíbula más angulosa sin parecer más gruesa, la ovalada es más fina y alargada y la redonda más suave"]},
 {v:"2026-11-14-6.84",ver:"6.84",at:"2026-11-14T10:08",t:"👤 Cara con perfil y formas de cara de verdad",l:["La cabeza del entrenador 3D tiene ahora relieve: nariz, arco de las cejas, pómulos, zona de la boca y barbilla adelantada, así que de lado ya se ve un perfil y la cara no queda hundida bajo el pelo o el gorro","La opción «Forma de la cara» vuelve a notarse: redonda, ovalada (barbilla fina) y cuadrada (mandíbula ancha) son tres cabezas distintas","El pelo rapado, la cresta, el undercut y las barbas van pintados sobre la propia cabeza, así que siguen su forma exacta","Patillas más discretas con los peinados cortos"]},

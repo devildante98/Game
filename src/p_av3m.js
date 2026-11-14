@@ -6,7 +6,7 @@
 // pinta pegada al relieve de la cabeza, y el pelo, los gorros y los complementos se acoplan encima.
 // Las figuras pequeñas del mapa siguen saliendo del modelo de siempre: a ese tamaño no se nota y no descarga nada.
 // =====================================================================================
-const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"4",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
+const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"5",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
 function av3mParse(buf){const dv=new DataView(buf);let off=12,json=null,bin=null;
   while(off<dv.byteLength){const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),ch=buf.slice(off+8,off+8+len);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(ch));else bin=ch;off+=8+len}
   const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],o=(bv.byteOffset||0)+(a.byteOffset||0),n=a.count*{SCALAR:1,VEC3:3}[a.type];
@@ -85,10 +85,10 @@ function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k]
     if(L.bp===6){const M=m4RY(T(0,1.19,bz-.149),Math.PI);E.disc(M,.042,.042,W,16);E.disc(m4T(M,0,.014,.001),.042,.028,[.9,.2,.25],16);E.disc(m4T(M,0,0,.002),.042,.005,K);E.disc(m4T(M,0,0,.003),.012,.012,W,10)}}
   else if([2,5,7].includes(L.bp)){E.ell(T(-.25,.93,.0),.055,.095,.11,bpc);E.box(m4RZ(T(-.03,1.17,fz+.008),.62),.009,.3,.004,dk(bpc,.2));E.box(m4RZ(T(-.03,1.17,bz-.008),.62),.009,.3,.004,dk(bpc,.2))}
   else if(L.bp===3)E.ell(T(.04,.985,.11),.08,.04,.04,bpc,null,1);
-  if([1,3].includes(L.nk)){E.ell(T(0,1.392,.006),.118,.046,.108,nkc);E.box(T(.055,1.28,fz+.014),.028,.1,.012,dk(nkc,.1))}
+  if([1,3].includes(L.nk)){E.ell(T(0,1.392,.004),.124,.048,.114,nkc);E.box(T(.055,1.28,fz+.014),.028,.1,.012,dk(nkc,.1))}
   else if(L.nk===4){E.box(T(0,1.25,fz+.008),.02,.115,.005,nkc);E.box(T(0,1.372,fz-.012),.026,.02,.01,nkc)}
   else if(L.nk===5||L.nk===11||L.nk===8){for(const s of[-1,1])E.ell(T(s*.038,1.37,.088),.038,.024,.012,nkc,null,1);E.ell(T(0,1.37,.094),.015,.015,.015,dk(nkc),null,1)}
-  else if(L.nk>0)E.lathe(T(0,0,-.012),[[1.39,.083,.078,nkc],[1.368,.09,.084,nkc]],16);
+  else if(L.nk>0)E.lathe(T(0,0,-.008),[[1.395,.088,.088,nkc],[1.368,.094,.092,nkc]],16);
   if(L.blt>0){E.lathe(T(0,0,-.008),[[1.018,.157,.105,dk(bc,.55)],[.98,.163,.11,dk(bc,.55)]],22);E.box(T(0,.999,.104),.022,.017,.004,[.9,.75,.25]);
     if(L.blt===2)for(const s of[-1,1]){const B=T(s*.08,.995,.1);E.ell(B,.023,.023,.023,[.9,.2,.25],(x,y)=>y>=0,1);E.ell(B,.023,.023,.023,[.97,.97,.99],(x,y)=>y<0,1)}}
   // prenda atada a la cintura: banda, nudo con las mangas por delante y la prenda cayendo por detrás

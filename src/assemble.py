@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.91.2";
+const GAME_VER="6.91.3";
 const NEWS=[
+{v:"2026-11-14-6.91.3",ver:"6.91.3",at:"2026-11-14T17:42",t:"🔧 Arreglos/Mejoras",l:["Tu compañero junto a la Poké Ball se ve ahora a su tamaño real comparado con tu entrenador: Charizard (1,7 m) es algo más alto que él y Pikachu (0,4 m) le llega por la rodilla","Los Pokémon gigantes (Wailord, Eternatus…) se limitan para que quepan en la pantalla, y los diminutos no bajan de un tamaño mínimo para que se vean"]},
 {v:"2026-11-14-6.91.2",ver:"6.91.2",at:"2026-11-14T17:28",t:"🔧 Arreglos/Mejoras",l:["Tu compañero junto a la Poké Ball vuelve a verse como antes: con su imagen animada, sin pixelar, respirando y dando algún saltito de vez en cuando","Vale para cualquier Pokémon que pongas de compañero; los pocos que no tienen imagen animada (Iron Valiant, Ogerpon, Pecharunt…) se ven con su imagen grande en alta definición"]},
 {v:"2026-11-14-6.91.1",ver:"6.91.1",at:"2026-11-14T17:24",t:"🔧 Arreglos/Mejoras",l:["Entrenador 3D: la visera de las gorras (normal, al revés y plana) ahora sale justo del borde de la gorra en toda su anchura; antes quedaba descolocada en los lados"]},
 {v:"2026-11-14-6.91",ver:"6.91",at:"2026-11-14T15:51",t:"🏞️ Paisaje en 3D en la pantalla principal",l:["Detrás del pueblo y de tu entrenador ahora hay un paisaje 3D: un valle con lago, colinas con bosques de pinos y árboles frondosos, rocas, montañas nevadas al fondo, nubes que se mueven y pájaros","La luz sigue la hora real: amanecer, día, atardecer y noche con luna y estrellas, y cambia poco a poco","El lago tiene olas, refleja el color del cielo y brilla con el sol","Para no gastar batería se queda quieto cuando hay una ventana abierta encima o la pestaña está oculta, y con «Animaciones ligeras» va más suave","Gorra al revés: ahora se ve más frente y por detrás baja hasta la nuca"]},

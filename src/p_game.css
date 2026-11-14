@@ -1135,3 +1135,4 @@ body.land3 #gBg .pcbg,body.land3 #gTod,body.land3 #gStars{display:none}
 @keyframes gbhop{0%,86%,100%{transform:none}89%{transform:translateY(-14px) scaleY(1.04)}92%{transform:translateY(0) scaleY(.94)}95%{transform:translateY(-6px)}98%{transform:none}}
 body.calm #gBud .gbst,body.glite #gBud .gbst{animation:none}
 #gBud .gbhd img{max-height:130px;margin:0!important}
+#gBud .gbst img{display:block}

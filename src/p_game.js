@@ -310,7 +310,26 @@ function gmHero(){const b=$("gBud");if(!b)return;let n=null;try{n=S.buddy&&S.own
   // el compañero se ve con su imagen animada de siempre (sin pixelar), respirando y dando algún saltito
   // (los pocos que no tienen imagen animada usan su imagen grande en alta definición, que tampoco se pixela)
   GM.bud={n:n,sh:sh,pm:null,at:0,el:null};const id=window._spr&&window._spr[n],noAni=id&&typeof SDNF!=="undefined"&&SDNF.has(id);
-  b.innerHTML='<div class="gbst'+(noAni?' gbhd':'')+'">'+(noAni&&typeof icoHD==="function"?icoHD(PM[n]||[n],92,false,sh):ico(PM[n]||[n],92,false,sh))+'</div>'}
+  b.innerHTML='<div class="gbst'+(noAni?' gbhd':'')+'">'+(noAni&&typeof icoHD==="function"?icoHD(PM[n]||[n],92,false,sh):ico(PM[n]||[n],92,false,sh))+'</div>';
+  const im=b.querySelector("img");if(im){if(im.complete&&im.naturalWidth)gmBudSize();else im.addEventListener("load",gmBudSize)}}
+// tamaño del compañero según su altura real, comparada con la del entrenador (que mide 1,45 m). Los muy grandes se
+// limitan para que quepan en la pantalla y los muy pequeños no bajan de un mínimo para que se vean bien.
+function gmBudSize(){const B=GM.bud,b=$("gBud"),im=b&&b.querySelector("img"),tr=$("gTr");if(!B||!im||!im.naturalWidth||!tr)return;
+  const h=typeof pkH==="function"?pkH(PM[B.n]||[B.n]):0;if(!h)return;const m=h/10,tb=tr.getBoundingClientRect();if(!tb.height)return;
+  const fig=tb.height*(tr.querySelector(".av3cv")?.86:.95),pxm=fig/1.45,sc=b.getBoundingClientRect().width/(b.offsetWidth||1)||1;
+  let px=m<=2.2?pxm*m:pxm*2.2*(1+Math.log2(m/2.2)*.18);px=Math.max(44,Math.min(px,fig*1.9,innerHeight*.42));
+  // contorno real del Pokémon dentro de la imagen (las imágenes traen huecos transparentes alrededor); se mide una vez
+  GM.bb=GM.bb||{};let bb=GM.bb[im.src];
+  if(bb===undefined){GM.bb[im.src]=null;const q=new Image();q.crossOrigin="anonymous";q.onload=()=>{try{const c=document.createElement("canvas"),W=c.width=Math.min(160,q.naturalWidth),H=c.height=Math.round(W*q.naturalHeight/q.naturalWidth),g=c.getContext("2d");g.drawImage(q,0,0,W,H);const d=g.getImageData(0,0,W,H).data;let x0=W,x1=0,y0=H,y1=0;
+      for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(d[(y*W+x)*4+3]>40){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}if(x1>x0&&y1>y0){GM.bb[q.src]={t:y0/H,b:(y1+1)/H,w:(x1-x0+1)/W}}}catch(e){}gmBudSize()};q.onerror=()=>{};q.src=im.src}
+  const hd=im.classList.contains("hd"),k=bb?bb.b-bb.t:hd?.84:.8;
+  // si la imagen animada (que es pequeña) tuviera que ampliarse más del triple se vería borrosa: se cambia por la grande en alta definición
+  if(!hd&&!B.hdTry&&px/(im.naturalHeight*k)>3.2&&typeof icoHD==="function"){B.hdTry=1;const w=document.createElement("div");w.innerHTML=icoHD(PM[B.n]||[B.n],92,false,B.sh);const ni=w.querySelector("img");
+    if(ni&&ni.classList.contains("hd")){ni.addEventListener("load",gmBudSize);im.replaceWith(ni);b.firstChild.classList.add("gbhd");return}}
+  const asp=bb?bb.w*im.naturalWidth/((bb.b-bb.t)*im.naturalHeight):hd?1:im.naturalWidth/im.naturalHeight,maxW=Math.min(fig*2.3,innerWidth*.34);if(px*asp>maxW)px=Math.max(44,maxW/asp);
+  const hh=Math.round(px/k/sc),set=(p,v)=>im.style.setProperty(p,v,"important");
+  set("max-height","none");set("width","auto");set("height",hh+"px");set("margin","0");set("margin-bottom",-Math.round(hh*(bb?1-bb.b:hd?.07:.04))+"px")}
+addEventListener("resize",()=>setTimeout(()=>{try{gmBudSize()}catch(e){}},250));
 function gmBudTick(dt){const B=GM.bud;if(!B||!B.pm||!B.el)return;const P=B.pm,a=P.Idle||P.Walk;if(!a)return;
   if(B.an!==a){B.an=a;const sc=P.sc*1.15;B.el.style.cssText="width:"+(a.fw*sc).toFixed(0)+"px;height:"+(a.fh*sc).toFixed(0)+"px;margin-bottom:"+(-(a.fh-1-a.bot)*sc).toFixed(0)+"px;background-image:url("+a.url+");background-size:"+(a.W*sc).toFixed(0)+"px "+(a.H*sc).toFixed(0)+"px";B.sc=sc}
   B.at+=hubCalm()?0:dt;const fr=pmdFrame(B.at,a);B.el.style.backgroundPosition=(-fr*a.fw*B.sc).toFixed(0)+"px 0px"}

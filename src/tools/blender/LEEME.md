@@ -6,7 +6,7 @@
     pip install bpy
     python src/tools/blender/build_trainer.py -- models
 
-Piezas: `base_m`, `base_f` (cuerpo con manos y dedos), `top0`…`top28`, `bot0`…`bot15`, `shoe0`…`shoe11`.
+Piezas: `head0`, `head1`, `head2` (cabeza con nariz y relieve: cara redonda, ovalada y cuadrada), `base_m`, `base_f` (cuerpo con manos y dedos), `top0`…`top28`, `bot0`…`bot15`, `shoe0`…`shoe11`.
 Los números son los mismos que los de las opciones del editor de aspecto.
 
 Cada objeto se llama `segmento.color.nombre[.etiqueta]`:

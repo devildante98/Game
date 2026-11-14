@@ -6,7 +6,7 @@
 // pinta pegada al relieve de la cabeza, y el pelo, los gorros y los complementos se acoplan encima.
 // Las figuras pequeñas del mapa siguen saliendo del modelo de siempre: a ese tamaño no se nota y no descarga nada.
 // =====================================================================================
-const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"1",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
+const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"2",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
 function av3mParse(buf){const dv=new DataView(buf);let off=12,json=null,bin=null;
   while(off<dv.byteLength){const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),ch=buf.slice(off+8,off+8+len);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(ch));else bin=ch;off+=8+len}
   const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],o=(bv.byteOffset||0)+(a.byteOffset||0),n=a.count*{SCALAR:1,VEC3:3}[a.type];
@@ -26,9 +26,11 @@ function av3mPump(){while(AV3M.busy<3&&AV3M.q.length){const n=AV3M.q.shift();AV3
 // cuando llega una pieza, lo que se dibujó con el modelo de siempre se vuelve a dibujar
 function av3mFresh(){clearTimeout(AV3M.t);AV3M.t=setTimeout(()=>{try{AV3S.url={};AV3S.n=0;for(const k in AV3V)if(AV3V[k])AV3V[k].sig=null;if(typeof GM!=="undefined"&&GM){GM.look=null;GM.town="";dispatchEvent(new Event("resize"))}if(document.getElementById("trPrev")&&typeof trUI==="function"&&!document.getElementById("av3Big"))trUI()}catch(e){}},150)}
 // ¿hay alguna pieza de este aspecto todavía descargándose?
-function av3mWait(L){if(av3mReady(L))return false;const dress=[4,23,26].includes(L.top);return["tr_meta",L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs].concat(dress?[]:["bot"+L.bot]).every(n=>AV3M.st[n]===1||AV3M.st[n]===2)}
+function av3mWait(L){if(av3mReady(L))return false;return av3mNeed(L).every(n=>AV3M.st[n]===1||AV3M.st[n]===2)}
 function av3mGet(n){const s=AV3M.st[n];if(s===2)return true;if(!s){AV3M.st[n]=1;AV3M.q.push(n);av3mPump()}return false}
-function av3mReady(L){if(typeof fetch!=="function")return false;const dress=[4,23,26].includes(L.top);let ok=true;for(const n of["tr_meta",L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs].concat(dress?[]:["bot"+L.bot]))if(!av3mGet(n))ok=false;return ok}
+// piezas que necesita un aspecto: datos, cabeza (según la forma de la cara), cuerpo, parte de arriba, calzado y parte de abajo
+function av3mNeed(L){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0),L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs].concat([4,23,26].includes(L.top)?[]:["bot"+L.bot])}
+function av3mReady(L){if(typeof fetch!=="function")return false;let ok=true;for(const n of av3mNeed(L))if(!av3mGet(n))ok=false;return ok}
 // ---------- el modelo ----------
 function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][0]),W=[1,1,1],K=[.1,.09,.12],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k),I=m4I();
   const sk=P("skin",L.sk),hc=P("hair",L.hc),ec=P("eye",L.ec),tc=P("cl",L.tc),ac=P("cl",L.ac),bc=P("cl",L.bc),shc=P("cl",L.sh),hac=P("cl",L.hac),bpc=P("cl",L.bpc),nkc=P("cl",L.nkc),glc=P("cl",L.glc),pcc=P("cl",L.pc),sckc=P("cl",L.sckc),wrc=P("cl",L.wrc);
@@ -44,27 +46,28 @@ function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k]
   const hcy=pv.head[2],hr=pv.hr,MH=rot(I,[0,1.42,0],Math.sin(t*.9)*.012+(pose==="l"?.34:0),0);
   // ----- piezas -----
   const stripes=top===14||L.pat===1,sc2=top===14?ac:pcc,tights=L.sck===3?av3Mix(sk,sckc,.8):null;
-  const put=(parts,isBase)=>{for(const p of parts){let c=COL[p.slot]||[1,0,1],cf=null;
+  // pelo rapado y barba van pintados sobre la propia cabeza (siguen su forma exacta)
+  const thinH=[5,10,27].includes(L.hs)?av3Mix(sk,hc,.6):null,beardC=L.brd===1?av3Mix(sk,hc,.3):L.brd===4||L.brd===6?hc:null;
+  const headCf=thinH||beardC?(y,x,z)=>{const v=(y-hcy)/hr[2],u=Math.abs(x/hr[0]),w=z/hr[1];if(beardC&&v<-.44&&w>-.02&&!(u<.27&&v>-.8))return beardC;if(thinH&&v>(w>0?-.36+w:-.36+w*.55))return thinH;return sk}:null;
+  const put=(parts,isBase)=>{for(const p of parts){let c=COL[p.slot]||[1,0,1],cf=null;if(p.name==="head"&&headCf)cf=headCf;
       if(isBase&&p.tag){if(p.tag==="torso"&&!showTorso)continue;if(hide[p.tag])continue;if(p.tag==="foot"&&!ms.foot)continue;
         if(p.tag==="palm"&&[1,2,4].includes(L.glv))c=glc;else if(p.tag==="finger"&&[2,4].includes(L.glv))c=glc;else if(p.tag==="farm"&&L.glv===4)c=glc;else if(tights&&(p.tag==="thigh"||p.tag==="shin"||p.tag==="foot"))c=tights}
       if(stripes&&p.slot==="top"&&(p.seg==="body"||p.name.indexOf("sleeve")===0))cf=y=>Math.floor((y-.9)/.055)%2?sc2:tc;
       E.mesh(p.seg==="head"?MH:MS[p.seg]||G,p.P,p.N,p.I,c,cf)}};
-  put(AV3M.pc[girl?"base_f":"base_m"],true);put(TP);if(!dress)put(AV3M.pc["bot"+L.bot]);put(AV3M.pc["shoe"+L.shs]);
+  const fsn=L.fs===1||L.fs===2?L.fs:0;put(AV3M.pc["head"+fsn]);put(AV3M.pc[girl?"base_f":"base_m"],true);put(TP);if(!dress)put(AV3M.pc["bot"+L.bot]);put(AV3M.pc["shoe"+L.shs]);
   // ----- cara -----
-  const fg=meta.face,zAt=(x,y)=>{const gx=(x-fg.x0)/fg.d,gy=(y-fg.y0)/fg.d,ix=Math.max(0,Math.min(fg.g[0].length-2,Math.floor(gx))),iy=Math.max(0,Math.min(fg.g.length-2,Math.floor(gy))),fx=Math.max(0,Math.min(1,gx-ix)),fy=Math.max(0,Math.min(1,gy-iy)),v=(a,b)=>fg.g[b][a]==null?.02:fg.g[b][a];
+  const fg=meta.faces[fsn],zAt=(x,y)=>{const gx=(x-fg.x0)/fg.d,gy=(y-fg.y0)/fg.d,ix=Math.max(0,Math.min(fg.g[0].length-2,Math.floor(gx))),iy=Math.max(0,Math.min(fg.g.length-2,Math.floor(gy))),fx=Math.max(0,Math.min(1,gx-ix)),fy=Math.max(0,Math.min(1,gy-iy)),v=(a,b)=>fg.g[b][a]==null?.02:fg.g[b][a];
       return(v(ix,iy)*(1-fx)+v(ix+1,iy)*fx)*(1-fy)+(v(ix,iy+1)*(1-fx)+v(ix+1,iy+1)*fx)*fy};
   av3mFace(E,L,{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W});
   // ----- pelo y gorro (formas de siempre, acopladas a la cabeza nueva) -----
   const k0=hr[0]/.114,HM=m4S(m4T(MH,0,hcy,0),k0),hk=typeof chHatKind==="function"?chHatKind(L.hat):"",hatOn=["cap","beanie","wide","top","hard"].includes(hk),hx=.114,hy=.128,hz=.118;
-  av3Hair(E,L,{HM,hrx:hx,hry:hy,hrz:hz,hc,sk,hac,hatOn,zs:(x,y)=>zAt(x*k0,hcy+y*k0)/k0});
+  av3Hair(E,L,{HM,hrx:hx,hry:hy,hrz:hz,hc,sk,hac,hatOn,noThin:1,zs:(x,y)=>zAt(x*k0,hcy+y*k0)/k0});
   av3Hat(E,L,{HM,hrx:hx,hry:hy,hrz:hz,hac,hc,ac,hk});
   // barba
   if(L.brd===2||L.brd===6)E.ell(m4T(MH,0,hcy-.93*hr[2],zAt(0,hcy-.9*hr[2])-.004),.03,.03,.018,hc,null,1);
   if(L.brd===3||L.brd===4||L.brd===6)for(const s of[-1,1])E.ell(m4T(MH,s*.026,hcy-.6*hr[2],zAt(s*.026,hcy-.6*hr[2])+.002),.03,.011,.008,hc,null,1);
-  if(L.brd===4||L.brd===6)E.ell(m4T(HM,0,-.055,.008),hx*.99,hy*.84,hz*1.02,hc,(x,y,z)=>y<-.22&&z>-.15&&!(y>-.6&&Math.abs(x)<.34&&z>.5));
-  if(L.brd===6)E.ell(m4T(HM,0,-.19,.05),.05,.065,.04,hc);
+  if(L.brd===6)E.ell(m4T(MH,0,hcy-1.04*hr[2],zAt(0,hcy-.92*hr[2])-.035),.06,.075,.05,hc);
   if(L.brd===5)for(const s of[-1,1])E.ell(m4T(HM,s*hx*.96,-.05,.03),.012,.05,.03,hc,null,1);
-  if(L.brd===1)E.ell(m4T(HM,0,-.058,.006),hx*.74,hy*.74,hz*.9,av3Mix(sk,hc,.3),(x,y,z)=>y<-.3&&z>.05&&!(y>-.55&&Math.abs(x)<.3&&z>.6));
   // gafas
   const shades=L.gl===3||L.hat===7||L.hat===13;
   if(L.gl>0||shades){const gc=L.gl===6?[.9,.75,.25]:L.gl===7?[.9,.3,.5]:[.12,.12,.15],one=L.gl===5||L.gl===6,EY=hcy-.2*hr[2],gz=zAt(.078,EY)+.03;
@@ -142,8 +145,6 @@ function av3mFace(E,L,C){const{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W}=C,B0=.0036,
   const wp=(x,y,l)=>[x,y,zAt(x,y)+B0+l*DZ],wel=(cx,cy,rx,ry,l,n)=>{const R=[wp(cx,cy,l)];n=n||14;for(let i=0;i<n;i++){const a=i/n*PI*2;R.push(wp(cx+Math.cos(a)*rx,cy+Math.sin(a)*ry,l))}return R};
   if(L.bl===3){const y=EY-.085;E.strip(MH,[wp(.075,y+.014,1),wp(.125,y+.004,1)],[wp(.077,y-.006,1),wp(.127,y-.016,1)],[.95,.85,.7])}
   if(L.bl===4)E.fan(MH,wel(.07,EY-.115,.0055,.0055,1,8),dk(sk,.62));
-  // nariz: una sombra pequeña
-  {const ny=hcy-.47*hr[2];E.fan(MH,[wp(0,ny+.012,1),wp(-.007,ny,1),wp(.007,ny,1)],dk(sk,.17))}
   // boca
   {const my=hcy-.7*hr[2],lip=[1,4].includes(L.mk),mc=lip?mkc:dk(sk,.52),mo=L.mo,th=lip?.0048:.0034,line=(w,f)=>{const A=[],Bq=[];for(let i=0;i<=12;i++){const u=-w+2*w*i/12,v=my+f(u/w);A.push(wp(u,v+th,1));Bq.push(wp(u,v-th,1))}E.strip(MH,A,Bq,mc)};
     if(mo===2||mo===4&&false){}

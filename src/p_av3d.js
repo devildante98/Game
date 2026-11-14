@@ -77,11 +77,11 @@ function av3Hair(E,L,C){const hs=L.hs;if(hs===22)return;
   const cz=!!C.flat,ly=y=>cz&&y<-.105?-.0625+.4*y:y,kl=cz?.55:1;
   const thin=av3Mix(sk,hc,.6),line=(x,y,z)=>y>(z>0?-.36+z:-.36+z*.55);
   const shell=()=>E.ell(top?m4T(HM,0,.006,-.006):HM,hrx*1.13,hry*(top?1.17:1.12),hrz*(top?1.15:1.12),hc,line);
-  const burns=()=>{for(const s of[-1,1])lock(s*hrx*1.0,-.035,.03,.022,.07,.045,0,s*.12)};
+  const burns=()=>{for(const s of[-1,1]){if(C.noThin)lock(s*hrx*.98,-.022,.05,.011,.05,.026,0,s*.08);else lock(s*hrx*1.0,-.035,.03,.022,.07,.045,0,s*.12)}};
   const nape=n=>{for(let k=0;k<n;k++){const a=PI*1.5+(k/(n-1)-.5)*1.7;spike([Math.cos(a)*hrx*1.02,-.045,Math.sin(a)*hrz*1.02],[Math.cos(a)*.35,-1,Math.sin(a)*.45],.05,.034,k%2?h2:hc)}};
   // ----- casos que no llevan casco de pelo normal -----
-  if(hs===5){E.ell(HM,hrx*1.03,hry*1.03,hrz*1.03,thin,line);return}
-  if(hs===10){E.ell(HM,hrx*1.03,hry*1.03,hrz*1.03,thin,line);if(top)for(let k=0;k<8;k++){const t=k/7,f=-1.0+t*2.7;spike([0,Math.cos(f)*hry*.98,-Math.sin(f)*hrz*.98],[0,Math.cos(f)+.3,-Math.sin(f)-.1],.11-Math.abs(t-.4)*.06,.038,k%2?h2:hc)}
+  if(hs===5){if(!C.noThin)E.ell(HM,hrx*1.03,hry*1.03,hrz*1.03,thin,line);return}
+  if(hs===10){if(!C.noThin)E.ell(HM,hrx*1.03,hry*1.03,hrz*1.03,thin,line);if(top)for(let k=0;k<8;k++){const t=k/7,f=-1.0+t*2.7;spike([0,Math.cos(f)*hry*.98,-Math.sin(f)*hrz*.98],[0,Math.cos(f)+.3,-Math.sin(f)-.1],.11-Math.abs(t-.4)*.06,.038,k%2?h2:hc)}
     else nape(4);return}
   if(hs===9){if(top){E.ell(m4T(HM,0,.035,-.012),hrx*1.5,hry*1.42,hrz*1.5,hc,(x,y,z)=>!(z>.52&&y<.3)&&y>-.62);
       for(let k=0;k<30;k++){const a=k*2.4,e=-.35+((k*7)%10)/10*1.8,ce=Math.cos(e);if(Math.sin(a)*ce>.45&&e<.55)continue;ball(Math.cos(a)*ce*hrx*1.45,.035+Math.sin(e)*hry*1.37,-.012+Math.sin(a)*ce*hrz*1.45,.042,k%2?h2:hc)}}
@@ -90,7 +90,7 @@ function av3Hair(E,L,C){const hs=L.hs;if(hs===22)return;
     for(const[e,n]of[[1.25,3],[.8,7],[.35,10],[-.08,9],[-.42,6]]){if(!top&&e>.1)continue;for(let k=0;k<n;k++){const a=(e<0?PI-.25+k/(n-1)*(PI+.5):k/n*PI*2+e),p=on(a,e,1.13);if(e>=0&&e<.6&&Math.sin(a)>.5)continue;ball(p[0],p[1],p[2],.04,(k+n)%2?h2:hc)}}
     if(top)for(let k=0;k<5;k++){const u=(k/4-.5)*2,x=u*.082;ball(x,.078-Math.abs(u)*.012,zs(x,.07)+.018,.031,k%2?hc:h2)}return}
   // ----- casco -----
-  if(hs===27){E.ell(HM,hrx*1.03,hry*1.03,hrz*1.03,thin,line);E.ell(m4T(HM,-.006,.012,-.004),hrx*1.1,hry*1.17,hrz*1.14,hc,(x,y,z)=>y>.3);if(top){lock(-.03,.118,.02,.085,.04,.1,-.1,.22);lock(-.05,.1,.085,.07,.034,.045,.35,.35,h2)}}
+  if(hs===27){if(!C.noThin)E.ell(HM,hrx*1.03,hry*1.03,hrz*1.03,thin,line);if(top){E.ell(m4T(HM,-.006,.012,-.004),hrx*1.1,hry*1.17,hrz*1.14,hc,(x,y,z)=>y>.3);lock(-.03,.118,.02,.085,.04,.1,-.1,.22);lock(-.05,.1,.085,.07,.034,.045,.35,.35,h2)}}
   else shell();
   // ----- melena: mechones alrededor (dejando la cara libre); las largas siguen por la espalda -----
   const LEN0={2:-.2,7:-.105,11:-.15,16:-.125,17:-.42,19:-.1,23:-.19,24:-.5,28:-.36,30:-.3,32:-.13,26:-.1}[hs],LEN=LEN0==null?null:ly(LEN0),LS=ly(-.2),wave=[17,30,32].includes(hs)?3:0,g=hs===16?.9:1.04;

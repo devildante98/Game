@@ -163,29 +163,78 @@ def lerp_tab(T, z):
 
 
 # ================================================================ CUERPO BASE
-def head_shape(x, y, z, k=1.0):
+# Formas de la cara (opción del editor): 0 redonda, 1 ovalada, 2 cuadrada.
+#   wx ancho · taper/tp cuánto y cómo se estrecha hacia la barbilla · chin largo de la parte baja ·
+#   cheek mejillas · jaw ángulo de la mandíbula · chinw ancho de la barbilla
+FS = {0: dict(wx=1.0, taper=0.4, tp=1.9, chin=0.95, cheek=0.1, jaw=0.0, chinw=1.0),
+      1: dict(wx=0.93, taper=0.52, tp=1.55, chin=1.06, cheek=0.03, jaw=0.0, chinw=0.8),
+      2: dict(wx=1.03, taper=0.3, tp=2.7, chin=0.98, cheek=0.04, jaw=0.13, chinw=1.3)}
+
+
+def head_shape(x, y, z, f):
+    """De la esfera unidad a la cabeza: cráneo redondo, mandíbula según la forma elegida, barbilla adelantada
+    y relieve en la cara (frente, arco de las cejas, cuencas de los ojos, pómulos, boca y barbilla)."""
+    g = lambda a, s: math.exp(-(a / s) ** 2)
+    fwd = 0.0
     if z < 0:
         t = -z
-        x *= 1 - 0.46 * t ** 1.7
-        y *= (1 - 0.2 * t ** 1.6) if y < 0 else (1 - 0.5 * t ** 1.3)
-        if y < 0:
-            x *= 1 + 0.07 * math.exp(-((z + 0.38) / 0.24) ** 2)
-    if y < -0.2:
-        y *= 1 - 0.07 * (1 - min(1, abs(x) * 1.6))
-    return Vector((HC.x + x * HR[0] * k, HC.y + y * HR[1] * k, HC.z + z * HR[2] * k))
+        x *= 1 - f["taper"] * t ** f["tp"]
+        y *= (1 - 0.1 * t ** 1.8) if y < 0 else (1 - 0.5 * t ** 1.3)
+        if y < 0.15:
+            x *= 1 + f["cheek"] * g(z + 0.4, 0.26) + f["jaw"] * g(z + 0.7, 0.2)
+        fwd = 0.34 * t ** 1.6          # la parte baja de la cabeza se adelanta: la barbilla queda bajo la cara
+        z *= f["chin"]
+    x *= f["wx"]
+    p = Vector((HC.x + x * HR[0], HC.y + (y - fwd) * HR[1], HC.z + z * HR[2]))
+    if y < 0:
+        w = min(1.0, -y * 1.7) ** 1.5
+        u, v = p.x / HR[0], (p.z - HC.z) / HR[2]
+        au = abs(u)
+        d = 0.007 * g(v - 0.36, 0.3) * g(u, 0.75)            # frente
+        d += 0.0075 * g(v - 0.01, 0.075) * g(au - 0.36, 0.32)  # arco de las cejas
+        d -= 0.0075 * g(v + 0.2, 0.13) * g(au - 0.42, 0.2)     # cuencas de los ojos
+        d += 0.01 * g(v + 0.5, 0.2) * g(au - 0.5, 0.26)        # pómulos
+        d += 0.009 * g(v + 0.71, 0.13) * g(u, 0.36)            # boca
+        d += 0.012 * g(v + 0.95, 0.14) * g(u, 0.3 * f["chinw"])  # barbilla
+        p.y -= d * w
+    return p
+
+
+def heads():
+    META["faces"] = {}
+    for fs, f in FS.items():
+        reset()
+        V, F = sphere(64, 40)
+        ho = mk("head", [head_shape(v.x, v.y, v.z, f) for v in V], F, "skin", "head", ss=0)
+        for s in (1, -1):
+            V2, F2 = sphere(12, 8)
+            mk("ear" + "LR"[s < 0], [Vector((s * (HR[0] * f["wx"] * 0.965) + v.x * 0.026, 0.03 + v.y * 0.034, HC.z - 0.03 + v.z * 0.052)) for v in V2], F2, "skin", "head", ss=0)
+        dg = bpy.context.evaluated_depsgraph_get()
+        he = ho.evaluated_get(dg)
+        front = lambda x, z: he.ray_cast(Vector((x, -1.0, z)), Vector((0, 1, 0)))
+        # nariz: cuña pequeña y afilada que nace entre los ojos y acaba en punta
+        yf = lambda z: front(0, z)[1].y
+        zb, zm, zt = HC.z - 0.1 * HR[2], HC.z - 0.3 * HR[2], HC.z - 0.47 * HR[2]
+        V2, F2 = tube([(0, yf(zb) + 0.012, zb + 0.01), (0, yf(zb) + 0.002, zb), (0, yf(zm) - 0.01, zm), (0, yf(zt) - 0.026, zt), (0, yf(zt - 0.022) + 0.006, zt - 0.024)],
+                      [(0.008, 0.004), (0.011, 0.006), (0.014, 0.011), (0.0165, 0.013), (0.012, 0.006)], X, 8, 2.0)
+        mk("nose", V2, F2, "skin", "head", ss=2)
+        grid = []
+        for iz in range(46):
+            row = []
+            for ix in range(41):
+                hit, loc, _, _ = front(-0.2 + ix * 0.01, 1.39 + iz * 0.01)
+                row.append(round(-loc.y, 4) if hit else None)
+            grid.append(row)
+        META["faces"][str(fs)] = {"x0": -0.2, "y0": 1.39, "d": 0.01, "g": grid}
+        save(f"head{fs}")
 
 
 def base(girl):
     reset()
     ak = 0.86 if girl else 1.0      # grosor de brazos
     lk = 0.92 if girl else 1.0      # grosor de piernas
-    V, F = sphere(32, 20)
-    ho = mk("head", [head_shape(*v) for v in V], F, "skin", "head", ss=0)
-    for s in (1, -1):
-        V2, F2 = sphere(10, 7)
-        mk("ear" + "LR"[s < 0], [Vector((s * (HR[0] * 0.97) + v.x * 0.026, 0.025 + v.y * 0.034, HC.z - 0.03 + v.z * 0.052)) for v in V2], F2, "skin", "head", ss=0)
     nk = 0.9 if girl else 1.0
-    V, F = tube([(0, 0.014, 1.31), (0, 0.014, 1.39), (0, 0.012, 1.47)], [(0.058 * nk, 0.056 * nk), (0.05 * nk, 0.05 * nk), (0.054 * nk, 0.054 * nk)], X, 12, cap0=False, cap1=False)
+    V, F = tube([(0, 0.014, 1.31), (0, 0.014, 1.39), (0, 0.016, 1.47), (0, 0.02, 1.56)], [(0.058 * nk, 0.056 * nk), (0.05 * nk, 0.05 * nk), (0.052 * nk, 0.052 * nk), (0.056 * nk, 0.056 * nk)], X, 12, cap0=False, cap1=True)
     mk("neck", V, F, "skin", "body")
     # torso
     T = [(0.86, 0.135, 0.09), (0.93, 0.15, 0.098), (1.0, 0.134, 0.086), (1.1, 0.146, 0.094), (1.2, 0.162, 0.1), (1.27, 0.168, 0.098), (1.31, 0.14, 0.086), (1.345, 0.075, 0.062)]
@@ -239,17 +288,7 @@ def base(girl):
     both("foot", turned(V, FA, SX, SY), F, "skin", "legL", "legR", tag="foot")
     piece = "base_f" if girl else "base_m"
     save(piece)
-    if not girl:      # relieve de la cara y perfiles para lo que el juego dibuja encima
-        dg = bpy.context.evaluated_depsgraph_get()
-        he = ho.evaluated_get(dg)
-        grid = []
-        for iz in range(44):
-            row = []
-            for ix in range(41):
-                hit, loc, _, _ = he.ray_cast(Vector((-0.2 + ix * 0.01, -1.0, 1.41 + iz * 0.01)), Vector((0, 1, 0)))
-                row.append(round(-loc.y, 4) if hit else None)
-            grid.append(row)
-        META["face"] = {"x0": -0.2, "y0": 1.41, "d": 0.01, "g": grid}
+    if not girl:      # perfiles para lo que el juego dibuja encima
         META["torso"] = T
         META["leg"] = [[p[2], p[0], p[1], r[0], r[1]] for p, r in zip(P, R)]
 
@@ -629,6 +668,7 @@ def bottom(n):
 
 
 # ================================================================ generar todo
+heads()
 base(False)
 base(True)
 for n in range(29):

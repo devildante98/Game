@@ -12,7 +12,12 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     // luz del sol + cielo (hemisférica), y niebla que se mezcla con el color del horizonte según la distancia
     gl.attachShader(pr,sh(gl.VERTEX_SHADER,"attribute vec3 p;attribute vec3 n;attribute vec3 c;uniform mat4 m;uniform vec3 L;uniform vec3 amb;uniform vec3 gnd;uniform vec3 sun;uniform vec2 fog;varying vec3 vc;varying float vf;void main(){vec4 q=m*vec4(p,1.);gl_Position=q;float u=step(.01,dot(n,n));vec3 nn=normalize(n+vec3(0.,.0001,0.));float d=max(dot(nn,L),0.);vec3 a=mix(gnd,amb,nn.y*.5+.5);vc=mix(c,c*(a+sun*d),u);vf=u*clamp((q.w-fog.x)/(fog.y-fog.x),0.,1.);vf=vf*vf*(3.-2.*vf);}"));
     gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,"precision mediump float;varying vec3 vc;varying float vf;uniform vec3 fogc;void main(){gl_FragColor=vec4(mix(vc,fogc,vf*.88),1.);}"));
+    gl.bindAttribLocation(pr,0,"p");gl.bindAttribLocation(pr,1,"n");gl.bindAttribLocation(pr,2,"c");
     gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return null}catch(e){return null}
+  // segundo programa, para las nubes: colores con transparencia (bordes difuminados), sin luz
+  let prC=null;try{prC=gl.createProgram();gl.attachShader(prC,sh(gl.VERTEX_SHADER,"attribute vec3 p;attribute vec4 c;uniform mat4 m;varying vec4 vc;void main(){gl_Position=m*vec4(p,1.);vc=c;}"));
+    gl.attachShader(prC,sh(gl.FRAGMENT_SHADER,"precision mediump float;varying vec4 vc;void main(){gl_FragColor=vc;}"));gl.bindAttribLocation(prC,0,"p");gl.bindAttribLocation(prC,1,"c");gl.linkProgram(prC);if(!gl.getProgramParameter(prC,gl.LINK_STATUS))prC=null}catch(e){prC=null}
+  const uMC=prC&&gl.getUniformLocation(prC,"m"),CB={a:new Float32Array(150000*7),n:0,vbo:gl.createBuffer()};
   gl.useProgram(pr);const U=k=>gl.getUniformLocation(pr,k),uM=U("m"),uL=U("L"),uA=U("amb"),uG=U("gnd"),uS=U("sun"),uF=U("fog"),uFc=U("fogc"),aP=gl.getAttribLocation(pr,"p"),aN=gl.getAttribLocation(pr,"n"),aC=gl.getAttribLocation(pr,"c");
   gl.enableVertexAttribArray(aP);gl.enableVertexAttribArray(aN);gl.enableVertexAttribArray(aC);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);
   // dos búferes: lo fijo (relieve, árboles) y lo que se mueve (cielo, agua, nubes, pájaros)
@@ -80,7 +85,28 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     gl.bindBuffer(gl.ARRAY_BUFFER,ST.vbo);gl.bufferData(gl.ARRAY_BUFFER,ST.a.subarray(0,ST.n*9),gl.STATIC_DRAW)};
   // ---------- lo que se mueve ----------
   const hash=n=>{const x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
-  const CL=[];for(let i=0;i<14;i++)CL.push({x:(hash(i)-.5)*900,y:70+hash(i+3)*60,z:260+hash(i+7)*220,s:18+hash(i+9)*26,v:1.2+hash(i+11)*1.6});
+  // nubes: cada una es un cúmulo de bolas difuminadas, con la base plana y la copa abultada; unas cerca y otras lejos
+  const CL=[];for(let i=0;i<22;i++){const z=260+hash(i+7)*300,s=(13+hash(i+9)*15)*(.75+z/650),n=9+Math.floor(hash(i+5)*9),P=[];
+    for(let k=0;k<n;k++){const u=(k/(n-1)-.5)*2,mid=1-u*u;P.push({dx:u*s*1.25+(hash(i*31+k)-.5)*s*.25,dy:mid*s*.42*(.6+hash(i*17+k)*.7),r:s*(.28+mid*.32)*(.75+hash(i*13+k)*.5)})}
+    for(let k=0;k<Math.floor(n/2);k++)P.push({dx:(hash(i*41+k)-.5)*s*1.2,dy:s*(.35+hash(i*43+k)*.35),r:s*(.22+hash(i*47+k)*.18)});
+    CL.push({x:(i/22-.5)*1400+(hash(i)-.5)*40,y:88+hash(i+3)*70+z*.12,z,s,v:.9+hash(i+11)*1.4,P})}
+  const cloudPass=(t,P,VP)=>{if(!prC)return;CB.n=0;const A=CB.a,top=P.top,hor=P.hor,night=P.star>.5;
+    const lit=night?mix(top,[.75,.8,.95],.35):mix([1,1,1],P.sunCol,.25),shade=night?mix(top,[0,0,0],.25):mix(mix(hor,top,.35),[.55,.58,.68],.35),aMax=night?.7:1;
+    const V4=(x,y,z,c,a)=>{if(CB.n>=150000)return;const i=CB.n*7;A[i]=x;A[i+1]=y;A[i+2]=z;A[i+3]=c[0];A[i+4]=c[1];A[i+5]=c[2];A[i+6]=a;CB.n++};
+    for(const k of CL){const x0=((k.x+t*k.v+700)%1400)-700,far=Math.min(1,(k.z-230)/330),fogK=.15+far*.45;
+      // de las bolas de abajo a las de arriba: abajo más oscuras, arriba con la luz del sol
+      const order=k.P.slice().sort((a,b)=>a.dy-b.dy);
+      for(const b of order){const cx=x0+b.dx,cy=k.y+b.dy,r=b.r,hgt=Math.min(1,Math.max(0,b.dy/(k.s*.7))),seg=18;
+        const cc=mix(mix(shade,lit,.25+hgt*.75),hor,fogK*.7),ce=mix(cc,hor,.25),a0=aMax*(1-far*.35);
+        for(let s2=0;s2<seg;s2++){const t0=s2/seg*6.283,t1=(s2+1)/seg*6.283,sy=Math.sin(t0)<0?.62:1,sy1=Math.sin(t1)<0?.62:1;
+          // cada bola: centro opaco y borde transparente (con un anillo intermedio para que el difuminado sea suave)
+          const p0=[cx+Math.cos(t0)*r*.82,cy+Math.sin(t0)*r*.82*sy,k.z],p1=[cx+Math.cos(t1)*r*.82,cy+Math.sin(t1)*r*.82*sy1,k.z],q0=[cx+Math.cos(t0)*r,cy+Math.sin(t0)*r*sy,k.z],q1=[cx+Math.cos(t1)*r,cy+Math.sin(t1)*r*sy1,k.z];
+          V4(cx,cy,k.z,cc,a0);V4(p0[0],p0[1],p0[2],cc,a0*.95);V4(p1[0],p1[1],p1[2],cc,a0*.95);
+          V4(p0[0],p0[1],p0[2],cc,a0*.95);V4(q0[0],q0[1],q0[2],ce,0);V4(q1[0],q1[1],q1[2],ce,0);V4(p0[0],p0[1],p0[2],cc,a0*.95);V4(q1[0],q1[1],q1[2],ce,0);V4(p1[0],p1[1],p1[2],cc,a0*.95)}}}
+    gl.useProgram(prC);gl.uniformMatrix4fv(uMC,false,VP);gl.bindBuffer(gl.ARRAY_BUFFER,CB.vbo);gl.bufferData(gl.ARRAY_BUFFER,A.subarray(0,CB.n*7),gl.DYNAMIC_DRAW);
+    gl.disableVertexAttribArray(2);gl.vertexAttribPointer(0,3,gl.FLOAT,false,28,0);gl.vertexAttribPointer(1,4,gl.FLOAT,false,28,12);
+    gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);gl.drawArrays(gl.TRIANGLES,0,CB.n);gl.depthMask(true);gl.disable(gl.BLEND);
+    gl.enableVertexAttribArray(2);gl.useProgram(pr)};
   const buildDyn=(t,P)=>{B=DY;B.n=0;const top=P.top,hor=P.hor,low=P.low,sun=P.sunDir;
     // cúpula del cielo: degradado de arriba al horizonte y un halo alrededor del sol
     const R=700,sd=[sun[0],sun[1],sun[2]];const skyC=(dx,dy,dz)=>{const h=Math.max(0,dy);let c=mix(hor,top,Math.min(1,Math.pow(h,.55)));if(dy<0)c=mix(hor,low,Math.min(1,-dy*4));const dd=dx*sd[0]+dy*sd[1]+dz*sd[2];if(dd>0)c=mix(c,P.sunCol,Math.pow(dd,18)*.6+Math.pow(dd,3)*.12);return c};
@@ -90,10 +116,6 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     {const c=[EYE[0]+sd[0]*600,EYE[1]+sd[1]*600*.55+20,EYE[2]+sd[2]*600],r=P.star>.5?14:20,col=P.sunCol;for(let k=0;k<16;k++){const a0=k/16*6.283,a1=(k+1)/16*6.283;ut(c,[c[0]+Math.cos(a0)*r,c[1]+Math.sin(a0)*r,c[2]],[c[0]+Math.cos(a1)*r,c[1]+Math.sin(a1)*r,c[2]],col)}}
     // estrellas
     if(P.star>.05)for(let i=0;i<260;i++){const u=hash(i)*6.283,v=.08+hash(i+7)*1.3,cv=Math.cos(v),x=EYE[0]+Math.sin(u)*cv*650,y=EYE[1]+Math.sin(v)*650*.55,z=EYE[2]+Math.cos(u)*cv*650,s=.9+hash(i+3)*1.4,c=mix(top,[1,1,1],P.star*(.55+.45*Math.sin(t*1.7+i)));ut([x-s,y,z],[x+s,y,z],[x,y+s*1.6,z],c);ut([x-s,y,z],[x,y-s*1.6,z],[x+s,y,z],c)}
-    // nubes: grupos de bolas suaves que se desplazan despacio
-    const cw=P.star>.5?mix(top,[1,1,1],.2):mix([1,1,1],P.sunCol,.15),cs=mix(cw,hor,.35);
-    for(const k of CL){const x=((k.x+t*k.v+900)%1800)-900;for(let b=0;b<5;b++){const bx=x+(b-2)*k.s*.55,by=k.y+Math.sin(b*1.7)*k.s*.12,r=k.s*(.45+.25*Math.sin(b*2.3+1)),seg=10;
-        for(let s=0;s<seg;s++){const a0=s/seg*6.283,a1=(s+1)/seg*6.283;ut([bx,by,k.z],[bx+Math.cos(a0)*r,by+Math.sin(a0)*r*.55,k.z],[bx+Math.cos(a1)*r,by+Math.sin(a1)*r*.55,k.z],cw,Math.sin(a0)>0?cw:cs,Math.sin(a1)>0?cw:cs)}}}
     // lago: olas, color del cielo y brillo del sol
     const wl=-.2,wc=P.water,whi=P.waterHi;for(let j=0;j<26;j++){const z0=40+j*4.6,z1=z0+4.6;for(let i=0;i<30;i++){const x0=-75+i*5,x1=x0+5,w=(x,z)=>wl+.18*Math.sin(x*.25+t*1.1)+.12*Math.sin(z*.31-t*1.4+x*.1);
         const col=(x,z)=>{const vx=x-EYE[0],vz=z-EYE[2],l=Math.hypot(vx,EYE[1],vz),fres=Math.min(1,.25+Math.pow(1-EYE[1]/l,4)*1.1),gl2=Math.max(0,1-Math.abs(x-(sd[0]/Math.max(.05,sd[2]))*(z-EYE[2])*.9)/(8+z*.08))*(.6+.4*Math.sin(x*.9+t*3+z*.7));return mix(mix(wc,hor,fres*.55),whi,gl2*(P.star>.5?.4:.75))};
@@ -114,7 +136,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       buildDyn(t,P);
       gl.clearColor(P.hor[0],P.hor[1],P.hor[2],1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);
       const L=P.sunDir,l=Math.hypot(...L);gl.uniform3f(uL,L[0]/l,L[1]/l,L[2]/l);gl.uniform3fv(uA,P.amb);gl.uniform3fv(uG,P.gnd);gl.uniform3fv(uS,P.lit);gl.uniform2f(uF,P.fog[0],P.fog[1]);gl.uniform3fv(uFc,mix(P.hor,P.low,.3));
-      bind(DY);gl.drawArrays(gl.TRIANGLES,0,DY.n);bind(ST);gl.drawArrays(gl.TRIANGLES,0,ST.n)}};
+      bind(DY);gl.drawArrays(gl.TRIANGLES,0,DY.n);bind(ST);gl.drawArrays(gl.TRIANGLES,0,ST.n);cloudPass(t,P,VP)}};
   return R}
 // ---------- conexión con la pantalla principal ----------
 (function(){const tryAttach=()=>{const bg=document.getElementById("gBg");if(!bg)return false;if(document.getElementById("gLand3"))return true;

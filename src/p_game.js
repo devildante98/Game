@@ -309,7 +309,7 @@ function gmHero(){const b=$("gBud");if(!b)return;let n=null;try{n=S.buddy&&S.own
   if(!n){b.innerHTML="";GM.bud=null;return}const sh=!!(S.shiny&&S.shiny[n]>0);if(GM.bud&&GM.bud.n===n&&GM.bud.sh===sh)return;
   // el compañero se ve con su imagen animada de siempre (sin pixelar), respirando y dando algún saltito
   // (los pocos que no tienen imagen animada usan su imagen grande en alta definición, que tampoco se pixela)
-  GM.bud={n:n,sh:sh,pm:null,at:0,el:null};const id=window._spr&&window._spr[n],noAni=id&&typeof SDNF!=="undefined"&&SDNF.has(id);
+  GM.bud={n:n,sh:sh,pm:null,at:0,el:null};const id=window._spr&&window._spr[n],noAni=typeof icoHD==="function";// siempre la imagen en alta definición (nítida a cualquier tamaño)
   b.innerHTML='<div class="gbst'+(noAni?' gbhd':'')+'">'+(noAni&&typeof icoHD==="function"?icoHD(PM[n]||[n],92,false,sh):ico(PM[n]||[n],92,false,sh))+'</div>';
   const im=b.querySelector("img");if(im){if(im.complete&&im.naturalWidth)gmBudSize();else im.addEventListener("load",gmBudSize)}}
 // tamaño del compañero según su altura real, comparada con la del entrenador (que mide 1,45 m). Los muy grandes se

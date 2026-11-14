@@ -59,9 +59,13 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
 // =====================================================================================
 // COMPROBACIONES CONTRA VALORES IMPOSIBLES (protección básica en el propio juego)
 // =====================================================================================
-const MG_MAX={who:6000,mem:1700,dig:400,fish:3000,thr:2500,run:20000,exc:2500,wgt:40000};
-{const _ms=mgrSubmit;mgrSubmit=function(id,sc){if(MG_MAX[id]&&sc>MG_MAX[id])return "";return _ms(id,sc)}}
-{const _ts=tourSubmit;tourSubmit=function(id,sc){if(MG_MAX[id]&&sc>MG_MAX[id])return "";return _ts(id,sc)}}
+// minijuegos con un máximo fijo (tienen un número de rondas)
+const MG_MAX={who:6000,mem:1700,dig:400,fish:3000,thr:2500,exc:2500};
+// minijuegos sin final (hasta que chocas o fallas): no tienen tope; solo se descarta lo imposible para el tiempo jugado
+const MG_RATE={run:s=>s*260+3000,wgt:s=>{const n=s/.45+3;return 175*n+5*n*n},hl:s=>{const n=s/.45+3;return 175*n+5*n*n}};
+const mgOk=(id,sc)=>{if(MG_MAX[id]&&sc>MG_MAX[id])return false;const f=MG_RATE[id];if(f&&MG.t0){const secs=Math.max(0,(Date.now()-MG.t0)/1000);if(sc>f(secs))return false}return true};
+{const _ms=mgrSubmit;mgrSubmit=function(id,sc){if(!mgOk(id,sc))return "";return _ms(id,sc)}}
+{const _ts=tourSubmit;tourSubmit=function(id,sc){if(!mgOk(id,sc))return "";return _ts(id,sc)}}
 function sanity(){let fix=0;
   if(!(S.t>=0)||!isFinite(S.t)){S.t=0;fix++}if(S.t>1e15){S.t=1e15;fix++}
   for(const n in S.owned){const c=S.owned[n];if(!PM[n]||!(c>0)||!isFinite(c)){delete S.owned[n];fix++}else if(c>99999){S.owned[n]=99999;fix++}}

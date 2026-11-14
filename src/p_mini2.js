@@ -12,15 +12,19 @@ const kgTxt=hg=>(hg/10).toLocaleString("es",{maximumFractionDigits:1})+" kg",mTx
 // paisaje en capas que se mueven a distinta velocidad, ciclo de día/atardecer/noche y Rapidash galopando con su llama.
 // La velocidad tiene un máximo y la separación entre obstáculos crece con ella, así que siempre se pueden saltar.
 // Controles: tocar/espacio = saltar (mantén para más alto, otra vez en el aire = doble salto) · deslizar abajo/↓ = agacharse.
-const RU_SPD0=250,RU_SPDMAX=520;
-const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por el campo: salta vallas, rocas y troncos y agáchate para esquivar a los Zubat. Mantén pulsado para saltar más alto, pulsa otra vez en el aire para un doble salto y recoge tickets y potenciadores.",
+const RU_SPD0=250,RU_SPDMAX=1000;
+// velocidad según la distancia: sube rápido al principio y después sigue subiendo poco a poco, sin tope práctico
+const ruSpeed=d=>Math.min(RU_SPDMAX,RU_SPD0+330*(1-Math.exp(-d/700))+d*.05);
+// nivel de dificultad: cada nivel añade obstáculos más difíciles y los junta un poco más
+const ruTier=d=>d<150?0:d<400?1:d<800?2:d<1400?3:4+Math.floor((d-1400)/700);
+const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos.",
   rw:s=>s*180,
   start(B,end){
     const R=PM.Rapidash||PM.Ponyta||P[0],Z=PM.Zubat||null;
     B.innerHTML='<div class="whohd"><span>📏 <b id="ruD">0</b> m</span><span id="ruT"></span><span id="ruPw"></span></div>'+
       '<div class="ruw2" id="ruW"><canvas id="ruC3" class="ru3"></canvas><canvas id="ruC"></canvas><div class="rumsg" id="ruM">Toca o pulsa espacio para empezar</div></div>'+
-      '<div class="rubtn"><button type="button" class="alt" id="ruDn">⬇ Agacharse</button><button type="button" class="red" id="ruUp">⬆ Saltar</button></div>'+
-      '<small class="mut rukeys">Espacio o ↑: saltar (mantén para más alto; pulsa otra vez en el aire para un doble salto) · ↓ o desliza hacia abajo: agacharse</small>';
+      '<div class="rubtn"><button type="button" class="alt" id="ruL" aria-label="Carril izquierdo">◀</button><button type="button" class="alt" id="ruDn">⬇ Agacharse</button><button type="button" class="red" id="ruUp">⬆ Saltar</button><button type="button" class="alt" id="ruR" aria-label="Carril derecho">▶</button></div>'+
+      '<small class="mut rukeys">W, Espacio o ↑: saltar (mantén para más alto; otra vez en el aire = doble salto) · S o ↓: agacharse · A/D o ←/→: cambiar de carril · En móvil: desliza hacia los lados, arriba o abajo</small>';
     const cv=$("ruC"),g=cv.getContext("2d"),msg=$("ruM");let W=300,H=280,dpr=1;
     // dibujo en 3D si el navegador tiene WebGL; si no, el clásico en 2D
     let r3=null;try{r3=typeof RU3D==="function"?RU3D($("ruC3")):null}catch(e){r3=null}
@@ -28,37 +32,62 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     const fit=()=>{const r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=Math.max(200,r.width);H=Math.max(160,r.height);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);if(r3)r3.resize(W,H,dpr)};fit();
     const im=new Image(),zi=new Image();im.src=mgImgSrc(R);if(Z)zi.src=mgImgSrc(Z);
     const PX=70,PW=64,PH=64,GH=46;const GY=()=>H-GH;
-    let y=0,vy=0,jumps=0,hold=false,holdT=0,duck=false,started=false,dead=false,spd=RU_SPD0,dist=0,bonus=0,cam=0,t=0,last=0,nextO=400,shield=0,magnet=0,combo=0,shake=0,landFx=false;
+    let y=0,vy=0,jumps=0,hold=false,holdT=0,duck=false,started=false,dead=false,spd=RU_SPD0,lane=0,lx=0,tierN=0,dist=0,bonus=0,cam=0,t=0,last=0,nextO=400,shield=0,magnet=0,combo=0,shake=0,landFx=false;
     let obs=[],items=[],parts=[],deadAt=0;
+    // acceso para las pruebas automáticas (no cambia nada en la partida)
+    MG.runDbg={get:()=>({dist,spd,lx,lane,tier:tierN,dead,obs:obs.map(o=>({k:o.k,x:Math.round(o.x),ln:o.ln}))}),set:(d,sh)=>{dist=d;if(sh)shield=sh}};
     const rnd=(a,b)=>a+Math.random()*(b-a),hash=n=>{const x=Math.sin(n*127.1)*43758.5453;return x-Math.floor(x)};
     // ---------- controles ----------
     const press=()=>{if(dead)return;if(!started){started=true;msg.textContent="";last=performance.now();MG.raf=requestAnimationFrame(loop);return}
       if(y>=-.5){vy=-620;jumps=1;hold=true;holdT=0;snd("pop")}else if(jumps<2){vy=-560;jumps=2;hold=true;holdT=0;snd("pop");for(let i=0;i<10;i++)parts.push({x:PX+PW/2,y:GY()+y,vx:rnd(-90,90),vy:rnd(20,120),l:.5,t:0,c:"#fff6",r:rnd(3,6)})}};
     const release=()=>{hold=false};
     const duckOn=()=>{if(!started||dead)return;duck=true},duckOff=()=>{duck=false};
-    MG.runKey={down:k=>{if(k==="d")duckOn();else press()},up:k=>{if(k==="d")duckOff();else release()}};
-    let py0=null;
-    cv.addEventListener("pointerdown",e=>{e.preventDefault();py0=e.clientY;press()});
-    cv.addEventListener("pointermove",e=>{if(py0!=null&&e.clientY-py0>28){duckOn();hold=false}});
-    const up=()=>{py0=null;release();duckOff()};cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up);cv.addEventListener("pointerleave",up);
+    // cambio de carril (-1 izquierda, 0 centro, 1 derecha)
+    const side=d=>{if(dead)return;if(!started){press();return}const n=Math.max(-1,Math.min(1,lane+d));if(n!==lane){lane=n;snd("click")}};
+    MG.runKey={down:k=>{if(k==="d")duckOn();else if(k==="l")side(-1);else if(k==="r")side(1);else press()},up:k=>{if(k==="d")duckOff();else if(k==="u")release()}};
+    // en el lienzo: tocar = saltar; deslizar hacia abajo = agacharse; deslizar a los lados = cambiar de carril
+    let py0=null,px0=null,swiped=false,tapT=0;
+    cv.addEventListener("pointerdown",e=>{e.preventDefault();py0=e.clientY;px0=e.clientX;swiped=false;tapT=performance.now()});
+    cv.addEventListener("pointermove",e=>{if(py0==null||swiped)return;const dx=e.clientX-px0,dy=e.clientY-py0;
+      if(Math.abs(dx)>34&&Math.abs(dx)>Math.abs(dy)){swiped=true;side(dx>0?1:-1)}else if(dy>28){swiped=true;duckOn();hold=false}else if(dy<-34){swiped=true;press()}});
+    const up=()=>{if(py0!=null&&!swiped)press();if(py0!=null&&!swiped)setTimeout(release,Math.max(0,140-(performance.now()-tapT)));else release();py0=null;duckOff()};cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",()=>{py0=null;release();duckOff()});cv.addEventListener("pointerleave",()=>{if(py0!=null){py0=null;release();duckOff()}});
     const bU=$("ruUp"),bD=$("ruDn");
     bU.addEventListener("pointerdown",e=>{e.preventDefault();press()});["pointerup","pointerleave","pointercancel"].forEach(ev=>bU.addEventListener(ev,release));
     bD.addEventListener("pointerdown",e=>{e.preventDefault();duckOn()});["pointerup","pointerleave","pointercancel"].forEach(ev=>bD.addEventListener(ev,duckOff));
+    $("ruL").addEventListener("pointerdown",e=>{e.preventDefault();side(-1)});$("ruR").addEventListener("pointerdown",e=>{e.preventDefault();side(1)});
     const onRs=()=>{if(!cv.isConnected){window.removeEventListener("resize",onRs);return}fit();if(!started||dead)draw()};window.addEventListener("resize",onRs);
     // ---------- obstáculos y objetos ----------
-    const spawn=()=>{const G=GY(),k=Math.random(),far=dist>150;let o;
-      if(far&&k<.18)o={k:"bat",w:40,h:30,y:G-74};
-      else if(k<.42)o={k:"fence",w:24,h:40};else if(k<.62)o={k:"rock",w:40,h:28};else if(k<.78)o={k:"log",w:70,h:26};
-      else if(dist>60&&k<.9)o={k:"high",w:26,h:62};else o={k:"fence2",w:24,h:40,gap:72};
-      o.x=r3?PX+PW/2+RU3_FAR*RU3_S:W+30;if(o.y==null)o.y=G-o.h;obs.push(o);
-      // tickets en arco por encima del obstáculo (o por debajo del Zubat)
-      if(Math.random()<.6){const cx=o.x+(o.k==="fence2"?o.w+o.gap/2:o.w/2);
-        if(o.k==="bat"){const n=3+Math.floor(Math.random()*3);for(let i=0;i<n;i++)items.push({k:"tk",x:cx+((i/(n-1))-.5)*110,y:G-22})}
-        else{// los tickets siguen la trayectoria real de un salto bien hecho (corto, o largo si el obstáculo lo pide), con el punto más alto justo encima
-          const long=o.k==="fence2"||o.k==="high"||o.k==="log",sA=Math.min(RU_SPDMAX,spd+(o.x-PX-PW/2)/20*.42),ht=long?.24:.09,P2=[];let yy=0,v=-620,tt=0,ap=0,apH=0;
-          while(tt<2){v+=((tt<ht&&v<0)?950:2100)*.004;yy+=v*.004;tt+=.004;if(yy>=0)break;P2.push([tt,-yy]);if(-yy>apH){apH=-yy;ap=tt}}
-          const n=long?5:3+Math.floor(Math.random()*2);for(let i=0;i<n;i++){const f=.2+.6*i/(n-1),q=P2[Math.min(P2.length-1,Math.floor(f*P2.length))];items.push({k:"tk",x:cx+(q[0]-ap)*sA,y:G-q[1]-26})}}}
-      else if(Math.random()<.18)items.push({k:Math.random()<.5?"fire":"mag",x:o.x+o.w+140,y:G-110})};
+    // Obstáculos de todo el ancho (se saltan o se pasan agachado) y, según el nivel, obstáculos en uno o dos carriles
+    // (columnas y carros: no se pueden saltar, hay que cambiar de carril). Siempre queda al menos un carril libre.
+    const LN=[-1,0,1],shuf=a=>a.slice().sort(()=>Math.random()-.5),TALL=1000;
+    const arcTk=(o,ln)=>{const G=GY(),cx=o.x+(o.k==="fence2"?o.w+o.gap/2:o.w/2);
+      // los tickets siguen la trayectoria real de un salto bien hecho (corto, o largo si el obstáculo lo pide), con el punto más alto justo encima
+      const long=o.k==="fence2"||o.k==="high"||o.k==="log",sA=ruSpeed(dist+(o.x-PX-PW/2)/20),ht=long?.24:.09,P2=[];let yy=0,v=-620,tt=0,ap=0,apH=0;
+      while(tt<2){v+=((tt<ht&&v<0)?950:2100)*.004;yy+=v*.004;tt+=.004;if(yy>=0)break;P2.push([tt,-yy]);if(-yy>apH){apH=-yy;ap=tt}}
+      const n=long?5:3+Math.floor(Math.random()*2);for(let i=0;i<n;i++){const f=.2+.6*i/(n-1),q=P2[Math.min(P2.length-1,Math.floor(f*P2.length))];items.push({k:"tk",x:cx+(q[0]-ap)*sA,y:G-q[1]-26,ln})}};
+    const groundTk=(x0,w,ln)=>{const G=GY(),n=3+Math.floor(Math.random()*3);for(let i=0;i<n;i++)items.push({k:"tk",x:x0+((i/(n-1))-.5)*Math.max(110,w+60),y:G-22,ln})};
+    const spawn=()=>{const G=GY(),T=ruTier(dist),k=Math.random(),X=r3?PX+PW/2+RU3_FAR*RU3_S:W+30,os=[];
+      const full=()=>{const q=Math.random();let o;if(T>=1&&q<.16)o={k:"bat",w:40,h:30,y:G-74};else if(q<.42)o={k:"fence",w:24,h:40};else if(q<.6)o={k:"rock",w:40,h:28};
+        else if(q<.76)o={k:"log",w:70,h:26};else if(T>=1&&q<.9)o={k:"high",w:26,h:62};else o={k:"fence2",w:24,h:40,gap:72};return o};
+      const pSide=[.14,.3,.4,.46,.52][Math.min(4,T)],pCombo=T>=3?.18+Math.min(.12,(T-3)*.03):0;
+      if(dist>40&&k<pSide){const q=Math.random();
+        if(T>=2&&q<.32){const a=Math.random()<.5?-1:0;os.push({k:"wagon",w:96,h:TALL,ln:[a,a+1]})}
+        else if(T>=2&&q<.58){const L=shuf(LN);os.push({k:"pillar",w:40,h:TALL,ln:[L[0]]},{k:"pillar",w:40,h:TALL,ln:[L[1]]})}
+        else if(T>=1&&q<.8){const L=shuf(LN).slice(0,T>=3?2:1);os.push({k:"bat",w:40,h:30,y:G-74,ln:L})}
+        else os.push({k:"pillar",w:40,h:TALL,ln:[shuf(LN)[0]]})}
+      else if(k<pSide+pCombo){const L=shuf(LN),f=Math.random()<.5?{k:"fence",w:24,h:40}:{k:"rock",w:40,h:28};f.ln=[L[2]];
+        os.push({k:"pillar",w:40,h:TALL,ln:[L[0]]},{k:"pillar",w:40,h:TALL,ln:[L[1]]},f)}
+      else os.push(full());
+      for(const o of os){o.x=X;if(o.y==null)o.y=o.h>=TALL?G-TALL:G-o.h;obs.push(o)}
+      // tickets: sobre el salto, o en el carril libre si hay que esquivar
+      if(Math.random()<.62){const blocked=new Set();os.forEach(o=>(o.ln||[]).forEach(l=>{if(o.h>=TALL||o.k==="bat")blocked.add(l)}));
+        const free=LN.filter(l=>!blocked.has(l)),o=os[os.length-1];
+        if(os.some(o=>o.ln&&o.h>=TALL)){const jumpable=os.find(o=>o.h<TALL&&o.k!=="bat");const fl=free[Math.floor(Math.random()*free.length)];if(jumpable)arcTk(jumpable,jumpable.ln?jumpable.ln[0]:fl);else groundTk(X+20,os[0].w,fl)}
+        else if(o.k==="bat")groundTk(X+20,o.w,o.ln?(free.length?free[Math.floor(Math.random()*free.length)]:o.ln[0]):LN[Math.floor(Math.random()*3)]);
+        else arcTk(o,LN[Math.floor(Math.random()*3)])}
+      else if(Math.random()<.18)items.push({k:Math.random()<.5?"fire":"mag",x:X+os[0].w+140,y:G-110,ln:LN[Math.floor(Math.random()*3)]})};
+    // ¿el obstáculo está en el carril de Rapidash? (a mitad de un cambio de carril puede tocar los dos)
+    const inLane=o=>!o.ln||o.ln.some(l=>Math.abs(lx-l)<.66);
     const crash=()=>{dead=true;deadAt=performance.now();snd("hit",1);shake=.4;msg.textContent="¡Has chocado! "+Math.floor(dist)+" m";MG.runKey=null;
       for(let i=0;i<24;i++)parts.push({x:PX+PW/2,y:GY()+y-PH/2,vx:rnd(-220,220),vy:rnd(-260,40),l:.9,t:0,c:i%2?"#ff9a3c":"#ffd35c",r:rnd(3,7),gr:1});
       const fin=performance.now(),tail=n=>{if(n<=0||!cv.isConnected)return;const now=performance.now(),dt=Math.min(.05,(now-last)/1000);last=now;stepParts(dt);draw();requestAnimationFrame(()=>tail(n-1))};last=fin;tail(70);
@@ -66,28 +95,31 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     const stepParts=dt=>{for(const p of parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.gr)p.vy+=900*dt}parts=parts.filter(p=>p.t<p.l)};
     // ---------- bucle ----------
     const loop=ts=>{if(dead||!cv.isConnected)return;const dt=Math.max(0,Math.min(.05,(ts-last)/1000));last=ts;t+=dt;
-      spd=Math.min(RU_SPDMAX,RU_SPD0+dist*.42);const mv=spd*dt;dist+=mv/20;cam+=mv;
+      spd=ruSpeed(dist);const mv=spd*dt;dist+=mv/20;cam+=mv;
+      // cambio de carril suave (unas 0,13 s por carril)
+      if(lx!==lane){const d=lane-lx,st2=7.5*dt;lx=Math.abs(d)<=st2?lane:lx+Math.sign(d)*st2}
+      {const T=ruTier(dist);if(T>tierN){tierN=T;msg.textContent=T===1?"¡Nivel 2! Columnas: cambia de carril para esquivarlas":T===2?"¡Nivel 3! Carros y columnas dobles":T===3?"¡Nivel 4! Columnas con vallas: esquiva y salta":"¡Nivel "+(T+1)+"! Más rápido y más juntos";mgT(()=>{if(!dead&&msg.textContent.indexOf("Nivel")>0)msg.textContent=""},2200);snd("lvl")}}
       // salto: mantener pulsado = menos gravedad un momento; agachado en el aire = cae más rápido
       const air=y<-.5;let grav=2100;if(hold&&vy<0&&holdT<.24){holdT+=dt;grav=950}if(duck&&air)grav=4200;
       vy+=grav*dt;y+=vy*dt;if(y>=0){if(air&&vy>300){landFx=true}y=0;vy=0;jumps=0}
       if(landFx){landFx=false;for(let i=0;i<8;i++)parts.push({x:PX+PW/2+rnd(-20,20),y:GY(),vx:rnd(-160,-40),vy:rnd(-80,-10),l:.45,t:0,c:"#c9a46a",r:rnd(2,5)})}
       if(shield>0)shield=Math.max(0,shield-dt);if(magnet>0)magnet=Math.max(0,magnet-dt);
       // separación mínima según la velocidad: da tiempo a aterrizar y reaccionar
-      nextO-=mv;if(nextO<=0){spawn();const mn=spd*.95+130;nextO=mn+Math.random()*spd*.8}
+      nextO-=mv;if(nextO<=0){spawn();const T=ruTier(dist),mn=spd*Math.max(.85,.95-.025*T)+180;nextO=mn+Math.random()*spd*Math.max(.35,.8-.08*T)}
       const G=GY(),ducking=duck&&!air,top=G+y-(ducking?34:PH-8),bot=G+y-4,L=PX+12,Rr=PX+PW-12;
       for(const o of obs){o.x-=mv;if(o.k==="bat")o.y=G-74+Math.sin(t*6+o.x*.02)*4;
         const parts2=o.k==="fence2"?[[o.x,o.w],[o.x+o.w+o.gap,o.w]]:[[o.x,o.w]];
-        for(const [ox,ow] of parts2){if(o.hit)break;if(ox<Rr&&ox+ow>L&&bot>o.y+3&&top<o.y+o.h-3){
-          if(shield>0){o.hit=1;o.smash=1;bonus+=5;snd("hit");for(let i=0;i<14;i++)parts.push({x:ox+ow/2,y:o.y+o.h/2,vx:rnd(-80,260),vy:rnd(-260,-40),l:.7,t:0,c:o.k==="bat"?"#7a5bd6":o.k==="rock"?"#9aa0a8":"#a0703a",r:rnd(2,5),gr:1})}
+        for(const [ox,ow] of parts2){if(o.hit)break;if(ox<Rr&&ox+ow>L&&inLane(o)&&(o.h>=TALL||bot>o.y+3&&top<o.y+o.h-3)){
+          if(shield>0){o.hit=1;o.smash=1;bonus+=5;snd("hit");for(let i=0;i<14;i++)parts.push({x:ox+ow/2,y:o.h>=TALL?G-60:o.y+o.h/2,ln:lx,vx:rnd(-80,260),vy:rnd(-260,-40),l:.7,t:0,c:o.k==="bat"?"#7a5bd6":o.k==="rock"?"#9aa0a8":"#a0703a",r:rnd(2,5),gr:1})}
           else{crash();return}}}
         // ¡justo! = pasar muy cerca por encima
-        const ex=o.k==="fence2"?o.x+o.w*2+o.gap:o.x+o.w;if(!o.hit&&!o.pass&&ex<L){o.pass=1;if(o.k!=="bat"&&air&&o.y-bot<16){combo++;const p=3+Math.min(7,combo);bonus+=p;const pp=r3?r3.playerScreen(-y/RU3_S):[cv.getBoundingClientRect().left+PX+PW,cv.getBoundingClientRect().top+G+y-PH];mgPop(pp[0],pp[1],"¡Justo! +"+p,"#7df9ff")}else if(o.k!=="bat")combo=0}}
+        const ex=o.k==="fence2"?o.x+o.w*2+o.gap:o.x+o.w;if(!o.hit&&!o.pass&&ex<L){o.pass=1;if(o.h>=TALL){if(Math.abs(lx-o.ln[0])<1.6&&!o.ln.some(l=>Math.abs(lx-l)<.66)){bonus+=2}}else if(o.k!=="bat"&&inLane(o)&&air&&o.y-bot<16){combo++;const p=3+Math.min(7,combo);bonus+=p;const pp=r3?r3.playerScreen(-y/RU3_S,lx):[cv.getBoundingClientRect().left+PX+PW,cv.getBoundingClientRect().top+G+y-PH];mgPop(pp[0],pp[1],"¡Justo! +"+p,"#7df9ff")}else if(o.k!=="bat")combo=0}}
       obs=obs.filter(o=>o.x>(r3?-320:-160)&&!o.smash);
       for(const it of items){it.x-=mv;
         if(magnet>0&&it.k==="tk"){const dx=PX+PW/2-it.x,dy=G+y-PH/2-it.y,d=Math.hypot(dx,dy);if(d<260){it.x+=dx/d*520*dt;it.y+=dy/d*520*dt}}
         // sin imán, los tickets que pasan cerca también se acercan un poco: no hace falta clavar el salto
         else if(it.k==="tk"){const dx=PX+PW/2-it.x,dy=G+y-PH/2-it.y,d=Math.hypot(dx,dy);if(d<78&&d>1){const k2=Math.min(d,330*dt);it.x+=dx/d*k2;it.y+=dy/d*k2}}
-        if(!it.got&&it.x>L-18&&it.x<Rr+18&&it.y>top-18&&it.y<bot+14){it.got=1;
+        if(!it.got&&it.x>L-18&&it.x<Rr+18&&it.y>top-18&&it.y<bot+14&&(it.ln==null||Math.abs(lx-it.ln)<.6||magnet>0)){it.got=1;
           if(it.k==="tk"){bonus+=15;snd("click")}else if(it.k==="fire"){shield=5;snd("lvl");toast("🔥 ¡Llamarada! Atraviesas los obstáculos durante 5 s")}else{magnet=7;snd("lvl");toast("🧲 ¡Imán! Atraes los tickets durante 7 s")}
           for(let i=0;i<6;i++)parts.push({x:it.x,y:it.y,vx:rnd(-60,60),vy:rnd(-120,-20),l:.4,t:0,c:"#ffd35c",r:rnd(2,4)})}}
       items=items.filter(it=>!it.got&&it.x>-40);
@@ -95,7 +127,7 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       const fy=G+y-PH*.62,n=shield>0?4:2;for(let i=0;i<n;i++)parts.push({x:PX+16+rnd(-4,6),y:fy+rnd(-10,10),vx:-spd*.55+rnd(-40,20),vy:rnd(-60,10),l:rnd(.25,.45),t:0,c:shield>0?"#ffb03c":"#ff7a2a",r:rnd(4,8),fl:1});
       stepParts(dt);
       mgSet(Math.floor(dist)+bonus);$("ruD").textContent=Math.floor(dist);
-      $("ruT").textContent=spd>=RU_SPDMAX?"🔥 ¡Velocidad máxima!":spd>420?"💨 ¡Más rápido!":"";
+      $("ruT").textContent="⚡ Nivel "+(tierN+1)+" · "+Math.round(spd/250*100)+"%";
       const pw=(shield>0?"🔥 "+shield.toFixed(1)+" s ":"")+(magnet>0?"🧲 "+magnet.toFixed(1)+" s":"");const pe=$("ruPw");if(pe&&pe.textContent!==pw)pe.textContent=pw;
       draw();MG.raf=requestAnimationFrame(loop)};
     // ---------- dibujo ----------
@@ -105,7 +137,7 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       let c;if(ph<.55)c=D;else if(ph<.7){const k=(ph-.55)/.15;c=[mix(D[0],S2[0],k),mix(D[1],S2[1],k)]}else if(ph<.78){const k=(ph-.7)/.08;c=[mix(S2[0],N[0],k),mix(S2[1],N[1],k)]}else if(ph<.92)c=N;else{const k=(ph-.92)/.08;c=[mix(N[0],D[0],k),mix(N[1],D[1],k)]}
       return {c,ph,night:ph>.72&&ph<.95}};
     const draw=()=>{if(r3){g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cv.width,cv.height);if(shake>0)shake=Math.max(0,shake-.016);
-        r3.draw({t:started?t:performance.now()/1000,dist,cam,spd,y,vy,duck,started,dead,deadT:dead?(performance.now()-deadAt)/1000:0,shield,magnet,obs,items,parts,sky:sky(),shake,PX,PW,PH,G:GY()});return}
+        r3.draw({t:started?t:performance.now()/1000,dist,cam,spd,y,vy,duck,started,dead,lx,lane,deadT:dead?(performance.now()-deadAt)/1000:0,shield,magnet,obs,items,parts,sky:sky(),shake,PX,PW,PH,G:GY()});return}
       g.setTransform(dpr,0,0,dpr,0,0);const G=GY();let sx=0,sy=0;if(shake>0){sx=rnd(-5,5)*shake*2;sy=rnd(-4,4)*shake*2;shake=Math.max(0,shake-.016)}g.translate(sx,sy);
       const s=sky(),sg=g.createLinearGradient(0,0,0,G);sg.addColorStop(0,"rgb("+s.c[0]+")");sg.addColorStop(1,"rgb("+s.c[1]+")");g.fillStyle=sg;g.fillRect(-10,-10,W+20,G+20);
       // estrellas y sol/luna
@@ -128,9 +160,11 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       // líneas de velocidad
       if(spd>430&&started&&!dead){g.strokeStyle="rgba(255,255,255,.35)";g.lineWidth=1.5;for(let i=0;i<6;i++){const yy=G*.3+hash(i+Math.floor(t*12))*G*.6,x=((t*900+i*137)%(W+200))-100;g.beginPath();g.moveTo(W-x,yy);g.lineTo(W-x+40,yy);g.stroke()}}
       // objetos
-      for(const it of items){const bob=Math.sin(t*6+it.x*.05)*3;g.font="22px serif";g.textAlign="center";g.textBaseline="middle";g.fillText(it.k==="tk"?"🎟️":it.k==="fire"?"🔥":"🧲",it.x,it.y+bob);if(it.k!=="tk"){g.strokeStyle="rgba(255,255,255,.7)";g.lineWidth=2;g.beginPath();g.arc(it.x,it.y+bob,17,0,7);g.stroke()}}
+      const LO=l=>(l||0)*9;for(const it of items){const bob=Math.sin(t*6+it.x*.05)*3+LO(it.ln);g.font="22px serif";g.textAlign="center";g.textBaseline="middle";g.fillText(it.k==="tk"?"🎟️":it.k==="fire"?"🔥":"🧲",it.x,it.y+bob);if(it.k!=="tk"){g.strokeStyle="rgba(255,255,255,.7)";g.lineWidth=2;g.beginPath();g.arc(it.x,it.y+bob,17,0,7);g.stroke()}}
       // obstáculos
-      for(const o of obs){if(o.k==="fence"||o.k==="high"||o.k==="fence2"){const one=(x,w,h)=>{g.fillStyle="#8b5a2b";g.fillRect(x,G-h,5,h);g.fillRect(x+w-5,G-h,5,h);g.fillStyle="#c8874a";for(let k=0;k<3;k++)g.fillRect(x-2,G-h+6+k*(h-12)/2.5,w+4,6);g.strokeStyle="rgba(0,0,0,.25)";g.strokeRect(x-2,G-h+6,w+4,6)};one(o.x,o.w,o.h);if(o.k==="fence2")one(o.x+o.w+o.gap,o.w,o.h)}
+      // en 2D los carriles se ven como franjas: los obstáculos de carril llevan una marca de su carril
+      for(const o of obs){if(o.h>=1000){for(const l of o.ln){g.fillStyle=o.k==="wagon"?"#8a5a2c":"#7d838c";g.fillRect(o.x,G-110+LO(l),o.w,110);g.fillStyle="rgba(255,255,255,.25)";g.fillRect(o.x+4,G-104+LO(l),6,98);g.fillStyle="#e8434a";g.font="bold 13px sans-serif";g.textAlign="center";g.fillText(l<0?"◀":l>0?"▶":"●",o.x+o.w/2,G-118+LO(l))}continue}
+        if(o.k==="fence"||o.k==="high"||o.k==="fence2"){const one=(x,w,h)=>{g.fillStyle="#8b5a2b";g.fillRect(x,G-h,5,h);g.fillRect(x+w-5,G-h,5,h);g.fillStyle="#c8874a";for(let k=0;k<3;k++)g.fillRect(x-2,G-h+6+k*(h-12)/2.5,w+4,6);g.strokeStyle="rgba(0,0,0,.25)";g.strokeRect(x-2,G-h+6,w+4,6)};one(o.x,o.w,o.h);if(o.k==="fence2")one(o.x+o.w+o.gap,o.w,o.h)}
         else if(o.k==="rock"){g.fillStyle="#8d939c";g.beginPath();g.moveTo(o.x,G);g.lineTo(o.x+6,G-o.h*.7);g.lineTo(o.x+o.w*.45,G-o.h);g.lineTo(o.x+o.w-5,G-o.h*.6);g.lineTo(o.x+o.w,G);g.closePath();g.fill();g.fillStyle="rgba(255,255,255,.25)";g.beginPath();g.moveTo(o.x+8,G-o.h*.65);g.lineTo(o.x+o.w*.45,G-o.h+3);g.lineTo(o.x+o.w*.5,G-o.h*.55);g.closePath();g.fill()}
         else if(o.k==="log"){g.fillStyle="#7a4b25";g.fillRect(o.x,G-o.h,o.w,o.h);g.fillStyle="#a8703f";g.beginPath();g.ellipse(o.x+o.w,G-o.h/2,8,o.h/2,0,0,7);g.fill();g.strokeStyle="#6a3d1c";g.beginPath();g.ellipse(o.x+o.w,G-o.h/2,4,o.h/4,0,0,7);g.stroke();g.fillStyle="rgba(0,0,0,.15)";g.fillRect(o.x,G-o.h/2,o.w,2)}
         else if(o.k==="bat"){const fl=1+Math.sin(t*22)*.18;g.save();g.translate(o.x+o.w/2,o.y+o.h/2);g.scale(fl,1);if(zi.complete&&zi.naturalWidth)g.drawImage(zi,-28,-28,56,56);else{g.font="30px serif";g.textAlign="center";g.textBaseline="middle";g.fillText("🦇",0,0)}g.restore()}}
@@ -140,16 +174,17 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       // aura de la Llamarada
       if(shield>0){g.fillStyle="rgba(255,150,40,"+(.25+.1*Math.sin(t*20))+")";g.beginPath();g.arc(PX+PW/2,G+y-PH/2,PW*.75,0,7);g.fill()}
       for(const p of parts){const k=1-p.t/p.l;g.globalAlpha=Math.max(0,k);g.fillStyle=p.c;g.beginPath();g.arc(p.x,p.y,p.r*(p.fl?k:1),0,7);g.fill()}g.globalAlpha=1;
-      g.save();g.translate(PX+PW/2,G+y-(ducking?PH*.32:PH/2)+(gal?Math.abs(gal)*-4:0));g.rotate(dead?.9:Math.max(-.35,Math.min(.35,vy/1800))+gal*.04);g.scale(-1,ducking?.62:1);
+      g.save();g.translate(PX+PW/2,G+y-(ducking?PH*.32:PH/2)+(gal?Math.abs(gal)*-4:0)+LO(lx));g.rotate(dead?.9:Math.max(-.35,Math.min(.35,vy/1800))+gal*.04);g.scale(-1,ducking?.62:1);
       if(im.complete&&im.naturalWidth){const sz=PW*1.5;g.drawImage(im,-sz/2,-sz/2-(ducking?-6:6),sz,sz)}else{g.font="54px serif";g.textAlign="center";g.textBaseline="middle";g.fillText("🐴",0,0)}
       g.restore();g.setTransform(1,0,0,1,0,0)};
     mgSet(0);draw();im.onload=()=>{if(!started)draw()};
     // en 3D, Rapidash respira y la llama se mueve también antes de empezar
     if(r3){const idle=()=>{if(started||!cv.isConnected)return;draw();requestAnimationFrame(idle)};requestAnimationFrame(idle)}
   }};
-// teclas: espacio/↑ saltar (mantener = más alto), ↓ agacharse
-document.addEventListener("keydown",e=>{if(!MG.runKey)return;const m=$("mgM");if(!m||m.hidden)return;const k=e.code==="Space"||e.key==="ArrowUp"||e.key===" "?"u":e.key==="ArrowDown"?"d":null;if(!k)return;e.preventDefault();e.stopPropagation();if(!e.repeat)MG.runKey.down(k)},true);
-document.addEventListener("keyup",e=>{if(!MG.runKey)return;const k=e.code==="Space"||e.key==="ArrowUp"||e.key===" "?"u":e.key==="ArrowDown"?"d":null;if(k)MG.runKey.up(k)},true);
+// teclas: W/Espacio/↑ saltar (mantener = más alto), S/↓ agacharse, A/← y D/→ cambiar de carril
+const ruKey=e=>e.code==="Space"||e.key===" "||e.key==="ArrowUp"||e.code==="KeyW"?"u":e.key==="ArrowDown"||e.code==="KeyS"?"d":e.key==="ArrowLeft"||e.code==="KeyA"?"l":e.key==="ArrowRight"||e.code==="KeyD"?"r":null;
+document.addEventListener("keydown",e=>{if(!MG.runKey)return;const m=$("mgM");if(!m||m.hidden)return;if(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName))return;const k=ruKey(e);if(!k)return;e.preventDefault();e.stopPropagation();if(!e.repeat)MG.runKey.down(k)},true);
+document.addEventListener("keyup",e=>{if(!MG.runKey)return;const k=ruKey(e);if(k)MG.runKey.up(k)},true);
 
 // ---------------- EXCAVACIÓN SUBTERRÁNEA ----------------
 const EXT=[// [id, nombre, ancho, alto, valor, tipo de premio]

@@ -17,8 +17,9 @@ function num(v, lo, hi) { return (v is int || v is float) && v >= lo && v <= hi;
 function optNum(f, lo, hi) { return !(f in request.resource.data) || num(request.resource.data[f], lo, hi); }
 // NUEVO: puntuación máxima posible de cada minijuego («2026-W45_who» → who); el torneo semanal usa el máximo general
 function maxScore(w) {
-  return {'who': 6000, 'mem': 1700, 'dig': 400, 'fish': 3000, 'thr': 2500, 'run': 20000,
-          'exc': 2500, 'wgt': 40000, 'fos': 2500, 'puz': 50000, 'hl': 50000}
+  // run, wgt y hl no tienen final (hasta que chocas o fallas): el juego comprueba la puntuación con el tiempo jugado
+  return {'who': 6000, 'mem': 1700, 'dig': 400, 'fish': 3000, 'thr': 2500, 'run': 5000000,
+          'exc': 2500, 'wgt': 5000000, 'fos': 2500, 'puz': 50000, 'hl': 5000000}
          .get(w.split('_').size() > 1 ? w.split('_')[1] : 'x', 50000);
 }
 

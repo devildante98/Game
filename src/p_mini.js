@@ -86,22 +86,29 @@ const G_FISH={id:"fish",n:"Pesca",ic:"🎣",c:"#1e88c8",d:"Lanza la caña y puls
   rw:s=>s*700,
   start(B,end){
     let cast=0,st="idle";const N=8,caught=[];
-    B.innerHTML='<div class="whohd"><span>Lanzamientos: <b id="fiN">0</b>/'+N+'</span><span id="fiC"></span></div><div class="fiw" id="fiW"><div class="fisky"></div><div class="fiwater"><div class="fiwave"></div></div><div class="filine" id="fiL"></div><div class="fibob" id="fiB"></div><div class="fiex" id="fiE" hidden>¡!</div><div class="fimsg" id="fiM">Pulsa «Lanzar» para empezar</div><div class="ficatch" id="fiK"></div></div><div class="fibtns"><button class="red big" id="fiGo">🎣 Lanzar</button></div><div class="fibag" id="fiG"></div>';
+    B.innerHTML='<div class="whohd"><span>Lanzamientos: <b id="fiN">0</b>/'+N+'</span><span id="fiC"></span></div><div class="fiw" id="fiW"><canvas class="fic3" id="fiC3"></canvas><div class="fisky"></div><div class="fiwater"><div class="fiwave"></div></div><div class="filine" id="fiL"></div><div class="fibob" id="fiB"></div><div class="fiex" id="fiE" hidden>¡!</div><div class="fimsg" id="fiM">Pulsa «Lanzar» para empezar</div><div class="ficatch" id="fiK"></div></div><div class="fibtns"><button class="red big" id="fiGo">🎣 Lanzar</button></div><div class="fibag" id="fiG"></div>';
     mgSet(0);const W=$("fiW"),bob=$("fiB"),ex=$("fiE"),msg=$("fiM"),go=$("fiGo");let bite=0,win=0,fish=null;
+    // en 3D si el navegador tiene WebGL: el «¡!» y el Pokémon pescado siguen al flotador
+    let F3=null;try{F3=typeof FI3D==="function"?FI3D($("fiC3")):null}catch(e){F3=null}
+    if(F3){W.classList.add("fi3on");const fit=()=>{const r=W.getBoundingClientRect();F3.resize(Math.max(200,r.width),Math.max(160,r.height),Math.min(2,window.devicePixelRatio||1))};fit();
+      const onRs=()=>{if(!W.isConnected){window.removeEventListener("resize",onRs);return}fit()};window.addEventListener("resize",onRs);
+      const K=$("fiK");F3.start(b=>{ex.style.left=(b[0]*100)+"%";ex.style.top=(b[1]*100)+"%";if(K){K.style.left=(b[0]*100)+"%";K.style.top=(b[1]*100)+"%"}})}
+    else{const c3=$("fiC3");if(c3)c3.remove()}
+    const f3=k=>{if(F3)try{F3.ev(k)}catch(e){}};
     const pickFish=()=>{const t=FISH.reduce((a,f)=>a+f[1],0);let x=Math.random()*t;for(const f of FISH){x-=f[1];if(x<=0)return PM[f[0]]}return PM[FISH[0][0]]};
-    const reset=()=>{st="idle";ex.hidden=true;bob.className="fibob";go.textContent=cast>=N?"🏁 Ver resultado":"🎣 Lanzar";go.disabled=false};
+    const reset=()=>{st="idle";f3("idle");ex.hidden=true;bob.className="fibob";go.textContent=cast>=N?"🏁 Ver resultado":"🎣 Lanzar";go.disabled=false};
     const doCast=()=>{
       if(cast>=N){end(MG.score);return}
-      cast++;$("fiN").textContent=cast;st="wait";go.textContent="✋ ¡Tirar!";msg.textContent="Esperando a que pique…";snd("throw");bob.className="fibob in";fish=pickFish();
+      cast++;$("fiN").textContent=cast;st="wait";go.textContent="✋ ¡Tirar!";msg.textContent="Esperando a que pique…";snd("throw");bob.className="fibob in";fish=pickFish();f3("cast");mgT(()=>{if(st==="wait")f3("wait")},900);
       // amagos antes de picar de verdad
-      const wait=1600+Math.random()*3800;let t=600;while(t<wait-500){const q=t;mgT(()=>{if(st==="wait"){bob.classList.remove("nib");void bob.offsetWidth;bob.classList.add("nib");snd("click")}},q);t+=500+Math.random()*900}
-      mgT(()=>{if(st!=="wait")return;st="bite";bite=performance.now();win=fish[2]==="C"?900:fish[2]==="R"?620:430;ex.hidden=false;bob.className="fibob bite";snd("flash");msg.textContent="¡Ha picado!";
-        mgT(()=>{if(st==="bite"){st="miss";ex.hidden=true;msg.textContent="Se ha escapado… ¡Has tardado demasiado!";snd("miss");mgT(reset,1100)}},win)},wait);
+      const wait=1600+Math.random()*3800;let t=600;while(t<wait-500){const q=t;mgT(()=>{if(st==="wait"){bob.classList.remove("nib");void bob.offsetWidth;bob.classList.add("nib");snd("click");f3("nib")}},q);t+=500+Math.random()*900}
+      mgT(()=>{if(st!=="wait")return;st="bite";bite=performance.now();win=fish[2]==="C"?900:fish[2]==="R"?620:430;ex.hidden=false;bob.className="fibob bite";snd("flash");msg.textContent="¡Ha picado!";f3("bite");
+        mgT(()=>{if(st==="bite"){st="miss";f3("miss");ex.hidden=true;msg.textContent="Se ha escapado… ¡Has tardado demasiado!";snd("miss");mgT(reset,1100)}},win)},wait);
     };
     const pull=()=>{
       if(st==="idle"){doCast();return}
-      if(st==="wait"){st="miss";msg.textContent="¡Demasiado pronto! Has asustado a los peces.";snd("miss");bob.className="fibob";mgT(reset,1100);return}
-      if(st==="bite"){st="got";const rt=performance.now()-bite,p=fish,base={C:10,R:30,E:90,L:150}[p[2]]||10,bonus=Math.max(0,Math.round((1-rt/win)*base*.5)),pts=base+bonus;
+      if(st==="wait"){st="miss";f3("miss");msg.textContent="¡Demasiado pronto! Has asustado a los peces.";snd("miss");bob.className="fibob";mgT(reset,1100);return}
+      if(st==="bite"){st="got";f3("got");const rt=performance.now()-bite,p=fish,base={C:10,R:30,E:90,L:150}[p[2]]||10,bonus=Math.max(0,Math.round((1-rt/win)*base*.5)),pts=base+bonus;
         ex.hidden=true;bob.className="fibob";mgSet(MG.score+pts);snd("capok");caught.push(p);
         const k=$("fiK");k.innerHTML=ico(p,96);k.classList.remove("jump");void k.offsetWidth;k.classList.add("jump");
         msg.innerHTML='¡Has pescado un <b>'+esc(p[0])+'</b>! '+STAR[p[2]]+' <b>+'+pts+'</b>'+(rt<200?' ⚡ ¡Reflejos de campeón!':'');

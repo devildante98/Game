@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.93.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.94"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794690260">
+<meta name="game-build" content="1794695201">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2934,7 +2934,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.93.1</small>
+    <small class="pcver">Versión 6.94</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7616,8 +7616,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.93.1";
+const GAME_VER="6.94";
 const NEWS=[
+{v:"2026-11-14-6.94",ver:"6.94",at:"2026-11-14T23:21",t:"🚶 Un pueblo con vida",l:["Vecinos que pasean por la calle del pueblo y por un sendero nuevo junto al lago, algunos con su Pokémon: un cachorro que trota y una bolita que va dando saltos","Las Miltank de la granja pastan: bajan la cabeza a comer y mueven la cola y las orejas","Sale humo de las chimeneas de la Escuela y de la Guardería","De noche: las farolas brillan, los focos del Estadio iluminan el campo, la antena del Laboratorio parpadea en rojo y los vecinos que aún pasean llevan un farolillo","No gasta más: en las pruebas el paisaje tarda lo mismo en dibujarse que antes","Arreglado: los edificios ya no se desplazan uno o dos píxeles cuando late el botón del Gacha"]},
 {v:"2026-11-14-6.93.1",ver:"6.93.1",at:"2026-11-14T22:04",t:"🔧 Arreglos/Mejoras",l:["La pestaña «Tienda» de abajo pasa a llamarse «Mejoras» y es el único botón para mejorar el pueblo (se quita el botón lateral «Mejoras»); los edificios del pueblo siguen abriendo la misma ventana","El aviso ↑ de esa pestaña también sale cuando puedes mejorar los Guantes de entrenador"]},
 {v:"2026-11-14-6.93",ver:"6.93",at:"2026-11-14T22:02",t:"🏘️ Edificios del pueblo más detallados y un solo menú de mejoras",l:["Los edificios del pueblo 3D tienen mucho más detalle: zócalo de piedra, esquinas remarcadas, ventanas con marco, cruceta, alféizar, contraventanas y jardineras, puertas con escalón y tejadillo, tejados de tejas en hileras con cumbrera y aleros, y chimeneas","La Granja tiene tejado de establo de doble pendiente, portón con cruces, pajar y silo con aros; el Centro Pokémon, fachada acristalada con marquesina, tejado a cuatro aguas y emblema; la Liga, escalinata, columnas acanaladas con basa y capitel, frontón y estandartes; el Estadio, gradas escalonadas, muro con arcos, campo marcado y focos; y el Laboratorio, ventanales corridos, máquinas en la azotea, parabólica, antena y placas solares","El paisaje y el pueblo ya no se balancean: la vista queda fija, y en pantallas muy anchas o altas se ajusta para que ningún edificio quede bajo la base de la Poké Ball","Un solo menú de mejoras: el botón «Tienda» de abajo, el botón «Mejoras» y los propios edificios abren la misma ventana"]},
 {v:"2026-11-14-6.92",ver:"6.92",at:"2026-11-14T21:30",t:"🏘️ Pueblo en 3D y botón de Mejoras",l:["Las casas pixeladas de abajo se han sustituido por un pueblo en 3D dentro del propio paisaje: Escuela de entrenadores, Granja Miltank con su establo, silo y Miltank, Centro Pokémon, Guardería con huevos en el jardín, Liga Pokémon con columnas y copa, Estadio con gradas y focos, y Laboratorio con antena y placas solares","Cada edificio está asentado en el prado con su explanada, girado a su manera (unos de frente, otros de lado o de perfil) y unidos por un camino de tierra que baja al lago","Tienen siempre el mismo tamaño: al subir de nivel ganan detalles (flores, farolas, banderas, más Miltank o huevos, remates dorados) sin crecer ni tapar el paisaje; los que aún no tienes se ven en obras","De noche se encienden las ventanas, las farolas y los focos del estadio","Toca un edificio (o su cartel) para mejorarlo, y siguen soltando sus tickets","Nuevo botón «Mejoras» en el lateral derecho: todas las mejoras y los guantes en una ventana, con nivel, producción, precio y compra ×1, ×10, ×50 o el máximo. Se marca cuando puedes comprar algo","En pantallas estrechas el pueblo se recorre deslizando o con las flechas"]},
@@ -7965,7 +7966,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794690260";
+const GAME_B="1794695201";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -18528,9 +18529,9 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
   const TOWN=[{x:33,z:28,yaw:-32,r:5.2},{x:22.5,z:31.5,yaw:72,r:5.6},{x:10.5,z:25,yaw:-10,r:5},{x:0,z:26,yaw:0,r:5},{x:-10.5,z:25,yaw:12,r:5.2},{x:-23,z:32,yaw:0,r:5.6},{x:-33.5,z:27,yaw:40,r:5.2}];// (la x positiva se ve a la izquierda)
   TOWN.forEach(b=>{b.y=H0(b.x,b.z);const a=b.yaw*Math.PI/180;b.ca=Math.cos(a);b.sa=Math.sin(a)});
   // camino de tierra: baja del pueblo hacia el lago y pasa por delante de cada edificio
-  const ROAD=[[48,22],[33,21],[22.5,24],[10.5,18.5],[0,21],[-10.5,18.5],[-23,24.5],[-33.5,20.5],[-48,21]],ROAD2=[[0,21],[1.5,34],[-1,50]];
+  const ROAD=[[48,22],[33,21],[22.5,24],[10.5,18.5],[0,21],[-10.5,18.5],[-23,24.5],[-33.5,20.5],[-48,21]],ROAD2=[[0,21],[1.5,34],[-1,50]],BACK=[[62,39.5],[36,38.6],[16,39.8],[0,40.2],[-18,39.4],[-40,39],[-62,39.6]];
   const segD=(px,pz,a,b)=>{const dx=b[0]-a[0],dz=b[1]-a[1],t=Math.max(0,Math.min(1,((px-a[0])*dx+(pz-a[1])*dz)/(dx*dx+dz*dz)));return Math.hypot(px-a[0]-dx*t,pz-a[1]-dz*t)};
-  const roadD=(x,z)=>{let d=99;for(const R of[ROAD,ROAD2])for(let i=0;i<R.length-1;i++)d=Math.min(d,segD(x,z,R[i],R[i+1]));
+  const roadD=(x,z)=>{let d=99;for(const R of[ROAD,ROAD2,BACK])for(let i=0;i<R.length-1;i++)d=Math.min(d,segD(x,z,R[i],R[i+1]));
     // y un ramal corto hasta la puerta de cada edificio
     for(const b of TOWN){const fx=b.x-b.sa*(b.r+1.2),fz=b.z-b.ca*(b.r+1.2);let best=null,bd=99;for(const R of[ROAD])for(let i=0;i<R.length-1;i++){const q=segD(fx,fz,R[i],R[i+1]);if(q<bd){bd=q;best=1}}
       if(best)d=Math.min(d,segD(x,z,[b.x-b.sa*b.r*.6,b.z-b.ca*b.r*.6],[fx-b.sa*bd,fz-b.ca*bd]))}return d};
@@ -18575,7 +18576,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     gl.bindBuffer(gl.ARRAY_BUFFER,ST.vbo);gl.bufferData(gl.ARRAY_BUFFER,ST.a.subarray(0,ST.n*9),gl.STATIC_DRAW)};
   // ---------- los edificios del pueblo (tamaño fijo; al subir de nivel solo ganan detalles) ----------
   const TW=mkB(120000),TB=[];let townKey="";
-  const buildTown=(tiers,night)=>{B=TW;B.n=0;
+  const buildTown=(tiers,night)=>{B=TW;B.n=0;LIFE.smk=[];LIFE.glo=[];LIFE.beam=[];LIFE.cow=null;
     const starts=[];for(let i=0;i<TOWN.length;i++){starts.push(B.n);const b=TOWN[i],t=tiers[i]|0;
       // ---- coordenadas del edificio: x a la derecha de la fachada, y arriba, z hacia dentro (la fachada mira a -z) ----
       const SC=.88,P=(x,y,z)=>[b.x+(x*b.ca+z*b.sa)*SC,b.y+y*SC,b.z+(-x*b.sa+z*b.ca)*SC],N=v=>[v[0]*b.ca+v[2]*b.sa,v[1],-v[0]*b.sa+v[2]*b.ca];
@@ -18639,12 +18640,12 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
               q(Ac,Ac,A0,Bc,ec,ec,ec,ec,nn);q(A0,A1,L(sa*ha,0,y0+p1[1]),L(sa*ha,0,y0+Math.max(0,p0[1])),ec,ec,ec,ec,nn)}}
           for(const s of[-1,1])for(let k=0;k<prof.length-1;k++){const p0=prof[k],p1=prof[k+1],m=L(sa*(ha+ov+.02),s*(p0[0]+p1[0])/2,y0+(p0[1]+p1[1])/2+.05),dC=(p1[0]-p0[0])*s,dy=p1[1]-p0[1],l=Math.hypot(dC,dy);
             const Un=[C[0]*dC/l,dy/l,C[2]*dC/l];let Vn=[C[0]*-dy/l,dC/l,C[2]*-dy/l];if(Vn[1]<0)Vn=Vn.map(v=>-v);obox(m,Un,Vn,A.map(v=>v*sa),l/2,.09,.04,trim,null,0)}}};
-      const lamp=(x,z)=>{cyl(x,0,z,.07,2.4,[.2,.22,.26],null,6);box(x,0,z,.14,.08,.14,[.2,.22,.26]);box(x,2.4,z,.06,.12,.06,[.2,.22,.26]);const lc=night?[1,.9,.6]:[.95,.95,.88];
+      const lamp=(x,z)=>{if(night)LIFE.glo.push({p:P(x,2.77,z),r:.95,c:[1,.85,.5]});cyl(x,0,z,.07,2.4,[.2,.22,.26],null,6);box(x,0,z,.14,.08,.14,[.2,.22,.26]);box(x,2.4,z,.06,.12,.06,[.2,.22,.26]);const lc=night?[1,.9,.6]:[.95,.95,.88];
         if(night){glw([x-.16,2.62,z-.17],[x+.16,2.62,z-.17],[x+.16,2.92,z-.17],[x-.16,2.92,z-.17],lc);glw([x-.17,2.62,z+.16],[x-.17,2.62,z-.16],[x-.17,2.92,z-.16],[x-.17,2.92,z+.16],lc)}box(x,2.62,z,.17,.15,.17,lc,[.2,.22,.26],0);box(x,2.92,z,.21,.04,.21,[.2,.22,.26],null,0)};
       const flowers=(x,z,c,w)=>{w=w||.9;box(x,0,z,w,.12,.32,[.48,.34,.24],[.36,.26,.18]);for(let k=0;k<Math.round(w*5);k++)ell(x-w+.15+k*(w*2-.3)/Math.max(1,Math.round(w*5)-1),.33,z+(k%2?.1:-.08),.12,.1,.12,k%3===1?[1,.95,.55]:c,6)};
       const flag=(x,z,c)=>{cyl(x,0,z,.05,3.4,[.85,.85,.88],null,6);ell(x,3.42,z,.08,.08,.08,[.9,.78,.3],6);q1([x,2.75,z],[x+1,2.85,z],[x+1,3.35,z],[x,3.3,z],c,[0,0,-1]);q1([x+1,2.85,z],[x,2.75,z],[x,3.3,z],[x+1,3.35,z],c,[0,0,1])};
       const fence=(x0,x1,z,c)=>{const n=Math.max(2,Math.round((x1-x0)/1.1));for(let k=0;k<=n;k++)box(x0+(x1-x0)*k/n,0,z,.07,.42,.07,c,lt(c,.1),.1);box((x0+x1)/2,.55,z,(x1-x0)/2,.045,.035,c,null,0);box((x0+x1)/2,.25,z,(x1-x0)/2,.045,.035,c,null,0)};
-      const chimney=(x,y,z)=>{box(x,y,z,.3,.75,.3,[.62,.38,.3],null,.1);box(x,y+1.5,z,.36,.07,.36,[.5,.5,.52],null,0)};
+      const chimney=(x,y,z)=>{LIFE.smk.push(P(x,y+1.72,z));box(x,y,z,.3,.75,.3,[.62,.38,.3],null,.1);box(x,y+1.5,z,.36,.07,.36,[.5,.5,.52],null,0)};
       const gold=[.95,.78,.28],tr5=t>=5;
       // sombra suave en el suelo y explanada empedrada
       const sh=[.2,.28,.17];q1([-b.r*.95+.5,.03,-b.r*.75+.5],[b.r*.95+.5,.03,-b.r*.75+.5],[b.r*.95+.5,.03,b.r*.75+.5],[-b.r*.95+.5,.03,b.r*.75+.5],sh,[0,1,0]);
@@ -18675,7 +18676,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
         cyl(4.8,0,1.1,1.05,5,[.8,.8,.82],null,16);for(let k=1;k<6;k++)cyl(4.8,k*.85,1.1,1.075,.06,[.6,.62,.66],null,16);ell(4.8,5,1.1,1.07,.8,1.07,[.55,.58,.62],12);box(4.8,0,1.1-1.1,.12,2.4,.04,[.55,.55,.58],null,0);
         // cercado, abrevadero y Miltank
         const fc=[.92,.88,.8];fence(-4.4,3.6,-4.6,fc);fence(-4.4,-4.4+.01,-4.6,fc);box(2.2,0,-3.9,.7,.22,.25,[.45,.35,.25],[.4,.6,.8]);
-        const cows=Math.min(3,1+Math.floor(t/2));for(let k=0;k<cows;k++){const cx=-2.8+k*2,cz=-3.5-(k%2)*.35;ell(cx,.88,cz,.65,.42,.4,[.95,.66,.72]);ell(cx-.72,1.08,cz,.3,.27,.27,[.98,.86,.72]);ell(cx-.98,1.02,cz,.12,.1,.17,[1,.78,.82],6);ell(cx-.72,1.36,cz-.18,.09,.07,.04,[.25,.2,.2],5);ell(cx-.72,1.36,cz+.18,.09,.07,.04,[.25,.2,.2],5);ell(cx+.15,.52,cz,.32,.14,.27,[1,.82,.88]);for(const[lx,lz]of[[-.38,-.22],[.38,-.22],[-.38,.22],[.38,.22]])cyl(cx+lx,0,cz+lz,.08,.5,[.98,.9,.8],null,5)}
+        LIFE.cow={ell,cyl,n:Math.min(3,1+Math.floor(t/2))};
         if(t>=2){for(const[x,z]of[[-4.7,1.6],[-4.6,.3],[-4.7,1]]){cyl(x,0,z,.5,.85,[.9,.76,.34],[.95,.86,.48],10)}}if(t>=3)lamp(4.2,-3.4);if(t>=4)flag(-4.3,-1.9,[.95,.85,.3]);if(tr5)box(0,5.47,0,.1,.05,2.95,gold)}
       else if(i===2){// ---- Centro Pokémon: fachada acristalada, marquesina roja, tejado a cuatro aguas y emblema ----
         const wall=[.97,.95,.92],red=[.86,.18,.2];body(0,0,3.6,2.6,3.4,wall,{tr:[.9,.88,.86],band:red,bandY:.3,bandH:.16});
@@ -18727,7 +18728,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
         // entrada principal
         const F=front(-rz*1.0);F.box(0,1.4,.1,.9,1.4,.15,wall,null,.12);F.quad(-.6,0,.6,1.6,.27,night?GL:[.3,.32,.38],night);F.box(0,2.95,.15,1.05,.18,.2,s2,null,0);
         const lights=t>=3?4:2;for(let k=0;k<lights;k++){const a=(k+.5)/lights*6.283,x=Math.cos(a)*rx*1.1,z=Math.sin(a)*rz*1.1;cyl(x,0,z,.1,3.8,[.6,.62,.66],null,6);const lc=night?[1,.96,.8]:[.92,.94,.9];
-          box(x,3.8,z,.6,.32,.12,[.35,.37,.42],null,0);for(let r2=0;r2<2;r2++)for(let c2=0;c2<3;c2++){const lx=x-.38+c2*.38,ly=3.92+r2*.3;if(night)glw([lx-.13,ly,z-.13],[lx+.13,ly,z-.13],[lx+.13,ly+.22,z-.13],[lx-.13,ly+.22,z-.13],lc);else box(lx,ly,z-.08,.12,.1,.05,lc,null,0)}}
+          box(x,3.8,z,.6,.32,.12,[.35,.37,.42],null,0);if(night){LIFE.glo.push({p:P(x,4.12,z-.25),r:1.6,c:[1,.95,.8]});LIFE.beam.push([P(x,4.05,z-.2),P(x*.15,.3,z*.15)])}for(let r2=0;r2<2;r2++)for(let c2=0;c2<3;c2++){const lx=x-.38+c2*.38,ly=3.92+r2*.3;if(night)glw([lx-.13,ly,z-.13],[lx+.13,ly,z-.13],[lx+.13,ly+.22,z-.13],[lx-.13,ly+.22,z-.13],lc);else box(lx,ly,z-.08,.12,.1,.05,lc,null,0)}}
         if(t>=4)flag(0,rz+.6,[.95,.3,.35])}
       else if(i===6){// ---- Laboratorio: cuerpo moderno con ventanales corridos, azotea con máquinas, parabólica y placas ----
         const wt=[.95,.96,.97],gr=[.7,.72,.76],blu=[.24,.46,.8];box(0,0,0,3.6,1.55,2.5,wt,[.82,.84,.88],.15);box(0,0,0,3.66,.16,2.56,[.55,.56,.6]);box(1.6,3.1,.4,1.8,.8,1.8,wt,[.82,.84,.88],.1);
@@ -18737,7 +18738,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
         const S2=front(-1.4,1.6);S2.quad(-1.5,3.4,1.5,4.3,.015,night?GL:[.42,.6,.78],night,night?null:[.34,.5,.7]);
         box(-2.4,3.1,1.2,.5,.35,.45,[.78,.8,.84],null,.1);for(let k=0;k<3;k++)box(-2.4,3.82,1.2-.25+k*.25,.42,.02,.06,[.4,.42,.46],null,0);
         cyl(-2.3,3.1,-1.2,.08,1,[.7,.72,.76],null,6);ell(-2.3,4.25,-1.2,.62,.14,.62,[.92,.94,.97],12);cyl(-2.3,4.25,-1.2,.03,.45,[.6,.62,.66],null,5);
-        cyl(2.6,4.7,1.4,.04,1.6,[.75,.77,.8],null,5);if(night)glw([2.52,6.25,1.32],[2.68,6.25,1.32],[2.68,6.38,1.32],[2.52,6.38,1.32],[1,.2,.2]);else ell(2.6,6.32,1.4,.07,.07,.07,[.9,.2,.2],6);
+        cyl(2.6,4.7,1.4,.04,1.6,[.75,.77,.8],null,5);if(night){LIFE.glo.push({p:P(2.6,6.32,1.25),r:.8,c:[1,.15,.12],blink:1});glw([2.52,6.25,1.32],[2.68,6.25,1.32],[2.68,6.38,1.32],[2.52,6.38,1.32],[1,.2,.2])}else ell(2.6,6.32,1.4,.07,.07,.07,[.9,.2,.2],6);
         if(t>=2)for(let k=0;k<4;k++){const c=[-2.9+k*.95,3.25,-1.4];obox(c,X,[0,.87,-.5],[0,.5,.87],.4,.02,.55,[.18,.26,.48],[.25,.36,.62],0)}
         if(tr5)box(1.6,4.72,.4,1.85,.04,1.85,gold);if(t>=3)lamp(-4.2,-2.4);if(t>=4)flag(4,-1.3,[.3,.6,.95])}
       // árbol junto a cada edificio, por detrás, para que no quede suelto en el prado
@@ -18754,6 +18755,72 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     for(let k=0;k<n;k++){const u=(k/(n-1)-.5)*2,mid=1-u*u;P.push({dx:u*s*1.25+(hash(i*31+k)-.5)*s*.25,dy:mid*s*.42*(.6+hash(i*17+k)*.7),r:s*(.28+mid*.32)*(.75+hash(i*13+k)*.5)})}
     for(let k=0;k<Math.floor(n/2);k++)P.push({dx:(hash(i*41+k)-.5)*s*1.2,dy:s*(.35+hash(i*43+k)*.35),r:s*(.22+hash(i*47+k)*.18)});
     CL.push({x:(i/22-.5)*1400+(hash(i)-.5)*40,y:88+hash(i+3)*70+z*.12,z,s,v:.9+hash(i+11)*1.4,P})}
+  // ---------- vida en el pueblo: vecinos y Pokémon que pasean por la calle, Miltank pastando, humo de chimeneas y luces de noche ----------
+  const LV=mkB(40000),LB={a:new Float32Array(30000*7),n:0,vbo:gl.createBuffer()},LIFE={smk:[],glo:[],beam:[],cow:null,wg:[]};
+  // recorrido de los paseantes: la calle del pueblo, alargada por los lados para que entren y salgan de la vista
+  // y un sendero junto al lago, por detrás de los edificios (se ve entre ellos aunque los carteles tapen la calle)
+  const mkPath=W=>{const seg=[];let len=0;for(let i=0;i<W.length-1;i++){const a=W[i],b=W[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]);seg.push({a,b,l,s:len});len+=l}return{seg,len}};
+  const PATHS=[mkPath([[72,23]].concat(ROAD,[[-72,21]])),mkPath([[74,39.5]].concat(BACK,[[-74,39.6]]))];
+  const walkAt=(pi,s,lane)=>{const{seg:WSEG,len:WLEN}=PATHS[pi];s=Math.max(0,Math.min(WLEN-.001,s));let g=WSEG[0];for(const q of WSEG)if(s>=q.s)g=q;const dx=(g.b[0]-g.a[0])/g.l,dz=(g.b[1]-g.a[1])/g.l,x=g.a[0]+dx*(s-g.s)-dz*lane,z=g.a[1]+dz*(s-g.s)+dx*lane;return{x,z,y:H(x,z),dx,dz}};
+  // piezas en coordenadas del mundo: caja orientada (ejes U, W, D) y elipsoide orientado (adelante F, lado S)
+  const wq=(a,b,c,d,col,n)=>{tri(a,b,c,col,col,col,n,n,n);tri(a,c,d,col,col,col,n,n,n)};
+  const wbox=(c,U,W,D,hu,hw,hd,col)=>{const p=(a,b,d)=>[c[0]+U[0]*a*hu+W[0]*b*hw+D[0]*d*hd,c[1]+U[1]*a*hu+W[1]*b*hw+D[1]*d*hd,c[2]+U[2]*a*hu+W[2]*b*hw+D[2]*d*hd],ng=v=>[-v[0],-v[1],-v[2]],lo=mix(col,[0,0,0],.15);
+    wq(p(1,-1,-1),p(1,1,-1),p(1,1,1),p(1,-1,1),col,U);wq(p(-1,-1,1),p(-1,1,1),p(-1,1,-1),p(-1,-1,-1),col,ng(U));wq(p(-1,1,-1),p(-1,1,1),p(1,1,1),p(1,1,-1),col,W);
+    wq(p(-1,-1,-1),p(1,-1,-1),p(1,-1,1),p(-1,-1,1),lo,ng(W));wq(p(-1,-1,1),p(1,-1,1),p(1,1,1),p(-1,1,1),col,D);wq(p(1,-1,-1),p(-1,-1,-1),p(-1,1,-1),p(1,1,-1),col,ng(D))};
+  const well=(c,F,S,rf,ry,rs,col,seg)=>{seg=seg||7;const R2=4,pt=(i,j)=>{const v=i/R2*Math.PI,u=j/seg*6.283,a=Math.sin(v)*Math.cos(u),b=Math.cos(v),d=Math.sin(v)*Math.sin(u);
+      return[[c[0]+F[0]*a*rf+S[0]*d*rs,c[1]+b*ry,c[2]+F[2]*a*rf+S[2]*d*rs],[F[0]*a/rf+S[0]*d/rs,b/ry,F[2]*a/rf+S[2]*d/rs]]};
+    for(let i=0;i<R2;i++)for(let j=0;j<seg;j++){const A=pt(i,j),Bp=pt(i+1,j),C=pt(i+1,j+1),D=pt(i,j+1);tri(A[0],Bp[0],C[0],col,col,col,A[1],Bp[1],C[1]);tri(A[0],C[0],D[0],col,col,col,A[1],C[1],D[1])}};
+  // pierna o brazo: cajita que gira hacia delante/atrás desde la cadera o el hombro
+  const limb=(F,S,hip,len,ang,hw,col)=>{const dir=[F[0]*Math.sin(ang),-Math.cos(ang),F[2]*Math.sin(ang)],c=[hip[0]+dir[0]*len/2,hip[1]+dir[1]*len/2,hip[2]+dir[2]*len/2];
+    wbox(c,[F[0]*Math.cos(ang),Math.sin(ang),F[2]*Math.cos(ang)],[-dir[0],-dir[1],-dir[2]],S,hw,len/2,hw,col)};
+  const person=(x,y,z,F,ph,o)=>{const S=[-F[2],0,F[0]],Up=[0,1,0],k=o.sc||1,at=(a,h,sd)=>[x+F[0]*a*k+S[0]*sd*k,y+h*k,z+F[2]*a*k+S[2]*sd*k],sw=Math.sin(ph)*.5,bob=Math.abs(Math.cos(ph))*.035;
+    for(const sd of[-1,1]){limb(F,S,at(0,.64+bob,sd*.085),.62*k,sw*sd,.07*k,o.pants);wbox(at(.04+Math.sin(sw*sd)*.3,.04,sd*.085),F,Up,S,.1*k,.04*k,.07*k,o.shoe||[.25,.22,.2])}
+    wbox(at(0,.9+bob,0),F,Up,S,.11*k,.25*k,.17*k,o.shirt);
+    for(const sd of[-1,1]){const lant=o.lant&&sd>0,a=lant?.12:-sw*sd*.8;limb(F,S,at(0,1.1+bob,sd*.225),.46*k,a,.055*k,o.shirt);
+      if(lant){const h=at(.1,.6+bob,.25);wbox(h,F,Up,S,.07*k,.09*k,.07*k,[1,.86,.5]);LIFE.wg.push({p:h,r:.75,c:[1,.8,.45]})}}
+    well(at(0,1.33+bob,0),F,S,.12*k,.135*k,.12*k,o.skin,8);well(at(-.025,1.4+bob,0),F,S,.13*k,.09*k,.13*k,o.hair,8);
+    if(o.hat){wbox(at(0,1.47+bob,0),F,Up,S,.14*k,.05*k,.14*k,o.hat);wbox(at(.13,1.43+bob,0),F,Up,S,.09*k,.015*k,.12*k,o.hat)}
+    if(o.bag)wbox(at(-.17,.95+bob,0),F,Up,S,.06*k,.16*k,.13*k,o.bag)};
+  // Pokémon que acompañan: un cachorro de cuatro patas y una bolita que va dando saltos
+  const pup=(x,y,z,F,ph,c1,c2)=>{const S=[-F[2],0,F[0]],at=(a,h,sd)=>[x+F[0]*a+S[0]*sd,y+h,z+F[2]*a+S[2]*sd],b=Math.abs(Math.sin(ph))*.04;
+    for(const[a,sd,o2]of[[.15,-1,0],[.15,1,Math.PI],[-.15,-1,Math.PI],[-.15,1,0]])limb(F,S,at(a,.26+b,sd*.08),.26,Math.sin(ph+o2)*.5,.04,c1);
+    well(at(0,.34+b,0),F,S,.27,.13,.12,c1,7);well(at(.03,.3+b,0),F,S,.2,.08,.1,c2,6);well(at(.27,.5+b,0),F,S,.13,.12,.11,c1,7);well(at(.37,.46+b,0),F,S,.08,.055,.065,c2,6);
+    for(const sd of[-1,1])well(at(.24,.62+b,sd*.07),F,S,.04,.07,.03,c1,5);well(at(-.3,.46+b,Math.sin(ph*2)*.06),F,S,.1,.05,.05,c2,5)};
+  const hop=(x,y,z,F,ph,c1,c2)=>{const S=[-F[2],0,F[0]],at=(a,h,sd)=>[x+F[0]*a+S[0]*sd,y+h,z+F[2]*a+S[2]*sd],h=Math.abs(Math.sin(ph))*.24,sq=1-Math.max(0,.06-h)*2;
+    well(at(0,.19+h,0),F,S,.18,.17*sq,.17,c1,8);well(at(.07,.16+h,0),F,S,.12,.1*sq,.13,c2,7);for(const sd of[-1,1])well(at(-.01,.38+h,sd*.09),F,S,.065,.065,.03,c1,6);
+    well(at(-.24,.13+h,0),F,S,.06,.06,.06,c2,5)};
+  const WK=[{v:.95,s0:40,lane:.5,pet:"pup",o:{shirt:[.86,.27,.25],pants:[.24,.3,.46],skin:[.96,.8,.66],hair:[.3,.2,.12]}},
+    {v:1.05,s0:170,lane:1.2,night:1,o:{shirt:[.26,.5,.86],pants:[.3,.28,.27],skin:[.84,.64,.5],hair:[.12,.1,.1],hat:[.95,.82,.3],lant:1}},
+    {v:.85,s0:95,lane:1.15,pet:"hop",o:{sc:.78,shirt:[.36,.72,.4],pants:[.3,.42,.72],skin:[.98,.85,.73],hair:[.82,.55,.26],bag:[.92,.6,.22]}},
+    {v:.8,s0:250,lane:.5,night:1,o:{shirt:[.95,.8,.36],pants:[.46,.36,.28],skin:[.7,.5,.38],hair:[.2,.13,.08],lant:1}},
+    {pi:1,v:.75,s0:60,lane:.35,pet:"pup",petC:[[.55,.4,.3],[.95,.88,.75]],o:{shirt:[.62,.38,.78],pants:[.22,.24,.3],skin:[.92,.74,.6],hair:[.55,.35,.2],hat:[.85,.85,.82]}},
+    {pi:1,v:1.25,s0:200,lane:-.35,night:1,o:{shirt:[.95,.45,.2],pants:[.2,.22,.3],skin:[.78,.58,.44],hair:[.1,.08,.08],lant:1}}];
+  const lifeDyn=(t,night)=>{const B0=B;B=LV;B.n=0;LIFE.wg=[];
+    for(const w of WK){if(night&&!w.night)continue;const pi=w.pi||0,WLEN=PATHS[pi].len,k=w.o.sc||1,u=((w.s0+w.v*t)%(2*WLEN)+2*WLEN)%(2*WLEN),dir=u<WLEN?1:-1,s=u<WLEN?u:2*WLEN-u,o=night?Object.assign({},w.o):Object.assign({},w.o,{lant:0});
+      const q=walkAt(pi,s,w.lane*dir),F=[q.dx*dir,0,q.dz*dir];person(q.x,q.y,q.z,F,s*6.283/(1.05*k),o);
+      if(w.pet){const p2=walkAt(pi,s+dir*1.2,w.lane*dir),F2=[p2.dx*dir,0,p2.dz*dir],pc=w.petC||[[.93,.55,.22],[.98,.9,.74]];if(w.pet==="pup")pup(p2.x,p2.y,p2.z,F2,s*6.283/.55,pc[0],pc[1]);else hop(p2.x,p2.y,p2.z,F2,s*6.283/1.1,[.42,.62,.95],[.96,.94,.86])}}
+    // Miltank pastando: bajan la cabeza a comer, mueven la cola y las orejas
+    if(LIFE.cow){const{ell,cyl,n}=LIFE.cow;for(let k=0;k<n;k++){const cx=-2.8+k*2,cz=-3.5-(k%2)*.35,g=Math.pow(Math.max(0,Math.sin(t*.32+k*2.1)),.6),br=Math.sin(t*1.3+k)*.015,hx=cx-.72-g*.14,hy=1.08-g*.4,tl=Math.sin(t*2.4+k*1.7)*.14,ear=Math.pow(Math.max(0,Math.sin(t*3.1+k*4)),8)*.06;
+        ell(cx,.88+br,cz,.65,.42+br,.4,[.95,.66,.72]);ell(hx,hy,cz,.3,.27,.27,[.98,.86,.72]);ell(hx-.26,hy-.06,cz,.12,.1,.17,[1,.78,.82],6);ell(hx,hy+.28,cz-.18-ear,.09,.07,.04,[.25,.2,.2],5);ell(hx,hy+.28,cz+.18+ear,.09,.07,.04,[.25,.2,.2],5);
+        ell(cx+.15,.52,cz,.32,.14,.27,[1,.82,.88]);for(const[lx,lz]of[[-.38,-.22],[.38,-.22],[-.38,.22],[.38,.22]])cyl(cx+lx,0,cz+lz,.08,.5,[.98,.9,.8],null,5);ell(cx+.68,.72,cz+tl,.04,.22,.04,[.95,.66,.72],5);ell(cx+.7,.5,cz+tl*1.6,.07,.08,.07,[.32,.24,.24],5)}}
+    B=B0;gl.bindBuffer(gl.ARRAY_BUFFER,LV.vbo);gl.bufferData(gl.ARRAY_BUFFER,LV.a.subarray(0,LV.n*9),gl.DYNAMIC_DRAW)};
+  // humo (transparencia normal) y luces de noche (se suman a lo de detrás, como un resplandor)
+  const lifePass=(t,P,VP,night)=>{if(!prC)return;LB.n=0;const A=LB.a,V4=(x,y,z,c,a)=>{if(LB.n>=30000)return;const i=LB.n*7;A[i]=x;A[i+1]=y;A[i+2]=z;A[i+3]=c[0];A[i+4]=c[1];A[i+5]=c[2];A[i+6]=a;LB.n++};
+    const disc=(c,r,col,a,seg,inner)=>{seg=seg||12;const ri=inner||0;for(let k=0;k<seg;k++){const a0=k/seg*6.283,a1=(k+1)/seg*6.283,c0=Math.cos(a0),s0=Math.sin(a0),c1=Math.cos(a1),s1=Math.sin(a1);
+        if(ri){const p0=[c[0]+c0*r*ri,c[1]+s0*r*ri,c[2]],p1=[c[0]+c1*r*ri,c[1]+s1*r*ri,c[2]];V4(c[0],c[1],c[2],col,a);V4(p0[0],p0[1],p0[2],col,a*.85);V4(p1[0],p1[1],p1[2],col,a*.85);
+          V4(p0[0],p0[1],p0[2],col,a*.85);V4(c[0]+c0*r,c[1]+s0*r,c[2],col,0);V4(c[0]+c1*r,c[1]+s1*r,c[2],col,0);V4(p0[0],p0[1],p0[2],col,a*.85);V4(c[0]+c1*r,c[1]+s1*r,c[2],col,0);V4(p1[0],p1[1],p1[2],col,a*.85)}
+        else{V4(c[0],c[1],c[2],col,a);V4(c[0]+c0*r,c[1]+s0*r,c[2],col,0);V4(c[0]+c1*r,c[1]+s1*r,c[2],col,0)}}};
+    const sc=night?mix([.4,.43,.52],P.hor,.25):mix([.96,.96,.97],P.hor,.12);
+    LIFE.smk.forEach((c,ci)=>{for(let k=0;k<10;k++){const ph=(t*.16+k/10+ci*.37)%1,r=.2+ph*.85,a=(night?.34:.55)*(1-ph)*Math.min(1,ph*6);
+      disc([c[0]+ph*ph*1.8+Math.sin(t*.7+k*1.3)*.12,c[1]+ph*3.8,c[2]+ph*.5],r,mix(sc,P.hor,ph*.35),a,12,.55)}});
+    const nS=LB.n;
+    if(night){for(const g of LIFE.glo.concat(LIFE.wg)){const a=g.blink?(Math.sin(t*3.2)>.2?.9:0):.5;if(a)disc(g.p,g.r,g.c,a,14)}
+      for(const[h,e]of LIFE.beam){const dx=e[0]-h[0],dy=e[1]-h[1],l=Math.hypot(dx,dy)||1,px=-dy/l,py=dx/l,c=[1,.95,.82],w0=.35,w1=3;
+        V4(h[0]-px*w0,h[1]-py*w0,h[2],c,.22);V4(h[0]+px*w0,h[1]+py*w0,h[2],c,.22);V4(e[0]+px*w1,e[1]+py*w1,e[2],c,0);V4(h[0]-px*w0,h[1]-py*w0,h[2],c,.22);V4(e[0]+px*w1,e[1]+py*w1,e[2],c,0);V4(e[0]-px*w1,e[1]-py*w1,e[2],c,0)}}
+    if(!LB.n)return;gl.useProgram(prC);gl.uniformMatrix4fv(uMC,false,VP);gl.bindBuffer(gl.ARRAY_BUFFER,LB.vbo);gl.bufferData(gl.ARRAY_BUFFER,A.subarray(0,LB.n*7),gl.DYNAMIC_DRAW);
+    gl.disableVertexAttribArray(2);gl.vertexAttribPointer(0,3,gl.FLOAT,false,28,0);gl.vertexAttribPointer(1,4,gl.FLOAT,false,28,12);gl.enable(gl.BLEND);gl.depthMask(false);
+    if(nS){gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.TRIANGLES,0,nS)}if(LB.n>nS){gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.drawArrays(gl.TRIANGLES,nS,LB.n-nS)}
+    gl.depthMask(true);gl.disable(gl.BLEND);gl.enableVertexAttribArray(2);gl.useProgram(pr)};
   const cloudPass=(t,P,VP)=>{if(!prC)return;CB.n=0;const A=CB.a,top=P.top,hor=P.hor,night=P.star>.5;
     const lit=night?mix(top,[.75,.8,.95],.35):mix([1,1,1],P.sunCol,.25),shade=night?mix(top,[0,0,0],.25):mix(mix(hor,top,.35),[.55,.58,.68],.35),aMax=night?.7:1;
     const V4=(x,y,z,c,a)=>{if(CB.n>=150000)return;const i=CB.n*7;A[i]=x;A[i+1]=y;A[i+2]=z;A[i+3]=c[0];A[i+4]=c[1];A[i+5]=c[2];A[i+6]=a;CB.n++};
@@ -18801,8 +18868,8 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       gl.clearColor(P.hor[0],P.hor[1],P.hor[2],1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);
       const L=P.sunDir,l=Math.hypot(...L);gl.uniform3f(uL,L[0]/l,L[1]/l,L[2]/l);gl.uniform3fv(uA,P.amb);gl.uniform3fv(uG,P.gnd);gl.uniform3fv(uS,P.lit);gl.uniform2f(uF,P.fog[0],P.fog[1]);gl.uniform3fv(uFc,mix(P.hor,P.low,.3));
       bind(DY);gl.drawArrays(gl.TRIANGLES,0,DY.n);bind(ST);gl.drawArrays(gl.TRIANGLES,0,ST.n);
-      const tk=(R.tiers||[]).join(",")+"|"+(tod==="night"?1:0);if(tk!==townKey&&R.tiers){townKey=tk;buildTown(R.tiers,tod==="night");B=ST}if(TW.n){const tl=tod==="night"?[.35,.7,-.6]:[.5,.72,-.48],l2=Math.hypot(...tl);gl.uniform3f(uL,tl[0]/l2,tl[1]/l2,tl[2]/l2);gl.uniform3fv(uS,P.lit.map(v=>v*1.05));bind(TW);gl.drawArrays(gl.TRIANGLES,0,TW.n)}
-      cloudPass(t,P,VP);R.VP=VP;R.asp=asp;if(R.band&&TB.length){const k=R.band.join(",")+"|"+vw+"x"+vh;if(k!==R.camKey){R.camKey=k;R.fit()}}},
+      const tk=(R.tiers||[]).join(",")+"|"+(tod==="night"?1:0);if(tk!==townKey&&R.tiers){townKey=tk;buildTown(R.tiers,tod==="night");B=ST}if(TW.n){const tl=tod==="night"?[.35,.7,-.6]:[.5,.72,-.48],l2=Math.hypot(...tl);gl.uniform3f(uL,tl[0]/l2,tl[1]/l2,tl[2]/l2);gl.uniform3fv(uS,P.lit.map(v=>v*1.05));bind(TW);gl.drawArrays(gl.TRIANGLES,0,TW.n);lifeDyn(t,tod==="night");if(LV.n){bind(LV);gl.drawArrays(gl.TRIANGLES,0,LV.n)}}
+      cloudPass(t,P,VP);if(TW.n)lifePass(t,P,VP,tod==="night");R.VP=VP;R.asp=asp;if(R.band&&TB.length){const k=R.band.join(",")+"|"+vw+"x"+vh;if(k!==R.camKey){R.camKey=k;R.fit()}}},
     // coloca la cámara para que todo el pueblo quepa en la franja libre de la pantalla (entre la base de la Poké Ball y la
     // barra de abajo): el cabeceo pone los cimientos más cercanos justo encima de los carteles, y si algún tejado sube
     // por encima de la base de la Poké Ball, la cámara se eleva un poco (vista algo más desde arriba)
@@ -18830,7 +18897,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       // con una ventana o una sección abierta encima, el paisaje se queda quieto
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
       const lite=document.body.classList.contains("lite")||(window.S&&S.o&&S.o.lite),gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:50;if(ts-last<gap)return;last=ts;
-      try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40)L.band=[Math.round(bt-lh-4),Math.round(a.bottom+5)]}}
+      try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
         L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L)}catch(e){console.error(e)}};
     requestAnimationFrame(loop);return true};
   if(!tryAttach()){const iv=setInterval(()=>{if(tryAttach())clearInterval(iv)},700)}})();

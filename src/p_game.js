@@ -307,8 +307,8 @@ function gmTod(){const h=new Date().getHours()+new Date().getMinutes()/60;let k=
 // ---------- entrenador y compañero junto a la Poké Ball ----------
 function gmHero(){const b=$("gBud");if(!b)return;let n=null;try{n=S.buddy&&S.owned[S.buddy.n]>0?S.buddy.n:(S.team||[]).find(x=>x&&S.owned[x])}catch(e){}
   if(!n){b.innerHTML="";GM.bud=null;return}const sh=!!(S.shiny&&S.shiny[n]>0);if(GM.bud&&GM.bud.n===n&&GM.bud.sh===sh)return;
-  GM.bud={n:n,sh:sh,pm:null,at:0,el:null};const me=GM.bud;b.innerHTML='<div class="gbst">'+ico(PM[n]||[n],72,false,sh)+'</div>';
-  if(typeof pmdLoad==="function")pmdLoad(n,sh).then(d=>{if(!d||GM.bud!==me)return;me.pm=d;b.innerHTML='<div class="gbpm"></div>';me.el=b.firstChild}).catch(()=>{})}
+  // el compañero se ve con su imagen animada de siempre (sin pixelar), respirando y dando algún saltito
+  GM.bud={n:n,sh:sh,pm:null,at:0,el:null};b.innerHTML='<div class="gbst">'+ico(PM[n]||[n],92,false,sh)+'</div>'}
 function gmBudTick(dt){const B=GM.bud;if(!B||!B.pm||!B.el)return;const P=B.pm,a=P.Idle||P.Walk;if(!a)return;
   if(B.an!==a){B.an=a;const sc=P.sc*1.15;B.el.style.cssText="width:"+(a.fw*sc).toFixed(0)+"px;height:"+(a.fh*sc).toFixed(0)+"px;margin-bottom:"+(-(a.fh-1-a.bot)*sc).toFixed(0)+"px;background-image:url("+a.url+");background-size:"+(a.W*sc).toFixed(0)+"px "+(a.H*sc).toFixed(0)+"px";B.sc=sc}
   B.at+=hubCalm()?0:dt;const fr=pmdFrame(B.at,a);B.el.style.backgroundPosition=(-fr*a.fw*B.sc).toFixed(0)+"px 0px"}

@@ -1128,3 +1128,9 @@ body.av3 img.trimg,body.av3 #psp img,body.av3 .tsprc,body.av3 img.sctr,body.av3 
 /* paisaje 3D detrás de la pantalla principal (sustituye al dibujo plano y a la capa de color de la hora) */
 #gLand3{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:3}
 body.land3 #gBg .pcbg,body.land3 #gTod,body.land3 #gStars{display:none}
+
+/* compañero junto a la Poké Ball: imagen animada sin pixelar, respira y de vez en cuando da un saltito */
+#gBud .gbst{animation:gbhop 7s ease-in-out infinite;transform-origin:50% 100%}
+#gBud .gbst img{image-rendering:auto!important;max-height:120px;width:auto;filter:drop-shadow(0 6px 4px rgba(0,0,0,.28))}
+@keyframes gbhop{0%,86%,100%{transform:none}89%{transform:translateY(-14px) scaleY(1.04)}92%{transform:translateY(0) scaleY(.94)}95%{transform:translateY(-6px)}98%{transform:none}}
+body.calm #gBud .gbst,body.glite #gBud .gbst{animation:none}

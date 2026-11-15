@@ -108,8 +108,8 @@ rep('    gDisband:gid=>S.deleteDoc(S.doc(db,"guilds",gid))\n  };', '''    gDisba
     async rankPos(f,v){const c=await S.getCountFromServer(S.query(S.collection(db,"ranks"),S.where(f,">",v)));return c.data().count+1}
   };
   let lastRank="";''')
-rep('try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp()});lastSaved=d;lastW=Date.now()}',
-    'try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp()});lastSaved=d;lastW=Date.now();try{if(window.rankData)await FB.rankSave(window.rankData())}catch(e){}}')
+rep('try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp(),sess:SID,claim:false},{merge:true});lastSaved=d;lastW=Date.now()}',
+    'try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp(),sess:SID,claim:false},{merge:true});lastSaved=d;lastW=Date.now();try{if(window.rankData)await FB.rankSave(window.rankData())}catch(e){}}')
 # ---- estilos ----
 rep('.dexn{position:absolute;', '''.card.shiny{border-color:transparent!important;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(120deg,#ff5f9e,#ffd35c,#5fe0c0,#6aa8ff,#c57bff,#ff5f9e) border-box!important;background-size:100% 100%,300% 300%!important;animation:shgrad 3s linear infinite,pop .8s cubic-bezier(.2,.9,.3,1.15) backwards!important;box-shadow:0 0 22px rgba(255,220,120,.8)!important}
 @keyframes shgrad{to{background-position:0 0,300% 0}}

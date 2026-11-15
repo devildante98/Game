@@ -193,8 +193,19 @@ match /gifts/{id} {
     // Partida de cada jugador (NUEVO: tiene que ser texto y de tamaño razonable)
     match /users/{uid} {
       allow read, delete: if request.auth != null && request.auth.uid == uid;
-      allow create, update: if request.auth != null && request.auth.uid == uid
+      allow create: if request.auth != null && request.auth.uid == uid
         && request.resource.data.data is string && request.resource.data.data.size() < 1000000;
+      // una sola partida activa: el dispositivo que abre la partida la «reclama» (claim) y desde entonces solo se aceptan
+      // los guardados que llevan su marca de sesión; los de un dispositivo antiguo se rechazan
+      allow update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.data is string && request.resource.data.data.size() < 1000000
+        && (request.resource.data.get('claim', false) == true
+            || !('sess' in request.resource.data) || !('sess' in resource.data)
+            || request.resource.data.sess == resource.data.sess);
+    }
+    // marca de qué dispositivo tiene la partida abierta (la ven los demás dispositivos de la misma cuenta)
+    match /sess/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
     }
 
     // Lobby y salas del PVP (ya existían)

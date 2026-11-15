@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.98";
+const GAME_VER="6.99";
 const NEWS=[
+{v:"2026-11-15-6.99",ver:"6.99",at:"2026-11-15T15:56",t:"📱💻 Tu partida, abierta en un solo sitio a la vez",l:["Si abres tu cuenta en otro dispositivo (o en otra pestaña), ese pasa a ser el activo y el anterior se pausa al momento con un aviso: «Tu partida se ha abierto en otro sitio»","Con «▶ Jugar aquí» vuelves a tomar el control: se carga tu partida con todo lo que hiciste en el otro sitio, y se pausa el otro","Así ya no se pierde progreso porque una copia vieja pise a la nueva al guardar en la nube, y no se pueden duplicar Pokémon, ventas ni premios jugando en dos sitios a la vez","El servidor también rechaza los guardados de un dispositivo que ya no es el activo, por si estaba sin conexión o dormido"]},
 {v:"2026-11-15-6.98",ver:"6.98",at:"2026-11-15T15:38",t:"🔥 Carrera de Rapidash: ahora es un reto de verdad",l:["La velocidad ya no se queda en el 400 %: sigue subiendo hasta el 560 %, y sube antes (a 6.000 m vas el doble de rápido que a 500 m)","Los niveles llegan antes (cada 600 m desde los 1.200 m) y cada nivel junta más los obstáculos: a 3.600 m hay casi un 25 % menos de tiempo entre uno y otro que antes","Más columnas, carros y combinaciones de columnas con vallas en los niveles altos, y más Snorlax","Nuevo desde el nivel 6: los zigzags, dos grupos de columnas seguidos con el hueco libre en carriles distintos","Cuanto más lejos llegas, menos potenciadores salen (Llamarada, Velocidad Extrema, Revivir y Moneda Amuleto)","Tras un salto largo siempre queda tiempo para aterrizar: es difícil, pero siempre hay forma de pasar","Clasificaciones: si el servidor rechaza una marca, ahora te avisa, y tu mejor marca de la semana se vuelve a enviar sola al abrir la clasificación"]},
 {v:"2026-11-15-6.97",ver:"6.97",at:"2026-11-15T12:23",t:"📱 El juego va más fluido en móviles",l:["En móviles, tabletas, equipos con poca memoria y en modo ligero, el entrenador 3D usa una versión ligera de todas sus piezas (peinados, gorros, ropa, calzado y cuerpo) con un 60 % menos de polígonos: se dibuja en menos de la mitad de tiempo y se ve prácticamente igual","En el móvil el entrenador de la pantalla principal se anima a 15 imágenes por segundo en vez de 24 y con una resolución algo menor, y deja de dibujarse mientras hay una ventana abierta encima","El paisaje de la pantalla principal se actualiza un poco menos a menudo en pantallas táctiles","Se descarga menos: en el móvil solo se piden las piezas ligeras. El editor del entrenador sigue usando la versión completa para verlo con todo detalle al acercarte"]},
 {v:"2026-11-15-6.96",ver:"6.96",at:"2026-11-15T10:13",t:"🏆 Premios mucho mejores en el Torneo semanal y en las clasificaciones",l:["Los tickets de premio crecen con tu pueblo: te llevas lo mayor entre una cantidad fija y varias horas de lo que produces. En el Torneo: 1º 24 h de producción (mínimo 50 millones), 2º 12 h, 3º 8 h, top 10 3 h, top 25 1,5 h y por participar 30 min","Torneo: el 1º recibe además 5 Master Ball, 10 Caramelos Raros, 3 PP máximos, 3 Cristales Supremos, 2 objetos equipables y el legendario de la semana siempre variocolor ✨; el 2º, 3 Master Ball, 6 Caramelos y la forma especial con un 50 % de ser variocolor; el 3º, 2 Master Ball, 4 Caramelos y su Pokémon variocolor","Nuevo: el top 10 del Torneo gana también un Pokémon épico de la semana y una Master Ball, y hay premios del 11º al 25º","Clasificación de cada minijuego: premian a los 25 primeros. 1º 6 h de producción (mínimo 10 millones), Master Ball, 3 Caramelos Raros y el premio especial del juego ×3; 2º 4 h; 3º 3 h; 4º–10º 1 h y el premio especial; 11º–25º 20 min","Todos los minijuegos tienen ya premio especial, y en cada panel ves exactamente lo que ganarías en cada puesto"]},
@@ -688,16 +689,19 @@ rep('''  async function flush(){
   const hhmm=t=>new Date(t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});
   const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;{const a=g("acct");if(a)a.classList.toggle("dirty",dirty)}e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 5 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
   async function flush(force){
-    if(!uid||pending===null||busy)return;
+    if(!uid||pending===null||busy||locked)return;
     if(pending===lastSaved){pending=null;syncTxt();return}
     if(force!==true&&Date.now()-lastW<(typeof force==="number"?force:0))return;
     busy=true;const d=pending;pending=null;g("sync").textContent="☁️ Guardando…";
-    try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp()});lastSaved=d;lastW=Date.now()}
-    catch(e){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;return}
+    try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp(),sess:SID,claim:false},{merge:true});lastSaved=d;lastW=Date.now()}
+    catch(e){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;
+      // si el servidor lo rechaza porque la partida ya está activa en otro sitio, aquí se pausa
+      if(e&&e.code==="permission-denied")try{const sn=await S.getDoc(S.doc(db,"sess",uid)),x=sn.exists()?sn.data():null;if(x&&x.s&&x.s!==SID)sessLock(x)}catch(x){}
+      return}
     busy=false;syncTxt();
   }
   window.cloudFlush=f=>flush(f===true?true:0);
-  window.cloudSave=j=>{pending=j;if(!lastSaved&&!lastW)lastSaved=j;syncTxt()};
+  window.cloudSave=j=>{if(locked)return;pending=j;if(!lastSaved&&!lastW)lastSaved=j;syncTxt()};
   setInterval(()=>flush(0),AUTO);
   addEventListener("pagehide",()=>{flush(true);try{if(lobby)lobby.leave()}catch(e){}});
   document.addEventListener("visibilitychange",()=>{if(document.hidden)flush(20000)});

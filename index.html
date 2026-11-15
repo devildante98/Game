@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.97"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.98"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794741836">
+<meta name="game-build" content="1794753518">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2935,7 +2935,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.97</small>
+    <small class="pcver">Versión 6.98</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7617,8 +7617,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.97";
+const GAME_VER="6.98";
 const NEWS=[
+{v:"2026-11-15-6.98",ver:"6.98",at:"2026-11-15T15:38",t:"🔥 Carrera de Rapidash: ahora es un reto de verdad",l:["La velocidad ya no se queda en el 400 %: sigue subiendo hasta el 560 %, y sube antes (a 6.000 m vas el doble de rápido que a 500 m)","Los niveles llegan antes (cada 600 m desde los 1.200 m) y cada nivel junta más los obstáculos: a 3.600 m hay casi un 25 % menos de tiempo entre uno y otro que antes","Más columnas, carros y combinaciones de columnas con vallas en los niveles altos, y más Snorlax","Nuevo desde el nivel 6: los zigzags, dos grupos de columnas seguidos con el hueco libre en carriles distintos","Cuanto más lejos llegas, menos potenciadores salen (Llamarada, Velocidad Extrema, Revivir y Moneda Amuleto)","Tras un salto largo siempre queda tiempo para aterrizar: es difícil, pero siempre hay forma de pasar","Clasificaciones: si el servidor rechaza una marca, ahora te avisa, y tu mejor marca de la semana se vuelve a enviar sola al abrir la clasificación"]},
 {v:"2026-11-15-6.97",ver:"6.97",at:"2026-11-15T12:23",t:"📱 El juego va más fluido en móviles",l:["En móviles, tabletas, equipos con poca memoria y en modo ligero, el entrenador 3D usa una versión ligera de todas sus piezas (peinados, gorros, ropa, calzado y cuerpo) con un 60 % menos de polígonos: se dibuja en menos de la mitad de tiempo y se ve prácticamente igual","En el móvil el entrenador de la pantalla principal se anima a 15 imágenes por segundo en vez de 24 y con una resolución algo menor, y deja de dibujarse mientras hay una ventana abierta encima","El paisaje de la pantalla principal se actualiza un poco menos a menudo en pantallas táctiles","Se descarga menos: en el móvil solo se piden las piezas ligeras. El editor del entrenador sigue usando la versión completa para verlo con todo detalle al acercarte"]},
 {v:"2026-11-15-6.96",ver:"6.96",at:"2026-11-15T10:13",t:"🏆 Premios mucho mejores en el Torneo semanal y en las clasificaciones",l:["Los tickets de premio crecen con tu pueblo: te llevas lo mayor entre una cantidad fija y varias horas de lo que produces. En el Torneo: 1º 24 h de producción (mínimo 50 millones), 2º 12 h, 3º 8 h, top 10 3 h, top 25 1,5 h y por participar 30 min","Torneo: el 1º recibe además 5 Master Ball, 10 Caramelos Raros, 3 PP máximos, 3 Cristales Supremos, 2 objetos equipables y el legendario de la semana siempre variocolor ✨; el 2º, 3 Master Ball, 6 Caramelos y la forma especial con un 50 % de ser variocolor; el 3º, 2 Master Ball, 4 Caramelos y su Pokémon variocolor","Nuevo: el top 10 del Torneo gana también un Pokémon épico de la semana y una Master Ball, y hay premios del 11º al 25º","Clasificación de cada minijuego: premian a los 25 primeros. 1º 6 h de producción (mínimo 10 millones), Master Ball, 3 Caramelos Raros y el premio especial del juego ×3; 2º 4 h; 3º 3 h; 4º–10º 1 h y el premio especial; 11º–25º 20 min","Todos los minijuegos tienen ya premio especial, y en cada panel ves exactamente lo que ganarías en cada puesto"]},
 {v:"2026-11-15-6.95",ver:"6.95",at:"2026-11-15T10:08",t:"💤 Carrera de Rapidash: Snorlax dormidos y más potenciadores",l:["Nuevo obstáculo desde el nivel 2: un Snorlax dormido tumbado que ocupa dos carriles. Cámbiate al carril libre o salta largo… y si caes sobre su barriga, ¡rebotas muy alto y ganas puntos! (¡Boing!)","🪙 Moneda Amuleto: tickets ×2 durante 10 s (todo lo que ganas, metros y tickets, cuenta doble)","⚡ Velocidad Extrema: 4 s a toda velocidad arrasando con todo lo que encuentras","💖 Revivir: si chocas, sigues corriendo una vez","Los potenciadores salen algo más a menudo, y arriba ves cuánto le queda a cada uno"]},
@@ -7972,7 +7973,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794741836";
+const GAME_B="1794753518";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9609,14 +9610,15 @@ const kgTxt=hg=>(hg/10).toLocaleString("es",{maximumFractionDigits:1})+" kg",mTx
 // ---------------- CARRERA DE RAPIDASH ----------------
 // Se dibuja en 3D (p_run3d.js) con la cámara detrás de Rapidash; si no hay WebGL, se usa el dibujo clásico en 2D de este archivo:
 // paisaje en capas que se mueven a distinta velocidad, ciclo de día/atardecer/noche y Rapidash galopando con su llama.
-// La velocidad tiene un máximo y la separación entre obstáculos crece con ella, así que siempre se pueden saltar.
+// La velocidad no para de subir (hasta un máximo muy alto) y, a partir de los 1.200 m, los obstáculos salen más juntos, aparecen
+// zigzags y hay menos potenciadores: llegar muy lejos es un reto, pero siempre hay un hueco para pasar.
 // Controles: tocar/espacio = saltar (mantén para más alto, otra vez en el aire = doble salto) · deslizar abajo/↓ = agacharse.
-const RU_SPD0=250,RU_SPDMAX=1000;
+const RU_SPD0=250,RU_SPDMAX=1400;
 // velocidad según la distancia: sube rápido al principio y después sigue subiendo poco a poco, sin tope práctico
-const ruSpeed=d=>Math.min(RU_SPDMAX,RU_SPD0+330*(1-Math.exp(-d/700))+d*.05);
+const ruSpeed=d=>Math.min(RU_SPDMAX,RU_SPD0+330*(1-Math.exp(-d/600))+d*.07);
 // nivel de dificultad: cada nivel añade obstáculos más difíciles y los junta un poco más
-const ruTier=d=>d<150?0:d<400?1:d<800?2:d<1400?3:4+Math.floor((d-1400)/700);
-const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuidado con los Snorlax dormidos: ocupan dos carriles, pero si caes sobre su barriga, ¡rebotas! Recoge potenciadores como Tickets ×2, Velocidad Extrema o Revivir. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos.",
+const ruTier=d=>d<150?0:d<400?1:d<800?2:d<1200?3:4+Math.floor((d-1200)/600);
+const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuidado con los Snorlax dormidos: ocupan dos carriles, pero si caes sobre su barriga, ¡rebotas! Recoge potenciadores como Tickets ×2, Velocidad Extrema o Revivir. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos: a partir de los 1.200 m salen más juntos, hay zigzags y casi no quedan potenciadores.",
   rw:s=>s*180,
   start(B,end){
     const R=PM.Rapidash||PM.Ponyta||P[0],Z=PM.Zubat||null,SN=PM.Snorlax||null;
@@ -9671,10 +9673,10 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     const spawn=()=>{const G=GY(),T=ruTier(dist),k=Math.random(),X=r3?PX+PW/2+RU3_FAR*RU3_S:W+30,os=[];
       const full=()=>{const q=Math.random();let o;if(T>=1&&q<.16)o={k:"bat",w:40,h:30,y:G-74};else if(q<.42)o={k:"fence",w:24,h:40};else if(q<.6)o={k:"rock",w:40,h:28};
         else if(q<.76)o={k:"log",w:70,h:26};else if(T>=1&&q<.9)o={k:"high",w:26,h:62};else o={k:"fence2",w:24,h:40,gap:72};return o};
-      const pSide=[.14,.3,.4,.46,.52][Math.min(4,T)],pCombo=T>=3?.18+Math.min(.12,(T-3)*.03):0;
+      const pSide=T<5?[.14,.3,.4,.46,.52][T]:Math.min(.66,.52+(T-4)*.03),pCombo=T>=3?.18+Math.min(.22,(T-3)*.035):0;
       if(dist>40&&k<pSide){const q=Math.random();
         // Snorlax dormido de lado a lado de dos carriles: se esquiva cambiando de carril o con un salto largo (y en su barriga se rebota)
-        if(T>=1&&Math.random()<.24){const a=Math.random()<.5?-1:0;os.push({k:"snor",w:70,h:80,ln:[a,a+1]})}
+        if(T>=1&&Math.random()<.24+Math.min(.16,(T-1)*.02)){const a=Math.random()<.5?-1:0;os.push({k:"snor",w:70,h:80,ln:[a,a+1]})}
         else if(T>=2&&q<.32){const a=Math.random()<.5?-1:0;os.push({k:"wagon",w:96,h:TALL,ln:[a,a+1]})}
         else if(T>=2&&q<.58){const L=shuf(LN);os.push({k:"pillar",w:40,h:TALL,ln:[L[0]]},{k:"pillar",w:40,h:TALL,ln:[L[1]]})}
         else if(T>=1&&q<.8){const L=shuf(LN).slice(0,T>=3?2:1);os.push({k:"bat",w:40,h:30,y:G-74,ln:L})}
@@ -9683,14 +9685,18 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
         os.push({k:"pillar",w:40,h:TALL,ln:[L[0]]},{k:"pillar",w:40,h:TALL,ln:[L[1]]},f)}
       else os.push(full());
       for(const o of os){o.x=X;if(o.y==null)o.y=o.h>=TALL?G-TALL:G-o.h;obs.push(o)}
+      // desde el nivel 6, «zigzag»: poco después llega otro grupo de columnas con el hueco libre en un carril distinto
+      let extra=0;if(T>=5&&os.some(o=>o.h>=TALL)&&Math.random()<Math.min(.35,(T-4)*.07)){const blk=new Set();os.forEach(o=>{if(o.h>=TALL)o.ln.forEach(l=>blk.add(l))});const f1=LN.filter(l=>!blk.has(l)),f2=shuf(LN.filter(l=>!f1.includes(l)))[0];
+        if(f2!=null){const gap=spd*.55+110;for(const l of LN)if(l!==f2)obs.push({k:"pillar",w:40,h:TALL,ln:[l],x:X+gap,y:G-TALL});extra=gap}}
       // tickets: sobre el salto, o en el carril libre si hay que esquivar
       if(Math.random()<.62){const blocked=new Set();os.forEach(o=>(o.ln||[]).forEach(l=>{if(o.h>=TALL||o.k==="bat")blocked.add(l)}));
         const free=LN.filter(l=>!blocked.has(l)),o=os[os.length-1];
         if(os.some(o=>o.ln&&o.h>=TALL)){const jumpable=os.find(o=>o.h<TALL&&o.k!=="bat");const fl=free[Math.floor(Math.random()*free.length)];if(jumpable)arcTk(jumpable,jumpable.ln?jumpable.ln[0]:fl);else groundTk(X+20,os[0].w,fl)}
         else if(o.k==="bat")groundTk(X+20,o.w,o.ln?(free.length?free[Math.floor(Math.random()*free.length)]:o.ln[0]):LN[Math.floor(Math.random()*3)]);
         else arcTk(o,LN[Math.floor(Math.random()*3)])}
-      else if(Math.random()<.26){const PW2=[["fire",22],["mag",22],["coin",24]].concat(dist>100?[["speed",16]]:[],life?[]:[["life",14]]),tot=PW2.reduce((a,b)=>a+b[1],0);let r=Math.random()*tot,pk=PW2[0][0];for(const q of PW2){if((r-=q[1])<0){pk=q[0];break}}
-        items.push({k:pk,x:X+os[0].w+140,y:G-110,ln:LN[Math.floor(Math.random()*3)]})}};
+      else if(Math.random()<.26*Math.max(.3,1-dist/5000)){const PW2=[["fire",22*Math.max(.4,1-dist/5000)],["mag",22],["coin",24*Math.max(.35,1-dist/6000)]].concat(dist>100?[["speed",16*Math.max(.3,1-dist/5000)]]:[],life?[]:[["life",14*Math.max(.25,1-dist/4000)]]),tot=PW2.reduce((a,b)=>a+b[1],0);let r=Math.random()*tot,pk=PW2[0][0];for(const q of PW2){if((r-=q[1])<0){pk=q[0];break}}
+        items.push({k:pk,x:X+os[0].w+140,y:G-110,ln:LN[Math.floor(Math.random()*3)]})}
+      return{extra,long:os.some(o=>o.k==="high"||o.k==="fence2"||o.k==="log"||o.k==="snor")}};
     // ¿el obstáculo está en el carril de Rapidash? (a mitad de un cambio de carril puede tocar los dos)
     const inLane=o=>!o.ln||o.ln.some(l=>Math.abs(lx-l)<.66);
     const crash=()=>{dead=true;deadAt=performance.now();snd("hit",1);shake=.4;msg.textContent="¡Has chocado! "+Math.floor(dist)+" m";MG.runKey=null;
@@ -9700,17 +9706,17 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     const stepParts=dt=>{for(const p of parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.gr)p.vy+=900*dt}parts=parts.filter(p=>p.t<p.l)};
     // ---------- bucle ----------
     const loop=ts=>{if(dead||!cv.isConnected)return;const dt=Math.max(0,Math.min(.05,(ts-last)/1000));last=ts;t+=dt;
-      spd=ruSpeed(dist)*(turbo>0?1.55:1);const mv=spd*dt;dist+=mv/20;if(coin>0)bonus+=mv/20;cam+=mv;
+      spd=Math.min(1800,ruSpeed(dist)*(turbo>0?1.5:1));const mv=spd*dt;dist+=mv/20;if(coin>0)bonus+=mv/20;cam+=mv;
       // cambio de carril suave (unas 0,13 s por carril)
       if(lx!==lane){const d=lane-lx,st2=7.5*dt;lx=Math.abs(d)<=st2?lane:lx+Math.sign(d)*st2}
-      {const T=ruTier(dist);if(T>tierN){tierN=T;msg.textContent=T===1?"¡Nivel 2! Columnas y Snorlax dormidos: cambia de carril (o rebota en su barriga)":T===2?"¡Nivel 3! Carros y columnas dobles":T===3?"¡Nivel 4! Columnas con vallas: esquiva y salta":"¡Nivel "+(T+1)+"! Más rápido y más juntos";mgT(()=>{if(!dead&&msg.textContent.indexOf("Nivel")>0)msg.textContent=""},2200);snd("lvl")}}
+      {const T=ruTier(dist);if(T>tierN){tierN=T;msg.textContent=T===1?"¡Nivel 2! Columnas y Snorlax dormidos: cambia de carril (o rebota en su barriga)":T===2?"¡Nivel 3! Carros y columnas dobles":T===3?"¡Nivel 4! Columnas con vallas: esquiva y salta":T===5?"¡Nivel 6! Zigzag: columnas seguidas con el hueco en otro carril":T===8?"¡Nivel 9! Casi no quedan potenciadores: ¡aguanta!":"¡Nivel "+(T+1)+"! Más rápido y más juntos";mgT(()=>{if(!dead&&msg.textContent.indexOf("Nivel")>0)msg.textContent=""},2200);snd("lvl")}}
       // salto: mantener pulsado = menos gravedad un momento; agachado en el aire = cae más rápido
       const air=y<-.5;let grav=2100;if(hold&&vy<0&&holdT<.24){holdT+=dt;grav=950}if(duck&&air)grav=4200;
       vy+=grav*dt;y+=vy*dt;if(y>=0){if(air&&vy>300){landFx=true}y=0;vy=0;jumps=0}
       if(landFx){landFx=false;for(let i=0;i<8;i++)parts.push({x:PX+PW/2+rnd(-20,20),y:GY(),vx:rnd(-160,-40),vy:rnd(-80,-10),l:.45,t:0,c:"#c9a46a",r:rnd(2,5)})}
       if(shield>0)shield=Math.max(0,shield-dt);if(magnet>0)magnet=Math.max(0,magnet-dt);if(coin>0)coin=Math.max(0,coin-dt);if(turbo>0){turbo=Math.max(0,turbo-dt);if(!turbo)grace=Math.max(grace,1)}if(grace>0)grace=Math.max(0,grace-dt);
-      // separación mínima según la velocidad: da tiempo a aterrizar y reaccionar
-      nextO-=mv;if(nextO<=0){if(!MG.runDbg.calm)spawn();const T=ruTier(dist),mn=spd*Math.max(.85,.95-.025*T)+180;nextO=mn+Math.random()*spd*Math.max(.35,.8-.08*T)}
+      // separación mínima según la velocidad: cada nivel la acorta un poco, pero tras un salto largo siempre queda tiempo para aterrizar
+      nextO-=mv;if(nextO<=0){let sp={extra:0,long:false};if(!MG.runDbg.calm)sp=spawn()||sp;const T=ruTier(dist),mn=spd*Math.max(.72,.95-.035*T)+Math.max(110,180-12*T);nextO=mn+Math.random()*spd*Math.max(.18,.8-.09*T)+(sp.long?spd*.15:0)+sp.extra}
       const G=GY(),ducking=duck&&!air,top=G+y-(ducking?34:PH-8),bot=G+y-4,L=PX+12,Rr=PX+PW-12;
       for(const o of obs){o.x-=mv;if(o.k==="bat")o.y=G-74+Math.sin(t*6+o.x*.02)*4;
         const parts2=o.k==="fence2"?[[o.x,o.w],[o.x+o.w+o.gap,o.w]]:[[o.x,o.w]];
@@ -11146,7 +11152,7 @@ const MGHOW={
  dig:["Tienes 30 segundos y los topos salen cada vez más rápido.","<b>Diglett +1</b>, <b>Dugtrio +3</b>. ¡No toques a <b>Voltorb</b>: −3 y pierdes el combo!","<b>Combo</b>: a partir de 5 aciertos seguidos, cada golpe vale +1 extra. Si se te escapa un Diglett, el combo vuelve a 0.","Una partida muy buena ronda los <b>110–130</b>."],
  fish:["8 lanzamientos: pulsa en cuanto aparezca <b>¡!</b>","Cada Pokémon común da <b>10 puntos</b>; Lapras y Gyarados (raros) dan <b>90</b>.","Cuanto más rápido reacciones, más <b>bonus</b> (hasta +50%). Los raros te dan muy poco tiempo.","Si pulsas antes de tiempo o tarde, se escapa. Los raros que pesques pueden quedarse contigo."],
  thr:["10 lanzamientos: lanza cuando el círculo sea <b>pequeño</b> y el Pokémon esté en el <b>centro</b>.","<b>¡Excelente!</b> 100 · <b>¡Genial!</b> 60 · <b>¡Bien!</b> 30. Si el Pokémon no está centrado, fallas.","<b>Combo</b>: desde el 3.er acierto seguido, +10, +20, +30… extra. Fallar lo corta.","Máximo posible: <b>1.360</b> (10 Excelentes seguidos)."],
- run:["<b>Saltar</b>: toca la pista, el botón ⬆ o pulsa espacio / ↑. <b>Mantén pulsado</b> para saltar más alto y <b>vuelve a pulsar en el aire</b> para un doble salto.","<b>Agacharse</b>: desliza hacia abajo, botón ⬇ o tecla ↓. Sirve para pasar por debajo de los Zubat; en el aire te hace caer más rápido.","Las vallas altas y las vallas dobles necesitan un salto largo o un doble salto.","Ganas <b>1 punto por metro</b>, <b>15</b> por cada 🎟️ y puntos extra por saltos <b>¡Justos!</b> (pasar rozando un obstáculo) seguidos.","Potenciadores: 🔥 <b>Llamarada</b> (5 s atravesando obstáculos), 🧲 <b>Imán</b> (7 s atrayendo tickets), 🪙 <b>Moneda Amuleto</b> (10 s con <b>tickets ×2</b>: todo lo que ganas cuenta doble), ⚡ <b>Velocidad Extrema</b> (4 s a toda velocidad arrasando con todo) y 💖 <b>Revivir</b> (si chocas, sigues corriendo una vez).","💤 <b>Snorlax dormido</b>: ocupa dos carriles. Cámbiate al carril libre o salta largo… y si caes sobre su barriga, ¡rebotas muy alto y ganas puntos!","La velocidad sube hasta un máximo y los obstáculos se separan más cuanto más rápido vas: siempre se pueden saltar."],
+ run:["<b>Saltar</b>: toca la pista, el botón ⬆ o pulsa espacio / ↑. <b>Mantén pulsado</b> para saltar más alto y <b>vuelve a pulsar en el aire</b> para un doble salto.","<b>Agacharse</b>: desliza hacia abajo, botón ⬇ o tecla ↓. Sirve para pasar por debajo de los Zubat; en el aire te hace caer más rápido.","Las vallas altas y las vallas dobles necesitan un salto largo o un doble salto.","Ganas <b>1 punto por metro</b>, <b>15</b> por cada 🎟️ y puntos extra por saltos <b>¡Justos!</b> (pasar rozando un obstáculo) seguidos.","Potenciadores: 🔥 <b>Llamarada</b> (5 s atravesando obstáculos), 🧲 <b>Imán</b> (7 s atrayendo tickets), 🪙 <b>Moneda Amuleto</b> (10 s con <b>tickets ×2</b>: todo lo que ganas cuenta doble), ⚡ <b>Velocidad Extrema</b> (4 s a toda velocidad arrasando con todo) y 💖 <b>Revivir</b> (si chocas, sigues corriendo una vez).","💤 <b>Snorlax dormido</b>: ocupa dos carriles. Cámbiate al carril libre o salta largo… y si caes sobre su barriga, ¡rebotas muy alto y ganas puntos!","La velocidad no para de subir y, a partir de los 1.200 m, los obstáculos salen cada vez más juntos, llegan los <b>zigzags</b> (columnas seguidas con el hueco en otro carril) y hay cada vez menos potenciadores. Es un reto, pero siempre hay un hueco para pasar."],
  exc:["Pica la pared para <b>desenterrar tesoros</b> (hay de 2 a 4 escondidos).","<b>Solo puntúa el tesoro que queda totalmente al descubierto</b>: si queda una casilla de roca encima, no cuenta.","⛏️ <b>Pico</b>: rompe la casilla y un poco las de alrededor (en cruz). Daña poco la pared.<br>🔨 <b>Martillo</b>: rompe un cuadrado de 3×3. Daña el doble la pared.","La barra de arriba es la <b>estabilidad</b>: si llega a 0, la pared se derrumba y termina la partida (conservas lo ya desenterrado).","Las rocas más oscuras son más duras. Usa el martillo para abrir zonas y el pico para terminar de destapar los bordes.","Puntos por tesoro: Esfera Roja/Azul 40 · Perla 60 · Pepita 90 · Esfera Grande 120 · Hueso Raro 140 · Trozo Estrella 160 · Piedra evolutiva 200 · Objeto escondido 220 · Caramelo Raro 260 · Fósil 300."],
  wgt:["Dos Pokémon: elige cuál pesa más o menos, o cuál es más alto o más bajo.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>.","Se juega hasta el <b>primer fallo</b>: cuantas más seguidas aciertes, más vale cada una."],
  fos:["Igual que la Excavación: destapa del todo cada fósil para que cuente.","Cada fósil vale <b>300–520 puntos</b> (el Ámbar Viejo es el que más). Los tesoros pequeños dan 40–110.","Cuida la <b>estabilidad</b>: el martillo daña el doble que el pico.","Los fósiles que saques van al 🧪 Laboratorio, donde puedes revivirlos."]};
@@ -13587,17 +13593,26 @@ function mgrRw(gid,pos){const T=mgrTier(pos);if(!T)return null;const rw={t:tkOf(
   for(let k=0;k<T.x;k++)Object.keys(ex).forEach(i=>{if(i==="_hold"){const h=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[h]=(rw.it[h]||0)+1}else if(i==="_evo"){const ev=ITEMS.filter(q=>q[7]==="evo"),e=ev[Math.floor(Math.random()*ev.length)][0];rw.it[e]=(rw.it[e]||0)+1}else rw.it[i]=(rw.it[i]||0)+ex[i]});
   return rw}
 const mgrExTxt=gid=>{const e=MGR_EX[gid]||{};return Object.keys(e).map(k=>k==="_hold"?"objeto equipable":k==="_evo"?"piedra evolutiva":(e[k]>1?e[k]+" ":"")+IN2(k)).join(" + ")};
-var MGR={g:null,top:{},at:{},prev:{}};
+var MGR={g:null,top:{},at:{},prev:{},rs:{}};
+// sube tu marca a la clasificación. Si el servidor la rechaza, se avisa (así no se pierde en silencio) y se vuelve a
+// intentar sola la próxima vez que se abra la clasificación de ese juego
+function mgrPut(gid,score,loud){const w=tourWeek();if(!(window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid()))return;
+  window.FB.tourSet(MGR_KEY(w,gid),{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()})
+    .then(()=>{MGR.at[gid]=0;if(S.mgw&&S.mgw.pend)delete S.mgw.pend[gid]})
+    .catch(e=>{if(S.mgw&&S.mgw.w===w){S.mgw.pend=S.mgw.pend||{};S.mgw.pend[gid]=score;save()}
+      if(loud)try{toast("⚠️ No se ha podido guardar tu marca de "+fmt(score)+" en la clasificación"+(e&&e.code==="permission-denied"?" (el servidor la ha rechazado)":"")+". Se volverá a intentar sola.")}catch(x){}})}
 function mgrSubmit(gid,score){
   if(score<=0||!MGS.some(g=>g.id===gid))return "";const w=tourWeek();S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};
   if(score<=(S.mgw.b[gid]|0))return "";S.mgw.b[gid]=score;save();
-  if(window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid())window.FB.tourSet(MGR_KEY(w,gid),{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()}).then(()=>{MGR.at[gid]=0}).catch(()=>{});
+  mgrPut(gid,score,true);
   return '<p class="tourm">📊 Nueva mejor marca semanal en la clasificación: <b>'+fmt(score)+'</b></p>';
 }
 async function mgrLoad(gid,force){if(!window.FB||!window.FB.tourTop)return null;const w=tourWeek();if(!force&&MGR.top[gid]&&MGR.top[gid].w===w&&Date.now()-(MGR.at[gid]||0)<60e3)return MGR.top[gid].l;
   try{const l=await window.FB.tourTop(MGR_KEY(w,gid),25);MGR.top[gid]={w:w,l:l};MGR.at[gid]=Date.now();
     // si en la nube tienes una marca mejor que la de este dispositivo, se usa esa
     const me=window.FB.uid&&window.FB.uid(),x=me&&l.find(y=>y.id===me);if(x&&(x.sc|0)>0){S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};if((x.sc|0)>(S.mgw.b[gid]|0)){S.mgw.b[gid]=x.sc|0;save()}}
+    // si tu mejor marca de la semana no llegó a la nube (o llegó una peor), se vuelve a subir una vez por sesión
+    const loc=S.mgw&&S.mgw.w===w?(S.mgw.b[gid]|0):0;if(me&&loc>0&&!MGR.rs[gid]&&((S.mgw.pend&&S.mgw.pend[gid])||(x&&(x.sc|0)<loc)||(!x&&(l.length<25||loc>(l[l.length-1].sc|0))))){MGR.rs[gid]=1;mgrPut(gid,loc,false)}
   }catch(e){MGR.top[gid]=MGR.top[gid]||{w:w,l:[]}}return MGR.top[gid].l}
 // premios de la semana pasada
 async function mgrClaim(){

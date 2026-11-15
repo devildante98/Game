@@ -11,17 +11,26 @@ function mgrRw(gid,pos){const T=mgrTier(pos);if(!T)return null;const rw={t:tkOf(
   for(let k=0;k<T.x;k++)Object.keys(ex).forEach(i=>{if(i==="_hold"){const h=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[h]=(rw.it[h]||0)+1}else if(i==="_evo"){const ev=ITEMS.filter(q=>q[7]==="evo"),e=ev[Math.floor(Math.random()*ev.length)][0];rw.it[e]=(rw.it[e]||0)+1}else rw.it[i]=(rw.it[i]||0)+ex[i]});
   return rw}
 const mgrExTxt=gid=>{const e=MGR_EX[gid]||{};return Object.keys(e).map(k=>k==="_hold"?"objeto equipable":k==="_evo"?"piedra evolutiva":(e[k]>1?e[k]+" ":"")+IN2(k)).join(" + ")};
-var MGR={g:null,top:{},at:{},prev:{}};
+var MGR={g:null,top:{},at:{},prev:{},rs:{}};
+// sube tu marca a la clasificación. Si el servidor la rechaza, se avisa (así no se pierde en silencio) y se vuelve a
+// intentar sola la próxima vez que se abra la clasificación de ese juego
+function mgrPut(gid,score,loud){const w=tourWeek();if(!(window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid()))return;
+  window.FB.tourSet(MGR_KEY(w,gid),{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()})
+    .then(()=>{MGR.at[gid]=0;if(S.mgw&&S.mgw.pend)delete S.mgw.pend[gid]})
+    .catch(e=>{if(S.mgw&&S.mgw.w===w){S.mgw.pend=S.mgw.pend||{};S.mgw.pend[gid]=score;save()}
+      if(loud)try{toast("⚠️ No se ha podido guardar tu marca de "+fmt(score)+" en la clasificación"+(e&&e.code==="permission-denied"?" (el servidor la ha rechazado)":"")+". Se volverá a intentar sola.")}catch(x){}})}
 function mgrSubmit(gid,score){
   if(score<=0||!MGS.some(g=>g.id===gid))return "";const w=tourWeek();S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};
   if(score<=(S.mgw.b[gid]|0))return "";S.mgw.b[gid]=score;save();
-  if(window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid())window.FB.tourSet(MGR_KEY(w,gid),{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()}).then(()=>{MGR.at[gid]=0}).catch(()=>{});
+  mgrPut(gid,score,true);
   return '<p class="tourm">📊 Nueva mejor marca semanal en la clasificación: <b>'+fmt(score)+'</b></p>';
 }
 async function mgrLoad(gid,force){if(!window.FB||!window.FB.tourTop)return null;const w=tourWeek();if(!force&&MGR.top[gid]&&MGR.top[gid].w===w&&Date.now()-(MGR.at[gid]||0)<60e3)return MGR.top[gid].l;
   try{const l=await window.FB.tourTop(MGR_KEY(w,gid),25);MGR.top[gid]={w:w,l:l};MGR.at[gid]=Date.now();
     // si en la nube tienes una marca mejor que la de este dispositivo, se usa esa
     const me=window.FB.uid&&window.FB.uid(),x=me&&l.find(y=>y.id===me);if(x&&(x.sc|0)>0){S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};if((x.sc|0)>(S.mgw.b[gid]|0)){S.mgw.b[gid]=x.sc|0;save()}}
+    // si tu mejor marca de la semana no llegó a la nube (o llegó una peor), se vuelve a subir una vez por sesión
+    const loc=S.mgw&&S.mgw.w===w?(S.mgw.b[gid]|0):0;if(me&&loc>0&&!MGR.rs[gid]&&((S.mgw.pend&&S.mgw.pend[gid])||(x&&(x.sc|0)<loc)||(!x&&(l.length<25||loc>(l[l.length-1].sc|0))))){MGR.rs[gid]=1;mgrPut(gid,loc,false)}
   }catch(e){MGR.top[gid]=MGR.top[gid]||{w:w,l:[]}}return MGR.top[gid].l}
 // premios de la semana pasada
 async function mgrClaim(){

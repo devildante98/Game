@@ -10,14 +10,15 @@ const kgTxt=hg=>(hg/10).toLocaleString("es",{maximumFractionDigits:1})+" kg",mTx
 // ---------------- CARRERA DE RAPIDASH ----------------
 // Se dibuja en 3D (p_run3d.js) con la cámara detrás de Rapidash; si no hay WebGL, se usa el dibujo clásico en 2D de este archivo:
 // paisaje en capas que se mueven a distinta velocidad, ciclo de día/atardecer/noche y Rapidash galopando con su llama.
-// La velocidad tiene un máximo y la separación entre obstáculos crece con ella, así que siempre se pueden saltar.
+// La velocidad no para de subir (hasta un máximo muy alto) y, a partir de los 1.200 m, los obstáculos salen más juntos, aparecen
+// zigzags y hay menos potenciadores: llegar muy lejos es un reto, pero siempre hay un hueco para pasar.
 // Controles: tocar/espacio = saltar (mantén para más alto, otra vez en el aire = doble salto) · deslizar abajo/↓ = agacharse.
-const RU_SPD0=250,RU_SPDMAX=1000;
+const RU_SPD0=250,RU_SPDMAX=1400;
 // velocidad según la distancia: sube rápido al principio y después sigue subiendo poco a poco, sin tope práctico
-const ruSpeed=d=>Math.min(RU_SPDMAX,RU_SPD0+330*(1-Math.exp(-d/700))+d*.05);
+const ruSpeed=d=>Math.min(RU_SPDMAX,RU_SPD0+330*(1-Math.exp(-d/600))+d*.07);
 // nivel de dificultad: cada nivel añade obstáculos más difíciles y los junta un poco más
-const ruTier=d=>d<150?0:d<400?1:d<800?2:d<1400?3:4+Math.floor((d-1400)/700);
-const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuidado con los Snorlax dormidos: ocupan dos carriles, pero si caes sobre su barriga, ¡rebotas! Recoge potenciadores como Tickets ×2, Velocidad Extrema o Revivir. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos.",
+const ruTier=d=>d<150?0:d<400?1:d<800?2:d<1200?3:4+Math.floor((d-1200)/600);
+const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuidado con los Snorlax dormidos: ocupan dos carriles, pero si caes sobre su barriga, ¡rebotas! Recoge potenciadores como Tickets ×2, Velocidad Extrema o Revivir. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos: a partir de los 1.200 m salen más juntos, hay zigzags y casi no quedan potenciadores.",
   rw:s=>s*180,
   start(B,end){
     const R=PM.Rapidash||PM.Ponyta||P[0],Z=PM.Zubat||null,SN=PM.Snorlax||null;
@@ -72,10 +73,10 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     const spawn=()=>{const G=GY(),T=ruTier(dist),k=Math.random(),X=r3?PX+PW/2+RU3_FAR*RU3_S:W+30,os=[];
       const full=()=>{const q=Math.random();let o;if(T>=1&&q<.16)o={k:"bat",w:40,h:30,y:G-74};else if(q<.42)o={k:"fence",w:24,h:40};else if(q<.6)o={k:"rock",w:40,h:28};
         else if(q<.76)o={k:"log",w:70,h:26};else if(T>=1&&q<.9)o={k:"high",w:26,h:62};else o={k:"fence2",w:24,h:40,gap:72};return o};
-      const pSide=[.14,.3,.4,.46,.52][Math.min(4,T)],pCombo=T>=3?.18+Math.min(.12,(T-3)*.03):0;
+      const pSide=T<5?[.14,.3,.4,.46,.52][T]:Math.min(.66,.52+(T-4)*.03),pCombo=T>=3?.18+Math.min(.22,(T-3)*.035):0;
       if(dist>40&&k<pSide){const q=Math.random();
         // Snorlax dormido de lado a lado de dos carriles: se esquiva cambiando de carril o con un salto largo (y en su barriga se rebota)
-        if(T>=1&&Math.random()<.24){const a=Math.random()<.5?-1:0;os.push({k:"snor",w:70,h:80,ln:[a,a+1]})}
+        if(T>=1&&Math.random()<.24+Math.min(.16,(T-1)*.02)){const a=Math.random()<.5?-1:0;os.push({k:"snor",w:70,h:80,ln:[a,a+1]})}
         else if(T>=2&&q<.32){const a=Math.random()<.5?-1:0;os.push({k:"wagon",w:96,h:TALL,ln:[a,a+1]})}
         else if(T>=2&&q<.58){const L=shuf(LN);os.push({k:"pillar",w:40,h:TALL,ln:[L[0]]},{k:"pillar",w:40,h:TALL,ln:[L[1]]})}
         else if(T>=1&&q<.8){const L=shuf(LN).slice(0,T>=3?2:1);os.push({k:"bat",w:40,h:30,y:G-74,ln:L})}
@@ -84,14 +85,18 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
         os.push({k:"pillar",w:40,h:TALL,ln:[L[0]]},{k:"pillar",w:40,h:TALL,ln:[L[1]]},f)}
       else os.push(full());
       for(const o of os){o.x=X;if(o.y==null)o.y=o.h>=TALL?G-TALL:G-o.h;obs.push(o)}
+      // desde el nivel 6, «zigzag»: poco después llega otro grupo de columnas con el hueco libre en un carril distinto
+      let extra=0;if(T>=5&&os.some(o=>o.h>=TALL)&&Math.random()<Math.min(.35,(T-4)*.07)){const blk=new Set();os.forEach(o=>{if(o.h>=TALL)o.ln.forEach(l=>blk.add(l))});const f1=LN.filter(l=>!blk.has(l)),f2=shuf(LN.filter(l=>!f1.includes(l)))[0];
+        if(f2!=null){const gap=spd*.55+110;for(const l of LN)if(l!==f2)obs.push({k:"pillar",w:40,h:TALL,ln:[l],x:X+gap,y:G-TALL});extra=gap}}
       // tickets: sobre el salto, o en el carril libre si hay que esquivar
       if(Math.random()<.62){const blocked=new Set();os.forEach(o=>(o.ln||[]).forEach(l=>{if(o.h>=TALL||o.k==="bat")blocked.add(l)}));
         const free=LN.filter(l=>!blocked.has(l)),o=os[os.length-1];
         if(os.some(o=>o.ln&&o.h>=TALL)){const jumpable=os.find(o=>o.h<TALL&&o.k!=="bat");const fl=free[Math.floor(Math.random()*free.length)];if(jumpable)arcTk(jumpable,jumpable.ln?jumpable.ln[0]:fl);else groundTk(X+20,os[0].w,fl)}
         else if(o.k==="bat")groundTk(X+20,o.w,o.ln?(free.length?free[Math.floor(Math.random()*free.length)]:o.ln[0]):LN[Math.floor(Math.random()*3)]);
         else arcTk(o,LN[Math.floor(Math.random()*3)])}
-      else if(Math.random()<.26){const PW2=[["fire",22],["mag",22],["coin",24]].concat(dist>100?[["speed",16]]:[],life?[]:[["life",14]]),tot=PW2.reduce((a,b)=>a+b[1],0);let r=Math.random()*tot,pk=PW2[0][0];for(const q of PW2){if((r-=q[1])<0){pk=q[0];break}}
-        items.push({k:pk,x:X+os[0].w+140,y:G-110,ln:LN[Math.floor(Math.random()*3)]})}};
+      else if(Math.random()<.26*Math.max(.3,1-dist/5000)){const PW2=[["fire",22*Math.max(.4,1-dist/5000)],["mag",22],["coin",24*Math.max(.35,1-dist/6000)]].concat(dist>100?[["speed",16*Math.max(.3,1-dist/5000)]]:[],life?[]:[["life",14*Math.max(.25,1-dist/4000)]]),tot=PW2.reduce((a,b)=>a+b[1],0);let r=Math.random()*tot,pk=PW2[0][0];for(const q of PW2){if((r-=q[1])<0){pk=q[0];break}}
+        items.push({k:pk,x:X+os[0].w+140,y:G-110,ln:LN[Math.floor(Math.random()*3)]})}
+      return{extra,long:os.some(o=>o.k==="high"||o.k==="fence2"||o.k==="log"||o.k==="snor")}};
     // ¿el obstáculo está en el carril de Rapidash? (a mitad de un cambio de carril puede tocar los dos)
     const inLane=o=>!o.ln||o.ln.some(l=>Math.abs(lx-l)<.66);
     const crash=()=>{dead=true;deadAt=performance.now();snd("hit",1);shake=.4;msg.textContent="¡Has chocado! "+Math.floor(dist)+" m";MG.runKey=null;
@@ -101,17 +106,17 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     const stepParts=dt=>{for(const p of parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.gr)p.vy+=900*dt}parts=parts.filter(p=>p.t<p.l)};
     // ---------- bucle ----------
     const loop=ts=>{if(dead||!cv.isConnected)return;const dt=Math.max(0,Math.min(.05,(ts-last)/1000));last=ts;t+=dt;
-      spd=ruSpeed(dist)*(turbo>0?1.55:1);const mv=spd*dt;dist+=mv/20;if(coin>0)bonus+=mv/20;cam+=mv;
+      spd=Math.min(1800,ruSpeed(dist)*(turbo>0?1.5:1));const mv=spd*dt;dist+=mv/20;if(coin>0)bonus+=mv/20;cam+=mv;
       // cambio de carril suave (unas 0,13 s por carril)
       if(lx!==lane){const d=lane-lx,st2=7.5*dt;lx=Math.abs(d)<=st2?lane:lx+Math.sign(d)*st2}
-      {const T=ruTier(dist);if(T>tierN){tierN=T;msg.textContent=T===1?"¡Nivel 2! Columnas y Snorlax dormidos: cambia de carril (o rebota en su barriga)":T===2?"¡Nivel 3! Carros y columnas dobles":T===3?"¡Nivel 4! Columnas con vallas: esquiva y salta":"¡Nivel "+(T+1)+"! Más rápido y más juntos";mgT(()=>{if(!dead&&msg.textContent.indexOf("Nivel")>0)msg.textContent=""},2200);snd("lvl")}}
+      {const T=ruTier(dist);if(T>tierN){tierN=T;msg.textContent=T===1?"¡Nivel 2! Columnas y Snorlax dormidos: cambia de carril (o rebota en su barriga)":T===2?"¡Nivel 3! Carros y columnas dobles":T===3?"¡Nivel 4! Columnas con vallas: esquiva y salta":T===5?"¡Nivel 6! Zigzag: columnas seguidas con el hueco en otro carril":T===8?"¡Nivel 9! Casi no quedan potenciadores: ¡aguanta!":"¡Nivel "+(T+1)+"! Más rápido y más juntos";mgT(()=>{if(!dead&&msg.textContent.indexOf("Nivel")>0)msg.textContent=""},2200);snd("lvl")}}
       // salto: mantener pulsado = menos gravedad un momento; agachado en el aire = cae más rápido
       const air=y<-.5;let grav=2100;if(hold&&vy<0&&holdT<.24){holdT+=dt;grav=950}if(duck&&air)grav=4200;
       vy+=grav*dt;y+=vy*dt;if(y>=0){if(air&&vy>300){landFx=true}y=0;vy=0;jumps=0}
       if(landFx){landFx=false;for(let i=0;i<8;i++)parts.push({x:PX+PW/2+rnd(-20,20),y:GY(),vx:rnd(-160,-40),vy:rnd(-80,-10),l:.45,t:0,c:"#c9a46a",r:rnd(2,5)})}
       if(shield>0)shield=Math.max(0,shield-dt);if(magnet>0)magnet=Math.max(0,magnet-dt);if(coin>0)coin=Math.max(0,coin-dt);if(turbo>0){turbo=Math.max(0,turbo-dt);if(!turbo)grace=Math.max(grace,1)}if(grace>0)grace=Math.max(0,grace-dt);
-      // separación mínima según la velocidad: da tiempo a aterrizar y reaccionar
-      nextO-=mv;if(nextO<=0){if(!MG.runDbg.calm)spawn();const T=ruTier(dist),mn=spd*Math.max(.85,.95-.025*T)+180;nextO=mn+Math.random()*spd*Math.max(.35,.8-.08*T)}
+      // separación mínima según la velocidad: cada nivel la acorta un poco, pero tras un salto largo siempre queda tiempo para aterrizar
+      nextO-=mv;if(nextO<=0){let sp={extra:0,long:false};if(!MG.runDbg.calm)sp=spawn()||sp;const T=ruTier(dist),mn=spd*Math.max(.72,.95-.035*T)+Math.max(110,180-12*T);nextO=mn+Math.random()*spd*Math.max(.18,.8-.09*T)+(sp.long?spd*.15:0)+sp.extra}
       const G=GY(),ducking=duck&&!air,top=G+y-(ducking?34:PH-8),bot=G+y-4,L=PX+12,Rr=PX+PW-12;
       for(const o of obs){o.x-=mv;if(o.k==="bat")o.y=G-74+Math.sin(t*6+o.x*.02)*4;
         const parts2=o.k==="fence2"?[[o.x,o.w],[o.x+o.w+o.gap,o.w]]:[[o.x,o.w]];

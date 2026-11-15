@@ -22,7 +22,9 @@ const esEntero = (v, lo, hi) => typeof v === "number" && Number.isFinite(v) && v
 
 // extra: tickets que el servidor sabe con certeza que ha recibido en este rato (ventas del mercadillo cobradas y
 // tickets devueltos por un administrador)
-function revisar(prevIn, next, dtSeg, extra) {
+// op.estricto: la partida anterior ya venía de un juego 7.2 o posterior, en el que las tiradas, los edificios y los
+// guantes solo cambian en el servidor (acción «tirar» o «mejorar»); un guardado normal no puede subirlos.
+function revisar(prevIn, next, dtSeg, extra, op) {
   const prev = prevIn || NUEVA;
   const motivos = [];
   let peor = "ok";
@@ -49,6 +51,21 @@ function revisar(prevIn, next, dtSeg, extra) {
     if (o && typeof o === "object") for (const x in o) if (!esEntero(o[x], 0, mx)) { marca("imposible", k + "." + x + " con cantidad no válida (" + o[x] + ")"); break; }
   }
   if (E.prs(next) > E.prs(prev) + 1) marca("imposible", "el prestigio sube más de 1 de golpe (" + E.prs(prev) + " → " + E.prs(next) + ")");
+
+  // ---- modo estricto: tiradas, edificios, guantes y garantía de raro solo cambian en el servidor ----
+  if (op && op.estricto) {
+    const g0 = Array.isArray(prev.g) ? prev.g : [], g1 = Array.isArray(next.g) ? next.g : [];
+    // empezar de cero (o prestigio): todo a cero y casi sin Pokémon
+    const reinicio = g1.every((v) => !n(v)) && !n(next.cl) && total(next.owned) <= Math.max(10, total(prev.owned) * 0.2) && n(next.pulls) < n(prev.pulls) + 1;
+    for (let i = 0; i < Math.max(g0.length, g1.length); i++) if (n(g1[i]) > n(g0[i])) { marca("imposible", "edificio " + i + " mejorado fuera del servidor (" + n(g0[i]) + " → " + n(g1[i]) + ")"); break; }
+    if (n(next.cl) > n(prev.cl)) marca("imposible", "guantes mejorados fuera del servidor (" + n(prev.cl) + " → " + n(next.cl) + ")");
+    if (n(next.np) > n(prev.np) || n(next.sp) > n(prev.sp)) marca("imposible", "tiradas hechas fuera del servidor");
+    if (!reinicio) {
+      if (n(next.np) < n(prev.np) || n(next.sp) < n(prev.sp)) marca("imposible", "tiradas deshechas (" + n(prev.np) + "+" + n(prev.sp) + " → " + n(next.np) + "+" + n(next.sp) + ")");
+      if (n(next.pity) !== n(prev.pity)) marca("imposible", "garantía de raro cambiada fuera del servidor (" + n(prev.pity) + " → " + n(next.pity) + ")");
+      if (E.prs(next) > E.prs(prev)) marca("imposible", "prestigio sin reiniciar la partida");
+    }
+  }
 
   const dt = Math.max(0, Math.min(n(dtSeg), 14 * DIA));
   const venta = Math.max(0, n(extra));

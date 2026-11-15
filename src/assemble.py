@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.1.1";
+const GAME_VER="7.2";
 const NEWS=[
+{v:"2026-11-15-7.2",ver:"7.2",at:"2026-11-15T23:38",t:"🎰 Las tiradas y las mejoras las hace el servidor",l:["Con cuenta, las tiradas del gacha y las mejoras de edificios y guantes las hace ahora el servidor del juego: él cobra los tickets, decide lo que sale y lo guarda en la nube al momento","Las probabilidades, la garantía de raro, los eventos, el Pokémon destacado y el Día de la Comunidad son exactamente los mismos que antes","Así nadie puede elegir lo que le sale ni subir edificios sin pagarlos","Necesita conexión: si no hay, el juego te avisa y no se gasta nada","Si tocas muchas veces seguidas una mejora, se juntan en una sola compra","Sin cuenta, todo sigue funcionando como siempre en tu navegador"]},
 {v:"2026-11-15-7.1.1",ver:"7.1.1",at:"2026-11-15T23:17",t:"📊 Clasificación de minijuegos: tus marcas ya entran",l:["Arreglado: si alguna vez una marca tuya no llegaba a la clasificación (por ejemplo, las de más de 20.000 en la Carrera de Rapidash de antes), el juego la seguía tomando como tu mejor marca de la semana y no subía las siguientes aunque fueran buenas","Ahora se sube cualquier marca que mejore la que tienes en la clasificación","Si una marca no entra, te avisa al momento"]},
 {v:"2026-11-15-7.1",ver:"7.1",at:"2026-11-15T22:50",t:"🛡️ Tu partida, guardada y revisada por el servidor",l:["Ahora las partidas en la nube solo las guarda el servidor del juego: desde el navegador ya no se pueden escribir ni borrar","Cada vez que se guarda, el servidor la compara con la anterior y con el tiempo que ha pasado. Si hay progreso que no se puede conseguir jugando (tickets, Pokémon u objetos que aparecen de la nada), no se guarda y vuelves a tu última partida buena","Jugando normal no cambia nada: los márgenes son muy amplios, y las ventas del mercadillo y las devoluciones de tickets también se tienen en cuenta","Si cierras el juego sin que se haya subido lo último, al volver a entrar en el mismo dispositivo se conserva y se sube","Si tenías el juego abierto desde antes de esta versión, recarga la página para que se vuelva a guardar en la nube"]},
 {v:"2026-11-15-7.0",ver:"7.0",at:"2026-11-15T16:22",t:"🔒 Revisión de seguridad: el juego, más justo para todos",l:["Hemos revisado todo el juego en busca de trampas que perjudicaran a otros jugadores y las hemos cerrado","Chat y sugerencias: arreglado un fallo por el que una foto o un dato preparados podían ejecutar código en la pantalla de quien los viera. Tampoco se pueden fijar mensajes arriba con fechas falsas ni hacerse pasar por avisos del sistema","Clasificaciones: en la Carrera de Rapidash, Peso y altura y Más o menos, el servidor comprueba que la puntuación sea posible en el tiempo jugado","Incursiones: solo los participantes pueden golpear al jefe, y ganar exige dejarlo de verdad a 0","Gremios: nadie puede dejar al jefe semanal a 0 ni completar las misiones de golpe; nadie hace él solo más del 60 % del jefe (salvo en gremios de una persona)","Intercambios: el Pokémon ofrecido ya no se puede cambiar después, y cada uno solo puede dar los pasos que le tocan","Duelos de siluetas: nadie puede tocar las respuestas del rival","Invitar amigos: cada cuenta solo puede usar un código, las medallas del invitado suben de una en una, y se cobran premios por hasta 15 amigos"]},
@@ -691,24 +692,39 @@ rep('''  async function flush(){
   const AUTO=5*60000;let lastW=0,lastSaved="",busy=false;
   const hhmm=t=>new Date(t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});
   const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;{const a=g("acct");if(a)a.classList.toggle("dirty",dirty)}e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 5 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
+  // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
+  // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
+  // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
+  const CV="__GAMEVER__";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
+  // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
+  const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};
+  const srvOkMark=(r,t0)=>{try{localStorage.setItem(MARK(),String(r.at||0))}catch(e){}(window.cloudHooks||[]).forEach(f=>{try{f(t0)}catch(e){}})};
   async function flush(force){
     if(!uid||pending===null||busy||locked)return;
     if(pending===lastSaved){pending=null;syncTxt();return}
     if(force!==true&&Date.now()-lastW<(typeof force==="number"?force:0))return;
-    busy=true;const d=pending,t0=Date.now();pending=null;g("sync").textContent="☁️ Guardando…";
-    // la partida se envía al servidor, que es el único que puede guardarla (comprueba la sesión y que sea posible)
-    let r;
-    try{r=(await srvSave({data:d,sess:SID})).data||{}}
-    catch(e){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;return}
+    busy=true;g("sync").textContent="☁️ Guardando…";
+    let d=null,t0=0,r;
+    try{r=await srvRun(async()=>{if(locked||pending===null||pending===lastSaved)return {skip:1};d=pending;t0=Date.now();pending=null;
+      return (await srvSave({data:d,sess:SID,v:CV,q:nq()})).data||{}})}
+    catch(e){if(pending===null&&d!==null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;return}
     busy=false;
-    // la partida está abierta en otro dispositivo: aquí se pausa
-    if(r.why==="sesion"){sessLock({d:r.d});return}
-    // el servidor ha visto progreso imposible: no la guarda y se vuelve a la última partida buena
-    if(r.why==="rechazado"){saveBack(r);return}
+    if(r.skip){if(pending===lastSaved)pending=null;syncTxt();return}
+    if(srvBad(r))return;
+    if(r.why==="viejo"){syncTxt();return}
     if(!r.ok){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";return}
-    try{localStorage.setItem(MARK(),String(r.at||0))}catch(e){}(window.cloudHooks||[]).forEach(f=>{try{f(t0)}catch(e){}})
+    srvOkMark(r,t0);
     lastSaved=d;lastW=Date.now();syncTxt();
   }
+  // tiradas y mejoras (p_srv.js): getJ da la partida en el momento de enviarla y apply aplica el resultado antes de que
+  // salga la siguiente petición
+  window.srvAccion=(accion,getJ,apply)=>{if(!uid||locked)return Promise.reject({code:"local"});
+    return srvRun(async()=>{if(locked)return {ok:false,why:"pausa"};const j=getJ(),t0=Date.now();if(j==null)return {ok:false,why:"nada"};
+      const r=(await srvSave({data:j,sess:SID,v:CV,q:nq(),accion:accion})).data||{};
+      if(srvBad(r))return r;
+      if(r.ok){srvOkMark(r,t0);try{if(apply)apply(r)}catch(e){console.error(e)}lastW=Date.now();syncTxt()}
+      return r})};
   function saveBack(r){if(locked)return;locked=true;pending=null;clearTimeout(timer);timer=0;window.__sessLocked=1;
     const k=window.__KEY;
     // al recargar manda la nube (marca -1), aunque no haya llegado la última partida buena

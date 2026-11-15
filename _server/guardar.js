@@ -1,14 +1,24 @@
 // =====================================================================================
 // Guardar la partida: el servidor es el único que puede escribirla (las reglas de Firestore lo impiden al navegador).
-// 1) Comprueba que quien guarda es el dispositivo activo (una sola partida abierta a la vez).
+// 1) Comprueba que quien guarda es el dispositivo activo (una sola partida abierta a la vez) y que el juego es de la
+//    versión actual.
 // 2) Compara la partida nueva con la última aceptada (revisar.js).
 // 3) Si es imposible, no la guarda y devuelve la última partida buena para que el juego vuelva a ella.
 //    Si es sospechosa, la guarda pero la apunta en flags/ para que la revise un administrador.
+// 4) Con «accion», además hace en el servidor una tirada del gacha (gacha.js) o una mejora de la tienda (tienda.js)
+//    sobre esa partida y la guarda ya con el resultado. Desde la versión 7.2 las tiradas, los edificios y los guantes
+//    solo cambian así (modo estricto de revisar.js).
+// Todo va en una transacción: dos peticiones a la vez nunca se pisan, y una petición antigua que llegue tarde
+// (número q menor que el último guardado de esa sesión) no sobrescribe una más nueva.
 // =====================================================================================
+const crypto = require("crypto");
 const {FieldValue, Timestamp} = require("firebase-admin/firestore");
 const {revisar} = require("./revisar");
+const gacha = require("./gacha");
+const tienda = require("./tienda");
 
 const MAX = 1000000;
+const VMIN = [7, 2];
 
 function leer(txt) {
   if (typeof txt !== "string") return null;
@@ -19,42 +29,85 @@ function leer(txt) {
     return null;
   }
 }
+const ver = (v) => { const m = /^(\d+)\.(\d+)/.exec(String(v || "")); return m ? [+m[1], +m[2]] : [0, 0]; };
+const verOk = (v) => { const a = ver(v); return a[0] > VMIN[0] || (a[0] === VMIN[0] && a[1] >= VMIN[1]); };
 
-// db: Firestore (admin) · uid: quién llama · p: {data, sess} · ahora: ms · cuentaSeg: antigüedad de la cuenta (s)
-async function guardar(db, uid, p, ahora, cuentaSeg) {
+// firma de la partida, la misma que pone el juego (si no cuadra, el juego cree que alguien la ha editado a mano)
+const _hs = (str) => {
+  let h1 = 0xdeadbeef ^ 0x5f3a, h2 = 0x41c6ce57 ^ 0x2b9d;
+  for (let i = 0; i < str.length; i++) { const c = str.charCodeAt(i); h1 = Math.imul(h1 ^ c, 2654435761); h2 = Math.imul(h2 ^ c, 1597334677); }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+};
+function firmar(obj, uid) {
+  const o = Object.assign({}, obj);
+  delete o._h;
+  const j = JSON.stringify(o), k = "pgc·" + ("gacha-pkmn-v3-" + uid).length * 7919 + "·brisa";
+  return j.slice(0, -1) + ',"_h":"' + _hs(j + k) + '"}';
+}
+
+const rndCripto = () => crypto.randomInt(0, 4294967296) / 4294967296;
+
+// db: Firestore (admin) · uid: quién llama · p: {data, sess, v, q, accion} · ahora: ms · cuentaSeg: antigüedad (s)
+async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
   if (!uid) return {ok: false, why: "sin-cuenta"};
+  const ac = p && p.accion && typeof p.accion === "object" ? p.accion : null;
+  if (ac && ac.k === "hola") return {ok: true, hola: 1}; // para despertar el servidor al entrar
+  if (!verOk(p && p.v)) return {ok: false, why: "version"};
   const data = p && p.data, sess = p && typeof p.sess === "string" ? p.sess.slice(0, 64) : "";
+  const q = p && typeof p.q === "number" && isFinite(p.q) ? p.q : 0;
   if (typeof data !== "string" || data.length > MAX) return {ok: false, why: "formato"};
   const next = leer(data);
   if (!next) return {ok: false, why: "formato"};
+  if (ac && !["tirar", "mejorar"].includes(ac.k)) return {ok: false, why: "accion"};
 
-  // solo guarda el dispositivo que tiene la partida abierta
-  const ss = await db.doc("sess/" + uid).get();
-  if (ss.exists && ss.data().s && ss.data().s !== sess) return {ok: false, why: "sesion", d: String(ss.data().d || "")};
+  let flags = [];
+  const out = await db.runTransaction(async (tx) => {
+    flags = [];
+    // solo guarda el dispositivo que tiene la partida abierta
+    const ss = await tx.get(db.doc("sess/" + uid));
+    if (ss.exists && ss.data().s && ss.data().s !== sess) return {ok: false, why: "sesion", d: String(ss.data().d || "")};
+    const ref = db.doc("users/" + uid);
+    const snap = await tx.get(ref);
+    const cur = snap.exists ? snap.data() : null;
+    if (cur && sess && cur.sess === sess && q && typeof cur.q === "number" && q <= cur.q) return {ok: false, why: "viejo"};
+    const prevTxt = cur ? cur.data : null;
+    const prev = leer(prevTxt);
+    const upd = cur && cur.updated && cur.updated.toMillis ? cur.updated.toMillis() : 0;
+    const dt = prev && upd ? (ahora - upd) / 1000 : Math.max(0, Number(cuentaSeg) || 0);
+    const venta = (await ventas(db, uid, prev, next)) + (await devuelto(db, uid, prev, next));
+    // modo estricto cuando la última partida guardada ya venía de la versión 7.2 o posterior
+    const estricto = !!prev && verOk(cur && cur.v);
+    const r = revisar(prev, next, dt, venta, {estricto});
+    const apunta = (estado) => flags.push({uid, n: String(next.nick || "").slice(0, 40), at: FieldValue.serverTimestamp(), estado,
+      motivos: r.motivos.slice(0, 10), datos: r.datos, primera: !prev});
 
-  const ref = db.doc("users/" + uid);
-  const snap = await ref.get();
-  const prevTxt = snap.exists ? snap.data().data : null;
-  const prev = leer(prevTxt);
-  const upd = snap.exists && snap.data().updated && snap.data().updated.toMillis ? snap.data().updated.toMillis() : 0;
-  const dt = prev && upd ? (ahora - upd) / 1000 : Math.max(0, Number(cuentaSeg) || 0);
-  const venta = (await ventas(db, uid, prev, next)) + (await devuelto(db, uid, prev, next));
-  const r = revisar(prev, next, dt, venta);
-
-  const apunta = (estado) => db.collection("flags").add({
-    uid, n: String(next.nick || "").slice(0, 40), at: FieldValue.serverTimestamp(), estado,
-    motivos: r.motivos.slice(0, 10), datos: r.datos, primera: !prev,
-  }).catch(() => {});
-
-  // una cuenta sin partida en la nube puede estar subiendo la que jugó sin cuenta: se acepta y, si es rara, se apunta
-  if (r.estado === "imposible" && prev) {
-    await apunta("rechazado");
-    return {ok: false, why: "rechazado", motivos: r.motivos.slice(0, 5), last: typeof prevTxt === "string" ? prevTxt : null};
-  }
-  await ref.set({data, updated: Timestamp.fromMillis(ahora), sess: sess || null});
-  if (r.estado !== "ok") await apunta(r.estado === "imposible" ? "primera subida rara" : "sospechoso");
-  // at: la hora exacta del guardado, para que el juego sepa al volver a entrar si su copia es la continuación de esta
-  return {ok: true, estado: r.estado, at: ahora};
+    // una cuenta sin partida en la nube puede estar subiendo la que jugó sin cuenta: se acepta y, si es rara, se apunta
+    if (r.estado === "imposible" && prev) {
+      apunta("rechazado");
+      return {ok: false, why: "rechazado", motivos: r.motivos.slice(0, 5), last: typeof prevTxt === "string" ? prevTxt : null};
+    }
+    let dataOut = data;
+    const extra = {};
+    if (ac && ac.k === "tirar") {
+      const t = gacha.tirar(next, ac.n, ac.sup, ahora, rnd || rndCripto);
+      if (t.error) return {ok: false, why: t.error, coste: t.coste};
+      Object.assign(extra, {tirada: t});
+      dataOut = firmar(next, uid);
+    } else if (ac && ac.k === "mejorar") {
+      const m = tienda.mejorar(next, ac.i, ac.n);
+      if (m.error) return {ok: false, why: m.error, coste: m.coste};
+      Object.assign(extra, {mejora: m});
+      dataOut = firmar(next, uid);
+    }
+    tx.set(ref, {data: dataOut, updated: Timestamp.fromMillis(ahora), sess: sess || null, v: String(p.v).slice(0, 12), q});
+    if (r.estado !== "ok") apunta(r.estado === "imposible" ? "primera subida rara" : "sospechoso");
+    // at: la hora exacta del guardado, para que el juego sepa al volver a entrar si su copia es la continuación de esta
+    return Object.assign({ok: true, estado: r.estado, at: ahora}, extra);
+  });
+  for (const f of flags) await db.collection("flags").add(f).catch(() => {});
+  return out;
 }
 
 // ventas del mercadillo cobradas desde el último guardado: el juego apunta en mkPaid cada venta que cobra y no borra el
@@ -92,4 +145,4 @@ async function devuelto(db, uid, prev, next) {
   }
 }
 
-module.exports = {guardar, leer};
+module.exports = {guardar, leer, firmar, verOk};

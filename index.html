@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.1.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794781064">
+<meta name="game-build" content="1794782291">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2944,7 +2944,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.1.1</small>
+    <small class="pcver">Versión 7.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7626,8 +7626,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.1.1";
+const GAME_VER="7.2";
 const NEWS=[
+{v:"2026-11-15-7.2",ver:"7.2",at:"2026-11-15T23:38",t:"🎰 Las tiradas y las mejoras las hace el servidor",l:["Con cuenta, las tiradas del gacha y las mejoras de edificios y guantes las hace ahora el servidor del juego: él cobra los tickets, decide lo que sale y lo guarda en la nube al momento","Las probabilidades, la garantía de raro, los eventos, el Pokémon destacado y el Día de la Comunidad son exactamente los mismos que antes","Así nadie puede elegir lo que le sale ni subir edificios sin pagarlos","Necesita conexión: si no hay, el juego te avisa y no se gasta nada","Si tocas muchas veces seguidas una mejora, se juntan en una sola compra","Sin cuenta, todo sigue funcionando como siempre en tu navegador"]},
 {v:"2026-11-15-7.1.1",ver:"7.1.1",at:"2026-11-15T23:17",t:"📊 Clasificación de minijuegos: tus marcas ya entran",l:["Arreglado: si alguna vez una marca tuya no llegaba a la clasificación (por ejemplo, las de más de 20.000 en la Carrera de Rapidash de antes), el juego la seguía tomando como tu mejor marca de la semana y no subía las siguientes aunque fueran buenas","Ahora se sube cualquier marca que mejore la que tienes en la clasificación","Si una marca no entra, te avisa al momento"]},
 {v:"2026-11-15-7.1",ver:"7.1",at:"2026-11-15T22:50",t:"🛡️ Tu partida, guardada y revisada por el servidor",l:["Ahora las partidas en la nube solo las guarda el servidor del juego: desde el navegador ya no se pueden escribir ni borrar","Cada vez que se guarda, el servidor la compara con la anterior y con el tiempo que ha pasado. Si hay progreso que no se puede conseguir jugando (tickets, Pokémon u objetos que aparecen de la nada), no se guarda y vuelves a tu última partida buena","Jugando normal no cambia nada: los márgenes son muy amplios, y las ventas del mercadillo y las devoluciones de tickets también se tienen en cuenta","Si cierras el juego sin que se haya subido lo último, al volver a entrar en el mismo dispositivo se conserva y se sube","Si tenías el juego abierto desde antes de esta versión, recarga la página para que se vuelva a guardar en la nube"]},
 {v:"2026-11-15-7.0",ver:"7.0",at:"2026-11-15T16:22",t:"🔒 Revisión de seguridad: el juego, más justo para todos",l:["Hemos revisado todo el juego en busca de trampas que perjudicaran a otros jugadores y las hemos cerrado","Chat y sugerencias: arreglado un fallo por el que una foto o un dato preparados podían ejecutar código en la pantalla de quien los viera. Tampoco se pueden fijar mensajes arriba con fechas falsas ni hacerse pasar por avisos del sistema","Clasificaciones: en la Carrera de Rapidash, Peso y altura y Más o menos, el servidor comprueba que la puntuación sea posible en el tiempo jugado","Incursiones: solo los participantes pueden golpear al jefe, y ganar exige dejarlo de verdad a 0","Gremios: nadie puede dejar al jefe semanal a 0 ni completar las misiones de golpe; nadie hace él solo más del 60 % del jefe (salvo en gremios de una persona)","Intercambios: el Pokémon ofrecido ya no se puede cambiar después, y cada uno solo puede dar los pasos que le tocan","Duelos de siluetas: nadie puede tocar las respuestas del rival","Invitar amigos: cada cuenta solo puede usar un código, las medallas del invitado suben de una en una, y se cobran premios por hasta 15 amigos"]},
@@ -7986,7 +7987,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794781064";
+const GAME_B="1794782291";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -19681,6 +19682,74 @@ function av3mFace(E,L,C){const{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W}=C,B0=.0036,
 // las piezas de tu aspecto se piden nada más entrar
 setTimeout(()=>{try{av3mReady(myLook(),av3mLo())}catch(e){}},1200);
 
+// =====================================================================================
+// TIRADAS Y MEJORAS EN EL SERVIDOR (versión 7.2)
+// Con cuenta, las tiradas del gacha y las mejoras de edificios y guantes las hace el servidor (_server/gacha.js y
+// _server/tienda.js): él cobra, decide el azar y guarda la partida con el resultado; aquí solo se aplica lo que
+// devuelve y se enseña igual que antes. Sin cuenta, todo sigue funcionando en el navegador como siempre.
+// Las peticiones van en fila (window.srvAccion, en el módulo de Firebase): cada una sale con la partida ya al día.
+// =====================================================================================
+const srvOn=()=>!!(window.srvAccion&&window.FB&&window.FB.uid&&window.FB.uid()&&!window.__sessLocked);
+const srvJ=()=>{delete S._h;return sigAdd(JSON.stringify(S))};
+const SRV_TXT={saldo:"No tienes tickets suficientes.",maximo:"Ya está al nivel máximo.",cantidad:"Cantidad no válida.",version:"Hay una versión nueva del juego: recarga la página."};
+const SRV_RED="Sin conexión con el servidor: con cuenta, las tiradas y las mejoras necesitan conexión. Inténtalo de nuevo.";
+// (sesión en otro dispositivo o partida rechazada: ya sale su propio aviso)
+const srvErr=r=>r&&["sesion","rechazado","pausa","nada"].includes(r.why)?"":(r&&SRV_TXT[r.why])||SRV_RED;
+
+// ---- tiradas ----
+// aplica lo que ha salido en el servidor exactamente como lo hace pull(): Pokémon, variocolores, Poké Ball con la que
+// llegan, tickets de repetidos, megas repetidas, misiones y la animación
+function srvPullApply(t,n,sup){
+  MDUP={c:0,t:0};$("out").innerHTML="";$("out").classList.remove("nox");$("msg").textContent="";
+  // (si estás en un combate de Exploración, los Pokémon van a tu partida normal)
+  const xg=typeof XGSW!=="undefined"&&XGSW&&typeof xgOut==="function";if(xg)xgOut();
+  const res=[];let back=0;
+  try{
+    S.t-=t.coste;if(sup)S.sp=t.sp;else S.np=t.np;S.pity=t.pity;S.balls=S.balls||{};S.when=S.when||{};S.bag=S.bag||{};
+    for(const x of t.res||[]){const p=PM[x[0]];if(!p)continue;const name=x[0],isNew=!!x[1],r=+x[2]||0,sh=!!x[3],md=x[4]|0;
+      if(!S.owned[name]){S.balls[name]=BALLR[p[2]];S.when[name]=Date.now()}
+      S.owned[name]=(S.owned[name]||0)+1;S.pulls=(S.pulls||0)+1;
+      if(sh){S.shiny=S.shiny||{};S.shiny[name]=(S.shiny[name]||0)+1;qEv("shiny")}
+      if(md){S.owned[name]=Math.max(1,(S.owned[name]|0)-1);if(md===1){S.bag.cand=(S.bag.cand||0)-r;MDUP.c-=r}else MDUP.t+=r}
+      back+=Math.max(0,r);res.push([p,isNew,r,sh])}
+    qEv("pull",n);if(sup)qEv("spull",n);const nn=res.filter(x=>x[1]).length;if(nn)qEv("new",nn);
+    S.t+=back;
+  }finally{if(xg&&typeof xgIn==="function")xgIn()}
+  save();render();
+  const RC={C:"#fff",R:"#7fb6ff",E:"#d3a2ff",M:"#ff9ad8",L:"#ffd15c"};
+  const best=res.reduce((a,x)=>"CREML".indexOf(x[0][2])>"CREML".indexOf(a)?x[0][2]:a,"C");
+  gachaShow(res,n,best,back,sup,RC);
+  if(MDUP.c||MDUP.t){const c=MDUP.c,tk=MDUP.t;setTimeout(()=>toast("🔑 Megas/Gigamax repetidas convertidas en: "+[c?c+" Caramelo"+(c>1?"s":"")+" Raro"+(c>1?"s":""):"",tk?fmt(tk)+" 🎟️":""].filter(Boolean).join(" y ")+"."),1800)}
+}
+{const _pl=pull;pull=function(n,sup){
+  if(!srvOn())return _pl.apply(this,arguments);
+  if(busy||S.t<cost(n,sup))return;
+  busy=true;$("msg").textContent="🎰 Tirando…";
+  // (r.tirada falta solo si el servidor aún no se ha actualizado: entonces no se ha tirado ni cobrado nada)
+  window.srvAccion({k:"tirar",n:n,sup:!!sup},srvJ,r=>{if(r.tirada)srvPullApply(r.tirada,n,sup)})
+    .then(r=>{if(!r||!r.ok||!r.tirada){busy=false;const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a tirar.":srvErr(r);$("msg").textContent=m;if(m)toast("⚠️ "+m)}})
+    .catch(()=>{busy=false;$("msg").textContent=SRV_RED;toast("⚠️ "+SRV_RED)})}}
+
+// ---- mejoras de la tienda (edificios y guantes) ----
+// Van de una en una: cada compra se calcula cuando le toca, con los tickets y niveles ya actualizados. Si tocas varias
+// veces seguidas el mismo edificio mientras otra compra está en camino, se juntan en una sola petición.
+// srvShopN: cuántos niveles (como mucho lim) se pueden pagar ahora y cuánto cuestan (como shopN)
+function srvShopN(i,lim){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?Math.round(25*Math.pow(3,lv0+k)):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
+  let n=0,c=0;while(n<lim){if(i<0&&lv0+n>=GLMAX)break;const u=unit(n);if(c+u>S.t)break;c+=u;n++}return [n,c]}
+const SRVSH={};
+{const _sb=shopBuy;shopBuy=function(i){
+  if(!srvOn())return _sb.apply(this,arguments);
+  if(i<0&&(S.cl|0)>=GLMAX)return;const [n0,c0]=shopN(i);if(!n0||S.t<c0)return;
+  const mx=SHQ==="max",k=String(i),q=SRVSH[k];
+  // ya hay una compra de este edificio esperando su turno: se suma a esa
+  if(q&&!q.go){if(mx)q.mx=1;else q.u+=n0;return}
+  const ac={k:"mejorar",i:i,n:0},job={u:n0,mx:mx,go:0};SRVSH[k]=job;
+  // (si cuando le toca ya no llega para ninguna, no se envía)
+  window.srvAccion(ac,()=>{job.go=1;if(SRVSH[k]===job)delete SRVSH[k];const [n]=job.mx?shopN(i):srvShopN(i,job.u);if(!n)return null;ac.n=n;return srvJ()},
+      r=>{const m=r.mejora;if(!m)return;S.t-=m.coste;if(i<0){S.cl=m.nivel;window._fk=null}else{S.g[i]=m.nivel}window._gk=null;save();render()})
+    .then(r=>{if(SRVSH[k]===job)delete SRVSH[k];if(!r||!r.ok||!r.mejora){const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m)}})
+    .catch(()=>{if(SRVSH[k]===job)delete SRVSH[k];toast("⚠️ "+SRV_RED)})}}
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -19920,24 +19989,39 @@ async function main(){
   const AUTO=5*60000;let lastW=0,lastSaved="",busy=false;
   const hhmm=t=>new Date(t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});
   const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;{const a=g("acct");if(a)a.classList.toggle("dirty",dirty)}e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 5 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
+  // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
+  // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
+  // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
+  const CV="7.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
+  // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
+  const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};
+  const srvOkMark=(r,t0)=>{try{localStorage.setItem(MARK(),String(r.at||0))}catch(e){}(window.cloudHooks||[]).forEach(f=>{try{f(t0)}catch(e){}})};
   async function flush(force){
     if(!uid||pending===null||busy||locked)return;
     if(pending===lastSaved){pending=null;syncTxt();return}
     if(force!==true&&Date.now()-lastW<(typeof force==="number"?force:0))return;
-    busy=true;const d=pending,t0=Date.now();pending=null;g("sync").textContent="☁️ Guardando…";
-    // la partida se envía al servidor, que es el único que puede guardarla (comprueba la sesión y que sea posible)
-    let r;
-    try{r=(await srvSave({data:d,sess:SID})).data||{}}
-    catch(e){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;return}
+    busy=true;g("sync").textContent="☁️ Guardando…";
+    let d=null,t0=0,r;
+    try{r=await srvRun(async()=>{if(locked||pending===null||pending===lastSaved)return {skip:1};d=pending;t0=Date.now();pending=null;
+      return (await srvSave({data:d,sess:SID,v:CV,q:nq()})).data||{}})}
+    catch(e){if(pending===null&&d!==null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;return}
     busy=false;
-    // la partida está abierta en otro dispositivo: aquí se pausa
-    if(r.why==="sesion"){sessLock({d:r.d});return}
-    // el servidor ha visto progreso imposible: no la guarda y se vuelve a la última partida buena
-    if(r.why==="rechazado"){saveBack(r);return}
+    if(r.skip){if(pending===lastSaved)pending=null;syncTxt();return}
+    if(srvBad(r))return;
+    if(r.why==="viejo"){syncTxt();return}
     if(!r.ok){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";return}
-    try{localStorage.setItem(MARK(),String(r.at||0))}catch(e){}(window.cloudHooks||[]).forEach(f=>{try{f(t0)}catch(e){}})
+    srvOkMark(r,t0);
     lastSaved=d;lastW=Date.now();syncTxt();try{if(window.rankData)await FB.rankSave(window.rankData())}catch(e){}try{if(window.gFlushHook)await window.gFlushHook()}catch(e){}
   }
+  // tiradas y mejoras (p_srv.js): getJ da la partida en el momento de enviarla y apply aplica el resultado antes de que
+  // salga la siguiente petición
+  window.srvAccion=(accion,getJ,apply)=>{if(!uid||locked)return Promise.reject({code:"local"});
+    return srvRun(async()=>{if(locked)return {ok:false,why:"pausa"};const j=getJ(),t0=Date.now();if(j==null)return {ok:false,why:"nada"};
+      const r=(await srvSave({data:j,sess:SID,v:CV,q:nq(),accion:accion})).data||{};
+      if(srvBad(r))return r;
+      if(r.ok){srvOkMark(r,t0);try{if(apply)apply(r)}catch(e){console.error(e)}lastW=Date.now();syncTxt()}
+      return r})};
   function saveBack(r){if(locked)return;locked=true;pending=null;clearTimeout(timer);timer=0;window.__sessLocked=1;
     const k=window.__KEY;
     // al recargar manda la nube (marca -1), aunque no haya llegado la última partida buena
@@ -19974,6 +20058,8 @@ async function main(){
     catch(x){g("auth").hidden=false;msg("No se pudo cargar tu progreso: "+(x.code||x.message));return}
     lobby=new FsRoom(db,uid,["lobby"]);window.claude={use:async n=>n==="room"?lobby:null};window.FB=FB;
     window.__KEY=key;started=true;sessWatch();
+    // despierta el servidor ya al entrar (la primera petición tras un rato parado tarda unos segundos)
+    try{srvSave({accion:{k:"hola"}}).catch(()=>{})}catch(e){}
     g("auth").hidden=true;g("acct").hidden=false;g("aname").textContent="👤 "+label(u);
     window.startGameOnce();
   });

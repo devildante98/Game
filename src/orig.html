@@ -3248,6 +3248,8 @@ async function main(){
     catch(x){g("auth").hidden=false;msg("No se pudo cargar tu progreso: "+(x.code||x.message));return}
     lobby=new FsRoom(db,uid,["lobby"]);window.claude={use:async n=>n==="room"?lobby:null};
     window.__KEY=key;started=true;sessWatch();
+    // despierta el servidor ya al entrar (la primera petición tras un rato parado tarda unos segundos)
+    try{srvSave({accion:{k:"hola"}}).catch(()=>{})}catch(e){}
     g("auth").hidden=true;g("acct").hidden=false;g("aname").textContent="👤 "+label(u);
     window.startGameOnce();
   });

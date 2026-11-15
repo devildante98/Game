@@ -15,6 +15,12 @@ function banned() {
 // NUEVO: comprobaciones de valores
 function num(v, lo, hi) { return (v is int || v is float) && v >= lo && v <= hi; }
 function optNum(f, lo, hi) { return !(f in request.resource.data) || num(request.resource.data[f], lo, hi); }
+// NUEVO (seguridad): textos con tamaño máximo, y fechas que pone el jugador cerca de la hora real del servidor
+// (si no, alguien podría poner una fecha futura y dejar su mensaje, sala o anuncio fijado arriba para siempre)
+function str(v, mx) { return v is string && v.size() <= mx; }
+function optStr(f, mx) { return !(f in request.resource.data) || str(request.resource.data[f], mx); }
+function nowOk(v) { return (v is int || v is float) && math.abs(v - request.time.toMillis()) < 600000; }
+function optNow(f) { return !(f in request.resource.data) || nowOk(request.resource.data[f]); }
 // NUEVO: puntuación máxima posible de cada minijuego («2026-W45_who» → who); el torneo semanal usa el máximo general
 function maxScore(w) {
   // run, wgt y hl no tienen final (hasta que chocas o fallas): el juego comprueba la puntuación con el tiempo jugado
@@ -56,45 +62,116 @@ match /freq/{id} {
     && request.resource.data.from == resource.data.from && request.resource.data.to == resource.data.to;
   allow delete: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
 }
+// NUEVO (seguridad): solo los campos que usa el juego, con tamaños razonables; la foto tiene que ser una imagen de verdad;
+// la fecha, cerca de la real; y los avisos del sistema («se ha unido al gremio») solo en el chat del gremio
+function msgOk(sysOk) {
+  let d = request.resource.data;
+  return d.keys().hasOnly(['u', 'n', 'cr', 'tr', 'g', 't', 'at', 'rp', 'p', 'img', 'exp', 'inv', 'sys'])
+    && d.u == request.auth.uid && str(d.t, 200) && nowOk(d.at)
+    && optStr('n', 30) && optStr('tr', 80) && optStr('g', 4) && optNum('cr', 0, 3)
+    && (!('img' in d) || (str(d.img, 400000) && d.img.matches('data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}')))
+    && (!('exp' in d) || num(d.exp, 0, request.time.toMillis() + 172800000))
+    && (!('rp' in d) || (d.rp is map && d.rp.keys().hasOnly(['id', 'n', 't'])))
+    && (!('p' in d) || (d.p is map && d.p.keys().hasOnly(['n', 'l', 's', 'k'])))
+    && (!('inv' in d) || (d.inv is map && d.inv.size() <= 12))
+    && (!('sys' in d) || (sysOk && d.sys == 'join'));
+}
 match /chats/{room}/msgs/{m} {
   allow read: if request.auth != null && room == "global";
   allow create: if request.auth != null && room == "global" && request.resource.data.u == request.auth.uid
-    && request.resource.data.t is string && request.resource.data.t.size() <= 200 && !banned();
+    && msgOk(false) && !banned();
   allow delete: if request.auth != null && (resource.data.u == request.auth.uid || isAdmin());
 }
 match /gchats/{gid}/msgs/{m} {
   allow read: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/guilds/$(gid)).data.members;
-  allow create: if request.auth != null && request.resource.data.u == request.auth.uid
-    && request.resource.data.t is string && request.resource.data.t.size() <= 200
+  allow create: if request.auth != null && request.resource.data.u == request.auth.uid && msgOk(true)
     && request.auth.uid in get(/databases/$(database)/documents/guilds/$(gid)).data.members && !banned();
   allow delete: if request.auth != null && (resource.data.u == request.auth.uid || isAdmin());
 }
 match /dms/{pair}/msgs/{m} {
   allow read: if request.auth != null && request.auth.uid in pair.split('_');
   allow create: if request.auth != null && request.resource.data.u == request.auth.uid
-    && request.auth.uid in pair.split('_')
-    && request.resource.data.t is string && request.resource.data.t.size() <= 200 && !banned();
+    && request.auth.uid in pair.split('_') && pair.split('_').size() == 2
+    && msgOk(false) && !banned();
   allow delete: if request.auth != null && (resource.data.u == request.auth.uid || isAdmin());
 }
 // NUEVO: la puntuación no puede pasar del máximo real de cada minijuego
+// NUEVO (seguridad): en los juegos sin final (run, wgt, hl) la puntuación tampoco puede pasar de lo que da tiempo a hacer
+// desde que empezó la partida, según la hora del SERVIDOR (play/{uid}/g/{juego}), no la del jugador
+function gameOf(w) { return w.split('_').size() > 1 ? w.split('_')[1] : 'x'; }
+function playSecs(u, g) {
+  let p = /databases/$(database)/documents/play/$(u)/g/$(g);
+  let raw = exists(p) ? (request.time.toMillis() - get(p).data.at.toMillis()) / 1000 : -1;
+  return raw > 10800 ? 10800 : raw;
+}
+function timeOk(w, u, sc) {
+  let g = gameOf(w);
+  let t = (g in ['run', 'wgt', 'hl']) ? playSecs(u, g) : 0;
+  let n = t / 0.45 + 3;
+  return !(g in ['run', 'wgt', 'hl']) || (t >= 0 && sc <= (g == 'run' ? 350 * t + 5000 : 175 * n + 5 * n * n));
+}
 match /tours/{week}/s/{u} {
   allow read: if request.auth != null;
   allow create, update: if request.auth != null && request.auth.uid == u && !banned()
-    && request.resource.data.sc is number && request.resource.data.sc > 0 && request.resource.data.sc <= maxScore(week);
+    && request.resource.data.keys().hasOnly(['sc', 'cr', 'n', 'tr', 'g', 'at'])
+    && request.resource.data.sc is number && request.resource.data.sc > 0 && request.resource.data.sc <= maxScore(week)
+    && optStr('n', 30) && optStr('tr', 80) && optStr('g', 4) && optNum('cr', 0, 3)
+    && timeOk(week, u, request.resource.data.sc);
   allow delete: if isAdmin();
+}
+// inicio de cada partida de minijuego: la hora la pone el servidor
+match /play/{u}/g/{g} {
+  allow read: if request.auth != null && request.auth.uid == u;
+  allow create, update: if request.auth != null && request.auth.uid == u
+    && request.resource.data.keys().hasOnly(['at']) && request.resource.data.at == request.time;
+}
+// NUEVO (seguridad): cada jugador solo añade SUS respuestas (no puede cambiar las del rival ni corregir las suyas);
+// aceptar o rechazar el reto solo lo hace el retado
+function duAns() {
+  let u = request.auth.uid;
+  let df = request.resource.data.get('ans', {}).diff(resource.data.get('ans', {}));
+  return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['ans'])
+    && df.changedKeys().size() == 0 && df.removedKeys().size() == 0 && df.addedKeys().size() == 1
+    && df.addedKeys().hasOnly(['r0_' + u, 'r1_' + u, 'r2_' + u, 'r3_' + u, 'r4_' + u, 'r5_' + u, 'r6_' + u, 'r7_' + u]);
 }
 match /sdu/{id} {
   allow read: if request.auth != null && (resource == null || request.auth.uid == resource.data.a || request.auth.uid == resource.data.b);
-  allow create: if request.auth != null && request.resource.data.a == request.auth.uid;
+  allow create: if request.auth != null && request.resource.data.a == request.auth.uid && request.resource.data.st == 'inv'
+    && request.resource.data.get('ans', {}).size() == 0;
   allow update: if request.auth != null && (request.auth.uid == resource.data.a || request.auth.uid == resource.data.b)
-    && request.resource.data.a == resource.data.a && request.resource.data.b == resource.data.b;
+    && request.resource.data.a == resource.data.a && request.resource.data.b == resource.data.b
+    && (duAns() || (request.auth.uid == resource.data.b && resource.data.st == 'inv'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['st', 'go', 'bn']) && request.resource.data.st in ['go', 'no']));
   allow delete: if request.auth != null && (request.auth.uid == resource.data.a || request.auth.uid == resource.data.b);
 }
 
+// NUEVO (seguridad): antes cualquiera podía cambiar cualquier incursión (dejar al jefe a 0, darla por ganada, echar a gente).
+// Ahora: cada uno solo entra o sale él mismo; solo el anfitrión la empieza; solo los participantes golpean (la vida baja
+// lo mismo que sube su daño, con un tope según el tiempo de combate); ganar solo con el jefe a 0 y perder solo al acabar el tiempo
+function rpl() { return resource.data.get('pl', {}); }
+function npl() { return request.resource.data.get('pl', {}); }
+function rch() { return request.resource.data.diff(resource.data).affectedKeys(); }
+function onlyMe() { return npl().diff(rpl()).affectedKeys().hasOnly([request.auth.uid]); }
+function raidHitOk() {
+  let u = request.auth.uid;
+  let d0 = rpl()[u].get('dmg', 0);
+  let d1 = npl()[u].get('dmg', 0);
+  return d1 is number && d1 > d0 && math.abs((resource.data.hp - request.resource.data.hp) - (d1 - d0)) < 1
+    && d1 <= resource.data.mx * ((request.time.toMillis() - resource.data.go) / 1000 + 10) / 50;
+}
 match /raids/{id} {
   allow read: if request.auth != null;
-  allow create: if request.auth != null && request.resource.data.h == request.auth.uid;
-  allow update: if request.auth != null && request.resource.data.h == resource.data.h && request.resource.data.boss == resource.data.boss;
+  allow create: if request.auth != null && request.resource.data.h == request.auth.uid && request.resource.data.st == 'lobby'
+    && request.resource.data.hp == 0 && npl().keys().hasOnly([request.auth.uid]) && optStr('hn', 30) && optNow('at');
+  allow update: if request.auth != null && request.resource.data.h == resource.data.h && request.resource.data.boss == resource.data.boss && (
+    (rch().hasOnly(['pl']) && onlyMe() && (!(request.auth.uid in npl()) || (resource.data.st == 'lobby' && npl().size() <= 4)))
+    || (request.auth.uid == resource.data.h && resource.data.st == 'lobby' && request.resource.data.st == 'fight'
+        && rch().hasOnly(['st', 'hp', 'mx', 'go', 'end']) && num(request.resource.data.mx, 4000, 1000000000)
+        && request.resource.data.hp == request.resource.data.mx && nowOk(request.resource.data.go)
+        && request.resource.data.end == request.resource.data.go + 180000)
+    || (request.auth.uid in rpl() && resource.data.st == 'fight' && rch().hasOnly(['hp', 'pl']) && onlyMe() && request.auth.uid in npl() && raidHitOk())
+    || (request.auth.uid in rpl() && resource.data.st == 'fight' && request.resource.data.st == 'end' && rch().hasOnly(['st', 'win'])
+        && ((request.resource.data.win == 1 && resource.data.hp <= 0) || (request.resource.data.win == 0 && request.time.toMillis() > resource.data.end))));
   allow delete: if request.auth != null && (resource.data.h == request.auth.uid || isAdmin());
 }
 // NUEVO: precios, niveles y cantidades razonables; al comprar solo cambia el estado
@@ -102,7 +179,10 @@ match /market/{id} {
   allow read: if request.auth != null;
   allow create: if request.auth != null && request.resource.data.s == request.auth.uid
     && request.resource.data.st == "open" && num(request.resource.data.pr, 1000, 2000000000) && !banned()
-    && (request.resource.data.k == 'pk' ? num(request.resource.data.pk.l, 1, 100) : num(request.resource.data.it.q, 1, 999999));
+    && request.resource.data.keys().hasOnly(['s', 'sn', 'k', 'pr', 'st', 'at', 'pk', 'it']) && optStr('sn', 30)
+    && (request.resource.data.k == 'pk'
+        ? (request.resource.data.pk.keys().hasOnly(['n', 'l', 's']) && str(request.resource.data.pk.n, 40) && num(request.resource.data.pk.l, 1, 100))
+        : (request.resource.data.k == 'it' && request.resource.data.it.keys().hasOnly(['id', 'q']) && str(request.resource.data.it.id, 40) && num(request.resource.data.it.q, 1, 999999)));
   allow update: if request.auth != null && resource.data.st == "open" && resource.data.s != request.auth.uid
     && request.resource.data.st == "sold" && request.resource.data.b == request.auth.uid
     && request.resource.data.pr == resource.data.pr && request.resource.data.s == resource.data.s
@@ -111,13 +191,30 @@ match /market/{id} {
 }
 match /refs/{code} {
   allow read: if request.auth != null;
-  allow create: if request.auth != null && request.resource.data.u == request.auth.uid;
+  allow create: if request.auth != null && request.resource.data.u == request.auth.uid
+    && request.resource.data.keys().hasOnly(['u', 'n']) && optStr('n', 30);
   allow delete: if isAdmin();
+  // NUEVO (seguridad): cada cuenta solo puede apuntarse a UN código (refd/{uid}), empieza con 0 o 1 medallas y las
+  // medallas solo suben de una en una, con al menos 30 minutos entre subidas (así no compensa fabricar invitados)
   match /inv/{u} {
     allow read: if request.auth != null;
-    allow create, update: if request.auth != null && request.auth.uid == u && optNum('med', 0, 8);
+    allow create: if request.auth != null && request.auth.uid == u
+      && request.resource.data.keys().hasOnly(['n', 'med', 'at', 'mt']) && optStr('n', 30) && num(request.resource.data.med, 0, 1)
+      && request.resource.data.mt == request.time
+      && !exists(/databases/$(database)/documents/refd/$(u))
+      && getAfter(/databases/$(database)/documents/refd/$(u)).data.c == code;
+    allow update: if request.auth != null && request.auth.uid == u
+      && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['med', 'mt'])
+      && num(request.resource.data.med, resource.data.get('med', 0), resource.data.get('med', 0) + 1)
+      && request.resource.data.mt == request.time
+      && (!('mt' in resource.data) || request.time > resource.data.mt + duration.value(30, 'm'));
     allow delete: if isAdmin();
   }
+}
+match /refd/{u} {
+  allow read: if request.auth != null && request.auth.uid == u;
+  allow create: if request.auth != null && request.auth.uid == u && request.resource.data.keys().hasOnly(['c'])
+    && existsAfter(/databases/$(database)/documents/refs/$(request.resource.data.c)/inv/$(u));
 }
 match /guilds/{gid} {
   function me() { return request.auth.uid; }
@@ -157,25 +254,65 @@ match /guilds/{gid} {
       && (!('sub' in changed()) || (resource.data.get('sub', '') == me() && request.resource.data.sub == ''))
       && (!(me() in memDiff().addedKeys()) || resource.data.get('open', false) == true);
   }
-  // Miembros: jefe semanal y misiones del gremio
+  // Miembros: subir su daño al jefe semanal y su parte de las misiones (NUEVO, seguridad: antes cualquiera podía dejar al
+  // jefe a 0 y todo el gremio se llevaba el legendario). La vida baja lo mismo que sube SU daño, nadie puede hacer él solo
+  // más del 60 % del jefe (salvo en un gremio de una persona) y las misiones solo suben, con un tope por envío
   function contrib() {
-    return isMember() && changed().hasOnly(['bd', 'bh', 'bm', 'bp', 'bw', 'gm']);
+    let n0 = resource.data;
+    let n1 = request.resource.data;
+    let d0 = n0.get('bd', {}).get(me(), 0);
+    let d1 = n1.get('bd', {}).get(me(), 0);
+    let g0 = n0.get('gm', {});
+    let g1 = n1.get('gm', {});
+    return isMember() && changed().hasOnly(['bd', 'bh', 'gm'])
+      && n1.get('bd', {}).diff(n0.get('bd', {})).affectedKeys().hasOnly([me()])
+      && d1 is number && d1 >= d0 && math.abs((n0.get('bh', 0) - n1.get('bh', 0)) - (d1 - d0)) < 1
+      && d1 - d0 <= n0.get('bm', 0) / 3 + 1
+      && d1 <= n0.get('bm', 0) * (n0.members.size() == 1 ? 1.0 : 0.6) + 1
+      && g1.diff(g0).affectedKeys().hasOnly(['cap', 'win', 'pull'])
+      && g1.get('cap', 0) >= g0.get('cap', 0) && g1.get('cap', 0) - g0.get('cap', 0) <= 300
+      && g1.get('win', 0) >= g0.get('win', 0) && g1.get('win', 0) - g0.get('win', 0) <= 300
+      && g1.get('pull', 0) >= g0.get('pull', 0) && g1.get('pull', 0) - g0.get('pull', 0) <= 3000;
   }
+  // Miembros: empezar el jefe de una semana nueva (como mucho una vez cada 6 días, con la vida que toca por miembros)
+  function weekReset() {
+    let n1 = request.resource.data;
+    return isMember() && changed().hasOnly(['bw', 'bp', 'bm', 'bh', 'bd', 'gm', 'bt'])
+      && n1.bw is string && n1.bw.matches('[0-9]{4}-[0-9]{2}-[0-9]{2}') && n1.bw != resource.data.get('bw', '')
+      && n1.bp is string && n1.bp.size() <= 40
+      && n1.bm == 25000 * resource.data.members.size() && n1.bh == n1.bm
+      && n1.bd.size() == 0 && n1.gm.size() == 0 && n1.bt == request.time
+      && (!('bt' in resource.data) || request.time > resource.data.bt + duration.value(6, 'd'));
+  }
+  function bossKeys() { return ['bd', 'bh', 'bm', 'bp', 'bw', 'gm', 'bt']; }
 
   allow read: if request.auth != null;
-  allow create: if request.auth != null && request.resource.data.owner == me();
+  allow create: if request.auth != null && request.resource.data.owner == me()
+    && request.resource.data.members.keys().hasOnly([me()]) && request.resource.data.n == 1
+    && !request.resource.data.keys().hasAny(bossKeys()) && optStr('name', 20) && optStr('tag', 4) && optStr('desc', 120);
   allow delete: if request.auth != null && (isLeader() || isAdmin());
   allow update: if request.auth != null
-    && (isLeader() || subAccept() || subReject() || selfOnly() || contrib());
+    && ((isLeader() && !changed().hasAny(bossKeys()) && optStr('name', 20) && optStr('tag', 4) && optStr('desc', 120))
+        || subAccept() || subReject() || selfOnly() || contrib() || weekReset());
 }
 // NUEVO: los Pokémon intercambiados tienen que tener un nivel válido (1-100)
+// NUEVO (seguridad): el Pokémon ofrecido no se puede cambiar después (nada de «te enseño uno y te mando otro»), y cada uno
+// solo puede hacer los pasos que le tocan: el que recibe responde o rechaza; el que ofrece acepta, rechaza o cancela
+function tOnly(ks) { return request.resource.data.diff(resource.data).affectedKeys().hasOnly(ks); }
+function monOk(m) { return m is map && m.keys().hasOnly(['n', 'l', 's']) && str(m.n, 40) && num(m.l, 1, 100); }
 match /trades/{id} {
   allow read: if request.auth != null && (resource == null || resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
-  allow create: if request.auth != null && request.resource.data.from == request.auth.uid
-    && num(request.resource.data.o.l, 1, 100);
+  allow create: if request.auth != null && request.resource.data.from == request.auth.uid && request.resource.data.to != request.auth.uid
+    && request.resource.data.keys().hasOnly(['from', 'to', 'fn', 'tn', 'o', 'st', 'at']) && request.resource.data.st == 'req'
+    && monOk(request.resource.data.o) && optStr('fn', 30) && optStr('tn', 30);
   allow update: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid)
     && request.resource.data.from == resource.data.from && request.resource.data.to == resource.data.to
-    && (!('b' in request.resource.data) || num(request.resource.data.b.l, 1, 100));
+    && request.resource.data.o == resource.data.o && (
+      (request.auth.uid == resource.data.to && resource.data.st == 'req' && request.resource.data.st == 'resp' && tOnly(['st', 'b', 'at']) && monOk(request.resource.data.b))
+      || (request.auth.uid == resource.data.to && resource.data.st == 'req' && request.resource.data.st == 'no' && tOnly(['st', 'at']))
+      || (request.auth.uid == resource.data.to && resource.data.st == 'acc' && request.resource.data.st == 'done' && tOnly(['st', 'at']))
+      || (request.auth.uid == resource.data.from && resource.data.st == 'req' && request.resource.data.st == 'cx' && tOnly(['st', 'at']))
+      || (request.auth.uid == resource.data.from && resource.data.st == 'resp' && request.resource.data.st in ['acc', 'rej'] && tOnly(['st', 'at'])));
   allow delete: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
 }
 match /gifts/{id} {
@@ -183,7 +320,8 @@ match /gifts/{id} {
   allow read: if request.auth != null && (resource.data.to == request.auth.uid || resource.data.from == request.auth.uid);
   // un regalo al día por amigo, a tu nombre
   allow create: if request.auth != null && request.resource.data.from == request.auth.uid
-    && id == request.auth.uid + "_" + request.resource.data.to + "_" + request.resource.data.d && !banned();
+    && id == request.auth.uid + "_" + request.resource.data.to + "_" + request.resource.data.d && !banned()
+    && request.resource.data.keys().hasOnly(['from', 'to', 'fn', 'd', 'at']) && optStr('fn', 30) && str(request.resource.data.d, 12);
   allow update: if request.auth != null && resource.data.from == request.auth.uid
     && request.resource.data.from == request.auth.uid && request.resource.data.to == resource.data.to;
   // solo quien lo recibe puede abrirlo (al abrirlo se borra)
@@ -240,6 +378,8 @@ match /gifts/{id} {
     match /suggestions/{id} {
       allow create: if request.auth != null && request.resource.data.uid == request.auth.uid
         && request.resource.data.text is string && request.resource.data.text.size() <= 1000
+        && request.resource.data.keys().hasOnly(['uid', 'name', 'nick', 'text', 'at', 'imgs', 'nimg'])
+        && optStr('name', 80) && optStr('nick', 40) && optNum('nimg', 0, 3)
         && (!('imgs' in request.resource.data) || request.resource.data.imgs.size() <= 3)
         && !('st' in request.resource.data) && !('rp' in request.resource.data) && !('rpAt' in request.resource.data);
       allow read: if isAdmin()

@@ -35,8 +35,9 @@ rep('trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),','''trDel:id=>S.deleteDoc(S.d
     async mkCancel(id){const ref=S.doc(db,"market",id);await S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(!s.exists()||s.data().st!=="open")throw {code:"gone"};tx.delete(ref)})},
     refSet:(c,d)=>S.setDoc(S.doc(db,"refs",c),d),
     async refGet(c){const s=await S.getDoc(S.doc(db,"refs",c));return s.exists()?s.data():null},
-    refJoin:(c,d)=>S.setDoc(S.doc(db,"refs",c,"inv",uid),d),
-    refUpd:(c,f)=>S.updateDoc(S.doc(db,"refs",c,"inv",uid),f),
+    // al apuntarse a un código se marca también refd/{uid}: cada cuenta solo puede usar UN código (lo comprueban las reglas)
+    refJoin:(c,d)=>{const b=S.writeBatch(db);b.set(S.doc(db,"refs",c,"inv",uid),Object.assign({},d,{mt:S.serverTimestamp()}));b.set(S.doc(db,"refd",uid),{c:c});return b.commit()},
+    refUpd:(c,f)=>S.updateDoc(S.doc(db,"refs",c,"inv",uid),Object.assign({},f,{mt:S.serverTimestamp()})),
     async refInv(c){const sn=await S.getDocs(S.collection(db,"refs",c,"inv"));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     duCreate:(id,d)=>S.setDoc(S.doc(db,"sdu",id),d),
     duUpd:(id,f)=>S.updateDoc(S.doc(db,"sdu",id),f),

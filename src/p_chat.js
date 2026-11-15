@@ -167,9 +167,10 @@ setInterval(()=>{try{if(nxOpen("chatP"))chHubUI()}catch(e){}},3000);
 // ================= FOTOS TEMPORALES EN EL CHAT (desaparecen a las 24 horas) =================
 const CH_IMG_TTL=24*36e5;
 function chImgHTML(m){const left=(m.exp||0)-Date.now();
-  if(left<=0||!/^data:image\/(jpeg|png|webp);base64,/.test(m.img))return '<div class="chimg gone">📷 <span>Foto caducada</span></div>';
+  // la foto tiene que ser una imagen en base64 y nada más (si no, alguien podría colar código en la pantalla de los demás)
+  if(left<=0||typeof m.img!=="string"||m.img.length>400000||!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/]+={0,2}$/.test(m.img))return '<div class="chimg gone">📷 <span>Foto caducada</span></div>';
   const h=Math.floor(left/36e5),mi=Math.max(1,Math.floor(left%36e5/6e4));
-  return '<div class="chimg"><a href="#" data-chimg="'+esc(m.id)+'"><img src="'+m.img+'" alt="Foto" onload="chImgLd(this)"></a><small>⏳ Desaparece en '+(h?h+' h ':'')+(h<3?mi+' min':'')+'</small></div>'}
+  return '<div class="chimg"><a href="#" data-chimg="'+esc(m.id)+'"><img src="'+esc(m.img)+'" alt="Foto" onload="chImgLd(this)"></a><small>⏳ Desaparece en '+(h?h+' h ':'')+(h<3?mi+' min':'')+'</small></div>'}
 async function chSendImg(file){
   const me=chMe();if(!me||!window.FB||!window.FB.chSend){chFlash("Inicia sesión para enviar fotos.");return}const k=chKey();if(!k)return;
   if(Date.now()-CH.last<CH_WAIT){chFlash("Espera un momento antes de enviar otra foto.");return}

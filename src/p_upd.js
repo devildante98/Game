@@ -118,7 +118,7 @@ sugLoad=async function(){
   let l;try{const ah=Array.isArray(S.sugAdmHid)?S.sugAdmHid:[];l=(await window.sugList()).filter(x=>!x.ah&&!ah.includes(x.id))}catch(e){$("sugAdm").hidden=true;return}
   $("sugAdm").hidden=false;
   $("sugList").innerHTML=l.length?l.map(s=>{const im=Array.isArray(s.imgs)?s.imgs:[];return '<div class="sugi"><div class="sugbt">'+(im.length?'<button class="alt" data-sdi="'+esc(s.id)+'">🖼️ Borrar fotos</button>':'')+'<button class="alt" data-sd="'+esc(s.id)+'">🗑️ Borrar</button></div><b>'+esc(s.name||"Anónimo")+'</b>'+(s.nick?' <small class="mut">('+esc(s.nick)+')</small>':'')+' <small class="mut">· '+(s.at?new Date(s.at).toLocaleString("es"):"")+'</small> '+sugStB(s.st)+'<p>'+esc(s.text||"").replace(/\n/g,"<br>")+'</p>'+sugAdmBox(s)+
-    (im.length?'<div class="sugims">'+im.map(u=>/^data:image\/(jpeg|png|webp);base64,/.test(u)?'<a href="#" data-sgv="1"><img src="'+u+'" alt="Foto adjunta"></a>':'').join("")+'</div>':(s.nimg?'<small class="mut">🖼️ '+s.nimg+' foto'+(s.nimg>1?'s':'')+' borrada'+(s.nimg>1?'s':'')+'</small>':''))+'</div>'}).join(""):'<small class="mut">Aún no hay sugerencias.</small>';
+    (im.length?'<div class="sugims">'+im.map(u=>typeof u==="string"&&u.length<1500000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/]+={0,2}$/.test(u)?'<a href="#" data-sgv="1"><img src="'+esc(u)+'" alt="Foto adjunta"></a>':'').join("")+'</div>':((s.nimg|0)>0?'<small class="mut">🖼️ '+(s.nimg|0)+' foto'+((s.nimg|0)>1?'s':'')+' borrada'+((s.nimg|0)>1?'s':'')+'</small>':''))+'</div>'}).join(""):'<small class="mut">Aún no hay sugerencias.</small>';
 };
 $("sugRe").onclick=()=>sugLoad();
 $("sugList").addEventListener("click",async e=>{

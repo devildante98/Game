@@ -221,7 +221,7 @@ setTimeout(passMini,800);
 
 // ================= INVITAR AMIGOS =================
 function refCode(){const u=window.FB&&window.FB.uid?window.FB.uid():"";if(!u)return "";let h=0;for(const ch of u)h=(h*131+ch.charCodeAt(0))>>>0;let s="",x=h;const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";for(let i=0;i<6;i++){s+=A[x%A.length];x=Math.floor(x/A.length)+(i*7919)}return s}
-const REF_MS=[["join","Se une con tu código",{t:300000,it:{ub:2}}],["m2","Consigue 2 medallas",{t:1000000,it:{cand:2}}],["m4","Consigue 4 medallas",{t:2500000,it:{mb:1}}]];
+const REF_MAXP=15,REF_MS=[["join","Se une con tu código",{t:300000,it:{ub:2}}],["m2","Consigue 2 medallas",{t:1000000,it:{cand:2}}],["m4","Consigue 4 medallas",{t:2500000,it:{mb:1}}]];
 nxPanel("refP","📨 Invitar amigos","Comparte tu código. Cuando alguien nuevo empieza a jugar con él, los dos ganáis premios, y tú sigues recibiendo más cuando tu invitado avanza en la aventura.");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="refP"))g.tabs.splice(1,0,["refP","Invitar amigos"]);HUBP.refP="mas";HUBR.refP=()=>refUI(true)}
 let RFX={list:null,at:0};
@@ -249,13 +249,16 @@ async function refUse(){
   nxModal('<div class="hofb">📨</div><h3>¡Bienvenido de parte de '+esc(pvClean(d.n||"tu amigo"))+'!</h3><p>Premio de bienvenida: <b>'+rwTxt(rw)+'</b></p><small class="mut">Cuando consigas 4 medallas recibirás 1.000.000 🎟️ más.</small><button id="rfOk">¡Gracias!</button>');$("rfOk").onclick=nxModalClose;refUI(true);
 }
 // el invitado mantiene al día sus medallas para que su padrino cobre los premios
-setInterval(()=>{try{if(!S.refBy||!window.FB||!window.FB.refUpd)return;const m=medCount();if(m!==(S.refMed|0)){S.refMed=m;window.FB.refUpd(S.refBy,{med:m}).catch(()=>{});save()}
+// (las medallas suben de una en una y el servidor deja como mucho una subida cada 30 minutos: se reintenta solo)
+setInterval(()=>{try{if(!S.refBy||!window.FB||!window.FB.refUpd)return;const m=medCount();if(m>(S.refMed|0)&&!S._refBusy){const nx=(S.refMed|0)+1;S._refBusy=1;window.FB.refUpd(S.refBy,{med:nx}).then(()=>{S.refMed=nx;save()}).catch(()=>{}).then(()=>{S._refBusy=0})}
   if(m>=4&&!S.refM4){S.refM4=1;const rw={t:1000000};grant(rw);save();render();toast("📨 ¡4 medallas! Premio por venir invitado: "+rwTxt(rw))}}catch(e){}},20e3);
 document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("#refPB button");if(!b)return;const d=b.dataset;
   if(d.ref==="copy"){const link=location.origin+location.pathname+"?ref="+refCode();try{await navigator.clipboard.writeText(link);toast("📋 Enlace copiado")}catch(x){toast(link)}}
   else if(d.ref==="share"){try{await navigator.share({title:"Poke Gacha Online",text:"¡Juega conmigo a Poke Gacha Online! Usa mi código "+refCode()+" y recibe 500.000 tickets.",url:location.origin+location.pathname+"?ref="+refCode()})}catch(x){}}
   else if(d.ref==="use")refUse();
-  else if(d.refc){const k=d.refc+":"+d.refm,x=(RFX.list||[]).find(q=>q.id===d.refc),m=REF_MS.find(q=>q[0]===d.refm);S.refCl=S.refCl||{};if(!x||!m||S.refCl[k]||!refDone(x,m[0]))return;S.refCl[k]=1;grant(m[2]);save();render();snd("win");toast("📨 ¡Premio por invitar! "+rwTxt(m[2]));const l=$("refL");if(l)l.innerHTML=refListHTML()}});
+  else if(d.refc){const k=d.refc+":"+d.refm,x=(RFX.list||[]).find(q=>q.id===d.refc),m=REF_MS.find(q=>q[0]===d.refm);S.refCl=S.refCl||{};if(!x||!m||S.refCl[k]||!refDone(x,m[0]))return;
+    // como mucho se cobran premios por REF_MAXP amigos distintos (así no compensa crear cuentas falsas)
+    {const got=new Set(Object.keys(S.refCl).map(q=>q.split(":")[0]));if(!got.has(d.refc)&&got.size>=REF_MAXP){toast("📨 Ya has cobrado los premios de "+REF_MAXP+" amigos invitados, el máximo. ¡Gracias por traer a tanta gente!");return}}S.refCl[k]=1;grant(m[2]);save();render();snd("win");toast("📨 ¡Premio por invitar! "+rwTxt(m[2]));const l=$("refL");if(l)l.innerHTML=refListHTML()}});
 document.addEventListener("input",e=>{if(e.target&&e.target.id==="refIn")NX.refq=e.target.value});
 // enlace con ?ref=CÓDIGO: se rellena solo
 (function(){try{const c=new URLSearchParams(location.search).get("ref");if(c&&!S.refBy){NX.refq=c.toUpperCase().slice(0,6);setTimeout(()=>{if(!S.refBy&&(S.pulls|0)<400){toast("📨 ¡Te han invitado! Ve a ⚙️ Más → Invitar amigos para recibir tu regalo.")}},4000)}}catch(e){}})();

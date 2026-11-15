@@ -159,7 +159,7 @@ function mgOpen(id){
   m.hidden=false;m.querySelector(".mgx").onclick=mgClose;
   const left=mgLeft(id),best=mgState().best[id]|0;
   $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+g.ic+'</div><h3>'+g.n+'</h3><p>'+g.d+'</p><div class="mginf"><span>🏆 Récord: <b>'+fmt(best)+'</b></span><span>🎁 Partidas con premio hoy: <b>'+left+'/'+MG_DAY+'</b></span></div><button class="red big" id="mgGo">▶ ¡Jugar!</button>'+(typeof mgHow==="function"?mgHow(g.id):"")+(left?'':'<small class="mut">Hoy ya has ganado todos los premios de este minijuego, pero puedes seguir jugando para batir tu récord.</small>')+'</div>';
-  $("mgGo").onclick=()=>{snd("ui");MG.t0=Date.now();g.start($("mgB"),mgEnd)};
+  $("mgGo").onclick=()=>{snd("ui");MG.t0=Date.now();mgPlayStart(g.id);g.start($("mgB"),mgEnd)};
   m.querySelector(".mgw").animate([{transform:"scale(.85)",opacity:0},{transform:"none",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.9,.3,1.2)"});
 }
 function mgClose(){if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
@@ -178,7 +178,7 @@ function mgEnd(score){
   $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+(rec?"🏆":g.ic)+'</div><h3>'+(rec?"¡Nuevo récord!":"¡Partida terminada!")+'</h3><div class="mgfinal">'+fmt(score)+'<small>puntos</small></div>'+
     (rw?'<p>Premio: <b>'+rwTxt(rw)+'</b></p>':'<p class="mut">'+(score>0?'Hoy ya no quedan premios en este minijuego.':'¡Sin puntos esta vez!')+'</p>')+extra+
     '<div class="mginf"><span>🏆 Récord: <b>'+fmt(st.best[g.id]|0)+'</b></span><span>🎁 Premios hoy: <b>'+mgLeft(g.id)+'/'+MG_DAY+'</b></span></div><div class="mgbtns"><button class="red big" id="mgAg">🔁 Otra vez</button><button class="alt" id="mgBk">Volver a los minijuegos</button></div></div>';
-  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;MG.t0=Date.now();g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
+  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;MG.t0=Date.now();mgPlayStart(g.id);g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("mgM");if(m&&!m.hidden)mgClose()}});
 
@@ -196,3 +196,5 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 (function(){const ep=$("earnP");if(!ep||$("mgBan"))return;const d=document.createElement("button");d.id="mgBan";d.type="button";
   d.innerHTML='<span class="mgbi">🎮</span><span class="mgbt"><b>¡Minijuegos!</b><small>¿Quién es ese Pokémon?, Pesca, Diglett… ¡gana tickets jugando!</small></span><span class="mgbg">JUGAR ▶</span>';
   d.onclick=()=>{snd("ui");hubOpen("mg")};const h=ep.querySelector("h2");if(h)h.after(d);else ep.prepend(d)})();
+// el servidor apunta la hora a la que empieza cada partida (sirve para comprobar que la puntuación es posible)
+function mgPlayStart(id){try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid())window.FB.playStart(id)}catch(e){}}

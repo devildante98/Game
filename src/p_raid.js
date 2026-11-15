@@ -17,7 +17,7 @@ function rdShell(){
 async function rdCreate(){
   if(!window.FB||!window.FB.raidNew)return;if(fcd){toast("Termina el combate primero.");return}
   const me=window.FB.uid(),b=raidBoss(),id=me+"_"+Date.now();
-  const d={h:me,hn:pvClean(pvNick()).slice(0,30),boss:b[0],st:"lobby",hp:0,mx:0,pl:{[me]:rdMe(b[0])},at:Date.now()};
+  const d={h:me,hn:pvClean(pvNick()).slice(0,30),boss:b[0],st:"lobby",hp:0,mx:0,pl:{[me]:rdMe(b[0])},at:Math.round(rdNow())};
   try{await window.FB.raidNew(id,d)}catch(e){toast("No se ha podido crear la sala.");return}rdJoinWatch(id);
 }
 function rdMe(boss){const t=(S.team||[]).filter(n=>n&&S.owned[n]);let pw=0;try{pw=Math.round(rdPow(rdBuildTeam(),PM[boss]||raidBoss()))}catch(e){}return{n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),dmg:0,lead:t[0]||"",pw:pw,at:Date.now()}}
@@ -47,7 +47,7 @@ function rdTick(fromSnap){
     $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+tyTxt(b)+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos. Toca para atacar, carga los ataques fuertes y esquiva cuando el jefe brille en amarillo.</p>'+(ids.length<RD_MAX?'<button class="rdinv" data-rdchat="inv">📨 Invitar a más gente por el chat</button>':'')+'<div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
       '<button class="alt" id="rdMvSet">🎯 Elegir los ataques de tu equipo</button>'+(d.h===me?'<button class="red big" id="rdGo">⚔️ ¡Empezar la incursión!</button><small class="mut">Cuantos más seáis, más PS tendrá el jefe… ¡pero más probabilidades de ganar!</small>':'<p><b>Esperando a que el anfitrión empiece…</b></p>')+'</div>';
     {const ms=$("rdMvSet");if(ms)ms.onclick=()=>rdMvOpen(d.boss)}
-    const g=$("rdGo");if(g)g.onclick=()=>{const mx=rdBossHP(RD.d);window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:rdNow()+3500,end:rdNow()+3500+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
+    const g=$("rdGo");if(g)g.onclick=()=>{const mx=rdBossHP(RD.d),go=Math.round(rdNow()+3500);window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:go,end:go+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
     return}
   if(d.st==="fight"||d.st==="end"){
     if(RD.phase==="lobby"||RD.phase==="")rdFightUI();RD.phase=RD.phase==="catch"||RD.phase==="done"?RD.phase:"fight";

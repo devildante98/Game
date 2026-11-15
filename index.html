@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.99"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.0"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794754587">
+<meta name="game-build" content="1794756176">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2944,7 +2944,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.99</small>
+    <small class="pcver">Versión 7.0</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7626,8 +7626,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.99";
+const GAME_VER="7.0";
 const NEWS=[
+{v:"2026-11-15-7.0",ver:"7.0",at:"2026-11-15T16:22",t:"🔒 Revisión de seguridad: el juego, más justo para todos",l:["Hemos revisado todo el juego en busca de trampas que perjudicaran a otros jugadores y las hemos cerrado","Chat y sugerencias: arreglado un fallo por el que una foto o un dato preparados podían ejecutar código en la pantalla de quien los viera. Tampoco se pueden fijar mensajes arriba con fechas falsas ni hacerse pasar por avisos del sistema","Clasificaciones: en la Carrera de Rapidash, Peso y altura y Más o menos, el servidor comprueba que la puntuación sea posible en el tiempo jugado","Incursiones: solo los participantes pueden golpear al jefe, y ganar exige dejarlo de verdad a 0","Gremios: nadie puede dejar al jefe semanal a 0 ni completar las misiones de golpe; nadie hace él solo más del 60 % del jefe (salvo en gremios de una persona)","Intercambios: el Pokémon ofrecido ya no se puede cambiar después, y cada uno solo puede dar los pasos que le tocan","Duelos de siluetas: nadie puede tocar las respuestas del rival","Invitar amigos: cada cuenta solo puede usar un código, las medallas del invitado suben de una en una, y se cobran premios por hasta 15 amigos"]},
 {v:"2026-11-15-6.99",ver:"6.99",at:"2026-11-15T15:56",t:"📱💻 Tu partida, abierta en un solo sitio a la vez",l:["Si abres tu cuenta en otro dispositivo (o en otra pestaña), ese pasa a ser el activo y el anterior se pausa al momento con un aviso: «Tu partida se ha abierto en otro sitio»","Con «▶ Jugar aquí» vuelves a tomar el control: se carga tu partida con todo lo que hiciste en el otro sitio, y se pausa el otro","Así ya no se pierde progreso porque una copia vieja pise a la nueva al guardar en la nube, y no se pueden duplicar Pokémon, ventas ni premios jugando en dos sitios a la vez","El servidor también rechaza los guardados de un dispositivo que ya no es el activo, por si estaba sin conexión o dormido"]},
 {v:"2026-11-15-6.98",ver:"6.98",at:"2026-11-15T15:38",t:"🔥 Carrera de Rapidash: ahora es un reto de verdad",l:["La velocidad ya no se queda en el 400 %: sigue subiendo hasta el 560 %, y sube antes (a 6.000 m vas el doble de rápido que a 500 m)","Los niveles llegan antes (cada 600 m desde los 1.200 m) y cada nivel junta más los obstáculos: a 3.600 m hay casi un 25 % menos de tiempo entre uno y otro que antes","Más columnas, carros y combinaciones de columnas con vallas en los niveles altos, y más Snorlax","Nuevo desde el nivel 6: los zigzags, dos grupos de columnas seguidos con el hueco libre en carriles distintos","Cuanto más lejos llegas, menos potenciadores salen (Llamarada, Velocidad Extrema, Revivir y Moneda Amuleto)","Tras un salto largo siempre queda tiempo para aterrizar: es difícil, pero siempre hay forma de pasar","Clasificaciones: si el servidor rechaza una marca, ahora te avisa, y tu mejor marca de la semana se vuelve a enviar sola al abrir la clasificación"]},
 {v:"2026-11-15-6.97",ver:"6.97",at:"2026-11-15T12:23",t:"📱 El juego va más fluido en móviles",l:["En móviles, tabletas, equipos con poca memoria y en modo ligero, el entrenador 3D usa una versión ligera de todas sus piezas (peinados, gorros, ropa, calzado y cuerpo) con un 60 % menos de polígonos: se dibuja en menos de la mitad de tiempo y se ve prácticamente igual","En el móvil el entrenador de la pantalla principal se anima a 15 imágenes por segundo en vez de 24 y con una resolución algo menor, y deja de dibujarse mientras hay una ventana abierta encima","El paisaje de la pantalla principal se actualiza un poco menos a menudo en pantallas táctiles","Se descarga menos: en el móvil solo se piden las piezas ligeras. El editor del entrenador sigue usando la versión completa para verlo con todo detalle al acercarte"]},
@@ -7983,7 +7984,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794754587";
+const GAME_B="1794756176";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8164,7 +8165,7 @@ function gBossFor(gid,w){const r=rngS(pvHash("boss"+gid+w)),pool=P.filter(p=>p[2
 async function gEnsureWeek(){
   const g=GS.doc,w=weekKey();if(!g||!S.gid||g.bw===w)return;
   const n=Math.max(1,Object.keys(g.members||{}).length);
-  await window.FB.gEdit(S.gid,{bw:w,bp:gBossFor(S.gid,w),bm:GB_HP*n,bh:GB_HP*n,bd:{},gm:{}});
+  await window.FB.gEdit(S.gid,{bw:w,bp:gBossFor(S.gid,w),bm:GB_HP*n,bh:GB_HP*n,bd:{},gm:{},bt:window.FB.srvTs()});
 }
 window.gFlushHook=async()=>{
   if(!S.gid||!S.gacc||!window.FB||!GS.doc)return;const w=weekKey(),a=S.gacc;if(a.w!==w){S.gacc={w:w};return}
@@ -8199,7 +8200,9 @@ async function openProf(uid,dIn,tgt){
   const box=tgt||$("profB");box.innerHTML='<p class="mut">Cargando perfil…</p>';if(!tgt)$("prof").hidden=false;
   let d=dIn||null;if(!d)try{d=await window.FB.rankGet(uid)}catch(e){}
   if(!d){box.innerHTML='<p>Este jugador todavía no tiene perfil público (aparece cuando guarda su partida en la nube con el apodo registrado).</p><div class="jrow"><button class="alt" data-pcl="1">Cerrar</button></div>';return}
-  const me=window.FB&&window.FB.uid?window.FB.uid():uid,sp=d[ssnField()]||0,on=uid===me||pvOthers().find(p=>p.peer===uid);
+  // los números del perfil llegan de otro jugador: se fuerzan a número para que no se pueda colar texto en la página
+  const NN=v=>Math.max(0,Math.floor(+v||0));d=Object.assign({},d,{dex:NN(d.dex),sh:NN(d.sh),win:NN(d.win),pw:NN(d.pw),prs:NN(d.prs),med:Math.min(8,NN(d.med)),bs:NN(d.bs),ach:NN(d.ach)});
+  const me=window.FB&&window.FB.uid?window.FB.uid():uid,sp=NN(d[ssnField()]),on=uid===me||pvOthers().find(p=>p.peer===uid);
   const st=[["📚","Pokédex",d.dex],["✨","Variocolor",d.sh],["🎯","Combates ganados",d.win],["⚔️","Victorias PVP",d.pw],["🌟","Prestigio",d.prs],["🏅","Medallas",(d.med|0)+"/8"],["🔥","Mejor racha",d.bs|0],["🗼","Récord Torre",d.tw|0],["🏛️","Salón de la Fama",d.hof|0],["🏆","Trofeos de torneo",Array.isArray(d.tro)?d.tro.reduce((x,y)=>x+(y|0),0):0],["🏆","Logros",d.ach|0],["⏱️","Horas jugadas",d.pt|0],["🎰","Tiradas",d.pulls|0]];
   box.innerHTML='<div'+(typeof cardAttr==="function"?cardAttr(d.cbg,d.cfr):' class="pcard"')+'><div class="profh"><div class="profav">'+trImg(trDec(d.tr),"f","i")+'</div><div><h2>'+(d.cr>=1&&d.cr<=3?["👑 ","🥈 ","🥉 "][d.cr-1]:"")+esc(pvClean(d.n))+' '+(d.g?'<span class="gtag">'+esc(String(d.g).slice(0,4))+'</span>':'')+'</h2>'+(d.tit?'<div class="proftit">'+esc(String(d.tit).slice(0,40))+'</div>':'')+'<span class="tier t'+tierIdx(sp)+'">'+TIERS[tierIdx(sp)][1]+'</span> <small class="mut">'+sp+' pts esta temporada · '+(on?"🟢 Conectado":"⚫ Desconectado")+'</small><div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,i<(d.med|0),22)).join("")+'</div></div></div></div>'+
     '<div class="profst">'+st.map(x=>'<div><span>'+x[0]+'</span><b>'+(typeof x[2]==="number"?fmt(x[2]||0):x[2])+'</b><small>'+x[1]+'</small></div>').join("")+'</div>'+
@@ -9281,9 +9284,10 @@ setInterval(()=>{try{if(nxOpen("chatP"))chHubUI()}catch(e){}},3000);
 // ================= FOTOS TEMPORALES EN EL CHAT (desaparecen a las 24 horas) =================
 const CH_IMG_TTL=24*36e5;
 function chImgHTML(m){const left=(m.exp||0)-Date.now();
-  if(left<=0||!/^data:image\/(jpeg|png|webp);base64,/.test(m.img))return '<div class="chimg gone">📷 <span>Foto caducada</span></div>';
+  // la foto tiene que ser una imagen en base64 y nada más (si no, alguien podría colar código en la pantalla de los demás)
+  if(left<=0||typeof m.img!=="string"||m.img.length>400000||!/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/]+={0,2}$/.test(m.img))return '<div class="chimg gone">📷 <span>Foto caducada</span></div>';
   const h=Math.floor(left/36e5),mi=Math.max(1,Math.floor(left%36e5/6e4));
-  return '<div class="chimg"><a href="#" data-chimg="'+esc(m.id)+'"><img src="'+m.img+'" alt="Foto" onload="chImgLd(this)"></a><small>⏳ Desaparece en '+(h?h+' h ':'')+(h<3?mi+' min':'')+'</small></div>'}
+  return '<div class="chimg"><a href="#" data-chimg="'+esc(m.id)+'"><img src="'+esc(m.img)+'" alt="Foto" onload="chImgLd(this)"></a><small>⏳ Desaparece en '+(h?h+' h ':'')+(h<3?mi+' min':'')+'</small></div>'}
 async function chSendImg(file){
   const me=chMe();if(!me||!window.FB||!window.FB.chSend){chFlash("Inicia sesión para enviar fotos.");return}const k=chKey();if(!k)return;
   if(Date.now()-CH.last<CH_WAIT){chFlash("Espera un momento antes de enviar otra foto.");return}
@@ -9570,7 +9574,7 @@ function mgOpen(id){
   m.hidden=false;m.querySelector(".mgx").onclick=mgClose;
   const left=mgLeft(id),best=mgState().best[id]|0;
   $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+g.ic+'</div><h3>'+g.n+'</h3><p>'+g.d+'</p><div class="mginf"><span>🏆 Récord: <b>'+fmt(best)+'</b></span><span>🎁 Partidas con premio hoy: <b>'+left+'/'+MG_DAY+'</b></span></div><button class="red big" id="mgGo">▶ ¡Jugar!</button>'+(typeof mgHow==="function"?mgHow(g.id):"")+(left?'':'<small class="mut">Hoy ya has ganado todos los premios de este minijuego, pero puedes seguir jugando para batir tu récord.</small>')+'</div>';
-  $("mgGo").onclick=()=>{snd("ui");MG.t0=Date.now();g.start($("mgB"),mgEnd)};
+  $("mgGo").onclick=()=>{snd("ui");MG.t0=Date.now();mgPlayStart(g.id);g.start($("mgB"),mgEnd)};
   m.querySelector(".mgw").animate([{transform:"scale(.85)",opacity:0},{transform:"none",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.9,.3,1.2)"});
 }
 function mgClose(){if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
@@ -9589,7 +9593,7 @@ function mgEnd(score){
   $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+(rec?"🏆":g.ic)+'</div><h3>'+(rec?"¡Nuevo récord!":"¡Partida terminada!")+'</h3><div class="mgfinal">'+fmt(score)+'<small>puntos</small></div>'+
     (rw?'<p>Premio: <b>'+rwTxt(rw)+'</b></p>':'<p class="mut">'+(score>0?'Hoy ya no quedan premios en este minijuego.':'¡Sin puntos esta vez!')+'</p>')+extra+
     '<div class="mginf"><span>🏆 Récord: <b>'+fmt(st.best[g.id]|0)+'</b></span><span>🎁 Premios hoy: <b>'+mgLeft(g.id)+'/'+MG_DAY+'</b></span></div><div class="mgbtns"><button class="red big" id="mgAg">🔁 Otra vez</button><button class="alt" id="mgBk">Volver a los minijuegos</button></div></div>';
-  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;MG.t0=Date.now();g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
+  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;MG.t0=Date.now();mgPlayStart(g.id);g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
 }
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){const m=$("mgM");if(m&&!m.hidden)mgClose()}});
 
@@ -9607,6 +9611,8 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 (function(){const ep=$("earnP");if(!ep||$("mgBan"))return;const d=document.createElement("button");d.id="mgBan";d.type="button";
   d.innerHTML='<span class="mgbi">🎮</span><span class="mgbt"><b>¡Minijuegos!</b><small>¿Quién es ese Pokémon?, Pesca, Diglett… ¡gana tickets jugando!</small></span><span class="mgbg">JUGAR ▶</span>';
   d.onclick=()=>{snd("ui");hubOpen("mg")};const h=ep.querySelector("h2");if(h)h.after(d);else ep.prepend(d)})();
+// el servidor apunta la hora a la que empieza cada partida (sirve para comprobar que la puntuación es posible)
+function mgPlayStart(id){try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid())window.FB.playStart(id)}catch(e){}}
 
 // =====================================================================================
 // MÁS MINIJUEGOS: Carrera de Rapidash, Excavación subterránea, Peso y altura,
@@ -10361,7 +10367,7 @@ setTimeout(passMini,800);
 
 // ================= INVITAR AMIGOS =================
 function refCode(){const u=window.FB&&window.FB.uid?window.FB.uid():"";if(!u)return "";let h=0;for(const ch of u)h=(h*131+ch.charCodeAt(0))>>>0;let s="",x=h;const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";for(let i=0;i<6;i++){s+=A[x%A.length];x=Math.floor(x/A.length)+(i*7919)}return s}
-const REF_MS=[["join","Se une con tu código",{t:300000,it:{ub:2}}],["m2","Consigue 2 medallas",{t:1000000,it:{cand:2}}],["m4","Consigue 4 medallas",{t:2500000,it:{mb:1}}]];
+const REF_MAXP=15,REF_MS=[["join","Se une con tu código",{t:300000,it:{ub:2}}],["m2","Consigue 2 medallas",{t:1000000,it:{cand:2}}],["m4","Consigue 4 medallas",{t:2500000,it:{mb:1}}]];
 nxPanel("refP","📨 Invitar amigos","Comparte tu código. Cuando alguien nuevo empieza a jugar con él, los dos ganáis premios, y tú sigues recibiendo más cuando tu invitado avanza en la aventura.");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="refP"))g.tabs.splice(1,0,["refP","Invitar amigos"]);HUBP.refP="mas";HUBR.refP=()=>refUI(true)}
 let RFX={list:null,at:0};
@@ -10389,13 +10395,16 @@ async function refUse(){
   nxModal('<div class="hofb">📨</div><h3>¡Bienvenido de parte de '+esc(pvClean(d.n||"tu amigo"))+'!</h3><p>Premio de bienvenida: <b>'+rwTxt(rw)+'</b></p><small class="mut">Cuando consigas 4 medallas recibirás 1.000.000 🎟️ más.</small><button id="rfOk">¡Gracias!</button>');$("rfOk").onclick=nxModalClose;refUI(true);
 }
 // el invitado mantiene al día sus medallas para que su padrino cobre los premios
-setInterval(()=>{try{if(!S.refBy||!window.FB||!window.FB.refUpd)return;const m=medCount();if(m!==(S.refMed|0)){S.refMed=m;window.FB.refUpd(S.refBy,{med:m}).catch(()=>{});save()}
+// (las medallas suben de una en una y el servidor deja como mucho una subida cada 30 minutos: se reintenta solo)
+setInterval(()=>{try{if(!S.refBy||!window.FB||!window.FB.refUpd)return;const m=medCount();if(m>(S.refMed|0)&&!S._refBusy){const nx=(S.refMed|0)+1;S._refBusy=1;window.FB.refUpd(S.refBy,{med:nx}).then(()=>{S.refMed=nx;save()}).catch(()=>{}).then(()=>{S._refBusy=0})}
   if(m>=4&&!S.refM4){S.refM4=1;const rw={t:1000000};grant(rw);save();render();toast("📨 ¡4 medallas! Premio por venir invitado: "+rwTxt(rw))}}catch(e){}},20e3);
 document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("#refPB button");if(!b)return;const d=b.dataset;
   if(d.ref==="copy"){const link=location.origin+location.pathname+"?ref="+refCode();try{await navigator.clipboard.writeText(link);toast("📋 Enlace copiado")}catch(x){toast(link)}}
   else if(d.ref==="share"){try{await navigator.share({title:"Poke Gacha Online",text:"¡Juega conmigo a Poke Gacha Online! Usa mi código "+refCode()+" y recibe 500.000 tickets.",url:location.origin+location.pathname+"?ref="+refCode()})}catch(x){}}
   else if(d.ref==="use")refUse();
-  else if(d.refc){const k=d.refc+":"+d.refm,x=(RFX.list||[]).find(q=>q.id===d.refc),m=REF_MS.find(q=>q[0]===d.refm);S.refCl=S.refCl||{};if(!x||!m||S.refCl[k]||!refDone(x,m[0]))return;S.refCl[k]=1;grant(m[2]);save();render();snd("win");toast("📨 ¡Premio por invitar! "+rwTxt(m[2]));const l=$("refL");if(l)l.innerHTML=refListHTML()}});
+  else if(d.refc){const k=d.refc+":"+d.refm,x=(RFX.list||[]).find(q=>q.id===d.refc),m=REF_MS.find(q=>q[0]===d.refm);S.refCl=S.refCl||{};if(!x||!m||S.refCl[k]||!refDone(x,m[0]))return;
+    // como mucho se cobran premios por REF_MAXP amigos distintos (así no compensa crear cuentas falsas)
+    {const got=new Set(Object.keys(S.refCl).map(q=>q.split(":")[0]));if(!got.has(d.refc)&&got.size>=REF_MAXP){toast("📨 Ya has cobrado los premios de "+REF_MAXP+" amigos invitados, el máximo. ¡Gracias por traer a tanta gente!");return}}S.refCl[k]=1;grant(m[2]);save();render();snd("win");toast("📨 ¡Premio por invitar! "+rwTxt(m[2]));const l=$("refL");if(l)l.innerHTML=refListHTML()}});
 document.addEventListener("input",e=>{if(e.target&&e.target.id==="refIn")NX.refq=e.target.value});
 // enlace con ?ref=CÓDIGO: se rellena solo
 (function(){try{const c=new URLSearchParams(location.search).get("ref");if(c&&!S.refBy){NX.refq=c.toUpperCase().slice(0,6);setTimeout(()=>{if(!S.refBy&&(S.pulls|0)<400){toast("📨 ¡Te han invitado! Ve a ⚙️ Más → Invitar amigos para recibir tu regalo.")}},4000)}}catch(e){}})();
@@ -10422,7 +10431,7 @@ function rdShell(){
 async function rdCreate(){
   if(!window.FB||!window.FB.raidNew)return;if(fcd){toast("Termina el combate primero.");return}
   const me=window.FB.uid(),b=raidBoss(),id=me+"_"+Date.now();
-  const d={h:me,hn:pvClean(pvNick()).slice(0,30),boss:b[0],st:"lobby",hp:0,mx:0,pl:{[me]:rdMe(b[0])},at:Date.now()};
+  const d={h:me,hn:pvClean(pvNick()).slice(0,30),boss:b[0],st:"lobby",hp:0,mx:0,pl:{[me]:rdMe(b[0])},at:Math.round(rdNow())};
   try{await window.FB.raidNew(id,d)}catch(e){toast("No se ha podido crear la sala.");return}rdJoinWatch(id);
 }
 function rdMe(boss){const t=(S.team||[]).filter(n=>n&&S.owned[n]);let pw=0;try{pw=Math.round(rdPow(rdBuildTeam(),PM[boss]||raidBoss()))}catch(e){}return{n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),dmg:0,lead:t[0]||"",pw:pw,at:Date.now()}}
@@ -10452,7 +10461,7 @@ function rdTick(fromSnap){
     $("mgB").innerHTML='<div class="rdlob" id="rdLob"><div class="rdbossv">'+icoHD(b,180,false,false)+'</div><h3>'+esc(d.boss)+' <small>'+STAR[b[2]]+' · '+tyTxt(b)+'</small></h3><p class="mut">Esperando entrenadores… ('+ids.length+'/'+RD_MAX+'). Tenéis 3 minutos para derrotarlo entre todos. Toca para atacar, carga los ataques fuertes y esquiva cuando el jefe brille en amarillo.</p>'+(ids.length<RD_MAX?'<button class="rdinv" data-rdchat="inv">📨 Invitar a más gente por el chat</button>':'')+'<div class="rdpl">'+ids.map(u=>'<div class="rdp"><span class="chav">'+chAv(pl[u].tr)+'</span><b>'+esc(pvClean(pl[u].n||""))+(u===d.h?' 👑':'')+'</b>'+(pl[u].lead&&PM[pl[u].lead]?'<span class="rdlead">'+ico(PM[pl[u].lead],36)+'</span>':'')+'</div>').join("")+'</div>'+
       '<button class="alt" id="rdMvSet">🎯 Elegir los ataques de tu equipo</button>'+(d.h===me?'<button class="red big" id="rdGo">⚔️ ¡Empezar la incursión!</button><small class="mut">Cuantos más seáis, más PS tendrá el jefe… ¡pero más probabilidades de ganar!</small>':'<p><b>Esperando a que el anfitrión empiece…</b></p>')+'</div>';
     {const ms=$("rdMvSet");if(ms)ms.onclick=()=>rdMvOpen(d.boss)}
-    const g=$("rdGo");if(g)g.onclick=()=>{const mx=rdBossHP(RD.d);window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:rdNow()+3500,end:rdNow()+3500+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
+    const g=$("rdGo");if(g)g.onclick=()=>{const mx=rdBossHP(RD.d),go=Math.round(rdNow()+3500);window.FB.raidUpd(RD.id,{st:"fight",hp:mx,mx:mx,go:go,end:go+RD_DUR}).catch(()=>toast("No se ha podido empezar."))};
     return}
   if(d.st==="fight"||d.st==="end"){
     if(RD.phase==="lobby"||RD.phase==="")rdFightUI();RD.phase=RD.phase==="catch"||RD.phase==="done"?RD.phase:"fight";
@@ -10864,7 +10873,7 @@ sugLoad=async function(){
   let l;try{const ah=Array.isArray(S.sugAdmHid)?S.sugAdmHid:[];l=(await window.sugList()).filter(x=>!x.ah&&!ah.includes(x.id))}catch(e){$("sugAdm").hidden=true;return}
   $("sugAdm").hidden=false;
   $("sugList").innerHTML=l.length?l.map(s=>{const im=Array.isArray(s.imgs)?s.imgs:[];return '<div class="sugi"><div class="sugbt">'+(im.length?'<button class="alt" data-sdi="'+esc(s.id)+'">🖼️ Borrar fotos</button>':'')+'<button class="alt" data-sd="'+esc(s.id)+'">🗑️ Borrar</button></div><b>'+esc(s.name||"Anónimo")+'</b>'+(s.nick?' <small class="mut">('+esc(s.nick)+')</small>':'')+' <small class="mut">· '+(s.at?new Date(s.at).toLocaleString("es"):"")+'</small> '+sugStB(s.st)+'<p>'+esc(s.text||"").replace(/\n/g,"<br>")+'</p>'+sugAdmBox(s)+
-    (im.length?'<div class="sugims">'+im.map(u=>/^data:image\/(jpeg|png|webp);base64,/.test(u)?'<a href="#" data-sgv="1"><img src="'+u+'" alt="Foto adjunta"></a>':'').join("")+'</div>':(s.nimg?'<small class="mut">🖼️ '+s.nimg+' foto'+(s.nimg>1?'s':'')+' borrada'+(s.nimg>1?'s':'')+'</small>':''))+'</div>'}).join(""):'<small class="mut">Aún no hay sugerencias.</small>';
+    (im.length?'<div class="sugims">'+im.map(u=>typeof u==="string"&&u.length<1500000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/]+={0,2}$/.test(u)?'<a href="#" data-sgv="1"><img src="'+esc(u)+'" alt="Foto adjunta"></a>':'').join("")+'</div>':((s.nimg|0)>0?'<small class="mut">🖼️ '+(s.nimg|0)+' foto'+((s.nimg|0)>1?'s':'')+' borrada'+((s.nimg|0)>1?'s':'')+'</small>':''))+'</div>'}).join(""):'<small class="mut">Aún no hay sugerencias.</small>';
 };
 $("sugRe").onclick=()=>sugLoad();
 $("sugList").addEventListener("click",async e=>{
@@ -19707,6 +19716,10 @@ async function main(){
   // ---- amigos y gremios (Firestore: friends, freq, guilds) ----
   const FB={
     uid:()=>uid,
+    // hora del servidor para los campos que la necesitan, e inicio de cada partida de minijuego (las reglas comprueban
+    // con ella que una puntuación de un juego sin final sea posible en el tiempo jugado)
+    srvTs:()=>S.serverTimestamp(),
+    playStart:g=>S.setDoc(S.doc(db,"play",uid,"g",String(g)),{at:S.serverTimestamp()}).catch(()=>{}),
     frInit(cb){
       const st={l:{},inc:[],out:[]},fref=S.doc(db,"friends",uid),emit=()=>cb({l:Object.assign({},st.l),inc:st.inc.slice(),out:st.out.slice()});
       S.onSnapshot(fref,sn=>{st.l=(sn.exists()&&sn.data().l)||{};emit()},()=>{});
@@ -19784,8 +19797,9 @@ async function main(){
     async mkCancel(id){const ref=S.doc(db,"market",id);await S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(!s.exists()||s.data().st!=="open")throw {code:"gone"};tx.delete(ref)})},
     refSet:(c,d)=>S.setDoc(S.doc(db,"refs",c),d),
     async refGet(c){const s=await S.getDoc(S.doc(db,"refs",c));return s.exists()?s.data():null},
-    refJoin:(c,d)=>S.setDoc(S.doc(db,"refs",c,"inv",uid),d),
-    refUpd:(c,f)=>S.updateDoc(S.doc(db,"refs",c,"inv",uid),f),
+    // al apuntarse a un código se marca también refd/{uid}: cada cuenta solo puede usar UN código (lo comprueban las reglas)
+    refJoin:(c,d)=>{const b=S.writeBatch(db);b.set(S.doc(db,"refs",c,"inv",uid),Object.assign({},d,{mt:S.serverTimestamp()}));b.set(S.doc(db,"refd",uid),{c:c});return b.commit()},
+    refUpd:(c,f)=>S.updateDoc(S.doc(db,"refs",c,"inv",uid),Object.assign({},f,{mt:S.serverTimestamp()})),
     async refInv(c){const sn=await S.getDocs(S.collection(db,"refs",c,"inv"));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     duCreate:(id,d)=>S.setDoc(S.doc(db,"sdu",id),d),
     duUpd:(id,f)=>S.updateDoc(S.doc(db,"sdu",id),f),

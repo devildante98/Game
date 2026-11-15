@@ -113,7 +113,7 @@ function gBossFor(gid,w){const r=rngS(pvHash("boss"+gid+w)),pool=P.filter(p=>p[2
 async function gEnsureWeek(){
   const g=GS.doc,w=weekKey();if(!g||!S.gid||g.bw===w)return;
   const n=Math.max(1,Object.keys(g.members||{}).length);
-  await window.FB.gEdit(S.gid,{bw:w,bp:gBossFor(S.gid,w),bm:GB_HP*n,bh:GB_HP*n,bd:{},gm:{}});
+  await window.FB.gEdit(S.gid,{bw:w,bp:gBossFor(S.gid,w),bm:GB_HP*n,bh:GB_HP*n,bd:{},gm:{},bt:window.FB.srvTs()});
 }
 window.gFlushHook=async()=>{
   if(!S.gid||!S.gacc||!window.FB||!GS.doc)return;const w=weekKey(),a=S.gacc;if(a.w!==w){S.gacc={w:w};return}
@@ -148,7 +148,9 @@ async function openProf(uid,dIn,tgt){
   const box=tgt||$("profB");box.innerHTML='<p class="mut">Cargando perfil…</p>';if(!tgt)$("prof").hidden=false;
   let d=dIn||null;if(!d)try{d=await window.FB.rankGet(uid)}catch(e){}
   if(!d){box.innerHTML='<p>Este jugador todavía no tiene perfil público (aparece cuando guarda su partida en la nube con el apodo registrado).</p><div class="jrow"><button class="alt" data-pcl="1">Cerrar</button></div>';return}
-  const me=window.FB&&window.FB.uid?window.FB.uid():uid,sp=d[ssnField()]||0,on=uid===me||pvOthers().find(p=>p.peer===uid);
+  // los números del perfil llegan de otro jugador: se fuerzan a número para que no se pueda colar texto en la página
+  const NN=v=>Math.max(0,Math.floor(+v||0));d=Object.assign({},d,{dex:NN(d.dex),sh:NN(d.sh),win:NN(d.win),pw:NN(d.pw),prs:NN(d.prs),med:Math.min(8,NN(d.med)),bs:NN(d.bs),ach:NN(d.ach)});
+  const me=window.FB&&window.FB.uid?window.FB.uid():uid,sp=NN(d[ssnField()]),on=uid===me||pvOthers().find(p=>p.peer===uid);
   const st=[["📚","Pokédex",d.dex],["✨","Variocolor",d.sh],["🎯","Combates ganados",d.win],["⚔️","Victorias PVP",d.pw],["🌟","Prestigio",d.prs],["🏅","Medallas",(d.med|0)+"/8"],["🔥","Mejor racha",d.bs|0],["🏆","Logros",d.ach|0]];
   box.innerHTML='<div'+(typeof cardAttr==="function"?cardAttr(d.cbg,d.cfr):' class="pcard"')+'><div class="profh"><div class="profav">'+trImg(trDec(d.tr),"f","i")+'</div><div><h2>'+esc(pvClean(d.n))+' '+(d.g?'<span class="gtag">'+esc(String(d.g).slice(0,4))+'</span>':'')+'</h2><span class="tier t'+tierIdx(sp)+'">'+TIERS[tierIdx(sp)][1]+'</span> <small class="mut">'+sp+' pts esta temporada · '+(on?"🟢 Conectado":"⚫ Desconectado")+'</small><div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,i<(d.med|0),22)).join("")+'</div></div></div></div>'+
     '<div class="profst">'+st.map(x=>'<div><span>'+x[0]+'</span><b>'+(typeof x[2]==="number"?fmt(x[2]||0):x[2])+'</b><small>'+x[1]+'</small></div>').join("")+'</div>'+

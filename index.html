@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.95"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.96"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794733715">
+<meta name="game-build" content="1794734037">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2935,7 +2935,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.95</small>
+    <small class="pcver">Versión 6.96</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7617,8 +7617,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.95";
+const GAME_VER="6.96";
 const NEWS=[
+{v:"2026-11-15-6.96",ver:"6.96",at:"2026-11-15T10:13",t:"🏆 Premios mucho mejores en el Torneo semanal y en las clasificaciones",l:["Los tickets de premio crecen con tu pueblo: te llevas lo mayor entre una cantidad fija y varias horas de lo que produces. En el Torneo: 1º 24 h de producción (mínimo 50 millones), 2º 12 h, 3º 8 h, top 10 3 h, top 25 1,5 h y por participar 30 min","Torneo: el 1º recibe además 5 Master Ball, 10 Caramelos Raros, 3 PP máximos, 3 Cristales Supremos, 2 objetos equipables y el legendario de la semana siempre variocolor ✨; el 2º, 3 Master Ball, 6 Caramelos y la forma especial con un 50 % de ser variocolor; el 3º, 2 Master Ball, 4 Caramelos y su Pokémon variocolor","Nuevo: el top 10 del Torneo gana también un Pokémon épico de la semana y una Master Ball, y hay premios del 11º al 25º","Clasificación de cada minijuego: premian a los 25 primeros. 1º 6 h de producción (mínimo 10 millones), Master Ball, 3 Caramelos Raros y el premio especial del juego ×3; 2º 4 h; 3º 3 h; 4º–10º 1 h y el premio especial; 11º–25º 20 min","Todos los minijuegos tienen ya premio especial, y en cada panel ves exactamente lo que ganarías en cada puesto"]},
 {v:"2026-11-15-6.95",ver:"6.95",at:"2026-11-15T10:08",t:"💤 Carrera de Rapidash: Snorlax dormidos y más potenciadores",l:["Nuevo obstáculo desde el nivel 2: un Snorlax dormido tumbado que ocupa dos carriles. Cámbiate al carril libre o salta largo… y si caes sobre su barriga, ¡rebotas muy alto y ganas puntos! (¡Boing!)","🪙 Moneda Amuleto: tickets ×2 durante 10 s (todo lo que ganas, metros y tickets, cuenta doble)","⚡ Velocidad Extrema: 4 s a toda velocidad arrasando con todo lo que encuentras","💖 Revivir: si chocas, sigues corriendo una vez","Los potenciadores salen algo más a menudo, y arriba ves cuánto le queda a cada uno"]},
 {v:"2026-11-15-6.94.2",ver:"6.94.2",at:"2026-11-15T09:45",t:"🔧 Arreglos/Mejoras",l:["Intercambios: si tienes repetidos, ahora eliges cuál das. Junto a tu Pokémon principal (con su nivel) aparecen sus repetidos (Nv1, marcados con 🔁 y borde de puntos), y los variocolor repetidos aparte; puedes dar un repetido y quedarte con el principal","Vale para el intercambio con amigos, la sala de intercambio en directo y para vender en el mercado"]},
 {v:"2026-11-15-6.94.1",ver:"6.94.1",at:"2026-11-15T09:40",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas múltiples (×10, ×100) los Pokémon nuevos, los que aún no tenías, salen los primeros, y después los repetidos"]},
@@ -7970,7 +7971,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794733715";
+const GAME_B="1794734037";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9895,21 +9896,28 @@ const tourBest=w=>Math.max(S.tour&&S.tour.w===w?S.tour.b|0:0,S.mgw&&S.mgw.w===w?
 const tourEndsIn=()=>{const d=new Date(),k=(8-(d.getDay()||7))%7||7,e=new Date(d.getFullYear(),d.getMonth(),d.getDate()+k);return e-d};
 // premios del torneo: cada semana tiene su propio legendario, su forma especial y su variocolor de premio
 function tourMons(w){let h=0;for(const ch of String(w))h=(h*31+ch.charCodeAt(0))|0;const r=rngSeed(h),pk=a=>a[Math.floor(r()*a.length)];
-  return{leg:pk(P.filter(p=>p[2]==="L")),mega:pk(P.filter(p=>p[2]==="M")),shy:pk(P.filter(p=>p[2]==="E"))}}
+  const leg=pk(P.filter(p=>p[2]==="L")),mega=pk(P.filter(p=>p[2]==="M")),shy=pk(P.filter(p=>p[2]==="E"));return{leg,mega,shy,top:pk(P.filter(p=>p[2]==="E"&&p!==shy))}}
+// los tickets de premio crecen con tu pueblo: te llevas lo que sea mayor entre una cantidad fija y unas horas de tu producción
+const prodH=h=>{let p=0;try{p=tps()}catch(e){}return Math.round(p*3600*(h||0))};
+const tkOf=T=>Math.max(T.t,prodH(T.h));
+const hTxt=h=>h>=1?(h%1?String(h).replace(".",","):h)+" h":Math.round(h*60)+" min";
+// sh: 1 = variocolor seguro, entre 0 y 1 = probabilidad (si no, un 5 %)
 const TOUR_TIERS=[
- {k:1,ic:"🥇",n:"Campeón",t:10000000,it:{mb:2,cand:3},mon:"leg",sh:0,tit:"👑 Campeón semanal"},
- {k:2,ic:"🥈",n:"Subcampeón",t:5000000,it:{mb:1,cand:2},mon:"mega",sh:0,tit:"🥈 Subcampeón semanal"},
- {k:3,ic:"🥉",n:"Tercer puesto",t:2500000,it:{ub:5,cand:1},mon:"shy",sh:1,tit:"🥉 Podio semanal"},
- {k:10,ic:"🎖️",n:"Top 10",t:1000000,it:{ub:3},hold:1},
- {k:0,ic:"🎟️",n:"Participación",t:150000,it:{sb:5}}];
-const tierOf=pos=>pos<0?TOUR_TIERS[4]:pos<3?TOUR_TIERS[pos]:pos<10?TOUR_TIERS[3]:TOUR_TIERS[4];
+ {k:1,ic:"🥇",n:"Campeón",t:50000000,h:24,it:{mb:5,cand:10,ppmax:3},hold:2,mon:"leg",sh:1,tit:"👑 Campeón semanal"},
+ {k:2,ic:"🥈",n:"Subcampeón",t:25000000,h:12,it:{mb:3,cand:6,ppmax:2},hold:1,mon:"mega",sh:.5,tit:"🥈 Subcampeón semanal"},
+ {k:3,ic:"🥉",n:"Tercer puesto",t:15000000,h:8,it:{mb:2,cand:4,ppmax:1},hold:1,mon:"shy",sh:1,tit:"🥉 Podio semanal"},
+ {k:10,ic:"🎖️",n:"Top 10",t:6000000,h:3,it:{mb:1,cand:2,ub:10},hold:1,mon:"top",sh:.1},
+ {k:25,ic:"🏅",n:"Top 25",t:3000000,h:1.5,it:{ub:8,cand:1}},
+ {k:0,ic:"🎟️",n:"Participación",t:1000000,h:.5,it:{ub:5,cand:1}}];
+const tierOf=pos=>pos<0?TOUR_TIERS[5]:pos<3?TOUR_TIERS[pos]:pos<10?TOUR_TIERS[3]:pos<25?TOUR_TIERS[4]:TOUR_TIERS[5];
+const tierItTxt=T=>Object.keys(T.it).map(k=>T.it[k]+" "+IN2(k)).concat(T.hold?[(T.hold>1?T.hold+" objetos equipables":"objeto equipable")]:[]).join(" + ");
 function tourGive(pos,w){
-  const T=tierOf(pos),rw={t:T.t,it:Object.assign({},T.it)},M=tourMons(w);let mon=null,isNew=false;
-  if(T.hold){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}
+  const T=tierOf(pos),rw={t:tkOf(T),it:Object.assign({},T.it)},M=tourMons(w);let mon=null,isNew=false,sh=false;
+  for(let n=0;n<(T.hold|0);n++){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}
   grant(rw);
-  if(T.mon){mon=M[T.mon];const lv=clampL(Math.max(10,Math.min(lvCap(),leadLevel())));isNew=giveMon(mon[0],lv,T.sh||Math.random()<.05)}
+  if(T.mon){mon=M[T.mon];const lv=clampL(Math.max(10,Math.min(lvCap(),leadLevel())));sh=T.sh>=1||Math.random()<(T.sh||.05);isNew=giveMon(mon[0],lv,sh)}
   if(pos>=0&&pos<10){S.trophies=S.trophies||[];S.trophies.push({w:w,p:pos+1,g:tourGameOf(w).id});if(pos<3)S.crown={w:tourWeek(),p:pos+1}}
-  save();render();return{rw:rw,mon:mon,isNew:isNew,T:T};
+  save();render();return{rw:rw,mon:mon,isNew:isNew,T:T,sh:sh};
 }
 let TR_={w:"",top:null,at:0};
 function tourSubmit(id,score){
@@ -9921,17 +9929,17 @@ function tourSubmit(id,score){
 }
 async function tourLoad(force){
   const w=tourWeek();if(!window.FB||!window.FB.tourTop)return null;if(!force&&TR_.w===w&&TR_.top&&Date.now()-TR_.at<60e3)return TR_.top;
-  try{TR_.top=await window.FB.tourTop(tourKey(w),10);TR_.w=w;TR_.at=Date.now()}catch(e){TR_.top=TR_.top||[]}return TR_.top;
+  try{TR_.top=await window.FB.tourTop(tourKey(w),25);TR_.w=w;TR_.at=Date.now()}catch(e){TR_.top=TR_.top||[]}return TR_.top;
 }
 async function tourClaim(){
   const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!(tourBest(pw)>0)||S.tourDone===pw)return;
-  let top=null;try{top=await window.FB.tourTop(tourKey(pw),10)}catch(e){return}S.tourDone=pw;const me=window.FB.uid(),i=(top||[]).findIndex(x=>x.id===me);
+  let top=null;try{top=await window.FB.tourTop(tourKey(pw),25)}catch(e){return}S.tourDone=pw;const me=window.FB.uid(),i=(top||[]).findIndex(x=>x.id===me);
   const g=tourGiveShow(i,pw);
 }
 function tourGiveShow(i,pw){
   const r=tourGive(i,pw),T=r.T,big=i>=0&&i<3;snd(big?"lvl":"win");setTimeout(()=>snd("win"),big?500:0);
-  const m=nxModal('<div class="tourwin'+(big?' big':'')+'"><div class="tourrays"></div><div class="hofb">'+T.ic+'</div></div><h3>'+(i>=0&&i<10?'¡Has quedado '+(i+1)+'º en el Torneo semanal!':'¡Gracias por participar en el Torneo semanal!')+'</h3><p class="mut">'+esc(tourGameOf(pw).n)+' · semana '+pw.split("-W")[1]+'</p>'+
-    (r.mon?'<div class="tourmonw">'+icoHD(r.mon,150,false,!!(S.shiny&&S.shiny[r.mon[0]]&&T.sh))+'<b>'+(T.sh?"✨ ":"")+esc(r.mon[0])+(r.isNew?' <span class="mgnew">¡NUEVO!</span>':'')+'</b><small>¡Se une a tu equipo!</small></div>':'')+
+  const m=nxModal('<div class="tourwin'+(big?' big':'')+'"><div class="tourrays"></div><div class="hofb">'+T.ic+'</div></div><h3>'+(i>=0&&i<25?'¡Has quedado '+(i+1)+'º en el Torneo semanal!':'¡Gracias por participar en el Torneo semanal!')+'</h3><p class="mut">'+esc(tourGameOf(pw).n)+' · semana '+pw.split("-W")[1]+'</p>'+
+    (r.mon?'<div class="tourmonw">'+icoHD(r.mon,150,false,!!r.sh)+'<b>'+(r.sh?"✨ ":"")+esc(r.mon[0])+(r.isNew?' <span class="mgnew">¡NUEVO!</span>':'')+'</b><small>¡Se une a tu equipo!</small></div>':'')+
     '<p>Premio: <b>'+rwTxt(r.rw)+'</b></p>'+(T.tit?'<p class="tourtit">Esta semana luces el título <b>'+T.tit+'</b> en el chat y en tu perfil.</p>':'')+'<button id="tourOk">¡Increíble!</button>');
   if(big&&!hubCalm()){const w=m.querySelector(".nxmw");for(let k=0;k<50;k++){const s=document.createElement("span");s.className="mgconf";s.textContent=["🎉","✨","⭐","🏆","🎊"][k%5];s.style.left=Math.random()*100+"%";w.appendChild(s);s.animate([{transform:"translateY(-20px)",opacity:1},{transform:"translateY("+(300+Math.random()*200)+"px) rotate("+(Math.random()*720-360)+"deg)",opacity:0}],{duration:1600+Math.random()*1000,delay:Math.random()*500,easing:"ease-in"}).onfinish=()=>s.remove()}}
   $("tourOk").onclick=nxModalClose;return r;
@@ -9941,13 +9949,13 @@ setTimeout(()=>{try{tourClaim()}catch(e){}},6000);
 function tourHTML(){
   const w=tourWeek(),g=tourGameOf(w),ms=tourEndsIn(),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),my=tourBest(w),me=window.FB&&window.FB.uid?window.FB.uid():null;
   const L=TR_.w===w&&TR_.top?TR_.top:null,M=tourMons(w),myPos=L?L.findIndex(x=>x.id===me):-1;
-  const pod=(T,p,cls)=>'<div class="tpod '+cls+'"><div class="tpm">'+icoHD(p,cls==="p1"?120:92,false,!!T.sh)+(T.sh?'<span class="tpsh">✨</span>':'')+'</div><span class="tpic">'+T.ic+'</span><b>'+(T.sh?"✨ ":"")+esc(p[0])+'</b><small>'+fmt(T.t)+' 🎟️ + '+Object.keys(T.it).map(k=>T.it[k]+" "+IN2(k)).join(" + ")+'</small><div class="tpbar"></div></div>';
+  const pod=(T,p,cls)=>'<div class="tpod '+cls+'"><div class="tpm">'+icoHD(p,cls==="p1"?120:92,false,T.sh>=1)+(T.sh>=1?'<span class="tpsh">✨</span>':'')+'</div><span class="tpic">'+T.ic+'</span><b>'+(T.sh>=1?"✨ ":"")+esc(p[0])+'</b><small>'+fmt(Math.round(tkOf(T)*RMUL()))+' 🎟️ + '+tierItTxt(T)+(T.sh>0&&T.sh<1?' · '+Math.round(T.sh*100)+' % variocolor':'')+'</small><div class="tpbar"></div></div>';
   const tro=(S.trophies||[]),cnt=k=>tro.filter(x=>k===4?x.p>3:x.p===k).length;
   return '<div class="tourb" style="--mc:'+g.c+'"><div class="tourh"><span class="tourc">🏆</span><div><small>TORNEO SEMANAL · termina en '+(d?d+" d ":"")+h+' h</small><b>'+g.ic+' '+g.n+'</b><small>¡Consigue la mejor puntuación de la semana y gana Pokémon exclusivos!</small></div><button class="tourgo" data-mgo="'+g.id+'">▶ Jugar</button></div>'+
     '<div class="tpods">'+pod(TOUR_TIERS[1],M.mega,"p2")+pod(TOUR_TIERS[0],M.leg,"p1")+pod(TOUR_TIERS[2],M.shy,"p3")+'</div>'+
-    '<div class="tourx"><span>🎖️ <b>Top 10:</b> 1.000.000 🎟️ + 3 Ultra Ball + objeto equipable</span><span>🎟️ <b>Por participar:</b> 150.000 🎟️ + 5 Super Ball</span><span>👑 Los 3 primeros lucen un <b>título</b> en el chat y en su perfil toda la semana siguiente</span></div>'+
-    '<div class="tourl">'+(!window.FB?'<small>Inicia sesión para competir en la clasificación.</small>':!L?'<small>Cargando clasificación…</small>':L.length?L.map((x,i)=>'<div class="tourr'+(x.id===me?' me':'')+(i<3?' top':'')+'"><span class="tourp">'+(["🥇","🥈","🥉"][i]||(i+1)+"º")+'</span><span class="chav">'+chAv(x.tr)+'</span><b class="plink" data-prof="'+esc(x.id)+'">'+(x.cr?["👑","🥈","🥉"][x.cr-1]+" ":"")+esc(pvClean(x.n||"Entrenador"))+'</b>'+(x.g?' <span class="gtag">'+esc(String(x.g).slice(0,4))+'</span>':'')+'<span class="tours">'+fmt(x.sc|0)+'</span></div>').join(""):'<small>Nadie ha jugado todavía esta semana. ¡Sé el primero y llévate el legendario!</small>')+
-    '<div class="tourmy">Tu mejor marca esta semana: <b>'+fmt(my)+'</b>'+(myPos>=0?' · vas <b>'+(myPos+1)+'º</b>'+(myPos<3?' 🔥':''):my?' · fuera del top 10, ¡sigue intentándolo!':'')+(tro.length?'<span class="tourvit">Tu vitrina: 🥇×'+cnt(1)+' 🥈×'+cnt(2)+' 🥉×'+cnt(3)+' 🎖️×'+cnt(4)+'</span>':'')+'</div></div></div>';
+    '<div class="tourx">'+[3,4,5].map(i=>{const T=TOUR_TIERS[i];return '<span>'+T.ic+' <b>'+(i===5?'Por participar':T.n)+':</b> '+fmt(Math.round(tkOf(T)*RMUL()))+' 🎟️ + '+tierItTxt(T)+(T.mon?' + un Pokémon épico ('+esc(M[T.mon][0])+')':'')+'</span>'}).join("")+'<span>📈 Los tickets crecen con tu pueblo: el 1º gana <b>'+hTxt(TOUR_TIERS[0].h)+'</b> de tu producción (mínimo '+fmt(TOUR_TIERS[0].t)+' 🎟️), el 2º '+hTxt(TOUR_TIERS[1].h)+', el 3º '+hTxt(TOUR_TIERS[2].h)+', el top 10 '+hTxt(TOUR_TIERS[3].h)+'…</span><span>👑 Los 3 primeros lucen un <b>título</b> en el chat y en su perfil toda la semana siguiente</span></div>'+
+    '<div class="tourl">'+(!window.FB?'<small>Inicia sesión para competir en la clasificación.</small>':!L?'<small>Cargando clasificación…</small>':L.length?L.slice(0,10).map((x,i)=>'<div class="tourr'+(x.id===me?' me':'')+(i<3?' top':'')+'"><span class="tourp">'+(["🥇","🥈","🥉"][i]||(i+1)+"º")+'</span><span class="chav">'+chAv(x.tr)+'</span><b class="plink" data-prof="'+esc(x.id)+'">'+(x.cr?["👑","🥈","🥉"][x.cr-1]+" ":"")+esc(pvClean(x.n||"Entrenador"))+'</b>'+(x.g?' <span class="gtag">'+esc(String(x.g).slice(0,4))+'</span>':'')+'<span class="tours">'+fmt(x.sc|0)+'</span></div>').join(""):'<small>Nadie ha jugado todavía esta semana. ¡Sé el primero y llévate el legendario!</small>')+
+    '<div class="tourmy">Tu mejor marca esta semana: <b>'+fmt(my)+'</b>'+(myPos>=0?' · vas <b>'+(myPos+1)+'º</b>'+(myPos<3?' 🔥':myPos>=10?' (Top 25)':''):my?' · fuera del top 25, ¡sigue intentándolo!':'')+(tro.length?'<span class="tourvit">Tu vitrina: 🥇×'+cnt(1)+' 🥈×'+cnt(2)+' 🥉×'+cnt(3)+' 🎖️×'+cnt(4)+'</span>':'')+'</div></div></div>';
 }
 // ================= DUELO DE SILUETAS EN DIRECTO =================
 const DU_R=8,DU_T=7000,DU_GAP=2600,DU_STEP=DU_T+DU_GAP;
@@ -13567,13 +13575,14 @@ setInterval(()=>{if(RQ.cur||!window.FB||rqBusy())return;let L=[];try{L=rqItems()
 
 // =====================================================================================
 // CLASIFICACIÓN SEMANAL DE CADA MINIJUEGO (Firestore: tours/{semana_juego}/s/{uid})
-// Cada lunes los 10 mejores de cada minijuego reciben premio
+// Cada lunes los 25 mejores de cada minijuego reciben premio (los tickets crecen con la producción de cada jugador)
 // =====================================================================================
 const MGR_KEY=(w,g)=>w+"_"+g;
-const MGR_EX={who:{cand:1},mem:{ub:3},dig:{_hold:1},fish:{sb:8},thr:{ub:3},run:{lucky:1},exc:{_evo:1},wgt:{ppmax:1}};
-const MGR_TIER=[{p:1,ic:"🥇",t:1000000,x:2},{p:2,ic:"🥈",t:500000,x:1},{p:3,ic:"🥉",t:250000,x:1},{p:10,ic:"🎖️",t:100000,x:0}];
-const mgrTier=pos=>pos<0?null:pos===0?MGR_TIER[0]:pos===1?MGR_TIER[1]:pos===2?MGR_TIER[2]:pos<10?MGR_TIER[3]:null;
-function mgrRw(gid,pos){const T=mgrTier(pos);if(!T)return null;const rw={t:T.t,it:{}};const ex=MGR_EX[gid]||{};
+const MGR_EX={who:{cand:1},mem:{ub:3},dig:{_hold:1},fish:{sb:8},thr:{ub:3},run:{lucky:1},exc:{_evo:1},wgt:{ppmax:1},fos:{_hold:1},puz:{cand:1},jig:{ub:3},hl:{ppmax:1}};
+// t = tickets mínimos, h = horas de tu producción (se da lo mayor), x = veces el premio especial del juego
+const MGR_TIER=[{p:1,ic:"🥇",t:10000000,h:6,x:3,it:{mb:1,cand:3}},{p:2,ic:"🥈",t:6000000,h:4,x:2,it:{cand:2}},{p:3,ic:"🥉",t:4000000,h:3,x:2,it:{cand:1}},{p:10,ic:"🎖️",t:1500000,h:1,x:1,it:{}},{p:25,ic:"🏅",t:500000,h:.33,x:0,it:{}}];
+const mgrTier=pos=>pos<0?null:pos<3?MGR_TIER[pos]:pos<10?MGR_TIER[3]:pos<25?MGR_TIER[4]:null;
+function mgrRw(gid,pos){const T=mgrTier(pos);if(!T)return null;const rw={t:tkOf(T),it:Object.assign({},T.it)};const ex=MGR_EX[gid]||{};
   for(let k=0;k<T.x;k++)Object.keys(ex).forEach(i=>{if(i==="_hold"){const h=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[h]=(rw.it[h]||0)+1}else if(i==="_evo"){const ev=ITEMS.filter(q=>q[7]==="evo"),e=ev[Math.floor(Math.random()*ev.length)][0];rw.it[e]=(rw.it[e]||0)+1}else rw.it[i]=(rw.it[i]||0)+ex[i]});
   return rw}
 const mgrExTxt=gid=>{const e=MGR_EX[gid]||{};return Object.keys(e).map(k=>k==="_hold"?"objeto equipable":k==="_evo"?"piedra evolutiva":(e[k]>1?e[k]+" ":"")+IN2(k)).join(" + ")};
@@ -13585,7 +13594,7 @@ function mgrSubmit(gid,score){
   return '<p class="tourm">📊 Nueva mejor marca semanal en la clasificación: <b>'+fmt(score)+'</b></p>';
 }
 async function mgrLoad(gid,force){if(!window.FB||!window.FB.tourTop)return null;const w=tourWeek();if(!force&&MGR.top[gid]&&MGR.top[gid].w===w&&Date.now()-(MGR.at[gid]||0)<60e3)return MGR.top[gid].l;
-  try{const l=await window.FB.tourTop(MGR_KEY(w,gid),10);MGR.top[gid]={w:w,l:l};MGR.at[gid]=Date.now();
+  try{const l=await window.FB.tourTop(MGR_KEY(w,gid),25);MGR.top[gid]={w:w,l:l};MGR.at[gid]=Date.now();
     // si en la nube tienes una marca mejor que la de este dispositivo, se usa esa
     const me=window.FB.uid&&window.FB.uid(),x=me&&l.find(y=>y.id===me);if(x&&(x.sc|0)>0){S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};if((x.sc|0)>(S.mgw.b[gid]|0)){S.mgw.b[gid]=x.sc|0;save()}}
   }catch(e){MGR.top[gid]=MGR.top[gid]||{w:w,l:[]}}return MGR.top[gid].l}
@@ -13593,21 +13602,22 @@ async function mgrLoad(gid,force){if(!window.FB||!window.FB.tourTop)return null;
 async function mgrClaim(){
   const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!window.FB.uid||!window.FB.uid())return;if(!S.mgw||S.mgw.w!==pw||S.mgrDone===pw)return;
   const me=window.FB.uid(),won=[];
-  for(const gid of Object.keys(S.mgw.b||{})){if(!(S.mgw.b[gid]>0))continue;let top=null;try{top=await window.FB.tourTop(MGR_KEY(pw,gid),10)}catch(e){return}const i=(top||[]).findIndex(x=>x.id===me);const rw=mgrRw(gid,i);if(rw){grant(rw);won.push({g:MGS.find(x=>x.id===gid),i:i,rw:rw})}}
+  for(const gid of Object.keys(S.mgw.b||{})){if(!(S.mgw.b[gid]>0))continue;let top=null;try{top=await window.FB.tourTop(MGR_KEY(pw,gid),25)}catch(e){return}const i=(top||[]).findIndex(x=>x.id===me);const rw=mgrRw(gid,i);if(rw){grant(rw);won.push({g:MGS.find(x=>x.id===gid),i:i,rw:rw})}}
   S.mgrDone=pw;save();render();if(!won.length)return;snd("win");
   nxModal('<div class="hofb">📊</div><h3>¡Premios de la clasificación semanal!</h3><p class="mut">Semana '+pw.split("-W")[1]+'</p><div class="mgrwon">'+won.map(x=>'<div><span>'+(MGR_TIER.find(t=>t.p>=x.i+1)||{}).ic+'</span><b>'+(x.g?x.g.ic+" "+x.g.n:"")+'</b><small>'+(x.i+1)+'º · '+rwTxt(x.rw)+'</small></div>').join("")+'</div><button id="mgrOk">¡Genial!</button>');$("mgrOk").onclick=nxModalClose;
 }
 setTimeout(()=>{try{mgrClaim()}catch(e){}},9000);
 // ---- panel ----
-nxPanel("mgrP","📊 Clasificación de minijuegos","Los mejores de cada minijuego esta semana. Cada lunes, los 10 primeros de cada uno reciben premio: 🥇 1.000.000 🎟️, 🥈 500.000 🎟️, 🥉 250.000 🎟️ y 🎖️ 100.000 🎟️ del 4º al 10º, más un premio especial de cada juego para el podio.");
+nxPanel("mgrP","📊 Clasificación de minijuegos","Los mejores de cada minijuego esta semana. Cada lunes, los 25 primeros de cada uno reciben premio: tickets que crecen con tu pueblo (hasta 6 horas de tu producción), Master Ball, Caramelos Raros y el premio especial de cada juego.");
 {const g=HUB.find(x=>x.k==="mg");if(g&&!g.tabs.some(t=>t[0]==="mgrP"))g.tabs.push(["mgrP","Clasificación"]);HUBP.mgrP="mg";HUBR.mgrP=()=>mgrUI(true)}
 async function mgrUI(force){
   const box=$("mgrPB");if(!box)return;MGR.g=MGR.g||MGS[0].id;const g=MGS.find(x=>x.id===MGR.g)||MGS[0],w=tourWeek(),ms=tourEndsIn(),d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),my=S.mgw&&S.mgw.w===w?(S.mgw.b[g.id]|0):0,me=window.FB&&window.FB.uid?window.FB.uid():null;
   const draw=()=>{const L=MGR.top[g.id]&&MGR.top[g.id].w===w?MGR.top[g.id].l:null,pos=L?L.findIndex(x=>x.id===me):-1;
     box.innerHTML='<div class="mgrtabs">'+MGS.map(x=>'<button class="'+(x.id===g.id?'on':'')+'" data-mgr="'+x.id+'" style="--mc:'+x.c+'"><span>'+x.ic+'</span><small>'+x.n+'</small></button>').join("")+'</div>'+
-      '<div class="mgrb" style="--mc:'+g.c+'"><div class="mgrh"><span>'+g.ic+'</span><div><b>'+g.n+'</b><small>Termina en '+(d?d+" d ":"")+h+' h · Podio: +'+mgrExTxt(g.id)+'</small></div><button class="tourgo" data-mgo="'+g.id+'">▶ Jugar</button></div>'+
-      '<div class="tourl">'+(!window.FB?'<small>Inicia sesión para aparecer en la clasificación.</small>':!L?'<small>Cargando clasificación…</small>':L.length?L.map((x,i)=>'<div class="tourr'+(x.id===me?' me':'')+(i<3?' top':'')+'"><span class="tourp">'+(["🥇","🥈","🥉"][i]||(i+1)+"º")+'</span><span class="chav">'+chAv(x.tr)+'</span><b class="plink" data-prof="'+esc(x.id)+'">'+(x.cr?["👑","🥈","🥉"][x.cr-1]+" ":"")+esc(pvClean(x.n||"Entrenador"))+'</b>'+(x.g?' <span class="gtag">'+esc(String(x.g).slice(0,4))+'</span>':'')+'<span class="tours">'+fmt(x.sc|0)+'</span></div>').join(""):'<small>Nadie ha jugado todavía esta semana. ¡Sé el primero!</small>')+
-      '<div class="tourmy">Tu mejor marca esta semana: <b>'+fmt(my)+'</b>'+(pos>=0?' · vas <b>'+(pos+1)+'º</b>'+(pos<3?' 🔥':''):my?' · fuera del top 10':'')+'</div></div></div>'};
+      '<div class="mgrb" style="--mc:'+g.c+'"><div class="mgrh"><span>'+g.ic+'</span><div><b>'+g.n+'</b><small>Termina en '+(d?d+" d ":"")+h+' h · Premio especial: '+(mgrExTxt(g.id)||'—')+'</small></div><button class="tourgo" data-mgo="'+g.id+'">▶ Jugar</button></div>'+
+      '<div class="tourx mgrx">'+MGR_TIER.map(T=>{const it=Object.keys(T.it).map(k=>T.it[k]+" "+IN2(k)).concat(T.x&&mgrExTxt(g.id)?[(T.x>1?T.x+"× ":"")+mgrExTxt(g.id)]:[]);return '<span>'+T.ic+' <b>'+(T.p===1?'1º':T.p===2?'2º':T.p===3?'3º':T.p===10?'4º–10º':'11º–25º')+':</b> '+fmt(Math.round(tkOf(T)*RMUL()))+' 🎟️'+(it.length?' + '+it.join(" + "):'')+'</span>'}).join("")+'</div>'+
+      '<div class="tourl">'+(!window.FB?'<small>Inicia sesión para aparecer en la clasificación.</small>':!L?'<small>Cargando clasificación…</small>':L.length?L.slice(0,10).map((x,i)=>'<div class="tourr'+(x.id===me?' me':'')+(i<3?' top':'')+'"><span class="tourp">'+(["🥇","🥈","🥉"][i]||(i+1)+"º")+'</span><span class="chav">'+chAv(x.tr)+'</span><b class="plink" data-prof="'+esc(x.id)+'">'+(x.cr?["👑","🥈","🥉"][x.cr-1]+" ":"")+esc(pvClean(x.n||"Entrenador"))+'</b>'+(x.g?' <span class="gtag">'+esc(String(x.g).slice(0,4))+'</span>':'')+'<span class="tours">'+fmt(x.sc|0)+'</span></div>').join(""):'<small>Nadie ha jugado todavía esta semana. ¡Sé el primero!</small>')+
+      '<div class="tourmy">Tu mejor marca esta semana: <b>'+fmt(my)+'</b>'+(pos>=0?' · vas <b>'+(pos+1)+'º</b>'+(pos<3?' 🔥':pos>=10?' (Top 25)':''):my?' · fuera del top 25':'')+'</div></div></div>'};
   draw();if(window.FB){await mgrLoad(g.id,force);if(nxOpen("mgrP")&&MGR.g===g.id)draw()}
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-mgr]");if(b){MGR.g=b.dataset.mgr;snd("ui");mgrUI(false)}});

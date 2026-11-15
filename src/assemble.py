@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.0";
+const GAME_VER="7.1";
 const NEWS=[
+{v:"2026-11-15-7.1",ver:"7.1",at:"2026-11-15T22:50",t:"🛡️ Tu partida, guardada y revisada por el servidor",l:["Ahora las partidas en la nube solo las guarda el servidor del juego: desde el navegador ya no se pueden escribir ni borrar","Cada vez que se guarda, el servidor la compara con la anterior y con el tiempo que ha pasado. Si hay progreso que no se puede conseguir jugando (tickets, Pokémon u objetos que aparecen de la nada), no se guarda y vuelves a tu última partida buena","Jugando normal no cambia nada: los márgenes son muy amplios, y las ventas del mercadillo y las devoluciones de tickets también se tienen en cuenta","Si cierras el juego sin que se haya subido lo último, al volver a entrar en el mismo dispositivo se conserva y se sube","Si tenías el juego abierto desde antes de esta versión, recarga la página para que se vuelva a guardar en la nube"]},
 {v:"2026-11-15-7.0",ver:"7.0",at:"2026-11-15T16:22",t:"🔒 Revisión de seguridad: el juego, más justo para todos",l:["Hemos revisado todo el juego en busca de trampas que perjudicaran a otros jugadores y las hemos cerrado","Chat y sugerencias: arreglado un fallo por el que una foto o un dato preparados podían ejecutar código en la pantalla de quien los viera. Tampoco se pueden fijar mensajes arriba con fechas falsas ni hacerse pasar por avisos del sistema","Clasificaciones: en la Carrera de Rapidash, Peso y altura y Más o menos, el servidor comprueba que la puntuación sea posible en el tiempo jugado","Incursiones: solo los participantes pueden golpear al jefe, y ganar exige dejarlo de verdad a 0","Gremios: nadie puede dejar al jefe semanal a 0 ni completar las misiones de golpe; nadie hace él solo más del 60 % del jefe (salvo en gremios de una persona)","Intercambios: el Pokémon ofrecido ya no se puede cambiar después, y cada uno solo puede dar los pasos que le tocan","Duelos de siluetas: nadie puede tocar las respuestas del rival","Invitar amigos: cada cuenta solo puede usar un código, las medallas del invitado suben de una en una, y se cobran premios por hasta 15 amigos"]},
 {v:"2026-11-15-6.99",ver:"6.99",at:"2026-11-15T15:56",t:"📱💻 Tu partida, abierta en un solo sitio a la vez",l:["Si abres tu cuenta en otro dispositivo (o en otra pestaña), ese pasa a ser el activo y el anterior se pausa al momento con un aviso: «Tu partida se ha abierto en otro sitio»","Con «▶ Jugar aquí» vuelves a tomar el control: se carga tu partida con todo lo que hiciste en el otro sitio, y se pausa el otro","Así ya no se pierde progreso porque una copia vieja pise a la nueva al guardar en la nube, y no se pueden duplicar Pokémon, ventas ni premios jugando en dos sitios a la vez","El servidor también rechaza los guardados de un dispositivo que ya no es el activo, por si estaba sin conexión o dormido"]},
 {v:"2026-11-15-6.98",ver:"6.98",at:"2026-11-15T15:38",t:"🔥 Carrera de Rapidash: ahora es un reto de verdad",l:["La velocidad ya no se queda en el 400 %: sigue subiendo hasta el 560 %, y sube antes (a 6.000 m vas el doble de rápido que a 500 m)","Los niveles llegan antes (cada 600 m desde los 1.200 m) y cada nivel junta más los obstáculos: a 3.600 m hay casi un 25 % menos de tiempo entre uno y otro que antes","Más columnas, carros y combinaciones de columnas con vallas en los niveles altos, y más Snorlax","Nuevo desde el nivel 6: los zigzags, dos grupos de columnas seguidos con el hueco libre en carriles distintos","Cuanto más lejos llegas, menos potenciadores salen (Llamarada, Velocidad Extrema, Revivir y Moneda Amuleto)","Tras un salto largo siempre queda tiempo para aterrizar: es difícil, pero siempre hay forma de pasar","Clasificaciones: si el servidor rechaza una marca, ahora te avisa, y tu mejor marca de la semana se vuelve a enviar sola al abrir la clasificación"]},
@@ -693,16 +694,32 @@ rep('''  async function flush(){
     if(!uid||pending===null||busy||locked)return;
     if(pending===lastSaved){pending=null;syncTxt();return}
     if(force!==true&&Date.now()-lastW<(typeof force==="number"?force:0))return;
-    busy=true;const d=pending;pending=null;g("sync").textContent="☁️ Guardando…";
-    try{await S.setDoc(S.doc(db,"users",uid),{data:d,updated:S.serverTimestamp(),sess:SID,claim:false},{merge:true});lastSaved=d;lastW=Date.now()}
-    catch(e){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;
-      // si el servidor lo rechaza porque la partida ya está activa en otro sitio, aquí se pausa
-      if(e&&e.code==="permission-denied")try{const sn=await S.getDoc(S.doc(db,"sess",uid)),x=sn.exists()?sn.data():null;if(x&&x.s&&x.s!==SID)sessLock(x)}catch(x){}
-      return}
-    busy=false;syncTxt();
+    busy=true;const d=pending,t0=Date.now();pending=null;g("sync").textContent="☁️ Guardando…";
+    // la partida se envía al servidor, que es el único que puede guardarla (comprueba la sesión y que sea posible)
+    let r;
+    try{r=(await srvSave({data:d,sess:SID})).data||{}}
+    catch(e){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";busy=false;return}
+    busy=false;
+    // la partida está abierta en otro dispositivo: aquí se pausa
+    if(r.why==="sesion"){sessLock({d:r.d});return}
+    // el servidor ha visto progreso imposible: no la guarda y se vuelve a la última partida buena
+    if(r.why==="rechazado"){saveBack(r);return}
+    if(!r.ok){if(pending===null)pending=d;g("sync").textContent="⚠️ Sin guardar";return}
+    try{localStorage.setItem(MARK(),String(r.at||0))}catch(e){}(window.cloudHooks||[]).forEach(f=>{try{f(t0)}catch(e){}})
+    lastSaved=d;lastW=Date.now();syncTxt();
   }
+  function saveBack(r){if(locked)return;locked=true;pending=null;clearTimeout(timer);timer=0;window.__sessLocked=1;
+    const k=window.__KEY;
+    // al recargar manda la nube (marca -1), aunque no haya llegado la última partida buena
+    try{localStorage.setItem(MARK(),"-1");if(typeof r.last==="string"&&k)localStorage.setItem(k,r.last);const si=Storage.prototype.setItem;Storage.prototype.setItem=function(n,v){if(n===k)return;return si.call(this,n,v)}}catch(e){}
+    try{g("sync").textContent="⚠️ Partida no válida"}catch(e){}
+    const es=t=>String(t).replace(/[&<>"']/g,c=>"&#"+c.charCodeAt(0)+";"),m=Array.isArray(r.motivos)?r.motivos.slice(0,3):[];
+    const o=document.createElement("div");o.id="sessLock";o.setAttribute("role","alertdialog");o.setAttribute("aria-modal","true");
+    o.innerHTML='<div class="slbox"><div class="slic">🛡️</div><h2>No se ha podido guardar tu partida</h2><p>El servidor ha revisado tu partida y tiene progreso que no se puede conseguir jugando, así que no se ha guardado. Se va a cargar tu última partida guardada en la nube.</p>'+(m.length?'<p class="slm">'+m.map(es).join("<br>")+'</p>':'')+'<p class="slm">Si crees que es un error, cuéntanoslo en Sugerencias.</p><button type="button" id="slGo">▶ Cargar mi partida</button></div>';
+    document.body.appendChild(o);const b=document.getElementById("slGo");b.onclick=()=>{b.disabled=true;b.textContent="Cargando…";location.reload()};try{b.focus()}catch(e){}}
   window.cloudFlush=f=>flush(f===true?true:0);
-  window.cloudSave=j=>{if(locked)return;pending=j;if(!lastSaved&&!lastW)lastSaved=j;syncTxt()};
+  // (si se ha seguido con la copia del navegador, el primer guardado sí se sube)
+  window.cloudSave=j=>{if(locked)return;pending=j;if(!lastSaved&&!lastW&&!fromLocal)lastSaved=j;syncTxt()};
   setInterval(()=>flush(0),AUTO);
   addEventListener("pagehide",()=>{flush(true);try{if(lobby)lobby.leave()}catch(e){}});
   document.addEventListener("visibilitychange",()=>{if(document.hidden)flush(20000)});

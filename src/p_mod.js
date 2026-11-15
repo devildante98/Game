@@ -3,7 +3,7 @@
 // limpiar clasificaciones y comprobaciones contra valores imposibles
 // Firestore: reports/{id}, bans/{uid} (admins/{uid} ya existe)
 // =====================================================================================
-var MOD={admin:false,ban:null,reports:null,bans:null,unsub:null};
+var MOD={admin:false,ban:null,reports:null,bans:null,flags:null,unsub:null};
 const MOD_WHY=["Insultos o acoso","Spam o publicidad","Contenido inapropiado","Trampas","Otro"];
 function modInit(){if(MOD.on||!window.FB||!window.FB.uid||!window.FB.uid()||!window.FB.modIsAdmin)return;MOD.on=1;
   if(!$("sugAdm").hidden){MOD.admin=true;modTab()}
@@ -30,20 +30,30 @@ function modTab(){nxPanel("modP","🛠️ Moderación","Solo lo ves tú porque e
   const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="modP"))g.tabs.push(["modP","🛠️ Moderación"]);HUBP.modP="mas";HUBR.modP=()=>modUI(true)}
 async function modUI(force){
   const box=$("modPB");if(!box||!MOD.admin)return;
-  if(force||!MOD.reports){box.innerHTML='<small class="mut">Cargando…</small>';try{MOD.reports=await window.FB.reportList();MOD.bans=await window.FB.banList()}catch(e){box.innerHTML='<p class="mut">No se han podido cargar los datos ('+((e&&e.code)||"error")+'). Revisa las reglas de Firestore.</p>';return}}
+  if(force||!MOD.reports){box.innerHTML='<small class="mut">Cargando…</small>';try{MOD.reports=await window.FB.reportList();MOD.bans=await window.FB.banList();MOD.flags=window.FB.flagList?await window.FB.flagList().catch(()=>null):null}catch(e){box.innerHTML='<p class="mut">No se han podido cargar los datos ('+((e&&e.code)||"error")+'). Revisa las reglas de Firestore.</p>';return}}
   const R=MOD.reports||[],Bn=(MOD.bans||[]).filter(banActive);
   box.innerHTML='<h3 class="shh">🚩 Reportes ('+R.length+')</h3>'+(R.length?R.map(r=>'<div class="modr"><div><b>'+esc(r.un||"?")+'</b> <small class="mut">reportado por '+esc(r.byn||"?")+' · '+esc(r.why||"")+' · '+new Date(r.at||0).toLocaleString("es")+'</small><p>'+(r.img?'📷 ':'')+esc(r.t||"(sin texto)")+'</p></div><div class="modb">'+
       '<button class="alt mini" data-mdm="'+esc(r.id)+'">🗑️ Borrar mensaje</button><button class="mini" data-mban="'+esc(r.u)+'" data-mbn="'+esc(r.un||"")+'" data-mbt="24">🔇 Silenciar 24 h</button><button class="mini" data-mban="'+esc(r.u)+'" data-mbn="'+esc(r.un||"")+'" data-mbt="168">🔇 7 días</button><button class="red mini" data-mban="'+esc(r.u)+'" data-mbn="'+esc(r.un||"")+'" data-mbt="0" data-mball="1">⛔ Expulsar</button><button class="alt mini" data-mrd="'+esc(r.id)+'">✅ Descartar</button></div></div>').join(""):'<small class="mut">No hay reportes pendientes. 🎉</small>')+
     '<h3 class="shh">🔇 Jugadores sancionados ('+Bn.length+')</h3>'+(Bn.length?Bn.map(b=>'<div class="modr"><div><b>'+esc(b.n||b.id)+'</b> <small class="mut">'+(b.all?'⛔ Expulsado (chat, mercadillo y clasificaciones)':'🔇 Silenciado en el chat')+' '+banTxt(b)+(b.why?' · '+esc(b.why):'')+'</small></div><div class="modb"><button class="alt mini" data-munb="'+esc(b.id)+'">Quitar sanción</button></div></div>').join(""):'<small class="mut">Nadie está sancionado.</small>')+
+    modFlagsHTML()+
     '<h3 class="shh">🏆 Clasificaciones</h3><small class="mut">En las clasificaciones del Torneo semanal y de los minijuegos verás un botón 🗑️ junto a cada jugador para quitar marcas imposibles o hechas con trampas.</small>'+
     '<h3 class="shh">💾 Copias de seguridad</h3><small class="mut">Actívalas en la consola de Firebase → Firestore → <b>Recuperación ante desastres</b> → «Crear programación» (diaria). Así podrás recuperar los datos si algo se borra por error.</small>';
 }
+// guardados que el servidor ha rechazado (progreso imposible) o ha guardado pero le han parecido raros
+const MOD_FL={rechazado:["⛔","Rechazado: no se guardó y volvió a su última partida buena"],sospechoso:["⚠️","Guardado, pero raro"],"primera subida rara":["🆕","Primera subida a la nube, rara (puede venir de jugar sin cuenta)"]};
+function modFlagsHTML(){const F=MOD.flags;
+  if(!F)return '<h3 class="shh">🛡️ Revisión de guardados</h3><small class="mut">No se han podido cargar (se activa cuando el servidor está publicado).</small>';
+  return '<h3 class="shh">🛡️ Revisión de guardados ('+F.length+')</h3><small class="mut">El servidor revisa cada guardado. Aquí aparecen los que tienen progreso imposible o raro.</small>'+(F.length?F.map(f=>{const t=MOD_FL[f.estado]||["❔",String(f.estado||"")],dt=f.datos||{};
+    return '<div class="modr"><div><b>'+t[0]+' '+esc(f.n||"(sin apodo)")+'</b> <small class="mut">'+esc(t[1])+' · '+(f.at?new Date(f.at).toLocaleString("es"):"")+' · '+esc(String(f.uid||"").slice(0,10))+'…</small><p>'+(Array.isArray(f.motivos)?f.motivos.slice(0,5).map(esc).join("<br>"):"")+'</p>'+
+      ((dt.t0!=null||dt.t1!=null)?'<small class="mut">Tickets '+fmt(+dt.t0||0)+' → '+fmt(+dt.t1||0)+(dt.dt!=null?' en '+Math.round((+dt.dt||0)/60)+' min':'')+(dt.mercado?' · mercadillo +'+fmt(+dt.mercado||0):'')+'</small>':'')+'</div><div class="modb">'+
+      '<button class="alt mini" data-mfl="'+esc(f.id)+'">✅ Revisado</button><button class="red mini" data-mban="'+esc(f.uid||"")+'" data-mbn="'+esc(f.n||"")+'" data-mbt="0" data-mball="1">⛔ Expulsar</button></div></div>'}).join(""):'<small class="mut">Ningún guardado raro. 🎉</small>')}
 document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.closest("#modPB button");if(!b||!MOD.admin)return;const d=b.dataset;
   try{
     if(d.mdm){const r=(MOD.reports||[]).find(x=>x.id===d.mdm);if(r&&r.key){const [tp,id]=r.key==="global"?["global","global"]:r.key.split(":");await window.FB.chDel(tp,id,r.mid).catch(()=>{})}await window.FB.reportDel(d.mdm);toast("🗑️ Mensaje borrado")}
     else if(d.mban){const h=+d.mbt,why=await askText("Motivo (lo verá el jugador):",h?"Mal comportamiento en el chat":"Trampas o abuso")||"";await window.FB.banSet(d.mban,{n:String(d.mbn||"").slice(0,30),until:h?Date.now()+h*36e5:0,all:d.mball?1:0,why:why.slice(0,80),by:window.FB.uid(),at:Date.now()});toast(h?"🔇 Jugador silenciado":"⛔ Jugador expulsado")}
     else if(d.mrd){await window.FB.reportDel(d.mrd);toast("✅ Reporte descartado")}
     else if(d.munb){await window.FB.banDel(d.munb);toast("Sanción quitada")}
+    else if(d.mfl){await window.FB.flagDel(d.mfl);toast("✅ Marcado como revisado")}
   }catch(x){toast("No se ha podido completar ("+((x&&x.code)||"error")+")")}
   modUI(true)});
 // ---- quitar entradas de las clasificaciones (administrador) ----

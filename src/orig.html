@@ -3117,10 +3117,10 @@ const label=u=>u.displayName||(u.email&&u.email.endsWith("@"+UDOM)?u.email.slice
 const ERR={"bad-user":"El nombre de usuario debe tener entre 3 y 20 caracteres: letras sin tildes ni ñ, números, punto, guion o guion bajo.","auth/invalid-credential":"Usuario/correo o contraseña incorrectos.","auth/email-already-in-use":"Ese correo ya tiene una cuenta.","auth/missing-password":"Escribe una contraseña.","auth/weak-password":"La contraseña debe tener al menos 6 caracteres.","auth/invalid-email":"El correo no es válido.","auth/popup-closed-by-user":"Cerraste la ventana de Google.","auth/operation-not-allowed":"Ese método de acceso no está activado en Firebase (Authentication > Método de acceso).","auth/unauthorized-domain":"Este dominio no está autorizado en Firebase (Authentication > Configuración > Dominios autorizados).","auth/network-request-failed":"Sin conexión con Firebase."};
 const errT=e=>ERR[e.code]||("Error: "+(e.code||e.message));
 async function main(){
-  let A,F,S;
+  let A,F,S,Fn;
   try{
     const u="https://www.gstatic.com/firebasejs/10.14.1";
-    [A,F,S]=await Promise.all([import(u+"/firebase-app.js"),import(u+"/firebase-auth.js"),import(u+"/firebase-firestore.js")]);
+    [A,F,S,Fn]=await Promise.all([import(u+"/firebase-app.js"),import(u+"/firebase-auth.js"),import(u+"/firebase-firestore.js"),import(u+"/firebase-functions.js")]);
   }catch(e){msg("No se pudo cargar Firebase (¿sin conexión?). Puedes jugar sin cuenta.");return}
   // ahorro de lecturas: con la pestaña oculta más de 3 min se pausan todas las escuchas en tiempo real y se reanudan al volver
   {const S0=S,L=new Set();let paused=false,tm=0;
@@ -3131,16 +3131,27 @@ async function main(){
     S=Object.assign({},S0,{onSnapshot:on})}
   const app=A.initializeApp(cfg),auth=F.getAuth(app),db=S.getFirestore(app);
   let uid=null,started=false,timer=0,pending=null,lobby=null,cu=null;
+  // la partida solo la guarda el servidor (Cloud Functions): comprueba que la sesión es la activa y que la partida es posible
+  const srvSave=Fn.httpsCallable(Fn.getFunctions(app,"europe-west1"),"guardar",{timeout:30000});
+  // gacha-sync-{uid}: hora del último guardado en la nube que conoce este navegador. Al entrar, si nadie ha guardado
+  // después y la copia del navegador es más reciente, se sigue con ella (y se sube); si no, manda la de la nube.
+  let fromLocal=false;const MARK=()=>"gacha-sync-"+uid;
+  const keepLocal=(key,cd,upd)=>{try{const lo=localStorage.getItem(key);if(!lo||lo===cd)return false;
+    const L=JSON.parse(lo),C=JSON.parse(cd);if(!L||!C||typeof L!=="object"||typeof C!=="object")return false;
+    const u=upd&&upd.toMillis?upd.toMillis():0,m=localStorage.getItem(MARK()),lt=+L.lt||0,ct=+C.lt||0;
+    if(m!==null)return +m>0&&+m===u&&lt>=ct;
+    // sin marca (partidas de versiones anteriores del juego): solo si es claramente más reciente
+    return lt>ct+60000}catch(e){return false}};
   // ---- una sola partida activa por cuenta ----
-  // Cada vez que se abre la partida, este dispositivo (o pestaña) pasa a ser el activo: lo apunta en sess/{uid} y en el
-  // guardado. Los demás lo ven al momento, dejan de guardar y muestran un aviso con «Jugar aquí». Así dos copias de la
+  // Cada vez que se abre la partida, este dispositivo (o pestaña) pasa a ser el activo: lo apunta en sess/{uid} y el
+  // servidor solo acepta los guardados de ese dispositivo. Los demás lo ven al momento, dejan de guardar y muestran un aviso con «Jugar aquí». Así dos copias de la
   // partida nunca se pisan en la nube ni se pueden duplicar Pokémon o premios.
   const SID=Math.random().toString(36).slice(2,10)+Date.now().toString(36);let locked=false;
   const devName=()=>{const u=navigator.userAgent||"";return /iPad|Tablet/i.test(u)||(/Android/i.test(u)&&!/Mobile/i.test(u))?"una tableta":/Mobi|Android|iPhone/i.test(u)?"un móvil":"un ordenador"};
   // (con la conexión lenta no se espera más de 3 s: la partida se abre igual y la marca llega en cuanto se pueda)
   async function sessClaim(){
     const w=p=>Promise.race([p.catch(()=>{}),new Promise(r=>setTimeout(r,3000))]);
-    await Promise.all([w(S.setDoc(S.doc(db,"sess",uid),{s:SID,at:S.serverTimestamp(),d:devName()})),w(S.setDoc(S.doc(db,"users",uid),{sess:SID,claim:true},{merge:true}))]);
+    await w(S.setDoc(S.doc(db,"sess",uid),{s:SID,at:S.serverTimestamp(),d:devName()}));
   }
   function sessLock(d){if(locked)return;locked=true;pending=null;clearTimeout(timer);timer=0;window.__sessLocked=1;try{g("sync").textContent="⏸️ En otro dispositivo"}catch(e){}
     const o=document.createElement("div");o.id="sessLock";o.setAttribute("role","alertdialog");o.setAttribute("aria-modal","true");
@@ -3233,7 +3244,7 @@ async function main(){
     uid=u.uid;cu=u;const key="gacha-pkmn-v3-"+uid;
     // primero se toma el control de la partida (así el otro dispositivo deja de guardar) y después se lee lo último guardado
     await sessClaim();
-    try{const sn=await S.getDoc(S.doc(db,"users",uid));if(sn.exists()&&typeof sn.data().data==="string")localStorage.setItem(key,sn.data().data);else if(!sn.exists()&&!localStorage.getItem(key)){try{const L=localStorage.getItem("gacha-pkmn-v3"),d=L&&JSON.parse(L),n=d&&Object.keys(d.owned||{}).length;if(n&&confirm("Tienes una partida sin cuenta en este navegador ("+n+" Pokémon). ¿Quieres pasarla a tu nueva cuenta? Así se guardará en la nube y podrás jugarla desde cualquier sitio."))localStorage.setItem(key,L)}catch(e){}}}
+    try{const sn=await S.getDoc(S.doc(db,"users",uid));if(sn.exists()&&typeof sn.data().data==="string"){const cd=sn.data().data,up=sn.data().updated;if(keepLocal(key,cd,up))fromLocal=true;else{localStorage.setItem(key,cd);try{localStorage.setItem(MARK(),String(up&&up.toMillis?up.toMillis():0))}catch(e){}}}else if(!sn.exists()&&!localStorage.getItem(key)){try{const L=localStorage.getItem("gacha-pkmn-v3"),d=L&&JSON.parse(L),n=d&&Object.keys(d.owned||{}).length;if(n&&confirm("Tienes una partida sin cuenta en este navegador ("+n+" Pokémon). ¿Quieres pasarla a tu nueva cuenta? Así se guardará en la nube y podrás jugarla desde cualquier sitio."))localStorage.setItem(key,L)}catch(e){}}}
     catch(x){g("auth").hidden=false;msg("No se pudo cargar tu progreso: "+(x.code||x.message));return}
     lobby=new FsRoom(db,uid,["lobby"]);window.claude={use:async n=>n==="room"?lobby:null};
     window.__KEY=key;started=true;sessWatch();

@@ -8,11 +8,17 @@ function mkInit(){if(MK.on||!window.FB||!window.FB.mkMine||!window.FB.uid||!wind
   try{window.FB.mkMine(l=>{MK.mine=l;l.forEach(d=>{if(d.st==="sold"&&!MK.paying[d.id])mkCollect(d)});if(nxOpen("mktP"))mktUI()})}catch(e){MK.on=false}}
 setInterval(mkInit,3000);
 async function mkCollect(d){
-  MK.paying[d.id]=1;S.mkPaid=S.mkPaid||{};if(S.mkPaid[d.id]){window.FB.mkDel(d.id).catch(()=>{});return}
-  const got=Math.floor((d.pr|0)*(1-MK_FEE));S.mkPaid[d.id]=1;S.t+=got;save();render();snd("win");
+  // ya cobrada: el anuncio se borra cuando el servidor acepte el guardado que la incluye (mkCloudSaved)
+  MK.paying[d.id]=1;S.mkPaid=S.mkPaid||{};if(S.mkPaid[d.id])return;
+  const got=Math.floor((d.pr|0)*(1-MK_FEE));S.mkPaid[d.id]=Date.now();S.t+=got;save();render();snd("win");
   toast("💰 ¡"+pvClean(d.bn||"Alguien")+" ha comprado tu "+(d.k==="pk"?d.pk.n:IN2(d.it.id)+" ×"+d.it.q)+"! +"+fmt(got)+" 🎟️");
-  try{await window.FB.mkDel(d.id);delete S.mkPaid[d.id];save()}catch(e){}
 }
+// el servidor comprueba cada venta cobrada mirando su anuncio, así que el anuncio se mantiene hasta que se ha guardado en
+// la nube la partida con esos tickets (t0: cuándo empezó ese guardado)
+(window.cloudHooks=window.cloudHooks||[]).push(t0=>{const P=S.mkPaid;if(!P||!window.FB)return;
+  const drop=id=>{if(S.mkPaid&&S.mkPaid[id]){delete S.mkPaid[id];save()}};
+  // (si el anuncio ya no existe, borrarlo da «permiso denegado»: entonces solo se olvida)
+  Object.keys(P).forEach(id=>{if((+P[id]||0)<=t0)window.FB.mkDel(id).then(()=>drop(id)).catch(e=>{if(e&&e.code==="permission-denied")drop(id)})})});
 const mkWhat=d=>d.k==="pk"?(d.pk.s?"✨ ":"")+d.pk.n+" Nv"+(d.pk.l|0):IN2(d.it.id)+" ×"+(d.it.q|0);
 const mkIco=(d,s)=>d.k==="pk"&&PM[d.pk.n]?ico(PM[d.pk.n],s,false,!!d.pk.s):d.k==="it"?itemIco(d.it.id,Math.round(s*.7)):"";
 nxPanel("mktP","🛒 Mercadillo","Compra y vende Pokémon y objetos con otros jugadores a cambio de tickets. Cuando vendes algo, cobras automáticamente (con un 5% de comisión).");

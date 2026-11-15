@@ -708,13 +708,14 @@ document.addEventListener("click",async e=>{const t=e.target;if(!t.closest)retur
   if(!await askOk("¿Aplicar esta corrección a "+b.dataset.fixn+"? Se aplicará la próxima vez que entre."))return;
   b.disabled=true;try{await window.FB.fixSet(b.dataset.fixgo,fx);toast("🛠️ Corrección guardada para "+b.dataset.fixn+". Se aplicará cuando entre.")}catch(x){toast("No se ha podido guardar ("+((x&&x.code)||"error")+"). ¿Has añadido la regla «fixes» en Firebase?");b.disabled=false}});
 // el jugador: al entrar comprueba si tiene una corrección pendiente (1 lectura por sesión)
-let _fixChk=0;
+let _fixChk=0,_fixDone=0;
 async function fixCheck(){if(_fixChk||!window.FB||!window.FB.fixGet||!window.FB.uid||!window.FB.uid())return;_fixChk=1;let fx=null;try{fx=await window.FB.fixGet()}catch(e){return}
   if(!fx||!(fx.at>(S.fixAt||0)))return;
   const ch=[];if(fx.add>0){S.t+=fx.add;ch.push("🎁 Recibes "+fmt(fx.add)+" 🎟️")}if(fx.t!=null&&S.t>fx.t){ch.push("🎟️ Tickets: "+fmt(S.t)+" → "+fmt(fx.t));S.t=fx.t}
   if(fx.cl!=null&&(S.cl|0)>fx.cl){ch.push("🥊 Guantes: Nv"+S.cl+" → Nv"+fx.cl);S.cl=fx.cl;window._fk=null}
   (fx.g||[]).forEach((v,i)=>{if(v!=null&&G[i]&&(S.g[i]|0)>v){ch.push(GI[i]+" "+G[i][0]+": "+fmt(S.g[i])+" → "+fmt(v));S.g[i]=v}});window._gk=null;
-  S.fixAt=fx.at;save();try{if(window.cloudFlush)window.cloudFlush(true)}catch(e){}try{await window.FB.fixDel()}catch(e){}render();
+  // la corrección se borra cuando el servidor ha aceptado el guardado que la incluye (así puede comprobar los tickets devueltos)
+  const ta=Date.now();S.fixAt=fx.at;save();(window.cloudHooks=window.cloudHooks||[]).push(t0=>{if(t0>=ta&&!_fixDone){_fixDone=1;window.FB.fixDel().catch(()=>{})}});try{if(window.cloudFlush)window.cloudFlush(true)}catch(e){}render();
   nxModal('<div class="hofb">🛠️</div><h3>Tu partida se ha corregido</h3><p>'+esc(fx.msg||"El equipo del juego ha corregido tu partida.")+'</p>'+(ch.length?'<ul class="fixl">'+ch.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>':'<p class="mut">No ha hecho falta cambiar nada.</p>')+'<button id="fixOk">Entendido</button>');$("fixOk").onclick=nxModalClose}
 setInterval(()=>{try{fixCheck()}catch(e){}},4000);
 // ================= cristales Z: icono oficial de la mochila (repositorio pokesprite) =================

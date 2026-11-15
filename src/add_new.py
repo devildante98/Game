@@ -16,6 +16,8 @@ rep('trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),','''trDel:id=>S.deleteDoc(S.d
     reportAdd:d=>S.addDoc(S.collection(db,"reports"),d),
     async reportList(){const sn=await S.getDocs(S.query(S.collection(db,"reports"),S.orderBy("at","desc"),S.limit(100)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     reportDel:id=>S.deleteDoc(S.doc(db,"reports",id)),
+    async flagList(){const sn=await S.getDocs(S.query(S.collection(db,"flags"),S.orderBy("at","desc"),S.limit(100)));return sn.docs.map(d=>{const v=d.data();return Object.assign({id:d.id},v,{at:v.at&&v.at.toMillis?v.at.toMillis():0})})},
+    flagDel:id=>S.deleteDoc(S.doc(db,"flags",id)),
     async banList(){const sn=await S.getDocs(S.collection(db,"bans"));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     banSet:(u,d)=>S.setDoc(S.doc(db,"bans",u),d),
     banDel:u=>S.deleteDoc(S.doc(db,"bans",u)),

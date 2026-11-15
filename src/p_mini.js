@@ -197,4 +197,7 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
   d.innerHTML='<span class="mgbi">🎮</span><span class="mgbt"><b>¡Minijuegos!</b><small>¿Quién es ese Pokémon?, Pesca, Diglett… ¡gana tickets jugando!</small></span><span class="mgbg">JUGAR ▶</span>';
   d.onclick=()=>{snd("ui");hubOpen("mg")};const h=ep.querySelector("h2");if(h)h.after(d);else ep.prepend(d)})();
 // el servidor apunta la hora a la que empieza cada partida (sirve para comprobar que la puntuación es posible)
-function mgPlayStart(id){try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid())window.FB.playStart(id)}catch(e){}}
+// el servidor cuenta el tiempo de cada partida desde aquí; antes se espera a que se haya subido la marca de la anterior
+// (si no, al pulsar «Otra vez» muy rápido la marca llegaba con el reloj ya reiniciado y se rechazaba)
+function mgPlayStart(id){try{if(typeof mgrW==="function")mgrW().ls[id]=Date.now()}catch(e){}
+  try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid()){const go=()=>window.FB.playStart(id);const b=typeof MGR!=="undefined"&&MGR.busy;if(b)Promise.race([b,new Promise(r=>setTimeout(r,8000))]).then(go,go);else go()}}catch(e){}}

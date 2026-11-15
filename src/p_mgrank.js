@@ -11,33 +11,50 @@ function mgrRw(gid,pos){const T=mgrTier(pos);if(!T)return null;const rw={t:tkOf(
   for(let k=0;k<T.x;k++)Object.keys(ex).forEach(i=>{if(i==="_hold"){const h=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[h]=(rw.it[h]||0)+1}else if(i==="_evo"){const ev=ITEMS.filter(q=>q[7]==="evo"),e=ev[Math.floor(Math.random()*ev.length)][0];rw.it[e]=(rw.it[e]||0)+1}else rw.it[i]=(rw.it[i]||0)+ex[i]});
   return rw}
 const mgrExTxt=gid=>{const e=MGR_EX[gid]||{};return Object.keys(e).map(k=>k==="_hold"?"objeto equipable":k==="_evo"?"piedra evolutiva":(e[k]>1?e[k]+" ":"")+IN2(k)).join(" + ")};
-var MGR={g:null,top:{},at:{},prev:{},rs:{}};
-// sube tu marca a la clasificación. Si el servidor la rechaza, se avisa (así no se pierde en silencio) y se vuelve a
-// intentar sola la próxima vez que se abra la clasificación de ese juego
+var MGR={g:null,top:{},at:{},prev:{},rs:{},busy:null};
+// S.mgw (semana actual): b = tu mejor marca de la semana, c = la mejor que ha entrado en la nube, ls = cuándo empezó la
+// última partida de cada juego, pend = marca que no se pudo subir por la conexión.
+// El servidor comprueba cada marca con el tiempo desde que empezó la ÚLTIMA partida de ese juego. Por eso:
+//  · se sube toda marca que mejore la de la nube (aunque en este dispositivo haya apuntada una mayor que no entró);
+//  · una marca rechazada no se reintenta (más tarde ya no se puede comprobar), y una que falló por la conexión solo se
+//    reintenta si no has empezado otra partida de ese juego;
+//  · la siguiente partida no empieza a contar en el servidor hasta que la marca anterior se ha subido.
+const mgrW=()=>{const w=tourWeek();
+  // al empezar una semana nueva, la anterior se guarda aparte hasta cobrar sus premios (mgrClaim)
+  if(S.mgw&&S.mgw.w!==w&&S.mgw.w===tourPrevWeek()&&S.mgrDone!==S.mgw.w)S.mgwPrev=S.mgw;
+  S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};S.mgw.b=S.mgw.b||{};S.mgw.c=S.mgw.c||{};S.mgw.ls=S.mgw.ls||{};return S.mgw};
 function mgrPut(gid,score,loud){const w=tourWeek();if(!(window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid()))return;
-  window.FB.tourSet(MGR_KEY(w,gid),{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()})
-    .then(()=>{MGR.at[gid]=0;if(S.mgw&&S.mgw.pend)delete S.mgw.pend[gid]})
-    .catch(e=>{if(S.mgw&&S.mgw.w===w){S.mgw.pend=S.mgw.pend||{};S.mgw.pend[gid]=score;save()}
-      if(loud)try{toast("⚠️ No se ha podido guardar tu marca de "+fmt(score)+" en la clasificación"+(e&&e.code==="permission-denied"?" (el servidor la ha rechazado)":"")+". Se volverá a intentar sola.")}catch(x){}})}
+  const ls=mgrW().ls[gid]||0;
+  const ok=sc=>{MGR.at[gid]=0;const M=mgrW();if(M.w!==w)return;M.c[gid]=Math.max(M.c[gid]|0,sc|0);if(M.pend)delete M.pend[gid];if((sc|0)>(M.b[gid]|0))M.b[gid]=sc|0;save()};
+  const p=window.FB.tourSet(MGR_KEY(w,gid),{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()})
+    .then(sc=>ok(typeof sc==="number"?sc:score))
+    .catch(e=>{const M=mgrW();if(M.w!==w)return;const den=e&&e.code==="permission-denied";M.pend=M.pend||{};
+      if(den)delete M.pend[gid];else M.pend[gid]={sc:score,ls:ls};save();
+      if(loud)try{toast(den?"⚠️ Tu marca de "+fmt(score)+" no ha entrado en la clasificación: el servidor la ha rechazado.":"⚠️ No se ha podido subir tu marca de "+fmt(score)+" a la clasificación (¿sin conexión?). Se volverá a intentar sola.")}catch(x){}});
+  MGR.busy=Promise.resolve(MGR.busy).then(()=>p,()=>p).catch(()=>{});return p}
 function mgrSubmit(gid,score){
-  if(score<=0||!MGS.some(g=>g.id===gid))return "";const w=tourWeek();S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};
-  if(score<=(S.mgw.b[gid]|0))return "";S.mgw.b[gid]=score;save();
+  if(score<=0||!MGS.some(g=>g.id===gid))return "";const M=mgrW();
+  const nb=score>(M.b[gid]|0);if(nb)M.b[gid]=score;save();
+  if(score<=(M.c[gid]|0))return "";
   mgrPut(gid,score,true);
-  return '<p class="tourm">📊 Nueva mejor marca semanal en la clasificación: <b>'+fmt(score)+'</b></p>';
+  return '<p class="tourm">📊 '+(nb?'Nueva mejor marca semanal en la clasificación':'Tu marca sube a la clasificación')+': <b>'+fmt(score)+'</b></p>';
 }
 async function mgrLoad(gid,force){if(!window.FB||!window.FB.tourTop)return null;const w=tourWeek();if(!force&&MGR.top[gid]&&MGR.top[gid].w===w&&Date.now()-(MGR.at[gid]||0)<60e3)return MGR.top[gid].l;
   try{const l=await window.FB.tourTop(MGR_KEY(w,gid),25);MGR.top[gid]={w:w,l:l};MGR.at[gid]=Date.now();
     // si en la nube tienes una marca mejor que la de este dispositivo, se usa esa
-    const me=window.FB.uid&&window.FB.uid(),x=me&&l.find(y=>y.id===me);if(x&&(x.sc|0)>0){S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};if((x.sc|0)>(S.mgw.b[gid]|0)){S.mgw.b[gid]=x.sc|0;save()}}
-    // si tu mejor marca de la semana no llegó a la nube (o llegó una peor), se vuelve a subir una vez por sesión
-    const loc=S.mgw&&S.mgw.w===w?(S.mgw.b[gid]|0):0;if(me&&loc>0&&!MGR.rs[gid]&&((S.mgw.pend&&S.mgw.pend[gid])||(x&&(x.sc|0)<loc)||(!x&&(l.length<25||loc>(l[l.length-1].sc|0))))){MGR.rs[gid]=1;mgrPut(gid,loc,false)}
+    const me=window.FB.uid&&window.FB.uid(),x=me&&l.find(y=>y.id===me),M=mgrW();
+    if(x&&(x.sc|0)>0){let ch=false;if((x.sc|0)>(M.c[gid]|0)){M.c[gid]=x.sc|0;ch=true}if((x.sc|0)>(M.b[gid]|0)){M.b[gid]=x.sc|0;ch=true}if(ch)save()}
+    // una marca que no se pudo subir por la conexión se reintenta (una vez por sesión) si no has empezado otra partida de ese juego
+    const pd=M.pend&&M.pend[gid];
+    if(pd&&typeof pd!=="object"){delete M.pend[gid];save()}
+    else if(me&&pd&&!MGR.rs[gid]){if((pd.ls|0)===(M.ls[gid]|0)&&(pd.sc|0)>(M.c[gid]|0)){MGR.rs[gid]=1;mgrPut(gid,pd.sc|0,false)}else{delete M.pend[gid];save()}}
   }catch(e){MGR.top[gid]=MGR.top[gid]||{w:w,l:[]}}return MGR.top[gid].l}
 // premios de la semana pasada
 async function mgrClaim(){
-  const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!window.FB.uid||!window.FB.uid())return;if(!S.mgw||S.mgw.w!==pw||S.mgrDone===pw)return;
+  const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!window.FB.uid||!window.FB.uid())return;const PM_=S.mgw&&S.mgw.w===pw?S.mgw:S.mgwPrev&&S.mgwPrev.w===pw?S.mgwPrev:null;if(!PM_||S.mgrDone===pw)return;
   const me=window.FB.uid(),won=[];
-  for(const gid of Object.keys(S.mgw.b||{})){if(!(S.mgw.b[gid]>0))continue;let top=null;try{top=await window.FB.tourTop(MGR_KEY(pw,gid),25)}catch(e){return}const i=(top||[]).findIndex(x=>x.id===me);const rw=mgrRw(gid,i);if(rw){grant(rw);won.push({g:MGS.find(x=>x.id===gid),i:i,rw:rw})}}
-  S.mgrDone=pw;save();render();if(!won.length)return;snd("win");
+  for(const gid of Object.keys(PM_.b||{})){if(!(PM_.b[gid]>0))continue;let top=null;try{top=await window.FB.tourTop(MGR_KEY(pw,gid),25)}catch(e){return}const i=(top||[]).findIndex(x=>x.id===me);const rw=mgrRw(gid,i);if(rw){grant(rw);won.push({g:MGS.find(x=>x.id===gid),i:i,rw:rw})}}
+  S.mgrDone=pw;delete S.mgwPrev;save();render();if(!won.length)return;snd("win");
   nxModal('<div class="hofb">📊</div><h3>¡Premios de la clasificación semanal!</h3><p class="mut">Semana '+pw.split("-W")[1]+'</p><div class="mgrwon">'+won.map(x=>'<div><span>'+(MGR_TIER.find(t=>t.p>=x.i+1)||{}).ic+'</span><b>'+(x.g?x.g.ic+" "+x.g.n:"")+'</b><small>'+(x.i+1)+'º · '+rwTxt(x.rw)+'</small></div>').join("")+'</div><button id="mgrOk">¡Genial!</button>');$("mgrOk").onclick=nxModalClose;
 }
 setTimeout(()=>{try{mgrClaim()}catch(e){}},9000);

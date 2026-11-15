@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.1.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794779437">
+<meta name="game-build" content="1794781064">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2944,7 +2944,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.1</small>
+    <small class="pcver">Versión 7.1.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7626,8 +7626,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.1";
+const GAME_VER="7.1.1";
 const NEWS=[
+{v:"2026-11-15-7.1.1",ver:"7.1.1",at:"2026-11-15T23:17",t:"📊 Clasificación de minijuegos: tus marcas ya entran",l:["Arreglado: si alguna vez una marca tuya no llegaba a la clasificación (por ejemplo, las de más de 20.000 en la Carrera de Rapidash de antes), el juego la seguía tomando como tu mejor marca de la semana y no subía las siguientes aunque fueran buenas","Ahora se sube cualquier marca que mejore la que tienes en la clasificación","Si una marca no entra, te avisa al momento"]},
 {v:"2026-11-15-7.1",ver:"7.1",at:"2026-11-15T22:50",t:"🛡️ Tu partida, guardada y revisada por el servidor",l:["Ahora las partidas en la nube solo las guarda el servidor del juego: desde el navegador ya no se pueden escribir ni borrar","Cada vez que se guarda, el servidor la compara con la anterior y con el tiempo que ha pasado. Si hay progreso que no se puede conseguir jugando (tickets, Pokémon u objetos que aparecen de la nada), no se guarda y vuelves a tu última partida buena","Jugando normal no cambia nada: los márgenes son muy amplios, y las ventas del mercadillo y las devoluciones de tickets también se tienen en cuenta","Si cierras el juego sin que se haya subido lo último, al volver a entrar en el mismo dispositivo se conserva y se sube","Si tenías el juego abierto desde antes de esta versión, recarga la página para que se vuelva a guardar en la nube"]},
 {v:"2026-11-15-7.0",ver:"7.0",at:"2026-11-15T16:22",t:"🔒 Revisión de seguridad: el juego, más justo para todos",l:["Hemos revisado todo el juego en busca de trampas que perjudicaran a otros jugadores y las hemos cerrado","Chat y sugerencias: arreglado un fallo por el que una foto o un dato preparados podían ejecutar código en la pantalla de quien los viera. Tampoco se pueden fijar mensajes arriba con fechas falsas ni hacerse pasar por avisos del sistema","Clasificaciones: en la Carrera de Rapidash, Peso y altura y Más o menos, el servidor comprueba que la puntuación sea posible en el tiempo jugado","Incursiones: solo los participantes pueden golpear al jefe, y ganar exige dejarlo de verdad a 0","Gremios: nadie puede dejar al jefe semanal a 0 ni completar las misiones de golpe; nadie hace él solo más del 60 % del jefe (salvo en gremios de una persona)","Intercambios: el Pokémon ofrecido ya no se puede cambiar después, y cada uno solo puede dar los pasos que le tocan","Duelos de siluetas: nadie puede tocar las respuestas del rival","Invitar amigos: cada cuenta solo puede usar un código, las medallas del invitado suben de una en una, y se cobran premios por hasta 15 amigos"]},
 {v:"2026-11-15-6.99",ver:"6.99",at:"2026-11-15T15:56",t:"📱💻 Tu partida, abierta en un solo sitio a la vez",l:["Si abres tu cuenta en otro dispositivo (o en otra pestaña), ese pasa a ser el activo y el anterior se pausa al momento con un aviso: «Tu partida se ha abierto en otro sitio»","Con «▶ Jugar aquí» vuelves a tomar el control: se carga tu partida con todo lo que hiciste en el otro sitio, y se pausa el otro","Así ya no se pierde progreso porque una copia vieja pise a la nueva al guardar en la nube, y no se pueden duplicar Pokémon, ventas ni premios jugando en dos sitios a la vez","El servidor también rechaza los guardados de un dispositivo que ya no es el activo, por si estaba sin conexión o dormido"]},
@@ -7985,7 +7986,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794779437";
+const GAME_B="1794781064";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9613,7 +9614,10 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
   d.innerHTML='<span class="mgbi">🎮</span><span class="mgbt"><b>¡Minijuegos!</b><small>¿Quién es ese Pokémon?, Pesca, Diglett… ¡gana tickets jugando!</small></span><span class="mgbg">JUGAR ▶</span>';
   d.onclick=()=>{snd("ui");hubOpen("mg")};const h=ep.querySelector("h2");if(h)h.after(d);else ep.prepend(d)})();
 // el servidor apunta la hora a la que empieza cada partida (sirve para comprobar que la puntuación es posible)
-function mgPlayStart(id){try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid())window.FB.playStart(id)}catch(e){}}
+// el servidor cuenta el tiempo de cada partida desde aquí; antes se espera a que se haya subido la marca de la anterior
+// (si no, al pulsar «Otra vez» muy rápido la marca llegaba con el reloj ya reiniciado y se rechazaba)
+function mgPlayStart(id){try{if(typeof mgrW==="function")mgrW().ls[id]=Date.now()}catch(e){}
+  try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid()){const go=()=>window.FB.playStart(id);const b=typeof MGR!=="undefined"&&MGR.busy;if(b)Promise.race([b,new Promise(r=>setTimeout(r,8000))]).then(go,go);else go()}}catch(e){}}
 
 // =====================================================================================
 // MÁS MINIJUEGOS: Carrera de Rapidash, Excavación subterránea, Peso y altura,
@@ -13620,33 +13624,50 @@ function mgrRw(gid,pos){const T=mgrTier(pos);if(!T)return null;const rw={t:tkOf(
   for(let k=0;k<T.x;k++)Object.keys(ex).forEach(i=>{if(i==="_hold"){const h=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[h]=(rw.it[h]||0)+1}else if(i==="_evo"){const ev=ITEMS.filter(q=>q[7]==="evo"),e=ev[Math.floor(Math.random()*ev.length)][0];rw.it[e]=(rw.it[e]||0)+1}else rw.it[i]=(rw.it[i]||0)+ex[i]});
   return rw}
 const mgrExTxt=gid=>{const e=MGR_EX[gid]||{};return Object.keys(e).map(k=>k==="_hold"?"objeto equipable":k==="_evo"?"piedra evolutiva":(e[k]>1?e[k]+" ":"")+IN2(k)).join(" + ")};
-var MGR={g:null,top:{},at:{},prev:{},rs:{}};
-// sube tu marca a la clasificación. Si el servidor la rechaza, se avisa (así no se pierde en silencio) y se vuelve a
-// intentar sola la próxima vez que se abra la clasificación de ese juego
+var MGR={g:null,top:{},at:{},prev:{},rs:{},busy:null};
+// S.mgw (semana actual): b = tu mejor marca de la semana, c = la mejor que ha entrado en la nube, ls = cuándo empezó la
+// última partida de cada juego, pend = marca que no se pudo subir por la conexión.
+// El servidor comprueba cada marca con el tiempo desde que empezó la ÚLTIMA partida de ese juego. Por eso:
+//  · se sube toda marca que mejore la de la nube (aunque en este dispositivo haya apuntada una mayor que no entró);
+//  · una marca rechazada no se reintenta (más tarde ya no se puede comprobar), y una que falló por la conexión solo se
+//    reintenta si no has empezado otra partida de ese juego;
+//  · la siguiente partida no empieza a contar en el servidor hasta que la marca anterior se ha subido.
+const mgrW=()=>{const w=tourWeek();
+  // al empezar una semana nueva, la anterior se guarda aparte hasta cobrar sus premios (mgrClaim)
+  if(S.mgw&&S.mgw.w!==w&&S.mgw.w===tourPrevWeek()&&S.mgrDone!==S.mgw.w)S.mgwPrev=S.mgw;
+  S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};S.mgw.b=S.mgw.b||{};S.mgw.c=S.mgw.c||{};S.mgw.ls=S.mgw.ls||{};return S.mgw};
 function mgrPut(gid,score,loud){const w=tourWeek();if(!(window.FB&&window.FB.tourSet&&window.FB.uid&&window.FB.uid()))return;
-  window.FB.tourSet(MGR_KEY(w,gid),{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()})
-    .then(()=>{MGR.at[gid]=0;if(S.mgw&&S.mgw.pend)delete S.mgw.pend[gid]})
-    .catch(e=>{if(S.mgw&&S.mgw.w===w){S.mgw.pend=S.mgw.pend||{};S.mgw.pend[gid]=score;save()}
-      if(loud)try{toast("⚠️ No se ha podido guardar tu marca de "+fmt(score)+" en la clasificación"+(e&&e.code==="permission-denied"?" (el servidor la ha rechazado)":"")+". Se volverá a intentar sola.")}catch(x){}})}
+  const ls=mgrW().ls[gid]||0;
+  const ok=sc=>{MGR.at[gid]=0;const M=mgrW();if(M.w!==w)return;M.c[gid]=Math.max(M.c[gid]|0,sc|0);if(M.pend)delete M.pend[gid];if((sc|0)>(M.b[gid]|0))M.b[gid]=sc|0;save()};
+  const p=window.FB.tourSet(MGR_KEY(w,gid),{sc:score,cr:myCrown(),n:pvClean(pvNick()).slice(0,30),tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",at:Date.now()})
+    .then(sc=>ok(typeof sc==="number"?sc:score))
+    .catch(e=>{const M=mgrW();if(M.w!==w)return;const den=e&&e.code==="permission-denied";M.pend=M.pend||{};
+      if(den)delete M.pend[gid];else M.pend[gid]={sc:score,ls:ls};save();
+      if(loud)try{toast(den?"⚠️ Tu marca de "+fmt(score)+" no ha entrado en la clasificación: el servidor la ha rechazado.":"⚠️ No se ha podido subir tu marca de "+fmt(score)+" a la clasificación (¿sin conexión?). Se volverá a intentar sola.")}catch(x){}});
+  MGR.busy=Promise.resolve(MGR.busy).then(()=>p,()=>p).catch(()=>{});return p}
 function mgrSubmit(gid,score){
-  if(score<=0||!MGS.some(g=>g.id===gid))return "";const w=tourWeek();S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};
-  if(score<=(S.mgw.b[gid]|0))return "";S.mgw.b[gid]=score;save();
+  if(score<=0||!MGS.some(g=>g.id===gid))return "";const M=mgrW();
+  const nb=score>(M.b[gid]|0);if(nb)M.b[gid]=score;save();
+  if(score<=(M.c[gid]|0))return "";
   mgrPut(gid,score,true);
-  return '<p class="tourm">📊 Nueva mejor marca semanal en la clasificación: <b>'+fmt(score)+'</b></p>';
+  return '<p class="tourm">📊 '+(nb?'Nueva mejor marca semanal en la clasificación':'Tu marca sube a la clasificación')+': <b>'+fmt(score)+'</b></p>';
 }
 async function mgrLoad(gid,force){if(!window.FB||!window.FB.tourTop)return null;const w=tourWeek();if(!force&&MGR.top[gid]&&MGR.top[gid].w===w&&Date.now()-(MGR.at[gid]||0)<60e3)return MGR.top[gid].l;
   try{const l=await window.FB.tourTop(MGR_KEY(w,gid),25);MGR.top[gid]={w:w,l:l};MGR.at[gid]=Date.now();
     // si en la nube tienes una marca mejor que la de este dispositivo, se usa esa
-    const me=window.FB.uid&&window.FB.uid(),x=me&&l.find(y=>y.id===me);if(x&&(x.sc|0)>0){S.mgw=S.mgw&&S.mgw.w===w?S.mgw:{w:w,b:{}};if((x.sc|0)>(S.mgw.b[gid]|0)){S.mgw.b[gid]=x.sc|0;save()}}
-    // si tu mejor marca de la semana no llegó a la nube (o llegó una peor), se vuelve a subir una vez por sesión
-    const loc=S.mgw&&S.mgw.w===w?(S.mgw.b[gid]|0):0;if(me&&loc>0&&!MGR.rs[gid]&&((S.mgw.pend&&S.mgw.pend[gid])||(x&&(x.sc|0)<loc)||(!x&&(l.length<25||loc>(l[l.length-1].sc|0))))){MGR.rs[gid]=1;mgrPut(gid,loc,false)}
+    const me=window.FB.uid&&window.FB.uid(),x=me&&l.find(y=>y.id===me),M=mgrW();
+    if(x&&(x.sc|0)>0){let ch=false;if((x.sc|0)>(M.c[gid]|0)){M.c[gid]=x.sc|0;ch=true}if((x.sc|0)>(M.b[gid]|0)){M.b[gid]=x.sc|0;ch=true}if(ch)save()}
+    // una marca que no se pudo subir por la conexión se reintenta (una vez por sesión) si no has empezado otra partida de ese juego
+    const pd=M.pend&&M.pend[gid];
+    if(pd&&typeof pd!=="object"){delete M.pend[gid];save()}
+    else if(me&&pd&&!MGR.rs[gid]){if((pd.ls|0)===(M.ls[gid]|0)&&(pd.sc|0)>(M.c[gid]|0)){MGR.rs[gid]=1;mgrPut(gid,pd.sc|0,false)}else{delete M.pend[gid];save()}}
   }catch(e){MGR.top[gid]=MGR.top[gid]||{w:w,l:[]}}return MGR.top[gid].l}
 // premios de la semana pasada
 async function mgrClaim(){
-  const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!window.FB.uid||!window.FB.uid())return;if(!S.mgw||S.mgw.w!==pw||S.mgrDone===pw)return;
+  const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!window.FB.uid||!window.FB.uid())return;const PM_=S.mgw&&S.mgw.w===pw?S.mgw:S.mgwPrev&&S.mgwPrev.w===pw?S.mgwPrev:null;if(!PM_||S.mgrDone===pw)return;
   const me=window.FB.uid(),won=[];
-  for(const gid of Object.keys(S.mgw.b||{})){if(!(S.mgw.b[gid]>0))continue;let top=null;try{top=await window.FB.tourTop(MGR_KEY(pw,gid),25)}catch(e){return}const i=(top||[]).findIndex(x=>x.id===me);const rw=mgrRw(gid,i);if(rw){grant(rw);won.push({g:MGS.find(x=>x.id===gid),i:i,rw:rw})}}
-  S.mgrDone=pw;save();render();if(!won.length)return;snd("win");
+  for(const gid of Object.keys(PM_.b||{})){if(!(PM_.b[gid]>0))continue;let top=null;try{top=await window.FB.tourTop(MGR_KEY(pw,gid),25)}catch(e){return}const i=(top||[]).findIndex(x=>x.id===me);const rw=mgrRw(gid,i);if(rw){grant(rw);won.push({g:MGS.find(x=>x.id===gid),i:i,rw:rw})}}
+  S.mgrDone=pw;delete S.mgwPrev;save();render();if(!won.length)return;snd("win");
   nxModal('<div class="hofb">📊</div><h3>¡Premios de la clasificación semanal!</h3><p class="mut">Semana '+pw.split("-W")[1]+'</p><div class="mgrwon">'+won.map(x=>'<div><span>'+(MGR_TIER.find(t=>t.p>=x.i+1)||{}).ic+'</span><b>'+(x.g?x.g.ic+" "+x.g.n:"")+'</b><small>'+(x.i+1)+'º · '+rwTxt(x.rw)+'</small></div>').join("")+'</div><button id="mgrOk">¡Genial!</button>');$("mgrOk").onclick=nxModalClose;
 }
 setTimeout(()=>{try{mgrClaim()}catch(e){}},9000);
@@ -19838,7 +19859,7 @@ async function main(){
     duWatch:(id,cb)=>S.onSnapshot(S.doc(db,"sdu",id),sn=>cb(sn.exists()?Object.assign({id:sn.id},sn.data()):null),()=>{}),
     duInbox(cb){return S.onSnapshot(S.query(S.collection(db,"sdu"),S.where("b","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
     // solo sube la marca si es mejor que la guardada (si no, una partida de otro dispositivo podía bajarla)
-    tourSet:(w,d)=>{const r=S.doc(db,"tours",w,"s",uid);return S.runTransaction(db,async tx=>{const o=await tx.get(r);if(o.exists()&&(+o.data().sc||0)>=(+d.sc||0))return;tx.set(r,d)})},
+    tourSet:(w,d)=>{const r=S.doc(db,"tours",w,"s",uid);return S.runTransaction(db,async tx=>{const o=await tx.get(r);if(o.exists()&&(+o.data().sc||0)>=(+d.sc||0))return +o.data().sc||0;tx.set(r,d);return +d.sc||0})},
     async tourTop(w,n){const sn=await S.getDocs(S.query(S.collection(db,"tours",w,"s"),S.orderBy("sc","desc"),S.limit(n)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     chDel(tp,id,m){return S.deleteDoc(tp==="global"?S.doc(db,"chats","global","msgs",m):tp==="g"?S.doc(db,"gchats",id,"msgs",m):S.doc(db,"dms",id,"msgs",m))},
     async rankSave(d){if(!d||!uid)return;const j=JSON.stringify(d);if(j===lastRank)return;await S.setDoc(S.doc(db,"ranks",uid),Object.assign({},d,{at:Date.now()}));lastRank=j},

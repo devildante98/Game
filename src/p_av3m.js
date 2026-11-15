@@ -6,7 +6,10 @@
 // pinta pegada al relieve de la cabeza, y el pelo, los gorros y los complementos se acoplan encima.
 // Las figuras pequeñas del mapa siguen saliendo del modelo de siempre: a ese tamaño no se nota y no descarga nada.
 // =====================================================================================
-const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"9",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
+const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"9",t:0};
+// versión ligera (models/lo: las mismas piezas con menos polígonos) en móviles, tabletas, equipos con poca memoria y en modo ligero.
+// El editor del entrenador (donde se puede acercar mucho) usa siempre la versión completa.
+const av3mLo=()=>{try{return !!((typeof O!=="undefined"&&O.lite)||(typeof GM!=="undefined"&&GM&&GM.liteAuto)||matchMedia("(pointer:coarse)").matches||(navigator.deviceMemory&&navigator.deviceMemory<=4))}catch(e){return false}};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
 function av3mParse(buf){const dv=new DataView(buf);let off=12,json=null,bin=null;
   while(off<dv.byteLength){const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),ch=buf.slice(off+8,off+8+len);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(ch));else bin=ch;off+=8+len}
   const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],o=(bv.byteOffset||0)+(a.byteOffset||0),n=a.count*{SCALAR:1,VEC3:3}[a.type];
@@ -26,19 +29,21 @@ function av3mPump(){while(AV3M.busy<3&&AV3M.q.length){const n=AV3M.q.shift();AV3
 // cuando llega una pieza, lo que se dibujó con el modelo de siempre se vuelve a dibujar
 function av3mFresh(){clearTimeout(AV3M.t);AV3M.t=setTimeout(()=>{try{AV3S.url={};AV3S.n=0;for(const k in AV3V)if(AV3V[k])AV3V[k].sig=null;if(typeof GM!=="undefined"&&GM){GM.look=null;GM.town="";dispatchEvent(new Event("resize"))}if(document.getElementById("trPrev")&&typeof trUI==="function"&&!document.getElementById("av3Big"))trUI()}catch(e){}},150)}
 // ¿hay alguna pieza de este aspecto todavía descargándose?
-function av3mWait(L){if(av3mReady(L))return false;return av3mNeed(L).every(n=>AV3M.st[n]===1||AV3M.st[n]===2)}
+function av3mWait(L,lo){if(av3mReady(L,lo))return false;return av3mNeed(L,lo).every(n=>AV3M.st[n]===1||AV3M.st[n]===2)}
 function av3mGet(n){const s=AV3M.st[n];if(s===2)return true;if(!s){AV3M.st[n]=1;AV3M.q.push(n);av3mPump()}return false}
 // piezas que necesita un aspecto: datos, cabeza (según la forma de la cara), cuerpo, parte de arriba, calzado y parte de abajo
 // peinados sin pieza: rapado y calvo (van pintados sobre la cabeza)
 const AV3M_NOHAIR=[5,22];
 // gorros con pieza (las gafas de sol y de aviador se dibujan como gafas)
 const av3mHat=L=>L.hat>0&&L.hat!==7&&L.hat!==13;
-function av3mNeed(L){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0)].concat(AV3M_NOHAIR.includes(L.hs)?[]:["hair"+L.hs]).concat(av3mHat(L)?["hat"+L.hat]:[]).concat([L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs]).concat([4,23,26].includes(L.top)?[]:["bot"+L.bot])}
-function av3mReady(L){if(typeof fetch!=="function")return false;let ok=true;for(const n of av3mNeed(L))if(!av3mGet(n))ok=false;return ok}
+function av3mNeed(L,lo){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0)].concat(AV3M_NOHAIR.includes(L.hs)?[]:["hair"+L.hs]).concat(av3mHat(L)?["hat"+L.hat]:[]).concat([L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs]).concat([4,23,26].includes(L.top)?[]:["bot"+L.bot]).map(n=>lo&&n!=="tr_meta"?"lo/"+n:n)}
+function av3mReady(L,lo){if(typeof fetch!=="function")return false;let ok=true;for(const n of av3mNeed(L,lo))if(!av3mGet(n))ok=false;return ok}
+// ¿están ya todas las piezas descargadas? (sin pedir ninguna)
+const av3mHas=(L,lo)=>av3mNeed(L,lo).every(n=>AV3M.st[n]===2);
 // ---------- el modelo ----------
-function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][0]),W=[1,1,1],K=[.1,.09,.12],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k),I=m4I();
+function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][0]),W=[1,1,1],K=[.1,.09,.12],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k),I=m4I();
   const sk=P("skin",L.sk),hc=P("hair",L.hc),ec=P("eye",L.ec),tc=P("cl",L.tc),ac=P("cl",L.ac),bc=P("cl",L.bc),shc=P("cl",L.sh),hac=P("cl",L.hac),bpc=P("cl",L.bpc),nkc=P("cl",L.nkc),glc=P("cl",L.glc),pcc=P("cl",L.pc),sckc=P("cl",L.sckc),wrc=P("cl",L.wrc);
-  const meta=AV3M.meta,t=o.t||0,pose=o.pose||"i",girl=L.b===1,top=L.top,dress=[4,23,26].includes(top),mt=meta.pieces["top"+top],mb=dress?{hide:[]}:meta.pieces["bot"+L.bot],ms=meta.pieces["shoe"+L.shs],TP=AV3M.pc["top"+top];
+  const meta=AV3M.meta,t=o.t||0,pose=o.pose||"i",girl=L.b===1,top=L.top,dress=[4,23,26].includes(top),mt=meta.pieces["top"+top],mb=dress?{hide:[]}:meta.pieces["bot"+L.bot],ms=meta.pieces["shoe"+L.shs],TP=PC("top"+top);
   const hide={};mt.hide.concat(mb.hide).forEach(k=>hide[k]=1);const showTorso=(mt.show||[]).includes("torso"),open=[1,3,8,11,12,15,19,20,25,27,18,16].includes(top);
   const COL={skin:sk,top:tc,topd:dk(tc,.2),topl:lt(tc,.86),inner:top===12||top===8?lt(ac,.1):ac,bot:bc,botd:dk(bc,.25),botl:lt(bc,.22),shoe:shc,shoed:dk(shc,.5),sole:[.96,.96,.98],white:[.97,.97,.99]};
   // ----- articulaciones: cada segmento gira alrededor de la suya -----
@@ -58,15 +63,15 @@ function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k]
         if(p.tag==="palm"&&[1,2,4].includes(L.glv))c=glc;else if(p.tag==="finger"&&[2,4].includes(L.glv))c=glc;else if(p.tag==="farm"&&L.glv===4)c=glc;else if(tights&&(p.tag==="thigh"||p.tag==="shin"||p.tag==="foot"))c=tights}
       if(stripes&&p.slot==="top"&&(p.seg==="body"||p.name.indexOf("sleeve")===0))cf=y=>Math.floor((y-.9)/.055)%2?sc2:tc;
       E.mesh(p.seg==="head"?MH:MS[p.seg]||G,p.P,p.N,p.I,c,cf)}};
-  const fsn=L.fs===1||L.fs===2?L.fs:0;put(AV3M.pc["head"+fsn]);put(AV3M.pc[girl?"base_f":"base_m"],true);put(TP);if(!dress)put(AV3M.pc["bot"+L.bot]);put(AV3M.pc["shoe"+L.shs]);
+  const fsn=L.fs===1||L.fs===2?L.fs:0;put(PC("head"+fsn));put(PC(girl?"base_f":"base_m"),true);put(TP);if(!dress)put(PC("bot"+L.bot));put(PC("shoe"+L.shs));
   // ----- cara -----
   const fg=meta.faces[fsn],zAt=(x,y)=>{const gx=(x-fg.x0)/fg.d,gy=(y-fg.y0)/fg.d,ix=Math.max(0,Math.min(fg.g[0].length-2,Math.floor(gx))),iy=Math.max(0,Math.min(fg.g.length-2,Math.floor(gy))),fx=Math.max(0,Math.min(1,gx-ix)),fy=Math.max(0,Math.min(1,gy-iy)),v=(a,b)=>fg.g[b][a]==null?.02:fg.g[b][a];
       return(v(ix,iy)*(1-fx)+v(ix+1,iy)*fx)*(1-fy)+(v(ix,iy+1)*(1-fx)+v(ix+1,iy+1)*fx)*fy};
   av3mFace(E,L,{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W});
   // ----- pelo y gorro (formas de siempre, acopladas a la cabeza nueva) -----
-  const k0=hr[0]/.114,HM=m4S(m4T(MH,0,hcy,0),k0),hk=typeof chHatKind==="function"?chHatKind(L.hat):"",hatP=av3mHat(L)?AV3M.pc["hat"+L.hat]:null,hatOn=hatP?!!(meta.pieces["hat"+L.hat]||{}).cover:["cap","beanie","wide","top","hard"].includes(hk),hx=.114,hy=.128,hz=.118;
+  const k0=hr[0]/.114,HM=m4S(m4T(MH,0,hcy,0),k0),hk=typeof chHatKind==="function"?chHatKind(L.hat):"",hatP=av3mHat(L)?PC("hat"+L.hat):null,hatOn=hatP?!!(meta.pieces["hat"+L.hat]||{}).cover:["cap","beanie","wide","top","hard"].includes(hk),hx=.114,hy=.128,hz=.118;
   // pelo modelado: con gorro se ocultan las partes de arriba («top») y salen las versiones bajas («hat»)
-  const HP=AV3M_NOHAIR.includes(L.hs)?null:AV3M.pc["hair"+L.hs];
+  const HP=AV3M_NOHAIR.includes(L.hs)?null:PC("hair"+L.hs);
   const wxF=({1:.95,2:.99})[fsn]||1,MHh=m4T(m4Mul(m4T(MH,0,hcy,0),new Float32Array([wxF,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1])),0,-hcy,0);
   if(HP){const mcc=P("hair",L.mcc),mch=L.mch|0;
     const HCOL={hair:hc,haird:dk(hc,.24),hairl:lt(hc,.16),tie:hac};
@@ -179,7 +184,10 @@ function av3mFace(E,L,C){const{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W}=C,B0=.0036,
     else if(mo===3)line(.03,u=>(u+.35)*(u+.35)*.0095-.004);
     else{line(.031,u=>u*u*.012-.004);if(mo===4)E.fan(MH,wel(.004,my-.014,.012,.012,2,10),[.94,.46,.52]);if(mo===6)E.fan(MH,[wp(.013,my-.014,2),wp(.007,my-.002,2),wp(.019,my+.001,2)],W)}}}
 // ---------- enlace con el visor: si las piezas del aspecto están cargadas se usa el modelo de mallas ----------
-{const _m=av3Model;av3Model=function(E,L,o){o=o||{};if(o.chibi||o.old||!av3mReady(L))return _m.call(this,E,L,o);try{av3mModel(E,L,o)}catch(e){console.error(e);AV3M.st["top"+L.top]=3;av3mFresh()}};
-  av3Model.nowarp=(L,o)=>!(o&&(o.chibi||o.old))&&av3mReady(L)}
+{const _m=av3Model;av3Model=function(E,L,o){o=o||{};
+    // si se pide la versión ligera pero aún no ha llegado y la completa ya está, se usa la completa mientras tanto
+    if(o.lo&&!o.chibi&&!o.old&&!av3mReady(L,true)&&av3mHas(L,false))o=Object.assign({},o,{lo:false});
+    if(o.chibi||o.old||!av3mReady(L,o.lo))return _m.call(this,E,L,o);try{av3mModel(E,L,o)}catch(e){console.error(e);AV3M.st[(o.lo?"lo/":"")+"top"+L.top]=3;av3mFresh()}};
+  av3Model.nowarp=(L,o)=>!(o&&(o.chibi||o.old))&&(av3mReady(L,o&&o.lo)||!!(o&&o.lo&&av3mHas(L,false)))}
 // las piezas de tu aspecto se piden nada más entrar
-setTimeout(()=>{try{av3mReady(myLook())}catch(e){}},1200);
+setTimeout(()=>{try{av3mReady(myLook(),av3mLo())}catch(e){}},1200);

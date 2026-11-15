@@ -1,5 +1,6 @@
 # Genera en Blender (sin interfaz) las piezas 3D del entrenador y las exporta a  models/*.glb
 #   pip install bpy ;  python build_trainer.py -- ../../../models
+#   versión ligera para móviles (menos polígonos):  python build_trainer.py -- ../../../models/lo --lod
 # Ejes de Blender: X = izquierda del personaje, -Y = frente, Z = arriba. Unidades = las del visor del juego.
 # Cada objeto se llama  segmento.color.nombre[.etiqueta]
 #   segmento: body, head, armL1, armL2, armR1, armR2, legL, legR  (lo que gira con cada articulación)
@@ -10,6 +11,7 @@ from math import pi, cos, sin
 from mathutils import Vector
 
 OUT = sys.argv[sys.argv.index("--") + 1]
+LOD = "--lod" in sys.argv[sys.argv.index("--") + 1:]
 os.makedirs(OUT, exist_ok=True)
 META = {"pieces": {}}
 MATS = {}
@@ -57,8 +59,27 @@ def both(name, V, F, slot, segL, segR, **kw):
     mk(name + "R", [Vector((-v[0], v[1], v[2])) for v in V], [tuple(reversed(f)) for f in F], slot, segR, **kw)
 
 
+def lod_ratio(t):
+    """Cuánto se conserva de cada malla en la versión ligera: las grandes se simplifican más, las pequeñas casi nada."""
+    return 1.0 if t < 120 else 0.65 if t < 300 else 0.5 if t < 700 else 0.38 if t < 2000 else 0.28
+
+
 def save(piece, **info):
     dg = bpy.context.evaluated_depsgraph_get()
+    if LOD:
+        for o in list(bpy.context.scene.objects):
+            if o.type != "MESH":
+                continue
+            e = o.evaluated_get(dg)
+            me = e.to_mesh()
+            me.calc_loop_triangles()
+            r = lod_ratio(len(me.loop_triangles))
+            e.to_mesh_clear()
+            if r < 1:
+                m = o.modifiers.new("lod", "DECIMATE")
+                m.ratio = r
+        dg = bpy.context.evaluated_depsgraph_get()
+        dg.update()
     tris = 0
     for o in bpy.context.scene.objects:
         e = o.evaluated_get(dg)

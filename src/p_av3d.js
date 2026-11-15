@@ -268,7 +268,7 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   else if(L.bp===3)E.ell(T(.04,.975,TZ+.005),.08,.04,.04,bpc,null,1)}
 // ---------- imágenes fijas (tarjeta, perfil…) y vistas vivas (editor y juego base) ----------
 const AV3S={c:null,r:null,url:{},n:0};
-function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=o||{};const k=trEnc(L)+"|"+w+"x"+h+"|"+(o.yaw||0)+"|"+(o.zoom||1)+"|"+(o.cy||"")+"|"+(o.pose||"");if(AV3S.url[k])return AV3S.url[k];
+function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=Object.assign({lo:typeof av3mLo==="function"&&av3mLo()},o||{});const k=trEnc(L)+"|"+w+"x"+h+"|"+(o.yaw||0)+"|"+(o.zoom||1)+"|"+(o.cy||"")+"|"+(o.pose||"")+(o.lo?"|lo":"");if(AV3S.url[k])return AV3S.url[k];
   if(AV3S.r===null){AV3S.c=document.createElement("canvas");AV3S.r=AV3(AV3S.c,true)||false}if(!AV3S.r)return null;
   if(AV3S.n>400){AV3S.url={};AV3S.n=0}AV3S.c.width=w;AV3S.c.height=h;AV3S.r.draw(L,Object.assign({t:1.2},o));AV3S.n++;try{document.body.classList.add("av3")}catch(e){}return AV3S.url[k]=AV3S.c.toDataURL("image/png")}
 // vista viva en un contenedor (se puede girar arrastrando). Cada «clave» conserva su lienzo aunque el contenedor se
@@ -289,9 +289,9 @@ function av3Attach(host,key,getLook,o){if(!av3Attach.ready)return false;o=o||{};
   if(v.big&&host.id!=="av3BigH")return true;
   if(v.bad)return false;v.get=getLook;v.o=o;if(v.cv.parentNode!==host){host.innerHTML="";host.appendChild(v.cv)}
   if(!v.run){v.run=true;v.last=0;const calm=()=>typeof hubCalm==="function"&&hubCalm(),gap=o.fps?1000/o.fps:33;
-    const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
-      const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
-      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L)){v.sig=null;return}v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy})}catch(e){}};requestAnimationFrame(loop)}
+    const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(v.o.pause&&v.o.pause())return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
+      const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(v.o.lo?1.5:2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
+      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L,v.o.lo)&&!(v.o.lo&&av3mHas(L,false))){v.sig=null;return}v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy,lo:v.o.lo})}catch(e){}};requestAnimationFrame(loop)}
   return true}
 // zoom de una vista viva: k multiplica el zoom actual (1 = solo recolocar) y f es la altura del puntero (0 arriba, 1 abajo),
 // que se queda quieta al acercar. La vista nunca se sale del modelo.

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.96"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.97"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794734037">
+<meta name="game-build" content="1794741836">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2935,7 +2935,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.96</small>
+    <small class="pcver">Versión 6.97</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7617,8 +7617,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.96";
+const GAME_VER="6.97";
 const NEWS=[
+{v:"2026-11-15-6.97",ver:"6.97",at:"2026-11-15T12:23",t:"📱 El juego va más fluido en móviles",l:["En móviles, tabletas, equipos con poca memoria y en modo ligero, el entrenador 3D usa una versión ligera de todas sus piezas (peinados, gorros, ropa, calzado y cuerpo) con un 60 % menos de polígonos: se dibuja en menos de la mitad de tiempo y se ve prácticamente igual","En el móvil el entrenador de la pantalla principal se anima a 15 imágenes por segundo en vez de 24 y con una resolución algo menor, y deja de dibujarse mientras hay una ventana abierta encima","El paisaje de la pantalla principal se actualiza un poco menos a menudo en pantallas táctiles","Se descarga menos: en el móvil solo se piden las piezas ligeras. El editor del entrenador sigue usando la versión completa para verlo con todo detalle al acercarte"]},
 {v:"2026-11-15-6.96",ver:"6.96",at:"2026-11-15T10:13",t:"🏆 Premios mucho mejores en el Torneo semanal y en las clasificaciones",l:["Los tickets de premio crecen con tu pueblo: te llevas lo mayor entre una cantidad fija y varias horas de lo que produces. En el Torneo: 1º 24 h de producción (mínimo 50 millones), 2º 12 h, 3º 8 h, top 10 3 h, top 25 1,5 h y por participar 30 min","Torneo: el 1º recibe además 5 Master Ball, 10 Caramelos Raros, 3 PP máximos, 3 Cristales Supremos, 2 objetos equipables y el legendario de la semana siempre variocolor ✨; el 2º, 3 Master Ball, 6 Caramelos y la forma especial con un 50 % de ser variocolor; el 3º, 2 Master Ball, 4 Caramelos y su Pokémon variocolor","Nuevo: el top 10 del Torneo gana también un Pokémon épico de la semana y una Master Ball, y hay premios del 11º al 25º","Clasificación de cada minijuego: premian a los 25 primeros. 1º 6 h de producción (mínimo 10 millones), Master Ball, 3 Caramelos Raros y el premio especial del juego ×3; 2º 4 h; 3º 3 h; 4º–10º 1 h y el premio especial; 11º–25º 20 min","Todos los minijuegos tienen ya premio especial, y en cada panel ves exactamente lo que ganarías en cada puesto"]},
 {v:"2026-11-15-6.95",ver:"6.95",at:"2026-11-15T10:08",t:"💤 Carrera de Rapidash: Snorlax dormidos y más potenciadores",l:["Nuevo obstáculo desde el nivel 2: un Snorlax dormido tumbado que ocupa dos carriles. Cámbiate al carril libre o salta largo… y si caes sobre su barriga, ¡rebotas muy alto y ganas puntos! (¡Boing!)","🪙 Moneda Amuleto: tickets ×2 durante 10 s (todo lo que ganas, metros y tickets, cuenta doble)","⚡ Velocidad Extrema: 4 s a toda velocidad arrasando con todo lo que encuentras","💖 Revivir: si chocas, sigues corriendo una vez","Los potenciadores salen algo más a menudo, y arriba ves cuánto le queda a cada uno"]},
 {v:"2026-11-15-6.94.2",ver:"6.94.2",at:"2026-11-15T09:45",t:"🔧 Arreglos/Mejoras",l:["Intercambios: si tienes repetidos, ahora eliges cuál das. Junto a tu Pokémon principal (con su nivel) aparecen sus repetidos (Nv1, marcados con 🔁 y borde de puntos), y los variocolor repetidos aparte; puedes dar un repetido y quedarte con el principal","Vale para el intercambio con amigos, la sala de intercambio en directo y para vender en el mercado"]},
@@ -7971,7 +7972,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794734037";
+const GAME_B="1794741836";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14668,7 +14669,7 @@ function gmTop(){
   try{if(GM.scr==="stage"){const pm=+(($("pityM")||{}).textContent)||30,pv=+(($("pity")||{}).textContent)||0,left=Math.max(0,pm-pv);$("gPityN").textContent=left;$("gPityB").style.width=Math.min(100,pv/pm*100)+"%";$("gPity").classList.toggle("gnear",left<=5)}}catch(e){}
   try{const nk=S.nick?String(S.nick).slice(0,18):"Entrenador";if($("gNick").textContent!==nk)$("gNick").textContent=nk}catch(e){}
   try{const cv=parseFloat(($("cpsv")||{}).textContent)||0,cb=$("gCombo");if(cv>=1){$("gCmb").textContent=cv.toFixed(1);if(!cb.classList.contains("on"))cb.classList.add("on");cb.classList.toggle("hot",cv>=6)}else cb.classList.remove("on","hot")}catch(e){}
-  try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr&&!(typeof av3Attach==="function"&&av3Attach(tr,"hub",()=>myLook(),{yaw:.3,drag:false,fps:24})))tr.innerHTML=typeof chSpriteImg==="function"?chSpriteImg(myLook(),"d"):trImg(myLook(),"f","i")}}catch(e){}
+  try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr&&!(typeof av3Attach==="function"&&av3Attach(tr,"hub",()=>myLook(),{yaw:.3,drag:false,fps:av3mLo()?15:24,lo:av3mLo(),pause:()=>{const c=document.getElementById("gScr"),h=document.getElementById("hubM");return(c&&!c.hidden)||(h&&!h.hidden)}})))tr.innerHTML=typeof chSpriteImg==="function"?chSpriteImg(myLook(),"d"):trImg(myLook(),"f","i")}}catch(e){}
 }
 function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   const set=(el,v)=>{if(!el)return;const i=el.querySelector(".gbd");if(!i)return;i.hidden=!v;if(v)i.textContent=v===true?"!":v};
@@ -18954,13 +18955,13 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
 // ---------- conexión con la pantalla principal ----------
 (function(){const tryAttach=()=>{const bg=document.getElementById("gBg");if(!bg)return false;if(document.getElementById("gLand3"))return true;
     const cv=document.createElement("canvas");cv.id="gLand3";cv.setAttribute("aria-hidden","true");let L=null;try{L=LAND3(cv)}catch(e){L=null}if(!L)return true;
-    bg.appendChild(cv);document.body.classList.add("land3");window.pcPause=1;window.LAND3I=L;
+    bg.appendChild(cv);document.body.classList.add("land3");try{L._coarse=matchMedia("(pointer:coarse)").matches}catch(e){}window.pcPause=1;window.LAND3I=L;
     const fit=()=>{const lite=document.body.classList.contains("lite")||(window.S&&S.o&&S.o.lite);L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",fit);
     const t0=performance.now();let last=0;
     const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm"))return;
       // con una ventana o una sección abierta encima, el paisaje se queda quieto
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
-      const lite=document.body.classList.contains("lite")||(window.S&&S.o&&S.o.lite),gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:50;if(ts-last<gap)return;last=ts;
+      const lite=document.body.classList.contains("lite")||(window.S&&S.o&&S.o.lite),gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?66:50;if(ts-last<gap)return;last=ts;
       try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
         L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L)}catch(e){console.error(e)}};
     requestAnimationFrame(loop);return true};
@@ -19348,7 +19349,7 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   else if(L.bp===3)E.ell(T(.04,.975,TZ+.005),.08,.04,.04,bpc,null,1)}
 // ---------- imágenes fijas (tarjeta, perfil…) y vistas vivas (editor y juego base) ----------
 const AV3S={c:null,r:null,url:{},n:0};
-function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=o||{};const k=trEnc(L)+"|"+w+"x"+h+"|"+(o.yaw||0)+"|"+(o.zoom||1)+"|"+(o.cy||"")+"|"+(o.pose||"");if(AV3S.url[k])return AV3S.url[k];
+function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=Object.assign({lo:typeof av3mLo==="function"&&av3mLo()},o||{});const k=trEnc(L)+"|"+w+"x"+h+"|"+(o.yaw||0)+"|"+(o.zoom||1)+"|"+(o.cy||"")+"|"+(o.pose||"")+(o.lo?"|lo":"");if(AV3S.url[k])return AV3S.url[k];
   if(AV3S.r===null){AV3S.c=document.createElement("canvas");AV3S.r=AV3(AV3S.c,true)||false}if(!AV3S.r)return null;
   if(AV3S.n>400){AV3S.url={};AV3S.n=0}AV3S.c.width=w;AV3S.c.height=h;AV3S.r.draw(L,Object.assign({t:1.2},o));AV3S.n++;try{document.body.classList.add("av3")}catch(e){}return AV3S.url[k]=AV3S.c.toDataURL("image/png")}
 // vista viva en un contenedor (se puede girar arrastrando). Cada «clave» conserva su lienzo aunque el contenedor se
@@ -19369,9 +19370,9 @@ function av3Attach(host,key,getLook,o){if(!av3Attach.ready)return false;o=o||{};
   if(v.big&&host.id!=="av3BigH")return true;
   if(v.bad)return false;v.get=getLook;v.o=o;if(v.cv.parentNode!==host){host.innerHTML="";host.appendChild(v.cv)}
   if(!v.run){v.run=true;v.last=0;const calm=()=>typeof hubCalm==="function"&&hubCalm(),gap=o.fps?1000/o.fps:33;
-    const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
-      const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
-      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L)){v.sig=null;return}v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy})}catch(e){}};requestAnimationFrame(loop)}
+    const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(v.o.pause&&v.o.pause())return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
+      const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(v.o.lo?1.5:2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
+      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L,v.o.lo)&&!(v.o.lo&&av3mHas(L,false))){v.sig=null;return}v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy,lo:v.o.lo})}catch(e){}};requestAnimationFrame(loop)}
   return true}
 // zoom de una vista viva: k multiplica el zoom actual (1 = solo recolocar) y f es la altura del puntero (0 arriba, 1 abajo),
 // que se queda quieta al acercar. La vista nunca se sale del modelo.
@@ -19421,7 +19422,10 @@ function ch3Grid(L,dir,fr){if(CH3.ok===false)return null;const S=CH3.S,W=16*S,H=
 // pinta pegada al relieve de la cabeza, y el pelo, los gorros y los complementos se acoplan encima.
 // Las figuras pequeñas del mapa siguen saliendo del modelo de siempre: a ese tamaño no se nota y no descarga nada.
 // =====================================================================================
-const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"9",t:0};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
+const AV3M={meta:null,st:{},pc:{},q:[],busy:0,base:"models/",ver:"9",t:0};
+// versión ligera (models/lo: las mismas piezas con menos polígonos) en móviles, tabletas, equipos con poca memoria y en modo ligero.
+// El editor del entrenador (donde se puede acercar mucho) usa siempre la versión completa.
+const av3mLo=()=>{try{return !!((typeof O!=="undefined"&&O.lite)||(typeof GM!=="undefined"&&GM&&GM.liteAuto)||matchMedia("(pointer:coarse)").matches||(navigator.deviceMemory&&navigator.deviceMemory<=4))}catch(e){return false}};   // «ver» cambia cuando se regeneran las piezas, para que no se use una copia vieja
 function av3mParse(buf){const dv=new DataView(buf);let off=12,json=null,bin=null;
   while(off<dv.byteLength){const len=dv.getUint32(off,true),type=dv.getUint32(off+4,true),ch=buf.slice(off+8,off+8+len);if(type===0x4E4F534A)json=JSON.parse(new TextDecoder().decode(ch));else bin=ch;off+=8+len}
   const acc=i=>{const a=json.accessors[i],bv=json.bufferViews[a.bufferView],o=(bv.byteOffset||0)+(a.byteOffset||0),n=a.count*{SCALAR:1,VEC3:3}[a.type];
@@ -19441,19 +19445,21 @@ function av3mPump(){while(AV3M.busy<3&&AV3M.q.length){const n=AV3M.q.shift();AV3
 // cuando llega una pieza, lo que se dibujó con el modelo de siempre se vuelve a dibujar
 function av3mFresh(){clearTimeout(AV3M.t);AV3M.t=setTimeout(()=>{try{AV3S.url={};AV3S.n=0;for(const k in AV3V)if(AV3V[k])AV3V[k].sig=null;if(typeof GM!=="undefined"&&GM){GM.look=null;GM.town="";dispatchEvent(new Event("resize"))}if(document.getElementById("trPrev")&&typeof trUI==="function"&&!document.getElementById("av3Big"))trUI()}catch(e){}},150)}
 // ¿hay alguna pieza de este aspecto todavía descargándose?
-function av3mWait(L){if(av3mReady(L))return false;return av3mNeed(L).every(n=>AV3M.st[n]===1||AV3M.st[n]===2)}
+function av3mWait(L,lo){if(av3mReady(L,lo))return false;return av3mNeed(L,lo).every(n=>AV3M.st[n]===1||AV3M.st[n]===2)}
 function av3mGet(n){const s=AV3M.st[n];if(s===2)return true;if(!s){AV3M.st[n]=1;AV3M.q.push(n);av3mPump()}return false}
 // piezas que necesita un aspecto: datos, cabeza (según la forma de la cara), cuerpo, parte de arriba, calzado y parte de abajo
 // peinados sin pieza: rapado y calvo (van pintados sobre la cabeza)
 const AV3M_NOHAIR=[5,22];
 // gorros con pieza (las gafas de sol y de aviador se dibujan como gafas)
 const av3mHat=L=>L.hat>0&&L.hat!==7&&L.hat!==13;
-function av3mNeed(L){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0)].concat(AV3M_NOHAIR.includes(L.hs)?[]:["hair"+L.hs]).concat(av3mHat(L)?["hat"+L.hat]:[]).concat([L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs]).concat([4,23,26].includes(L.top)?[]:["bot"+L.bot])}
-function av3mReady(L){if(typeof fetch!=="function")return false;let ok=true;for(const n of av3mNeed(L))if(!av3mGet(n))ok=false;return ok}
+function av3mNeed(L,lo){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0)].concat(AV3M_NOHAIR.includes(L.hs)?[]:["hair"+L.hs]).concat(av3mHat(L)?["hat"+L.hat]:[]).concat([L.b===1?"base_f":"base_m","top"+L.top,"shoe"+L.shs]).concat([4,23,26].includes(L.top)?[]:["bot"+L.bot]).map(n=>lo&&n!=="tr_meta"?"lo/"+n:n)}
+function av3mReady(L,lo){if(typeof fetch!=="function")return false;let ok=true;for(const n of av3mNeed(L,lo))if(!av3mGet(n))ok=false;return ok}
+// ¿están ya todas las piezas descargadas? (sin pedir ninguna)
+const av3mHas=(L,lo)=>av3mNeed(L,lo).every(n=>AV3M.st[n]===2);
 // ---------- el modelo ----------
-function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][0]),W=[1,1,1],K=[.1,.09,.12],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k),I=m4I();
+function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][0]),W=[1,1,1],K=[.1,.09,.12],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k),I=m4I();
   const sk=P("skin",L.sk),hc=P("hair",L.hc),ec=P("eye",L.ec),tc=P("cl",L.tc),ac=P("cl",L.ac),bc=P("cl",L.bc),shc=P("cl",L.sh),hac=P("cl",L.hac),bpc=P("cl",L.bpc),nkc=P("cl",L.nkc),glc=P("cl",L.glc),pcc=P("cl",L.pc),sckc=P("cl",L.sckc),wrc=P("cl",L.wrc);
-  const meta=AV3M.meta,t=o.t||0,pose=o.pose||"i",girl=L.b===1,top=L.top,dress=[4,23,26].includes(top),mt=meta.pieces["top"+top],mb=dress?{hide:[]}:meta.pieces["bot"+L.bot],ms=meta.pieces["shoe"+L.shs],TP=AV3M.pc["top"+top];
+  const meta=AV3M.meta,t=o.t||0,pose=o.pose||"i",girl=L.b===1,top=L.top,dress=[4,23,26].includes(top),mt=meta.pieces["top"+top],mb=dress?{hide:[]}:meta.pieces["bot"+L.bot],ms=meta.pieces["shoe"+L.shs],TP=PC("top"+top);
   const hide={};mt.hide.concat(mb.hide).forEach(k=>hide[k]=1);const showTorso=(mt.show||[]).includes("torso"),open=[1,3,8,11,12,15,19,20,25,27,18,16].includes(top);
   const COL={skin:sk,top:tc,topd:dk(tc,.2),topl:lt(tc,.86),inner:top===12||top===8?lt(ac,.1):ac,bot:bc,botd:dk(bc,.25),botl:lt(bc,.22),shoe:shc,shoed:dk(shc,.5),sole:[.96,.96,.98],white:[.97,.97,.99]};
   // ----- articulaciones: cada segmento gira alrededor de la suya -----
@@ -19473,15 +19479,15 @@ function av3mModel(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k]
         if(p.tag==="palm"&&[1,2,4].includes(L.glv))c=glc;else if(p.tag==="finger"&&[2,4].includes(L.glv))c=glc;else if(p.tag==="farm"&&L.glv===4)c=glc;else if(tights&&(p.tag==="thigh"||p.tag==="shin"||p.tag==="foot"))c=tights}
       if(stripes&&p.slot==="top"&&(p.seg==="body"||p.name.indexOf("sleeve")===0))cf=y=>Math.floor((y-.9)/.055)%2?sc2:tc;
       E.mesh(p.seg==="head"?MH:MS[p.seg]||G,p.P,p.N,p.I,c,cf)}};
-  const fsn=L.fs===1||L.fs===2?L.fs:0;put(AV3M.pc["head"+fsn]);put(AV3M.pc[girl?"base_f":"base_m"],true);put(TP);if(!dress)put(AV3M.pc["bot"+L.bot]);put(AV3M.pc["shoe"+L.shs]);
+  const fsn=L.fs===1||L.fs===2?L.fs:0;put(PC("head"+fsn));put(PC(girl?"base_f":"base_m"),true);put(TP);if(!dress)put(PC("bot"+L.bot));put(PC("shoe"+L.shs));
   // ----- cara -----
   const fg=meta.faces[fsn],zAt=(x,y)=>{const gx=(x-fg.x0)/fg.d,gy=(y-fg.y0)/fg.d,ix=Math.max(0,Math.min(fg.g[0].length-2,Math.floor(gx))),iy=Math.max(0,Math.min(fg.g.length-2,Math.floor(gy))),fx=Math.max(0,Math.min(1,gx-ix)),fy=Math.max(0,Math.min(1,gy-iy)),v=(a,b)=>fg.g[b][a]==null?.02:fg.g[b][a];
       return(v(ix,iy)*(1-fx)+v(ix+1,iy)*fx)*(1-fy)+(v(ix,iy+1)*(1-fx)+v(ix+1,iy+1)*fx)*fy};
   av3mFace(E,L,{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W});
   // ----- pelo y gorro (formas de siempre, acopladas a la cabeza nueva) -----
-  const k0=hr[0]/.114,HM=m4S(m4T(MH,0,hcy,0),k0),hk=typeof chHatKind==="function"?chHatKind(L.hat):"",hatP=av3mHat(L)?AV3M.pc["hat"+L.hat]:null,hatOn=hatP?!!(meta.pieces["hat"+L.hat]||{}).cover:["cap","beanie","wide","top","hard"].includes(hk),hx=.114,hy=.128,hz=.118;
+  const k0=hr[0]/.114,HM=m4S(m4T(MH,0,hcy,0),k0),hk=typeof chHatKind==="function"?chHatKind(L.hat):"",hatP=av3mHat(L)?PC("hat"+L.hat):null,hatOn=hatP?!!(meta.pieces["hat"+L.hat]||{}).cover:["cap","beanie","wide","top","hard"].includes(hk),hx=.114,hy=.128,hz=.118;
   // pelo modelado: con gorro se ocultan las partes de arriba («top») y salen las versiones bajas («hat»)
-  const HP=AV3M_NOHAIR.includes(L.hs)?null:AV3M.pc["hair"+L.hs];
+  const HP=AV3M_NOHAIR.includes(L.hs)?null:PC("hair"+L.hs);
   const wxF=({1:.95,2:.99})[fsn]||1,MHh=m4T(m4Mul(m4T(MH,0,hcy,0),new Float32Array([wxF,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1])),0,-hcy,0);
   if(HP){const mcc=P("hair",L.mcc),mch=L.mch|0;
     const HCOL={hair:hc,haird:dk(hc,.24),hairl:lt(hc,.16),tie:hac};
@@ -19594,10 +19600,13 @@ function av3mFace(E,L,C){const{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W}=C,B0=.0036,
     else if(mo===3)line(.03,u=>(u+.35)*(u+.35)*.0095-.004);
     else{line(.031,u=>u*u*.012-.004);if(mo===4)E.fan(MH,wel(.004,my-.014,.012,.012,2,10),[.94,.46,.52]);if(mo===6)E.fan(MH,[wp(.013,my-.014,2),wp(.007,my-.002,2),wp(.019,my+.001,2)],W)}}}
 // ---------- enlace con el visor: si las piezas del aspecto están cargadas se usa el modelo de mallas ----------
-{const _m=av3Model;av3Model=function(E,L,o){o=o||{};if(o.chibi||o.old||!av3mReady(L))return _m.call(this,E,L,o);try{av3mModel(E,L,o)}catch(e){console.error(e);AV3M.st["top"+L.top]=3;av3mFresh()}};
-  av3Model.nowarp=(L,o)=>!(o&&(o.chibi||o.old))&&av3mReady(L)}
+{const _m=av3Model;av3Model=function(E,L,o){o=o||{};
+    // si se pide la versión ligera pero aún no ha llegado y la completa ya está, se usa la completa mientras tanto
+    if(o.lo&&!o.chibi&&!o.old&&!av3mReady(L,true)&&av3mHas(L,false))o=Object.assign({},o,{lo:false});
+    if(o.chibi||o.old||!av3mReady(L,o.lo))return _m.call(this,E,L,o);try{av3mModel(E,L,o)}catch(e){console.error(e);AV3M.st[(o.lo?"lo/":"")+"top"+L.top]=3;av3mFresh()}};
+  av3Model.nowarp=(L,o)=>!(o&&(o.chibi||o.old))&&(av3mReady(L,o&&o.lo)||!!(o&&o.lo&&av3mHas(L,false)))}
 // las piezas de tu aspecto se piden nada más entrar
-setTimeout(()=>{try{av3mReady(myLook())}catch(e){}},1200);
+setTimeout(()=>{try{av3mReady(myLook(),av3mLo())}catch(e){}},1200);
 
 </script>
 <script>

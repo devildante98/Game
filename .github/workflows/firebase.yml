@@ -1,0 +1,49 @@
+# Publica el servidor (Cloud Functions) y las reglas de Firestore en Firebase cada vez que cambian en main.
+# Necesita el secreto FIREBASE_SA (la clave JSON de una cuenta de servicio de Firebase) en
+# Settings → Secrets and variables → Actions. Si todavía no está, el trabajo se salta sin fallar.
+name: Publicar servidor en Firebase
+on:
+  push:
+    branches: [main]
+    paths:
+      - "_server/**"
+      - "firestore.rules"
+      - "firebase.json"
+      - ".firebaserc"
+      - ".github/workflows/firebase.yml"
+  workflow_dispatch:
+concurrency:
+  group: firebase-deploy
+  cancel-in-progress: false
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      HAS_SA: ${{ secrets.FIREBASE_SA != '' }}
+    steps:
+      - name: Aviso si falta la clave
+        if: env.HAS_SA != 'true'
+        run: echo "::warning::Falta el secreto FIREBASE_SA; no se publica nada."
+      - uses: actions/checkout@v4
+        if: env.HAS_SA == 'true'
+      - uses: actions/setup-node@v4
+        if: env.HAS_SA == 'true'
+        with:
+          node-version: 22
+      - name: Instalar dependencias del servidor
+        if: env.HAS_SA == 'true'
+        run: npm ci --prefix _server --no-audit --no-fund
+      - name: Preparar la clave
+        if: env.HAS_SA == 'true'
+        env:
+          SA: ${{ secrets.FIREBASE_SA }}
+        run: printf '%s' "$SA" > "$RUNNER_TEMP/sa.json"
+      - name: Publicar en Firebase (funciones y reglas)
+        if: env.HAS_SA == 'true'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/sa.json
+        run: npx --yes firebase-tools@15.36.0 deploy --only functions,firestore:rules --project pokegacha-fdef9 --non-interactive --force
+      - name: Borrar la clave
+        if: always()
+        run: rm -f "$RUNNER_TEMP/sa.json"

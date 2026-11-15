@@ -883,6 +883,8 @@ function gmFill(){const g=document.querySelector("#gmach .gmballs");if(!g||g.chi
   g.innerHTML=L.map((r,i)=>gbHTML(r).replace('class="gb','style="left:'+P[i][0]+'px;top:'+P[i][1]+'px" class="gb')).join("")}
 setTimeout(gmFill,300);
 function gachaShow(res,n,best,back,sup,RC){
+  // los Pokémon nuevos (que no tenías) salen los primeros; el resto mantiene el orden de la tirada
+  res=res.filter(x=>x[1]).concat(res.filter(x=>!x[1]));
   gmFill();const M=$("gmach"),calm=typeof hubCalm==="function"&&hubCalm();$("out").innerHTML="";
   let GM=$("gacM");if(!GM){GM=document.createElement("div");GM.id="gacM";GM.setAttribute("role","dialog");GM.setAttribute("aria-modal","true");GM.setAttribute("aria-label","Resultados de la tirada");document.body.appendChild(GM);
     GM.addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.dataset.gk==="skip"){if(SK)SK();return}if((b&&b.dataset.gk==="ok")||(e.target===GM&&!busy)){GM.hidden=true;snd("ui")}})}

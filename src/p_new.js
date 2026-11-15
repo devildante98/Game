@@ -28,7 +28,7 @@ const natSync=n=>{if(_ownPrev)_ownPrev[n]=S.owned[n]|0};
 function natAlt(n,k){if(k<=0)return;S.natAlt=S.natAlt||{};const L=S.natAlt[n]=S.natAlt[n]||[];for(let i=0;i<Math.min(k,6);i++){const x=Math.floor(Math.random()*NAT.length);if(x!==natOf(n)&&!L.includes(x))L.push(x)}while(L.length>6)L.shift();if(!L.length)delete S.natAlt[n]}
 {const _r=render;render=function(){try{natTrack()}catch(e){}return _r.apply(this,arguments)}}
 // --- al entregar un Pokémon en un intercambio se limpian sus datos y vuelve su objeto a la Mochila ---
-{const _t=pkTake;pkTake=function(n){const h=heldOf(n),r=_t(n);if(r&&!(S.owned[n]>0)){if(h)S.bag[h]=(S.bag[h]||0)+1;[S.held,S.mote,S.fav,S.nat,S.natAlt].forEach(o=>{if(o)delete o[n]});save()}return r}}
+{const _t=pkTake;pkTake=function(n,k){const h=heldOf(n),r=_t(n,k);if(r&&!(S.owned[n]>0)){if(h)S.bag[h]=(S.bag[h]||0)+1;[S.held,S.mote,S.fav,S.nat,S.natAlt].forEach(o=>{if(o)delete o[n]});save()}return r}}
 // Pokémon ocupados (guardería o expedición)
 function busyMon(n){return !!(S.dc&&(S.dc.a===n||S.dc.b===n))||!!(S.exp||[]).some(x=>x.n===n)}
 function busyTxt(n){return S.dc&&(S.dc.a===n||S.dc.b===n)?"en la Guardería":(S.exp||[]).some(x=>x.n===n)?"de expedición":""}

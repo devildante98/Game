@@ -821,6 +821,7 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .stbs.up{border-color:#2fa36b}.stbs.up em,.stbs.up small{color:#2fa36b}.stbs.dn{border-color:#e63950}.stbs.dn em,.stbs.dn small{color:#e63950}
 /* intercambios: límite de nivel */
 .tcell.tover{opacity:.45;filter:grayscale(.6);cursor:not-allowed}
+.tcell.tdup{border-style:dashed!important}.nxcell small{white-space:normal}
 .tcell .tovr{color:#e63950;font-weight:700}
 .tcap{margin:10px 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,#e63950 14%,transparent);border:1px solid #e63950;font-size:.9rem}
 .tmoc{color:#ffb62e!important;font-weight:800}

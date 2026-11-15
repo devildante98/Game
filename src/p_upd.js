@@ -978,7 +978,7 @@ function ltInvite(uid,n){if(!PR||LT.st!=="idle"||fcd)return;const o=pvOthers().f
 async function ltEnter(room,uid,n){LT={st:"room",room:room,uid:uid,n:n,sel:null,ok:null,go:null,q:"",t0:Date.now(),seen:Date.now()};
   try{LT.R=await PR.join(room)}catch(e){ltReset("No se pudo entrar en la sala de intercambio.");return}
   ltPub();LT.un=LT.R.onPeers(()=>ltTick());LT.iv=setInterval(ltTick,500);snd("lvl");ltRender()}
-const ltRec=n=>n&&S.owned[n]>0?{n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0}:null;
+const ltRec=key=>trRecK(key);
 function ltPub(){if(!LT.R)return;LT.R.presence({lt:{v:1,n:pvClean(pvNick()),sel:ltRec(LT.sel),ok:LT.ok,go:LT.go}}).catch(()=>{})}
 const ltPeer=()=>{if(!LT.R)return null;const p=LT.R.peers().find(x=>!x.isMe&&x.presence&&x.presence.lt&&x.presence.lt.v===1);return p?p.presence.lt:null};
 function ltRender(){if(LT.st!=="room")return;const o=ltPeer(),mine=ltRec(LT.sel),theirs=o&&ltOk(o.sel)?o.sel:null,q=nrm(LT.q||"");
@@ -987,12 +987,12 @@ function ltRender(){if(LT.st!=="room")return;const o=ltPeer(),mine=ltRec(LT.sel)
   const h='<h2>🔄 Sala de intercambio</h2><p class="mut">Estás con <b>'+esc(LT.n)+'</b>'+(o?' · 🟢 en la sala':' · ⏳ entrando…')+'</p>'+
     '<div class="tvs">'+trCard(mine,"Tú ofreces",mine?"":"Elige uno abajo").replace('class="tcard','class="tcard'+(okMe?' ltok':''))+'<div class="tarrow"><span>⇄</span></div>'+trCard(theirs,esc(LT.n)+" ofrece",o?"Está eligiendo…":"").replace('class="tcard','class="tcard'+(okThem?' ltok':''))+'</div>'+
     '<div class="ltst"><span class="'+(okMe?'on':'')+'">'+(okMe?'✅ Tú: listo':'Tú: eligiendo')+'</span><span class="'+(okThem?'on':'')+'">'+(okThem?'✅ '+esc(LT.n)+': listo':esc(LT.n)+': eligiendo')+'</span></div>'+
-    (okMe?'':'<div class="tfil"><input id="ltq" placeholder="Buscar en tu colección..." value="'+esc(LT.q||"")+'"></div><div class="tgrid">'+L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;return '<button class="tcell '+p[2]+(LT.sel===p[0]?' sel':'')+(sh?' shiny':'')+'" data-ltp="'+esc(p[0])+'">'+ico(p,56,false,sh)+'<b>'+esc(p[0])+'</b><small>Nv'+lvd(p[0]).l+(S.owned[p[0]]>1?' · ×'+S.owned[p[0]]:'')+'</small></button>'}).join("")+'</div>')+
+    (okMe?'':'<div class="tfil"><input id="ltq" placeholder="Buscar en tu colección..." value="'+esc(LT.q||"")+'"></div><div class="tgrid">'+trCells(L,LT.sel,"data-ltp",0)+'</div>')+
     '<div class="jrow">'+(okMe?'<button class="alt" data-ltu="1">✏️ Cambiar mi Pokémon</button>':'<button class="red" data-ltc="1"'+(mine&&theirs?'':' disabled')+'>✅ Confirmar intercambio</button>')+'<button class="alt" data-ltx="1">Salir de la sala</button></div>'+
     '<small class="mut">Cuando los dos confirméis, se hará el intercambio. Si el otro cambia de Pokémon, tendrás que volver a confirmar.</small>';
   const M=ltModal(h),g=M.querySelector(".tgrid");if(g&&LT.gs)g.scrollTop=LT.gs;const i=$("ltq");if(i){i.oninput=e=>{LT.q=e.target.value;const c=e.target.selectionStart;ltRender();const n=$("ltq");n.focus();n.setSelectionRange(c,c)}}}
 async function ltDo(mine,theirs){LT.st="busy";clearInterval(LT.iv);const n=LT.n;
-  const rec=pkTake(mine.n);if(!rec){ltReset("Ya no tienes ese Pokémon.");return}
+  const rec=trTakeK(LT.sel);if(!rec){ltReset("Ya no tienes ese Pokémon.");return}
   stt().trade=(stt().trade||0)+1;save();ltModal(null);
   try{await trAnim(rec,theirs,n)}catch(e){}await pkGive(theirs,true);if(window.cloudFlush)window.cloudFlush(true);render();
   setTimeout(()=>ltReset(),1500)}
@@ -1027,8 +1027,8 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
   if(t.closest("[data-lta]")&&LT.st==="ask"){const a=LT;PV.lt={acc:{from:a.from,room:a.room},t:Date.now()};pvPub();ltEnter(a.room,a.from,a.n);return}
   if(t.closest("[data-ltn]")&&LT.st==="ask"){PV.lt={no:{from:LT.from,room:LT.room},t:Date.now()};pvPub();const r=LT.room;LT={st:"idle"};ltModal(null);setTimeout(()=>{if(LT.st==="idle"&&PV.lt&&PV.lt.no&&PV.lt.no.room===r){PV.lt=null;pvPub()}},8000);return}
   if(LT.st!=="room")return;
-  const p=t.closest("[data-ltp]");if(p){const g=$("ltM").querySelector(".tgrid");LT.gs=g?g.scrollTop:0;LT.sel=p.dataset.ltp;LT.ok=null;LT.go=null;snd("ui");try{cry(LT.sel)}catch(x){}ltPub();ltRender();return}
-  if(t.closest("[data-ltc]")){const o=ltPeer(),th=o&&ltOk(o.sel)?o.sel:null;if(!LT.sel||!th)return;LT.ok={n:LT.sel,t:th.n};snd("lvl");ltPub();ltRender();return}
+  const p=t.closest("[data-ltp]");if(p){const g=$("ltM").querySelector(".tgrid");LT.gs=g?g.scrollTop:0;LT.sel=p.dataset.ltp;LT.ok=null;LT.go=null;snd("ui");try{cry(trSplit(LT.sel)[0])}catch(x){}ltPub();ltRender();return}
+  if(t.closest("[data-ltc]")){const o=ltPeer(),th=o&&ltOk(o.sel)?o.sel:null;const mn=ltRec(LT.sel);if(!mn||!th)return;LT.ok={n:mn.n,t:th.n};snd("lvl");ltPub();ltRender();return}
   if(t.closest("[data-ltu]")){LT.ok=null;LT.go=null;ltPub();ltRender();return}});
 
 // ================= objetos nuevos: Hierba Blanca y semillas de campo =================

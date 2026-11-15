@@ -166,8 +166,11 @@ document.addEventListener("click",e=>{
 $("prof").addEventListener("click",e=>{if(e.target.id==="prof")$("prof").hidden=true});
 // ================= intercambios entre amigos =================
 let TRD={inc:[],out:[]},TRC=null;
-function pkTake(n){
-  if(!(S.owned[n]>0))return null;const d=lvd(n),rec={n:n,l:d.l,s:S.shiny&&S.shiny[n]>0?1:0};
+// k: "m" el principal (con su nivel), "d" un repetido normal (Nv1), "ds" un repetido variocolor (Nv1)
+function pkTake(n,k){
+  if(!(S.owned[n]>0))return null;
+  if(k==="d"||k==="ds"){const c=trCopies(n).find(x=>x.k===k);if(!c)return null;S.owned[n]--;if(k==="ds"){S.shiny[n]--}save();return{n:n,l:1,s:k==="ds"?1:0}}
+  const d=lvd(n),rec={n:n,l:d.l,s:S.shiny&&S.shiny[n]>0?1:0};
   S.owned[n]--;if(rec.s){S.shiny[n]--;if(!S.shiny[n])delete S.shiny[n]}
   [S.lv,S.mv,S.hp,S.pp||{},S.ppu||{},S.ml||{}].forEach(o=>{delete o[n]});
   if(S.owned[n]<=0){delete S.owned[n];S.reg=S.reg||{};S.reg[n]=1;S.team=(S.team||[]).map(x=>x===n?"":x);(S.sets||[]).forEach(st=>{st.team=st.team.map(x=>x===n?"":x)})}
@@ -183,6 +186,16 @@ async function pkGive(rec,tradeEvo){
   if(tradeEvo){const ev=EVO(n).filter(e=>e[1]==="Ilinking-cord"&&PM[e[0]]);if(ev.length&&!fcd)await evoPrompt(n,ev)}
 }
 const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0);
+// copias que puedes dar de cada especie: la principal (con su nivel) y, si tienes repetidos, los repetidos (Nv1), con los variocolor aparte
+const trCopies=n=>{const c=S.owned[n]|0;if(c<=0)return[];const sh=Math.min(c,(S.shiny&&S.shiny[n])|0),out=[{k:"m",l:lvd(n).l,s:sh>0?1:0,c:1}],dS=Math.max(0,sh-1),dN=c-1-dS;
+  if(dN>0)out.push({k:"d",l:1,s:0,c:dN});if(dS>0)out.push({k:"ds",l:1,s:1,c:dS});return out};
+// la elección se guarda como "Nombre|tipo de copia"
+const trSplit=key=>{key=key||"";const i=key.lastIndexOf("|");return i<0?[key,"m"]:[key.slice(0,i),key.slice(i+1)]};
+const trRecK=key=>{if(!key)return null;const[n,k]=trSplit(key);if(!PM[n]||!(S.owned[n]>0))return null;const c=trCopies(n).find(x=>x.k===k);return c?{n:n,l:c.l,s:c.s}:null};
+const trTakeK=key=>{const[n,k]=trSplit(key);return pkTake(n,k)};
+// casillas para elegir: el principal y, al lado, sus repetidos
+const trCells=(L,sel,attr,cap)=>L.flatMap(p=>trCopies(p[0]).map(c=>{const key=p[0]+"|"+c.k,dup=c.k!=="m",over=cap&&c.l>cap;
+  return '<button class="tcell '+p[2]+(sel===key?' sel':'')+(c.s?' shiny':'')+(dup?' tdup':'')+(over?' tover':'')+'" '+attr+'="'+esc(key)+'"'+(over?' disabled title="Supera el límite de nivel de tu amigo (Nv'+cap+')"':'')+'>'+ico(p,56,false,!!c.s)+'<b>'+esc(p[0])+'</b><small>Nv'+c.l+(dup?' · 🔁 Repetido'+(c.c>1?' ×'+c.c:''):(S.team.includes(p[0])?' · ⭐':''))+'</small>'+(over?'<small class="tovr">🔒 Supera su límite</small>':'')+'</button>'})).join("");
 const recTxt=r=>r?(r.s?"✨ ":"")+esc(r.n)+" Nv"+(r.l|0):"?";
 // ---- ventana de intercambio al estilo de los juegos ----
 let TM={st:null,t:null,sel:null,q:"",f:""};
@@ -195,12 +208,12 @@ const trRec=n=>n&&S.owned[n]>0?{n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0}:null
 function trGrid(){
   const q=nrm(TM.q),L=trOwnList().filter(p=>(!q||nrm(p[0]).includes(q))&&(!TM.f||p[2]===TM.f)).sort((a,b)=>lvd(b[0]).l-lvd(a[0]).l||WW[b[2]]-WW[a[2]]).slice(0,240);
   return '<div class="tfil"><input id="tq" placeholder="Buscar en tu equipo y colección..." value="'+esc(TM.q)+'"><select id="tf"><option value="">Todas</option>'+["C","R","E","L"].map(r=>'<option value="'+r+'"'+(TM.f===r?' selected':'')+'>'+STAR[r]+'</option>').join("")+'</select></div>'+
-    '<div class="tgrid">'+(L.length?L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;const over=TM.pcap&&lvd(p[0]).l>TM.pcap;return '<button class="tcell '+p[2]+(TM.sel===p[0]?' sel':'')+(sh?' shiny':'')+(over?' tover':'')+'" data-tp="'+esc(p[0])+'"'+(over?' disabled title="Supera el límite de nivel de tu amigo (Nv'+TM.pcap+')"':'')+'>'+ico(p,56,false,sh)+'<b>'+esc(p[0])+'</b><small>Nv'+lvd(p[0]).l+(S.owned[p[0]]>1?' · ×'+S.owned[p[0]]:'')+(S.team.includes(p[0])?' · ⭐':'')+'</small>'+(over?'<small class="tovr">🔒 Supera su límite</small>':'')+'</button>'}).join(""):'<small class="mut">No hay Pokémon con ese filtro.</small>')+'</div>';
+    '<div class="tgrid">'+(L.length?trCells(L,TM.sel,"data-tp",TM.pcap):'<small class="mut">No hay Pokémon con ese filtro.</small>')+'</div>';
 }
 function trOpen(st,t){if(fcd&&st!=="anim"){toast("Termina el combate para intercambiar.");return}TM={st:st,t:t,sel:null,q:"",f:"",pcap:0};$("trdM").hidden=false;trRender();trCapLoad()}
 // límite de nivel del otro jugador (lo publica en su perfil): no se le puede dar un Pokémon de más nivel del que él puede tener
 async function trCapLoad(){const t=TM.t;if(!t||!window.FB||!window.FB.rankGet)return;const me=window.FB.uid&&window.FB.uid(),u=t.uid||(t.from&&t.from!==me?t.from:t.to);if(!u||u===me)return;
-  try{const d=await window.FB.rankGet(u);const c=d&&+d.cap;if(c>0&&TM.t===t){TM.pcap=c;if(TM.st&&TM.st.startsWith("pick")){if(TM.sel&&lvd(TM.sel).l>c)TM.sel=null;trRender()}}}catch(e){}}
+  try{const d=await window.FB.rankGet(u);const c=d&&+d.cap;if(c>0&&TM.t===t){TM.pcap=c;if(TM.st&&TM.st.startsWith("pick")){{const r=trRecK(TM.sel);if(r&&r.l>c)TM.sel=null};trRender()}}}catch(e){}}
 const trOver=r=>!!r&&(r.l|0)>lvCap();
 const trOverTxt=r=>'<p class="tcap">🔒 '+esc(r.n)+' es de nivel '+(r.l|0)+' y tu límite es el Nv'+lvCap()+'. Consigue más medallas de gimnasio para poder recibir Pokémon de ese nivel.</p>';
 function trClose(){$("trdM").hidden=true;TM.st=null;trdUI()}
@@ -208,10 +221,10 @@ function trRender(){
   const b=$("trdB"),t=TM.t,st=TM.st;if(!st)return;let h="";
   const vs=(l,r)=>'<div class="tvs">'+l+'<div class="tarrow"><span>⇄</span></div>'+r+'</div>';
   if(st==="pick"||st==="pickb"){
-    const partner=st==="pick"?t.n:pvClean(t.fn),mine=trRec(TM.sel);
+    const partner=st==="pick"?t.n:pvClean(t.fn),mine=trRecK(TM.sel);
     h='<h2>🔄 Intercambio con '+esc(partner)+'</h2>'+vs(trCard(mine,"Tú ofreces",mine?"":"Elige uno abajo"),st==="pickb"?trCard(t.o,esc(partner)+" ofrece"):trCard(null,esc(partner)+" ofrece","Lo elegirá después"))+
-      '<small class="mut">'+(st==="pick"?"Elige el Pokémon que quieres ofrecer. "+esc(partner)+" verá tu oferta y elegirá qué te da a cambio.":"Elige qué Pokémon das a cambio de su "+esc(t.o.n)+".")+' Se envía con su nivel; si te quedan copias, esas vuelven al nivel 1.'+(TM.pcap?' Solo puedes dar Pokémon hasta el Nv'+TM.pcap+' (el límite de nivel de '+esc(partner)+').':'')+'</small>'+trGrid()+
-      '<div class="jrow"><button class="red" data-tgo="1"'+(mine?'':' disabled')+'>🔄 Ofrecer '+(mine?esc(mine.n):"")+'</button><button class="alt" data-tcl="1">'+(st==="pickb"?"Volver":"Cancelar")+'</button>'+(st==="pickb"?'<button class="alt" data-tno="1">Rechazar</button>':'')+'</div>';
+      '<small class="mut">'+(st==="pick"?"Elige el Pokémon que quieres ofrecer. "+esc(partner)+" verá tu oferta y elegirá qué te da a cambio.":"Elige qué Pokémon das a cambio de su "+esc(t.o.n)+".")+' Si tienes repetidos, puedes dar uno de ellos (Nv1) y quedarte con el principal; si das el principal, el siguiente que tengas empieza en Nv1.'+(TM.pcap?' Solo puedes dar Pokémon hasta el Nv'+TM.pcap+' (el límite de nivel de '+esc(partner)+').':'')+'</small>'+trGrid()+
+      '<div class="jrow"><button class="red" data-tgo="1"'+(mine?'':' disabled')+'>🔄 Ofrecer '+(mine?(mine.s?"✨ ":"")+esc(mine.n)+" Nv"+mine.l:"")+'</button><button class="alt" data-tcl="1">'+(st==="pickb"?"Volver":"Cancelar")+'</button>'+(st==="pickb"?'<button class="alt" data-tno="1">Rechazar</button>':'')+'</div>';
   }else if(st==="inc"){
     const ov=trOver(t.o);h='<h2>📨 ¡Solicitud de intercambio!</h2><p><b>'+esc(pvClean(t.fn))+'</b> quiere intercambiar contigo y te ofrece:</p><div class="tsolo">'+trCard(t.o,"Te ofrece")+'</div>'+(ov?trOverTxt(t.o):'')+'<div class="jrow">'+(ov?'':'<button class="red" data-tpb="1">👀 Elegir qué le doy a cambio</button>')+'<button class="alt" data-tno="1">Rechazar</button><button class="alt" data-tcl="1">Más tarde</button></div>';
   }else if(st==="wait"){
@@ -294,11 +307,11 @@ document.addEventListener("click",async e=>{
   try{
     if(d.frt){trOpen("pick",{uid:d.frt,n:d.frtn});return}
     if(d.topen!=null){const x=($("trdBox")._L||[])[+d.topen];if(x)trOpen(x.st,x.t);return}
-    if(d.tp){TM.sel=d.tp;snd("ui");const sc=$("trdB").querySelector(".tgrid").scrollTop;trRender();$("trdB").querySelector(".tgrid").scrollTop=sc;try{cry(d.tp)}catch(x){}return}
+    if(d.tp){TM.sel=d.tp;snd("ui");const sc=$("trdB").querySelector(".tgrid").scrollTop;trRender();$("trdB").querySelector(".tgrid").scrollTop=sc;try{cry(trSplit(d.tp)[0])}catch(x){}return}
     if(d.tcl){trClose();return}
     if(d.tpb){if(trOver(t&&t.o))return;TM.st="pickb";TM.sel=null;trRender();return}
     if(d.tgo){
-      if(!TM.sel||fcd)return;if(TM.pcap&&lvd(TM.sel).l>TM.pcap){toast("🔒 Ese Pokémon supera el límite de nivel de tu amigo (Nv"+TM.pcap+").");return}b.disabled=true;const rec=pkTake(TM.sel);if(!rec)return;
+      if(!TM.sel||fcd)return;const want=trRecK(TM.sel);if(!want)return;if(TM.pcap&&want.l>TM.pcap){toast("🔒 Ese Pokémon supera el límite de nivel de tu amigo (Nv"+TM.pcap+").");return}b.disabled=true;const rec=trTakeK(TM.sel);if(!rec)return;
       if(TM.st==="pick"){try{const ref=await window.FB.trSend(t.uid,t.n,pvClean(pvNick()),rec);if(window.cloudFlush)window.cloudFlush(true);snd("throw");TM.st="wait";TM.t={id:ref&&ref.id,from:window.FB.uid(),to:t.uid,tn:t.n,o:rec,st:"req"};trRender();toast("📨 Oferta enviada a "+t.n)}catch(x){await pkGive(rec,false);throw x}}
       else{try{await window.FB.trUpd(t.id,{st:"resp",b:rec});if(window.cloudFlush)window.cloudFlush(true);snd("throw");TM.st="wait";TM.t=Object.assign({},t,{b:rec,st:"resp"});trRender()}catch(x){await pkGive(rec,false);throw x}}
       render();return;

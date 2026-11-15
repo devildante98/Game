@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.94.1";
+const GAME_VER="6.94.2";
 const NEWS=[
+{v:"2026-11-15-6.94.2",ver:"6.94.2",at:"2026-11-15T09:45",t:"🔧 Arreglos/Mejoras",l:["Intercambios: si tienes repetidos, ahora eliges cuál das. Junto a tu Pokémon principal (con su nivel) aparecen sus repetidos (Nv1, marcados con 🔁 y borde de puntos), y los variocolor repetidos aparte; puedes dar un repetido y quedarte con el principal","Vale para el intercambio con amigos, la sala de intercambio en directo y para vender en el mercado"]},
 {v:"2026-11-15-6.94.1",ver:"6.94.1",at:"2026-11-15T09:40",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas múltiples (×10, ×100) los Pokémon nuevos, los que aún no tenías, salen los primeros, y después los repetidos"]},
 {v:"2026-11-14-6.94",ver:"6.94",at:"2026-11-14T23:21",t:"🚶 Un pueblo con vida",l:["Vecinos que pasean por la calle del pueblo y por un sendero nuevo junto al lago, algunos con su Pokémon: un cachorro que trota y una bolita que va dando saltos","Las Miltank de la granja pastan: bajan la cabeza a comer y mueven la cola y las orejas","Sale humo de las chimeneas de la Escuela y de la Guardería","De noche: las farolas brillan, los focos del Estadio brillan, la antena del Laboratorio parpadea en rojo y los vecinos que aún pasean llevan un farolillo","No gasta más: en las pruebas el paisaje tarda lo mismo en dibujarse que antes","Arreglado: los edificios ya no se desplazan uno o dos píxeles cuando late el botón del Gacha"]},
 {v:"2026-11-14-6.93.1",ver:"6.93.1",at:"2026-11-14T22:04",t:"🔧 Arreglos/Mejoras",l:["La pestaña «Tienda» de abajo pasa a llamarse «Mejoras» y es el único botón para mejorar el pueblo (se quita el botón lateral «Mejoras»); los edificios del pueblo siguen abriendo la misma ventana","El aviso ↑ de esa pestaña también sale cuando puedes mejorar los Guantes de entrenador"]},

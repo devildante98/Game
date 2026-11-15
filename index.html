@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.94.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.94.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794732004">
+<meta name="game-build" content="1794732303">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2512,6 +2512,7 @@ body.tmdragging,body.tmdragging *{cursor:grabbing!important;user-select:none}
 .stbs.up{border-color:#2fa36b}.stbs.up em,.stbs.up small{color:#2fa36b}.stbs.dn{border-color:#e63950}.stbs.dn em,.stbs.dn small{color:#e63950}
 /* intercambios: límite de nivel */
 .tcell.tover{opacity:.45;filter:grayscale(.6);cursor:not-allowed}
+.tcell.tdup{border-style:dashed!important}.nxcell small{white-space:normal}
 .tcell .tovr{color:#e63950;font-weight:700}
 .tcap{margin:10px 0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,#e63950 14%,transparent);border:1px solid #e63950;font-size:.9rem}
 .tmoc{color:#ffb62e!important;font-weight:800}
@@ -2934,7 +2935,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.94.1</small>
+    <small class="pcver">Versión 6.94.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7616,8 +7617,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.94.1";
+const GAME_VER="6.94.2";
 const NEWS=[
+{v:"2026-11-15-6.94.2",ver:"6.94.2",at:"2026-11-15T09:45",t:"🔧 Arreglos/Mejoras",l:["Intercambios: si tienes repetidos, ahora eliges cuál das. Junto a tu Pokémon principal (con su nivel) aparecen sus repetidos (Nv1, marcados con 🔁 y borde de puntos), y los variocolor repetidos aparte; puedes dar un repetido y quedarte con el principal","Vale para el intercambio con amigos, la sala de intercambio en directo y para vender en el mercado"]},
 {v:"2026-11-15-6.94.1",ver:"6.94.1",at:"2026-11-15T09:40",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas múltiples (×10, ×100) los Pokémon nuevos, los que aún no tenías, salen los primeros, y después los repetidos"]},
 {v:"2026-11-14-6.94",ver:"6.94",at:"2026-11-14T23:21",t:"🚶 Un pueblo con vida",l:["Vecinos que pasean por la calle del pueblo y por un sendero nuevo junto al lago, algunos con su Pokémon: un cachorro que trota y una bolita que va dando saltos","Las Miltank de la granja pastan: bajan la cabeza a comer y mueven la cola y las orejas","Sale humo de las chimeneas de la Escuela y de la Guardería","De noche: las farolas brillan, los focos del Estadio brillan, la antena del Laboratorio parpadea en rojo y los vecinos que aún pasean llevan un farolillo","No gasta más: en las pruebas el paisaje tarda lo mismo en dibujarse que antes","Arreglado: los edificios ya no se desplazan uno o dos píxeles cuando late el botón del Gacha"]},
 {v:"2026-11-14-6.93.1",ver:"6.93.1",at:"2026-11-14T22:04",t:"🔧 Arreglos/Mejoras",l:["La pestaña «Tienda» de abajo pasa a llamarse «Mejoras» y es el único botón para mejorar el pueblo (se quita el botón lateral «Mejoras»); los edificios del pueblo siguen abriendo la misma ventana","El aviso ↑ de esa pestaña también sale cuando puedes mejorar los Guantes de entrenador"]},
@@ -7967,7 +7969,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794732004";
+const GAME_B="1794732303";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8203,8 +8205,11 @@ document.addEventListener("click",e=>{
 $("prof").addEventListener("click",e=>{if(e.target.id==="prof")$("prof").hidden=true});
 // ================= intercambios entre amigos =================
 let TRD={inc:[],out:[]},TRC=null;
-function pkTake(n){
-  if(!(S.owned[n]>0))return null;const d=lvd(n),rec={n:n,l:d.l,s:S.shiny&&S.shiny[n]>0?1:0};
+// k: "m" el principal (con su nivel), "d" un repetido normal (Nv1), "ds" un repetido variocolor (Nv1)
+function pkTake(n,k){
+  if(!(S.owned[n]>0))return null;
+  if(k==="d"||k==="ds"){const c=trCopies(n).find(x=>x.k===k);if(!c)return null;S.owned[n]--;if(k==="ds"){S.shiny[n]--}save();return{n:n,l:1,s:k==="ds"?1:0}}
+  const d=lvd(n),rec={n:n,l:d.l,s:S.shiny&&S.shiny[n]>0?1:0};
   S.owned[n]--;if(rec.s){S.shiny[n]--;if(!S.shiny[n])delete S.shiny[n]}
   [S.lv,S.mv,S.hp,S.pp||{},S.ppu||{},S.ml||{}].forEach(o=>{delete o[n]});
   if(S.owned[n]<=0){delete S.owned[n];S.reg=S.reg||{};S.reg[n]=1;S.team=(S.team||[]).map(x=>x===n?"":x);(S.sets||[]).forEach(st=>{st.team=st.team.map(x=>x===n?"":x)})}
@@ -8220,6 +8225,16 @@ async function pkGive(rec,tradeEvo){
   if(tradeEvo){const ev=EVO(n).filter(e=>e[1]==="Ilinking-cord"&&PM[e[0]]);if(ev.length&&!fcd)await evoPrompt(n,ev)}
 }
 const trOwnList=()=>P.filter(p=>S.owned[p[0]]>0&&!(isFav(p[0])&&S.owned[p[0]]<=1)&&!busyMon(p[0]));
+// copias que puedes dar de cada especie: la principal (con su nivel) y, si tienes repetidos, los repetidos (Nv1), con los variocolor aparte
+const trCopies=n=>{const c=S.owned[n]|0;if(c<=0)return[];const sh=Math.min(c,(S.shiny&&S.shiny[n])|0),out=[{k:"m",l:lvd(n).l,s:sh>0?1:0,c:1}],dS=Math.max(0,sh-1),dN=c-1-dS;
+  if(dN>0)out.push({k:"d",l:1,s:0,c:dN});if(dS>0)out.push({k:"ds",l:1,s:1,c:dS});return out};
+// la elección se guarda como "Nombre|tipo de copia"
+const trSplit=key=>{key=key||"";const i=key.lastIndexOf("|");return i<0?[key,"m"]:[key.slice(0,i),key.slice(i+1)]};
+const trRecK=key=>{if(!key)return null;const[n,k]=trSplit(key);if(!PM[n]||!(S.owned[n]>0))return null;const c=trCopies(n).find(x=>x.k===k);return c?{n:n,l:c.l,s:c.s}:null};
+const trTakeK=key=>{const[n,k]=trSplit(key);return pkTake(n,k)};
+// casillas para elegir: el principal y, al lado, sus repetidos
+const trCells=(L,sel,attr,cap)=>L.flatMap(p=>trCopies(p[0]).map(c=>{const key=p[0]+"|"+c.k,dup=c.k!=="m",over=cap&&c.l>cap;
+  return '<button class="tcell '+p[2]+(sel===key?' sel':'')+(c.s?' shiny':'')+(dup?' tdup':'')+(over?' tover':'')+'" '+attr+'="'+esc(key)+'"'+(over?' disabled title="Supera el límite de nivel de tu amigo (Nv'+cap+')"':'')+'>'+ico(p,56,false,!!c.s)+'<b>'+esc(p[0])+'</b><small>Nv'+c.l+(dup?' · 🔁 Repetido'+(c.c>1?' ×'+c.c:''):(S.team.includes(p[0])?' · ⭐':''))+'</small>'+(over?'<small class="tovr">🔒 Supera su límite</small>':'')+'</button>'})).join("");
 const recTxt=r=>r?(r.s?"✨ ":"")+esc(r.n)+" Nv"+(r.l|0):"?";
 // ---- ventana de intercambio al estilo de los juegos ----
 let TM={st:null,t:null,sel:null,q:"",f:""};
@@ -8232,12 +8247,12 @@ const trRec=n=>n&&S.owned[n]>0?{n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0}:null
 function trGrid(){
   const q=nrm(TM.q),L=trOwnList().filter(p=>(!q||nrm(p[0]).includes(q))&&(!TM.f||p[2]===TM.f)).sort((a,b)=>lvd(b[0]).l-lvd(a[0]).l||WW[b[2]]-WW[a[2]]).slice(0,240);
   return '<div class="tfil"><input id="tq" placeholder="Buscar en tu equipo y colección..." value="'+esc(TM.q)+'"><select id="tf"><option value="">Todas</option>'+["C","R","E","M","L"].map(r=>'<option value="'+r+'"'+(TM.f===r?' selected':'')+'>'+STAR[r]+'</option>').join("")+'</select></div>'+
-    '<div class="tgrid">'+(L.length?L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;const over=TM.pcap&&lvd(p[0]).l>TM.pcap;return '<button class="tcell '+p[2]+(TM.sel===p[0]?' sel':'')+(sh?' shiny':'')+(over?' tover':'')+'" data-tp="'+esc(p[0])+'"'+(over?' disabled title="Supera el límite de nivel de tu amigo (Nv'+TM.pcap+')"':'')+'>'+ico(p,56,false,sh)+'<b>'+esc(p[0])+'</b><small>Nv'+lvd(p[0]).l+(S.owned[p[0]]>1?' · ×'+S.owned[p[0]]:'')+(S.team.includes(p[0])?' · ⭐':'')+'</small>'+(over?'<small class="tovr">🔒 Supera su límite</small>':'')+'</button>'}).join(""):'<small class="mut">No hay Pokémon con ese filtro.</small>')+'</div>';
+    '<div class="tgrid">'+(L.length?trCells(L,TM.sel,"data-tp",TM.pcap):'<small class="mut">No hay Pokémon con ese filtro.</small>')+'</div>';
 }
 function trOpen(st,t){if(fcd&&st!=="anim"){toast("Termina el combate para intercambiar.");return}TM={st:st,t:t,sel:null,q:"",f:"",pcap:0};$("trdM").hidden=false;trRender();trCapLoad()}
 // límite de nivel del otro jugador (lo publica en su perfil): no se le puede dar un Pokémon de más nivel del que él puede tener
 async function trCapLoad(){const t=TM.t;if(!t||!window.FB||!window.FB.rankGet)return;const me=window.FB.uid&&window.FB.uid(),u=t.uid||(t.from&&t.from!==me?t.from:t.to);if(!u||u===me)return;
-  try{const d=await window.FB.rankGet(u);const c=d&&+d.cap;if(c>0&&TM.t===t){TM.pcap=c;if(TM.st&&TM.st.startsWith("pick")){if(TM.sel&&lvd(TM.sel).l>c)TM.sel=null;trRender()}}}catch(e){}}
+  try{const d=await window.FB.rankGet(u);const c=d&&+d.cap;if(c>0&&TM.t===t){TM.pcap=c;if(TM.st&&TM.st.startsWith("pick")){{const r=trRecK(TM.sel);if(r&&r.l>c)TM.sel=null};trRender()}}}catch(e){}}
 const trOver=r=>!!r&&(r.l|0)>lvCap();
 const trOverTxt=r=>'<p class="tcap">🔒 '+esc(r.n)+' es de nivel '+(r.l|0)+' y tu límite es el Nv'+lvCap()+'. Consigue más medallas de gimnasio para poder recibir Pokémon de ese nivel.</p>';
 function trClose(){$("trdM").hidden=true;TM.st=null;trdUI()}
@@ -8245,10 +8260,10 @@ function trRender(){
   const b=$("trdB"),t=TM.t,st=TM.st;if(!st)return;let h="";
   const vs=(l,r)=>'<div class="tvs">'+l+'<div class="tarrow"><span>⇄</span></div>'+r+'</div>';
   if(st==="pick"||st==="pickb"){
-    const partner=st==="pick"?t.n:pvClean(t.fn),mine=trRec(TM.sel);
+    const partner=st==="pick"?t.n:pvClean(t.fn),mine=trRecK(TM.sel);
     h='<h2>🔄 Intercambio con '+esc(partner)+'</h2>'+vs(trCard(mine,"Tú ofreces",mine?"":"Elige uno abajo"),st==="pickb"?trCard(t.o,esc(partner)+" ofrece"):trCard(null,esc(partner)+" ofrece","Lo elegirá después"))+
-      '<small class="mut">'+(st==="pick"?"Elige el Pokémon que quieres ofrecer. "+esc(partner)+" verá tu oferta y elegirá qué te da a cambio.":"Elige qué Pokémon das a cambio de su "+esc(t.o.n)+".")+' Se envía con su nivel; si te quedan copias, esas vuelven al nivel 1.'+(TM.pcap?' Solo puedes dar Pokémon hasta el Nv'+TM.pcap+' (el límite de nivel de '+esc(partner)+').':'')+'</small>'+trGrid()+
-      '<div class="jrow"><button class="red" data-tgo="1"'+(mine?'':' disabled')+'>🔄 Ofrecer '+(mine?esc(mine.n):"")+'</button><button class="alt" data-tcl="1">'+(st==="pickb"?"Volver":"Cancelar")+'</button>'+(st==="pickb"?'<button class="alt" data-tno="1">Rechazar</button>':'')+'</div>';
+      '<small class="mut">'+(st==="pick"?"Elige el Pokémon que quieres ofrecer. "+esc(partner)+" verá tu oferta y elegirá qué te da a cambio.":"Elige qué Pokémon das a cambio de su "+esc(t.o.n)+".")+' Si tienes repetidos, puedes dar uno de ellos (Nv1) y quedarte con el principal; si das el principal, el siguiente que tengas empieza en Nv1.'+(TM.pcap?' Solo puedes dar Pokémon hasta el Nv'+TM.pcap+' (el límite de nivel de '+esc(partner)+').':'')+'</small>'+trGrid()+
+      '<div class="jrow"><button class="red" data-tgo="1"'+(mine?'':' disabled')+'>🔄 Ofrecer '+(mine?(mine.s?"✨ ":"")+esc(mine.n)+" Nv"+mine.l:"")+'</button><button class="alt" data-tcl="1">'+(st==="pickb"?"Volver":"Cancelar")+'</button>'+(st==="pickb"?'<button class="alt" data-tno="1">Rechazar</button>':'')+'</div>';
   }else if(st==="inc"){
     const ov=trOver(t.o);h='<h2>📨 ¡Solicitud de intercambio!</h2><p><b>'+esc(pvClean(t.fn))+'</b> quiere intercambiar contigo y te ofrece:</p><div class="tsolo">'+trCard(t.o,"Te ofrece")+'</div>'+(ov?trOverTxt(t.o):'')+'<div class="jrow">'+(ov?'':'<button class="red" data-tpb="1">👀 Elegir qué le doy a cambio</button>')+'<button class="alt" data-tno="1">Rechazar</button><button class="alt" data-tcl="1">Más tarde</button></div>';
   }else if(st==="wait"){
@@ -8331,11 +8346,11 @@ document.addEventListener("click",async e=>{
   try{
     if(d.frt){trOpen("pick",{uid:d.frt,n:d.frtn});return}
     if(d.topen!=null){const x=($("trdBox")._L||[])[+d.topen];if(x)trOpen(x.st,x.t);return}
-    if(d.tp){TM.sel=d.tp;snd("ui");const sc=$("trdB").querySelector(".tgrid").scrollTop;trRender();$("trdB").querySelector(".tgrid").scrollTop=sc;try{cry(d.tp)}catch(x){}return}
+    if(d.tp){TM.sel=d.tp;snd("ui");const sc=$("trdB").querySelector(".tgrid").scrollTop;trRender();$("trdB").querySelector(".tgrid").scrollTop=sc;try{cry(trSplit(d.tp)[0])}catch(x){}return}
     if(d.tcl){trClose();return}
     if(d.tpb){if(trOver(t&&t.o))return;TM.st="pickb";TM.sel=null;trRender();return}
     if(d.tgo){
-      if(!TM.sel||fcd)return;if(TM.pcap&&lvd(TM.sel).l>TM.pcap){toast("🔒 Ese Pokémon supera el límite de nivel de tu amigo (Nv"+TM.pcap+").");return}b.disabled=true;const rec=pkTake(TM.sel);if(!rec)return;
+      if(!TM.sel||fcd)return;const want=trRecK(TM.sel);if(!want)return;if(TM.pcap&&want.l>TM.pcap){toast("🔒 Ese Pokémon supera el límite de nivel de tu amigo (Nv"+TM.pcap+").");return}b.disabled=true;const rec=trTakeK(TM.sel);if(!rec)return;
       if(TM.st==="pick"){try{const ref=await window.FB.trSend(t.uid,t.n,pvClean(pvNick()),rec);if(window.cloudFlush)window.cloudFlush(true);snd("throw");TM.st="wait";TM.t={id:ref&&ref.id,from:window.FB.uid(),to:t.uid,tn:t.n,o:rec,st:"req"};trRender();toast("📨 Oferta enviada a "+t.n)}catch(x){await pkGive(rec,false);throw x}}
       else{try{await window.FB.trUpd(t.id,{st:"resp",b:rec});if(window.cloudFlush)window.cloudFlush(true);snd("throw");TM.st="wait";TM.t=Object.assign({},t,{b:rec,st:"resp"});trRender()}catch(x){await pkGive(rec,false);throw x}}
       render();return;
@@ -8761,7 +8776,7 @@ const natSync=n=>{if(_ownPrev)_ownPrev[n]=S.owned[n]|0};
 function natAlt(n,k){if(k<=0)return;S.natAlt=S.natAlt||{};const L=S.natAlt[n]=S.natAlt[n]||[];for(let i=0;i<Math.min(k,6);i++){const x=Math.floor(Math.random()*NAT.length);if(x!==natOf(n)&&!L.includes(x))L.push(x)}while(L.length>6)L.shift();if(!L.length)delete S.natAlt[n]}
 {const _r=render;render=function(){try{natTrack()}catch(e){}return _r.apply(this,arguments)}}
 // --- al entregar un Pokémon en un intercambio se limpian sus datos y vuelve su objeto a la Mochila ---
-{const _t=pkTake;pkTake=function(n){const h=heldOf(n),r=_t(n);if(r&&!(S.owned[n]>0)){if(h)S.bag[h]=(S.bag[h]||0)+1;[S.held,S.mote,S.fav,S.nat,S.natAlt].forEach(o=>{if(o)delete o[n]});save()}return r}}
+{const _t=pkTake;pkTake=function(n,k){const h=heldOf(n),r=_t(n,k);if(r&&!(S.owned[n]>0)){if(h)S.bag[h]=(S.bag[h]||0)+1;[S.held,S.mote,S.fav,S.nat,S.natAlt].forEach(o=>{if(o)delete o[n]});save()}return r}}
 // Pokémon ocupados (guardería o expedición)
 function busyMon(n){return !!(S.dc&&(S.dc.a===n||S.dc.b===n))||!!(S.exp||[]).some(x=>x.n===n)}
 function busyTxt(n){return S.dc&&(S.dc.a===n||S.dc.b===n)?"en la Guardería":(S.exp||[]).some(x=>x.n===n)?"de expedición":""}
@@ -10586,9 +10601,9 @@ function mktUI(){
     if(open.length>=MK_MAX)h+='<p class="mut">Ya tienes '+MK_MAX+' cosas a la venta. Espera a que se vendan o retira alguna.</p>';
     else{const k=MK.sk||"pk";h+='<div class="exdur"><button class="'+(k==="pk"?'on':'')+'" data-mks="pk">Pokémon</button><button class="'+(k==="it"?'on':'')+'" data-mks="it">Objetos</button></div>';
       if(k==="pk"){const q=nrm(MK.sq||""),L=trOwnList().filter(p=>!q||nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q)).sort((a,b)=>"CREML".indexOf(b[2])-"CREML".indexOf(a[2])||lvd(b[0]).l-lvd(a[0]).l).slice(0,80);
-        h+='<div class="sets-row"><input id="mkSQ" placeholder="Buscar en tu colección..." value="'+esc(MK.sq||"")+'"></div><small class="mut">No salen tus favoritos únicos ni los que están en la Guardería o de expedición. Si vendes tu última copia, desaparece de tu colección.</small><div class="nxgrid">'+L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;return '<button class="nxcell'+(MK.sel===p[0]?' sel':'')+'" data-mkp="'+esc(p[0])+'">'+ico(p,48,false,sh)+'<b>'+esc(nk(p[0]))+'</b><small>Nv'+lvd(p[0]).l+' · ×'+S.owned[p[0]]+'</small></button>'}).join("")+'</div>'}
+        h+='<div class="sets-row"><input id="mkSQ" placeholder="Buscar en tu colección..." value="'+esc(MK.sq||"")+'"></div><small class="mut">No salen tus favoritos únicos ni los que están en la Guardería o de expedición. Si vendes tu última copia, desaparece de tu colección.</small><div class="nxgrid">'+L.flatMap(p=>trCopies(p[0]).map(c=>{const key=p[0]+"|"+c.k,dup=c.k!=="m";return '<button class="nxcell'+(MK.sel===key?' sel':'')+'" data-mkp="'+esc(key)+'">'+ico(p,48,false,!!c.s)+'<b>'+esc(nk(p[0]))+'</b><small>Nv'+c.l+(dup?' · 🔁 Repetido'+(c.c>1?' ×'+c.c:''):'')+'</small></button>'})).join("")+'</div>'}
       else{const L=ITEMS.filter(it=>(S.bag[it[0]]|0)>0);h+='<div class="nxgrid">'+(L.length?L.map(it=>'<button class="nxcell'+(MK.sel===it[0]?' sel':'')+'" data-mki="'+it[0]+'"><span class="iico">'+itemIco(it[0],36)+'</span><b>'+it[1]+'</b><small>Tienes ×'+S.bag[it[0]]+'</small></button>').join(""):'<small class="mut">Tu mochila está vacía.</small>')+'</div>'}
-      if(MK.sel){h+='<div class="mksell"><b>Vender '+(k==="pk"?esc(nk(MK.sel)):IN2(MK.sel))+'</b>'+(k==="it"?'<label>Cantidad <input id="mkN" type="number" min="1" max="'+(S.bag[MK.sel]|0)+'" value="1"></label>':'')+'<label>Precio 🎟️ <input id="mkP" type="number" min="'+MK_MIN+'" step="1000" value="'+(MK.pr||"")+'" placeholder="Ej. 500000"></label><small class="mut">Recibirás el 95% del precio.</small><button class="red" data-mkgo="1">🏷️ Poner a la venta</button></div>'}}
+      if(MK.sel){h+='<div class="mksell"><b>Vender '+(k==="pk"?(r=>r?(r.s?"✨ ":"")+esc(nk(r.n))+" Nv"+r.l:"")(trRecK(MK.sel)):IN2(MK.sel))+'</b>'+(k==="it"?'<label>Cantidad <input id="mkN" type="number" min="1" max="'+(S.bag[MK.sel]|0)+'" value="1"></label>':'')+'<label>Precio 🎟️ <input id="mkP" type="number" min="'+MK_MIN+'" step="1000" value="'+(MK.pr||"")+'" placeholder="Ej. 500000"></label><small class="mut">Recibirás el 95% del precio.</small><button class="red" data-mkgo="1">🏷️ Poner a la venta</button></div>'}}
   }else{
     h+=MK.mine.length?'<div class="mkgrid">'+MK.mine.map(d=>'<div class="mkc"><div class="mki">'+mkIco(d,56)+'</div><b>'+esc(mkWhat(d))+'</b><small>🎟️ '+fmt(d.pr)+'</small>'+(d.st==="open"?'<button class="alt" data-mkx="'+esc(d.id)+'">Retirar</button>':'<small>✅ Vendido a '+esc(pvClean(d.bn||""))+'</small>')+'</div>').join("")+'</div>':'<small class="mut">No tienes nada a la venta.</small>';
   }
@@ -10602,7 +10617,7 @@ async function mkSell(){
   if(!(pr>=MK_MIN&&pr<=MK_TOP)){toast("El precio debe estar entre "+fmt(MK_MIN)+" y "+fmt(MK_TOP)+" 🎟️.");return}
   if(fcd){toast("Termina el combate primero.");return}if(MK.mine.filter(d=>d.st==="open").length>=MK_MAX)return;
   const d={s:window.FB.uid(),sn:pvClean(pvNick()).slice(0,30),k:k,pr:pr,st:"open",at:Date.now()};
-  if(k==="pk"){if(!trOwnList().some(p=>p[0]===n)){toast("No puedes vender ese Pokémon.");return}const rec=pkTake(n);if(!rec)return;d.pk=rec}
+  if(k==="pk"){const pn=trSplit(n)[0];if(!trOwnList().some(p=>p[0]===pn)||!trRecK(n)){toast("No puedes vender ese Pokémon.");return}const rec=trTakeK(n);if(!rec)return;d.pk=rec}
   else{const q=Math.max(1,Math.min(S.bag[n]|0,Math.floor(+($("mkN")||{}).value||1)));if(!(S.bag[n]>0))return;S.bag[n]-=q;d.it={id:n,q:q};save()}
   try{await window.FB.mkAdd(d)}catch(e){if(k==="pk")await pkGive(d.pk);else S.bag[n]+=d.it.q;save();toast("No se ha podido poner a la venta.");return}
   MK.sel=null;MK.pr="";MK.tab="mine";render();snd("pop");toast("🏷️ ¡"+mkWhat(d)+" está a la venta por "+fmt(pr)+" 🎟️!");mktUI();
@@ -11671,7 +11686,7 @@ function ltInvite(uid,n){if(!PR||LT.st!=="idle"||fcd)return;const o=pvOthers().f
 async function ltEnter(room,uid,n){LT={st:"room",room:room,uid:uid,n:n,sel:null,ok:null,go:null,q:"",t0:Date.now(),seen:Date.now()};
   try{LT.R=await PR.join(room)}catch(e){ltReset("No se pudo entrar en la sala de intercambio.");return}
   ltPub();LT.un=LT.R.onPeers(()=>ltTick());LT.iv=setInterval(ltTick,500);snd("lvl");ltRender()}
-const ltRec=n=>n&&S.owned[n]>0?{n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0}:null;
+const ltRec=key=>trRecK(key);
 function ltPub(){if(!LT.R)return;LT.R.presence({lt:{v:1,n:pvClean(pvNick()),sel:ltRec(LT.sel),ok:LT.ok,go:LT.go}}).catch(()=>{})}
 const ltPeer=()=>{if(!LT.R)return null;const p=LT.R.peers().find(x=>!x.isMe&&x.presence&&x.presence.lt&&x.presence.lt.v===1);return p?p.presence.lt:null};
 function ltRender(){if(LT.st!=="room")return;const o=ltPeer(),mine=ltRec(LT.sel),theirs=o&&ltOk(o.sel)?o.sel:null,q=nrm(LT.q||"");
@@ -11680,12 +11695,12 @@ function ltRender(){if(LT.st!=="room")return;const o=ltPeer(),mine=ltRec(LT.sel)
   const h='<h2>🔄 Sala de intercambio</h2><p class="mut">Estás con <b>'+esc(LT.n)+'</b>'+(o?' · 🟢 en la sala':' · ⏳ entrando…')+'</p>'+
     '<div class="tvs">'+trCard(mine,"Tú ofreces",mine?"":"Elige uno abajo").replace('class="tcard','class="tcard'+(okMe?' ltok':''))+'<div class="tarrow"><span>⇄</span></div>'+trCard(theirs,esc(LT.n)+" ofrece",o?"Está eligiendo…":"").replace('class="tcard','class="tcard'+(okThem?' ltok':''))+'</div>'+
     '<div class="ltst"><span class="'+(okMe?'on':'')+'">'+(okMe?'✅ Tú: listo':'Tú: eligiendo')+'</span><span class="'+(okThem?'on':'')+'">'+(okThem?'✅ '+esc(LT.n)+': listo':esc(LT.n)+': eligiendo')+'</span></div>'+
-    (okMe?'':'<div class="tfil"><input id="ltq" placeholder="Buscar en tu colección..." value="'+esc(LT.q||"")+'"></div><div class="tgrid">'+L.map(p=>{const sh=S.shiny&&S.shiny[p[0]]>0;return '<button class="tcell '+p[2]+(LT.sel===p[0]?' sel':'')+(sh?' shiny':'')+'" data-ltp="'+esc(p[0])+'">'+ico(p,56,false,sh)+'<b>'+esc(p[0])+'</b><small>Nv'+lvd(p[0]).l+(S.owned[p[0]]>1?' · ×'+S.owned[p[0]]:'')+'</small></button>'}).join("")+'</div>')+
+    (okMe?'':'<div class="tfil"><input id="ltq" placeholder="Buscar en tu colección..." value="'+esc(LT.q||"")+'"></div><div class="tgrid">'+trCells(L,LT.sel,"data-ltp",0)+'</div>')+
     '<div class="jrow">'+(okMe?'<button class="alt" data-ltu="1">✏️ Cambiar mi Pokémon</button>':'<button class="red" data-ltc="1"'+(mine&&theirs?'':' disabled')+'>✅ Confirmar intercambio</button>')+'<button class="alt" data-ltx="1">Salir de la sala</button></div>'+
     '<small class="mut">Cuando los dos confirméis, se hará el intercambio. Si el otro cambia de Pokémon, tendrás que volver a confirmar.</small>';
   const M=ltModal(h),g=M.querySelector(".tgrid");if(g&&LT.gs)g.scrollTop=LT.gs;const i=$("ltq");if(i){i.oninput=e=>{LT.q=e.target.value;const c=e.target.selectionStart;ltRender();const n=$("ltq");n.focus();n.setSelectionRange(c,c)}}}
 async function ltDo(mine,theirs){LT.st="busy";clearInterval(LT.iv);const n=LT.n;
-  const rec=pkTake(mine.n);if(!rec){ltReset("Ya no tienes ese Pokémon.");return}
+  const rec=trTakeK(LT.sel);if(!rec){ltReset("Ya no tienes ese Pokémon.");return}
   stt().trade=(stt().trade||0)+1;save();ltModal(null);
   try{await trAnim(rec,theirs,n)}catch(e){}await pkGive(theirs,true);if(window.cloudFlush)window.cloudFlush(true);render();
   setTimeout(()=>ltReset(),1500)}
@@ -11720,8 +11735,8 @@ document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
   if(t.closest("[data-lta]")&&LT.st==="ask"){const a=LT;PV.lt={acc:{from:a.from,room:a.room},t:Date.now()};pvPub();ltEnter(a.room,a.from,a.n);return}
   if(t.closest("[data-ltn]")&&LT.st==="ask"){PV.lt={no:{from:LT.from,room:LT.room},t:Date.now()};pvPub();const r=LT.room;LT={st:"idle"};ltModal(null);setTimeout(()=>{if(LT.st==="idle"&&PV.lt&&PV.lt.no&&PV.lt.no.room===r){PV.lt=null;pvPub()}},8000);return}
   if(LT.st!=="room")return;
-  const p=t.closest("[data-ltp]");if(p){const g=$("ltM").querySelector(".tgrid");LT.gs=g?g.scrollTop:0;LT.sel=p.dataset.ltp;LT.ok=null;LT.go=null;snd("ui");try{cry(LT.sel)}catch(x){}ltPub();ltRender();return}
-  if(t.closest("[data-ltc]")){const o=ltPeer(),th=o&&ltOk(o.sel)?o.sel:null;if(!LT.sel||!th)return;LT.ok={n:LT.sel,t:th.n};snd("lvl");ltPub();ltRender();return}
+  const p=t.closest("[data-ltp]");if(p){const g=$("ltM").querySelector(".tgrid");LT.gs=g?g.scrollTop:0;LT.sel=p.dataset.ltp;LT.ok=null;LT.go=null;snd("ui");try{cry(trSplit(LT.sel)[0])}catch(x){}ltPub();ltRender();return}
+  if(t.closest("[data-ltc]")){const o=ltPeer(),th=o&&ltOk(o.sel)?o.sel:null;const mn=ltRec(LT.sel);if(!mn||!th)return;LT.ok={n:mn.n,t:th.n};snd("lvl");ltPub();ltRender();return}
   if(t.closest("[data-ltu]")){LT.ok=null;LT.go=null;ltPub();ltRender();return}});
 
 // ================= objetos nuevos: Hierba Blanca y semillas de campo =================

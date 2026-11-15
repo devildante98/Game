@@ -105,7 +105,27 @@ function RU3D(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alpha
         bx(cx,1.05,z,hw,.45,1.05,wd,wd2);bx(cx,.58,z,hw-.1,.06,1.0,wd3);for(const sx of[-1,1])for(const sz of[-1,1]){const m=RX(T(I(),cx+sx*(hw-.05),.5,z+sz*.65),t*0);box(m,.09,.5,.5,wd3,C("#7a4e2a"));bx(cx+sx*(hw+.02),.5,z+sz*.65,.05,.12,.12,C("#c9c9c9"))}
         for(let i=0;i<3;i++)bx(cx+(i-1)*hw*.62,1.85,z+(i%2?.2:-.2),hw*.3,.36,.85,i%2?hay:hay2,mix(hay,[1,1,1],.2));for(let i=0;i<2;i++)bx(cx+(i-.5)*hw*.6,2.55,z,hw*.28,.34,.8,hay2,mix(hay,[1,1,1],.25));bx(cx,3.2,z,hw*.32,.3,.7,hay,mix(hay,[1,1,1],.25));
         bx(cx,1.5,z-1.08,hw,.05,.03,wd2);for(const sx of[-hw+.15,hw-.15])bx(cx+sx,1.1,z-1.1,.06,.42,.06,wd3)};
+      // Snorlax dormido tumbado de lado de lado a lado de dos carriles: la barriga crema mira al jugador y sube y baja al respirar,
+      // la cabeza (ojos cerrados) a un lado, los pies al otro y unas «Z» flotando
+      const snorlax=(z,cx,o)=>{const bd=C("#2f6b7a"),bd2=C("#3f8494"),cr=C("#efe2c0"),cr2=C("#f8f0d8"),dk=C("#1b2a30"),wt=C("#f4f4f0"),br=1+Math.sin(t*1.7+o.x*.01)*.035,bx0=cx-.25,zf=z-1.0;
+        shadow(cx+.2,z+.3,1.85,1.15);
+        for(const[yc,hx,hz]of[[.22,.92,.84],[.62,1.08,.98],[1.05,1.12,1.02],[1.48,1.06,.96],[1.86,.9,.84],[2.18,.66,.62]])bx(bx0,yc*br,z,hx,.24*br,hz,bd,bd2);
+        // barriga
+        bx(bx0,1.12*br,zf-.06,.86,.86*br,.08,cr,cr2);bx(bx0,1.12*br,zf-.15,.66,.66*br,.05,cr2,cr2);bx(bx0,1.12*br,zf-.21,.42,.44*br,.03,cr2,cr2);
+        // brazos sobre la barriga con garras blancas
+        bx(bx0+.15,1.72*br,zf-.2,.5,.15,.14,bd,bd2);for(let k=0;k<3;k++)bx(bx0-.38,1.72*br+(k-1)*.09,zf-.33,.05,.035,.02,wt);
+        bx(bx0-.1,.55*br,zf-.2,.48,.14,.14,bd,bd2);for(let k=0;k<3;k++)bx(bx0-.6,.55*br+(k-1)*.09,zf-.33,.05,.035,.02,wt);
+        // cabeza: cara crema hacia el jugador, ojos cerrados, boca y orejas
+        const hx0=cx+1.15,hz0=z-.15;bx(hx0,1.25,hz0,.44,.58,.6,bd,bd2);bx(hx0,1.12,hz0-.61,.36,.4,.025,cr,cr2);
+        for(const sx of[-1,1])bx(hx0+sx*.16,1.3,hz0-.645,.1,.022,.01,dk);bx(hx0,.97,hz0-.645,.13,.02,.01,dk);for(const sx of[-1,1])bx(hx0+sx*.1,.92,hz0-.648,.035,.035,.01,wt);
+        for(const sx of[-1,1])bx(hx0+sx*.27,1.92,hz0,.1,.11,.1,bd,bd2);
+        // pies hacia el otro lado, con la planta crema y garras
+        for(const sy of[0,1]){const fy=.42+sy*.62;bx(cx-1.46,fy,z-.25,.24,.27,.36,bd,bd2);bx(cx-1.71,fy,z-.25,.015,.21,.28,cr);for(let k=0;k<3;k++)bx(cx-1.73,fy+.16,z-.25+(k-1)*.15,.02,.05,.04,wt)}
+        // Zzz
+        UNLIT=true;for(let k=0;k<3;k++){const ph=(t*.45+k/3)%1,s=.1+ph*.16,zx=hx0+.1+ph*.8,zy=2.1+ph*1.7,c=mix(C("#bfe0ff"),C("#ffffff"),ph);
+          bx(zx,zy+s,hz0-.3,s,.03,.02,c);bx(zx,zy-s,hz0-.3,s,.03,.02,c);box(RZ(T(I(),zx,zy,hz0-.3),-Math.PI/4),s*1.41,.03,.02,c)}UNLIT=false};
       for(const o of S.obs){const z=ZS(o.x+o.w/2),one=o.ln&&o.ln.length===1?XL(o.ln[0]):null;
+        if(o.k==="snor"){snorlax(z,(XL(o.ln[0])+XL(o.ln[1]))/2,o);continue}
         if(o.k==="pillar"){pillar(z,XL(o.ln[0]));continue}
         if(o.k==="wagon"){wagon(z,(XL(o.ln[0])+XL(o.ln[1]))/2);continue}
         if(o.k==="fence")fence(z,o.h,3,one,one!=null?.72:null);else if(o.k==="high")fence(z,o.h,4);else if(o.k==="fence2"){fence(ZS(o.x+o.w/2),o.h,3);fence(ZS(o.x+o.w+o.gap+o.w/2),o.h,3)}
@@ -118,6 +138,9 @@ function RU3D(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alpha
       for(const it of S.items){const z=ZS(it.x),y=(S.G-it.y)/RU3_S+Math.sin(t*6+it.x*.05)*.08,m=RY(T(I(),XL(it.ln),y,z),t*3+it.x*.01);
         if(it.k==="tk"){box(m,.3,.2,.045,C("#ffcf3a"),C("#ffe98a"));box(T(m,0,0,.05),.2,.11,.01,C("#fff6c8"));box(T(m,0,0,-.05),.2,.11,.01,C("#fff6c8"))}
         else if(it.k==="fire"){const s=1+Math.sin(t*12)*.12;box(T(m,0,-.1,0),.28*s,.22,.28*s,C("#ff5a1e"));box(T(m,0,.2,0),.2*s,.2,.2*s,C("#ff9a2a"));box(T(m,0,.48,0),.11,.16,.11,C("#ffe04a"));box(RX(m,t*2),.5,.03,.5,C("#ffd35c"))}
+        else if(it.k==="coin"){box(m,.3,.3,.045,C("#f2c230"),C("#ffe27a"));box(m,.11,.11,.05,C("#b98a1c"));box(RX(m,t*2),.5,.03,.5,C("#ffe58a"))}
+        else if(it.k==="speed"){const y1=C("#ffe23a");box(RZ(T(m,.07,.2,0),.45),.07,.2,.05,y1);box(m,.17,.05,.05,y1);box(RZ(T(m,-.07,-.2,0),.45),.07,.2,.05,y1);box(RX(m,t*2),.5,.03,.5,C("#fff27a"))}
+        else if(it.k==="life"){const pk=C("#ff5a9a");box(RZ(T(m,-.1,.04,0),Math.PI/4),.15,.24,.06,pk);box(RZ(T(m,.1,.04,0),-Math.PI/4),.15,.24,.06,pk);box(RX(m,t*2),.5,.03,.5,C("#ffb3d1"))}
         else{box(T(m,-.22,.05,0),.08,.24,.09,C("#e83a40"));box(T(m,.22,.05,0),.08,.24,.09,C("#e83a40"));box(T(m,0,-.22,0),.3,.08,.09,C("#e83a40"));box(T(m,-.22,.33,0),.08,.06,.09,C("#f4f4f8"));box(T(m,.22,.33,0),.08,.06,.09,C("#f4f4f8"));box(RX(m,t*2),.5,.03,.5,C("#9ad8ff"))}}
       // ---------- partículas (polvo, chispas y trozos) ----------
       for(const p of S.parts){if(p.lx==null)p.lx=(Math.random()-.5)*(p.fl?.5:1.6)+(p.ln!=null?XL(p.ln):p.fl||p.c==="#fff6"||p.c==="#c9a46a"||p.c==="#ffd35c"||p.c==="#ff9a3c"?PXl:0);const k=1-p.t/p.l,s=Math.max(.02,p.r/RU3_S*(p.fl?k:1)*.9);bx(p.lx+(p.fl?0:(p.lx-(p.ln!=null?XL(p.ln):0))*p.t*1.2),Math.max(s,(S.G-p.y)/RU3_S),ZS(p.x),s,s,s,PCc(p.c))}

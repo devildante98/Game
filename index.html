@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.94.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=6.95"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794732303">
+<meta name="game-build" content="1794733715">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2935,7 +2935,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 6.94.2</small>
+    <small class="pcver">Versión 6.95</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7617,8 +7617,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="6.94.2";
+const GAME_VER="6.95";
 const NEWS=[
+{v:"2026-11-15-6.95",ver:"6.95",at:"2026-11-15T10:08",t:"💤 Carrera de Rapidash: Snorlax dormidos y más potenciadores",l:["Nuevo obstáculo desde el nivel 2: un Snorlax dormido tumbado que ocupa dos carriles. Cámbiate al carril libre o salta largo… y si caes sobre su barriga, ¡rebotas muy alto y ganas puntos! (¡Boing!)","🪙 Moneda Amuleto: tickets ×2 durante 10 s (todo lo que ganas, metros y tickets, cuenta doble)","⚡ Velocidad Extrema: 4 s a toda velocidad arrasando con todo lo que encuentras","💖 Revivir: si chocas, sigues corriendo una vez","Los potenciadores salen algo más a menudo, y arriba ves cuánto le queda a cada uno"]},
 {v:"2026-11-15-6.94.2",ver:"6.94.2",at:"2026-11-15T09:45",t:"🔧 Arreglos/Mejoras",l:["Intercambios: si tienes repetidos, ahora eliges cuál das. Junto a tu Pokémon principal (con su nivel) aparecen sus repetidos (Nv1, marcados con 🔁 y borde de puntos), y los variocolor repetidos aparte; puedes dar un repetido y quedarte con el principal","Vale para el intercambio con amigos, la sala de intercambio en directo y para vender en el mercado"]},
 {v:"2026-11-15-6.94.1",ver:"6.94.1",at:"2026-11-15T09:40",t:"🔧 Arreglos/Mejoras",l:["Gacha: en las tiradas múltiples (×10, ×100) los Pokémon nuevos, los que aún no tenías, salen los primeros, y después los repetidos"]},
 {v:"2026-11-14-6.94",ver:"6.94",at:"2026-11-14T23:21",t:"🚶 Un pueblo con vida",l:["Vecinos que pasean por la calle del pueblo y por un sendero nuevo junto al lago, algunos con su Pokémon: un cachorro que trota y una bolita que va dando saltos","Las Miltank de la granja pastan: bajan la cabeza a comer y mueven la cola y las orejas","Sale humo de las chimeneas de la Escuela y de la Guardería","De noche: las farolas brillan, los focos del Estadio brillan, la antena del Laboratorio parpadea en rojo y los vecinos que aún pasean llevan un farolillo","No gasta más: en las pruebas el paisaje tarda lo mismo en dibujarse que antes","Arreglado: los edificios ya no se desplazan uno o dos píxeles cuando late el botón del Gacha"]},
@@ -7969,7 +7970,7 @@ function newsShow(all){
 $("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794732303";
+const GAME_B="1794733715";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9613,10 +9614,10 @@ const RU_SPD0=250,RU_SPDMAX=1000;
 const ruSpeed=d=>Math.min(RU_SPDMAX,RU_SPD0+330*(1-Math.exp(-d/700))+d*.05);
 // nivel de dificultad: cada nivel añade obstáculos más difíciles y los junta un poco más
 const ruTier=d=>d<150?0:d<400?1:d<800?2:d<1400?3:4+Math.floor((d-1400)/700);
-const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos.",
+const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuidado con los Snorlax dormidos: ocupan dos carriles, pero si caes sobre su barriga, ¡rebotas! Recoge potenciadores como Tickets ×2, Velocidad Extrema o Revivir. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos.",
   rw:s=>s*180,
   start(B,end){
-    const R=PM.Rapidash||PM.Ponyta||P[0],Z=PM.Zubat||null;
+    const R=PM.Rapidash||PM.Ponyta||P[0],Z=PM.Zubat||null,SN=PM.Snorlax||null;
     B.innerHTML='<div class="whohd"><span>📏 <b id="ruD">0</b> m</span><span id="ruT"></span><span id="ruPw"></span></div>'+
       '<div class="ruw2" id="ruW"><canvas id="ruC3" class="ru3"></canvas><canvas id="ruC"></canvas><div class="rumsg" id="ruM">Toca o pulsa espacio para empezar</div></div>'+
       '<div class="rubtn"><button type="button" class="alt" id="ruL" aria-label="Carril izquierdo">◀</button><button type="button" class="alt" id="ruDn">⬇ Agacharse</button><button type="button" class="red" id="ruUp">⬆ Saltar</button><button type="button" class="alt" id="ruR" aria-label="Carril derecho">▶</button></div>'+
@@ -9626,12 +9627,15 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     let r3=null;try{r3=typeof RU3D==="function"?RU3D($("ruC3")):null}catch(e){r3=null}
     if(r3)$("ruW").classList.add("ru3on");else{const c3=$("ruC3");if(c3)c3.remove()}
     const fit=()=>{const r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=Math.max(200,r.width);H=Math.max(160,r.height);cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);if(r3)r3.resize(W,H,dpr)};fit();
-    const im=new Image(),zi=new Image();im.src=mgImgSrc(R);if(Z)zi.src=mgImgSrc(Z);
+    const im=new Image(),zi=new Image(),sni=new Image();im.src=mgImgSrc(R);if(Z)zi.src=mgImgSrc(Z);if(SN)sni.src=mgImgSrc(SN);
     const PX=70,PW=64,PH=64,GH=46;const GY=()=>H-GH;
-    let y=0,vy=0,jumps=0,hold=false,holdT=0,duck=false,started=false,dead=false,spd=RU_SPD0,lane=0,lx=0,tierN=0,dist=0,bonus=0,cam=0,t=0,last=0,nextO=400,shield=0,magnet=0,combo=0,shake=0,landFx=false;
+    let y=0,vy=0,jumps=0,hold=false,holdT=0,duck=false,started=false,dead=false,spd=RU_SPD0,lane=0,lx=0,tierN=0,dist=0,bonus=0,cam=0,t=0,last=0,nextO=400,shield=0,magnet=0,combo=0,shake=0,landFx=false,coin=0,turbo=0,life=0,grace=0;
+    // Moneda Amuleto: todo lo que ganas cuenta doble mientras dura
+    const MULT=()=>coin>0?2:1,ppos=()=>r3?r3.playerScreen(-y/RU3_S,lx):[cv.getBoundingClientRect().left+PX+PW,cv.getBoundingClientRect().top+GY()+y-PH];
     let obs=[],items=[],parts=[],deadAt=0;
     // acceso para las pruebas automáticas (no cambia nada en la partida)
-    MG.runDbg={get:()=>({dist,spd,lx,lane,tier:tierN,dead,obs:obs.map(o=>({k:o.k,x:Math.round(o.x),ln:o.ln}))}),set:(d,sh)=>{dist=d;if(sh)shield=sh}};
+    MG.runDbg={get:()=>({dist,spd,lx,lane,tier:tierN,dead,y,bonus,coin,turbo,life,grace,obs:obs.map(o=>({k:o.k,x:Math.round(o.x),ln:o.ln,hit:o.hit}))}),set:(d,sh)=>{dist=d;if(sh)shield=sh},
+      put:(k,ln,dx)=>{const G=GY(),X=(r3?PX+PW/2+RU3_FAR*RU3_S:W+30)+(dx||0);if(k==="snor")obs.push({k,w:70,h:80,ln:ln||[-1,0],x:X,y:G-80});else items.push({k,x:X,y:G-30,ln:ln==null?lane:ln})}};
     const rnd=(a,b)=>a+Math.random()*(b-a),hash=n=>{const x=Math.sin(n*127.1)*43758.5453;return x-Math.floor(x)};
     // ---------- controles ----------
     const press=()=>{if(dead)return;if(!started){started=true;msg.textContent="";last=performance.now();MG.raf=requestAnimationFrame(loop);return}
@@ -9658,7 +9662,7 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     const LN=[-1,0,1],shuf=a=>a.slice().sort(()=>Math.random()-.5),TALL=1000;
     const arcTk=(o,ln)=>{const G=GY(),cx=o.x+(o.k==="fence2"?o.w+o.gap/2:o.w/2);
       // los tickets siguen la trayectoria real de un salto bien hecho (corto, o largo si el obstáculo lo pide), con el punto más alto justo encima
-      const long=o.k==="fence2"||o.k==="high"||o.k==="log",sA=ruSpeed(dist+(o.x-PX-PW/2)/20),ht=long?.24:.09,P2=[];let yy=0,v=-620,tt=0,ap=0,apH=0;
+      const long=o.k==="fence2"||o.k==="high"||o.k==="log"||o.k==="snor",sA=ruSpeed(dist+(o.x-PX-PW/2)/20),ht=long?.24:.09,P2=[];let yy=0,v=-620,tt=0,ap=0,apH=0;
       while(tt<2){v+=((tt<ht&&v<0)?950:2100)*.004;yy+=v*.004;tt+=.004;if(yy>=0)break;P2.push([tt,-yy]);if(-yy>apH){apH=-yy;ap=tt}}
       const n=long?5:3+Math.floor(Math.random()*2);for(let i=0;i<n;i++){const f=.2+.6*i/(n-1),q=P2[Math.min(P2.length-1,Math.floor(f*P2.length))];items.push({k:"tk",x:cx+(q[0]-ap)*sA,y:G-q[1]-26,ln})}};
     const groundTk=(x0,w,ln)=>{const G=GY(),n=3+Math.floor(Math.random()*3);for(let i=0;i<n;i++)items.push({k:"tk",x:x0+((i/(n-1))-.5)*Math.max(110,w+60),y:G-22,ln})};
@@ -9667,7 +9671,9 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
         else if(q<.76)o={k:"log",w:70,h:26};else if(T>=1&&q<.9)o={k:"high",w:26,h:62};else o={k:"fence2",w:24,h:40,gap:72};return o};
       const pSide=[.14,.3,.4,.46,.52][Math.min(4,T)],pCombo=T>=3?.18+Math.min(.12,(T-3)*.03):0;
       if(dist>40&&k<pSide){const q=Math.random();
-        if(T>=2&&q<.32){const a=Math.random()<.5?-1:0;os.push({k:"wagon",w:96,h:TALL,ln:[a,a+1]})}
+        // Snorlax dormido de lado a lado de dos carriles: se esquiva cambiando de carril o con un salto largo (y en su barriga se rebota)
+        if(T>=1&&Math.random()<.24){const a=Math.random()<.5?-1:0;os.push({k:"snor",w:70,h:80,ln:[a,a+1]})}
+        else if(T>=2&&q<.32){const a=Math.random()<.5?-1:0;os.push({k:"wagon",w:96,h:TALL,ln:[a,a+1]})}
         else if(T>=2&&q<.58){const L=shuf(LN);os.push({k:"pillar",w:40,h:TALL,ln:[L[0]]},{k:"pillar",w:40,h:TALL,ln:[L[1]]})}
         else if(T>=1&&q<.8){const L=shuf(LN).slice(0,T>=3?2:1);os.push({k:"bat",w:40,h:30,y:G-74,ln:L})}
         else os.push({k:"pillar",w:40,h:TALL,ln:[shuf(LN)[0]]})}
@@ -9681,7 +9687,8 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
         if(os.some(o=>o.ln&&o.h>=TALL)){const jumpable=os.find(o=>o.h<TALL&&o.k!=="bat");const fl=free[Math.floor(Math.random()*free.length)];if(jumpable)arcTk(jumpable,jumpable.ln?jumpable.ln[0]:fl);else groundTk(X+20,os[0].w,fl)}
         else if(o.k==="bat")groundTk(X+20,o.w,o.ln?(free.length?free[Math.floor(Math.random()*free.length)]:o.ln[0]):LN[Math.floor(Math.random()*3)]);
         else arcTk(o,LN[Math.floor(Math.random()*3)])}
-      else if(Math.random()<.18)items.push({k:Math.random()<.5?"fire":"mag",x:X+os[0].w+140,y:G-110,ln:LN[Math.floor(Math.random()*3)]})};
+      else if(Math.random()<.26){const PW2=[["fire",22],["mag",22],["coin",24]].concat(dist>100?[["speed",16]]:[],life?[]:[["life",14]]),tot=PW2.reduce((a,b)=>a+b[1],0);let r=Math.random()*tot,pk=PW2[0][0];for(const q of PW2){if((r-=q[1])<0){pk=q[0];break}}
+        items.push({k:pk,x:X+os[0].w+140,y:G-110,ln:LN[Math.floor(Math.random()*3)]})}};
     // ¿el obstáculo está en el carril de Rapidash? (a mitad de un cambio de carril puede tocar los dos)
     const inLane=o=>!o.ln||o.ln.some(l=>Math.abs(lx-l)<.66);
     const crash=()=>{dead=true;deadAt=performance.now();snd("hit",1);shake=.4;msg.textContent="¡Has chocado! "+Math.floor(dist)+" m";MG.runKey=null;
@@ -9691,40 +9698,44 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
     const stepParts=dt=>{for(const p of parts){p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.gr)p.vy+=900*dt}parts=parts.filter(p=>p.t<p.l)};
     // ---------- bucle ----------
     const loop=ts=>{if(dead||!cv.isConnected)return;const dt=Math.max(0,Math.min(.05,(ts-last)/1000));last=ts;t+=dt;
-      spd=ruSpeed(dist);const mv=spd*dt;dist+=mv/20;cam+=mv;
+      spd=ruSpeed(dist)*(turbo>0?1.55:1);const mv=spd*dt;dist+=mv/20;if(coin>0)bonus+=mv/20;cam+=mv;
       // cambio de carril suave (unas 0,13 s por carril)
       if(lx!==lane){const d=lane-lx,st2=7.5*dt;lx=Math.abs(d)<=st2?lane:lx+Math.sign(d)*st2}
-      {const T=ruTier(dist);if(T>tierN){tierN=T;msg.textContent=T===1?"¡Nivel 2! Columnas: cambia de carril para esquivarlas":T===2?"¡Nivel 3! Carros y columnas dobles":T===3?"¡Nivel 4! Columnas con vallas: esquiva y salta":"¡Nivel "+(T+1)+"! Más rápido y más juntos";mgT(()=>{if(!dead&&msg.textContent.indexOf("Nivel")>0)msg.textContent=""},2200);snd("lvl")}}
+      {const T=ruTier(dist);if(T>tierN){tierN=T;msg.textContent=T===1?"¡Nivel 2! Columnas y Snorlax dormidos: cambia de carril (o rebota en su barriga)":T===2?"¡Nivel 3! Carros y columnas dobles":T===3?"¡Nivel 4! Columnas con vallas: esquiva y salta":"¡Nivel "+(T+1)+"! Más rápido y más juntos";mgT(()=>{if(!dead&&msg.textContent.indexOf("Nivel")>0)msg.textContent=""},2200);snd("lvl")}}
       // salto: mantener pulsado = menos gravedad un momento; agachado en el aire = cae más rápido
       const air=y<-.5;let grav=2100;if(hold&&vy<0&&holdT<.24){holdT+=dt;grav=950}if(duck&&air)grav=4200;
       vy+=grav*dt;y+=vy*dt;if(y>=0){if(air&&vy>300){landFx=true}y=0;vy=0;jumps=0}
       if(landFx){landFx=false;for(let i=0;i<8;i++)parts.push({x:PX+PW/2+rnd(-20,20),y:GY(),vx:rnd(-160,-40),vy:rnd(-80,-10),l:.45,t:0,c:"#c9a46a",r:rnd(2,5)})}
-      if(shield>0)shield=Math.max(0,shield-dt);if(magnet>0)magnet=Math.max(0,magnet-dt);
+      if(shield>0)shield=Math.max(0,shield-dt);if(magnet>0)magnet=Math.max(0,magnet-dt);if(coin>0)coin=Math.max(0,coin-dt);if(turbo>0){turbo=Math.max(0,turbo-dt);if(!turbo)grace=Math.max(grace,1)}if(grace>0)grace=Math.max(0,grace-dt);
       // separación mínima según la velocidad: da tiempo a aterrizar y reaccionar
-      nextO-=mv;if(nextO<=0){spawn();const T=ruTier(dist),mn=spd*Math.max(.85,.95-.025*T)+180;nextO=mn+Math.random()*spd*Math.max(.35,.8-.08*T)}
+      nextO-=mv;if(nextO<=0){if(!MG.runDbg.calm)spawn();const T=ruTier(dist),mn=spd*Math.max(.85,.95-.025*T)+180;nextO=mn+Math.random()*spd*Math.max(.35,.8-.08*T)}
       const G=GY(),ducking=duck&&!air,top=G+y-(ducking?34:PH-8),bot=G+y-4,L=PX+12,Rr=PX+PW-12;
       for(const o of obs){o.x-=mv;if(o.k==="bat")o.y=G-74+Math.sin(t*6+o.x*.02)*4;
         const parts2=o.k==="fence2"?[[o.x,o.w],[o.x+o.w+o.gap,o.w]]:[[o.x,o.w]];
         for(const [ox,ow] of parts2){if(o.hit)break;if(ox<Rr&&ox+ow>L&&inLane(o)&&(o.h>=TALL||bot>o.y+3&&top<o.y+o.h-3)){
-          if(shield>0){o.hit=1;o.smash=1;bonus+=5;snd("hit");for(let i=0;i<14;i++)parts.push({x:ox+ow/2,y:o.h>=TALL?G-60:o.y+o.h/2,ln:lx,vx:rnd(-80,260),vy:rnd(-260,-40),l:.7,t:0,c:o.k==="bat"?"#7a5bd6":o.k==="rock"?"#9aa0a8":"#a0703a",r:rnd(2,5),gr:1})}
+          // Snorlax: si caes sobre su barriga, rebotas muy alto
+          if(o.k==="snor"&&vy>=0&&bot-o.y<28){y=o.y+4-G;vy=-760;jumps=1;hold=false;combo++;const p=8*MULT();bonus+=p;snd("pop");const pp=ppos();mgPop(pp[0],pp[1],"¡Boing! +"+p,"#9be7ff");for(let i=0;i<8;i++)parts.push({x:PX+PW/2,y:o.y,ln:lx,vx:rnd(-120,120),vy:rnd(-160,-40),l:.5,t:0,c:"#fff6",r:rnd(3,6)});continue}
+          if(shield>0||turbo>0||grace>0){o.hit=1;if(o.k!=="snor")o.smash=1;bonus+=5*MULT();snd("hit");for(let i=0;i<14;i++)parts.push({x:ox+ow/2,y:o.h>=TALL?G-60:o.y+o.h/2,ln:lx,vx:rnd(-80,260),vy:rnd(-260,-40),l:.7,t:0,c:o.k==="bat"?"#7a5bd6":o.k==="rock"?"#9aa0a8":"#a0703a",r:rnd(2,5),gr:1})}
+          else if(life>0){life=0;grace=1.6;o.hit=1;if(o.k!=="snor")o.smash=1;shake=.25;snd("lvl");const pp=ppos();mgPop(pp[0],pp[1],"💖 ¡Revivir!","#ff7ab8")}
           else{crash();return}}}
         // ¡justo! = pasar muy cerca por encima
-        const ex=o.k==="fence2"?o.x+o.w*2+o.gap:o.x+o.w;if(!o.hit&&!o.pass&&ex<L){o.pass=1;if(o.h>=TALL){if(Math.abs(lx-o.ln[0])<1.6&&!o.ln.some(l=>Math.abs(lx-l)<.66)){bonus+=2}}else if(o.k!=="bat"&&inLane(o)&&air&&o.y-bot<16){combo++;const p=3+Math.min(7,combo);bonus+=p;const pp=r3?r3.playerScreen(-y/RU3_S,lx):[cv.getBoundingClientRect().left+PX+PW,cv.getBoundingClientRect().top+G+y-PH];mgPop(pp[0],pp[1],"¡Justo! +"+p,"#7df9ff")}else if(o.k!=="bat")combo=0}}
+        const ex=o.k==="fence2"?o.x+o.w*2+o.gap:o.x+o.w;if(!o.hit&&!o.pass&&ex<L){o.pass=1;if(o.h>=TALL){if(Math.abs(lx-o.ln[0])<1.6&&!o.ln.some(l=>Math.abs(lx-l)<.66)){bonus+=2*MULT()}}else if(o.k!=="bat"&&inLane(o)&&air&&o.y-bot<16){combo++;const p=(3+Math.min(7,combo))*MULT();bonus+=p;const pp=ppos();mgPop(pp[0],pp[1],"¡Justo! +"+p,"#7df9ff")}else if(o.k!=="bat")combo=0}}
       obs=obs.filter(o=>o.x>(r3?-320:-160)&&!o.smash);
       for(const it of items){it.x-=mv;
         if(magnet>0&&it.k==="tk"){const dx=PX+PW/2-it.x,dy=G+y-PH/2-it.y,d=Math.hypot(dx,dy);if(d<260){it.x+=dx/d*520*dt;it.y+=dy/d*520*dt}}
         // sin imán, los tickets que pasan cerca también se acercan un poco: no hace falta clavar el salto
         else if(it.k==="tk"){const dx=PX+PW/2-it.x,dy=G+y-PH/2-it.y,d=Math.hypot(dx,dy);if(d<78&&d>1){const k2=Math.min(d,330*dt);it.x+=dx/d*k2;it.y+=dy/d*k2}}
         if(!it.got&&it.x>L-18&&it.x<Rr+18&&it.y>top-18&&it.y<bot+14&&(it.ln==null||Math.abs(lx-it.ln)<.6||magnet>0)){it.got=1;
-          if(it.k==="tk"){bonus+=15;snd("click")}else if(it.k==="fire"){shield=5;snd("lvl");toast("🔥 ¡Llamarada! Atraviesas los obstáculos durante 5 s")}else{magnet=7;snd("lvl");toast("🧲 ¡Imán! Atraes los tickets durante 7 s")}
+          if(it.k==="tk"){bonus+=15*MULT();snd("click")}else if(it.k==="fire"){shield=5;snd("lvl");toast("🔥 ¡Llamarada! Atraviesas los obstáculos durante 5 s")}else if(it.k==="mag"){magnet=7;snd("lvl");toast("🧲 ¡Imán! Atraes los tickets durante 7 s")}
+          else if(it.k==="coin"){coin=10;snd("lvl");toast("🪙 ¡Moneda Amuleto! Tickets ×2 durante 10 s")}else if(it.k==="speed"){turbo=4;snd("lvl");toast("⚡ ¡Velocidad Extrema! Vas a toda velocidad y arrasas con todo durante 4 s")}else if(it.k==="life"){life=1;snd("lvl");toast("💖 ¡Revivir! Si chocas, sigues corriendo una vez")}
           for(let i=0;i<6;i++)parts.push({x:it.x,y:it.y,vx:rnd(-60,60),vy:rnd(-120,-20),l:.4,t:0,c:"#ffd35c",r:rnd(2,4)})}}
       items=items.filter(it=>!it.got&&it.x>-40);
       // llama de Rapidash
-      const fy=G+y-PH*.62,n=shield>0?4:2;for(let i=0;i<n;i++)parts.push({x:PX+16+rnd(-4,6),y:fy+rnd(-10,10),vx:-spd*.55+rnd(-40,20),vy:rnd(-60,10),l:rnd(.25,.45),t:0,c:shield>0?"#ffb03c":"#ff7a2a",r:rnd(4,8),fl:1});
+      const fy=G+y-PH*.62,n=shield>0||turbo>0?4:2;for(let i=0;i<n;i++)parts.push({x:PX+16+rnd(-4,6),y:fy+rnd(-10,10),vx:-spd*.55+rnd(-40,20),vy:rnd(-60,10),l:rnd(.25,.45),t:0,c:turbo>0?"#ffe45c":shield>0?"#ffb03c":"#ff7a2a",r:rnd(4,8),fl:1});
       stepParts(dt);
-      mgSet(Math.floor(dist)+bonus);$("ruD").textContent=Math.floor(dist);
+      mgSet(Math.floor(dist+bonus));$("ruD").textContent=Math.floor(dist);
       $("ruT").textContent="⚡ Nivel "+(tierN+1)+" · "+Math.round(spd/250*100)+"%";
-      const pw=(shield>0?"🔥 "+shield.toFixed(1)+" s ":"")+(magnet>0?"🧲 "+magnet.toFixed(1)+" s":"");const pe=$("ruPw");if(pe&&pe.textContent!==pw)pe.textContent=pw;
+      const pw=(shield>0?"🔥 "+shield.toFixed(1)+" s ":"")+(magnet>0?"🧲 "+magnet.toFixed(1)+" s ":"")+(coin>0?"🪙×2 "+coin.toFixed(1)+" s ":"")+(turbo>0?"⚡ "+turbo.toFixed(1)+" s ":"")+(life?"💖":"");const pe=$("ruPw");if(pe&&pe.textContent!==pw)pe.textContent=pw;
       draw();MG.raf=requestAnimationFrame(loop)};
     // ---------- dibujo ----------
     const sky=()=>{const ph=(dist%1800)/1800;// 0-0.55 día, 0.55-0.7 atardecer, 0.7-0.92 noche, 0.92-1 amanecer
@@ -9733,7 +9744,7 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       let c;if(ph<.55)c=D;else if(ph<.7){const k=(ph-.55)/.15;c=[mix(D[0],S2[0],k),mix(D[1],S2[1],k)]}else if(ph<.78){const k=(ph-.7)/.08;c=[mix(S2[0],N[0],k),mix(S2[1],N[1],k)]}else if(ph<.92)c=N;else{const k=(ph-.92)/.08;c=[mix(N[0],D[0],k),mix(N[1],D[1],k)]}
       return {c,ph,night:ph>.72&&ph<.95}};
     const draw=()=>{if(r3){g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cv.width,cv.height);if(shake>0)shake=Math.max(0,shake-.016);
-        r3.draw({t:started?t:performance.now()/1000,dist,cam,spd,y,vy,duck,started,dead,lx,lane,deadT:dead?(performance.now()-deadAt)/1000:0,shield,magnet,obs,items,parts,sky:sky(),shake,PX,PW,PH,G:GY()});return}
+        r3.draw({t:started?t:performance.now()/1000,dist,cam,spd,y,vy,duck,started,dead,lx,lane,deadT:dead?(performance.now()-deadAt)/1000:0,shield:Math.max(shield,turbo,grace),magnet,coin,turbo,life,obs,items,parts,sky:sky(),shake,PX,PW,PH,G:GY()});return}
       g.setTransform(dpr,0,0,dpr,0,0);const G=GY();let sx=0,sy=0;if(shake>0){sx=rnd(-5,5)*shake*2;sy=rnd(-4,4)*shake*2;shake=Math.max(0,shake-.016)}g.translate(sx,sy);
       const s=sky(),sg=g.createLinearGradient(0,0,0,G);sg.addColorStop(0,"rgb("+s.c[0]+")");sg.addColorStop(1,"rgb("+s.c[1]+")");g.fillStyle=sg;g.fillRect(-10,-10,W+20,G+20);
       // estrellas y sol/luna
@@ -9756,10 +9767,12 @@ const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa co
       // líneas de velocidad
       if(spd>430&&started&&!dead){g.strokeStyle="rgba(255,255,255,.35)";g.lineWidth=1.5;for(let i=0;i<6;i++){const yy=G*.3+hash(i+Math.floor(t*12))*G*.6,x=((t*900+i*137)%(W+200))-100;g.beginPath();g.moveTo(W-x,yy);g.lineTo(W-x+40,yy);g.stroke()}}
       // objetos
-      const LO=l=>(l||0)*9;for(const it of items){const bob=Math.sin(t*6+it.x*.05)*3+LO(it.ln);g.font="22px serif";g.textAlign="center";g.textBaseline="middle";g.fillText(it.k==="tk"?"🎟️":it.k==="fire"?"🔥":"🧲",it.x,it.y+bob);if(it.k!=="tk"){g.strokeStyle="rgba(255,255,255,.7)";g.lineWidth=2;g.beginPath();g.arc(it.x,it.y+bob,17,0,7);g.stroke()}}
+      const LO=l=>(l||0)*9;for(const it of items){const bob=Math.sin(t*6+it.x*.05)*3+LO(it.ln);g.font="22px serif";g.textAlign="center";g.textBaseline="middle";g.fillText(({tk:"🎟️",fire:"🔥",mag:"🧲",coin:"🪙",speed:"⚡",life:"💖"})[it.k]||"⭐",it.x,it.y+bob);if(it.k!=="tk"){g.strokeStyle="rgba(255,255,255,.7)";g.lineWidth=2;g.beginPath();g.arc(it.x,it.y+bob,17,0,7);g.stroke()}}
       // obstáculos
       // en 2D los carriles se ven como franjas: los obstáculos de carril llevan una marca de su carril
-      for(const o of obs){if(o.h>=1000){for(const l of o.ln){g.fillStyle=o.k==="wagon"?"#8a5a2c":"#7d838c";g.fillRect(o.x,G-110+LO(l),o.w,110);g.fillStyle="rgba(255,255,255,.25)";g.fillRect(o.x+4,G-104+LO(l),6,98);g.fillStyle="#e8434a";g.font="bold 13px sans-serif";g.textAlign="center";g.fillText(l<0?"◀":l>0?"▶":"●",o.x+o.w/2,G-118+LO(l))}continue}
+      for(const o of obs){if(o.k==="snor"){for(const l of o.ln){g.save();g.translate(o.x+o.w/2,G-o.h/2+LO(l)+4);if(sni.complete&&sni.naturalWidth){g.rotate(-Math.PI/2);const sz=o.h*1.45;g.drawImage(sni,-sz/2,-sz/2,sz,sz)}else{g.fillStyle="#2f6b7a";g.beginPath();g.ellipse(0,0,o.w*.7,o.h/2,0,0,7);g.fill();g.fillStyle="#efe2c0";g.beginPath();g.ellipse(0,-o.h*.18,o.w*.5,o.h*.3,0,0,7);g.fill()}g.restore()}
+          g.font="bold 16px sans-serif";g.textAlign="center";g.fillStyle="#cfe8ff";g.fillText("💤",o.x+o.w/2+Math.sin(t*2)*6,G-o.h-10-((t*20)%14));continue}
+        if(o.h>=1000){for(const l of o.ln){g.fillStyle=o.k==="wagon"?"#8a5a2c":"#7d838c";g.fillRect(o.x,G-110+LO(l),o.w,110);g.fillStyle="rgba(255,255,255,.25)";g.fillRect(o.x+4,G-104+LO(l),6,98);g.fillStyle="#e8434a";g.font="bold 13px sans-serif";g.textAlign="center";g.fillText(l<0?"◀":l>0?"▶":"●",o.x+o.w/2,G-118+LO(l))}continue}
         if(o.k==="fence"||o.k==="high"||o.k==="fence2"){const one=(x,w,h)=>{g.fillStyle="#8b5a2b";g.fillRect(x,G-h,5,h);g.fillRect(x+w-5,G-h,5,h);g.fillStyle="#c8874a";for(let k=0;k<3;k++)g.fillRect(x-2,G-h+6+k*(h-12)/2.5,w+4,6);g.strokeStyle="rgba(0,0,0,.25)";g.strokeRect(x-2,G-h+6,w+4,6)};one(o.x,o.w,o.h);if(o.k==="fence2")one(o.x+o.w+o.gap,o.w,o.h)}
         else if(o.k==="rock"){g.fillStyle="#8d939c";g.beginPath();g.moveTo(o.x,G);g.lineTo(o.x+6,G-o.h*.7);g.lineTo(o.x+o.w*.45,G-o.h);g.lineTo(o.x+o.w-5,G-o.h*.6);g.lineTo(o.x+o.w,G);g.closePath();g.fill();g.fillStyle="rgba(255,255,255,.25)";g.beginPath();g.moveTo(o.x+8,G-o.h*.65);g.lineTo(o.x+o.w*.45,G-o.h+3);g.lineTo(o.x+o.w*.5,G-o.h*.55);g.closePath();g.fill()}
         else if(o.k==="log"){g.fillStyle="#7a4b25";g.fillRect(o.x,G-o.h,o.w,o.h);g.fillStyle="#a8703f";g.beginPath();g.ellipse(o.x+o.w,G-o.h/2,8,o.h/2,0,0,7);g.fill();g.strokeStyle="#6a3d1c";g.beginPath();g.ellipse(o.x+o.w,G-o.h/2,4,o.h/4,0,0,7);g.stroke();g.fillStyle="rgba(0,0,0,.15)";g.fillRect(o.x,G-o.h/2,o.w,2)}
@@ -11124,7 +11137,7 @@ const MGHOW={
  dig:["Tienes 30 segundos y los topos salen cada vez más rápido.","<b>Diglett +1</b>, <b>Dugtrio +3</b>. ¡No toques a <b>Voltorb</b>: −3 y pierdes el combo!","<b>Combo</b>: a partir de 5 aciertos seguidos, cada golpe vale +1 extra. Si se te escapa un Diglett, el combo vuelve a 0.","Una partida muy buena ronda los <b>110–130</b>."],
  fish:["8 lanzamientos: pulsa en cuanto aparezca <b>¡!</b>","Cada Pokémon común da <b>10 puntos</b>; Lapras y Gyarados (raros) dan <b>90</b>.","Cuanto más rápido reacciones, más <b>bonus</b> (hasta +50%). Los raros te dan muy poco tiempo.","Si pulsas antes de tiempo o tarde, se escapa. Los raros que pesques pueden quedarse contigo."],
  thr:["10 lanzamientos: lanza cuando el círculo sea <b>pequeño</b> y el Pokémon esté en el <b>centro</b>.","<b>¡Excelente!</b> 100 · <b>¡Genial!</b> 60 · <b>¡Bien!</b> 30. Si el Pokémon no está centrado, fallas.","<b>Combo</b>: desde el 3.er acierto seguido, +10, +20, +30… extra. Fallar lo corta.","Máximo posible: <b>1.360</b> (10 Excelentes seguidos)."],
- run:["<b>Saltar</b>: toca la pista, el botón ⬆ o pulsa espacio / ↑. <b>Mantén pulsado</b> para saltar más alto y <b>vuelve a pulsar en el aire</b> para un doble salto.","<b>Agacharse</b>: desliza hacia abajo, botón ⬇ o tecla ↓. Sirve para pasar por debajo de los Zubat; en el aire te hace caer más rápido.","Las vallas altas y las vallas dobles necesitan un salto largo o un doble salto.","Ganas <b>1 punto por metro</b>, <b>15</b> por cada 🎟️ y puntos extra por saltos <b>¡Justos!</b> (pasar rozando un obstáculo) seguidos.","Potenciadores: 🔥 <b>Llamarada</b> (5 s atravesando obstáculos) y 🧲 <b>Imán</b> (7 s atrayendo tickets).","La velocidad sube hasta un máximo y los obstáculos se separan más cuanto más rápido vas: siempre se pueden saltar."],
+ run:["<b>Saltar</b>: toca la pista, el botón ⬆ o pulsa espacio / ↑. <b>Mantén pulsado</b> para saltar más alto y <b>vuelve a pulsar en el aire</b> para un doble salto.","<b>Agacharse</b>: desliza hacia abajo, botón ⬇ o tecla ↓. Sirve para pasar por debajo de los Zubat; en el aire te hace caer más rápido.","Las vallas altas y las vallas dobles necesitan un salto largo o un doble salto.","Ganas <b>1 punto por metro</b>, <b>15</b> por cada 🎟️ y puntos extra por saltos <b>¡Justos!</b> (pasar rozando un obstáculo) seguidos.","Potenciadores: 🔥 <b>Llamarada</b> (5 s atravesando obstáculos), 🧲 <b>Imán</b> (7 s atrayendo tickets), 🪙 <b>Moneda Amuleto</b> (10 s con <b>tickets ×2</b>: todo lo que ganas cuenta doble), ⚡ <b>Velocidad Extrema</b> (4 s a toda velocidad arrasando con todo) y 💖 <b>Revivir</b> (si chocas, sigues corriendo una vez).","💤 <b>Snorlax dormido</b>: ocupa dos carriles. Cámbiate al carril libre o salta largo… y si caes sobre su barriga, ¡rebotas muy alto y ganas puntos!","La velocidad sube hasta un máximo y los obstáculos se separan más cuanto más rápido vas: siempre se pueden saltar."],
  exc:["Pica la pared para <b>desenterrar tesoros</b> (hay de 2 a 4 escondidos).","<b>Solo puntúa el tesoro que queda totalmente al descubierto</b>: si queda una casilla de roca encima, no cuenta.","⛏️ <b>Pico</b>: rompe la casilla y un poco las de alrededor (en cruz). Daña poco la pared.<br>🔨 <b>Martillo</b>: rompe un cuadrado de 3×3. Daña el doble la pared.","La barra de arriba es la <b>estabilidad</b>: si llega a 0, la pared se derrumba y termina la partida (conservas lo ya desenterrado).","Las rocas más oscuras son más duras. Usa el martillo para abrir zonas y el pico para terminar de destapar los bordes.","Puntos por tesoro: Esfera Roja/Azul 40 · Perla 60 · Pepita 90 · Esfera Grande 120 · Hueso Raro 140 · Trozo Estrella 160 · Piedra evolutiva 200 · Objeto escondido 220 · Caramelo Raro 260 · Fósil 300."],
  wgt:["Dos Pokémon: elige cuál pesa más o menos, o cuál es más alto o más bajo.","Cada acierto da <b>100 puntos</b>, más <b>hasta 60</b> por rapidez, más <b>10 × tu racha</b>.","Se juega hasta el <b>primer fallo</b>: cuantas más seguidas aciertes, más vale cada una."],
  fos:["Igual que la Excavación: destapa del todo cada fósil para que cuente.","Cada fósil vale <b>300–520 puntos</b> (el Ámbar Viejo es el que más). Los tesoros pequeños dan 40–110.","Cuida la <b>estabilidad</b>: el martillo daña el doble que el pico.","Los fósiles que saques van al 🧪 Laboratorio, donde puedes revivirlos."]};
@@ -14206,7 +14219,7 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
 // minijuegos con un máximo fijo (tienen un número de rondas)
 const MG_MAX={who:6000,mem:1700,dig:400,fish:3000,thr:2500,exc:2500};
 // minijuegos sin final (hasta que chocas o fallas): no tienen tope; solo se descarta lo imposible para el tiempo jugado
-const MG_RATE={run:s=>s*260+3000,wgt:s=>{const n=s/.45+3;return 175*n+5*n*n},hl:s=>{const n=s/.45+3;return 175*n+5*n*n}};
+const MG_RATE={run:s=>s*420+3000,wgt:s=>{const n=s/.45+3;return 175*n+5*n*n},hl:s=>{const n=s/.45+3;return 175*n+5*n*n}};
 const mgOk=(id,sc)=>{if(MG_MAX[id]&&sc>MG_MAX[id])return false;const f=MG_RATE[id];if(f&&MG.t0){const secs=Math.max(0,(Date.now()-MG.t0)/1000);if(sc>f(secs))return false}return true};
 {const _ms=mgrSubmit;mgrSubmit=function(id,sc){if(!mgOk(id,sc))return "";return _ms(id,sc)}}
 {const _ts=tourSubmit;tourSubmit=function(id,sc){if(!mgOk(id,sc))return "";return _ts(id,sc)}}
@@ -18313,7 +18326,27 @@ function RU3D(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alpha
         bx(cx,1.05,z,hw,.45,1.05,wd,wd2);bx(cx,.58,z,hw-.1,.06,1.0,wd3);for(const sx of[-1,1])for(const sz of[-1,1]){const m=RX(T(I(),cx+sx*(hw-.05),.5,z+sz*.65),t*0);box(m,.09,.5,.5,wd3,C("#7a4e2a"));bx(cx+sx*(hw+.02),.5,z+sz*.65,.05,.12,.12,C("#c9c9c9"))}
         for(let i=0;i<3;i++)bx(cx+(i-1)*hw*.62,1.85,z+(i%2?.2:-.2),hw*.3,.36,.85,i%2?hay:hay2,mix(hay,[1,1,1],.2));for(let i=0;i<2;i++)bx(cx+(i-.5)*hw*.6,2.55,z,hw*.28,.34,.8,hay2,mix(hay,[1,1,1],.25));bx(cx,3.2,z,hw*.32,.3,.7,hay,mix(hay,[1,1,1],.25));
         bx(cx,1.5,z-1.08,hw,.05,.03,wd2);for(const sx of[-hw+.15,hw-.15])bx(cx+sx,1.1,z-1.1,.06,.42,.06,wd3)};
+      // Snorlax dormido tumbado de lado de lado a lado de dos carriles: la barriga crema mira al jugador y sube y baja al respirar,
+      // la cabeza (ojos cerrados) a un lado, los pies al otro y unas «Z» flotando
+      const snorlax=(z,cx,o)=>{const bd=C("#2f6b7a"),bd2=C("#3f8494"),cr=C("#efe2c0"),cr2=C("#f8f0d8"),dk=C("#1b2a30"),wt=C("#f4f4f0"),br=1+Math.sin(t*1.7+o.x*.01)*.035,bx0=cx-.25,zf=z-1.0;
+        shadow(cx+.2,z+.3,1.85,1.15);
+        for(const[yc,hx,hz]of[[.22,.92,.84],[.62,1.08,.98],[1.05,1.12,1.02],[1.48,1.06,.96],[1.86,.9,.84],[2.18,.66,.62]])bx(bx0,yc*br,z,hx,.24*br,hz,bd,bd2);
+        // barriga
+        bx(bx0,1.12*br,zf-.06,.86,.86*br,.08,cr,cr2);bx(bx0,1.12*br,zf-.15,.66,.66*br,.05,cr2,cr2);bx(bx0,1.12*br,zf-.21,.42,.44*br,.03,cr2,cr2);
+        // brazos sobre la barriga con garras blancas
+        bx(bx0+.15,1.72*br,zf-.2,.5,.15,.14,bd,bd2);for(let k=0;k<3;k++)bx(bx0-.38,1.72*br+(k-1)*.09,zf-.33,.05,.035,.02,wt);
+        bx(bx0-.1,.55*br,zf-.2,.48,.14,.14,bd,bd2);for(let k=0;k<3;k++)bx(bx0-.6,.55*br+(k-1)*.09,zf-.33,.05,.035,.02,wt);
+        // cabeza: cara crema hacia el jugador, ojos cerrados, boca y orejas
+        const hx0=cx+1.15,hz0=z-.15;bx(hx0,1.25,hz0,.44,.58,.6,bd,bd2);bx(hx0,1.12,hz0-.61,.36,.4,.025,cr,cr2);
+        for(const sx of[-1,1])bx(hx0+sx*.16,1.3,hz0-.645,.1,.022,.01,dk);bx(hx0,.97,hz0-.645,.13,.02,.01,dk);for(const sx of[-1,1])bx(hx0+sx*.1,.92,hz0-.648,.035,.035,.01,wt);
+        for(const sx of[-1,1])bx(hx0+sx*.27,1.92,hz0,.1,.11,.1,bd,bd2);
+        // pies hacia el otro lado, con la planta crema y garras
+        for(const sy of[0,1]){const fy=.42+sy*.62;bx(cx-1.46,fy,z-.25,.24,.27,.36,bd,bd2);bx(cx-1.71,fy,z-.25,.015,.21,.28,cr);for(let k=0;k<3;k++)bx(cx-1.73,fy+.16,z-.25+(k-1)*.15,.02,.05,.04,wt)}
+        // Zzz
+        UNLIT=true;for(let k=0;k<3;k++){const ph=(t*.45+k/3)%1,s=.1+ph*.16,zx=hx0+.1+ph*.8,zy=2.1+ph*1.7,c=mix(C("#bfe0ff"),C("#ffffff"),ph);
+          bx(zx,zy+s,hz0-.3,s,.03,.02,c);bx(zx,zy-s,hz0-.3,s,.03,.02,c);box(RZ(T(I(),zx,zy,hz0-.3),-Math.PI/4),s*1.41,.03,.02,c)}UNLIT=false};
       for(const o of S.obs){const z=ZS(o.x+o.w/2),one=o.ln&&o.ln.length===1?XL(o.ln[0]):null;
+        if(o.k==="snor"){snorlax(z,(XL(o.ln[0])+XL(o.ln[1]))/2,o);continue}
         if(o.k==="pillar"){pillar(z,XL(o.ln[0]));continue}
         if(o.k==="wagon"){wagon(z,(XL(o.ln[0])+XL(o.ln[1]))/2);continue}
         if(o.k==="fence")fence(z,o.h,3,one,one!=null?.72:null);else if(o.k==="high")fence(z,o.h,4);else if(o.k==="fence2"){fence(ZS(o.x+o.w/2),o.h,3);fence(ZS(o.x+o.w+o.gap+o.w/2),o.h,3)}
@@ -18326,6 +18359,9 @@ function RU3D(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alpha
       for(const it of S.items){const z=ZS(it.x),y=(S.G-it.y)/RU3_S+Math.sin(t*6+it.x*.05)*.08,m=RY(T(I(),XL(it.ln),y,z),t*3+it.x*.01);
         if(it.k==="tk"){box(m,.3,.2,.045,C("#ffcf3a"),C("#ffe98a"));box(T(m,0,0,.05),.2,.11,.01,C("#fff6c8"));box(T(m,0,0,-.05),.2,.11,.01,C("#fff6c8"))}
         else if(it.k==="fire"){const s=1+Math.sin(t*12)*.12;box(T(m,0,-.1,0),.28*s,.22,.28*s,C("#ff5a1e"));box(T(m,0,.2,0),.2*s,.2,.2*s,C("#ff9a2a"));box(T(m,0,.48,0),.11,.16,.11,C("#ffe04a"));box(RX(m,t*2),.5,.03,.5,C("#ffd35c"))}
+        else if(it.k==="coin"){box(m,.3,.3,.045,C("#f2c230"),C("#ffe27a"));box(m,.11,.11,.05,C("#b98a1c"));box(RX(m,t*2),.5,.03,.5,C("#ffe58a"))}
+        else if(it.k==="speed"){const y1=C("#ffe23a");box(RZ(T(m,.07,.2,0),.45),.07,.2,.05,y1);box(m,.17,.05,.05,y1);box(RZ(T(m,-.07,-.2,0),.45),.07,.2,.05,y1);box(RX(m,t*2),.5,.03,.5,C("#fff27a"))}
+        else if(it.k==="life"){const pk=C("#ff5a9a");box(RZ(T(m,-.1,.04,0),Math.PI/4),.15,.24,.06,pk);box(RZ(T(m,.1,.04,0),-Math.PI/4),.15,.24,.06,pk);box(RX(m,t*2),.5,.03,.5,C("#ffb3d1"))}
         else{box(T(m,-.22,.05,0),.08,.24,.09,C("#e83a40"));box(T(m,.22,.05,0),.08,.24,.09,C("#e83a40"));box(T(m,0,-.22,0),.3,.08,.09,C("#e83a40"));box(T(m,-.22,.33,0),.08,.06,.09,C("#f4f4f8"));box(T(m,.22,.33,0),.08,.06,.09,C("#f4f4f8"));box(RX(m,t*2),.5,.03,.5,C("#9ad8ff"))}}
       // ---------- partículas (polvo, chispas y trozos) ----------
       for(const p of S.parts){if(p.lx==null)p.lx=(Math.random()-.5)*(p.fl?.5:1.6)+(p.ln!=null?XL(p.ln):p.fl||p.c==="#fff6"||p.c==="#c9a46a"||p.c==="#ffd35c"||p.c==="#ff9a3c"?PXl:0);const k=1-p.t/p.l,s=Math.max(.02,p.r/RU3_S*(p.fl?k:1)*.9);bx(p.lx+(p.fl?0:(p.lx-(p.ln!=null?XL(p.ln):0))*p.t*1.2),Math.max(s,(S.G-p.y)/RU3_S),ZS(p.x),s,s,s,PCc(p.c))}

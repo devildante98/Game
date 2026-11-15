@@ -62,7 +62,7 @@ document.addEventListener("click",async e=>{const b=e.target.closest&&e.target.c
 // minijuegos con un máximo fijo (tienen un número de rondas)
 const MG_MAX={who:6000,mem:1700,dig:400,fish:3000,thr:2500,exc:2500};
 // minijuegos sin final (hasta que chocas o fallas): no tienen tope; solo se descarta lo imposible para el tiempo jugado
-const MG_RATE={run:s=>s*260+3000,wgt:s=>{const n=s/.45+3;return 175*n+5*n*n},hl:s=>{const n=s/.45+3;return 175*n+5*n*n}};
+const MG_RATE={run:s=>s*420+3000,wgt:s=>{const n=s/.45+3;return 175*n+5*n*n},hl:s=>{const n=s/.45+3;return 175*n+5*n*n}};
 const mgOk=(id,sc)=>{if(MG_MAX[id]&&sc>MG_MAX[id])return false;const f=MG_RATE[id];if(f&&MG.t0){const secs=Math.max(0,(Date.now()-MG.t0)/1000);if(sc>f(secs))return false}return true};
 {const _ms=mgrSubmit;mgrSubmit=function(id,sc){if(!mgOk(id,sc))return "";return _ms(id,sc)}}
 {const _ts=tourSubmit;tourSubmit=function(id,sc){if(!mgOk(id,sc))return "";return _ts(id,sc)}}

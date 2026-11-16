@@ -96,3 +96,9 @@ function exToTitle(){if((typeof fcd!=="undefined"&&fcd)||EX.trans){toast("Termin
 {const _md=exMenuDo;exMenuDo=function(k){if(k==="title"){try{exMenuClose(true)}catch(e){}exToTitle();return}return _md.apply(this,arguments)}}
 // el texto de la pantalla de título habla de la ranura activa
 {const _t=exTitleUI;exTitleUI=function(){const r=_t.apply(this,arguments);try{if(EX.title){const w=$("exWhere"),L=slD();if(w&&!slHas(L.cur))w.textContent="✨ Pulsa Iniciar para empezar una partida nueva";else if(w&&!/^Partida/.test(w.textContent))w.textContent="Partida "+L.cur+" · "+w.textContent}else smClose(true)}catch(e){}return r}}
+
+// ---------- «▶ Iniciar» pone el modo Exploración en pantalla completa ----------
+// Al pulsar Iniciar (con el ratón, el dedo o la tecla) el mapa pasa a ocupar toda la pantalla, con el menú de inicio
+// dentro. El navegador solo deja pedir la pantalla completa justo al pulsar algo, por eso se hace aquí. Para salir,
+// el botón ⛶ de la esquina.
+{const _g=exGo;exGo=function(){if(EX.title&&!EX.fs&&typeof exFsEnter==="function")try{exFsEnter()}catch(e){}return _g.apply(this,arguments)}}

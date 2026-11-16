@@ -18,7 +18,8 @@ const RU_SPD0=250,RU_SPDMAX=1400;
 const ruSpeed=d=>Math.min(RU_SPDMAX,RU_SPD0+330*(1-Math.exp(-d/600))+d*.07);
 // nivel de dificultad: cada nivel añade obstáculos más difíciles y los junta un poco más
 const ruTier=d=>d<150?0:d<400?1:d<800?2:d<1200?3:4+Math.floor((d-1200)/600);
-const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuidado con los Snorlax dormidos: ocupan dos carriles, pero si caes sobre su barriga, ¡rebotas! Recoge potenciadores como Tickets ×2, Velocidad Extrema o Revivir. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos: a partir de los 1.200 m salen más juntos, hay zigzags y casi no quedan potenciadores.",
+const G_RUN={id:"run",n:"Carrera de Rapidash",ic:"🔥",c:"#f07a2a",d:"Galopa por tres carriles: salta, agáchate y cambia de carril para esquivar obstáculos y recoge potenciadores. ¡Cuanto más lejos llegas, más rápido y más difícil!",
+  dl:"Galopa con Rapidash por un camino de tres carriles: salta vallas, rocas y troncos, agáchate ante los Zubat y cambia de carril para esquivar columnas y carros, que no se pueden saltar. Cuidado con los Snorlax dormidos: ocupan dos carriles, pero si caes sobre su barriga, ¡rebotas! Recoge potenciadores como Tickets ×2, Velocidad Extrema o Revivir. Cuanto más lejos llegas, más rápido vas y más difíciles son los obstáculos: a partir de los 1.200 m salen más juntos, hay zigzags y casi no quedan potenciadores.",
   rw:s=>s*180,
   start(B,end){
     const R=PM.Rapidash||PM.Ponyta||P[0],Z=PM.Zubat||null,SN=PM.Snorlax||null;

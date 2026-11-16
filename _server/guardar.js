@@ -48,6 +48,9 @@ function firmar(obj, uid) {
 }
 
 const rndCripto = () => crypto.randomInt(0, 4294967296) / 4294967296;
+// fecha de hoy en Madrid (AAAA-MM-DD): el presupuesto diario de premios empieza de cero cada día
+const DMF = new Intl.DateTimeFormat("en-CA", {timeZone: "Europe/Madrid", year: "numeric", month: "2-digit", day: "2-digit"});
+const diaMadrid = (t) => DMF.format(new Date(t));
 
 // db: Firestore (admin) · uid: quién llama · p: {data, sess, v, q, accion} · ahora: ms · cuentaSeg: antigüedad (s)
 async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
@@ -58,13 +61,14 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
   const data = p && p.data, sess = p && typeof p.sess === "string" ? p.sess.slice(0, 64) : "";
   const q = p && typeof p.q === "number" && isFinite(p.q) ? p.q : 0;
   if (typeof data !== "string" || data.length > MAX) return {ok: false, why: "formato"};
-  const next = leer(data);
-  if (!next) return {ok: false, why: "formato"};
+  if (!leer(data)) return {ok: false, why: "formato"};
   if (ac && !["tirar", "mejorar"].includes(ac.k)) return {ok: false, why: "accion"};
 
   let flags = [];
   const out = await db.runTransaction(async (tx) => {
+    // (Firestore repite la transacción si choca con otra petición: cada intento parte de la partida recibida, sin tocar)
     flags = [];
+    const next = leer(data);
     // solo guarda el dispositivo que tiene la partida abierta
     const ss = await tx.get(db.doc("sess/" + uid));
     if (ss.exists && ss.data().s && ss.data().s !== sess) return {ok: false, why: "sesion", d: String(ss.data().d || "")};
@@ -79,7 +83,7 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
     const venta = (await ventas(db, uid, prev, next)) + (await devuelto(db, uid, prev, next));
     // modo estricto cuando la última partida guardada ya venía de la versión 7.2 o posterior
     const estricto = !!prev && verOk(cur && cur.v);
-    const r = revisar(prev, next, dt, venta, {estricto});
+    const r = revisar(prev, next, dt, venta, {estricto, eco: cur && cur.eco, hoy: diaMadrid(ahora)});
     const apunta = (estado) => flags.push({uid, n: String(next.nick || "").slice(0, 40), at: FieldValue.serverTimestamp(), estado,
       motivos: r.motivos.slice(0, 10), datos: r.datos, primera: !prev});
 
@@ -101,7 +105,9 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
       Object.assign(extra, {mejora: m});
       dataOut = firmar(next, uid);
     }
-    tx.set(ref, {data: dataOut, updated: Timestamp.fromMillis(ahora), sess: sess || null, v: String(p.v).slice(0, 12), q});
+    const doc = {data: dataOut, updated: Timestamp.fromMillis(ahora), sess: sess || null, v: String(p.v).slice(0, 12), q};
+    if (r.eco) doc.eco = r.eco; // lo ganado hoy por premios
+    tx.set(ref, doc);
     if (r.estado !== "ok") apunta(r.estado === "imposible" ? "primera subida rara" : "sospechoso");
     // at: la hora exacta del guardado, para que el juego sepa al volver a entrar si su copia es la continuación de esta
     return Object.assign({ok: true, estado: r.estado, at: ahora}, extra);
@@ -145,4 +151,4 @@ async function devuelto(db, uid, prev, next) {
   }
 }
 
-module.exports = {guardar, leer, firmar, verOk};
+module.exports = {guardar, leer, firmar, verOk, diaMadrid};

@@ -1,6 +1,7 @@
 // =====================================================================================
 // Exporta al servidor (_server/datos.json) los datos del juego que necesita para hacer las tiradas igual que el
-// navegador: la lista de Pokémon (nombre, tipo, rareza, generación), las formas supremas y los eventos de temporada.
+// navegador: la lista de Pokémon (nombre, tipo, rareza, generación), las formas supremas, los eventos de temporada y
+// los premios de los logros (para descontarlos del presupuesto diario de premios).
 // Se ejecuta con el juego servido en local:  node src/tools/servidor/exportar_datos.js [http://localhost:8765/index.html]
 // Hay que volver a ejecutarlo cuando cambie la lista de Pokémon (las pruebas del servidor avisan si no coincide).
 // =====================================================================================
@@ -20,9 +21,12 @@ const URL = process.argv[2] || "http://localhost:8765/index.html";
     sup: P.filter((x) => isSup(x[0])).map((x) => x[0]),
     eventos: EVENTS.map((e) => ({t: e.t, a: e.a, b: e.b})),
     hh: HH_KINDS.map((k) => k[0]),
+    // logros sin prestigio: [id, dificultad de cada nivel] · AR: premio de cada dificultad
+    logros0: ACH0.map((a) => [a[0], a[5].map((l) => l[1])]),
+    AR: AR,
   }));
   await b.close();
   const out = path.join(__dirname, "..", "..", "..", "_server", "datos.json");
   fs.writeFileSync(out, JSON.stringify(d));
-  console.log("datos.json:", d.P.length, "Pokémon,", d.sup.length, "formas supremas,", d.eventos.length, "eventos");
+  console.log("datos.json:", d.P.length, "Pokémon,", d.sup.length, "formas supremas,", d.eventos.length, "eventos,", d.logros0.length, "logros");
 })();

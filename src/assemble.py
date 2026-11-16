@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.2.2";
+const GAME_VER="7.2.3";
 const NEWS=[
+{v:"2026-11-16-7.2.3",ver:"7.2.3",at:"2026-11-16T10:37",t:"📰 Novedades: botón para cerrar arriba",l:["La ventana de Novedades tiene ahora un botón ✕ en la esquina de arriba a la derecha, que se queda a la vista aunque bajes por la lista","También se cierra con la tecla Esc"]},
 {v:"2026-11-16-7.2.2",ver:"7.2.2",at:"2026-11-16T02:48",t:"🗺️ Exploración en pantalla completa al pulsar Iniciar",l:["Al pulsar «▶ Iniciar» en el modo Exploración, el mapa pasa a pantalla completa (con el menú de inicio dentro)","Para salir, el botón de la esquina de arriba a la derecha"]},
 {v:"2026-11-16-7.2.1",ver:"7.2.1",at:"2026-11-16T02:21",t:"🎮 Minijuegos: tarjetas del mismo tamaño",l:["La descripción de la Carrera de Rapidash era tan larga que estiraba todas las tarjetas de su fila: ahora es corta, como las demás","La explicación completa sigue en la pantalla de inicio de la carrera"]},
 {v:"2026-11-15-7.2",ver:"7.2",at:"2026-11-15T23:38",t:"🎰 Las tiradas y las mejoras las hace el servidor",l:["Con cuenta, las tiradas del gacha y las mejoras de edificios y guantes las hace ahora el servidor del juego: él cobra los tickets, decide lo que sale y lo guarda en la nube al momento","Las probabilidades, la garantía de raro, los eventos, el Pokémon destacado y el Día de la Comunidad son exactamente los mismos que antes","Así nadie puede elegir lo que le sale ni subir edificios sin pagarlos","Necesita conexión: si no hay, el juego te avisa y no se gasta nada","Si tocas muchas veces seguidas una mejora, se juntan en una sola compra","Sin cuenta, todo sigue funcionando como siempre en tu navegador"]},
@@ -645,7 +646,10 @@ function newsShow(all){
   $("newsMl").innerHTML=newsHTML(L);
   $("newsM").hidden=false;$("newsM").querySelector(".jbox").scrollTop=0;try{$("newsOk").focus({preventScroll:true})}catch(e){}
 }
-$("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
+// se cierra con «¡Genial!» (abajo), con la ✕ de la esquina (siempre a la vista aunque bajes por la lista) o con Esc
+const newsClose=()=>{if($("newsM").hidden)return;$("newsM").hidden=true;S.newsV=GAME_V;save()};
+$("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 '''
 H = H[:s] + NEWS + H[e:]

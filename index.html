@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.2.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.2.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794793705">
+<meta name="game-build" content="1794821852">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2879,6 +2879,12 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 #sessLock .slm{color:#5a6185;font-size:14px}
 #sessLock button{margin-top:6px;width:100%;padding:13px 16px;border:0;border-radius:14px;background:#e8414f;color:#fff;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #a82633}
 #sessLock button:disabled{opacity:.7;cursor:default}
+/* Novedades: botón ✕ arriba a la derecha que se queda a la vista al bajar por la lista */
+#newsM .jbox h2{padding:0 46px}
+#newsM .newsX{position:sticky;top:6px;display:block;flex:none;z-index:5;margin:-12px -8px -54px auto;width:42px;height:42px;padding:0;border-radius:50%;
+  background:#fff;color:#1c1f3a;border:3px solid #ffb62e;font-size:1.15rem;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+#newsM .newsX:hover{background:#ffe9b8}
+#newsM .newsX:focus-visible{outline:3px solid #6aa8ff;outline-offset:2px}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2944,7 +2950,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.2.2</small>
+    <small class="pcver">Versión 7.2.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -3105,7 +3111,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
 <button id="navb" aria-label="Accesos directos" title="Accesos directos" hidden>🧭<span class="nbadge" id="navn" hidden></span></button>
 <div id="navp" hidden role="dialog" aria-label="Accesos directos"><b>🧭 Ir directamente a…</b><div class="navg" id="navg"></div></div>
 <div id="toast" hidden role="status" aria-live="polite"></div>
-<div id="newsM" hidden role="dialog" aria-modal="true" aria-label="Novedades"><div class="jbox"><h2>📰 ¡Novedades en PokeGacha!</h2><div id="newsMl"></div><div class="jrow"><button class="red" id="newsOk">¡Genial!</button></div></div></div>
+<div id="newsM" hidden role="dialog" aria-modal="true" aria-label="Novedades"><div class="jbox"><button type="button" class="newsX" id="newsX" title="Cerrar" aria-label="Cerrar novedades">✕</button><h2>📰 ¡Novedades en PokeGacha!</h2><div id="newsMl"></div><div class="jrow"><button class="red" id="newsOk">¡Genial!</button></div></div></div>
 <div id="strkM" hidden role="dialog" aria-modal="true" aria-label="Racha diaria"><div class="jbox"><div id="strk"></div></div></div>
 <div id="trdM" hidden role="dialog" aria-modal="true" aria-label="Intercambio"><div class="jbox tbox"><div id="trdB"></div></div></div>
 <div id="prof" hidden role="dialog" aria-modal="true" aria-label="Perfil de jugador"><div class="jbox"><div id="profB"></div></div></div>
@@ -7626,8 +7632,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.2.2";
+const GAME_VER="7.2.3";
 const NEWS=[
+{v:"2026-11-16-7.2.3",ver:"7.2.3",at:"2026-11-16T10:37",t:"📰 Novedades: botón para cerrar arriba",l:["La ventana de Novedades tiene ahora un botón ✕ en la esquina de arriba a la derecha, que se queda a la vista aunque bajes por la lista","También se cierra con la tecla Esc"]},
 {v:"2026-11-16-7.2.2",ver:"7.2.2",at:"2026-11-16T02:48",t:"🗺️ Exploración en pantalla completa al pulsar Iniciar",l:["Al pulsar «▶ Iniciar» en el modo Exploración, el mapa pasa a pantalla completa (con el menú de inicio dentro)","Para salir, el botón de la esquina de arriba a la derecha"]},
 {v:"2026-11-16-7.2.1",ver:"7.2.1",at:"2026-11-16T02:21",t:"🎮 Minijuegos: tarjetas del mismo tamaño",l:["La descripción de la Carrera de Rapidash era tan larga que estiraba todas las tarjetas de su fila: ahora es corta, como las demás","La explicación completa sigue en la pantalla de inicio de la carrera"]},
 {v:"2026-11-15-7.2",ver:"7.2",at:"2026-11-15T23:38",t:"🎰 Las tiradas y las mejoras las hace el servidor",l:["Con cuenta, las tiradas del gacha y las mejoras de edificios y guantes las hace ahora el servidor del juego: él cobra los tickets, decide lo que sale y lo guarda en la nube al momento","Las probabilidades, la garantía de raro, los eventos, el Pokémon destacado y el Día de la Comunidad son exactamente los mismos que antes","Así nadie puede elegir lo que le sale ni subir edificios sin pagarlos","Necesita conexión: si no hay, el juego te avisa y no se gasta nada","Si tocas muchas veces seguidas una mejora, se juntan en una sola compra","Sin cuenta, todo sigue funcionando como siempre en tu navegador"]},
@@ -7986,10 +7993,13 @@ function newsShow(all){
   $("newsMl").innerHTML=newsHTML(L);
   $("newsM").hidden=false;$("newsM").querySelector(".jbox").scrollTop=0;try{$("newsOk").focus({preventScroll:true})}catch(e){}
 }
-$("newsOk").onclick=()=>{$("newsM").hidden=true;S.newsV=GAME_V;save()};
+// se cierra con «¡Genial!» (abajo), con la ✕ de la esquina (siempre a la vista aunque bajes por la lista) o con Esc
+const newsClose=()=>{if($("newsM").hidden)return;$("newsM").hidden=true;S.newsV=GAME_V;save()};
+$("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794793705";
+const GAME_B="1794821852";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -20001,7 +20011,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.2.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.2.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

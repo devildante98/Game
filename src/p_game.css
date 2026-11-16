@@ -1188,3 +1188,9 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 #sessLock .slm{color:#5a6185;font-size:14px}
 #sessLock button{margin-top:6px;width:100%;padding:13px 16px;border:0;border-radius:14px;background:#e8414f;color:#fff;font-size:17px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #a82633}
 #sessLock button:disabled{opacity:.7;cursor:default}
+/* Novedades: botón ✕ arriba a la derecha que se queda a la vista al bajar por la lista */
+#newsM .jbox h2{padding:0 46px}
+#newsM .newsX{position:sticky;top:6px;display:block;flex:none;z-index:5;margin:-12px -8px -54px auto;width:42px;height:42px;padding:0;border-radius:50%;
+  background:#fff;color:#1c1f3a;border:3px solid #ffb62e;font-size:1.15rem;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3)}
+#newsM .newsX:hover{background:#ffe9b8}
+#newsM .newsX:focus-visible{outline:3px solid #6aa8ff;outline-offset:2px}

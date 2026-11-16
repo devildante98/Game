@@ -598,9 +598,10 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 let _trPubT=0;function trPubSoon(){clearTimeout(_trPubT);_trPubT=setTimeout(()=>{if(typeof pvPub==="function")pvPub()},6000)}
 function trSet(k,v){S.tr=Object.assign(myLook(),{[k]:v});save();trUI();trPubSoon()}
 async function trDemo(){
-  const L=myLook(),imgs=$("trPrev").querySelectorAll("img"),b=imgs[1],f=imgs[0];if(!b)return;
-  b.classList.remove("idle");
-  for(const p of ["t","m","u"]){b.src=trURL(L,"b",p);if(p==="u")snd("throw");await new Promise(r=>setTimeout(r,p==="u"?520:200))}
-  b.src=trURL(L,"b","i");b.classList.add("idle");
-  if(f){f.classList.remove("idle");f.src=trURL(L,"f","w");await new Promise(r=>setTimeout(r,900));f.src=trURL(L,"f","i");f.classList.add("idle")}
+  // el lanzamiento se ve en el muñeco «En combate», de espaldas (como en los combates); los del mapa no cambian
+  const L=myLook(),c=$("trPrev")&&$("trPrev").querySelector("img.trimg");if(!c||c._demo)return;c._demo=1;
+  const src0=c.src;c.classList.remove("idle");
+  try{for(const p of ["t","m","u"]){c.src=trURL(L,"b",p);if(p==="u")snd("throw");await new Promise(r=>setTimeout(r,p==="u"?700:220))}
+    c.src=trURL(L,"b","i");await new Promise(r=>setTimeout(r,600))}
+  finally{c.src=src0;c.classList.add("idle");c._demo=0}
 }

@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.2.3";
+const GAME_VER="7.2.4";
 const NEWS=[
+{v:"2026-11-16-7.2.4",ver:"7.2.4",at:"2026-11-16T10:50",t:"🧑 Tu entrenador: «Ver lanzamiento» arreglado",l:["El lanzamiento se ve ahora en el muñeco «En combate», de espaldas como en los combates","Los muñecos del mapa ya no cambian al pulsarlo"]},
 {v:"2026-11-16-7.2.3",ver:"7.2.3",at:"2026-11-16T10:37",t:"📰 Novedades: botón para cerrar arriba",l:["La ventana de Novedades tiene ahora un botón ✕ en la esquina de arriba a la derecha, que se queda a la vista aunque bajes por la lista","También se cierra con la tecla Esc"]},
 {v:"2026-11-16-7.2.2",ver:"7.2.2",at:"2026-11-16T02:48",t:"🗺️ Exploración en pantalla completa al pulsar Iniciar",l:["Al pulsar «▶ Iniciar» en el modo Exploración, el mapa pasa a pantalla completa (con el menú de inicio dentro)","Para salir, el botón de la esquina de arriba a la derecha"]},
 {v:"2026-11-16-7.2.1",ver:"7.2.1",at:"2026-11-16T02:21",t:"🎮 Minijuegos: tarjetas del mismo tamaño",l:["La descripción de la Carrera de Rapidash era tan larga que estiraba todas las tarjetas de su fila: ahora es corta, como las demás","La explicación completa sigue en la pantalla de inicio de la carrera"]},

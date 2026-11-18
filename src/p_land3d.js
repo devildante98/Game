@@ -293,9 +293,14 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
   // ---------- lo que se mueve ----------
   const hash=n=>{const x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x)};
   // nubes: cada una es un cúmulo de bolas difuminadas, con la base plana y la copa abultada; unas cerca y otras lejos
-  const CL=[];for(let i=0;i<22;i++){const z=260+hash(i+7)*300,s=(13+hash(i+9)*15)*(.75+z/650),n=9+Math.floor(hash(i+5)*9),P=[];
-    for(let k=0;k<n;k++){const u=(k/(n-1)-.5)*2,mid=1-u*u;P.push({dx:u*s*1.25+(hash(i*31+k)-.5)*s*.25,dy:mid*s*.42*(.6+hash(i*17+k)*.7),r:s*(.28+mid*.32)*(.75+hash(i*13+k)*.5)})}
-    for(let k=0;k<Math.floor(n/2);k++)P.push({dx:(hash(i*41+k)-.5)*s*1.2,dy:s*(.35+hash(i*43+k)*.35),r:s*(.22+hash(i*47+k)*.18)});
+  // nubes tipo cúmulo: base plana (todas las bolas se cortan a la misma altura), cuerpo ancho y torres irregulares
+  // encima, más altas cerca del centro; cada nube es distinta
+  const CL=[];for(let i=0;i<22;i++){const z=260+hash(i+7)*300,s=(13+hash(i+9)*15)*(.75+z/650),W=s*(1.5+hash(i+21)*1.3),P=[];
+    const nb=7+Math.floor(hash(i+5)*6);for(let k=0;k<nb;k++){const u=(k/(nb-1)-.5)*2,r=s*(.34+hash(i*13+k)*.22)*(1-.45*u*u);P.push({dx:u*W*.5+(hash(i*31+k)-.5)*s*.3,dy:r*.45,r})}
+    const nt=4+Math.floor(hash(i+25)*6),c0=(hash(i+27)-.5)*W*.3;for(let k=0;k<nt;k++){const u=(hash(i*41+k)-.5)*2,cx=c0+u*W*.34,lift=1-Math.min(1,Math.abs(cx)/(W*.55));
+      const r=s*(.26+hash(i*47+k)*.24)*(.7+lift*.5);P.push({dx:cx,dy:s*(.32+hash(i*43+k)*.38)*(.45+lift*.75),r})}
+    // bultos pequeños en los bordes para que el contorno no sea liso
+    for(let k=0;k<5;k++){const u=(hash(i*53+k)-.5)*2;P.push({dx:u*W*.55,dy:s*(.12+hash(i*59+k)*.2),r:s*(.13+hash(i*61+k)*.1)})}
     CL.push({x:(i/22-.5)*1400+(hash(i)-.5)*40,y:88+hash(i+3)*70+z*.12,z,s,v:.9+hash(i+11)*1.4,P})}
   // ---------- vida en el pueblo: vecinos y Pokémon que pasean por la calle, Miltank pastando, humo de chimeneas y luces de noche ----------
   const LV=mkB(40000),LB={a:new Float32Array(60000*7),n:0,vbo:gl.createBuffer()},LIFE={smk:[],glo:[],beam:[],cow:null,wg:[]};
@@ -375,10 +380,13 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       const order=k.P.slice().sort((a,b)=>a.dy-b.dy);
       for(const b of order){const cx=x0+b.dx,cy=k.y+b.dy,r=b.r,hgt=Math.min(1,Math.max(0,b.dy/(k.s*.7))),seg=18;
         const cd=P.cdim==null?1:P.cdim,cc=mix(mix(shade,lit,.25+hgt*.75),hor,fogK*.7).map(v=>v*cd),ce=mix(cc,hor,.25),a0=aMax*(1-far*.35);
-        for(let s2=0;s2<seg;s2++){const t0=s2/seg*6.283,t1=(s2+1)/seg*6.283,sy=Math.sin(t0)<0?.62:1,sy1=Math.sin(t1)<0?.62:1;
+        // la base de la nube es plana: nada baja de k.y (y la parte de abajo es algo más oscura)
+        const by=k.y,cy2=Math.max(by+r*.05,cy);
+        for(let s2=0;s2<seg;s2++){const t0=s2/seg*6.283,t1=(s2+1)/seg*6.283,sy=1,sy1=1;
           // cada bola: centro opaco y borde transparente (con un anillo intermedio para que el difuminado sea suave)
-          const p0=[cx+Math.cos(t0)*r*.82,cy+Math.sin(t0)*r*.82*sy,k.z],p1=[cx+Math.cos(t1)*r*.82,cy+Math.sin(t1)*r*.82*sy1,k.z],q0=[cx+Math.cos(t0)*r,cy+Math.sin(t0)*r*sy,k.z],q1=[cx+Math.cos(t1)*r,cy+Math.sin(t1)*r*sy1,k.z];
-          V4(cx,cy,k.z,cc,a0);V4(p0[0],p0[1],p0[2],cc,a0*.95);V4(p1[0],p1[1],p1[2],cc,a0*.95);
+          const Y=v=>Math.max(by,v),p0=[cx+Math.cos(t0)*r*.82,Y(cy2+Math.sin(t0)*r*.82),k.z],p1=[cx+Math.cos(t1)*r*.82,Y(cy2+Math.sin(t1)*r*.82),k.z],q0=[cx+Math.cos(t0)*r,Y(cy2+Math.sin(t0)*r),k.z],q1=[cx+Math.cos(t1)*r,Y(cy2+Math.sin(t1)*r),k.z];
+          const cb=p0[1]<=by+.01||p1[1]<=by+.01?mix(cc,shade,.25):cc;
+          V4(cx,cy2,k.z,cc,a0);V4(p0[0],p0[1],p0[2],cb,a0*.95);V4(p1[0],p1[1],p1[2],cb,a0*.95);
           V4(p0[0],p0[1],p0[2],cc,a0*.95);V4(q0[0],q0[1],q0[2],ce,0);V4(q1[0],q1[1],q1[2],ce,0);V4(p0[0],p0[1],p0[2],cc,a0*.95);V4(q1[0],q1[1],q1[2],ce,0);V4(p1[0],p1[1],p1[2],cc,a0*.95)}}}
     gl.useProgram(prC);gl.uniformMatrix4fv(uMC,false,VP);gl.bindBuffer(gl.ARRAY_BUFFER,CB.vbo);gl.bufferData(gl.ARRAY_BUFFER,A.subarray(0,CB.n*7),gl.DYNAMIC_DRAW);
     gl.disableVertexAttribArray(2);gl.vertexAttribPointer(0,3,gl.FLOAT,false,28,0);gl.vertexAttribPointer(1,4,gl.FLOAT,false,28,12);

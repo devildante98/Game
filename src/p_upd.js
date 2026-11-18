@@ -403,13 +403,14 @@ const _popQ=[];let _popT=0;
 function popToast(t){_popQ.push(t);popFlush()}
 function popFlush(){if(!_popQ.length||Date.now()<_popT)return;if(popBusy())return;_popT=Date.now()+4300;toast(_popQ.shift())}
 setInterval(popFlush,1000);
-// ================= textos de introducción largos: una línea y «Más información» =================
-function introCollapse(){document.querySelectorAll("section.panel > p.rates, section.panel > p.nxi").forEach(p=>{
+// ================= textos de introducción largos: solo la primera frase =================
+// el resto se ve en la ventana de ayuda del botón (?) (p_game.js); en el diseño clásico, que no tiene ese botón, se ve entero
+function introCollapse(){let gm=false;try{gm=!!gmOn()}catch(e){}document.querySelectorAll(".infor").forEach(r=>{if(r.hidden===gm)return;r.hidden=gm});if(!gm)return;
+  document.querySelectorAll("section.panel > p.rates, section.panel > p.nxi").forEach(p=>{
   if(p.dataset.ic)return;p.dataset.ic=1;const pr=p.previousElementSibling;if(!pr||pr.tagName!=="H2"||p.querySelector("[id]")||p.textContent.length<150)return;
   const h=p.innerHTML,m=h.match(/^([\s\S]*?[.!?])\s+(?=[A-ZÁÉÍÓÚ¿¡<])/);if(!m||m[1].replace(/<[^>]*>/g,"").length>140)return;
   const rest=h.slice(m[0].length);if(rest.replace(/<[^>]*>/g,"").trim().length<30)return;
-  p.innerHTML=m[1]+' <button type="button" class="infob" aria-expanded="false">ℹ️ Más información</button><span class="infor" hidden> '+rest+'</span>'})}
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".infob");if(!b)return;const r=b.nextElementSibling;if(!r)return;const o=r.hidden;r.hidden=!o;b.setAttribute("aria-expanded",String(o));b.textContent=o?"▲ Menos":"ℹ️ Más información"});
+  p.innerHTML=m[1]+'<span class="infor" hidden> '+rest+'</span>';p.dataset.gh=1;p.classList.remove("ghelp")})}// (la primera frase se queda a la vista)
 introCollapse();setInterval(introCollapse,2000);
 
 // ================= minijuegos: cómo se consiguen puntos =================

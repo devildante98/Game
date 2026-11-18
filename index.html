@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794981755">
+<meta name="game-build" content="1794982253">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2923,6 +2923,7 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 #hlpM .hlpb p:not(.hlpi){padding:8px 12px;border-radius:12px;background:rgba(255,210,63,.14);border-left:4px solid #ffd23f}
 #hlpM .hlpok{align-self:center;min-width:160px}
 #hlpM .hlpx{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;padding:0!important;line-height:1!important;font-size:1.1rem;background:rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.15);color:inherit;cursor:pointer}
+.infor[hidden]{display:none!important}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2988,7 +2989,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.8.1</small>
+    <small class="pcver">Versión 7.8.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7671,8 +7672,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.1";
+const GAME_VER="7.8.2";
 const NEWS=[
+{v:"2026-11-18-7.8.2",ver:"7.8.2",at:"2026-11-18T07:09",t:"🧹 Fuera el botón «Más información»",l:["Las ventanas ya no tienen el enlace «Más información»: toda la explicación de cada apartado está en el botón (?)"]},
 {v:"2026-11-18-7.8.1",ver:"7.8.1",at:"2026-11-18T07:02",t:"💡 El botón (?) ahora explica cada sección",l:["Al pulsar el botón (?) de cualquier ventana se abre una ventana con toda la información de ese apartado: la explicación completa (lo de «Más información») y los consejos y probabilidades","Se cierra con «Entendido», con la ✕, tocando fuera o con Esc"]},
 {v:"2026-11-18-7.8",ver:"7.8",at:"2026-11-18T06:50",t:"🌾 Zona Safari en 3D",l:["La Zona Safari ahora es un paisaje en 3D: una sabana con hierba alta que se mueve con el viento, acacias, una charca, montañas y mariposas","El cielo cambia con tu hora: de día, al atardecer o de noche con estrellas y luciérnagas","El Pokémon salvaje aparece entre la hierba, con su sombra, y la Safari Ball, el cebo y la roca se lanzan en 3D: verás cómo la Ball se mueve en el suelo antes de saber si lo has atrapado","Si tu dispositivo no puede mostrar 3D, la Zona Safari se ve como antes"]},
 {v:"2026-11-18-7.7.3",ver:"7.7.3",at:"2026-11-18T06:21",t:"☁️ Nubes completas",l:["Arreglado: algunas nubes del paisaje se veían cortadas porque quedaban fuera del cielo; ahora se ven enteras, de día y de noche"]},
@@ -8050,7 +8052,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794981755";
+const GAME_B="1794982253";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11246,13 +11248,14 @@ const _popQ=[];let _popT=0;
 function popToast(t){_popQ.push(t);popFlush()}
 function popFlush(){if(!_popQ.length||Date.now()<_popT)return;if(popBusy())return;_popT=Date.now()+4300;toast(_popQ.shift())}
 setInterval(popFlush,1000);
-// ================= textos de introducción largos: una línea y «Más información» =================
-function introCollapse(){document.querySelectorAll("section.panel > p.rates, section.panel > p.nxi").forEach(p=>{
+// ================= textos de introducción largos: solo la primera frase =================
+// el resto se ve en la ventana de ayuda del botón (?) (p_game.js); en el diseño clásico, que no tiene ese botón, se ve entero
+function introCollapse(){let gm=false;try{gm=!!gmOn()}catch(e){}document.querySelectorAll(".infor").forEach(r=>{if(r.hidden===gm)return;r.hidden=gm});if(!gm)return;
+  document.querySelectorAll("section.panel > p.rates, section.panel > p.nxi").forEach(p=>{
   if(p.dataset.ic)return;p.dataset.ic=1;const pr=p.previousElementSibling;if(!pr||pr.tagName!=="H2"||p.querySelector("[id]")||p.textContent.length<150)return;
   const h=p.innerHTML,m=h.match(/^([\s\S]*?[.!?])\s+(?=[A-ZÁÉÍÓÚ¿¡<])/);if(!m||m[1].replace(/<[^>]*>/g,"").length>140)return;
   const rest=h.slice(m[0].length);if(rest.replace(/<[^>]*>/g,"").trim().length<30)return;
-  p.innerHTML=m[1]+' <button type="button" class="infob" aria-expanded="false">ℹ️ Más información</button><span class="infor" hidden> '+rest+'</span>'})}
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest(".infob");if(!b)return;const r=b.nextElementSibling;if(!r)return;const o=r.hidden;r.hidden=!o;b.setAttribute("aria-expanded",String(o));b.textContent=o?"▲ Menos":"ℹ️ Más información"});
+  p.innerHTML=m[1]+'<span class="infor" hidden> '+rest+'</span>';p.dataset.gh=1;p.classList.remove("ghelp")})}// (la primera frase se queda a la vista)
 introCollapse();setInterval(introCollapse,2000);
 
 // ================= minijuegos: cómo se consiguen puntos =================
@@ -20525,7 +20528,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.8.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.8.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

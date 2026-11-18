@@ -138,3 +138,30 @@ function lrnAsk(n,mv,ids){return new Promise(res=>{
     '<p>Pero ya conoce 4 movimientos. ¿Cuál quieres que olvide?</p><div class="lrng">'+ids.map((x,k)=>MVD[x]?bt(MVD[x],k):'').join("")+'</div><button class="alt" data-lk="-1">No aprender '+esc(mv.n)+'</button></div>';
   document.body.appendChild(M);
   M.addEventListener("click",e=>{const b=e.target.closest("[data-lk]");if(!b)return;snd("ui");M.remove();res(+b.dataset.lk)})})}
+// ---- como en los juegos: si un Pokémon sube de nivel fuera de combate (expediciones, combates dobles, Caramelo Raro
+// en Exploración…) y puede aprender un movimiento, se le ofrece enseguida, sin esperar al siguiente combate.
+// Funciona con tu partida y con la de Exploración (que tiene sus propios Pokémon y niveles, p_exgame.js).
+// Solo mira los Pokémon que suben de nivel a partir de ahora; lo que quedara pendiente de antes se ofrece en combate, como siempre.
+const LRNW={snap:null};
+const lrnSrc=ctx=>{const sw=typeof XGSW!=="undefined"?XGSW:null;if(ctx==="main")return sw||S;return sw?S:(typeof xgData==="function"?xgData():null)};
+function lrnPend(src,n){const d=src&&src.lv&&src.lv[n],ml=src&&src.ml&&src.ml[n],mv=src&&src.mv&&src.mv[n];if(!d||ml==null||!Array.isArray(mv)||d.l<=ml)return[];
+  return learn(n).filter(x=>x[0]>ml&&x[0]<=d.l&&MVD[x[1]]&&!mv.includes(x[1]))}
+async function lrnOut(ctx,n){
+  let src=lrnSrc(ctx);const l=src.lv[n].l,L=lrnPend(src,n);src.ml[n]=l;save();const got=[];
+  for(const x of L){src=lrnSrc(ctx);if(!src||!(src.owned&&src.owned[n]>0))break;const id=x[1],mv=MVD[id],ids=(src.mv[n]||[]).slice();if(ids.includes(id))continue;
+    if(ids.length<4){ids.push(id);src.mv[n]=ids;save();got.push(mv.n);continue}
+    const k=await lrnAsk(n,mv,ids);src=lrnSrc(ctx);
+    if(k>=0){const old=ids[k];ids[k]=id;src.mv[n]=ids;if(src.pp&&src.pp[n])delete src.pp[n][old];save();snd("lvl");toast("1, 2 y… ¡Puf! "+nk(n)+" ha olvidado "+MVD[old].n+" y ha aprendido "+mv.n+".")}
+    else toast(nk(n)+" no ha aprendido "+mv.n+".")}
+  if(got.length){snd("lvl");toast("✨ ¡"+nk(n)+" ha aprendido "+got.join(", ")+"!")}
+}
+const lrnFree=()=>{try{if(fcd||_lrnBusy||$("lrnM")||document.hidden)return false;if(typeof R2!=="undefined"&&R2&&R2.ph==="battle"&&!R2.done)return false;if(typeof NX!=="undefined"&&NX.hatching)return false}catch(e){return false}return true};
+setInterval(async()=>{
+  if(!lrnFree()||typeof S==="undefined"||!S)return;
+  const cur={};for(const ctx of["main","xg"]){const src=lrnSrc(ctx),m={};if(src&&src.lv)for(const n in src.lv)if(src.lv[n])m[n]=src.lv[n].l;cur[ctx]=m}
+  const old=LRNW.snap;if(!old){LRNW.snap=cur;return}
+  // los que han subido: se apuntan como vistos uno a uno, así ninguno se pierde si suben varios a la vez
+  for(const ctx of["main","xg"])for(const n in cur[ctx]){const was=old[ctx][n]||0;old[ctx][n]=cur[ctx][n];if(!(cur[ctx][n]>was))continue;const src=lrnSrc(ctx);if(!lrnPend(src,n).length)continue;
+    _lrnBusy=true;try{await lrnOut(ctx,n)}catch(e){console.error(e)}finally{_lrnBusy=false}
+    return}
+},1500);

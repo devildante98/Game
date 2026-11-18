@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.6"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.7"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794983993">
+<meta name="game-build" content="1794984750">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2993,7 +2993,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.8.6</small>
+    <small class="pcver">Versión 7.8.7</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -5613,6 +5613,33 @@ function lrnAsk(n,mv,ids){return new Promise(res=>{
     '<p>Pero ya conoce 4 movimientos. ¿Cuál quieres que olvide?</p><div class="lrng">'+ids.map((x,k)=>MVD[x]?bt(MVD[x],k):'').join("")+'</div><button class="alt" data-lk="-1">No aprender '+esc(mv.n)+'</button></div>';
   document.body.appendChild(M);
   M.addEventListener("click",e=>{const b=e.target.closest("[data-lk]");if(!b)return;snd("ui");M.remove();res(+b.dataset.lk)})})}
+// ---- como en los juegos: si un Pokémon sube de nivel fuera de combate (expediciones, combates dobles, Caramelo Raro
+// en Exploración…) y puede aprender un movimiento, se le ofrece enseguida, sin esperar al siguiente combate.
+// Funciona con tu partida y con la de Exploración (que tiene sus propios Pokémon y niveles, p_exgame.js).
+// Solo mira los Pokémon que suben de nivel a partir de ahora; lo que quedara pendiente de antes se ofrece en combate, como siempre.
+const LRNW={snap:null};
+const lrnSrc=ctx=>{const sw=typeof XGSW!=="undefined"?XGSW:null;if(ctx==="main")return sw||S;return sw?S:(typeof xgData==="function"?xgData():null)};
+function lrnPend(src,n){const d=src&&src.lv&&src.lv[n],ml=src&&src.ml&&src.ml[n],mv=src&&src.mv&&src.mv[n];if(!d||ml==null||!Array.isArray(mv)||d.l<=ml)return[];
+  return learn(n).filter(x=>x[0]>ml&&x[0]<=d.l&&MVD[x[1]]&&!mv.includes(x[1]))}
+async function lrnOut(ctx,n){
+  let src=lrnSrc(ctx);const l=src.lv[n].l,L=lrnPend(src,n);src.ml[n]=l;save();const got=[];
+  for(const x of L){src=lrnSrc(ctx);if(!src||!(src.owned&&src.owned[n]>0))break;const id=x[1],mv=MVD[id],ids=(src.mv[n]||[]).slice();if(ids.includes(id))continue;
+    if(ids.length<4){ids.push(id);src.mv[n]=ids;save();got.push(mv.n);continue}
+    const k=await lrnAsk(n,mv,ids);src=lrnSrc(ctx);
+    if(k>=0){const old=ids[k];ids[k]=id;src.mv[n]=ids;if(src.pp&&src.pp[n])delete src.pp[n][old];save();snd("lvl");toast("1, 2 y… ¡Puf! "+nk(n)+" ha olvidado "+MVD[old].n+" y ha aprendido "+mv.n+".")}
+    else toast(nk(n)+" no ha aprendido "+mv.n+".")}
+  if(got.length){snd("lvl");toast("✨ ¡"+nk(n)+" ha aprendido "+got.join(", ")+"!")}
+}
+const lrnFree=()=>{try{if(fcd||_lrnBusy||$("lrnM")||document.hidden)return false;if(typeof R2!=="undefined"&&R2&&R2.ph==="battle"&&!R2.done)return false;if(typeof NX!=="undefined"&&NX.hatching)return false}catch(e){return false}return true};
+setInterval(async()=>{
+  if(!lrnFree()||typeof S==="undefined"||!S)return;
+  const cur={};for(const ctx of["main","xg"]){const src=lrnSrc(ctx),m={};if(src&&src.lv)for(const n in src.lv)if(src.lv[n])m[n]=src.lv[n].l;cur[ctx]=m}
+  const old=LRNW.snap;if(!old){LRNW.snap=cur;return}
+  // los que han subido: se apuntan como vistos uno a uno, así ninguno se pierde si suben varios a la vez
+  for(const ctx of["main","xg"])for(const n in cur[ctx]){const was=old[ctx][n]||0;old[ctx][n]=cur[ctx][n];if(!(cur[ctx][n]>was))continue;const src=lrnSrc(ctx);if(!lrnPend(src,n).length)continue;
+    _lrnBusy=true;try{await lrnOut(ctx,n)}catch(e){console.error(e)}finally{_lrnBusy=false}
+    return}
+},1500);
 // ================= entrenadores y Ligas =================
 // [nombre, equipo, nivel extra, sprite original de su clase de entrenador]
 const TRAINERS=[
@@ -7676,8 +7703,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.6";
+const GAME_VER="7.8.7";
 const NEWS=[
+{v:"2026-11-18-7.8.7",ver:"7.8.7",at:"2026-11-18T07:52",t:"📘 Movimientos nuevos al momento, como en los juegos",l:["Si un Pokémon sube de nivel fuera de combate (expediciones, combates dobles, Caramelo Raro en Exploración…) y puede aprender un movimiento, ahora se aprende enseguida: si tiene hueco lo aprende solo, y si ya sabe 4 se abre la ventana para elegir cuál olvidar","Antes tenía que esperar al siguiente combate. Funciona tanto en tu partida como en el modo Exploración"]},
 {v:"2026-11-18-7.8.6",ver:"7.8.6",at:"2026-11-18T07:39",t:"🌾 Zona Safari: capturas a nivel 1",l:["Los Pokémon que atrapas en la Zona Safari llegan ahora a nivel 1. Si ya tenías ese Pokémon, se queda con el nivel que tenía"]},
 {v:"2026-11-18-7.8.5",ver:"7.8.5",at:"2026-11-18T07:25",t:"💡 La ayuda ya no se corta",l:["Arreglado: en algunas ventanas de ayuda del botón (?) (como la de Combate) el texto aparecía entero y al segundo desaparecía, dejando solo la primera frase"]},
 {v:"2026-11-18-7.8.4",ver:"7.8.4",at:"2026-11-18T07:22",t:"⚙️ Nuevo apartado «Juego» en Ajustes",l:["Las opciones de juego (saltar animaciones de las tiradas y del Centro Pokémon, y seguir generando tickets con la pestaña oculta) tienen ahora su propio apartado en Ajustes, en vez de estar al final de Controles"]},
@@ -8060,7 +8088,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794983993";
+const GAME_B="1794984750";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -20669,7 +20697,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.8.6";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.8.7";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

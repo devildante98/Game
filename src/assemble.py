@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.6";
+const GAME_VER="7.8.7";
 const NEWS=[
+{v:"2026-11-18-7.8.7",ver:"7.8.7",at:"2026-11-18T07:52",t:"📘 Movimientos nuevos al momento, como en los juegos",l:["Si un Pokémon sube de nivel fuera de combate (expediciones, combates dobles, Caramelo Raro en Exploración…) y puede aprender un movimiento, ahora se aprende enseguida: si tiene hueco lo aprende solo, y si ya sabe 4 se abre la ventana para elegir cuál olvidar","Antes tenía que esperar al siguiente combate. Funciona tanto en tu partida como en el modo Exploración"]},
 {v:"2026-11-18-7.8.6",ver:"7.8.6",at:"2026-11-18T07:39",t:"🌾 Zona Safari: capturas a nivel 1",l:["Los Pokémon que atrapas en la Zona Safari llegan ahora a nivel 1. Si ya tenías ese Pokémon, se queda con el nivel que tenía"]},
 {v:"2026-11-18-7.8.5",ver:"7.8.5",at:"2026-11-18T07:25",t:"💡 La ayuda ya no se corta",l:["Arreglado: en algunas ventanas de ayuda del botón (?) (como la de Combate) el texto aparecía entero y al segundo desaparecía, dejando solo la primera frase"]},
 {v:"2026-11-18-7.8.4",ver:"7.8.4",at:"2026-11-18T07:22",t:"⚙️ Nuevo apartado «Juego» en Ajustes",l:["Las opciones de juego (saltar animaciones de las tiradas y del Centro Pokémon, y seguir generando tickets con la pestaña oculta) tienen ahora su propio apartado en Ajustes, en vez de estar al final de Controles"]},

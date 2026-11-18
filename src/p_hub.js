@@ -152,8 +152,8 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("hubG").hidden)hubMenu(false);else if(!$("hubM").hidden&&$("trdM").hidden&&$("prof").hidden&&$("evo").hidden)hubClose()}});
 hubInit();
-// ================= ajustes en una ventana con secciones (Sonido, Gráficos, Controles, Accesibilidad, Cuenta, Acerca de) =================
-const SETT=[["snd","🔊 Sonido"],["gfx","🎨 Gráficos"],["ctl","🎮 Controles"],["acc","♿ Accesibilidad"],["acct","👤 Cuenta"],["about","ℹ️ Acerca de"]];
+// ================= ajustes en una ventana con secciones (Sonido, Gráficos, Controles, Juego, Accesibilidad, Cuenta, Acerca de) =================
+const SETT=[["snd","🔊 Sonido"],["gfx","🎨 Gráficos"],["ctl","🎮 Controles"],["game","🕹️ Juego"],["acc","♿ Accesibilidad"],["acct","👤 Cuenta"],["about","ℹ️ Acerca de"]];
 let SETTAB="snd";
 function setTab(k){SETTAB=k;document.querySelectorAll("#optp .settabs button").forEach(b=>b.classList.toggle("on",b.dataset.st===k));document.querySelectorAll("#optp .setpane").forEach(p=>{p.hidden=p.dataset.st!==k});const b=document.querySelector("#optp .setbody");if(b)b.scrollTop=0}
 function setInit(){
@@ -184,7 +184,10 @@ function setInit(){
   // controles
   const cP=mk("ctl","Controles");
   sec(cP,"Tecla de la Pokéball");add(cP,[byId("tkl"),par("tkadd"),byId("tkmsg")]);
-  sec(cP,"Juego");add(cP,[lab("askip"),lab("skip"),lab("bgprod")]);
+  // juego (apartado propio)
+  const jP=mk("game","Juego");
+  sec(jP,"Animaciones");add(jP,[lab("askip"),lab("skip")]);
+  sec(jP,"Tickets");add(jP,[lab("bgprod")]);
   // accesibilidad
   const aP=mk("acc","Accesibilidad");
   {const d=document.createElement("div");d.innerHTML='<label class="slid noi18n"><span>🌐 Idioma · Language</span><select id="setLang"><option value="es">Español</option><option value="en">English</option></select></label><label class="slid"><span>🔠 Tamaño del texto</span><select id="setTxt"><option value="1">Normal</option><option value="1.1">Grande</option><option value="1.22">Muy grande</option></select></label><label class="tog"><input type="checkbox" data-o="calm"> Reducir el movimiento (sin animaciones ni balanceos)</label><label class="tog"><input type="checkbox" data-o="hc"> Alto contraste (textos y bordes más marcados)</label><small class="setnote">Estas opciones solo cambian cómo se ve el juego en este dispositivo.</small>';[...d.childNodes].forEach(n=>aP.appendChild(n))}

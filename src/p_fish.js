@@ -18,7 +18,7 @@ function fishMon(rod){let n=null;
     else if(rod===2)n=pick(FISH_G[z]||FISH_G.pra);
     else n=Math.random()<.05?pick(FISH_RARE):pick(FISH_S[z]||FISH_S.pra)}
   n=n&&PM[n]?n:"Magikarp";const b=sLv(0),lv=clampL(rod<=1?Math.max(2,Math.min(b,10)+Math.floor(Math.random()*3)-1):rod===2?Math.max(3,b-3+Math.floor(Math.random()*3)):b-1+Math.floor(Math.random()*4));
-  const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W)m.sh=1;return m}
+  const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W*shcK())m.sh=1;return m}
 // esperar a que pulses A en cuanto pica
 function fishReact(ms){return new Promise(res=>{let done=false;const fin=v=>{if(done)return;done=true;document.removeEventListener("keydown",kd,true);EX.fishWait=null;clearTimeout(t);res(v)};
   const kd=e=>{const a=typeof exAct==="function"?exAct(e.key):"";if(a==="a"||e.key==="Enter"||e.key===" "){e.preventDefault();e.stopPropagation();fin(true)}};

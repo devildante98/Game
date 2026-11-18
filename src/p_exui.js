@@ -37,9 +37,10 @@ function exMenuDo(k){if(k==="opt"){EXM_SUB=1;exMenu(true);return}if(k==="back"){
   else if(k==="save"){save();try{if(window.cloudFlush)window.cloudFlush()}catch(e){}snd("lvl");toast("💾 Partida guardada")}}
 // Pokédex de Exploración: los Pokémon que has capturado en este modo
 function exDex(){const sc=document.querySelector("#explPB .exscr")||document.querySelector(".exwrap .exscr");if(!sc)return;let d=$("exDexP");if(!d){d=document.createElement("div");d.id="exDexP";d.className="exteam exdex";sc.appendChild(d)}
-  const own=xgRun(()=>Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n])),tot=P.filter(p=>p[2]!=="M").length;
+  const own=xgRun(()=>Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n])),tot=SHC_LIST.length,got=shcCount();
   own.sort((a,b)=>(+PM[a][4]||9999)-(+PM[b][4]||9999));
-  d.innerHTML='<div class="xgh"><b>📖 Pokédex de Exploración · '+own.length+' / '+tot+'</b><button type="button" class="alt" data-exdx="1">Cerrar</button></div>'+
+  d.innerHTML='<div class="xgh"><b>📖 Pokédex de Exploración · '+got+' / '+tot+'</b><button type="button" class="alt" data-exdx="1">Cerrar</button></div>'+
+    '<div class="shcbar'+(S.shc?' have':'')+'"><span>'+(S.shc?'✨':'🔒')+'</span><div><b>Amuleto Iris'+(S.shc?' · ¡Lo tienes!':'')+'</b><small>'+(S.shc?'Los Pokémon variocolor aparecen tres veces más a menudo en Exploración.':'Completa la Pokédex (todas las especies comunes, raras y épicas; los legendarios y las formas especiales no cuentan) y la Profesora Vega te lo dará. Triplica la probabilidad de encontrar variocolores.')+'</small><i style="--p:'+Math.round(got/tot*100)+'%"></i></div></div>'+
     (own.length?'<div class="exdexg">'+own.map(n=>'<div class="exdexc" title="'+esc(n)+'">'+ico(PM[n],48)+'<small>#'+(PM[n][4]||"?")+'</small><b>'+esc(n)+'</b><i>'+tyTxt(PM[n])+'</i></div>').join("")+'</div>':'<p class="mut">Aún no has capturado ningún Pokémon en Exploración. ¡Busca en la hierba alta!</p>');
   d.hidden=false;d.querySelector("[data-exdx]").onclick=e=>{e.stopPropagation();d.hidden=true;snd("ui")};snd("ui")}
 // teclas M (menú) y V (velocidad), y moverse por el menú con las flechas

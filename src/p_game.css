@@ -1333,3 +1333,8 @@ body.calm #evpM .evpic{animation:none}
 .shopqw{position:sticky;top:0;z-index:3;display:flex;flex-direction:column;gap:4px;margin:4px 0 10px;padding:6px 0;background:var(--panel)}
 .shopqw input{width:100%;box-sizing:border-box;font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 #bag .row.bsq,#bag > .bsq{display:none!important}
+/* Amuleto Iris en la Pokédex de Exploración */
+.shcbar{display:flex;gap:10px;align-items:center;margin:6px 0 10px;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.08);border:2px solid rgba(255,214,90,.35)}
+.shcbar span{font-size:1.6rem}.shcbar>div{flex:1;min-width:0}.shcbar b{display:block}.shcbar small{opacity:.85;line-height:1.35;display:block}
+.shcbar i{display:block;height:6px;margin-top:6px;border-radius:99px;background:linear-gradient(90deg,#ffd23f var(--p),rgba(255,255,255,.15) var(--p))}
+.shcbar.have{border-color:#ffd23f;box-shadow:0 0 14px rgba(255,214,90,.45)}

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.11.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.12"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795009289">
+<meta name="game-build" content="1795009561">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3024,6 +3024,11 @@ body.calm #evpM .evpic{animation:none}
 .shopqw{position:sticky;top:0;z-index:3;display:flex;flex-direction:column;gap:4px;margin:4px 0 10px;padding:6px 0;background:var(--panel)}
 .shopqw input{width:100%;box-sizing:border-box;font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 #bag .row.bsq,#bag > .bsq{display:none!important}
+/* Amuleto Iris en la Pokédex de Exploración */
+.shcbar{display:flex;gap:10px;align-items:center;margin:6px 0 10px;padding:8px 12px;border-radius:14px;background:rgba(255,255,255,.08);border:2px solid rgba(255,214,90,.35)}
+.shcbar span{font-size:1.6rem}.shcbar>div{flex:1;min-width:0}.shcbar b{display:block}.shcbar small{opacity:.85;line-height:1.35;display:block}
+.shcbar i{display:block;height:6px;margin-top:6px;border-radius:99px;background:linear-gradient(90deg,#ffd23f var(--p),rgba(255,255,255,.15) var(--p))}
+.shcbar.have{border-color:#ffd23f;box-shadow:0 0 14px rgba(255,214,90,.45)}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3089,7 +3094,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.11.3</small>
+    <small class="pcver">Versión 7.12</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7830,8 +7835,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.11.3";
+const GAME_VER="7.12";
 const NEWS=[
+{v:"2026-11-18-7.12",ver:"7.12",at:"2026-11-18T14:46",t:"✨ Amuleto Iris en Exploración",l:["Completa la Pokédex de Exploración y la Profesora Vega te dará el Amuleto Iris: desde entonces, los Pokémon variocolor aparecen tres veces más a menudo en la hierba alta, al hacer surf y al pescar","La Pokédex de Exploración cuenta ahora las especies que pueden aparecer en este modo (comunes, raras y épicas: 992). Los legendarios y las formas especiales no hacen falta. Cuentan los que has capturado alguna vez, aunque ya no los tengas","En la Pokédex de Exploración (menú → Pokédex) ves cuántas llevas, una barra de progreso y si ya tienes el Amuleto"]},
 {v:"2026-11-18-7.11.3",ver:"7.11.3",at:"2026-11-18T14:41",t:"☁️ Nubes más realistas",l:["Las nubes del pueblo ahora son cúmulos de verdad: base plana y algo más oscura, cuerpo ancho y cimas abultadas e irregulares, cada una diferente (antes parecían medias lunas)"]},
 {v:"2026-11-18-7.11.2",ver:"7.11.2",at:"2026-11-18T14:38",t:"🔍 Buscador en la Tienda de objetos",l:["La Tienda de objetos tiene ahora una barra de búsqueda arriba: escribe el nombre o lo que hace el objeto (poción, baya, piedra, Master Ball…) y verás solo los que coinciden. No importan las tildes ni las mayúsculas"]},
 {v:"2026-11-18-7.11.1",ver:"7.11.1",at:"2026-11-18T14:32",t:"💎 Teracristalización en el PVP",l:["En los duelos PVP en modo «🧬 Libre» ya se puede teracristalizar: pulsa «💎 Teracristalizar» y elige el ataque. Una vez por combate y jugador","Tu rival ve la teracristalización con su animación y su corona, y el teratipo es el que tengas puesto en la ficha de tu Pokémon","En el PVP el Teraorbe siempre está cargado (no gasta la carga de tus combates). En el modo «⚔️ Clásico» no hay Teracristalización, igual que no hay megas, Dinamax ni movimientos Z"]},
@@ -8225,7 +8231,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795009289";
+const GAME_B="1795009561";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -13336,7 +13342,7 @@ exTrainerBattle=function(n){if(!exTeamOk()){exSay(["Tus Pokémon están debilita
   EX.trans={t:0,d:1300,k:"trainer",done:()=>exBattle({eteam:team,trainer:n.n,tsrc:{k:exTrKey(n.n),n:n.n}},n)}};
 exEncounter=function(){if(!exTeamOk()){exSay(["¡Algo se mueve en la hierba!","…pero tus Pokémon están demasiado cansados para luchar. Cúralos en un Centro Pokémon."]);return}
   const z=XGZ[EX.map]||[3,6],x=Math.random()*100,r=x<1.5?"E":x<22?"R":"C",z0=S.zone;S.zone=EX.M.z||z0;let op;xgRun(()=>{op=wildPick(r)});S.zone=z0;
-  const lv=clampL(z[0]+Math.floor(Math.random()*(z[1]-z[0]+1))),m=mkEnemy(stageFor(op,lv)||op,lv);if(Math.random()<SHINY_W)m.sh=1;
+  const lv=clampL(z[0]+Math.floor(Math.random()*(z[1]-z[0]+1))),m=mkEnemy(stageFor(op,lv)||op,lv);if(Math.random()<SHINY_W*shcK())m.sh=1;
   EX.keys={};EX.kst=[];snd("wild");EX.trans={t:0,d:1300,k:"wild",done:()=>exBattle({eteam:[m],wild:1})}};
 // ---------- ya no hacen falta medallas del juego base: avanzas con la historia ----------
 for(const k in EXM){const M=EXM[k];for(const c in (M.w||{}))delete M.w[c].med}
@@ -16072,9 +16078,10 @@ function exMenuDo(k){if(k==="opt"){EXM_SUB=1;exMenu(true);return}if(k==="back"){
   else if(k==="save"){save();try{if(window.cloudFlush)window.cloudFlush()}catch(e){}snd("lvl");toast("💾 Partida guardada")}}
 // Pokédex de Exploración: los Pokémon que has capturado en este modo
 function exDex(){const sc=document.querySelector("#explPB .exscr")||document.querySelector(".exwrap .exscr");if(!sc)return;let d=$("exDexP");if(!d){d=document.createElement("div");d.id="exDexP";d.className="exteam exdex";sc.appendChild(d)}
-  const own=xgRun(()=>Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n])),tot=P.filter(p=>p[2]!=="M").length;
+  const own=xgRun(()=>Object.keys(S.owned).filter(n=>S.owned[n]>0&&PM[n])),tot=SHC_LIST.length,got=shcCount();
   own.sort((a,b)=>(+PM[a][4]||9999)-(+PM[b][4]||9999));
-  d.innerHTML='<div class="xgh"><b>📖 Pokédex de Exploración · '+own.length+' / '+tot+'</b><button type="button" class="alt" data-exdx="1">Cerrar</button></div>'+
+  d.innerHTML='<div class="xgh"><b>📖 Pokédex de Exploración · '+got+' / '+tot+'</b><button type="button" class="alt" data-exdx="1">Cerrar</button></div>'+
+    '<div class="shcbar'+(S.shc?' have':'')+'"><span>'+(S.shc?'✨':'🔒')+'</span><div><b>Amuleto Iris'+(S.shc?' · ¡Lo tienes!':'')+'</b><small>'+(S.shc?'Los Pokémon variocolor aparecen tres veces más a menudo en Exploración.':'Completa la Pokédex (todas las especies comunes, raras y épicas; los legendarios y las formas especiales no cuentan) y la Profesora Vega te lo dará. Triplica la probabilidad de encontrar variocolores.')+'</small><i style="--p:'+Math.round(got/tot*100)+'%"></i></div></div>'+
     (own.length?'<div class="exdexg">'+own.map(n=>'<div class="exdexc" title="'+esc(n)+'">'+ico(PM[n],48)+'<small>#'+(PM[n][4]||"?")+'</small><b>'+esc(n)+'</b><i>'+tyTxt(PM[n])+'</i></div>').join("")+'</div>':'<p class="mut">Aún no has capturado ningún Pokémon en Exploración. ¡Busca en la hierba alta!</p>');
   d.hidden=false;d.querySelector("[data-exdx]").onclick=e=>{e.stopPropagation();d.hidden=true;snd("ui")};snd("ui")}
 // teclas M (menú) y V (velocidad), y moverse por el menú con las flechas
@@ -17808,7 +17815,7 @@ function hmWaterMon(){try{const R=typeof rnD==="function"?rnD():null;if(R&&R.w&&
 {const _a=exArrive;exArrive=function(){const r=_a.apply(this,arguments);try{if(EX.surf&&!EX.cut){const c=exAt(EX.x,EX.y);
   if(c!=="~")EX.surf=0;
   else if(!EX.dlg&&!EX.trans&&!(typeof fdRep==="function"&&fdRep())&&EX.steps-(EX.encAt||-99)>=6&&Math.random()<1/14){EX.encAt=EX.steps;if(!exTeamOk()){exSay(["¡Algo se mueve bajo el agua!","…pero tus Pokémon están demasiado cansados para luchar."]);return r}
-    const n=hmWaterMon(),lv=clampL(sLv(0)+Math.floor(Math.random()*4)-2);const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W)m.sh=1;
+    const n=hmWaterMon(),lv=clampL(sLv(0)+Math.floor(Math.random()*4)-2);const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W*shcK())m.sh=1;
     EX.keys={};EX.kst=[];snd("wild");EX.trans={t:0,d:1300,k:"wild",done:()=>exBattle({eteam:[m]})}}}}catch(e){console.error(e)}return r}}
 // al cambiar de mapa se baja del agua y la Fuerza se apaga (como en los juegos)
 {const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{EX.surf=0;EX.strength=null;EX.lit=null;if(HM_DARK[m]){let n=0;const tk=()=>{if(EX.map!==m||EX.lit)return;if(EX.title||EX.cut||EX.dlg||EX.trans){if(++n<60)setTimeout(tk,250);return}hmDark()};setTimeout(tk,900)}}catch(e){}return r}}
@@ -17875,7 +17882,7 @@ function fishMon(rod){let n=null;
     else if(rod===2)n=pick(FISH_G[z]||FISH_G.pra);
     else n=Math.random()<.05?pick(FISH_RARE):pick(FISH_S[z]||FISH_S.pra)}
   n=n&&PM[n]?n:"Magikarp";const b=sLv(0),lv=clampL(rod<=1?Math.max(2,Math.min(b,10)+Math.floor(Math.random()*3)-1):rod===2?Math.max(3,b-3+Math.floor(Math.random()*3)):b-1+Math.floor(Math.random()*4));
-  const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W)m.sh=1;return m}
+  const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W*shcK())m.sh=1;return m}
 // esperar a que pulses A en cuanto pica
 function fishReact(ms){return new Promise(res=>{let done=false;const fin=v=>{if(done)return;done=true;document.removeEventListener("keydown",kd,true);EX.fishWait=null;clearTimeout(t);res(v)};
   const kd=e=>{const a=typeof exAct==="function"?exAct(e.key):"";if(a==="a"||e.key==="Enter"||e.key===" "){e.preventDefault();e.stopPropagation();fin(true)}};
@@ -21095,6 +21102,21 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 $("menu").addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-pv="fT"]');if(!b||!D||!D.E||!D.E.free)return;e.stopImmediatePropagation();
   const pm=beAct(D.E.sd[pvMy()]);if(!pm)return;const v="T"+teraOf(pm.p[0]);snd("ui");D.pre=D.pre===v?"":v;D.zm=0;pvMenu()},true);
 
+// =====================================================================================
+// AMULETO IRIS (Exploración)
+// Como en los juegos: al completar la Pokédex de Exploración (todas las especies comunes, raras y épicas, las que
+// pueden aparecer en la hierba, el agua y la pesca; los legendarios y las formas especiales no cuentan), la Profesora
+// Vega te llama y te da el Amuleto Iris. Con él, los Pokémon variocolor salen el triple en Exploración (hierba alta,
+// surf y pesca). Cuentan los que has capturado alguna vez (aunque ya no los tengas).
+// =====================================================================================
+const SHC_LIST=P.filter(p=>p[2]==="C"||p[2]==="R"||p[2]==="E");
+function shcK(){try{return S&&S.shc?3:1}catch(e){return 1}}
+function shcCount(){return xgRun(()=>{let n=0;const o=S.owned||{},r=S.reg||{};for(const p of SHC_LIST)if((o[p[0]]|0)>0||r[p[0]])n++;return n})}
+// en cuanto completes la Pokédex (estando en Exploración y sin nada en marcha), la profesora te llama
+setInterval(()=>{try{if(typeof S==="undefined"||!S||S.shc||typeof EX==="undefined"||!EX.on||EX.title||EX.dlg||EX.trans||EX.cut||(typeof fcd!=="undefined"&&fcd))return;
+  if(shcCount()<SHC_LIST.length)return;S.shc=1;save();if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}snd("lvl");
+  exSay(["📞 ¡Bip, bip! Te llama la Profesora Vega.","«¡No me lo puedo creer! ¡Has completado la Pokédex de Exploración! Has registrado las "+SHC_LIST.length+" especies.»","«¡Qué talento tienes con los Pokémon! Toma, te lo has ganado: es el objeto más especial de mi laboratorio.»","✨ ¡Has recibido el Amuleto Iris!","Desde ahora, los Pokémon variocolor aparecerán tres veces más a menudo en la hierba alta, al hacer surf y al pescar."])}catch(e){}},2500);
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -21349,7 +21371,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.11.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.12";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

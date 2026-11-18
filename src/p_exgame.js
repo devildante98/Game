@@ -45,7 +45,7 @@ exTrainerBattle=function(n){if(!exTeamOk()){exSay(["Tus Pokémon están debilita
   EX.trans={t:0,d:1300,k:"trainer",done:()=>exBattle({eteam:team,trainer:n.n,tsrc:{k:exTrKey(n.n),n:n.n}},n)}};
 exEncounter=function(){if(!exTeamOk()){exSay(["¡Algo se mueve en la hierba!","…pero tus Pokémon están demasiado cansados para luchar. Cúralos en un Centro Pokémon."]);return}
   const z=XGZ[EX.map]||[3,6],x=Math.random()*100,r=x<1.5?"E":x<22?"R":"C",z0=S.zone;S.zone=EX.M.z||z0;let op;xgRun(()=>{op=wildPick(r)});S.zone=z0;
-  const lv=clampL(z[0]+Math.floor(Math.random()*(z[1]-z[0]+1))),m=mkEnemy(stageFor(op,lv)||op,lv);if(Math.random()<SHINY_W)m.sh=1;
+  const lv=clampL(z[0]+Math.floor(Math.random()*(z[1]-z[0]+1))),m=mkEnemy(stageFor(op,lv)||op,lv);if(Math.random()<SHINY_W*shcK())m.sh=1;
   EX.keys={};EX.kst=[];snd("wild");EX.trans={t:0,d:1300,k:"wild",done:()=>exBattle({eteam:[m],wild:1})}};
 // ---------- ya no hacen falta medallas del juego base: avanzas con la historia ----------
 for(const k in EXM){const M=EXM[k];for(const c in (M.w||{}))delete M.w[c].med}

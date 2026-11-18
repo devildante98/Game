@@ -47,7 +47,7 @@ function hmWaterMon(){try{const R=typeof rnD==="function"?rnD():null;if(R&&R.w&&
 {const _a=exArrive;exArrive=function(){const r=_a.apply(this,arguments);try{if(EX.surf&&!EX.cut){const c=exAt(EX.x,EX.y);
   if(c!=="~")EX.surf=0;
   else if(!EX.dlg&&!EX.trans&&!(typeof fdRep==="function"&&fdRep())&&EX.steps-(EX.encAt||-99)>=6&&Math.random()<1/14){EX.encAt=EX.steps;if(!exTeamOk()){exSay(["¡Algo se mueve bajo el agua!","…pero tus Pokémon están demasiado cansados para luchar."]);return r}
-    const n=hmWaterMon(),lv=clampL(sLv(0)+Math.floor(Math.random()*4)-2);const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W)m.sh=1;
+    const n=hmWaterMon(),lv=clampL(sLv(0)+Math.floor(Math.random()*4)-2);const m=mkEnemy(stageFor(PM[n],lv)||PM[n],lv);if(Math.random()<SHINY_W*shcK())m.sh=1;
     EX.keys={};EX.kst=[];snd("wild");EX.trans={t:0,d:1300,k:"wild",done:()=>exBattle({eteam:[m]})}}}}catch(e){console.error(e)}return r}}
 // al cambiar de mapa se baja del agua y la Fuerza se apaga (como en los juegos)
 {const _l=exLoad;exLoad=function(m){const r=_l.apply(this,arguments);try{EX.surf=0;EX.strength=null;EX.lit=null;if(HM_DARK[m]){let n=0;const tk=()=>{if(EX.map!==m||EX.lit)return;if(EX.title||EX.cut||EX.dlg||EX.trans){if(++n<60)setTimeout(tk,250);return}hmDark()};setTimeout(tk,900)}}catch(e){}return r}}

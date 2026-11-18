@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.12.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.12.4"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795024480">
+<meta name="game-build" content="1795024534">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3094,7 +3094,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.12.3</small>
+    <small class="pcver">Versión 7.12.4</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7835,8 +7835,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.12.3";
+const GAME_VER="7.12.4";
 const NEWS=[
+{v:"2026-11-18-7.12.4",ver:"7.12.4",at:"2026-11-18T18:55",t:"💬 Arreglo en el chat: menciones y respuestas",l:["Los mensajes con una mención (@apodo) o que responden a otro mensaje ya se envían bien. Antes el servidor los rechazaba y no llegaban"]},
 {v:"2026-11-18-7.12.3",ver:"7.12.3",at:"2026-11-18T18:54",t:"🔴 Arreglo en las incursiones",l:["La ventana para elegir los ataques de tu equipo ya se abre por encima de la incursión (antes quedaba detrás y había que salir de la sala)"]},
 {v:"2026-11-18-7.12.2",ver:"7.12.2",at:"2026-11-18T16:57",t:"🧍 Poses del entrenador más naturales",l:["Las manos del entrenador ya no están siempre igual: cierra el puño en «Puño en alto», «Puño al frente», «¡Listo para combatir!», «Sacar músculo» y «¡Victoria!», hace la «V» con dos dedos en «Victoria con la mano» y señala con el índice en «Señalar»","«Mirando a lo lejos»: la mano abierta y plana sobre la frente, encima de los ojos, como tapándose del sol","«Mano en la nuca»: el codo hacia fuera y la mano apoyada detrás de la cabeza"]},
 {v:"2026-11-18-7.12.1",ver:"7.12.1",at:"2026-11-18T15:19",t:"📰 Botón de Novedades en la pantalla principal",l:["Debajo de la Mochila hay un nuevo botón «Novedades» para ver todas las actualizaciones en cualquier momento. Si hay alguna que no has leído, lleva un aviso rojo"]},
@@ -8234,7 +8235,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795024480";
+const GAME_B="1795024534";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -21415,7 +21416,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.12.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.12.4";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

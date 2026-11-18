@@ -66,12 +66,13 @@ match /freq/{id} {
 // la fecha, cerca de la real; y los avisos del sistema («se ha unido al gremio») solo en el chat del gremio
 function msgOk(sysOk) {
   let d = request.resource.data;
-  return d.keys().hasOnly(['u', 'n', 'cr', 'tr', 'g', 't', 'at', 'rp', 'p', 'img', 'exp', 'inv', 'sys'])
+  return d.keys().hasOnly(['u', 'n', 'cr', 'tr', 'g', 't', 'at', 'rp', 'mn', 'p', 'img', 'exp', 'inv', 'sys'])
     && d.u == request.auth.uid && str(d.t, 200) && nowOk(d.at)
     && optStr('n', 30) && optStr('tr', 80) && optStr('g', 4) && optNum('cr', 0, 3)
     && (!('img' in d) || (str(d.img, 400000) && d.img.matches('data:image/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}')))
     && (!('exp' in d) || num(d.exp, 0, request.time.toMillis() + 172800000))
     && (!('rp' in d) || (d.rp is map && d.rp.keys().hasOnly(['id', 'n', 't'])))
+    && (!('mn' in d) || (d.mn is list && d.mn.size() <= 5))
     && (!('p' in d) || (d.p is map && d.p.keys().hasOnly(['n', 'l', 's', 'k'])))
     && (!('inv' in d) || (d.inv is map && d.inv.size() <= 12))
     && (!('sys' in d) || (sysOk && d.sys == 'join'));

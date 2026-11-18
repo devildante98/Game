@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.12.3";
+const GAME_VER="7.12.4";
 const NEWS=[
+{v:"2026-11-18-7.12.4",ver:"7.12.4",at:"2026-11-18T18:55",t:"💬 Arreglo en el chat: menciones y respuestas",l:["Los mensajes con una mención (@apodo) o que responden a otro mensaje ya se envían bien. Antes el servidor los rechazaba y no llegaban"]},
 {v:"2026-11-18-7.12.3",ver:"7.12.3",at:"2026-11-18T18:54",t:"🔴 Arreglo en las incursiones",l:["La ventana para elegir los ataques de tu equipo ya se abre por encima de la incursión (antes quedaba detrás y había que salir de la sala)"]},
 {v:"2026-11-18-7.12.2",ver:"7.12.2",at:"2026-11-18T16:57",t:"🧍 Poses del entrenador más naturales",l:["Las manos del entrenador ya no están siempre igual: cierra el puño en «Puño en alto», «Puño al frente», «¡Listo para combatir!», «Sacar músculo» y «¡Victoria!», hace la «V» con dos dedos en «Victoria con la mano» y señala con el índice en «Señalar»","«Mirando a lo lejos»: la mano abierta y plana sobre la frente, encima de los ojos, como tapándose del sol","«Mano en la nuca»: el codo hacia fuera y la mano apoyada detrás de la cabeza"]},
 {v:"2026-11-18-7.12.1",ver:"7.12.1",at:"2026-11-18T15:19",t:"📰 Botón de Novedades en la pantalla principal",l:["Debajo de la Mochila hay un nuevo botón «Novedades» para ver todas las actualizaciones en cualquier momento. Si hay alguna que no has leído, lleva un aviso rojo"]},

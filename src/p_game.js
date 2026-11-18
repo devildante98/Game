@@ -190,7 +190,7 @@ function gmInit(){
   $("gTown").addEventListener("scroll",gmTownArr,{passive:true});addEventListener("resize",()=>setTimeout(gmTownArr,300));
   $("gTL").onclick=()=>{snd("ui");$("gTown").scrollBy({left:-$("gTown").clientWidth*.7,behavior:"smooth"})};$("gTR").onclick=()=>{snd("ui");$("gTown").scrollBy({left:$("gTown").clientWidth*.7,behavior:"smooth"})};
   // ayuda (?) también en las ventanas del menú
-  const hx=$("hubX");if(hx&&!$("hubQ")){const q=document.createElement("button");q.id="hubQ";q.className="gmo ghq";q.setAttribute("aria-label","Ayuda");q.innerHTML=gI("help",24);hx.parentNode.insertBefore(q,hx);q.onclick=()=>gmHelpT()}
+  const hx=$("hubX");if(hx&&!$("hubQ")){const q=document.createElement("button");q.id="hubQ";q.className="gmo ghq";q.setAttribute("aria-label","Ayuda");q.innerHTML=gI("help",24);hx.parentNode.insertBefore(q,hx);q.onclick=()=>gmHelpT("hub")}
   // opciones nuevas en Ajustes
   const op=$("optp"),ref=op&&op.querySelector('[data-o="bg"]');if(ref&&!op.querySelector('[data-o="classic"]')){const lab=ref.closest("label");
     lab.insertAdjacentHTML("beforebegin",'<label><input type="checkbox" data-o="classic"> Diseño clásico (página con scroll en lugar del modo juego)</label><label><input type="checkbox" data-o="secMus"> Música distinta en cada sección</label><label><input type="checkbox" data-o="vib"> Vibración al tocar (móvil)</label><label><input type="checkbox" data-o="lite"> Animaciones ligeras (más fluido en móviles y ordenadores lentos)</label>');applyO()}
@@ -199,7 +199,7 @@ function gmInit(){
     const sync=()=>{const ac=$("acct");$("gAcc").hidden=!ac||ac.hidden;$("gAccN").textContent=(($("aname")||{}).textContent||"").trim()||"Tu cuenta"};sync();const ac=$("acct");if(ac)new MutationObserver(sync).observe(ac,{attributes:true,attributeFilter:["hidden"],subtree:true,childList:true,characterData:true})}
   // eventos
   document.addEventListener("click",gmClick,true);
-  $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT();
+  $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT("scr");
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GM.scr&&gmOn()&&!document.querySelector("#gacM:not([hidden]),#uiDlg:not([hidden]),#pkv:not([hidden])")){gmClose()}});
   $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const Q=window._gsq||(window._gsq={x:0,y:0,on:0});Q.x=e.clientX||0;Q.y=e.clientY||0;if(Q.on)return;Q.on=1;
     // chispas y salto del entrenador: una vez por fotograma aunque toques muchas veces a la vez
@@ -279,7 +279,34 @@ function gmClick(e){const t=e.target;if(!t.closest||!gmOn())return;
 // ---------- ayuda: los textos largos se esconden tras el botón (?) ----------
 function gmHelpMark(root){if(!root)return;root.querySelectorAll(".panel>p.rates,.panel>p.nxi,.panel>p.mut,.panel>small,.panel>p").forEach(e=>{if(e.dataset.gh)return;e.dataset.gh=1;const t=(e.textContent||"").trim();
   if(t.length>70&&!e.id&&!e.querySelector("[id],button,input,select,a,progress"))e.classList.add("ghelp")})}
-function gmHelpT(){GM.help=!GM.help;document.body.classList.toggle("ghelpon",GM.help);snd("ui")}
+// el botón (?) abre una ventana con toda la información de la sección que está abierta: la introducción completa (también
+// lo que va tras «Más información») y los textos de ayuda que el modo juego esconde
+function gmHelpT(w){
+  const inScr=w?w==="scr":!!(GM.scr&&$("gScr")&&!$("gScr").hidden&&$("hubM").hidden);
+  const root=$(inScr?"gScrB":"hubB"),tit=($(inScr?"gScrT":"hubT")||{}).textContent||"",sub=($(inScr?"gScrD":"hubD")||{}).textContent||"";
+  if(root)gmHelpMark(root);
+  const vis=e=>!!(e.offsetParent||e.getClientRects().length),seen=new Set(),parts=[];
+  const add=(e,cls)=>{const c=e.cloneNode(true);c.querySelectorAll("button,input,select,textarea,script,.infob").forEach(x=>x.remove());c.querySelectorAll("[hidden]").forEach(x=>x.hidden=false);
+    c.querySelectorAll("[id]").forEach(x=>x.removeAttribute("id"));c.removeAttribute("id");const t=(c.textContent||"").replace(/\s+/g," ").trim();if(t.length<25||seen.has(t))return;seen.add(t);parts.push('<p class="'+cls+'">'+c.innerHTML.trim()+'</p>')};
+  // título: la pestaña abierta (o el título de la sección); debajo, el grupo
+  const tab=!inScr&&$("hubTabs")&&!$("hubTabs").hidden?$("hubTabs").querySelector("button.on"):null,h2a=root&&root.querySelector(":scope>section.panel>h2");
+  const head=(tab&&tab.textContent.replace(/\s*\d+$/,"").trim())||(h2a&&h2a.textContent.trim())||tit;
+  if(root)root.querySelectorAll("section.panel").forEach(sec=>{if(!vis(sec))return;
+    sec.querySelectorAll(":scope>p.rates,:scope>p.nxi").forEach(e=>add(e,"hlpi"));
+    sec.querySelectorAll(".ghelp").forEach(e=>add(e,""));
+    sec.querySelectorAll("small.mut,p.mut").forEach(e=>{const pe=e.parentElement;if((pe===sec||(pe&&pe.parentElement===sec))&&vis(e)&&!e.closest("button,label,.ghelp")&&(e.textContent||"").trim().length>60)add(e,"")})});
+  // ayuda propia de las pantallas que no tienen texto de introducción
+  const HX={shopP:["Cada edificio de tu pueblo produce tickets cada segundo, también mientras no juegas. Cuanto más nivel tiene, más produce.","Los Guantes de entrenador aumentan los tickets que ganas con cada toque en la Poké Ball.","Con los botones ×1, ×10, ×50 y Máx compras varios niveles de una vez. El precio de cada nivel sube un poco cada vez."]};
+  if(inScr&&HX[GM.scr]&&parts.length<2)HX[GM.scr].forEach(t=>parts.push('<p>'+esc(t)+'</p>'));
+  const body=parts.slice(0,14).join("")||'<p class="hlpi">'+esc(sub||"")+'</p><p class="mut">Esta sección no tiene información extra.</p>';
+  const old=$("hlpM");if(old)old.remove();
+  const o=document.createElement("div");o.id="hlpM";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-label","Ayuda");
+  o.innerHTML='<div class="hlpbox"><button type="button" class="hlpx" aria-label="Cerrar">✕</button><div class="hlpic">💡</div><h2>'+esc(head||"Ayuda")+'</h2>'+(tit&&head!==tit?'<small class="hlps">'+esc(tit)+'</small>':'')+
+    '<div class="hlpb">'+body+'</div><button type="button" class="red hlpok">Entendido</button></div>';
+  document.body.appendChild(o);snd("ui");
+  const close=()=>{o.remove();document.removeEventListener("keydown",kd,true)},kd=e=>{if(e.key==="Escape"){e.stopPropagation();close()}};
+  o.addEventListener("click",e=>{if(e.target===o||e.target.closest(".hlpx,.hlpok"))close()});document.addEventListener("keydown",kd,true);try{o.querySelector(".hlpok").focus()}catch(e){}
+}
 // ---------- barra superior ----------
 function gmTop(){
   const v=S.t||0;if(GM.disp==null)GM.disp=v;const d=v-GM.disp;

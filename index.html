@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794981027">
+<meta name="game-build" content="1794981755">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2911,6 +2911,18 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 .safmon.saf3on.saf3t .safspr{opacity:0;pointer-events:none}
 .safmon.saf3on .safname{z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 @media (max-width:600px){.safmon.saf3on{height:270px}}
+/* ventana de ayuda del botón (?) */
+#hlpM{position:fixed;inset:0;z-index:185;background:rgba(10,12,30,.66);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+#hlpM .hlpbox{position:relative;max-width:560px;width:100%;max-height:min(80vh,640px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:4px solid #ffd23f;border-radius:22px;padding:20px 20px 16px;box-sizing:border-box;box-shadow:0 0 36px 6px rgba(255,210,63,.35);animation:jpop .4s cubic-bezier(.2,1.4,.4,1)}
+#hlpM .hlpic{font-size:2.3rem;line-height:1;text-align:center}
+#hlpM h2{margin:6px 40px 2px;text-align:center}
+#hlpM .hlps{display:block;text-align:center;opacity:.7;margin-bottom:4px}
+#hlpM .hlpb{overflow:auto;margin:10px 0 14px;padding-right:4px;text-align:left}
+#hlpM .hlpb p{margin:0 0 10px;line-height:1.5}
+#hlpM .hlpb p.hlpi{font-size:1.04rem}
+#hlpM .hlpb p:not(.hlpi){padding:8px 12px;border-radius:12px;background:rgba(255,210,63,.14);border-left:4px solid #ffd23f}
+#hlpM .hlpok{align-self:center;min-width:160px}
+#hlpM .hlpx{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;padding:0!important;line-height:1!important;font-size:1.1rem;background:rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.15);color:inherit;cursor:pointer}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2976,7 +2988,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.8</small>
+    <small class="pcver">Versión 7.8.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7659,8 +7671,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8";
+const GAME_VER="7.8.1";
 const NEWS=[
+{v:"2026-11-18-7.8.1",ver:"7.8.1",at:"2026-11-18T07:02",t:"💡 El botón (?) ahora explica cada sección",l:["Al pulsar el botón (?) de cualquier ventana se abre una ventana con toda la información de ese apartado: la explicación completa (lo de «Más información») y los consejos y probabilidades","Se cierra con «Entendido», con la ✕, tocando fuera o con Esc"]},
 {v:"2026-11-18-7.8",ver:"7.8",at:"2026-11-18T06:50",t:"🌾 Zona Safari en 3D",l:["La Zona Safari ahora es un paisaje en 3D: una sabana con hierba alta que se mueve con el viento, acacias, una charca, montañas y mariposas","El cielo cambia con tu hora: de día, al atardecer o de noche con estrellas y luciérnagas","El Pokémon salvaje aparece entre la hierba, con su sombra, y la Safari Ball, el cebo y la roca se lanzan en 3D: verás cómo la Ball se mueve en el suelo antes de saber si lo has atrapado","Si tu dispositivo no puede mostrar 3D, la Zona Safari se ve como antes"]},
 {v:"2026-11-18-7.7.3",ver:"7.7.3",at:"2026-11-18T06:21",t:"☁️ Nubes completas",l:["Arreglado: algunas nubes del paisaje se veían cortadas porque quedaban fuera del cielo; ahora se ven enteras, de día y de noche"]},
 {v:"2026-11-18-7.7.2",ver:"7.7.2",at:"2026-11-18T06:15",t:"✕ Botones de cerrar centrados",l:["La ✕ de los botones redondos de cerrar (Mejoras, minijuegos, chat, ficha de Pokémon…) queda ahora justo en el centro del círculo"]},
@@ -8037,7 +8050,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794981027";
+const GAME_B="1794981755";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14708,7 +14721,7 @@ function gmInit(){
   $("gTown").addEventListener("scroll",gmTownArr,{passive:true});addEventListener("resize",()=>setTimeout(gmTownArr,300));
   $("gTL").onclick=()=>{snd("ui");$("gTown").scrollBy({left:-$("gTown").clientWidth*.7,behavior:"smooth"})};$("gTR").onclick=()=>{snd("ui");$("gTown").scrollBy({left:$("gTown").clientWidth*.7,behavior:"smooth"})};
   // ayuda (?) también en las ventanas del menú
-  const hx=$("hubX");if(hx&&!$("hubQ")){const q=document.createElement("button");q.id="hubQ";q.className="gmo ghq";q.setAttribute("aria-label","Ayuda");q.innerHTML=gI("help",24);hx.parentNode.insertBefore(q,hx);q.onclick=()=>gmHelpT()}
+  const hx=$("hubX");if(hx&&!$("hubQ")){const q=document.createElement("button");q.id="hubQ";q.className="gmo ghq";q.setAttribute("aria-label","Ayuda");q.innerHTML=gI("help",24);hx.parentNode.insertBefore(q,hx);q.onclick=()=>gmHelpT("hub")}
   // opciones nuevas en Ajustes
   const op=$("optp"),ref=op&&op.querySelector('[data-o="bg"]');if(ref&&!op.querySelector('[data-o="classic"]')){const lab=ref.closest("label");
     lab.insertAdjacentHTML("beforebegin",'<label><input type="checkbox" data-o="classic"> Diseño clásico (página con scroll en lugar del modo juego)</label><label><input type="checkbox" data-o="secMus"> Música distinta en cada sección</label><label><input type="checkbox" data-o="vib"> Vibración al tocar (móvil)</label><label><input type="checkbox" data-o="lite"> Animaciones ligeras (más fluido en móviles y ordenadores lentos)</label>');applyO()}
@@ -14717,7 +14730,7 @@ function gmInit(){
     const sync=()=>{const ac=$("acct");$("gAcc").hidden=!ac||ac.hidden;$("gAccN").textContent=(($("aname")||{}).textContent||"").trim()||"Tu cuenta"};sync();const ac=$("acct");if(ac)new MutationObserver(sync).observe(ac,{attributes:true,attributeFilter:["hidden"],subtree:true,childList:true,characterData:true})}
   // eventos
   document.addEventListener("click",gmClick,true);
-  $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT();
+  $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT("scr");
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GM.scr&&gmOn()&&!document.querySelector("#gacM:not([hidden]),#uiDlg:not([hidden]),#pkv:not([hidden])")){gmClose()}});
   $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const Q=window._gsq||(window._gsq={x:0,y:0,on:0});Q.x=e.clientX||0;Q.y=e.clientY||0;if(Q.on)return;Q.on=1;
     // chispas y salto del entrenador: una vez por fotograma aunque toques muchas veces a la vez
@@ -14797,7 +14810,34 @@ function gmClick(e){const t=e.target;if(!t.closest||!gmOn())return;
 // ---------- ayuda: los textos largos se esconden tras el botón (?) ----------
 function gmHelpMark(root){if(!root)return;root.querySelectorAll(".panel>p.rates,.panel>p.nxi,.panel>p.mut,.panel>small,.panel>p").forEach(e=>{if(e.dataset.gh)return;e.dataset.gh=1;const t=(e.textContent||"").trim();
   if(t.length>70&&!e.id&&!e.querySelector("[id],button,input,select,a,progress"))e.classList.add("ghelp")})}
-function gmHelpT(){GM.help=!GM.help;document.body.classList.toggle("ghelpon",GM.help);snd("ui")}
+// el botón (?) abre una ventana con toda la información de la sección que está abierta: la introducción completa (también
+// lo que va tras «Más información») y los textos de ayuda que el modo juego esconde
+function gmHelpT(w){
+  const inScr=w?w==="scr":!!(GM.scr&&$("gScr")&&!$("gScr").hidden&&$("hubM").hidden);
+  const root=$(inScr?"gScrB":"hubB"),tit=($(inScr?"gScrT":"hubT")||{}).textContent||"",sub=($(inScr?"gScrD":"hubD")||{}).textContent||"";
+  if(root)gmHelpMark(root);
+  const vis=e=>!!(e.offsetParent||e.getClientRects().length),seen=new Set(),parts=[];
+  const add=(e,cls)=>{const c=e.cloneNode(true);c.querySelectorAll("button,input,select,textarea,script,.infob").forEach(x=>x.remove());c.querySelectorAll("[hidden]").forEach(x=>x.hidden=false);
+    c.querySelectorAll("[id]").forEach(x=>x.removeAttribute("id"));c.removeAttribute("id");const t=(c.textContent||"").replace(/\s+/g," ").trim();if(t.length<25||seen.has(t))return;seen.add(t);parts.push('<p class="'+cls+'">'+c.innerHTML.trim()+'</p>')};
+  // título: la pestaña abierta (o el título de la sección); debajo, el grupo
+  const tab=!inScr&&$("hubTabs")&&!$("hubTabs").hidden?$("hubTabs").querySelector("button.on"):null,h2a=root&&root.querySelector(":scope>section.panel>h2");
+  const head=(tab&&tab.textContent.replace(/\s*\d+$/,"").trim())||(h2a&&h2a.textContent.trim())||tit;
+  if(root)root.querySelectorAll("section.panel").forEach(sec=>{if(!vis(sec))return;
+    sec.querySelectorAll(":scope>p.rates,:scope>p.nxi").forEach(e=>add(e,"hlpi"));
+    sec.querySelectorAll(".ghelp").forEach(e=>add(e,""));
+    sec.querySelectorAll("small.mut,p.mut").forEach(e=>{const pe=e.parentElement;if((pe===sec||(pe&&pe.parentElement===sec))&&vis(e)&&!e.closest("button,label,.ghelp")&&(e.textContent||"").trim().length>60)add(e,"")})});
+  // ayuda propia de las pantallas que no tienen texto de introducción
+  const HX={shopP:["Cada edificio de tu pueblo produce tickets cada segundo, también mientras no juegas. Cuanto más nivel tiene, más produce.","Los Guantes de entrenador aumentan los tickets que ganas con cada toque en la Poké Ball.","Con los botones ×1, ×10, ×50 y Máx compras varios niveles de una vez. El precio de cada nivel sube un poco cada vez."]};
+  if(inScr&&HX[GM.scr]&&parts.length<2)HX[GM.scr].forEach(t=>parts.push('<p>'+esc(t)+'</p>'));
+  const body=parts.slice(0,14).join("")||'<p class="hlpi">'+esc(sub||"")+'</p><p class="mut">Esta sección no tiene información extra.</p>';
+  const old=$("hlpM");if(old)old.remove();
+  const o=document.createElement("div");o.id="hlpM";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-label","Ayuda");
+  o.innerHTML='<div class="hlpbox"><button type="button" class="hlpx" aria-label="Cerrar">✕</button><div class="hlpic">💡</div><h2>'+esc(head||"Ayuda")+'</h2>'+(tit&&head!==tit?'<small class="hlps">'+esc(tit)+'</small>':'')+
+    '<div class="hlpb">'+body+'</div><button type="button" class="red hlpok">Entendido</button></div>';
+  document.body.appendChild(o);snd("ui");
+  const close=()=>{o.remove();document.removeEventListener("keydown",kd,true)},kd=e=>{if(e.key==="Escape"){e.stopPropagation();close()}};
+  o.addEventListener("click",e=>{if(e.target===o||e.target.closest(".hlpx,.hlpok"))close()});document.addEventListener("keydown",kd,true);try{o.querySelector(".hlpok").focus()}catch(e){}
+}
 // ---------- barra superior ----------
 function gmTop(){
   const v=S.t||0;if(GM.disp==null)GM.disp=v;const d=v-GM.disp;
@@ -20485,7 +20525,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.8";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.8.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

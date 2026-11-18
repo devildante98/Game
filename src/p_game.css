@@ -1220,3 +1220,15 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 .safmon.saf3on.saf3t .safspr{opacity:0;pointer-events:none}
 .safmon.saf3on .safname{z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.2)}
 @media (max-width:600px){.safmon.saf3on{height:270px}}
+/* ventana de ayuda del botón (?) */
+#hlpM{position:fixed;inset:0;z-index:185;background:rgba(10,12,30,.66);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+#hlpM .hlpbox{position:relative;max-width:560px;width:100%;max-height:min(80vh,640px);display:flex;flex-direction:column;background:var(--panel);color:var(--ink);border:4px solid #ffd23f;border-radius:22px;padding:20px 20px 16px;box-sizing:border-box;box-shadow:0 0 36px 6px rgba(255,210,63,.35);animation:jpop .4s cubic-bezier(.2,1.4,.4,1)}
+#hlpM .hlpic{font-size:2.3rem;line-height:1;text-align:center}
+#hlpM h2{margin:6px 40px 2px;text-align:center}
+#hlpM .hlps{display:block;text-align:center;opacity:.7;margin-bottom:4px}
+#hlpM .hlpb{overflow:auto;margin:10px 0 14px;padding-right:4px;text-align:left}
+#hlpM .hlpb p{margin:0 0 10px;line-height:1.5}
+#hlpM .hlpb p.hlpi{font-size:1.04rem}
+#hlpM .hlpb p:not(.hlpi){padding:8px 12px;border-radius:12px;background:rgba(255,210,63,.14);border-left:4px solid #ffd23f}
+#hlpM .hlpok{align-self:center;min-width:160px}
+#hlpM .hlpx{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;padding:0!important;line-height:1!important;font-size:1.1rem;background:rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.15);color:inherit;cursor:pointer}

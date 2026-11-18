@@ -8,7 +8,10 @@ const HELPX={
   advP:[
     "Del 1 al 24 de diciembre se abre una casilla cada día (con la fecha de España). Solo puedes abrir la del día.",
     "Si un día no la abres, verás encima lo que te habría tocado. Del 25 al 31 de diciembre puedes recuperar todas las que te falten.",
-    "Los tickets crecen con tu pueblo (son horas de tu producción, con un mínimo). Algunos días hay Pokémon de hielo, y el 24 el regalo más grande: ✨ Delibird variocolor, Regice, 3 Master Ball y muchos tickets.",
+    "Cada regalo es mayor que el anterior: los tickets crecen día a día (y con tu pueblo, en horas de producción) y los objetos y Pokémon son cada vez mejores.",
+    "Hay Pokémon de hielo casi cada semana: legendarios como Articuno (día 12), Regice (día 18) y Kyurem (día 22), y variocolores a partir del día 16.",
+    "El 24, la gran sorpresa: ✨ Delibird y ✨ Articuno variocolores, 5 Master Ball, 2 Cristales Supremos, 15 Caramelos Raros y 15 millones de tickets o más.",
+    "En la parte de arriba ves qué trae la casilla de mañana.",
   ],
   wonP:[
     "Elige un Pokémon y pulsa «Intercambio Milagroso». Si otro entrenador ha dejado uno, te lo llevas al momento y él recibe el tuyo.",

@@ -1271,3 +1271,4 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 .advc .advlost{font-size:.6rem;font-weight:700;line-height:1.15;text-align:center;opacity:.95;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .advc .advlb{font-size:.6rem;font-weight:900;color:#ffd23f;margin-top:auto}
 .advc.miss .advlb{color:#ffd0d0}
+.advtop .advnext{margin-top:4px;font-weight:800;color:#1f7a4a}

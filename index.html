@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.9"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.9.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794996199">
+<meta name="game-build" content="1794996806">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2962,6 +2962,7 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 .advc .advlost{font-size:.6rem;font-weight:700;line-height:1.15;text-align:center;opacity:.95;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .advc .advlb{font-size:.6rem;font-weight:900;color:#ffd23f;margin-top:auto}
 .advc.miss .advlb{color:#ffd0d0}
+.advtop .advnext{margin-top:4px;font-weight:800;color:#1f7a4a}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3027,7 +3028,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.9</small>
+    <small class="pcver">Versión 7.9.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7753,8 +7754,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.9";
+const GAME_VER="7.9.1";
 const NEWS=[
+{v:"2026-11-18-7.9.1",ver:"7.9.1",at:"2026-11-18T11:12",t:"🎄 Calendario de Adviento: regalos mucho mejores",l:["Los regalos del Calendario de Adviento son ahora mayores y van creciendo cada día: desde el día 1 hay Pokémon, Caramelos Raros y tickets, y cada casilla da más que la anterior","Legendarios de hielo (Articuno, Regice y Kyurem), variocolores desde el día 16, Master Ball, Cristales Supremos y objetos equipables","El 24: ✨ Delibird y ✨ Articuno variocolores, 5 Master Ball, 2 Cristales Supremos, 15 Caramelos Raros y 15 millones de tickets o más","Arriba del calendario verás qué trae la casilla de mañana"]},
 {v:"2026-11-18-7.9",ver:"7.9",at:"2026-11-18T11:03",t:"🎄 Calendario de Adviento y ✨ Intercambio Milagroso",l:["🎄 Nuevo Calendario de Adviento (Actividades → Adviento): del 1 al 24 de diciembre, cada día abres una casilla con un regalo (tickets que crecen con tu pueblo, Poké Balls, Caramelos Raros, Master Ball, Cristal Supremo, objetos equipables y Pokémon de hielo como Articuno). ¡El 24, un ✨ Delibird variocolor, Regice, 3 Master Ball y muchos tickets!","Si un día no abres tu casilla, verás encima lo que te habría tocado. Del 25 al 31 de diciembre puedes recuperar las que te falten","✨ Nuevo Intercambio Milagroso (Social → Intercambio Milagroso): mandas un Pokémon y recibes al azar el que haya mandado otro entrenador. Si no hay nadie esperando, el tuyo espera y te llega el cambio aunque no estés jugando. Hasta 10 al día","El Pokémon que recibes llega con su nivel, sin pasar tu límite de nivel. Puedes retirar el que está esperando mientras nadie se lo haya llevado"]},
 {v:"2026-11-18-7.8.8",ver:"7.8.8",at:"2026-11-18T10:25",t:"🛡️ Arreglos en los gremios",l:["Arreglado: con un corte de conexión momentáneo (por ejemplo, al volver al juego tras un rato), el juego podía creer que tu gremio se había disuelto y sacarte de él, aunque siguieras dentro","Ahora, antes de sacarte de un gremio, el juego lo comprueba con el servidor","Si el juego te había sacado por error, al abrir Social → Gremio vuelves a estar en tu gremio. Y si pulsas «Solicitar unirse» en un gremio del que ya eres miembro, simplemente vuelves a entrar","Arreglado: el líder ya no recibe avisos para aceptar su propia solicitud ni la de alguien que ya es miembro"]},
 {v:"2026-11-18-7.8.7",ver:"7.8.7",at:"2026-11-18T07:52",t:"📘 Movimientos nuevos al momento, como en los juegos",l:["Si un Pokémon sube de nivel fuera de combate (expediciones, combates dobles, Caramelo Raro en Exploración…) y puede aprender un movimiento, ahora se aprende enseguida: si tiene hueco lo aprende solo, y si ya sabe 4 se abre la ventana para elegir cuál olvidar","Antes tenía que esperar al siguiente combate. Funciona tanto en tu partida como en el modo Exploración"]},
@@ -8140,7 +8142,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794996199";
+const GAME_B="1794996806";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -20391,7 +20393,10 @@ const HELPX={
   advP:[
     "Del 1 al 24 de diciembre se abre una casilla cada día (con la fecha de España). Solo puedes abrir la del día.",
     "Si un día no la abres, verás encima lo que te habría tocado. Del 25 al 31 de diciembre puedes recuperar todas las que te falten.",
-    "Los tickets crecen con tu pueblo (son horas de tu producción, con un mínimo). Algunos días hay Pokémon de hielo, y el 24 el regalo más grande: ✨ Delibird variocolor, Regice, 3 Master Ball y muchos tickets.",
+    "Cada regalo es mayor que el anterior: los tickets crecen día a día (y con tu pueblo, en horas de producción) y los objetos y Pokémon son cada vez mejores.",
+    "Hay Pokémon de hielo casi cada semana: legendarios como Articuno (día 12), Regice (día 18) y Kyurem (día 22), y variocolores a partir del día 16.",
+    "El 24, la gran sorpresa: ✨ Delibird y ✨ Articuno variocolores, 5 Master Ball, 2 Cristales Supremos, 15 Caramelos Raros y 15 millones de tickets o más.",
+    "En la parte de arriba ves qué trae la casilla de mañana.",
   ],
   wonP:[
     "Elige un Pokémon y pulsa «Intercambio Milagroso». Si otro entrenador ha dejado uno, te lo llevas al momento y él recibe el tuyo.",
@@ -20531,30 +20536,34 @@ const ADV_OFF=()=>+(window._advOff||0);// (solo para probar: desplaza la fecha)
 const advMadrid=()=>{const p=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(Date.now()+ADV_OFF())).split("-").map(Number);return{y:p[0],m:p[1],d:p[2]}};
 // t: tickets mínimos · h: horas de producción · it: objetos · ev/hold: objetos evolutivos / equipables al azar · mon: [Pokémon, variocolor]
 const ADV=[
-  {t:100000,h:1,it:{pb:5}},
-  {t:0,it:{sb:3,pot:2}},
-  {t:150000,h:2,it:{cand:1}},
-  {t:0,it:{ub:3}},
-  {t:150000,h:1,ev:1},
-  {mon:["Snorunt",0],it:{pb:5}},
-  {t:250000,h:3,it:{cand:2}},
-  {hold:1,it:{ub:5}},
-  {t:0,it:{hpot:2,rev:2}},
-  {t:350000,h:4,it:{ppmax:1}},
-  {t:0,it:{cand:3}},
-  {mon:["Articuno",0],it:{ub:3}},
-  {t:500000,h:5,it:{ub:5}},
-  {ev:1,hold:1},
-  {t:0,it:{mb:1}},
-  {t:750000,h:6,it:{cand:3}},
-  {t:0,it:{crys:1}},
-  {mon:["Cubchoo",1],it:{sb:5}},
-  {t:1000000,h:8,it:{cand:5}},
-  {hold:2},
-  {t:0,it:{mb:2}},
-  {t:1500000,h:12,it:{ppmax:2}},
-  {t:0,it:{cand:10,ub:10}},
-  {mon:["Delibird",1],mon2:["Regice",0],t:5000000,h:24,it:{mb:3}},
+  // semana 1: desde el primer día, Pokémon, Caramelos Raros y tickets
+  {t:300000,h:1,mon:["Snorunt",0],it:{sb:5,cand:1}},
+  {t:400000,h:1.5,it:{ub:3,pot:3,cand:1}},
+  {t:500000,h:2,ev:1,it:{cand:2,ub:2}},
+  {t:650000,h:2.5,mon:["Vanillite",0],it:{ub:3,cand:2}},
+  {t:800000,h:3,hold:1,it:{cand:3}},
+  {t:1000000,h:3.5,mon:["Frosmoth",0],it:{ub:5,cand:3}},
+  {t:1200000,h:4,it:{mb:1,cand:3,ppmax:1}},
+  // semana 2: Master Ball, objetos equipables y el primer legendario
+  {t:1400000,h:4.5,hold:1,ev:1,it:{hpot:3,cand:3}},
+  {t:1600000,h:5,mon:["Froslass",0],it:{cand:4,ppmax:2}},
+  {t:1800000,h:5.5,mon:["Lapras",0],it:{ub:5,cand:4}},
+  {t:2000000,h:6,hold:1,it:{mb:1,cand:4}},
+  {t:2500000,h:7,mon:["Articuno",0],it:{cand:5,ub:5}},
+  {t:2800000,h:7.5,it:{crys:1,cand:5,ub:5}},
+  {t:3000000,h:8,hold:2,ev:2,it:{cand:5}},
+  // semana 3: variocolores y más legendarios
+  {t:3500000,h:9,mon:["Glaceon",0],it:{mb:2,cand:6}},
+  {t:4000000,h:10,mon:["Cubchoo",1],it:{ppmax:3,cand:6}},
+  {t:4500000,h:11,hold:1,it:{crys:1,cand:7}},
+  {t:5000000,h:12,mon:["Regice",0],it:{mb:2,cand:7}},
+  {t:6000000,h:13,hold:2,it:{cand:8,ub:10}},
+  {t:7000000,h:14,mon:["Beartic",1],it:{mb:2,cand:8}},
+  {t:8000000,h:16,it:{crys:2,cand:10,ppmax:3}},
+  // la recta final
+  {t:9000000,h:18,mon:["Kyurem",0],it:{mb:3,cand:10}},
+  {t:10000000,h:20,hold:3,mon:["Avalugg",1],it:{cand:12,ppmax:3}},
+  {t:15000000,h:24,mon:["Delibird",1],mon2:["Articuno",1],it:{mb:5,crys:2,cand:15}},
 ];
 const advTk=r=>r.t||r.h?Math.max(r.t||0,Math.round((typeof tps==="function"?tps():0)*3600*(r.h||0))):0;
 // orden de las casillas en el calendario (desordenadas, como los de verdad, pero siempre igual)
@@ -20565,7 +20574,7 @@ function advData(){const y=advMadrid().y;if(!S.adv||S.adv.y!==y)S.adv={y:y,o:{}}
 function advCan(d){const ph=advPhase(),t=advMadrid();if(advData().o[d])return false;if(ph==="on")return d===t.d;if(ph==="late")return d>=1&&d<=24;return false}
 // texto del regalo (sin abrir, para la vista previa del 24 y el resumen)
 function advTxt(r){const L=[];if(r.mon)L.push((r.mon[1]?"✨ ":"")+r.mon[0]);if(r.mon2)L.push((r.mon2[1]?"✨ ":"")+r.mon2[0]);const tk=advTk(r);if(tk)L.push(fmt(Math.round(tk*RMUL()))+" 🎟️");
-  for(const k in r.it||{})L.push(r.it[k]+" "+IN2(k));if(r.ev)L.push(r.ev+" objeto evolutivo");if(r.hold)L.push(r.hold+(r.hold>1?" objetos equipables":" objeto equipable"));return L.join(" + ")}
+  for(const k in r.it||{})L.push(r.it[k]+" "+IN2(k));if(r.ev)L.push(r.ev+(r.ev>1?" objetos evolutivos":" objeto evolutivo"));if(r.hold)L.push(r.hold+(r.hold>1?" objetos equipables":" objeto equipable"));return L.join(" + ")}
 async function advOpen(d){
   if(!advCan(d)){snd("ui");return}if(typeof fcd!=="undefined"&&fcd){toast("Termina el combate primero.");return}
   const r=ADV[d-1],A=advData();A.o[d]=Date.now();
@@ -20584,8 +20593,8 @@ async function advOpen(d){
 function advUI(force){
   const box=$("advPB");if(!box)return;const ph=advPhase(),t=advMadrid(),A=advData();
   let h='';
-  if(ph==="pre"){const left=Math.max(0,Math.ceil((Date.UTC(t.y,11,1)-Date.UTC(t.y,t.m-1,t.d))/864e5));h+='<div class="advtop"><b>🎄 Empieza el 1 de diciembre</b><small>Faltan '+left+' día'+(left===1?'':'s')+'. ¡Cada día una casilla con un regalo y el 24 una sorpresa especial!</small></div>'}
-  else if(ph==="on"){const n=Object.keys(A.o).length;h+='<div class="advtop"><b>'+(A.o[t.d]?'✅ Ya has abierto la casilla de hoy':'🎁 ¡Tu casilla de hoy (día '+t.d+') te espera!')+'</b><small>Has abierto '+n+' de 24. '+(t.d<24?'Vuelve mañana para abrir la siguiente.':'¡Hoy es el gran día!')+'</small></div>'}
+  if(ph==="pre"){const left=Math.max(0,Math.ceil((Date.UTC(t.y,11,1)-Date.UTC(t.y,t.m-1,t.d))/864e5));h+='<div class="advtop"><b>🎄 Empieza el 1 de diciembre</b><small>Faltan '+left+' día'+(left===1?'':'s')+'. Cada día una casilla, y cada regalo es mayor que el anterior. ¡El 24, la gran sorpresa!</small><small class="advnext">🔮 Día 1: '+esc(advTxt(ADV[0]))+'</small></div>'}
+  else if(ph==="on"){const n=Object.keys(A.o).length;h+='<div class="advtop"><b>'+(A.o[t.d]?'✅ Ya has abierto la casilla de hoy':'🎁 ¡Tu casilla de hoy (día '+t.d+') te espera!')+'</b><small>Has abierto '+n+' de 24. '+(t.d<24?'Vuelve mañana para abrir la siguiente.':'¡Hoy es el gran día!')+'</small>'+(t.d<24?'<small class="advnext">🔮 Mañana (día '+(t.d+1)+'): '+esc(advTxt(ADV[t.d]))+'</small>':'')+'</div>'}
   else if(ph==="late"){const n=Object.keys(A.o).length;h+='<div class="advtop"><b>'+(n<24?'🎁 ¡Recupera las casillas que no abriste!':'🎉 ¡Has abierto todo el calendario!')+'</b><small>Hasta el 31 de diciembre puedes abrir las que te faltan ('+(24-n)+').</small></div>'}
   h+='<div class="advgrid">'+ADV_ORD.map(d=>{const R=ADV[d-1],op=!!A.o[d],can=advCan(d),past=ph==="late"||(ph==="on"&&d<t.d),miss=!op&&past&&!can,lost=!op&&past;
     return '<button class="advc'+(op?' op':'')+(can?' can':'')+(miss?' miss':'')+(lost?' lost':'')+(d===24?' d24':'')+'" data-adv="'+d+'"'+(can?'':' aria-disabled="true"')+' title="'+(op?esc(advTxt(R)):lost?esc((can?'Puedes recuperarla: ':'No la abriste a tiempo: ')+advTxt(R)):can?'¡Ábrela!':'Todavía no')+'">'+
@@ -20597,7 +20606,7 @@ function advUI(force){
   box.innerHTML=h;
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#advPB [data-adv]");if(!b)return;const d=+b.dataset.adv;if(advCan(d))advOpen(d);else{snd("ui");const ph=advPhase();toast(advData().o[d]?"🎁 "+advTxt(ADV[d-1]):ph==="pre"?"🎄 El calendario empieza el 1 de diciembre.":"🔒 Esa casilla "+(d>advMadrid().d||ph==="pre"?"todavía no se puede abrir.":"ya no se puede abrir."))}});
-nxPanel("advP","🎄 Calendario de Adviento","Del 1 al 24 de diciembre, cada día se abre una casilla con un regalo: tickets, Poké Balls, Caramelos Raros, Master Ball y Pokémon de hielo. ¡El 24 te espera una sorpresa especial!");
+nxPanel("advP","🎄 Calendario de Adviento","Del 1 al 24 de diciembre, cada día se abre una casilla con un regalo, y cada uno es mayor que el anterior: tickets, Caramelos Raros, Master Ball, Cristal Supremo, objetos equipables y Pokémon de hielo, con legendarios y variocolores. ¡El 24 te espera la gran sorpresa!");
 {const g=HUB.find(x=>x.k==="act");if(g&&!g.tabs.some(t=>t[0]==="advP"))g.tabs.unshift(["advP","🎄 Adviento"]);HUBP.advP="act";HUBR.advP=()=>advUI(true)}
 // la pestaña solo existe mientras dura (del 18 de noviembre al 31 de diciembre) y en Premios sale un aviso
 function advBan(){const ph=advPhase(),g=HUB.find(x=>x.k==="act");if(g){const has=g.tabs.some(t=>t[0]==="advP");if(ph==="off"&&has)g.tabs=g.tabs.filter(t=>t[0]!=="advP");else if(ph!=="off"&&!has)g.tabs.unshift(["advP","🎄 Adviento"])}
@@ -20949,7 +20958,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.9";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.9.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

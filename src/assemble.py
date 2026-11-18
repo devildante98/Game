@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.6";
+const GAME_VER="7.7";
 const NEWS=[
+{v:"2026-11-18-7.7",ver:"7.7",at:"2026-11-18T06:05",t:"📸 14 poses fijas nuevas para tu tarjeta",l:["En «Mi tarjeta» hay ahora poses fijas además de las animadas: Puño en alto, Manos en la cintura, Brazos cruzados, Mirando a lo lejos, Mano al pecho, ¡Listo para combatir!, Mano en la nuca, Brazos abiertos, Manos a la espalda, Victoria con la mano, Encogerse de hombros, Una mano en la cintura, Puño al frente y Sacar músculo","Como las animadas, se ven en tu tarjeta (también la que ven los demás) y en tu entrenador de la pantalla principal"]},
 {v:"2026-11-18-7.6",ver:"7.6",at:"2026-11-18T05:56",t:"🕺 Poses animadas para tu entrenador",l:["En «Tu entrenador → Mi tarjeta» puedes elegir una pose: Normal, Saludar, ¡Victoria!, Lanzar Poké Ball, Señalar, Bailar o Pensativo","La pose se mueve: saluda con la mano, lanza la Poké Ball una y otra vez, baila…","Se ve en tu tarjeta en 3D (también en la que ven los demás jugadores) y en tu entrenador de la pantalla principal"]},
 {v:"2026-11-18-7.5",ver:"7.5",at:"2026-11-18T05:42",t:"🎮 Premios de los minijuegos desde el servidor",l:["Con cuenta, el premio de cada partida de minijuego lo calcula ahora el servidor: comprueba la puntuación y lleva las 3 partidas con premio de cada día","El premio aparece en la pantalla final en cuanto responde el servidor (un instante)","Las cantidades son las mismas de siempre, también el doble en la franja de minijuegos"]},
 {v:"2026-11-18-7.4",ver:"7.4",at:"2026-11-18T05:34",t:"🔥 Regalo diario y racha desde el servidor",l:["Con cuenta, el regalo diario y los premios de la racha los da ahora el servidor: una vez al día, con tu racha guardada en la nube","Si lo cobras en un dispositivo, el otro lo sabe y no se puede cobrar dos veces","Las cantidades y los premios de cada día de la racha son los mismos de siempre"]},

@@ -61,8 +61,21 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
 // L/R: brazo izquierdo/derecho [giro del hombro hacia delante (negativo = arriba), separación del cuerpo, codo] ·
 // hx/hz: cabeza (asentir / inclinar) · lift: bote · roll: balanceo del cuerpo · ball: Poké Ball en la mano
 const AV3POSE=[["i","🧍","Normal"],["hola","👋","Saludar"],["vict","🙌","¡Victoria!"],["lanz","🔴","Lanzar Poké Ball"],["sena","👉","Señalar"],["baile","💃","Bailar"],["pens","🤔","Pensativo"]];
+// poses fijas (solo respiran un poco): [clave, icono, nombre, brazo izq., brazo dcho., cabeza asentir, cabeza inclinar, balanceo]
+// [rx: hombro hacia delante (negativo = arriba), rz: separación (con el brazo abajo, positivo = hacia fuera), codo, giro del brazo]
+const JA=[.1,.8,-1.5,-1.57];// mano en la cintura
+const AV3FIJA=[["f_puno","✊","Puño en alto",null,[-2.35,-.25,-1.5],-.06,-.04,-.02],["f_jarra","💪","Manos en la cintura",JA,JA,-.04,0,0],
+  ["f_cruz","🙅","Brazos cruzados",[-.55,.05,-1.5,-1.5],[-.63,.05,-1.6,-1.5],-.03,.05,0],["f_frente","🫡","Mirando a lo lejos",JA,[-2.05,.18,-2.35],-.12,-.05,0],
+  ["f_pecho","🤚","Mano al pecho",null,[-.45,.05,-1.75,-1.5],.04,.06,0],["f_lista","🥊","¡Listo para combatir!",[-1.15,.2,-1.75],[-1.25,.18,-1.7],.04,0,-.03],
+  ["f_nuca","😎","Mano en la nuca",JA,[-2.7,-.15,-2.45],-.05,-.08,.03],["f_abre","🤗","Brazos abiertos",[0,1.0,-.3,1.57],[0,1.0,-.3,1.57],-.06,0,0],
+  ["f_atras","🧘","Manos a la espalda",[.45,.15,-1.3,-1.57],[.45,.15,-1.3,-1.57],.03,0,0],["f_paz","✌️","Victoria con la mano",JA,[-1.75,.3,-2.2],.03,-.12,-.03],
+  ["f_hombros","🤷","Encogerse de hombros",[-.2,-.1,-1.5,1.57],[-.2,-.1,-1.5,1.57],.02,.12,0],["f_mitad","🙋","Una mano en la cintura",JA,null,0,.06,.03],
+  ["f_golpe","👊","Puño al frente",JA,[-1.35,-.05,-.8],-.03,0,-.04],["f_musc","💪","Sacar músculo",null,[0,1.45,-1.6,1.57],-.04,-.06,.02]];
+AV3FIJA.forEach(x=>AV3POSE.push([x[0],x[1],x[2],1]));
 const av3PoseOk=p=>AV3POSE.some(x=>x[0]===p);
 function av3Pose(p,t){const s=Math.sin,idle=k=>[s(t*1.6+k)*.03,-.03,0];
+  if(typeof p==="string"&&p.startsWith("f_")){const F=AV3FIJA.find(x=>x[0]===p);if(F){const br=s(t*1.6)*.015;
+    return{L:F[3]?[F[3][0]+br,F[3][1],F[3][2],F[3][3]||0]:idle(0),R:F[4]?[F[4][0]+br,F[4][1],F[4][2],F[4][3]||0]:idle(1),hx:F[5]+s(t*.9)*.01,hz:F[6],lift:0,roll:F[7]}}}
   if(p==="hola")return{L:idle(0),R:[-2.65,-.55+s(t*7)*.3,-.35+s(t*7)*.25],hx:s(t*1.8)*.03,hz:-.07,lift:0,roll:-.02};
   if(p==="vict"){const b=Math.abs(s(t*3.4));return{L:[-2.75,-.62-b*.12,-.1-b*.2],R:[-2.75,-.62-b*.12,-.1-b*.2],hx:-.1,hz:0,lift:b*.06,roll:0}}
   if(p==="lanz"){// ciclo de 2,6 s: coger impulso con la Poké Ball, brazo arriba, lanzar, seguir el gesto y volver

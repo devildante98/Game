@@ -51,7 +51,9 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
   const rot=(B,p,rx,rz)=>m4T(m4RX(m4RZ(m4T(B,p[0],p[1],p[2]),rz||0),rx||0),-p[0],-p[1],-p[2]);
   const AP={t:[1.0,-1.6,.3],m:[-2.6,-.3,.2],u:[-1.5,-.15,.1],f:[-.7,-.4,.05],w:[-2.6,-.5,.25]}[pose],sway=Math.sin(t*1.6)*.02,MS={body:G,legL:G,legR:G};
   const PZ=typeof av3Pose==="function"?av3Pose(pose,t):null;
-  if(PZ){MS.armL1=rot(G,J("shL"),PZ.L[0],PZ.L[1]);MS.armL2=rot(MS.armL1,J("elL"),PZ.L[2],0);MS.armR1=rot(G,mir(J("shL")),PZ.R[0],-PZ.R[1]);MS.armR2=rot(MS.armR1,mir(J("elL")),PZ.R[2],0)}
+  // (el 4.º valor gira el brazo sobre sí mismo: así el codo se dobla hacia el cuerpo, p. ej. mano en la cintura)
+  const rotT=(B,p,rx,rz,ry)=>m4T(m4RY(m4RX(m4RZ(m4T(B,p[0],p[1],p[2]),rz||0),rx||0),ry||0),-p[0],-p[1],-p[2]);
+  if(PZ){MS.armL1=rotT(G,J("shL"),PZ.L[0],PZ.L[1],PZ.L[3]);MS.armL2=rot(MS.armL1,J("elL"),PZ.L[2],0);MS.armR1=rotT(G,mir(J("shL")),PZ.R[0],-PZ.R[1],-(PZ.R[3]||0));MS.armR2=rot(MS.armR1,mir(J("elL")),PZ.R[2],0)}
   else{MS.armL1=rot(G,J("shL"),sway,pose==="w"?.35:0);MS.armL2=rot(MS.armL1,J("elL"),pose==="w"?-.5:0,0);
   MS.armR1=rot(G,mir(J("shL")),AP?AP[0]:-sway,AP?-AP[2]:0);MS.armR2=rot(MS.armR1,mir(J("elL")),AP?AP[1]:0,0)}
   const hcy=pv.head[2],hr=pv.hr,MH=PZ?rot(I,[0,1.42,0],PZ.hx+Math.sin(t*.9)*.012,PZ.hz):rot(I,[0,1.42,0],Math.sin(t*.9)*.012+(pose==="l"?.34:0),0);

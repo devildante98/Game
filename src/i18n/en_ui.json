@@ -2070,7 +2070,7 @@
 "Entrar gratis": "Enter for free",
 ">Entrada extra · {} 🎟️": ">Extra entry · {} 🎟️",
 ">Entrada extra ·": ">Extra entry ·",
-"Probabilidades: Común 40% · Raro 37% · Épico 20% · Legendario 3%. Los Pokémon que atrapes llegan con el nivel de tu equipo (sin pasar el límite del próximo gimnasio).": "Odds: Common 40% · Rare 37% · Epic 20% · Legendary 3%. The Pokémon you catch arrive at your team's level (without going over the next gym's cap).",
+"Probabilidades: Común 40% · Raro 37% · Épico 20% · Legendario 3%. Los Pokémon que atrapes llegan a nivel 1 (si ya lo tenías, se queda con su nivel).": "Odds: Common 40% · Rare 37% · Epic 20% · Legendary 3%. The Pokémon you catch arrive at level 1 (if you already had it, it keeps its level).",
 "📢 «¡Ding-dong! Se han acabado tus Safari Balls.»": "📢 «Ding-dong! You're out of Safari Balls.»",
 "Has visto {} Pokémon y has atrapado {}.": "You saw {} Pokémon and caught {}.",
 "Has visto": "You saw",

@@ -175,7 +175,7 @@ async function safAct(a){
       if(spr)spr.style.opacity=0;snd("open");
       for(let k=0;k<sh;k++){await sleep(220);snd("click");await b.animate([{transform:"rotate(0)"},{transform:"rotate(-22deg)"},{transform:"rotate(18deg)"},{transform:"rotate(0)"}],{duration:420}).finished}
       await sleep(250);if(!ok){b.remove();if(spr){spr.style.opacity=1;spr.animate([{transform:"scale(.3)",opacity:.3},{transform:"none",opacity:1}],{duration:260})}}else{b.classList.add("ok");snd("capok")}}
-    if(ok){const lv=clampL(Math.min(lvCap(),leadLevel())-1),isNew=giveMon(e.n,lv,e.sh);qEv("cap");s.caught.push({n:e.n,sh:e.sh,nw:isNew?1:0});s.msg="¡Has atrapado a "+(e.sh?"✨ ":"")+e.n+"!"+(isNew?" ¡Nuevo en tu Pokédex!":"");save();render();await sleep(hubCalm()?0:500);await safNext(s,1);return}
+    if(ok){const isNew=giveMon(e.n,1,e.sh);/* llegan a nivel 1 */qEv("cap");s.caught.push({n:e.n,sh:e.sh,nw:isNew?1:0});s.msg="¡Has atrapado a "+(e.sh?"✨ ":"")+e.n+"!"+(isNew?" ¡Nuevo en tu Pokédex!":"");save();render();await sleep(hubCalm()?0:500);await safNext(s,1);return}
     snd("capfail");s.msg=["¡Oh, no! ¡Se ha escapado!","¡Vaya! ¡Parecía que lo tenías!","¡Casi lo consigues!","¡Qué rabia! ¡Por muy poco!"][sh];
   }
   e.turns++;
@@ -193,7 +193,7 @@ function safEnd(){const s=S.saf&&S.saf.s;if(!s)return;S.saf.s=null;save();safUI(
 function safUI(){
   const box=$("safPB");if(!box)return;S.saf=S.saf||{};const s=S.saf.s,free=S.saf.d!==today();let h="";
   if(!s){h='<div class="safin"><div class="safgate">🌾</div><div><b>'+(free?'¡Tu salida de hoy está disponible!':'Ya has hecho tu salida gratis de hoy')+'</b><small class="mut">'+(free?'Entra gratis una vez al día.':'Vuelve mañana o paga una entrada extra.')+'</small></div>'+(free?'<button class="red" data-saf="go">Entrar gratis</button>':'<button data-saf="pay"'+(S.t<SAF_EXTRA?' disabled':'')+'>Entrada extra · '+fmt(SAF_EXTRA)+' 🎟️</button>')+'</div>'+
-    '<small class="mut">Probabilidades: Común 40% · Raro 37% · Épico 20% · Legendario 3%. Los Pokémon que atrapes llegan con el nivel de tu equipo (sin pasar el límite del próximo gimnasio).</small>'}
+    '<small class="mut">Probabilidades: Común 40% · Raro 37% · Épico 20% · Legendario 3%. Los Pokémon que atrapes llegan a nivel 1 (si ya lo tenías, se queda con su nivel).</small>'}
   else if(s.end||!s.enc){h='<div class="safsum"><b>📢 «¡Ding-dong! Se han acabado tus Safari Balls.»</b><p>Has visto '+s.seen+' Pokémon y has atrapado '+s.caught.length+'.</p>'+(s.caught.length?'<div class="safcl">'+s.caught.map(c=>'<span title="'+esc(c.n)+'">'+ico(PM[c.n],46,false,!!c.sh)+(c.nw?'<i>NUEVO</i>':'')+'</span>').join("")+'</div>':'')+'<button class="red" data-saf="end">Salir de la Zona Safari</button></div>'}
   else{const e=s.enc,p=PM[e.n];
     h='<div class="safbar"><span>🔴 Safari Balls: <b>'+s.balls+'</b></span><span>👀 Vistos: <b>'+s.seen+'</b></span><span>🎒 Atrapados: <b>'+s.caught.length+'</b></span></div>'+

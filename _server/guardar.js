@@ -17,6 +17,7 @@ const {revisar} = require("./revisar");
 const gacha = require("./gacha");
 const tienda = require("./tienda");
 const semana = require("./semana");
+const diario = require("./diario");
 
 const MAX = 1000000;
 const VMIN = [7, 2];
@@ -63,7 +64,7 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
   const q = p && typeof p.q === "number" && isFinite(p.q) ? p.q : 0;
   if (typeof data !== "string" || data.length > MAX) return {ok: false, why: "formato"};
   if (!leer(data)) return {ok: false, why: "formato"};
-  if (ac && !["tirar", "mejorar", "semana"].includes(ac.k)) return {ok: false, why: "accion"};
+  if (ac && !["tirar", "mejorar", "semana", "diario"].includes(ac.k)) return {ok: false, why: "accion"};
 
   let flags = [];
   const out = await db.runTransaction(async (tx) => {
@@ -106,6 +107,12 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
       Object.assign(extra, {semana: s});
       extra.sem = s.pw;
       if (!s.ya) dataOut = firmar(next, uid);
+    } else if (ac && ac.k === "diario") {
+      // regalo diario y racha: una vez al día, con la cuenta del servidor
+      const d = diario.cobrarDiario(next, cur && cur.dia, prev, ahora, cuentaSeg, rnd || rndCripto);
+      Object.assign(extra, {diario: d.out});
+      extra.dia = d.dia;
+      dataOut = firmar(next, uid);
     } else if (ac && ac.k === "mejorar") {
       const m = tienda.mejorar(next, ac.i, ac.n);
       if (m.error) return {ok: false, why: m.error, coste: m.coste};
@@ -117,6 +124,9 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
     const sem = extra.sem || (cur && cur.sem);
     if (sem) doc.sem = sem; // última semana cuyos premios ya se cobraron
     delete extra.sem;
+    const dia = extra.dia || (cur && cur.dia);
+    if (dia) doc.dia = dia; // regalo diario: último día cobrado, racha y regalos cobrados
+    delete extra.dia;
     tx.set(ref, doc);
     if (r.estado !== "ok") apunta(r.estado === "imposible" ? "primera subida rara" : "sospechoso");
     // at: la hora exacta del guardado, para que el juego sepa al volver a entrar si su copia es la continuación de esta

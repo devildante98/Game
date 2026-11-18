@@ -103,3 +103,26 @@ async function srvSemana(){
 {const _tc=tourClaim;tourClaim=function(){if(window.FB&&window.FB.uid&&window.FB.uid())return srvSemana();return _tc.apply(this,arguments)}}
 {const _mc=mgrClaim;mgrClaim=function(){if(window.FB&&window.FB.uid&&window.FB.uid())return srvSemana();return _mc.apply(this,arguments)}}
 setTimeout(()=>{try{srvSemana()}catch(e){}},20000);
+
+// ---- regalo diario y racha ----
+// Con cuenta los da el servidor (_server/diario.js): una vez al día y con su propia cuenta de la racha. Aquí se
+// añade lo mismo que ha guardado él y se avisa como siempre.
+let SRVDAY=0;
+function srvDayApply(d){
+  if(!d)return;
+  const xg=typeof XGSW!=="undefined"&&XGSW&&typeof xgOut==="function";if(xg)xgOut();
+  try{S.daily=d.hoy;S.dg=d.dg;S.sk=Object.assign({},d.sk);
+    if(!d.ya){S.t+=(d.gf||0)+(d.tk||0);S.bag=S.bag||{};Object.keys(d.it||{}).forEach(k=>{S.bag[k]=(S.bag[k]||0)+d.it[k]});qEv("daily")}
+  }finally{if(xg&&typeof xgIn==="function")xgIn()}
+  save();render();try{_sk="";strkUI()}catch(e){}
+  if(d.ya){toast("🔥 El regalo de hoy ya lo habías cobrado.");return}
+  snd("win");const got=[];if(d.tk)got.push("+"+fmt(d.tk)+" 🎟️ extra");Object.keys(d.it||{}).forEach(k=>got.push(d.it[k]+" "+IN(k)));
+  $("msg").textContent="¡+"+fmt(d.gf)+" 🎟️ de regalo diario! Mañana será mayor.";
+  toast("🔥 ¡Racha de "+S.sk.n+" día"+(S.sk.n===1?"":"s")+"! +"+fmt(d.gf)+" 🎟️"+(got.length?" y "+got.join(", "):""));
+}
+{const _d=$("daily").onclick;$("daily").onclick=function(){
+  if(!(window.FB&&window.FB.uid&&window.FB.uid()))return _d.apply(this,arguments);
+  if(S.daily===today()||SRVDAY||!srvOn())return;SRVDAY=1;$("daily").disabled=true;
+  window.srvAccion({k:"diario"},srvJ,r=>srvDayApply(r.diario))
+    .then(r=>{SRVDAY=0;if(!r||!r.ok||!r.diario){const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m);render()}})
+    .catch(()=>{SRVDAY=0;toast("⚠️ "+SRV_RED);render()})}}

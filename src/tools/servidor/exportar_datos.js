@@ -31,6 +31,9 @@ const URL = process.argv[2] || "http://localhost:8765/index.html";
       mgrEx: MGR_EX, tourRot: TOUR_ROT, tourMgrFrom: TOUR_MGR_FROM, mgs: MGS.map((g) => g.id),
       hold: HOLD.map((h) => h[0]), evo: ITEMS.filter((q) => q[7] === "evo").map((q) => q[0]),
     },
+    // regalo diario y racha (_server/diario.js): premios de cada día del ciclo de 30 y objetos que pueden tocar
+    racha: {T: STRK_T, evo: ITEMS.filter((i) => strkOk("evo", i)).map((i) => i[0]), mint: ITEMS.filter((i) => strkOk("mint", i)).map((i) => i[0]),
+      hold: ITEMS.filter((i) => strkOk("hold", i)).map((i) => i[0])},
   }));
   await b.close();
   const out = path.join(__dirname, "..", "..", "..", "_server", "datos.json");

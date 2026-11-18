@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.7.2";
+const GAME_VER="7.7.3";
 const NEWS=[
+{v:"2026-11-18-7.7.3",ver:"7.7.3",at:"2026-11-18T06:21",t:"☁️ Nubes completas",l:["Arreglado: algunas nubes del paisaje se veían cortadas porque quedaban fuera del cielo; ahora se ven enteras, de día y de noche"]},
 {v:"2026-11-18-7.7.2",ver:"7.7.2",at:"2026-11-18T06:15",t:"✕ Botones de cerrar centrados",l:["La ✕ de los botones redondos de cerrar (Mejoras, minijuegos, chat, ficha de Pokémon…) queda ahora justo en el centro del círculo"]},
 {v:"2026-11-18-7.7.1",ver:"7.7.1",at:"2026-11-18T06:12",t:"💾 Lo importante se guarda en la nube al momento",l:["Arreglado: si conseguías una medalla y cerrabas el juego (o lo abrías en otro dispositivo) antes del siguiente guardado en la nube, al volver podía no estar","Ahora las medallas (de gimnasio y de Exploración), la Liga, el Salón de la Fama y el prestigio se suben a la nube en cuanto los consigues","Además, el guardado automático en la nube pasa a ser cada 2 minutos en vez de cada 5"]},
 {v:"2026-11-18-7.7",ver:"7.7",at:"2026-11-18T06:05",t:"📸 14 poses fijas nuevas para tu tarjeta",l:["En «Mi tarjeta» hay ahora poses fijas además de las animadas: Puño en alto, Manos en la cintura, Brazos cruzados, Mirando a lo lejos, Mano al pecho, ¡Listo para combatir!, Mano en la nuca, Brazos abiertos, Manos a la espalda, Victoria con la mano, Encogerse de hombros, Una mano en la cintura, Puño al frente y Sacar músculo","Como las animadas, se ven en tu tarjeta (también la que ven los demás) y en tu entrenador de la pantalla principal"]},

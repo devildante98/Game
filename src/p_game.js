@@ -337,6 +337,16 @@ function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
 // ---------- hora del día ----------
 function gmTod(){const h=new Date().getHours()+new Date().getMinutes()/60;let k=GM.todF||"day";if(!GM.todF)
   if(h>=21||h<6)k="night";else if(h<8.5)k="dawn";else if(h>=18.5)k="dusk";if(document.body.dataset.tod!==k)document.body.dataset.tod=k}
+// tocar al entrenador de la pantalla principal abre su personalización, y tocar al compañero, la zona de Compañero
+// (en Actividades). Ninguno de los dos recoge los toques (así no tapan la Poké Ball): se mira si el toque cae sobre su
+// figura y no sobre la Poké Ball ni sobre un botón.
+function gmHeroHit(x,y,t){if(!gmOn()||GM.scr||!t||!t.closest||!t.closest("#farm"))return null;
+  if(t.closest("button,a,input,select,textarea,#train,.gside,#gTown,#gNav,#gTL,#gTR"))return null;
+  const inR=(r,kx,ky)=>r&&r.width&&x>r.left+r.width*kx&&x<r.right-r.width*kx&&y>r.top+r.height*ky&&y<r.bottom;
+  const bi=document.querySelector("#gBud img");if(bi&&bi.offsetParent&&inR(bi.getBoundingClientRect(),.08,.08))return "bud";
+  const tr=$("gTr");if(tr&&tr.offsetParent&&inR(tr.getBoundingClientRect(),.22,.06))return "trn";return null}
+document.addEventListener("click",e=>{const h=gmHeroHit(e.clientX,e.clientY,e.target);if(!h)return;snd("ui");try{h==="bud"?hubOpen("act","budP"):hubOpen("trn","trP")}catch(x){}});
+document.addEventListener("mousemove",e=>{const f=$("farm");if(!f||!gmOn())return;const on=!!gmHeroHit(e.clientX,e.clientY,e.target);if(on!==!!f._trc){f._trc=on;f.style.cursor=on?"pointer":""}},{passive:true});
 // ---------- entrenador y compañero junto a la Poké Ball ----------
 function gmHero(){const b=$("gBud");if(!b)return;let n=null;try{n=S.buddy&&S.owned[S.buddy.n]>0?S.buddy.n:(S.team||[]).find(x=>x&&S.owned[x])}catch(e){}
   if(!n){b.innerHTML="";GM.bud=null;return}const sh=!!(S.shiny&&S.shiny[n]>0);if(GM.bud&&GM.bud.n===n&&GM.bud.sh===sh)return;

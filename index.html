@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.5"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794976462">
+<meta name="game-build" content="1794976949">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2959,7 +2959,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.4</small>
+    <small class="pcver">Versión 7.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7642,8 +7642,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.4";
+const GAME_VER="7.5";
 const NEWS=[
+{v:"2026-11-18-7.5",ver:"7.5",at:"2026-11-18T05:42",t:"🎮 Premios de los minijuegos desde el servidor",l:["Con cuenta, el premio de cada partida de minijuego lo calcula ahora el servidor: comprueba la puntuación y lleva las 3 partidas con premio de cada día","El premio aparece en la pantalla final en cuanto responde el servidor (un instante)","Las cantidades son las mismas de siempre, también el doble en la franja de minijuegos"]},
 {v:"2026-11-18-7.4",ver:"7.4",at:"2026-11-18T05:34",t:"🔥 Regalo diario y racha desde el servidor",l:["Con cuenta, el regalo diario y los premios de la racha los da ahora el servidor: una vez al día, con tu racha guardada en la nube","Si lo cobras en un dispositivo, el otro lo sabe y no se puede cobrar dos veces","Las cantidades y los premios de cada día de la racha son los mismos de siempre"]},
 {v:"2026-11-18-7.3",ver:"7.3",at:"2026-11-18T05:28",t:"🏆 Premios semanales calculados por el servidor",l:["Con cuenta, los premios de la semana pasada (Torneo semanal y clasificación de cada minijuego) los calcula ahora el servidor: mira tu puesto real, te da el premio y lo guarda en la nube al momento","Los premios son los mismos de siempre, y se cobran una sola vez","Si al entrar no hay conexión, se vuelven a pedir solos en cuanto la haya"]},
 {v:"2026-11-18-7.2.5",ver:"7.2.5",at:"2026-11-18T05:21",t:"🆕 Aviso de versión nueva en el centro",l:["Cuando sale una versión nueva mientras juegas, aparece una ventana en el centro con «Actualizar ahora» o «Más tarde»","Si eliges «Más tarde» (por ejemplo, si estás en un combate), queda el aviso de arriba para actualizar cuando quieras","Al actualizar, tu partida se guarda antes"]},
@@ -8013,7 +8014,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794976462";
+const GAME_B="1794976949";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -19856,6 +19857,35 @@ function srvDayApply(d){
     .then(r=>{SRVDAY=0;if(!r||!r.ok||!r.diario){const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m);render()}})
     .catch(()=>{SRVDAY=0;toast("⚠️ "+SRV_RED);render()})}}
 
+// ---- premios de los minijuegos ----
+// Con cuenta los da el servidor (_server/minijuego.js): comprueba la puntuación, lleva las 3 partidas con premio de
+// cada día y calcula el premio. La pantalla final es la de siempre; el premio aparece en cuanto responde.
+{const _me=mgEnd;mgEnd=function(score){
+  if(!(window.FB&&window.FB.uid&&window.FB.uid())||!srvOn())return _me.apply(this,arguments);
+  const g=MG.g;if(!g)return;MG.onClose=null;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
+  if(rec)st.best[g.id]=score;let extra="";const pide=left>0&&score>0;
+  if(g.after)extra=g.after(score,pide)||"";
+  if(typeof tourSubmit==="function")try{extra+=tourSubmit(g.id,score)||""}catch(e){}
+  if(typeof mgrSubmit==="function")try{extra+=mgrSubmit(g.id,score)||""}catch(e){}
+  if(score>0&&Date.now()-(MG.t0||0)>=10000)qEv("mg");save();render();
+  if(rec){snd("lvl");setTimeout(()=>snd("win"),400);mgConfetti()}else snd("win");
+  $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+(rec?"🏆":g.ic)+'</div><h3>'+(rec?"¡Nuevo récord!":"¡Partida terminada!")+'</h3><div class="mgfinal">'+fmt(score)+'<small>puntos</small></div>'+
+    (pide?'<p id="mgPrz">Premio: <b>⏳ calculando…</b></p>':'<p class="mut">'+(score>0?'Hoy ya no quedan premios en este minijuego.':'¡Sin puntos esta vez!')+'</p>')+extra+
+    '<div class="mginf"><span>🏆 Récord: <b>'+fmt(st.best[g.id]|0)+'</b></span><span>🎁 Premios hoy: <b id="mgLeftN">'+(pide?left-1:mgLeft(g.id))+'</b><b>/'+MG_DAY+'</b></span></div><div class="mgbtns"><button class="red big" id="mgAg">🔁 Otra vez</button><button class="alt" id="mgBk">Volver a los minijuegos</button></div></div>';
+  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;MG.t0=Date.now();mgPlayStart(g.id);g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
+  if(!pide)return;
+  const ac={k:"minijuego",g:g.id,sc:score,b:g.id==="jig"&&typeof G_JIG!=="undefined"&&G_JIG._b===1.5?1.5:1};
+  const p=window.srvAccion(ac,srvJ,r=>{const m=r.minijuego;if(!m)return;const s2=mgState();s2.n[g.id]=m.n;if(m.premio)grant(m.premio);save();render()});
+  // (la siguiente partida no empieza a contar en el servidor hasta tener el premio de esta)
+  if(typeof MGR!=="undefined")MGR.busy=Promise.resolve(MGR.busy).then(()=>p,()=>p).catch(()=>{});
+  const show=h=>{const el=$("mgPrz");if(el)el.innerHTML=h;const lf=$("mgLeftN");if(lf)lf.textContent=mgLeft(g.id)};
+  p.then(r=>{const m=r&&r.ok&&r.minijuego;
+      if(m&&m.premio)show('Premio: <b>'+rwTxt(m.premio)+'</b>');
+      else if(m)show('<span class="mut">Hoy ya no quedan premios en este minijuego.</span>');
+      else if(r&&r.why==="puntos")show('<span class="mut">⚠️ Esta puntuación no cuadra con el tiempo jugado: sin premio.</span>');
+      else show('<span class="mut">⚠️ '+(srvErr(r)||"No se ha podido dar el premio.")+'</span>')})
+    .catch(()=>show('<span class="mut">⚠️ '+SRV_RED+'</span>'))}}
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -20098,7 +20128,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.4";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.5";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

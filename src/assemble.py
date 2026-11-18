@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.4";
+const GAME_VER="7.5";
 const NEWS=[
+{v:"2026-11-18-7.5",ver:"7.5",at:"2026-11-18T05:42",t:"🎮 Premios de los minijuegos desde el servidor",l:["Con cuenta, el premio de cada partida de minijuego lo calcula ahora el servidor: comprueba la puntuación y lleva las 3 partidas con premio de cada día","El premio aparece en la pantalla final en cuanto responde el servidor (un instante)","Las cantidades son las mismas de siempre, también el doble en la franja de minijuegos"]},
 {v:"2026-11-18-7.4",ver:"7.4",at:"2026-11-18T05:34",t:"🔥 Regalo diario y racha desde el servidor",l:["Con cuenta, el regalo diario y los premios de la racha los da ahora el servidor: una vez al día, con tu racha guardada en la nube","Si lo cobras en un dispositivo, el otro lo sabe y no se puede cobrar dos veces","Las cantidades y los premios de cada día de la racha son los mismos de siempre"]},
 {v:"2026-11-18-7.3",ver:"7.3",at:"2026-11-18T05:28",t:"🏆 Premios semanales calculados por el servidor",l:["Con cuenta, los premios de la semana pasada (Torneo semanal y clasificación de cada minijuego) los calcula ahora el servidor: mira tu puesto real, te da el premio y lo guarda en la nube al momento","Los premios son los mismos de siempre, y se cobran una sola vez","Si al entrar no hay conexión, se vuelven a pedir solos en cuanto la haya"]},
 {v:"2026-11-18-7.2.5",ver:"7.2.5",at:"2026-11-18T05:21",t:"🆕 Aviso de versión nueva en el centro",l:["Cuando sale una versión nueva mientras juegas, aparece una ventana en el centro con «Actualizar ahora» o «Más tarde»","Si eliges «Más tarde» (por ejemplo, si estás en un combate), queda el aviso de arriba para actualizar cuando quieras","Al actualizar, tu partida se guarda antes"]},

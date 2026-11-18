@@ -18,6 +18,7 @@ const gacha = require("./gacha");
 const tienda = require("./tienda");
 const semana = require("./semana");
 const diario = require("./diario");
+const minijuego = require("./minijuego");
 
 const MAX = 1000000;
 const VMIN = [7, 2];
@@ -64,7 +65,7 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
   const q = p && typeof p.q === "number" && isFinite(p.q) ? p.q : 0;
   if (typeof data !== "string" || data.length > MAX) return {ok: false, why: "formato"};
   if (!leer(data)) return {ok: false, why: "formato"};
-  if (ac && !["tirar", "mejorar", "semana", "diario"].includes(ac.k)) return {ok: false, why: "accion"};
+  if (ac && !["tirar", "mejorar", "semana", "diario", "minijuego"].includes(ac.k)) return {ok: false, why: "accion"};
 
   let flags = [];
   const out = await db.runTransaction(async (tx) => {
@@ -113,6 +114,13 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
       Object.assign(extra, {diario: d.out});
       extra.dia = d.dia;
       dataOut = firmar(next, uid);
+    } else if (ac && ac.k === "minijuego") {
+      // premio de una partida de minijuego: puntuación comprobada y 3 partidas con premio al día, contadas aquí
+      const m = await minijuego.premioMinijuego(db, uid, next, cur && cur.mgd, prev, ac, ahora, rnd || rndCripto);
+      if (m.error) return {ok: false, why: m.error};
+      Object.assign(extra, {minijuego: m.out});
+      extra.mgd = m.mgd;
+      dataOut = firmar(next, uid);
     } else if (ac && ac.k === "mejorar") {
       const m = tienda.mejorar(next, ac.i, ac.n);
       if (m.error) return {ok: false, why: m.error, coste: m.coste};
@@ -127,6 +135,9 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
     const dia = extra.dia || (cur && cur.dia);
     if (dia) doc.dia = dia; // regalo diario: último día cobrado, racha y regalos cobrados
     delete extra.dia;
+    const mgd = extra.mgd || (cur && cur.mgd);
+    if (mgd) doc.mgd = mgd; // partidas de minijuego con premio de hoy
+    delete extra.mgd;
     tx.set(ref, doc);
     if (r.estado !== "ok") apunta(r.estado === "imposible" ? "primera subida rara" : "sospechoso");
     // at: la hora exacta del guardado, para que el juego sepa al volver a entrar si su copia es la continuación de esta

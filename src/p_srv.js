@@ -126,3 +126,32 @@ function srvDayApply(d){
   window.srvAccion({k:"diario"},srvJ,r=>srvDayApply(r.diario))
     .then(r=>{SRVDAY=0;if(!r||!r.ok||!r.diario){const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m);render()}})
     .catch(()=>{SRVDAY=0;toast("⚠️ "+SRV_RED);render()})}}
+
+// ---- premios de los minijuegos ----
+// Con cuenta los da el servidor (_server/minijuego.js): comprueba la puntuación, lleva las 3 partidas con premio de
+// cada día y calcula el premio. La pantalla final es la de siempre; el premio aparece en cuanto responde.
+{const _me=mgEnd;mgEnd=function(score){
+  if(!(window.FB&&window.FB.uid&&window.FB.uid())||!srvOn())return _me.apply(this,arguments);
+  const g=MG.g;if(!g)return;MG.onClose=null;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
+  if(rec)st.best[g.id]=score;let extra="";const pide=left>0&&score>0;
+  if(g.after)extra=g.after(score,pide)||"";
+  if(typeof tourSubmit==="function")try{extra+=tourSubmit(g.id,score)||""}catch(e){}
+  if(typeof mgrSubmit==="function")try{extra+=mgrSubmit(g.id,score)||""}catch(e){}
+  if(score>0&&Date.now()-(MG.t0||0)>=10000)qEv("mg");save();render();
+  if(rec){snd("lvl");setTimeout(()=>snd("win"),400);mgConfetti()}else snd("win");
+  $("mgB").innerHTML='<div class="mgintro"><div class="mgbig">'+(rec?"🏆":g.ic)+'</div><h3>'+(rec?"¡Nuevo récord!":"¡Partida terminada!")+'</h3><div class="mgfinal">'+fmt(score)+'<small>puntos</small></div>'+
+    (pide?'<p id="mgPrz">Premio: <b>⏳ calculando…</b></p>':'<p class="mut">'+(score>0?'Hoy ya no quedan premios en este minijuego.':'¡Sin puntos esta vez!')+'</p>')+extra+
+    '<div class="mginf"><span>🏆 Récord: <b>'+fmt(st.best[g.id]|0)+'</b></span><span>🎁 Premios hoy: <b id="mgLeftN">'+(pide?left-1:mgLeft(g.id))+'</b><b>/'+MG_DAY+'</b></span></div><div class="mgbtns"><button class="red big" id="mgAg">🔁 Otra vez</button><button class="alt" id="mgBk">Volver a los minijuegos</button></div></div>';
+  $("mgAg").onclick=()=>{MG.score=0;mgSet(0);MG.fish=null;MG.t0=Date.now();mgPlayStart(g.id);g.start($("mgB"),mgEnd)};$("mgBk").onclick=()=>{mgClose();hubOpen("mg")};
+  if(!pide)return;
+  const ac={k:"minijuego",g:g.id,sc:score,b:g.id==="jig"&&typeof G_JIG!=="undefined"&&G_JIG._b===1.5?1.5:1};
+  const p=window.srvAccion(ac,srvJ,r=>{const m=r.minijuego;if(!m)return;const s2=mgState();s2.n[g.id]=m.n;if(m.premio)grant(m.premio);save();render()});
+  // (la siguiente partida no empieza a contar en el servidor hasta tener el premio de esta)
+  if(typeof MGR!=="undefined")MGR.busy=Promise.resolve(MGR.busy).then(()=>p,()=>p).catch(()=>{});
+  const show=h=>{const el=$("mgPrz");if(el)el.innerHTML=h;const lf=$("mgLeftN");if(lf)lf.textContent=mgLeft(g.id)};
+  p.then(r=>{const m=r&&r.ok&&r.minijuego;
+      if(m&&m.premio)show('Premio: <b>'+rwTxt(m.premio)+'</b>');
+      else if(m)show('<span class="mut">Hoy ya no quedan premios en este minijuego.</span>');
+      else if(r&&r.why==="puntos")show('<span class="mut">⚠️ Esta puntuación no cuadra con el tiempo jugado: sin premio.</span>');
+      else show('<span class="mut">⚠️ '+(srvErr(r)||"No se ha podido dar el premio.")+'</span>')})
+    .catch(()=>show('<span class="mut">⚠️ '+SRV_RED+'</span>'))}}

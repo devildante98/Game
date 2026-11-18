@@ -1213,3 +1213,10 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 .mypose .mypg{font-weight:800;margin-top:4px}
 /* botones redondos de cerrar: la ✕ siempre centrada en el círculo */
 #upgM .upgx,.av3bc,.chx,.mgx,.pkvx,.tpx,#newsM .newsX,.trsdel{display:inline-grid;place-items:center;padding:0!important;line-height:1!important;text-align:center}
+/* Zona Safari en 3D (p_saf3d.js) */
+.safmon.saf3on{height:310px;background:#9cc8ea}
+.safmon.saf3on .safgr{display:none}
+.saf3c{position:absolute;left:0;top:0;width:100%;height:100%;display:block;z-index:0}
+.safmon.saf3on.saf3t .safspr{opacity:0;pointer-events:none}
+.safmon.saf3on .safname{z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+@media (max-width:600px){.safmon.saf3on{height:270px}}

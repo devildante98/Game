@@ -162,15 +162,16 @@ function safStart(paid){
 const SAF_C={C:.45,R:.32,E:.2,L:.08},SAF_F={C:.08,R:.12,E:.18,L:.28};
 async function safAct(a){
   const s=S.saf&&S.saf.s;if(!s||!s.enc||NX.safBusy)return;const e=s.enc,p=PM[e.n],r=p[2];NX.safBusy=1;
-  const box=document.querySelector("#safPB .safmon"),spr=box&&box.querySelector(".safspr");
+  const box=document.querySelector("#safPB .safmon"),spr=box&&box.querySelector(".safspr"),F3=typeof saf3==="function"?saf3():null;// F3: la escena 3D (p_saf3d.js)
   try{
   if(a==="run"){s.msg="Te has alejado de "+e.n+".";snd("flee");await safNext(s);return}
-  if(a==="bait"){e.eat=1+Math.floor(Math.random()*3);e.ang=0;s.msg="¡"+e.n+" está comiendo el cebo!";snd("pop");if(spr)spr.animate([{transform:"none"},{transform:"translateY(-6px) scale(1.04)"},{transform:"none"}],{duration:500,iterations:2})}
-  else if(a==="rock"){e.ang=1+Math.floor(Math.random()*3);e.eat=0;s.msg="¡"+e.n+" se ha enfadado!";snd("hit",1);if(spr)spr.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:200,iterations:3})}
+  if(a==="bait"){e.eat=1+Math.floor(Math.random()*3);e.ang=0;s.msg="¡"+e.n+" está comiendo el cebo!";snd("pop");if(F3)F3.ev("bait");else if(spr)spr.animate([{transform:"none"},{transform:"translateY(-6px) scale(1.04)"},{transform:"none"}],{duration:500,iterations:2})}
+  else if(a==="rock"){e.ang=1+Math.floor(Math.random()*3);e.eat=0;s.msg="¡"+e.n+" se ha enfadado!";snd("hit",1);if(F3)F3.ev("rock");else if(spr)spr.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:200,iterations:3})}
   else if(a==="ball"){
     if(s.balls<=0)return;s.balls--;snd("throw");
     let c=SAF_C[r]*(e.ang?1.8:1)*(e.eat?.75:1);c=Math.min(.95,c);const ok=Math.random()<c,sh=ok?3:Math.random()<c*1.6?2:Math.random()<.5?1:0;
-    if(box&&!hubCalm()){const b=document.createElement("span");b.className="safball";box.appendChild(b);await b.animate([{transform:"translate(-160px,140px) scale(.6) rotate(0)"},{transform:"translate(-60px,-40px) scale(.9) rotate(360deg)",offset:.55},{transform:"translate(0,0) scale(1) rotate(720deg)"}],{duration:520,easing:"cubic-bezier(.3,.6,.4,1)"}).finished;
+    if(F3){const pb=F3.ball();await sleep(520);snd("open");await pb;for(let k=0;k<sh;k++){await sleep(220);snd("click");await F3.shake()}await sleep(250);if(!ok)F3.escape();else{F3.caught();snd("capok")}}
+    else if(box&&!hubCalm()){const b=document.createElement("span");b.className="safball";box.appendChild(b);await b.animate([{transform:"translate(-160px,140px) scale(.6) rotate(0)"},{transform:"translate(-60px,-40px) scale(.9) rotate(360deg)",offset:.55},{transform:"translate(0,0) scale(1) rotate(720deg)"}],{duration:520,easing:"cubic-bezier(.3,.6,.4,1)"}).finished;
       if(spr)spr.style.opacity=0;snd("open");
       for(let k=0;k<sh;k++){await sleep(220);snd("click");await b.animate([{transform:"rotate(0)"},{transform:"rotate(-22deg)"},{transform:"rotate(18deg)"},{transform:"rotate(0)"}],{duration:420}).finished}
       await sleep(250);if(!ok){b.remove();if(spr){spr.style.opacity=1;spr.animate([{transform:"scale(.3)",opacity:.3},{transform:"none",opacity:1}],{duration:260})}}else{b.classList.add("ok");snd("capok")}}
@@ -179,7 +180,7 @@ async function safAct(a){
   }
   e.turns++;
   const fl=Math.min(.9,SAF_F[r]*(e.ang?1.7:1)*(e.eat?.45:1)+e.turns*.01);if(e.eat)e.eat--;if(e.ang)e.ang--;
-  if(Math.random()<fl){s.msg+=" ¡"+e.n+" ha huido!";snd("flee");if(spr&&!hubCalm())await spr.animate([{transform:"none",opacity:1},{transform:"translateX(120px)",opacity:0}],{duration:420}).finished;await safNext(s);return}
+  if(Math.random()<fl){s.msg+=" ¡"+e.n+" ha huido!";snd("flee");if(F3)await F3.flee();else if(spr&&!hubCalm())await spr.animate([{transform:"none",opacity:1},{transform:"translateX(120px)",opacity:0}],{duration:420}).finished;await safNext(s);return}
   if(s.balls<=0){await safNext(s);return}
   save();safUI();
   }finally{NX.safBusy=0}
@@ -200,7 +201,7 @@ function safUI(){
     '<p class="safmsg">'+esc(s.msg||"")+'</p>'+
     '<div class="safbtn"><button class="red" data-saf="ball">🔴 Safari Ball</button><button data-saf="bait">🍓 Cebo</button><button data-saf="rock">🪨 Roca</button><button class="alt" data-saf="run">🏃 Huir</button></div>'+
     '<small class="mut">🍓 El cebo hace que huya menos (pero cuesta un poco más atraparlo). 🪨 La roca lo hace más fácil de atrapar, pero huye antes.</small>'+(s.caught.length?'<div class="safcl">'+s.caught.map(c=>'<span>'+ico(PM[c.n],36,false,!!c.sh)+'</span>').join("")+'</div>':'')}
-  box.innerHTML=h;
+  box.innerHTML=h;try{saf3Mount(box)}catch(e){}
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#safPB [data-saf]");if(!b)return;const a=b.dataset.saf;if(a==="go")safStart(false);else if(a==="pay")safStart(true);else if(a==="end")safEnd();else safAct(a)});
 

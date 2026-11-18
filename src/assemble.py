@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.7";
+const GAME_VER="7.8.8";
 const NEWS=[
+{v:"2026-11-18-7.8.8",ver:"7.8.8",at:"2026-11-18T10:25",t:"🛡️ Arreglos en los gremios",l:["Arreglado: con un corte de conexión momentáneo (por ejemplo, al volver al juego tras un rato), el juego podía creer que tu gremio se había disuelto y sacarte de él, aunque siguieras dentro","Ahora, antes de sacarte de un gremio, el juego lo comprueba con el servidor","Si el juego te había sacado por error, al abrir Social → Gremio vuelves a estar en tu gremio. Y si pulsas «Solicitar unirse» en un gremio del que ya eres miembro, simplemente vuelves a entrar","Arreglado: el líder ya no recibe avisos para aceptar su propia solicitud ni la de alguien que ya es miembro"]},
 {v:"2026-11-18-7.8.7",ver:"7.8.7",at:"2026-11-18T07:52",t:"📘 Movimientos nuevos al momento, como en los juegos",l:["Si un Pokémon sube de nivel fuera de combate (expediciones, combates dobles, Caramelo Raro en Exploración…) y puede aprender un movimiento, ahora se aprende enseguida: si tiene hueco lo aprende solo, y si ya sabe 4 se abre la ventana para elegir cuál olvidar","Antes tenía que esperar al siguiente combate. Funciona tanto en tu partida como en el modo Exploración"]},
 {v:"2026-11-18-7.8.6",ver:"7.8.6",at:"2026-11-18T07:39",t:"🌾 Zona Safari: capturas a nivel 1",l:["Los Pokémon que atrapas en la Zona Safari llegan ahora a nivel 1. Si ya tenías ese Pokémon, se queda con el nivel que tenía"]},
 {v:"2026-11-18-7.8.5",ver:"7.8.5",at:"2026-11-18T07:25",t:"💡 La ayuda ya no se corta",l:["Arreglado: en algunas ventanas de ayuda del botón (?) (como la de Combate) el texto aparecía entero y al segundo desaparecía, dejando solo la primera frase"]},
@@ -807,7 +808,9 @@ FB_API = '''
     gid:n=>"g_"+encodeURIComponent(String(n).trim().replace(/\\s+/g," ").toLowerCase()).replace(/\\./g,"%2E"),
     async gList(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.orderBy("n","desc"),S.limit(50)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     async gMine(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.where("members."+uid+".at",">",0),S.limit(1)));return sn.empty?null:sn.docs[0].id},
-    gWatch:(gid,cb)=>S.onSnapshot(S.doc(db,"guilds",gid),sn=>cb(sn.exists()?sn.data():null),()=>{}),
+    gWatch:(gid,cb)=>S.onSnapshot(S.doc(db,"guilds",gid),sn=>cb(sn.exists()?sn.data():null,!!(sn.metadata&&sn.metadata.fromCache)),()=>{}),
+    // lectura directa del servidor (sin caché) para confirmar que de verdad ya no estás en el gremio
+    async gGetSrv(gid){const f=S.getDocFromServer||S.getDoc,sn=await f(S.doc(db,"guilds",gid));return sn.exists()?sn.data():null},
     async gCreate(d,nick){const id=FB.gid(d.name),ref=S.doc(db,"guilds",id);await S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(s.exists())throw {code:"exists"};tx.set(ref,Object.assign({},d,{owner:uid,members:{[uid]:{n:String(nick),at:Date.now()}},req:{},n:1,at:Date.now()}))});return id},
     gJoin:(gid,nick)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+uid]:{n:String(nick),at:Date.now()},["req."+uid]:S.deleteField(),n:S.increment(1)}),
     gRequest:(gid,nick)=>S.updateDoc(S.doc(db,"guilds",gid),{["req."+uid]:{n:String(nick),at:Date.now()}}),

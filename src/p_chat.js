@@ -234,7 +234,7 @@ async function chInvAccept(id){
   if(v.k==="guild"){
     if(S.gid){toast("Ya perteneces a un gremio. Sal de él antes de unirte a otro.");return}
     const g=await new Promise(res=>{let u=null;const tm=setTimeout(()=>{try{u&&u()}catch(e){}res(undefined)},6000);u=window.FB.gWatch(v.gid,d=>{clearTimeout(tm);setTimeout(()=>{try{u&&u()}catch(e){}},0);res(d)})});
-    if(!g){toast("Ese gremio ya no existe.");return}if(Object.keys(g.members||{}).length>=GUILD_MAX){toast("Ese gremio está lleno.");return}
+    if(!g){toast("Ese gremio ya no existe.");return}if(gRelink(v.gid,g)){mark();return}if(Object.keys(g.members||{}).length>=GUILD_MAX){toast("Ese gremio está lleno.");return}
     const nick=pvClean(pvNick());
     try{if(g.open){await window.FB.gJoin(v.gid,nick);S.gid=v.gid;save();gWatch(v.gid);toast("🛡️ ¡Te has unido a "+g.name+"!");snd("lvl");gAnnounce(v.gid,nick)}
       else{await window.FB.gRequest(v.gid,nick);S.greq=v.gid;save();gReqWatch(v.gid);toast("📨 Solicitud enviada a "+g.name+". El líder o el sublíder la aprobará.")}

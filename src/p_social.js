@@ -138,18 +138,33 @@ async function gFindMine(){if(!window.FB||!window.FB.gMine||S.gid)return;try{con
 let _grqU=null;
 function gReqWatch(gid){
   if(_grqU){try{_grqU()}catch(e){}_grqU=null}if(!gid||!window.FB||S.gid)return;
-  _grqU=window.FB.gWatch(gid,d=>{const me=window.FB.uid();
+  _grqU=window.FB.gWatch(gid,(d,fromCache)=>{const me=window.FB.uid();if(!me||fromCache)return;
     if(d&&d.members&&d.members[me]){if(_grqU){try{_grqU()}catch(e){}_grqU=null}S.gid=gid;delete S.greq;save();gWatch(gid);snd("lvl");toast("🛡️ ¡Te han aceptado en el gremio "+d.name+"!");return}
     if(!d||!(d.req||{})[me]){if(_grqU){try{_grqU()}catch(e){}_grqU=null}if(S.greq===gid){delete S.greq;save();toast("Tu solicitud al gremio no ha sido aceptada.");gRefresh()}}});
 }
+async function gLeftCheck(gid,me){
+  let d;try{d=window.FB.gGetSrv?await window.FB.gGetSrv(gid):undefined}catch(e){return}// sin conexión: no se cambia nada
+  if(d===undefined||GS.gid!==gid)return;
+  if(d&&d.members&&d.members[me]){GS.doc=d;if(S.gid!==gid){S.gid=gid;save()}gUI(true);pvPub();return}
+  if(GS.doc||S.gid){toast(d?"Ya no formas parte del gremio.":"El gremio ha sido disuelto.")}GS.doc=null;S.gid=null;save();if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}gUI(true);pvPub()}
+// si ya eres miembro de ese gremio (por ejemplo, tras un fallo de conexión), se vuelve a enlazar en vez de pedir entrar
+function gRelink(gid,g){const me=window.FB&&window.FB.uid();if(!me||!g||!g.members||!g.members[me])return false;
+  S.gid=gid;delete S.greq;save();gWatch(gid);if(g.req&&g.req[me])window.FB.gReject(gid,me).catch(()=>{});toast("🛡️ Ya formas parte de "+(g.name||"este gremio")+".");return true}
 function gWatch(gid){
   if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}
   GS.gid=gid;GS.doc=null;
   if(!gid||!window.FB){gUI(true);return}
-  GS.unsub=window.FB.gWatch(gid,d=>{try{const me=window.FB.uid(),cur=pvClean(pvNick());if(d&&d.members&&d.members[me]&&cur&&d.members[me].n!==cur&&window.FB.gRename)window.FB.gRename(gid,cur).catch(()=>{})}catch(e){}
-    const me=window.FB.uid();
-    if(!d||!d.members||!d.members[me]){if(GS.doc||S.gid){toast(d?"Ya no formas parte del gremio.":"El gremio ha sido disuelto.")}GS.doc=null;S.gid=null;save();if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}gUI(true);pvPub();return}
-    GS.doc=d;if(S.gid!==gid){S.gid=gid;save()}gUI(true);pvPub();
+  GS.unsub=window.FB.gWatch(gid,(d,fromCache)=>{try{const me=window.FB.uid(),cur=pvClean(pvNick());if(d&&d.members&&d.members[me]&&cur&&d.members[me].n!==cur&&window.FB.gRename)window.FB.gRename(gid,cur).catch(()=>{})}catch(e){}
+    const me=window.FB.uid();if(!me)return;
+    if(!d||!d.members||!d.members[me]){
+      // antes de sacarte del gremio se comprueba en el servidor: una lectura sin conexión (de la caché) puede decir que el
+      // gremio no existe aunque sí exista, y eso te sacaba del gremio sin motivo
+      if(fromCache)return;
+      gLeftCheck(gid,me);return}
+    GS.doc=d;if(S.gid!==gid){S.gid=gid;save()}
+    // si quedó una solicitud tuya para entrar en tu propio gremio, se borra
+    if(d.req&&d.req[me])window.FB.gReject(gid,me).catch(()=>{});
+    gUI(true);pvPub();
   });
 }
 function geRead(){const v=id=>$(id)?$(id).value:"";if($("geName"))GE.name=v("geName").replace(/\s+/g," ").slice(0,20);GE.tag=v("geTag").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,4);GE.desc=v("geDesc").slice(0,120);if($("geS"))GE.s=+v("geS");if($("geP"))GE.p=+v("geP");if($("geOpen"))GE.open=$("geOpen").checked?1:0}
@@ -174,6 +189,7 @@ document.addEventListener("click",async e=>{
     if(d.gj){
       if(S.gid){gMsg("Ya perteneces a un gremio. Sal de él antes de unirte a otro.");return}
       const g=GS.list.find(x=>x.id===d.gj);if(!g)return;
+      if(gRelink(d.gj,g)){gUI(true);return}
       if(g.open){await window.FB.gJoin(d.gj,nick);S.gid=d.gj;save();gWatch(d.gj);toast("🛡️ ¡Te has unido a "+g.name+"!");gAnnounce(d.gj,nick)}
       else{await window.FB.gRequest(d.gj,nick);gMsg("📨 Solicitud enviada. El líder del gremio tiene que aceptarla.");S.greq=d.gj;save();gReqWatch(d.gj);await gRefresh()}
       return;

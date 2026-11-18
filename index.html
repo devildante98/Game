@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.7"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.8"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794984750">
+<meta name="game-build" content="1794993932">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2993,7 +2993,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.8.7</small>
+    <small class="pcver">Versión 7.8.8</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7119,18 +7119,33 @@ async function gFindMine(){if(!window.FB||!window.FB.gMine||S.gid)return;try{con
 let _grqU=null;
 function gReqWatch(gid){
   if(_grqU){try{_grqU()}catch(e){}_grqU=null}if(!gid||!window.FB||S.gid)return;
-  _grqU=window.FB.gWatch(gid,d=>{const me=window.FB.uid();
+  _grqU=window.FB.gWatch(gid,(d,fromCache)=>{const me=window.FB.uid();if(!me||fromCache)return;
     if(d&&d.members&&d.members[me]){if(_grqU){try{_grqU()}catch(e){}_grqU=null}S.gid=gid;delete S.greq;save();gWatch(gid);snd("lvl");toast("🛡️ ¡Te han aceptado en el gremio "+d.name+"!");return}
     if(!d||!(d.req||{})[me]){if(_grqU){try{_grqU()}catch(e){}_grqU=null}if(S.greq===gid){delete S.greq;save();toast("Tu solicitud al gremio no ha sido aceptada.");gRefresh()}}});
 }
+async function gLeftCheck(gid,me){
+  let d;try{d=window.FB.gGetSrv?await window.FB.gGetSrv(gid):undefined}catch(e){return}// sin conexión: no se cambia nada
+  if(d===undefined||GS.gid!==gid)return;
+  if(d&&d.members&&d.members[me]){GS.doc=d;if(S.gid!==gid){S.gid=gid;save()}gUI(true);pvPub();return}
+  if(GS.doc||S.gid){toast(d?"Ya no formas parte del gremio.":"El gremio ha sido disuelto.")}GS.doc=null;S.gid=null;save();if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}gUI(true);pvPub()}
+// si ya eres miembro de ese gremio (por ejemplo, tras un fallo de conexión), se vuelve a enlazar en vez de pedir entrar
+function gRelink(gid,g){const me=window.FB&&window.FB.uid();if(!me||!g||!g.members||!g.members[me])return false;
+  S.gid=gid;delete S.greq;save();gWatch(gid);if(g.req&&g.req[me])window.FB.gReject(gid,me).catch(()=>{});toast("🛡️ Ya formas parte de "+(g.name||"este gremio")+".");return true}
 function gWatch(gid){
   if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}
   GS.gid=gid;GS.doc=null;
   if(!gid||!window.FB){gUI(true);return}
-  GS.unsub=window.FB.gWatch(gid,d=>{try{const me=window.FB.uid(),cur=pvClean(pvNick());if(d&&d.members&&d.members[me]&&cur&&d.members[me].n!==cur&&window.FB.gRename)window.FB.gRename(gid,cur).catch(()=>{})}catch(e){}
-    const me=window.FB.uid();
-    if(!d||!d.members||!d.members[me]){if(GS.doc||S.gid){toast(d?"Ya no formas parte del gremio.":"El gremio ha sido disuelto.")}GS.doc=null;S.gid=null;save();if(GS.unsub){try{GS.unsub()}catch(e){}GS.unsub=null}gUI(true);pvPub();return}
-    GS.doc=d;if(S.gid!==gid){S.gid=gid;save()}gUI(true);pvPub();
+  GS.unsub=window.FB.gWatch(gid,(d,fromCache)=>{try{const me=window.FB.uid(),cur=pvClean(pvNick());if(d&&d.members&&d.members[me]&&cur&&d.members[me].n!==cur&&window.FB.gRename)window.FB.gRename(gid,cur).catch(()=>{})}catch(e){}
+    const me=window.FB.uid();if(!me)return;
+    if(!d||!d.members||!d.members[me]){
+      // antes de sacarte del gremio se comprueba en el servidor: una lectura sin conexión (de la caché) puede decir que el
+      // gremio no existe aunque sí exista, y eso te sacaba del gremio sin motivo
+      if(fromCache)return;
+      gLeftCheck(gid,me);return}
+    GS.doc=d;if(S.gid!==gid){S.gid=gid;save()}
+    // si quedó una solicitud tuya para entrar en tu propio gremio, se borra
+    if(d.req&&d.req[me])window.FB.gReject(gid,me).catch(()=>{});
+    gUI(true);pvPub();
   });
 }
 function geRead(){const v=id=>$(id)?$(id).value:"";if($("geName"))GE.name=v("geName").replace(/\s+/g," ").slice(0,20);GE.tag=v("geTag").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,4);GE.desc=v("geDesc").slice(0,120);if($("geS"))GE.s=+v("geS");if($("geP"))GE.p=+v("geP");if($("geOpen"))GE.open=$("geOpen").checked?1:0}
@@ -7155,6 +7170,7 @@ document.addEventListener("click",async e=>{
     if(d.gj){
       if(S.gid){gMsg("Ya perteneces a un gremio. Sal de él antes de unirte a otro.");return}
       const g=GS.list.find(x=>x.id===d.gj);if(!g)return;
+      if(gRelink(d.gj,g)){gUI(true);return}
       if(g.open){await window.FB.gJoin(d.gj,nick);S.gid=d.gj;save();gWatch(d.gj);toast("🛡️ ¡Te has unido a "+g.name+"!");gAnnounce(d.gj,nick)}
       else{await window.FB.gRequest(d.gj,nick);gMsg("📨 Solicitud enviada. El líder del gremio tiene que aceptarla.");S.greq=d.gj;save();gReqWatch(d.gj);await gRefresh()}
       return;
@@ -7703,8 +7719,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.7";
+const GAME_VER="7.8.8";
 const NEWS=[
+{v:"2026-11-18-7.8.8",ver:"7.8.8",at:"2026-11-18T10:25",t:"🛡️ Arreglos en los gremios",l:["Arreglado: con un corte de conexión momentáneo (por ejemplo, al volver al juego tras un rato), el juego podía creer que tu gremio se había disuelto y sacarte de él, aunque siguieras dentro","Ahora, antes de sacarte de un gremio, el juego lo comprueba con el servidor","Si el juego te había sacado por error, al abrir Social → Gremio vuelves a estar en tu gremio. Y si pulsas «Solicitar unirse» en un gremio del que ya eres miembro, simplemente vuelves a entrar","Arreglado: el líder ya no recibe avisos para aceptar su propia solicitud ni la de alguien que ya es miembro"]},
 {v:"2026-11-18-7.8.7",ver:"7.8.7",at:"2026-11-18T07:52",t:"📘 Movimientos nuevos al momento, como en los juegos",l:["Si un Pokémon sube de nivel fuera de combate (expediciones, combates dobles, Caramelo Raro en Exploración…) y puede aprender un movimiento, ahora se aprende enseguida: si tiene hueco lo aprende solo, y si ya sabe 4 se abre la ventana para elegir cuál olvidar","Antes tenía que esperar al siguiente combate. Funciona tanto en tu partida como en el modo Exploración"]},
 {v:"2026-11-18-7.8.6",ver:"7.8.6",at:"2026-11-18T07:39",t:"🌾 Zona Safari: capturas a nivel 1",l:["Los Pokémon que atrapas en la Zona Safari llegan ahora a nivel 1. Si ya tenías ese Pokémon, se queda con el nivel que tenía"]},
 {v:"2026-11-18-7.8.5",ver:"7.8.5",at:"2026-11-18T07:25",t:"💡 La ayuda ya no se corta",l:["Arreglado: en algunas ventanas de ayuda del botón (?) (como la de Combate) el texto aparecía entero y al segundo desaparecía, dejando solo la primera frase"]},
@@ -8088,7 +8105,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794984750";
+const GAME_B="1794993932";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9469,7 +9486,7 @@ async function chInvAccept(id){
   if(v.k==="guild"){
     if(S.gid){toast("Ya perteneces a un gremio. Sal de él antes de unirte a otro.");return}
     const g=await new Promise(res=>{let u=null;const tm=setTimeout(()=>{try{u&&u()}catch(e){}res(undefined)},6000);u=window.FB.gWatch(v.gid,d=>{clearTimeout(tm);setTimeout(()=>{try{u&&u()}catch(e){}},0);res(d)})});
-    if(!g){toast("Ese gremio ya no existe.");return}if(Object.keys(g.members||{}).length>=GUILD_MAX){toast("Ese gremio está lleno.");return}
+    if(!g){toast("Ese gremio ya no existe.");return}if(gRelink(v.gid,g)){mark();return}if(Object.keys(g.members||{}).length>=GUILD_MAX){toast("Ese gremio está lleno.");return}
     const nick=pvClean(pvNick());
     try{if(g.open){await window.FB.gJoin(v.gid,nick);S.gid=v.gid;save();gWatch(v.gid);toast("🛡️ ¡Te has unido a "+g.name+"!");snd("lvl");gAnnounce(v.gid,nick)}
       else{await window.FB.gRequest(v.gid,nick);S.greq=v.gid;save();gReqWatch(v.gid);toast("📨 Solicitud enviada a "+g.name+". El líder o el sublíder la aprobará.")}
@@ -13709,7 +13726,8 @@ function rqItems(){const L=[];const me=window.FB&&window.FB.uid?window.FB.uid():
     onNo:async()=>{try{await window.FB.frDecline(r.from)}catch(e){}}})})}catch(e){}
   // solicitudes para entrar en tu gremio (si eres líder o sublíder)
   try{const g=typeof GS!=="undefined"&&GS.doc;if(g&&(g.owner===me||g.sub===me)&&g.req){const full=Object.keys(g.members||{}).length>=GUILD_MAX;
-    Object.keys(g.req).forEach(u=>{const n=pvClean(g.req[u].n||"");L.push({k:"g"+GS.gid+u,ic:"🛡️",t:esc(n)+" quiere unirse a tu gremio",s:esc(g.name||"")+(full?" · ⚠️ El gremio está lleno":""),ok:"✅ Aceptar",no:"Rechazar",okOff:full,
+    Object.keys(g.req).forEach(u=>{if(u===me||(g.members&&g.members[u])){window.FB.gReject(GS.gid,u).catch(()=>{});return}// (ya es miembro: solicitud sobrante)
+      const n=pvClean(g.req[u].n||"");L.push({k:"g"+GS.gid+u,ic:"🛡️",t:esc(n)+" quiere unirse a tu gremio",s:esc(g.name||"")+(full?" · ⚠️ El gremio está lleno":""),ok:"✅ Aceptar",no:"Rechazar",okOff:full,
       alive:()=>!!(GS.doc&&GS.doc.req&&GS.doc.req[u]),onOk:async()=>{try{await window.FB.gAccept(GS.gid,u,n);gAnnounce(GS.gid,n,pvNick())}catch(e){toast("No se ha podido aceptar.")}},
       onNo:async()=>{try{await window.FB.gReject(GS.gid,u)}catch(e){}}})})}}catch(e){}
   // invitaciones por mensaje privado (duelo, duelo de siluetas, incursión, gremio, sala 2 vs 2)
@@ -20566,7 +20584,9 @@ async function main(){
     gid:n=>"g_"+encodeURIComponent(String(n).trim().replace(/\s+/g," ").toLowerCase()).replace(/\./g,"%2E"),
     async gList(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.orderBy("n","desc"),S.limit(50)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     async gMine(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.where("members."+uid+".at",">",0),S.limit(1)));return sn.empty?null:sn.docs[0].id},
-    gWatch:(gid,cb)=>S.onSnapshot(S.doc(db,"guilds",gid),sn=>cb(sn.exists()?sn.data():null),()=>{}),
+    gWatch:(gid,cb)=>S.onSnapshot(S.doc(db,"guilds",gid),sn=>cb(sn.exists()?sn.data():null,!!(sn.metadata&&sn.metadata.fromCache)),()=>{}),
+    // lectura directa del servidor (sin caché) para confirmar que de verdad ya no estás en el gremio
+    async gGetSrv(gid){const f=S.getDocFromServer||S.getDoc,sn=await f(S.doc(db,"guilds",gid));return sn.exists()?sn.data():null},
     async gCreate(d,nick){const id=FB.gid(d.name),ref=S.doc(db,"guilds",id);await S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(s.exists())throw {code:"exists"};tx.set(ref,Object.assign({},d,{owner:uid,members:{[uid]:{n:String(nick),at:Date.now()}},req:{},n:1,at:Date.now()}))});return id},
     gJoin:(gid,nick)=>S.updateDoc(S.doc(db,"guilds",gid),{["members."+uid]:{n:String(nick),at:Date.now()},["req."+uid]:S.deleteField(),n:S.increment(1)}),
     gRequest:(gid,nick)=>S.updateDoc(S.doc(db,"guilds",gid),{["req."+uid]:{n:String(nick),at:Date.now()}}),
@@ -20697,7 +20717,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.8.7";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.8.8";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

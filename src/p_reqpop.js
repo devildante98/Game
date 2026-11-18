@@ -18,7 +18,8 @@ function rqItems(){const L=[];const me=window.FB&&window.FB.uid?window.FB.uid():
     onNo:async()=>{try{await window.FB.frDecline(r.from)}catch(e){}}})})}catch(e){}
   // solicitudes para entrar en tu gremio (si eres líder o sublíder)
   try{const g=typeof GS!=="undefined"&&GS.doc;if(g&&(g.owner===me||g.sub===me)&&g.req){const full=Object.keys(g.members||{}).length>=GUILD_MAX;
-    Object.keys(g.req).forEach(u=>{const n=pvClean(g.req[u].n||"");L.push({k:"g"+GS.gid+u,ic:"🛡️",t:esc(n)+" quiere unirse a tu gremio",s:esc(g.name||"")+(full?" · ⚠️ El gremio está lleno":""),ok:"✅ Aceptar",no:"Rechazar",okOff:full,
+    Object.keys(g.req).forEach(u=>{if(u===me||(g.members&&g.members[u])){window.FB.gReject(GS.gid,u).catch(()=>{});return}// (ya es miembro: solicitud sobrante)
+      const n=pvClean(g.req[u].n||"");L.push({k:"g"+GS.gid+u,ic:"🛡️",t:esc(n)+" quiere unirse a tu gremio",s:esc(g.name||"")+(full?" · ⚠️ El gremio está lleno":""),ok:"✅ Aceptar",no:"Rechazar",okOff:full,
       alive:()=>!!(GS.doc&&GS.doc.req&&GS.doc.req[u]),onOk:async()=>{try{await window.FB.gAccept(GS.gid,u,n);gAnnounce(GS.gid,n,pvNick())}catch(e){toast("No se ha podido aceptar.")}},
       onNo:async()=>{try{await window.FB.gReject(GS.gid,u)}catch(e){}}})})}}catch(e){}
   // invitaciones por mensaje privado (duelo, duelo de siluetas, incursión, gremio, sala 2 vs 2)

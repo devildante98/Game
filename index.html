@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.11.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.11.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795008737">
+<meta name="game-build" content="1795009128">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3020,6 +3020,10 @@ body.calm #evpM .evpic{animation:none}
 .torbs{display:flex;gap:10px;align-items:center;padding:8px 12px;margin:6px 0 10px;border-radius:14px;background:rgba(122,208,255,.12)}
 .torbi{font-size:1.8rem;filter:grayscale(1) opacity(.5)}.torbi.on{filter:drop-shadow(0 0 8px #7ad0ff)}
 .torbs b{display:block}
+/* buscador de la Tienda de objetos */
+.shopqw{position:sticky;top:0;z-index:3;display:flex;flex-direction:column;gap:4px;margin:4px 0 10px;padding:6px 0;background:var(--panel)}
+.shopqw input{width:100%;box-sizing:border-box;font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+#bag .row.bsq,#bag > .bsq{display:none!important}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3085,7 +3089,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.11.1</small>
+    <small class="pcver">Versión 7.11.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -5732,6 +5736,21 @@ setInterval(async()=>{
     _lrnBusy=true;try{await lrnOut(ctx,n)}catch(e){console.error(e)}finally{_lrnBusy=false}
     return}
 },1500);
+// ---- buscador de la Tienda de objetos: por nombre o por lo que hace (sin tildes ni mayúsculas) ----
+let SQ="";
+function shopSearch(){const box=$("bag");if(!box)return;let w=$("shopQw");
+  if(!w){w=document.createElement("div");w.id="shopQw";w.className="shopqw";w.innerHTML='<input id="shopQ" type="search" placeholder="🔍 Buscar objeto (nombre o efecto: poción, baya, piedra, Master Ball…)" aria-label="Buscar en la tienda" autocomplete="off"><small id="shopQn" class="mut"></small>';box.before(w);
+    $("shopQ").addEventListener("input",e=>{SQ=e.target.value;shopFilter()});$("shopQ").addEventListener("keydown",e=>{if(e.key==="Escape"&&e.target.value){e.preventDefault();e.stopPropagation();e.target.value="";SQ="";shopFilter()}})}
+  shopFilter()}
+function shopFilter(){const q=nrm(SQ.trim()),words=q.split(/\s+/).filter(Boolean);let n=0,tot=0;
+  ITEMS.forEach((it,i)=>{const r=$("bq"+i)&&$("bq"+i).closest(".row");if(!r)return;if(r.hidden&&!r.classList.contains("bsq"))return;
+    const txt=nrm(it[1]+" "+(it[6]||"")),ok=!words.length||words.every(w=>txt.includes(w));r.classList.toggle("bsq",!ok);if(!r.hidden){tot++;if(ok)n++}});
+  // los títulos de categoría sin ningún objeto que coincida se ocultan mientras buscas
+  {const kids=[...$("bag").querySelectorAll(":scope > *")];let head=null,any=false;const done=()=>{if(head)head.classList.toggle("bsq",!!words.length&&!any)};
+    kids.forEach(k=>{if(k.classList.contains("row")){if(!k.hidden&&!k.classList.contains("bsq"))any=true}else{done();head=k;any=false}});done()}
+  const c=$("shopQn");if(c)c.textContent=words.length?(n?n+(n===1?" objeto":" objetos"):"No hay ningún objeto que coincida con «"+SQ.trim()+"»."):"";}
+{const _bb=buildBag;buildBag=function(){const r=_bb.apply(this,arguments);try{shopSearch()}catch(e){}return r}}
+setTimeout(()=>{try{shopSearch()}catch(e){}},300);
 // ================= entrenadores y Ligas =================
 // [nombre, equipo, nivel extra, sprite original de su clase de entrenador]
 const TRAINERS=[
@@ -7811,8 +7830,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.11.1";
+const GAME_VER="7.11.2";
 const NEWS=[
+{v:"2026-11-18-7.11.2",ver:"7.11.2",at:"2026-11-18T14:38",t:"🔍 Buscador en la Tienda de objetos",l:["La Tienda de objetos tiene ahora una barra de búsqueda arriba: escribe el nombre o lo que hace el objeto (poción, baya, piedra, Master Ball…) y verás solo los que coinciden. No importan las tildes ni las mayúsculas"]},
 {v:"2026-11-18-7.11.1",ver:"7.11.1",at:"2026-11-18T14:32",t:"💎 Teracristalización en el PVP",l:["En los duelos PVP en modo «🧬 Libre» ya se puede teracristalizar: pulsa «💎 Teracristalizar» y elige el ataque. Una vez por combate y jugador","Tu rival ve la teracristalización con su animación y su corona, y el teratipo es el que tengas puesto en la ficha de tu Pokémon","En el PVP el Teraorbe siempre está cargado (no gasta la carga de tus combates). En el modo «⚔️ Clásico» no hay Teracristalización, igual que no hay megas, Dinamax ni movimientos Z"]},
 {v:"2026-11-18-7.11",ver:"7.11",at:"2026-11-18T14:12",t:"💎 ¡Llega la Teracristalización!",l:["Como en la 9ª generación: una vez por combate puedes teracristalizar a un Pokémon con el botón «💎 Teracristalizar» (actívalo y elige el ataque). Brilla como un cristal, lleva una corona con su teratipo y pasa a ser solo de ese tipo hasta el final del combate","Sus ataques del teratipo ganan el bonus de tipo y conserva el de sus tipos de siempre; si el teratipo era uno de sus tipos, el bonus sube a ×2. Los ataques débiles del teratipo suben a 60 de potencia","El Teraorbe se recarga al curar a tu equipo en el Centro Pokémon","Cada Pokémon tiene un teratipo: cámbialo en su ficha con 10 Teralitos (nuevo objeto: en las incursiones, en la Tienda de la Torre Batalla y en la tienda)","Los Líderes de Gimnasio, la Liga Pokémon y el As de la Torre teracristalizan a su último Pokémon"]},
 {v:"2026-11-18-7.10",ver:"7.10",at:"2026-11-18T13:51",t:"❄️ Navidad, 🎆 Nochevieja y 🌦️ clima real en el pueblo",l:["🌦️ Clima real: el pueblo tiene el tiempo que hace ahora en la ciudad de tu zona horaria: sol, nubes, niebla, lluvia, tormenta con rayos o nieve. Se actualiza cada 30 minutos y se puede desactivar en Ajustes → Gráficos","❄️ En diciembre siempre nieva: copos cayendo y el pueblo nevado (suelo, árboles, rocas y tejados)","🎄 Del 1 de diciembre al 6 de enero, un gran árbol de Navidad en el pueblo, con guirnalda, bolas y estrella, y luces de colores en los pinos que de noche brillan y parpadean","🎆 Nochevieja (hora de España): fuegos artificiales sobre el pueblo desde las 21:00 del 31, cuenta atrás en el último minuto del año y, el 1 de enero, un gran regalo de Año Nuevo con un Pokémon legendario variocolor, Master Ball y muchos premios más. Aparece en el Calendario de eventos","Arreglado: al pasar del día al atardecer o a la noche, el paisaje podía verse negro unos segundos"]},
@@ -8204,7 +8224,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795008737";
+const GAME_B="1795009128";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -21320,7 +21340,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.11.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.11.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

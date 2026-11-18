@@ -1329,3 +1329,7 @@ body.calm #evpM .evpic{animation:none}
 .torbs{display:flex;gap:10px;align-items:center;padding:8px 12px;margin:6px 0 10px;border-radius:14px;background:rgba(122,208,255,.12)}
 .torbi{font-size:1.8rem;filter:grayscale(1) opacity(.5)}.torbi.on{filter:drop-shadow(0 0 8px #7ad0ff)}
 .torbs b{display:block}
+/* buscador de la Tienda de objetos */
+.shopqw{position:sticky;top:0;z-index:3;display:flex;flex-direction:column;gap:4px;margin:4px 0 10px;padding:6px 0;background:var(--panel)}
+.shopqw input{width:100%;box-sizing:border-box;font:inherit;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+#bag .row.bsq,#bag > .bsq{display:none!important}

@@ -165,3 +165,18 @@ setInterval(async()=>{
     _lrnBusy=true;try{await lrnOut(ctx,n)}catch(e){console.error(e)}finally{_lrnBusy=false}
     return}
 },1500);
+// ---- buscador de la Tienda de objetos: por nombre o por lo que hace (sin tildes ni mayúsculas) ----
+let SQ="";
+function shopSearch(){const box=$("bag");if(!box)return;let w=$("shopQw");
+  if(!w){w=document.createElement("div");w.id="shopQw";w.className="shopqw";w.innerHTML='<input id="shopQ" type="search" placeholder="🔍 Buscar objeto (nombre o efecto: poción, baya, piedra, Master Ball…)" aria-label="Buscar en la tienda" autocomplete="off"><small id="shopQn" class="mut"></small>';box.before(w);
+    $("shopQ").addEventListener("input",e=>{SQ=e.target.value;shopFilter()});$("shopQ").addEventListener("keydown",e=>{if(e.key==="Escape"&&e.target.value){e.preventDefault();e.stopPropagation();e.target.value="";SQ="";shopFilter()}})}
+  shopFilter()}
+function shopFilter(){const q=nrm(SQ.trim()),words=q.split(/\s+/).filter(Boolean);let n=0,tot=0;
+  ITEMS.forEach((it,i)=>{const r=$("bq"+i)&&$("bq"+i).closest(".row");if(!r)return;if(r.hidden&&!r.classList.contains("bsq"))return;
+    const txt=nrm(it[1]+" "+(it[6]||"")),ok=!words.length||words.every(w=>txt.includes(w));r.classList.toggle("bsq",!ok);if(!r.hidden){tot++;if(ok)n++}});
+  // los títulos de categoría sin ningún objeto que coincida se ocultan mientras buscas
+  {const kids=[...$("bag").querySelectorAll(":scope > *")];let head=null,any=false;const done=()=>{if(head)head.classList.toggle("bsq",!!words.length&&!any)};
+    kids.forEach(k=>{if(k.classList.contains("row")){if(!k.hidden&&!k.classList.contains("bsq"))any=true}else{done();head=k;any=false}});done()}
+  const c=$("shopQn");if(c)c.textContent=words.length?(n?n+(n===1?" objeto":" objetos"):"No hay ningún objeto que coincida con «"+SQ.trim()+"»."):"";}
+{const _bb=buildBag;buildBag=function(){const r=_bb.apply(this,arguments);try{shopSearch()}catch(e){}return r}}
+setTimeout(()=>{try{shopSearch()}catch(e){}},300);

@@ -55,26 +55,49 @@ setInterval(()=>{if(!RW.t||Date.now()-RW.t>30*6e4)rwFetch();window.WXENV=rwEnv()
 
 // ================= NOCHEVIEJA Y AÑO NUEVO =================
 // cuenta atrás en el último minuto del año (hora de España) y, el 1 de enero, ventana con el gran regalo
-const NY_GIFT=y=>({t:Math.max(20000000+y%100*10000,Math.round((typeof tps==="function"?tps():0)*3600*24)),it:{mb:10,crys:3,cand:20,ppmax:5},hold:3,mon:["Ho-Oh",1]});
-function nyTxt(g){return(g.mon[1]?"✨ ":"")+g.mon[0]+" variocolor + "+fmt(Math.round(g.t*RMUL()))+" 🎟️ + "+g.it.mb+" Master Ball + "+g.it.crys+" Cristales Supremos + "+g.it.cand+" Caramelos Raros + "+g.it.ppmax+" PP máximos + "+g.hold+" objetos equipables"}
+// Regalo de Año Nuevo (el mismo para todos): tickets (30 horas de producción o 150 millones, lo que sea mayor), objetos…
+// y, además, cada jugador elige 2 legendarios variocolor entre 5 que le tocan solo a él (cambian de un jugador a otro).
+const NY_GIFT=y=>({t:Math.max(150000000+y%100*100000,Math.round((typeof tps==="function"?tps():0)*3600*30)),it:{mb:12,crys:6,cand:50,ppmax:10,tshard:20},hold:6,pick:2,of:5});
+function nyTxt(g){return "✨ "+g.pick+" legendarios variocolor a elegir entre "+g.of+" (distintos para cada entrenador) + "+fmt(Math.round(g.t*RMUL()))+" 🎟️ + "+g.it.mb+" Master Ball + "+g.it.crys+" Cristales Supremos + "+g.it.cand+" Caramelos Raros + "+g.it.ppmax+" PP máximos + "+g.it.tshard+" Teralitos + "+g.hold+" objetos equipables"}
+// los 5 legendarios de cada jugador: salen de su cuenta y del año, así son siempre los mismos aunque cambie de dispositivo
+const NY_LEGS=()=>P.filter(p=>p[2]==="L"&&!/^Mega-|Primigenio|Forma |Gigamax|Dinamax/.test(p[0])&&!(typeof isSup==="function"&&isSup(p[0]))&&!(typeof isMegaF==="function"&&isMegaF(p[0]))).map(p=>p[0]);
+function nyOpts(y){S.nyc=S.nyc||{};if(S.nyc.y===y&&Array.isArray(S.nyc.L)&&S.nyc.L.length===5)return S.nyc.L;
+  let id="";try{id=(window.FB&&window.FB.uid&&window.FB.uid())||""}catch(e){}if(!id){S.nyid=S.nyid||Math.random().toString(36).slice(2);id=S.nyid}
+  let h=2166136261;for(const ch of id+"|"+y){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}
+  const rnd=()=>{h=(Math.imul(h,1103515245)+12345)>>>0;return h/4294967296},A=NY_LEGS(),L=[];
+  while(L.length<5&&A.length){const i=Math.floor(rnd()*A.length);L.push(A.splice(i,1)[0])}
+  S.nyc={y:y,L:L};try{save()}catch(e){}return L}
+function nyClaim(y,picks){if(S.ny===y)return;const g=NY_GIFT(y),ok=nyOpts(y);picks=(picks||[]).filter(n=>ok.includes(n)).slice(0,g.pick);if(!picks.length)return;
+  S.ny=y;const rw={t:g.t,it:Object.assign({},g.it)};for(let i=0;i<g.hold;i++){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}
+  grant(rw);const lv=typeof clampL==="function"?clampL(Math.max(10,Math.min(typeof lvCap==="function"?lvCap():50,typeof leadLevel==="function"?leadLevel():10))):10;
+  const nw=picks.map(n=>giveMon(n,lv,true));S.nyGot={y:y,L:picks};save();try{render()}catch(e){}if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}
+  return{rw,nw,g,picks}}
+function nyShow(y){
+  const g=NY_GIFT(y),claimed=S.ny===y,L=nyOpts(y),got=S.nyGot&&S.nyGot.y===y?S.nyGot.L:[],M=document.createElement("div");let sel=claimed?got.slice():[];
+  M.id="nyM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Feliz Año Nuevo");
+  M.innerHTML='<div class="nybox nybig"><div class="nyfw" aria-hidden="true"></div><small class="nyk">🎆 NOCHEVIEJA · AÑO NUEVO · SOLO UNA VEZ AL AÑO</small><h2>¡Feliz '+y+'!</h2>'+
+    '<p>Gracias por jugar a Poke Gacha Online. Para empezar el año a lo grande, <b>elige '+g.pick+' de estos '+g.of+' legendarios variocolor</b>. ¡Son solo para ti: cada entrenador tiene los suyos!</p>'+
+    '<div class="nylegs">'+L.map(n=>'<button type="button" class="nyleg" data-nyl="'+esc(n)+'"'+(claimed?' disabled':'')+'><span class="nyshine" aria-hidden="true"></span>'+'<span class="nyimg">'+(PM[n]?icoHD(PM[n],96,false,true):'')+'</span><b>✨ '+esc(n)+'</b><small>'+(PM[n]?tyTxt(PM[n]):'')+'</small><i class="nychk">✓</i></button>').join("")+'</div>'+
+    '<p class="nygift"><b>Y además, para todos:</b><br>'+fmt(Math.round(g.t*RMUL()))+' 🎟️ · '+g.it.mb+' Master Ball · '+g.it.crys+' Cristales Supremos · '+g.it.cand+' Caramelos Raros · '+g.it.ppmax+' PP máximos · '+g.it.tshard+' Teralitos · '+g.hold+' objetos equipables</p>'+
+    '<button type="button" class="red big" id="nyGo" disabled></button><button type="button" class="alt" id="nyX">'+(claimed?'Cerrar':'Más tarde')+'</button></div>';
+  document.body.appendChild(M);try{snd("lvl")}catch(e){}
+  const paint=()=>{M.querySelectorAll("[data-nyl]").forEach(b=>b.classList.toggle("on",sel.includes(b.dataset.nyl)));const go=M.querySelector("#nyGo");
+    if(S.ny===y){go.disabled=true;go.textContent="✅ ¡Regalo recogido!";return}
+    go.disabled=!sel.length;go.textContent=sel.length?"🎁 ¡Recoger mi regalo! ("+sel.length+"/"+g.pick+")":"Elige "+g.pick+" legendarios"};paint();
+  // chispas de colores en la ventana
+  const fw=M.querySelector(".nyfw");if(!(typeof hubCalm==="function"&&hubCalm()))for(let i=0;i<48;i++){const s=document.createElement("i");s.style.left=(4+Math.random()*92)+"%";s.style.top=(3+Math.random()*60)+"%";s.style.background=["#ff5a6a","#ffd23f","#5ab4ff","#7aff8a","#e07aff","#fff"][i%6];s.style.animationDelay=(Math.random()*2.4)+"s";fw.appendChild(s)}
+  M.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-nyl]");if(!b||S.ny===y)return;const n=b.dataset.nyl;
+    if(sel.includes(n))sel=sel.filter(x=>x!==n);else{if(sel.length>=g.pick)sel.shift();sel.push(n);try{if(PM[n])cry(n)}catch(x){}}snd("ui");paint()});
+  M.querySelector("#nyX").onclick=()=>M.remove();
+  M.querySelector("#nyGo").onclick=async()=>{if(S.ny===y||!sel.length)return;
+    if(sel.length<g.pick&&!(await askOk("Solo has elegido "+sel.length+" de "+g.pick+" legendarios. Después no podrás cambiarlo. ¿Recoger el regalo así?")))return;
+    const r=nyClaim(y,sel);if(!r)return;paint();M.querySelectorAll("[data-nyl]").forEach(b=>b.disabled=true);snd("capok");
+    toast("🎆 ¡Feliz "+y+"! ✨ "+r.picks.join(" y ")+" se unen a ti. ¡Regalo recibido!")};
+}
 function nyCountdown(){const M=rwMadrid(rwNow());let el=$("nyCd");
   if(M.m===12&&M.d===31&&M.h===23&&M.mi===59){const left=60-M.s;if(!el){el=document.createElement("div");el.id="nyCd";document.body.appendChild(el)}
     const big=left<=10;el.className=big?"big":"";const html=big?'<b>'+left+'</b><small>¡'+(M.y+1)+' está a punto de llegar!</small>':'🎆 ¡'+(M.y+1)+' llega en '+left+' s!';if(el.innerHTML!==html){el.innerHTML=html;if(big)try{snd("click")}catch(e){}}}
   else if(el)el.remove()}
-function nyClaim(y){if(S.ny===y)return;const g=NY_GIFT(y);S.ny=y;const rw={t:g.t,it:Object.assign({},g.it)};for(let i=0;i<g.hold;i++){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}
-  grant(rw);const nw=giveMon(g.mon[0],1,g.mon[1]);save();try{render()}catch(e){}if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}
-  return{rw,nw,g}}
-function nyShow(y){
-  const g=NY_GIFT(y),claimed=S.ny===y,M=document.createElement("div");M.id="nyM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Feliz Año Nuevo");
-  M.innerHTML='<div class="nybox"><div class="nyfw" aria-hidden="true"></div><small class="nyk">🎆 NOCHEVIEJA · AÑO NUEVO</small><h2>¡Feliz '+y+'!</h2><div class="nymon">'+ico(PM[g.mon[0]],120,false,true)+'</div>'+
-    '<p>Gracias por jugar a Poke Gacha Online. Para empezar el año a lo grande, aquí tienes tu regalo de Año Nuevo:</p><p class="nygift">'+esc(nyTxt(g))+'</p>'+
-    '<button type="button" class="red big" id="nyGo"'+(claimed?' disabled':'')+'>'+(claimed?'✅ Ya lo has recogido':'🎁 ¡Recoger mi regalo!')+'</button><button type="button" class="alt" id="nyX">Cerrar</button></div>';
-  document.body.appendChild(M);try{snd("lvl")}catch(e){}
-  // chispas de colores en la ventana
-  const fw=M.querySelector(".nyfw");if(!(typeof hubCalm==="function"&&hubCalm()))for(let i=0;i<36;i++){const s=document.createElement("i");s.style.left=(10+Math.random()*80)+"%";s.style.top=(5+Math.random()*50)+"%";s.style.background=["#ff5a6a","#ffd23f","#5ab4ff","#7aff8a","#e07aff","#fff"][i%6];s.style.animationDelay=(Math.random()*2.4)+"s";fw.appendChild(s)}
-  M.querySelector("#nyX").onclick=()=>M.remove();
-  M.querySelector("#nyGo").onclick=()=>{const r=nyClaim(y);if(!r)return;const b=M.querySelector("#nyGo");b.disabled=true;b.textContent="✅ ¡Regalo recogido!";snd("capok");toast("🎆 ¡Feliz "+y+"! "+(r.nw?"¡"+r.g.mon[0]+" variocolor es nuevo en tu Pokédex! ":"")+"Regalo recibido.")};
-}
 // ¿toca enseñar la ventana de Año Nuevo? (el 1 de enero, una vez; si aún no has recogido el regalo, vuelve a salir al entrar)
 function nyCheck(){if(typeof S==="undefined"||!S||$("nyM"))return;const M=rwMadrid(rwNow());if(!(M.m===1&&M.d===1))return;
   if(S.ny===M.y)return;if(window._nyShown===M.y)return;if(typeof evpFree==="function"&&!evpFree())return;window._nyShown=M.y;nyShow(M.y)}

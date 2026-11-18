@@ -1342,3 +1342,22 @@ body.calm #evpM .evpic{animation:none}
 /* buscador de conversaciones en la ventana del chat */
 .chdmq{padding:6px 10px 0}.chdmq[hidden]{display:none}.chdmq input{width:100%;box-sizing:border-box;font:inherit;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 #frQw[hidden]{display:none}
+
+/* Año Nuevo: elegir legendarios variocolor */
+#nyM .nybox.nybig{max-width:720px;max-height:calc(100vh - 32px);overflow-y:auto}
+#nyM .nylegs{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+@media (max-width:620px){#nyM .nylegs{grid-template-columns:repeat(3,1fr)}}
+#nyM .nyleg{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:2px;margin:0;padding:8px 4px 6px;border-radius:16px;border:3px solid rgba(255,255,255,.25);background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));color:#fff;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+#nyM .nyimg{height:88px;width:100%;display:flex;align-items:center;justify-content:center}#nyM .nyimg img{max-width:84px!important;max-height:84px!important;width:auto!important;height:auto!important;margin:0!important;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}#nyM #nyGo{display:block;width:100%;max-width:420px;margin:8px auto 4px}
+#nyM .nyleg b{font-size:.78rem;line-height:1.15}#nyM .nyleg small{font-size:.66rem;opacity:.8}
+#nyM .nyleg:hover:not(:disabled){transform:translateY(-3px)}
+#nyM .nyleg.on{border-color:#ffd23f;box-shadow:0 0 0 3px rgba(255,210,63,.35),0 0 24px rgba(255,210,63,.55);background:linear-gradient(160deg,rgba(255,210,63,.35),rgba(255,122,182,.18))}
+#nyM .nyleg:disabled:not(.on){opacity:.45}
+#nyM .nychk{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:#ffd23f;color:#1c1f3a;font-style:normal;font-weight:900;display:none;align-items:center;justify-content:center}
+#nyM .nyleg.on .nychk{display:flex}
+#nyM .nyshine{position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);animation:nyshine 3.2s ease-in-out infinite;pointer-events:none}
+@keyframes nyshine{0%{transform:translateX(-60%)}60%,100%{transform:translateX(60%)}}
+body.calm #nyM .nyshine{animation:none;display:none}
+
+/* ventana del chat más ancha (en móvil sigue a pantalla completa) */
+@media (min-width:621px){#chw{width:min(560px,calc(100vw - 24px))}}

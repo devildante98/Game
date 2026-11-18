@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.15"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.16"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795025415">
+<meta name="game-build" content="1795025805">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3034,6 +3034,25 @@ body.calm #evpM .evpic{animation:none}
 .chdmq{padding:6px 10px 0}.chdmq[hidden]{display:none}.chdmq input{width:100%;box-sizing:border-box;font:inherit;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 #frQw[hidden]{display:none}
 
+/* Año Nuevo: elegir legendarios variocolor */
+#nyM .nybox.nybig{max-width:720px;max-height:calc(100vh - 32px);overflow-y:auto}
+#nyM .nylegs{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+@media (max-width:620px){#nyM .nylegs{grid-template-columns:repeat(3,1fr)}}
+#nyM .nyleg{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:2px;margin:0;padding:8px 4px 6px;border-radius:16px;border:3px solid rgba(255,255,255,.25);background:linear-gradient(160deg,rgba(255,255,255,.14),rgba(255,255,255,.04));color:#fff;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s}
+#nyM .nyimg{height:88px;width:100%;display:flex;align-items:center;justify-content:center}#nyM .nyimg img{max-width:84px!important;max-height:84px!important;width:auto!important;height:auto!important;margin:0!important;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}#nyM #nyGo{display:block;width:100%;max-width:420px;margin:8px auto 4px}
+#nyM .nyleg b{font-size:.78rem;line-height:1.15}#nyM .nyleg small{font-size:.66rem;opacity:.8}
+#nyM .nyleg:hover:not(:disabled){transform:translateY(-3px)}
+#nyM .nyleg.on{border-color:#ffd23f;box-shadow:0 0 0 3px rgba(255,210,63,.35),0 0 24px rgba(255,210,63,.55);background:linear-gradient(160deg,rgba(255,210,63,.35),rgba(255,122,182,.18))}
+#nyM .nyleg:disabled:not(.on){opacity:.45}
+#nyM .nychk{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:#ffd23f;color:#1c1f3a;font-style:normal;font-weight:900;display:none;align-items:center;justify-content:center}
+#nyM .nyleg.on .nychk{display:flex}
+#nyM .nyshine{position:absolute;inset:-40%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);animation:nyshine 3.2s ease-in-out infinite;pointer-events:none}
+@keyframes nyshine{0%{transform:translateX(-60%)}60%,100%{transform:translateX(60%)}}
+body.calm #nyM .nyshine{animation:none;display:none}
+
+/* ventana del chat más ancha (en móvil sigue a pantalla completa) */
+@media (min-width:621px){#chw{width:min(560px,calc(100vw - 24px))}}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -3098,7 +3117,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.15</small>
+    <small class="pcver">Versión 7.16</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7849,8 +7868,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.15";
+const GAME_VER="7.16";
 const NEWS=[
+{v:"2026-11-18-7.16",ver:"7.16",at:"2026-11-18T19:16",t:"🎆 Regalo de Año Nuevo tremendamente especial",l:["El 1 de enero podrás elegir 2 legendarios variocolor entre 5. ¡Cada entrenador tiene sus propios 5, distintos a los de los demás!","Además, para todos lo mismo: 150 millones de tickets (o 30 horas de producción de tu pueblo, si es más), 12 Master Ball, 6 Cristales Supremos, 50 Caramelos Raros, 10 PP máximos, 20 Teralitos y 6 objetos equipables","💬 La ventana del chat es más ancha en ordenador"]},
 {v:"2026-11-18-7.15",ver:"7.15",at:"2026-11-18T19:10",t:"🔍 Buscar amigos y conversaciones",l:["Social › Amigos: nueva barra de búsqueda para encontrar enseguida a un amigo por su apodo","Chat › Amigos (y Social › Chat): barra para buscar conversaciones","Las conversaciones privadas salen ordenadas: primero las personas con las que hablaste por última vez"]},
 {v:"2026-11-18-7.14",ver:"7.14",at:"2026-11-18T19:04",t:"🎫 Pases gratuitos mucho mejores",l:["Pase de temporada: cada nivel da bastante más que el anterior. Los tickets crecen con el nivel y con lo que produce tu pueblo (el nivel 30 da 6 horas de producción). Además: 14 Master Ball, 7 Cristales Supremos, 137 Caramelos Raros, 30 Teralitos, objetos equipables…","Pokémon del pase: un épico en el nivel 10, épicos variocolor en el 15 y el 25, un legendario en el 20 y, en el 30, ¡el legendario de la temporada en variocolor!","Pase diario (racha): premios cada día mayores, con días grandes el 7, 14, 21 y 28 y un día 30 enorme (2 Master Ball, Cristal Supremo, 20 Caramelos Raros, 3 objetos equipables, Teralitos…). Los tickets extra también crecen con tu producción","Cada vuelta de 30 días seguidos multiplica los premios de la racha, hasta 5,5 veces"]},
 {v:"2026-11-18-7.13",ver:"7.13",at:"2026-11-18T19:00",t:"👆 Toca a tu entrenador o a tu compañero",l:["En la pantalla principal, toca a tu entrenador (junto a la Poké Ball) para ir directamente a su personalización","Toca a tu compañero para ir a la zona de Compañero, en Actividades, y darle mimos o bayas"]},
@@ -8252,7 +8272,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795025415";
+const GAME_B="1795025805";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -21059,26 +21079,49 @@ setInterval(()=>{if(!RW.t||Date.now()-RW.t>30*6e4)rwFetch();window.WXENV=rwEnv()
 
 // ================= NOCHEVIEJA Y AÑO NUEVO =================
 // cuenta atrás en el último minuto del año (hora de España) y, el 1 de enero, ventana con el gran regalo
-const NY_GIFT=y=>({t:Math.max(20000000+y%100*10000,Math.round((typeof tps==="function"?tps():0)*3600*24)),it:{mb:10,crys:3,cand:20,ppmax:5},hold:3,mon:["Ho-Oh",1]});
-function nyTxt(g){return(g.mon[1]?"✨ ":"")+g.mon[0]+" variocolor + "+fmt(Math.round(g.t*RMUL()))+" 🎟️ + "+g.it.mb+" Master Ball + "+g.it.crys+" Cristales Supremos + "+g.it.cand+" Caramelos Raros + "+g.it.ppmax+" PP máximos + "+g.hold+" objetos equipables"}
+// Regalo de Año Nuevo (el mismo para todos): tickets (30 horas de producción o 150 millones, lo que sea mayor), objetos…
+// y, además, cada jugador elige 2 legendarios variocolor entre 5 que le tocan solo a él (cambian de un jugador a otro).
+const NY_GIFT=y=>({t:Math.max(150000000+y%100*100000,Math.round((typeof tps==="function"?tps():0)*3600*30)),it:{mb:12,crys:6,cand:50,ppmax:10,tshard:20},hold:6,pick:2,of:5});
+function nyTxt(g){return "✨ "+g.pick+" legendarios variocolor a elegir entre "+g.of+" (distintos para cada entrenador) + "+fmt(Math.round(g.t*RMUL()))+" 🎟️ + "+g.it.mb+" Master Ball + "+g.it.crys+" Cristales Supremos + "+g.it.cand+" Caramelos Raros + "+g.it.ppmax+" PP máximos + "+g.it.tshard+" Teralitos + "+g.hold+" objetos equipables"}
+// los 5 legendarios de cada jugador: salen de su cuenta y del año, así son siempre los mismos aunque cambie de dispositivo
+const NY_LEGS=()=>P.filter(p=>p[2]==="L"&&!/^Mega-|Primigenio|Forma |Gigamax|Dinamax/.test(p[0])&&!(typeof isSup==="function"&&isSup(p[0]))&&!(typeof isMegaF==="function"&&isMegaF(p[0]))).map(p=>p[0]);
+function nyOpts(y){S.nyc=S.nyc||{};if(S.nyc.y===y&&Array.isArray(S.nyc.L)&&S.nyc.L.length===5)return S.nyc.L;
+  let id="";try{id=(window.FB&&window.FB.uid&&window.FB.uid())||""}catch(e){}if(!id){S.nyid=S.nyid||Math.random().toString(36).slice(2);id=S.nyid}
+  let h=2166136261;for(const ch of id+"|"+y){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}
+  const rnd=()=>{h=(Math.imul(h,1103515245)+12345)>>>0;return h/4294967296},A=NY_LEGS(),L=[];
+  while(L.length<5&&A.length){const i=Math.floor(rnd()*A.length);L.push(A.splice(i,1)[0])}
+  S.nyc={y:y,L:L};try{save()}catch(e){}return L}
+function nyClaim(y,picks){if(S.ny===y)return;const g=NY_GIFT(y),ok=nyOpts(y);picks=(picks||[]).filter(n=>ok.includes(n)).slice(0,g.pick);if(!picks.length)return;
+  S.ny=y;const rw={t:g.t,it:Object.assign({},g.it)};for(let i=0;i<g.hold;i++){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}
+  grant(rw);const lv=typeof clampL==="function"?clampL(Math.max(10,Math.min(typeof lvCap==="function"?lvCap():50,typeof leadLevel==="function"?leadLevel():10))):10;
+  const nw=picks.map(n=>giveMon(n,lv,true));S.nyGot={y:y,L:picks};save();try{render()}catch(e){}if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}
+  return{rw,nw,g,picks}}
+function nyShow(y){
+  const g=NY_GIFT(y),claimed=S.ny===y,L=nyOpts(y),got=S.nyGot&&S.nyGot.y===y?S.nyGot.L:[],M=document.createElement("div");let sel=claimed?got.slice():[];
+  M.id="nyM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Feliz Año Nuevo");
+  M.innerHTML='<div class="nybox nybig"><div class="nyfw" aria-hidden="true"></div><small class="nyk">🎆 NOCHEVIEJA · AÑO NUEVO · SOLO UNA VEZ AL AÑO</small><h2>¡Feliz '+y+'!</h2>'+
+    '<p>Gracias por jugar a Poke Gacha Online. Para empezar el año a lo grande, <b>elige '+g.pick+' de estos '+g.of+' legendarios variocolor</b>. ¡Son solo para ti: cada entrenador tiene los suyos!</p>'+
+    '<div class="nylegs">'+L.map(n=>'<button type="button" class="nyleg" data-nyl="'+esc(n)+'"'+(claimed?' disabled':'')+'><span class="nyshine" aria-hidden="true"></span>'+'<span class="nyimg">'+(PM[n]?icoHD(PM[n],96,false,true):'')+'</span><b>✨ '+esc(n)+'</b><small>'+(PM[n]?tyTxt(PM[n]):'')+'</small><i class="nychk">✓</i></button>').join("")+'</div>'+
+    '<p class="nygift"><b>Y además, para todos:</b><br>'+fmt(Math.round(g.t*RMUL()))+' 🎟️ · '+g.it.mb+' Master Ball · '+g.it.crys+' Cristales Supremos · '+g.it.cand+' Caramelos Raros · '+g.it.ppmax+' PP máximos · '+g.it.tshard+' Teralitos · '+g.hold+' objetos equipables</p>'+
+    '<button type="button" class="red big" id="nyGo" disabled></button><button type="button" class="alt" id="nyX">'+(claimed?'Cerrar':'Más tarde')+'</button></div>';
+  document.body.appendChild(M);try{snd("lvl")}catch(e){}
+  const paint=()=>{M.querySelectorAll("[data-nyl]").forEach(b=>b.classList.toggle("on",sel.includes(b.dataset.nyl)));const go=M.querySelector("#nyGo");
+    if(S.ny===y){go.disabled=true;go.textContent="✅ ¡Regalo recogido!";return}
+    go.disabled=!sel.length;go.textContent=sel.length?"🎁 ¡Recoger mi regalo! ("+sel.length+"/"+g.pick+")":"Elige "+g.pick+" legendarios"};paint();
+  // chispas de colores en la ventana
+  const fw=M.querySelector(".nyfw");if(!(typeof hubCalm==="function"&&hubCalm()))for(let i=0;i<48;i++){const s=document.createElement("i");s.style.left=(4+Math.random()*92)+"%";s.style.top=(3+Math.random()*60)+"%";s.style.background=["#ff5a6a","#ffd23f","#5ab4ff","#7aff8a","#e07aff","#fff"][i%6];s.style.animationDelay=(Math.random()*2.4)+"s";fw.appendChild(s)}
+  M.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-nyl]");if(!b||S.ny===y)return;const n=b.dataset.nyl;
+    if(sel.includes(n))sel=sel.filter(x=>x!==n);else{if(sel.length>=g.pick)sel.shift();sel.push(n);try{if(PM[n])cry(n)}catch(x){}}snd("ui");paint()});
+  M.querySelector("#nyX").onclick=()=>M.remove();
+  M.querySelector("#nyGo").onclick=async()=>{if(S.ny===y||!sel.length)return;
+    if(sel.length<g.pick&&!(await askOk("Solo has elegido "+sel.length+" de "+g.pick+" legendarios. Después no podrás cambiarlo. ¿Recoger el regalo así?")))return;
+    const r=nyClaim(y,sel);if(!r)return;paint();M.querySelectorAll("[data-nyl]").forEach(b=>b.disabled=true);snd("capok");
+    toast("🎆 ¡Feliz "+y+"! ✨ "+r.picks.join(" y ")+" se unen a ti. ¡Regalo recibido!")};
+}
 function nyCountdown(){const M=rwMadrid(rwNow());let el=$("nyCd");
   if(M.m===12&&M.d===31&&M.h===23&&M.mi===59){const left=60-M.s;if(!el){el=document.createElement("div");el.id="nyCd";document.body.appendChild(el)}
     const big=left<=10;el.className=big?"big":"";const html=big?'<b>'+left+'</b><small>¡'+(M.y+1)+' está a punto de llegar!</small>':'🎆 ¡'+(M.y+1)+' llega en '+left+' s!';if(el.innerHTML!==html){el.innerHTML=html;if(big)try{snd("click")}catch(e){}}}
   else if(el)el.remove()}
-function nyClaim(y){if(S.ny===y)return;const g=NY_GIFT(y);S.ny=y;const rw={t:g.t,it:Object.assign({},g.it)};for(let i=0;i<g.hold;i++){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}
-  grant(rw);const nw=giveMon(g.mon[0],1,g.mon[1]);save();try{render()}catch(e){}if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}
-  return{rw,nw,g}}
-function nyShow(y){
-  const g=NY_GIFT(y),claimed=S.ny===y,M=document.createElement("div");M.id="nyM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Feliz Año Nuevo");
-  M.innerHTML='<div class="nybox"><div class="nyfw" aria-hidden="true"></div><small class="nyk">🎆 NOCHEVIEJA · AÑO NUEVO</small><h2>¡Feliz '+y+'!</h2><div class="nymon">'+ico(PM[g.mon[0]],120,false,true)+'</div>'+
-    '<p>Gracias por jugar a Poke Gacha Online. Para empezar el año a lo grande, aquí tienes tu regalo de Año Nuevo:</p><p class="nygift">'+esc(nyTxt(g))+'</p>'+
-    '<button type="button" class="red big" id="nyGo"'+(claimed?' disabled':'')+'>'+(claimed?'✅ Ya lo has recogido':'🎁 ¡Recoger mi regalo!')+'</button><button type="button" class="alt" id="nyX">Cerrar</button></div>';
-  document.body.appendChild(M);try{snd("lvl")}catch(e){}
-  // chispas de colores en la ventana
-  const fw=M.querySelector(".nyfw");if(!(typeof hubCalm==="function"&&hubCalm()))for(let i=0;i<36;i++){const s=document.createElement("i");s.style.left=(10+Math.random()*80)+"%";s.style.top=(5+Math.random()*50)+"%";s.style.background=["#ff5a6a","#ffd23f","#5ab4ff","#7aff8a","#e07aff","#fff"][i%6];s.style.animationDelay=(Math.random()*2.4)+"s";fw.appendChild(s)}
-  M.querySelector("#nyX").onclick=()=>M.remove();
-  M.querySelector("#nyGo").onclick=()=>{const r=nyClaim(y);if(!r)return;const b=M.querySelector("#nyGo");b.disabled=true;b.textContent="✅ ¡Regalo recogido!";snd("capok");toast("🎆 ¡Feliz "+y+"! "+(r.nw?"¡"+r.g.mon[0]+" variocolor es nuevo en tu Pokédex! ":"")+"Regalo recibido.")};
-}
 // ¿toca enseñar la ventana de Año Nuevo? (el 1 de enero, una vez; si aún no has recogido el regalo, vuelve a salir al entrar)
 function nyCheck(){if(typeof S==="undefined"||!S||$("nyM"))return;const M=rwMadrid(rwNow());if(!(M.m===1&&M.d===1))return;
   if(S.ny===M.y)return;if(window._nyShown===M.y)return;if(typeof evpFree==="function"&&!evpFree())return;window._nyShown=M.y;nyShow(M.y)}
@@ -21465,7 +21508,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.15";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.16";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

@@ -66,8 +66,8 @@ async function advOpen(d){
 function advUI(force){
   const box=$("advPB");if(!box)return;const ph=advPhase(),t=advMadrid(),A=advData();
   let h='';
-  if(ph==="pre"){const left=Math.max(0,Math.ceil((Date.UTC(t.y,11,1)-Date.UTC(t.y,t.m-1,t.d))/864e5));h+='<div class="advtop"><b>🎄 Empieza el 1 de diciembre</b><small>Faltan '+left+' día'+(left===1?'':'s')+'. Cada día una casilla, y cada regalo es mayor que el anterior. ¡El 24, la gran sorpresa!</small><small class="advnext">🔮 Día 1: '+esc(advTxt(ADV[0]))+'</small></div>'}
-  else if(ph==="on"){const n=Object.keys(A.o).length;h+='<div class="advtop"><b>'+(A.o[t.d]?'✅ Ya has abierto la casilla de hoy':'🎁 ¡Tu casilla de hoy (día '+t.d+') te espera!')+'</b><small>Has abierto '+n+' de 24. '+(t.d<24?'Vuelve mañana para abrir la siguiente.':'¡Hoy es el gran día!')+'</small>'+(t.d<24?'<small class="advnext">🔮 Mañana (día '+(t.d+1)+'): '+esc(advTxt(ADV[t.d]))+'</small>':'')+'</div>'}
+  if(ph==="pre"){const left=Math.max(0,Math.ceil((Date.UTC(t.y,11,1)-Date.UTC(t.y,t.m-1,t.d))/864e5));h+='<div class="advtop"><b>🎄 Empieza el 1 de diciembre</b><small>Faltan '+left+' día'+(left===1?'':'s')+'. Cada día una casilla, y cada regalo es mayor que el anterior. ¡El 24, la gran sorpresa!</small></div>'}
+  else if(ph==="on"){const n=Object.keys(A.o).length;h+='<div class="advtop"><b>'+(A.o[t.d]?'✅ Ya has abierto la casilla de hoy':'🎁 ¡Tu casilla de hoy (día '+t.d+') te espera!')+'</b><small>Has abierto '+n+' de 24. '+(t.d<24?'Vuelve mañana para abrir la siguiente.':'¡Hoy es el gran día!')+'</small>'+'</div>'}
   else if(ph==="late"){const n=Object.keys(A.o).length;h+='<div class="advtop"><b>'+(n<24?'🎁 ¡Recupera las casillas que no abriste!':'🎉 ¡Has abierto todo el calendario!')+'</b><small>Hasta el 31 de diciembre puedes abrir las que te faltan ('+(24-n)+').</small></div>'}
   h+='<div class="advgrid">'+ADV_ORD.map(d=>{const R=ADV[d-1],op=!!A.o[d],can=advCan(d),past=ph==="late"||(ph==="on"&&d<t.d),miss=!op&&past&&!can,lost=!op&&past;
     return '<button class="advc'+(op?' op':'')+(can?' can':'')+(miss?' miss':'')+(lost?' lost':'')+(d===24?' d24':'')+'" data-adv="'+d+'"'+(can?'':' aria-disabled="true"')+' title="'+(op?esc(advTxt(R)):lost?esc((can?'Puedes recuperarla: ':'No la abriste a tiempo: ')+advTxt(R)):can?'¡Ábrela!':'Todavía no')+'">'+
@@ -75,7 +75,7 @@ function advUI(force){
       // las que no se abrieron a tiempo enseñan lo que habrían dado (del 25 al 31 se pueden recuperar)
       :lost?'<span class="advi">'+(R.mon?ico(PM[R.mon[0]],40,false,!!R.mon[1]):'🎁')+'</span><small class="advlost">'+esc(advTxt(R))+'</small><small class="advlb">'+(can?'¡Recupérala!':'No la abriste')+'</small>'
       :can?'<span class="advi">🎁</span><small>¡Ábrela!</small>':'<span class="advi">🔒</span>')+'</button>'}).join("")+'</div>';
-  h+='<small class="mut">El regalo del día 24: '+esc(advTxt(ADV[23]))+'. Las casillas se abren con la fecha de España.</small>';
+  h+='<small class="mut">Cada casilla es una sorpresa: no sabrás lo que trae hasta abrirla. Se abren con la fecha de España.</small>';
   box.innerHTML=h;
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#advPB [data-adv]");if(!b)return;const d=+b.dataset.adv;if(advCan(d))advOpen(d);else{snd("ui");const ph=advPhase();toast(advData().o[d]?"🎁 "+advTxt(ADV[d-1]):ph==="pre"?"🎄 El calendario empieza el 1 de diciembre.":"🔒 Esa casilla "+(d>advMadrid().d||ph==="pre"?"todavía no se puede abrir.":"ya no se puede abrir."))}});

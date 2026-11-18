@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.4";
+const GAME_VER="7.8.5";
 const NEWS=[
+{v:"2026-11-18-7.8.5",ver:"7.8.5",at:"2026-11-18T07:25",t:"💡 La ayuda ya no se corta",l:["Arreglado: en algunas ventanas de ayuda del botón (?) (como la de Combate) el texto aparecía entero y al segundo desaparecía, dejando solo la primera frase"]},
 {v:"2026-11-18-7.8.4",ver:"7.8.4",at:"2026-11-18T07:22",t:"⚙️ Nuevo apartado «Juego» en Ajustes",l:["Las opciones de juego (saltar animaciones de las tiradas y del Centro Pokémon, y seguir generando tickets con la pestaña oculta) tienen ahora su propio apartado en Ajustes, en vez de estar al final de Controles"]},
 {v:"2026-11-18-7.8.3",ver:"7.8.3",at:"2026-11-18T07:19",t:"📖 Ayuda más completa",l:["El botón (?) explica ahora con detalle cómo funcionan el Gacha, los Premios, las Mejoras, la Pokédex, la Guardería, el Compañero, la Torre Batalla, las Expediciones, las Horas felices, el Calendario, los Minijuegos, las Incursiones, el Mercadillo, el Pase, los Logros, Tu entrenador, Novedades, Próximamente e Invitar amigos","Corregido: algunos textos aún decían que la partida se guarda en la nube cada 5 minutos (ahora son 2)"]},
 {v:"2026-11-18-7.8.2",ver:"7.8.2",at:"2026-11-18T07:09",t:"🧹 Fuera el botón «Más información»",l:["Las ventanas ya no tienen el enlace «Más información»: toda la explicación de cada apartado está en el botón (?)"]},

@@ -286,7 +286,7 @@ function gmHelpT(w){
   const root=$(inScr?"gScrB":"hubB"),tit=($(inScr?"gScrT":"hubT")||{}).textContent||"",sub=($(inScr?"gScrD":"hubD")||{}).textContent||"";
   if(root)gmHelpMark(root);
   const vis=e=>!!(e.offsetParent||e.getClientRects().length),seen=new Set(),parts=[];
-  const add=(e,cls)=>{const c=e.cloneNode(true);c.querySelectorAll("button,input,select,textarea,script,.infob").forEach(x=>x.remove());c.querySelectorAll("[hidden]").forEach(x=>x.hidden=false);
+  const add=(e,cls)=>{const c=e.cloneNode(true);c.querySelectorAll("button,input,select,textarea,script,.infob").forEach(x=>x.remove());c.querySelectorAll("[hidden]").forEach(x=>x.hidden=false);c.querySelectorAll(".infor").forEach(x=>x.classList.remove("infor"));
     c.querySelectorAll("[id]").forEach(x=>x.removeAttribute("id"));c.removeAttribute("id");const t=(c.textContent||"").replace(/\s+/g," ").trim();if(t.length<25||seen.has(t))return;seen.add(t);parts.push('<p class="'+cls+'">'+c.innerHTML.trim()+'</p>')};
   // título: la pestaña abierta (o el título de la sección); debajo, el grupo
   const tab=!inScr&&$("hubTabs")&&!$("hubTabs").hidden?$("hubTabs").querySelector("button.on"):null,h2a=root&&root.querySelector(":scope>section.panel>h2");

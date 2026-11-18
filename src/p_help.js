@@ -5,6 +5,13 @@
 // Clave: el id de la sección (pestaña del menú o pantalla del modo juego).
 // =====================================================================================
 const HELPX={
+  batP:[
+    "💎 Teracristalización: una vez por combate, pulsa «Teracristalizar» y después elige el ataque. Tu Pokémon pasa a ser solo de su teratipo hasta el final del combate.",
+    "Al teracristalizarse, sus ataques del teratipo hacen más daño (×1,5) y conserva el bonus de sus tipos de siempre. Si el teratipo era uno de sus tipos, el bonus sube a ×2. Los ataques débiles del teratipo suben a 60 de potencia.",
+    "El Teraorbe se gasta al usarlo y se recarga al curar a tu equipo en el Centro Pokémon.",
+    "Cada Pokémon tiene un teratipo (al principio, su primer tipo). Puedes cambiarlo en su ficha con 10 Teralitos, que se consiguen en las incursiones, en la Torre Batalla y en la tienda.",
+    "Cuidado: los Líderes de Gimnasio, la Liga y el As de la Torre teracristalizan a su último Pokémon.",
+  ],
   advP:[
     "Del 1 al 24 de diciembre se abre una casilla cada día (con la fecha de España). Solo puedes abrir la del día.",
     "Si un día no la abres, verás encima lo que te habría tocado. Del 25 al 31 de diciembre puedes recuperar todas las que te falten.",

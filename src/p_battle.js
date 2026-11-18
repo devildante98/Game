@@ -102,14 +102,14 @@ function beUse(E,i,a,rng,push,acted,faint){
   {const ty0=mv.typeless?"normal":axTy(me,mv),ta=axMB(me)?0:tm.ab;if(tg!==i&&!mv.fixed&&!mv.flv&&((ty0==="ground"&&ta===26)||(ty0==="water"&&ta===11)||(ty0==="electric"&&ta===10)||(ty0==="fire"&&ta===18))){let hl=0;if(ta!==26&&ta!==18&&tm.mh<tm.mx){const b=tm.mh;tm.mh=Math.min(tm.mx,tm.mh+Math.max(1,Math.round(tm.mx/4)));hl=tm.mh-b}if(ta===18)tm.ffire=1;push({k:"abil",s:tg,n:tm.p[0],ab:ta,imm:1,h:hl});return}}
   if(tg!==i&&axImm(E,i,tg,me,tm,mv,push,rng))return;
   let hits=1;if(mv.hits){const x=mv.hits[0],y=mv.hits[1];if(x===y)hits=x;else if(y===5){const r=rng();hits=r<.35?2:r<.7?3:r<.85?4:5}else hits=x+Math.floor(rng()*(y-x+1))}if(mv.hits&&me.ab===92)hits=mv.hits[1];else if(mv.hits&&me.it==="ldice"&&mv.hits[1]===5)hits=rng()<.5?4:5;
-  const ty=mv.typeless?"normal":axTy(me,mv),special=mv.fixed||mv.flv||mv.half||mv.pct,e=mv.typeless||special?1:axEff(E,me,tm,ty,effP(ty,tm.p)),stab=!mv.typeless&&(stabP(ty,me.p)||[168,236,121,225].includes(me.ab))?(me.ab===91?2:1.5):1,pb=me.ab===185&&hits===1&&!mv.hits&&!special,h0=tm.mh;if(pb)hits=2;
+  const ty=mv.typeless?"normal":axTy(me,mv),special=mv.fixed||mv.flv||mv.half||mv.pct,e=mv.typeless||special?1:axEff(E,me,tm,ty,effP(ty,tm.p)),stab=!mv.typeless&&(stabP(ty,me.p)||(me.p0&&stabP(ty,me.p0))||[168,236,121,225].includes(me.ab))?(me.ab===91?2:1.5)*(me.tera&&ty===me.tera&&me.p0&&stabP(ty,me.p0)?(me.ab===91?1.125:4/3):1):1,pb=me.ab===185&&hits===1&&!mv.hits&&!special,h0=tm.mh;if(pb)hits=2;
   if(!mv.typeless&&tg!==i&&(special?axEff(E,me,tm,ty,effP(ty,tm.p)):e)===0){push({k:"noaff",s:tg,n:tm.p[0]});return}
   let tot=0,nh=0,crit=0;
   for(let h=0;h<hits&&tm.mh>0;h++){
     let d;const cr=!special&&!axNoCrit(me,tm)&&rng()<(mv.crit?1/8:1/24)*(me.it==="scope"?2:1)*((me.it==="leek"&&/^(Farfetch|Sirfetch)/.test(me.p[0]))||(me.it==="lpunch"&&/^Chansey/.test(me.p[0]))?4:1)*(me.ab===105?2:1)*axCritK(me,tm);
     if(mv.fixed)d=mv.fixed;else if(mv.flv)d=me.l;else if(mv.half)d=Math.max(1,Math.floor(tm.mh/2));else if(mv.pct)d=Math.max(1,Math.floor(tm.mh*mv.pct/100));
     else{const phy=mv.cl!==2;let am=tm.ab===109&&!axMB(me)?1:STG(phy?v.st.atk:v.st.spa),dm=me.ab===109?1:STG(phy?ts.v.st.def:ts.v.st.spd);if(cr){am=Math.max(1,am);dm=Math.min(1,dm)}
-      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1)*bsSR(me.p))*bsDF(tm.p,phy)*mv.pw/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)*(typeof itDmg==="function"?itDmg(me,tm,mv,phy,e):1)))}
+      d=Math.max(1,Math.round(me.ma*(phy?(me.na||1):(me.nsa||1)*bsSR(me.p))*bsDF(tm.p,phy)*(me.tera&&ty===me.tera&&mv.pw<60&&!mv.hits&&!(mv.pr>0)?60:mv.pw)/45*e*stab*(.85+rng()*.15)*(cr?(me.ab===97?2.25:1.5):1)*am/dm*(ts.v.g&&me.ab!==151&&me.ab!==242?.5:1)*(me.it==="lorb"?1.3:1)*(!phy&&tm.it==="avest"?2/3:1)/((phy?tm.nd:tm.nsd)||1)*(me.sts==="brn"&&mv.cl===1&&me.ab!==62?.5:1)*abAtk(me,mv,ty)*abDef(tm,ty,me)*axDmg(E,i,tg,me,tm,mv,ty,e,acted)*(pb&&h===1?.25:1)*(typeof itDmg==="function"?itDmg(me,tm,mv,phy,e):1)))}
     if(cr)crit++;
     if(d>0&&axZero(E,tg,tm,mv,me,push))d=0;
     if(mv.id==="206"&&d>=tm.mh&&tm.mh>1)d=tm.mh-1;

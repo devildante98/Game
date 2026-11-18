@@ -1304,3 +1304,28 @@ body.calm #evpM .evpic{animation:none}
 @keyframes nyspark{0%{transform:scale(.2);opacity:0;box-shadow:0 0 0 0 currentColor}15%{opacity:1}100%{transform:scale(1);opacity:0;box-shadow:0 0 0 22px transparent}}
 .nycal{display:flex;gap:12px;align-items:center;padding:12px 16px;margin-bottom:12px;border-radius:16px;color:#fff;background:linear-gradient(135deg,#3a2a8a,#c8286c)}
 .nycal span{font-size:2rem}.nycal b{display:block}.nycal small{opacity:.92;line-height:1.4}
+/* Teracristalización (p_tera.js) */
+.terabtn{background:linear-gradient(135deg,#bff6ff,var(--tc,#7ad0ff) 55%,#b48cff)!important;color:#141a3a!important;font-weight:900!important;border:2px solid #fff!important;box-shadow:0 0 12px var(--tc,#7ad0ff),0 3px 0 #2a2f6a!important}
+.terabtn.on{animation:terapulse 1s ease-in-out infinite}
+@keyframes terapulse{50%{box-shadow:0 0 22px 6px var(--tc,#7ad0ff),0 3px 0 #2a2f6a}}
+.tera{position:relative}
+.tera img,.tera svg{filter:drop-shadow(0 0 6px var(--tc,#7ad0ff)) drop-shadow(0 0 2px #fff) saturate(1.25) brightness(1.06)}
+.tera::after{content:"";position:absolute;inset:8% 14%;pointer-events:none;border-radius:40%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.55) 45%,transparent 60%);background-size:250% 100%;mix-blend-mode:screen;animation:terashine 2.6s linear infinite;opacity:.8}
+@keyframes terashine{from{background-position:120% 0}to{background-position:-120% 0}}
+.tcrown{position:absolute;left:50%;top:-6px;transform:translateX(-50%);z-index:3;font-size:1.25rem;line-height:1;padding:6px 9px 8px;clip-path:polygon(50% 0,100% 30%,82% 100%,18% 100%,0 30%);background:linear-gradient(160deg,#fff,var(--tc,#7ad0ff) 60%,#5a46c8);box-shadow:0 0 10px var(--tc,#7ad0ff);pointer-events:none;animation:tcfloat 2s ease-in-out infinite}
+@keyframes tcfloat{50%{transform:translate(-50%,-4px)}}
+.terafx{position:absolute;inset:-10%;z-index:4;pointer-events:none;display:grid;place-items:center}
+.terafx b{font-size:2.6rem;animation:terapop 1.5s ease-out forwards;filter:drop-shadow(0 0 10px var(--tc))}
+.terafx i{position:absolute;left:50%;top:50%;width:16px;height:28px;margin:-14px -8px;clip-path:polygon(50% 0,100% 40%,50% 100%,0 40%);background:linear-gradient(#fff,var(--tc));opacity:0;animation:terashard 1.4s ease-out forwards}
+.terafx i:nth-child(1){--a:0deg}.terafx i:nth-child(2){--a:45deg}.terafx i:nth-child(3){--a:90deg}.terafx i:nth-child(4){--a:135deg}.terafx i:nth-child(5){--a:180deg}.terafx i:nth-child(6){--a:225deg}.terafx i:nth-child(7){--a:270deg}.terafx i:nth-child(8){--a:315deg}
+@keyframes terashard{0%{transform:rotate(var(--a)) translateY(0) scale(.3);opacity:1}100%{transform:rotate(var(--a)) translateY(-90px) scale(1);opacity:0}}
+@keyframes terapop{0%{transform:scale(.2);opacity:0}30%{transform:scale(1.5);opacity:1}100%{transform:scale(1);opacity:0}}
+.pkvtera{margin:8px 0;padding:8px 10px;border-radius:14px;background:rgba(122,208,255,.12)}
+.pkvtera .tftop{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.tfchip{padding:4px 12px;border-radius:99px;font-weight:900;color:#141a3a;background:linear-gradient(135deg,#fff,var(--tc,#7ad0ff));box-shadow:0 0 8px var(--tc,#7ad0ff)}
+.tfgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:6px}
+.tfgrid button{padding:5px 4px;font-size:.78rem;border-radius:10px;background:var(--tc);color:#141a3a;font-weight:800;border:0}
+.tfgrid button:disabled{opacity:.35}
+.torbs{display:flex;gap:10px;align-items:center;padding:8px 12px;margin:6px 0 10px;border-radius:14px;background:rgba(122,208,255,.12)}
+.torbi{font-size:1.8rem;filter:grayscale(1) opacity(.5)}.torbi.on{filter:drop-shadow(0 0 8px #7ad0ff)}
+.torbs b{display:block}

@@ -5,7 +5,7 @@ const typeEff=(a,d)=>{const r=TCH[a];return r&&r[d]!=null?r[d]:1};
 const adv=(a,d)=>typeEff(a,d)>1;
 // segundo tipo de cada Pokémon (datos oficiales de PokeAPI); T1 corrige el tipo principal de algunas formas
 const TT=__T2__;Object.keys(TT.T1).forEach(n=>{const p=P.find(x=>x[0]===n);if(p)p[1]=TT.T1[n]});const T2=TT.T2;
-const ty2=p=>(p&&T2[p[0]])||null,tys=p=>ty2(p)?[p[1],ty2(p)]:[p[1]];
+const ty2=p=>(p&&!p.tera&&T2[p[0]])||null,/* (teracristalizado: un solo tipo, su teratipo) */tys=p=>ty2(p)?[p[1],ty2(p)]:[p[1]];
 const effP=(a,p)=>tys(p).reduce((m,t)=>m*typeEff(a,t),1),stabP=(t,p)=>tys(p).includes(t);
 const tyNm=p=>tys(p).map(t=>TIPO[t]).join(" / "),tyTxt=p=>tys(p).map(t=>EM[t]+" "+TIPO[t]).join(" · ");
 const WW={C:1,R:2,E:3,L:4},HPM={C:90,R:120,E:150,L:180},ATK={C:15,R:20,E:25,L:30};

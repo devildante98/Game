@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.12.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.12.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795011573">
+<meta name="game-build" content="1795017438">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3094,7 +3094,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.12.1</small>
+    <small class="pcver">Versión 7.12.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7835,8 +7835,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.12.1";
+const GAME_VER="7.12.2";
 const NEWS=[
+{v:"2026-11-18-7.12.2",ver:"7.12.2",at:"2026-11-18T16:57",t:"🧍 Poses del entrenador más naturales",l:["Las manos del entrenador ya no están siempre igual: cierra el puño en «Puño en alto», «Puño al frente», «¡Listo para combatir!», «Sacar músculo» y «¡Victoria!», hace la «V» con dos dedos en «Victoria con la mano» y señala con el índice en «Señalar»","«Mirando a lo lejos»: la mano abierta y plana sobre la frente, encima de los ojos, como tapándose del sol","«Mano en la nuca»: el codo hacia fuera y la mano apoyada detrás de la cabeza"]},
 {v:"2026-11-18-7.12.1",ver:"7.12.1",at:"2026-11-18T15:19",t:"📰 Botón de Novedades en la pantalla principal",l:["Debajo de la Mochila hay un nuevo botón «Novedades» para ver todas las actualizaciones en cualquier momento. Si hay alguna que no has leído, lleva un aviso rojo"]},
 {v:"2026-11-18-7.12",ver:"7.12",at:"2026-11-18T14:46",t:"✨ Amuleto Iris en Exploración",l:["Completa la Pokédex de Exploración y la Profesora Vega te dará el Amuleto Iris: desde entonces, los Pokémon variocolor aparecen tres veces más a menudo en la hierba alta, al hacer surf y al pescar","La Pokédex de Exploración cuenta ahora las especies que pueden aparecer en este modo (comunes, raras y épicas: 992). Los legendarios y las formas especiales no hacen falta. Cuentan los que has capturado alguna vez, aunque ya no los tengas","En la Pokédex de Exploración (menú → Pokédex) ves cuántas llevas, una barra de progreso y si ya tienes el Amuleto"]},
 {v:"2026-11-18-7.11.3",ver:"7.11.3",at:"2026-11-18T14:41",t:"☁️ Nubes más realistas",l:["Las nubes del pueblo ahora son cúmulos de verdad: base plana y algo más oscura, cuerpo ancho y cimas abultadas e irregulares, cada una diferente (antes parecían medias lunas)"]},
@@ -8232,7 +8233,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795011573";
+const GAME_B="1795017438";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -19879,27 +19880,28 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
 // hx/hz: cabeza (asentir / inclinar) · lift: bote · roll: balanceo del cuerpo · ball: Poké Ball en la mano
 const AV3POSE=[["i","🧍","Normal"],["hola","👋","Saludar"],["vict","🙌","¡Victoria!"],["lanz","🔴","Lanzar Poké Ball"],["sena","👉","Señalar"],["baile","💃","Bailar"],["pens","🤔","Pensativo"]];
 // poses fijas (solo respiran un poco): [clave, icono, nombre, brazo izq., brazo dcho., cabeza asentir, cabeza inclinar, balanceo]
-// [rx: hombro hacia delante (negativo = arriba), rz: separación (con el brazo abajo, positivo = hacia fuera), codo, giro del brazo]
+// [rx: hombro hacia delante (negativo = arriba), rz: separación (con el brazo abajo, positivo = hacia fuera), codo, giro del brazo, giro del antebrazo, muñeca hacia la palma, muñeca de lado]
+// 9.º valor: forma de las manos {L,R}: fist (puño), open (abierta), point (señalar), v (dos dedos)
 const JA=[.1,.8,-1.5,-1.57];// mano en la cintura
-const AV3FIJA=[["f_puno","✊","Puño en alto",null,[-2.35,-.25,-1.5],-.06,-.04,-.02],["f_jarra","💪","Manos en la cintura",JA,JA,-.04,0,0],
-  ["f_cruz","🙅","Brazos cruzados",[-.55,.05,-1.5,-1.5],[-.63,.05,-1.6,-1.5],-.03,.05,0],["f_frente","🫡","Mirando a lo lejos",JA,[-2.05,.18,-2.35],-.12,-.05,0],
-  ["f_pecho","🤚","Mano al pecho",null,[-.45,.05,-1.75,-1.5],.04,.06,0],["f_lista","🥊","¡Listo para combatir!",[-1.15,.2,-1.75],[-1.25,.18,-1.7],.04,0,-.03],
-  ["f_nuca","😎","Mano en la nuca",JA,[-2.7,-.15,-2.45],-.05,-.08,.03],["f_abre","🤗","Brazos abiertos",[0,1.0,-.3,1.57],[0,1.0,-.3,1.57],-.06,0,0],
-  ["f_atras","🧘","Manos a la espalda",[.45,.15,-1.3,-1.57],[.45,.15,-1.3,-1.57],.03,0,0],["f_paz","✌️","Victoria con la mano",JA,[-1.75,.3,-2.2],.03,-.12,-.03],
+const AV3FIJA=[["f_puno","✊","Puño en alto",null,[-2.67,-.602,-.683,-1.308,.871],-.06,-.04,-.02,{R:"fist"}],["f_jarra","💪","Manos en la cintura",JA,JA,-.04,0,0],
+  ["f_cruz","🙅","Brazos cruzados",[-.55,.05,-1.5,-1.5],[-.63,.05,-1.6,-1.5],-.03,.05,0],["f_frente","🫡","Mirando a lo lejos",JA,[-2.143,-.346,-.856,-1.305,-.081,.808,-.403],-.12,-.05,0,{R:"open"}],
+  ["f_pecho","🤚","Mano al pecho",null,[-.45,.05,-1.75,-1.5],.04,.06,0],["f_lista","🥊","¡Listo para combatir!",[-1.15,.2,-1.75],[-1.25,.18,-1.7],.04,0,-.03,{L:"fist",R:"fist"}],
+  ["f_nuca","😎","Mano en la nuca",JA,[-3.334,-.694,-1.881,-1.356,.272],-.05,-.08,.03,{R:"open"}],["f_abre","🤗","Brazos abiertos",[0,1.0,-.3,1.57],[0,1.0,-.3,1.57],-.06,0,0],
+  ["f_atras","🧘","Manos a la espalda",[.45,.15,-1.3,-1.57],[.45,.15,-1.3,-1.57],.03,0,0],["f_paz","✌️","Victoria con la mano",JA,[-.917,1.362,-1.64,1.274,-.953],.03,-.12,-.03,{R:"v"}],
   ["f_hombros","🤷","Encogerse de hombros",[-.2,-.1,-1.5,1.57],[-.2,-.1,-1.5,1.57],.02,.12,0],["f_mitad","🙋","Una mano en la cintura",JA,null,0,.06,.03],
-  ["f_golpe","👊","Puño al frente",JA,[-1.35,-.05,-.8],-.03,0,-.04],["f_musc","💪","Sacar músculo",null,[0,1.45,-1.6,1.57],-.04,-.06,.02]];
+  ["f_golpe","👊","Puño al frente",JA,[-1.404,-.145,-.13,-1.763,.004],-.03,0,-.04,{R:"fist"}],["f_musc","💪","Sacar músculo",null,[-.685,1.373,-1.888,1.035,.749],-.04,-.06,.02,{R:"fist"}]];
 AV3FIJA.forEach(x=>AV3POSE.push([x[0],x[1],x[2],1]));
 const av3PoseOk=p=>AV3POSE.some(x=>x[0]===p);
 function av3Pose(p,t){const s=Math.sin,idle=k=>[s(t*1.6+k)*.03,-.03,0];
   if(typeof p==="string"&&p.startsWith("f_")){const F=AV3FIJA.find(x=>x[0]===p);if(F){const br=s(t*1.6)*.015;
-    return{L:F[3]?[F[3][0]+br,F[3][1],F[3][2],F[3][3]||0]:idle(0),R:F[4]?[F[4][0]+br,F[4][1],F[4][2],F[4][3]||0]:idle(1),hx:F[5]+s(t*.9)*.01,hz:F[6],lift:0,roll:F[7]}}}
-  if(p==="hola")return{L:idle(0),R:[-2.65,-.55+s(t*7)*.3,-.35+s(t*7)*.25],hx:s(t*1.8)*.03,hz:-.07,lift:0,roll:-.02};
-  if(p==="vict"){const b=Math.abs(s(t*3.4));return{L:[-2.75,-.62-b*.12,-.1-b*.2],R:[-2.75,-.62-b*.12,-.1-b*.2],hx:-.1,hz:0,lift:b*.06,roll:0}}
+    return{L:F[3]?[F[3][0]+br].concat(F[3].slice(1)):idle(0),R:F[4]?[F[4][0]+br].concat(F[4].slice(1)):idle(1),hx:F[5]+s(t*.9)*.01,hz:F[6],lift:0,roll:F[7],hL:F[8]&&F[8].L,hR:F[8]&&F[8].R}}}
+  if(p==="hola")return{L:idle(0),R:[-2.65,-.55+s(t*7)*.3,-.35+s(t*7)*.25],hx:s(t*1.8)*.03,hz:-.07,lift:0,roll:-.02,hR:"open"};
+  if(p==="vict"){const b=Math.abs(s(t*3.4));return{L:[-2.75,-.62-b*.12,-.1-b*.2],R:[-2.75,-.62-b*.12,-.1-b*.2],hx:-.1,hz:0,lift:b*.06,roll:0,hL:"fist",hR:"fist"}}
   if(p==="lanz"){// ciclo de 2,6 s: coger impulso con la Poké Ball, brazo arriba, lanzar, seguir el gesto y volver
     const K=[[0,[.05,-.06,-.1],1],[.5,[1.0,-.2,-1.6],1],[1.0,[-2.6,-.15,-.3],1],[1.15,[-1.5,-.1,-.15],0],[1.5,[-.7,-.05,-.4],0],[2.1,[.05,-.06,-.1],0],[2.6,[.05,-.06,-.1],1]],c=t%2.6;
     let i=0;while(i<K.length-2&&c>=K[i+1][0])i++;const a=K[i],b=K[i+1],f=Math.min(1,(c-a[0])/(b[0]-a[0])),e=f*f*(3-2*f),R=a[1].map((v,j)=>v+(b[1][j]-v)*e);
-    return{L:idle(0),R:R,hx:c>.9&&c<1.4?-.06:0,hz:0,lift:0,roll:c>.9&&c<1.5?-.04:0,ball:!!a[2]&&c<1.1}}
-  if(p==="sena")return{L:idle(0),R:[-1.5+s(t*2.2)*.05,-.4,0],hx:-.04,hz:-.05,lift:0,roll:-.03};
+    return{L:idle(0),R:R,hx:c>.9&&c<1.4?-.06:0,hz:0,lift:0,roll:c>.9&&c<1.5?-.04:0,ball:!!a[2]&&c<1.1,hR:a[2]&&c<1.1?"grip":c<1.5?"open":null}}
+  if(p==="sena")return{L:idle(0),R:[-1.5+s(t*2.2)*.05,-.4,0],hx:-.04,hz:-.05,lift:0,roll:-.03,hR:"point"};
   if(p==="baile"){const a=s(t*4.2);return{L:[-1.5+a*1.1,-.5,-.6],R:[-1.5-a*1.1,-.5,-.6],hx:.03*a,hz:a*.09,lift:Math.abs(s(t*8.4))*.04,roll:a*.06}}
   if(p==="pens")return{L:[-.6,.35,-1.3],R:[-1.2,.18,-2.1],hx:.1+s(t*1.1)*.03,hz:.08,lift:0,roll:.02};
   return null}
@@ -20225,6 +20227,39 @@ function av3mNeed(L,lo){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0)].con
 function av3mReady(L,lo){if(typeof fetch!=="function")return false;let ok=true;for(const n of av3mNeed(L,lo))if(!av3mGet(n))ok=false;return ok}
 // ¿están ya todas las piezas descargadas? (sin pedir ninguna)
 const av3mHas=(L,lo)=>av3mNeed(L,lo).every(n=>AV3M.st[n]===2);
+// ---------- formas de la mano: puño, mano abierta, señalar con el índice y «V» ----------
+// Los dedos se doblan sobre el nudillo hacia la palma (como un dedo de verdad) y el pulgar gira sobre la muñeca.
+// Se calcula una vez por pieza y forma, y se guarda.
+const AV3HF={fist:[1.35,1.35,1.35,1.35,1.3],open:[-1,-1,-1,-1,-1],point:[-1,1.35,1.35,1.35,1.3],v:[-1,-1,1.35,1.35,1.3],grip:[.6,.6,.6,.6,.6]};
+function av3mHand(p,mode,girl){const key="_h"+mode+(girl?"f":"m");if(p[key])return p[key];const F=AV3HF[mode];if(!F)return p;
+  const sx=/R$/.test(p.name)?-1:1,hk=girl?.9:1,dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],nz=v=>{const l=Math.hypot(v[0],v[1],v[2])||1;return[v[0]/l,v[1]/l,v[2]/l]},
+    cr=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],G=v=>[v[0]*sx,v[2],-v[1]];// de Blender (z arriba) al visor
+  const WRb=[.288,-.022,.815],ELb=[.258,.012,1.045];let hd=nz([WRb[0]-ELb[0],WRb[1]-ELb[1],WRb[2]-ELb[2]]),pn=nz([-1+hd[0]*hd[0],hd[0]*hd[1],hd[0]*hd[2]]),wd=nz(cr(hd,pn));if(wd[1]>0)wd=wd.map(a=>-a);
+  const WR=G(WRb);hd=G(hd);pn=G(pn);wd=G(wd);
+  // giro de un punto/vector alrededor de un eje (fórmula de Rodrigues)
+  const rotV=(v,a,t)=>{const c=Math.cos(t),s=Math.sin(t),k=cr(a,v),d=dot(a,v)*(1-c);return[v[0]*c+k[0]*s+a[0]*d,v[1]*c+k[1]*s+a[1]*d,v[2]*c+k[2]*s+a[2]*d]};
+  const P=p.P,N=p.N,P2=new Float32Array(P.length),N2=new Float32Array(N.length),thumb=/^thumb/.test(p.name);
+  let k=0;if(!thumb){let w=0;for(let i=0;i<P.length;i+=3)w+=dot([P[i]-WR[0],P[i+1]-WR[1],P[i+2]-WR[2]],wd);w/=P.length/3;k=w>.022*hk?0:w>0?1:w>-.022*hk?2:3}
+  const amt=F[thumb?4:k];
+  if(thumb){// pulgar: en el puño se cruza por delante de los dedos; abierto, se separa
+    const tb=[WR[0]+hd[0]*.022*hk+wd[0]*.034*hk,WR[1]+hd[1]*.022*hk+wd[1]*.034*hk,WR[2]+hd[2]*.022*hk+wd[2]*.034*hk],a1=amt>0?1.05*amt:.45*amt,a2=amt>0?-.75*amt:0;
+    for(let i=0;i<P.length;i+=3){let v=[P[i]-tb[0],P[i+1]-tb[1],P[i+2]-tb[2]],n=[N[i],N[i+1],N[i+2]];v=rotV(rotV(v,hd,a1*sx),pn,a2*sx);n=rotV(rotV(n,hd,a1*sx),pn,a2*sx);
+      P2[i]=tb[0]+v[0];P2[i+1]=tb[1]+v[1];P2[i+2]=tb[2]+v[2];N2[i]=n[0];N2[i+1]=n[1];N2[i+2]=n[2]}}
+  else{// dedos: curvatura progresiva desde el nudillo (amt 1 = cerrado del todo; -1 = estirado)
+    const off=[.034,.0115,-.0115,-.033][k]*hk,K=[WR[0]+hd[0]*(.074-Math.abs(off)*.12)*hk,WR[1]+hd[1]*(.074-Math.abs(off)*.12)*hk,WR[2]+hd[2]*(.074-Math.abs(off)*.12)*hk],kc=amt>0?34*amt:9.5*amt||.0001,R=1/kc,spr=amt<0?off*-3.2*amt:0;
+    for(let i=0;i<P.length;i+=3){const d=[P[i]-K[0],P[i+1]-K[1],P[i+2]-K[2]],s=dot(d,hd),h=dot(d,pn),w=dot(d,wd),nh=dot([N[i],N[i+1],N[i+2]],hd),np=dot([N[i],N[i+1],N[i+2]],pn),nw=dot([N[i],N[i+1],N[i+2]],wd);
+      let q,n;if(s<=0){q=[d[0],d[1],d[2]];n=[N[i],N[i+1],N[i+2]]}
+      else{const t=kc*s,c=Math.cos(t),sn=Math.sin(t),a=(R-h)*sn,b=R-(R-h)*c;q=[wd[0]*w+hd[0]*a+pn[0]*b,wd[1]*w+hd[1]*a+pn[1]*b,wd[2]*w+hd[2]*a+pn[2]*b];
+        const A=nh*c-np*sn,B2=nh*sn+np*c;n=[wd[0]*nw+hd[0]*A+pn[0]*B2,wd[1]*nw+hd[1]*A+pn[1]*B2,wd[2]*nw+hd[2]*A+pn[2]*B2]}
+      if(spr){q=rotV(q,pn,spr*-sx);n=rotV(n,pn,spr*-sx)}
+      P2[i]=K[0]+q[0];P2[i+1]=K[1]+q[1];P2[i+2]=K[2]+q[2];N2[i]=n[0];N2[i+1]=n[1];N2[i+2]=n[2]}}
+  return p[key]={P:P2,N:N2}}
+// muñeca: dobla la mano (palma y dedos) hacia la palma o hacia atrás, y la ladea; ejes del lado derecho (el izquierdo, en espejo)
+const AV3WR=(()=>{const nz=v=>{const l=Math.hypot(v[0],v[1],v[2])||1;return[v[0]/l,v[1]/l,v[2]/l]},G=v=>[-v[0],v[2],-v[1]];let hd=nz([.03,-.034,-.23]),pn=nz([-1+hd[0]*hd[0],hd[0]*hd[1],hd[0]*hd[2]]);hd=G(hd);pn=G(pn);
+  const wd=nz([hd[1]*pn[2]-hd[2]*pn[1],hd[2]*pn[0]-hd[0]*pn[2],hd[0]*pn[1]-hd[1]*pn[0]]);return{W:[-.288,.815,.022],wd,pn}})();
+const av3mAx=(a,t)=>{const c=Math.cos(t),s=Math.sin(t),C=1-c,x=a[0],y=a[1],z=a[2];return new Float32Array([c+x*x*C,y*x*C+z*s,z*x*C-y*s,0,x*y*C-z*s,c+y*y*C,z*y*C+x*s,0,x*z*C+y*s,y*z*C-x*s,c+z*z*C,0,0,0,0,1])};
+function av3mWrist(B,left,flex,dev){const A=AV3WR,m=v=>left?[-v[0],v[1],v[2]]:v,k=left?-1:1,W=m(A.W);
+  return m4T(m4Mul(m4Mul(m4T(B,W[0],W[1],W[2]),av3mAx(m(A.wd),k*(flex||0))),av3mAx(m(A.pn),k*(dev||0))),-W[0],-W[1],-W[2])}
 // ---------- el modelo ----------
 function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][0]),W=[1,1,1],K=[.1,.09,.12],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k),I=m4I();
   const sk=P("skin",L.sk),hc=P("hair",L.hc),ec=P("eye",L.ec),tc=P("cl",L.tc),ac=P("cl",L.ac),bc=P("cl",L.bc),shc=P("cl",L.sh),hac=P("cl",L.hac),bpc=P("cl",L.bpc),nkc=P("cl",L.nkc),glc=P("cl",L.glc),pcc=P("cl",L.pc),sckc=P("cl",L.sckc),wrc=P("cl",L.wrc);
@@ -20238,7 +20273,10 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
   const PZ=typeof av3Pose==="function"?av3Pose(pose,t):null;
   // (el 4.º valor gira el brazo sobre sí mismo: así el codo se dobla hacia el cuerpo, p. ej. mano en la cintura)
   const rotT=(B,p,rx,rz,ry)=>m4T(m4RY(m4RX(m4RZ(m4T(B,p[0],p[1],p[2]),rz||0),rx||0),ry||0),-p[0],-p[1],-p[2]);
-  if(PZ){MS.armL1=rotT(G,J("shL"),PZ.L[0],PZ.L[1],PZ.L[3]);MS.armL2=rot(MS.armL1,J("elL"),PZ.L[2],0);MS.armR1=rotT(G,mir(J("shL")),PZ.R[0],-PZ.R[1],-(PZ.R[3]||0));MS.armR2=rot(MS.armR1,mir(J("elL")),PZ.R[2],0)}
+  // (el 5.º gira el antebrazo sobre sí mismo, para orientar la palma: hacia abajo, hacia la cabeza…)
+  const elb=(B,p,a,tw)=>tw?m4T(m4RY(m4RX(m4T(B,p[0],p[1],p[2]),a),tw),-p[0],-p[1],-p[2]):rot(B,p,a,0);
+  if(PZ){MS.armL1=rotT(G,J("shL"),PZ.L[0],PZ.L[1],PZ.L[3]);MS.armL2=elb(MS.armL1,J("elL"),PZ.L[2],PZ.L[4]||0);MS.armR1=rotT(G,mir(J("shL")),PZ.R[0],-PZ.R[1],-(PZ.R[3]||0));MS.armR2=elb(MS.armR1,mir(J("elL")),PZ.R[2],-(PZ.R[4]||0));
+    if(PZ.L[5]||PZ.L[6])MS.handL=av3mWrist(MS.armL2,true,PZ.L[5],PZ.L[6]);if(PZ.R[5]||PZ.R[6])MS.handR=av3mWrist(MS.armR2,false,PZ.R[5],PZ.R[6])}
   else{MS.armL1=rot(G,J("shL"),sway,pose==="w"?.35:0);MS.armL2=rot(MS.armL1,J("elL"),pose==="w"?-.5:0,0);
   MS.armR1=rot(G,mir(J("shL")),AP?AP[0]:-sway,AP?-AP[2]:0);MS.armR2=rot(MS.armR1,mir(J("elL")),AP?AP[1]:0,0)}
   const hcy=pv.head[2],hr=pv.hr,MH=PZ?rot(I,[0,1.42,0],PZ.hx+Math.sin(t*.9)*.012,PZ.hz):rot(I,[0,1.42,0],Math.sin(t*.9)*.012+(pose==="l"?.34:0),0);
@@ -20251,7 +20289,9 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
       if(isBase&&p.tag){if(p.tag==="torso"&&!showTorso)continue;if(hide[p.tag])continue;if(p.tag==="foot"&&!ms.foot)continue;
         if(p.tag==="palm"&&[1,2,4].includes(L.glv))c=glc;else if(p.tag==="finger"&&[2,4].includes(L.glv))c=glc;else if(p.tag==="farm"&&L.glv===4)c=glc;else if(tights&&(p.tag==="thigh"||p.tag==="shin"||p.tag==="foot"))c=tights}
       if(stripes&&p.slot==="top"&&(p.seg==="body"||p.name.indexOf("sleeve")===0))cf=y=>Math.floor((y-.9)/.055)%2?sc2:tc;
-      E.mesh(p.seg==="head"?MH:MS[p.seg]||G,p.P,p.N,p.I,c,cf)}};
+      let PP=p.P,NN=p.N;if(p.tag==="finger"&&PZ){const hm=p.seg==="armL2"?PZ.hL:p.seg==="armR2"?PZ.hR:null;if(hm){const q=av3mHand(p,hm,girl);PP=q.P;NN=q.N}}
+      const hM=(p.tag==="finger"||p.tag==="palm")&&(p.seg==="armL2"?MS.handL:p.seg==="armR2"?MS.handR:null);
+      E.mesh(p.seg==="head"?MH:hM||MS[p.seg]||G,PP,NN,p.I,c,cf)}};
   const fsn=L.fs===1||L.fs===2?L.fs:0;put(PC("head"+fsn));put(PC(girl?"base_f":"base_m"),true);put(TP);if(!dress)put(PC("bot"+L.bot));put(PC("shoe"+L.shs));
   // ----- cara -----
   const fg=meta.faces[fsn],zAt=(x,y)=>{const gx=(x-fg.x0)/fg.d,gy=(y-fg.y0)/fg.d,ix=Math.max(0,Math.min(fg.g[0].length-2,Math.floor(gx))),iy=Math.max(0,Math.min(fg.g.length-2,Math.floor(gy))),fx=Math.max(0,Math.min(1,gx-ix)),fy=Math.max(0,Math.min(1,gy-iy)),v=(a,b)=>fg.g[b][a]==null?.02:fg.g[b][a];
@@ -21374,7 +21414,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.12.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.12.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

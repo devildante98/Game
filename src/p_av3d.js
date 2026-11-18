@@ -62,27 +62,28 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
 // hx/hz: cabeza (asentir / inclinar) · lift: bote · roll: balanceo del cuerpo · ball: Poké Ball en la mano
 const AV3POSE=[["i","🧍","Normal"],["hola","👋","Saludar"],["vict","🙌","¡Victoria!"],["lanz","🔴","Lanzar Poké Ball"],["sena","👉","Señalar"],["baile","💃","Bailar"],["pens","🤔","Pensativo"]];
 // poses fijas (solo respiran un poco): [clave, icono, nombre, brazo izq., brazo dcho., cabeza asentir, cabeza inclinar, balanceo]
-// [rx: hombro hacia delante (negativo = arriba), rz: separación (con el brazo abajo, positivo = hacia fuera), codo, giro del brazo]
+// [rx: hombro hacia delante (negativo = arriba), rz: separación (con el brazo abajo, positivo = hacia fuera), codo, giro del brazo, giro del antebrazo, muñeca hacia la palma, muñeca de lado]
+// 9.º valor: forma de las manos {L,R}: fist (puño), open (abierta), point (señalar), v (dos dedos)
 const JA=[.1,.8,-1.5,-1.57];// mano en la cintura
-const AV3FIJA=[["f_puno","✊","Puño en alto",null,[-2.35,-.25,-1.5],-.06,-.04,-.02],["f_jarra","💪","Manos en la cintura",JA,JA,-.04,0,0],
-  ["f_cruz","🙅","Brazos cruzados",[-.55,.05,-1.5,-1.5],[-.63,.05,-1.6,-1.5],-.03,.05,0],["f_frente","🫡","Mirando a lo lejos",JA,[-2.05,.18,-2.35],-.12,-.05,0],
-  ["f_pecho","🤚","Mano al pecho",null,[-.45,.05,-1.75,-1.5],.04,.06,0],["f_lista","🥊","¡Listo para combatir!",[-1.15,.2,-1.75],[-1.25,.18,-1.7],.04,0,-.03],
-  ["f_nuca","😎","Mano en la nuca",JA,[-2.7,-.15,-2.45],-.05,-.08,.03],["f_abre","🤗","Brazos abiertos",[0,1.0,-.3,1.57],[0,1.0,-.3,1.57],-.06,0,0],
-  ["f_atras","🧘","Manos a la espalda",[.45,.15,-1.3,-1.57],[.45,.15,-1.3,-1.57],.03,0,0],["f_paz","✌️","Victoria con la mano",JA,[-1.75,.3,-2.2],.03,-.12,-.03],
+const AV3FIJA=[["f_puno","✊","Puño en alto",null,[-2.67,-.602,-.683,-1.308,.871],-.06,-.04,-.02,{R:"fist"}],["f_jarra","💪","Manos en la cintura",JA,JA,-.04,0,0],
+  ["f_cruz","🙅","Brazos cruzados",[-.55,.05,-1.5,-1.5],[-.63,.05,-1.6,-1.5],-.03,.05,0],["f_frente","🫡","Mirando a lo lejos",JA,[-2.143,-.346,-.856,-1.305,-.081,.808,-.403],-.12,-.05,0,{R:"open"}],
+  ["f_pecho","🤚","Mano al pecho",null,[-.45,.05,-1.75,-1.5],.04,.06,0],["f_lista","🥊","¡Listo para combatir!",[-1.15,.2,-1.75],[-1.25,.18,-1.7],.04,0,-.03,{L:"fist",R:"fist"}],
+  ["f_nuca","😎","Mano en la nuca",JA,[-3.334,-.694,-1.881,-1.356,.272],-.05,-.08,.03,{R:"open"}],["f_abre","🤗","Brazos abiertos",[0,1.0,-.3,1.57],[0,1.0,-.3,1.57],-.06,0,0],
+  ["f_atras","🧘","Manos a la espalda",[.45,.15,-1.3,-1.57],[.45,.15,-1.3,-1.57],.03,0,0],["f_paz","✌️","Victoria con la mano",JA,[-.917,1.362,-1.64,1.274,-.953],.03,-.12,-.03,{R:"v"}],
   ["f_hombros","🤷","Encogerse de hombros",[-.2,-.1,-1.5,1.57],[-.2,-.1,-1.5,1.57],.02,.12,0],["f_mitad","🙋","Una mano en la cintura",JA,null,0,.06,.03],
-  ["f_golpe","👊","Puño al frente",JA,[-1.35,-.05,-.8],-.03,0,-.04],["f_musc","💪","Sacar músculo",null,[0,1.45,-1.6,1.57],-.04,-.06,.02]];
+  ["f_golpe","👊","Puño al frente",JA,[-1.404,-.145,-.13,-1.763,.004],-.03,0,-.04,{R:"fist"}],["f_musc","💪","Sacar músculo",null,[-.685,1.373,-1.888,1.035,.749],-.04,-.06,.02,{R:"fist"}]];
 AV3FIJA.forEach(x=>AV3POSE.push([x[0],x[1],x[2],1]));
 const av3PoseOk=p=>AV3POSE.some(x=>x[0]===p);
 function av3Pose(p,t){const s=Math.sin,idle=k=>[s(t*1.6+k)*.03,-.03,0];
   if(typeof p==="string"&&p.startsWith("f_")){const F=AV3FIJA.find(x=>x[0]===p);if(F){const br=s(t*1.6)*.015;
-    return{L:F[3]?[F[3][0]+br,F[3][1],F[3][2],F[3][3]||0]:idle(0),R:F[4]?[F[4][0]+br,F[4][1],F[4][2],F[4][3]||0]:idle(1),hx:F[5]+s(t*.9)*.01,hz:F[6],lift:0,roll:F[7]}}}
-  if(p==="hola")return{L:idle(0),R:[-2.65,-.55+s(t*7)*.3,-.35+s(t*7)*.25],hx:s(t*1.8)*.03,hz:-.07,lift:0,roll:-.02};
-  if(p==="vict"){const b=Math.abs(s(t*3.4));return{L:[-2.75,-.62-b*.12,-.1-b*.2],R:[-2.75,-.62-b*.12,-.1-b*.2],hx:-.1,hz:0,lift:b*.06,roll:0}}
+    return{L:F[3]?[F[3][0]+br].concat(F[3].slice(1)):idle(0),R:F[4]?[F[4][0]+br].concat(F[4].slice(1)):idle(1),hx:F[5]+s(t*.9)*.01,hz:F[6],lift:0,roll:F[7],hL:F[8]&&F[8].L,hR:F[8]&&F[8].R}}}
+  if(p==="hola")return{L:idle(0),R:[-2.65,-.55+s(t*7)*.3,-.35+s(t*7)*.25],hx:s(t*1.8)*.03,hz:-.07,lift:0,roll:-.02,hR:"open"};
+  if(p==="vict"){const b=Math.abs(s(t*3.4));return{L:[-2.75,-.62-b*.12,-.1-b*.2],R:[-2.75,-.62-b*.12,-.1-b*.2],hx:-.1,hz:0,lift:b*.06,roll:0,hL:"fist",hR:"fist"}}
   if(p==="lanz"){// ciclo de 2,6 s: coger impulso con la Poké Ball, brazo arriba, lanzar, seguir el gesto y volver
     const K=[[0,[.05,-.06,-.1],1],[.5,[1.0,-.2,-1.6],1],[1.0,[-2.6,-.15,-.3],1],[1.15,[-1.5,-.1,-.15],0],[1.5,[-.7,-.05,-.4],0],[2.1,[.05,-.06,-.1],0],[2.6,[.05,-.06,-.1],1]],c=t%2.6;
     let i=0;while(i<K.length-2&&c>=K[i+1][0])i++;const a=K[i],b=K[i+1],f=Math.min(1,(c-a[0])/(b[0]-a[0])),e=f*f*(3-2*f),R=a[1].map((v,j)=>v+(b[1][j]-v)*e);
-    return{L:idle(0),R:R,hx:c>.9&&c<1.4?-.06:0,hz:0,lift:0,roll:c>.9&&c<1.5?-.04:0,ball:!!a[2]&&c<1.1}}
-  if(p==="sena")return{L:idle(0),R:[-1.5+s(t*2.2)*.05,-.4,0],hx:-.04,hz:-.05,lift:0,roll:-.03};
+    return{L:idle(0),R:R,hx:c>.9&&c<1.4?-.06:0,hz:0,lift:0,roll:c>.9&&c<1.5?-.04:0,ball:!!a[2]&&c<1.1,hR:a[2]&&c<1.1?"grip":c<1.5?"open":null}}
+  if(p==="sena")return{L:idle(0),R:[-1.5+s(t*2.2)*.05,-.4,0],hx:-.04,hz:-.05,lift:0,roll:-.03,hR:"point"};
   if(p==="baile"){const a=s(t*4.2);return{L:[-1.5+a*1.1,-.5,-.6],R:[-1.5-a*1.1,-.5,-.6],hx:.03*a,hz:a*.09,lift:Math.abs(s(t*8.4))*.04,roll:a*.06}}
   if(p==="pens")return{L:[-.6,.35,-1.3],R:[-1.2,.18,-2.1],hx:.1+s(t*1.1)*.03,hz:.08,lift:0,roll:.02};
   return null}

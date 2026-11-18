@@ -40,6 +40,39 @@ function av3mNeed(L,lo){return["tr_meta","head"+(L.fs===1||L.fs===2?L.fs:0)].con
 function av3mReady(L,lo){if(typeof fetch!=="function")return false;let ok=true;for(const n of av3mNeed(L,lo))if(!av3mGet(n))ok=false;return ok}
 // ¿están ya todas las piezas descargadas? (sin pedir ninguna)
 const av3mHas=(L,lo)=>av3mNeed(L,lo).every(n=>AV3M.st[n]===2);
+// ---------- formas de la mano: puño, mano abierta, señalar con el índice y «V» ----------
+// Los dedos se doblan sobre el nudillo hacia la palma (como un dedo de verdad) y el pulgar gira sobre la muñeca.
+// Se calcula una vez por pieza y forma, y se guarda.
+const AV3HF={fist:[1.35,1.35,1.35,1.35,1.3],open:[-1,-1,-1,-1,-1],point:[-1,1.35,1.35,1.35,1.3],v:[-1,-1,1.35,1.35,1.3],grip:[.6,.6,.6,.6,.6]};
+function av3mHand(p,mode,girl){const key="_h"+mode+(girl?"f":"m");if(p[key])return p[key];const F=AV3HF[mode];if(!F)return p;
+  const sx=/R$/.test(p.name)?-1:1,hk=girl?.9:1,dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],nz=v=>{const l=Math.hypot(v[0],v[1],v[2])||1;return[v[0]/l,v[1]/l,v[2]/l]},
+    cr=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],G=v=>[v[0]*sx,v[2],-v[1]];// de Blender (z arriba) al visor
+  const WRb=[.288,-.022,.815],ELb=[.258,.012,1.045];let hd=nz([WRb[0]-ELb[0],WRb[1]-ELb[1],WRb[2]-ELb[2]]),pn=nz([-1+hd[0]*hd[0],hd[0]*hd[1],hd[0]*hd[2]]),wd=nz(cr(hd,pn));if(wd[1]>0)wd=wd.map(a=>-a);
+  const WR=G(WRb);hd=G(hd);pn=G(pn);wd=G(wd);
+  // giro de un punto/vector alrededor de un eje (fórmula de Rodrigues)
+  const rotV=(v,a,t)=>{const c=Math.cos(t),s=Math.sin(t),k=cr(a,v),d=dot(a,v)*(1-c);return[v[0]*c+k[0]*s+a[0]*d,v[1]*c+k[1]*s+a[1]*d,v[2]*c+k[2]*s+a[2]*d]};
+  const P=p.P,N=p.N,P2=new Float32Array(P.length),N2=new Float32Array(N.length),thumb=/^thumb/.test(p.name);
+  let k=0;if(!thumb){let w=0;for(let i=0;i<P.length;i+=3)w+=dot([P[i]-WR[0],P[i+1]-WR[1],P[i+2]-WR[2]],wd);w/=P.length/3;k=w>.022*hk?0:w>0?1:w>-.022*hk?2:3}
+  const amt=F[thumb?4:k];
+  if(thumb){// pulgar: en el puño se cruza por delante de los dedos; abierto, se separa
+    const tb=[WR[0]+hd[0]*.022*hk+wd[0]*.034*hk,WR[1]+hd[1]*.022*hk+wd[1]*.034*hk,WR[2]+hd[2]*.022*hk+wd[2]*.034*hk],a1=amt>0?1.05*amt:.45*amt,a2=amt>0?-.75*amt:0;
+    for(let i=0;i<P.length;i+=3){let v=[P[i]-tb[0],P[i+1]-tb[1],P[i+2]-tb[2]],n=[N[i],N[i+1],N[i+2]];v=rotV(rotV(v,hd,a1*sx),pn,a2*sx);n=rotV(rotV(n,hd,a1*sx),pn,a2*sx);
+      P2[i]=tb[0]+v[0];P2[i+1]=tb[1]+v[1];P2[i+2]=tb[2]+v[2];N2[i]=n[0];N2[i+1]=n[1];N2[i+2]=n[2]}}
+  else{// dedos: curvatura progresiva desde el nudillo (amt 1 = cerrado del todo; -1 = estirado)
+    const off=[.034,.0115,-.0115,-.033][k]*hk,K=[WR[0]+hd[0]*(.074-Math.abs(off)*.12)*hk,WR[1]+hd[1]*(.074-Math.abs(off)*.12)*hk,WR[2]+hd[2]*(.074-Math.abs(off)*.12)*hk],kc=amt>0?34*amt:9.5*amt||.0001,R=1/kc,spr=amt<0?off*-3.2*amt:0;
+    for(let i=0;i<P.length;i+=3){const d=[P[i]-K[0],P[i+1]-K[1],P[i+2]-K[2]],s=dot(d,hd),h=dot(d,pn),w=dot(d,wd),nh=dot([N[i],N[i+1],N[i+2]],hd),np=dot([N[i],N[i+1],N[i+2]],pn),nw=dot([N[i],N[i+1],N[i+2]],wd);
+      let q,n;if(s<=0){q=[d[0],d[1],d[2]];n=[N[i],N[i+1],N[i+2]]}
+      else{const t=kc*s,c=Math.cos(t),sn=Math.sin(t),a=(R-h)*sn,b=R-(R-h)*c;q=[wd[0]*w+hd[0]*a+pn[0]*b,wd[1]*w+hd[1]*a+pn[1]*b,wd[2]*w+hd[2]*a+pn[2]*b];
+        const A=nh*c-np*sn,B2=nh*sn+np*c;n=[wd[0]*nw+hd[0]*A+pn[0]*B2,wd[1]*nw+hd[1]*A+pn[1]*B2,wd[2]*nw+hd[2]*A+pn[2]*B2]}
+      if(spr){q=rotV(q,pn,spr*-sx);n=rotV(n,pn,spr*-sx)}
+      P2[i]=K[0]+q[0];P2[i+1]=K[1]+q[1];P2[i+2]=K[2]+q[2];N2[i]=n[0];N2[i+1]=n[1];N2[i+2]=n[2]}}
+  return p[key]={P:P2,N:N2}}
+// muñeca: dobla la mano (palma y dedos) hacia la palma o hacia atrás, y la ladea; ejes del lado derecho (el izquierdo, en espejo)
+const AV3WR=(()=>{const nz=v=>{const l=Math.hypot(v[0],v[1],v[2])||1;return[v[0]/l,v[1]/l,v[2]/l]},G=v=>[-v[0],v[2],-v[1]];let hd=nz([.03,-.034,-.23]),pn=nz([-1+hd[0]*hd[0],hd[0]*hd[1],hd[0]*hd[2]]);hd=G(hd);pn=G(pn);
+  const wd=nz([hd[1]*pn[2]-hd[2]*pn[1],hd[2]*pn[0]-hd[0]*pn[2],hd[0]*pn[1]-hd[1]*pn[0]]);return{W:[-.288,.815,.022],wd,pn}})();
+const av3mAx=(a,t)=>{const c=Math.cos(t),s=Math.sin(t),C=1-c,x=a[0],y=a[1],z=a[2];return new Float32Array([c+x*x*C,y*x*C+z*s,z*x*C-y*s,0,x*y*C-z*s,c+y*y*C,z*y*C+x*s,0,x*z*C+y*s,y*z*C-x*s,c+z*z*C,0,0,0,0,1])};
+function av3mWrist(B,left,flex,dev){const A=AV3WR,m=v=>left?[-v[0],v[1],v[2]]:v,k=left?-1:1,W=m(A.W);
+  return m4T(m4Mul(m4Mul(m4T(B,W[0],W[1],W[2]),av3mAx(m(A.wd),k*(flex||0))),av3mAx(m(A.pn),k*(dev||0))),-W[0],-W[1],-W[2])}
 // ---------- el modelo ----------
 function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][0]),W=[1,1,1],K=[.1,.09,.12],dk=(c,k)=>av3Mix(c,[0,0,0],k==null?.25:k),lt=(c,k)=>av3Mix(c,W,k==null?.25:k),I=m4I();
   const sk=P("skin",L.sk),hc=P("hair",L.hc),ec=P("eye",L.ec),tc=P("cl",L.tc),ac=P("cl",L.ac),bc=P("cl",L.bc),shc=P("cl",L.sh),hac=P("cl",L.hac),bpc=P("cl",L.bpc),nkc=P("cl",L.nkc),glc=P("cl",L.glc),pcc=P("cl",L.pc),sckc=P("cl",L.sckc),wrc=P("cl",L.wrc);
@@ -53,7 +86,10 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
   const PZ=typeof av3Pose==="function"?av3Pose(pose,t):null;
   // (el 4.º valor gira el brazo sobre sí mismo: así el codo se dobla hacia el cuerpo, p. ej. mano en la cintura)
   const rotT=(B,p,rx,rz,ry)=>m4T(m4RY(m4RX(m4RZ(m4T(B,p[0],p[1],p[2]),rz||0),rx||0),ry||0),-p[0],-p[1],-p[2]);
-  if(PZ){MS.armL1=rotT(G,J("shL"),PZ.L[0],PZ.L[1],PZ.L[3]);MS.armL2=rot(MS.armL1,J("elL"),PZ.L[2],0);MS.armR1=rotT(G,mir(J("shL")),PZ.R[0],-PZ.R[1],-(PZ.R[3]||0));MS.armR2=rot(MS.armR1,mir(J("elL")),PZ.R[2],0)}
+  // (el 5.º gira el antebrazo sobre sí mismo, para orientar la palma: hacia abajo, hacia la cabeza…)
+  const elb=(B,p,a,tw)=>tw?m4T(m4RY(m4RX(m4T(B,p[0],p[1],p[2]),a),tw),-p[0],-p[1],-p[2]):rot(B,p,a,0);
+  if(PZ){MS.armL1=rotT(G,J("shL"),PZ.L[0],PZ.L[1],PZ.L[3]);MS.armL2=elb(MS.armL1,J("elL"),PZ.L[2],PZ.L[4]||0);MS.armR1=rotT(G,mir(J("shL")),PZ.R[0],-PZ.R[1],-(PZ.R[3]||0));MS.armR2=elb(MS.armR1,mir(J("elL")),PZ.R[2],-(PZ.R[4]||0));
+    if(PZ.L[5]||PZ.L[6])MS.handL=av3mWrist(MS.armL2,true,PZ.L[5],PZ.L[6]);if(PZ.R[5]||PZ.R[6])MS.handR=av3mWrist(MS.armR2,false,PZ.R[5],PZ.R[6])}
   else{MS.armL1=rot(G,J("shL"),sway,pose==="w"?.35:0);MS.armL2=rot(MS.armL1,J("elL"),pose==="w"?-.5:0,0);
   MS.armR1=rot(G,mir(J("shL")),AP?AP[0]:-sway,AP?-AP[2]:0);MS.armR2=rot(MS.armR1,mir(J("elL")),AP?AP[1]:0,0)}
   const hcy=pv.head[2],hr=pv.hr,MH=PZ?rot(I,[0,1.42,0],PZ.hx+Math.sin(t*.9)*.012,PZ.hz):rot(I,[0,1.42,0],Math.sin(t*.9)*.012+(pose==="l"?.34:0),0);
@@ -66,7 +102,9 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
       if(isBase&&p.tag){if(p.tag==="torso"&&!showTorso)continue;if(hide[p.tag])continue;if(p.tag==="foot"&&!ms.foot)continue;
         if(p.tag==="palm"&&[1,2,4].includes(L.glv))c=glc;else if(p.tag==="finger"&&[2,4].includes(L.glv))c=glc;else if(p.tag==="farm"&&L.glv===4)c=glc;else if(tights&&(p.tag==="thigh"||p.tag==="shin"||p.tag==="foot"))c=tights}
       if(stripes&&p.slot==="top"&&(p.seg==="body"||p.name.indexOf("sleeve")===0))cf=y=>Math.floor((y-.9)/.055)%2?sc2:tc;
-      E.mesh(p.seg==="head"?MH:MS[p.seg]||G,p.P,p.N,p.I,c,cf)}};
+      let PP=p.P,NN=p.N;if(p.tag==="finger"&&PZ){const hm=p.seg==="armL2"?PZ.hL:p.seg==="armR2"?PZ.hR:null;if(hm){const q=av3mHand(p,hm,girl);PP=q.P;NN=q.N}}
+      const hM=(p.tag==="finger"||p.tag==="palm")&&(p.seg==="armL2"?MS.handL:p.seg==="armR2"?MS.handR:null);
+      E.mesh(p.seg==="head"?MH:hM||MS[p.seg]||G,PP,NN,p.I,c,cf)}};
   const fsn=L.fs===1||L.fs===2?L.fs:0;put(PC("head"+fsn));put(PC(girl?"base_f":"base_m"),true);put(TP);if(!dress)put(PC("bot"+L.bot));put(PC("shoe"+L.shs));
   // ----- cara -----
   const fg=meta.faces[fsn],zAt=(x,y)=>{const gx=(x-fg.x0)/fg.d,gy=(y-fg.y0)/fg.d,ix=Math.max(0,Math.min(fg.g[0].length-2,Math.floor(gx))),iy=Math.max(0,Math.min(fg.g.length-2,Math.floor(gy))),fx=Math.max(0,Math.min(1,gx-ix)),fy=Math.max(0,Math.min(1,gy-iy)),v=(a,b)=>fg.g[b][a]==null?.02:fg.g[b][a];

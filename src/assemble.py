@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.12.1";
+const GAME_VER="7.12.2";
 const NEWS=[
+{v:"2026-11-18-7.12.2",ver:"7.12.2",at:"2026-11-18T16:57",t:"🧍 Poses del entrenador más naturales",l:["Las manos del entrenador ya no están siempre igual: cierra el puño en «Puño en alto», «Puño al frente», «¡Listo para combatir!», «Sacar músculo» y «¡Victoria!», hace la «V» con dos dedos en «Victoria con la mano» y señala con el índice en «Señalar»","«Mirando a lo lejos»: la mano abierta y plana sobre la frente, encima de los ojos, como tapándose del sol","«Mano en la nuca»: el codo hacia fuera y la mano apoyada detrás de la cabeza"]},
 {v:"2026-11-18-7.12.1",ver:"7.12.1",at:"2026-11-18T15:19",t:"📰 Botón de Novedades en la pantalla principal",l:["Debajo de la Mochila hay un nuevo botón «Novedades» para ver todas las actualizaciones en cualquier momento. Si hay alguna que no has leído, lleva un aviso rojo"]},
 {v:"2026-11-18-7.12",ver:"7.12",at:"2026-11-18T14:46",t:"✨ Amuleto Iris en Exploración",l:["Completa la Pokédex de Exploración y la Profesora Vega te dará el Amuleto Iris: desde entonces, los Pokémon variocolor aparecen tres veces más a menudo en la hierba alta, al hacer surf y al pescar","La Pokédex de Exploración cuenta ahora las especies que pueden aparecer en este modo (comunes, raras y épicas: 992). Los legendarios y las formas especiales no hacen falta. Cuentan los que has capturado alguna vez, aunque ya no los tengas","En la Pokédex de Exploración (menú → Pokédex) ves cuántas llevas, una barra de progreso y si ya tienes el Amuleto"]},
 {v:"2026-11-18-7.11.3",ver:"7.11.3",at:"2026-11-18T14:41",t:"☁️ Nubes más realistas",l:["Las nubes del pueblo ahora son cúmulos de verdad: base plana y algo más oscura, cuerpo ancho y cimas abultadas e irregulares, cada una diferente (antes parecían medias lunas)"]},

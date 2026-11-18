@@ -39,7 +39,7 @@ function creditoLogros(prev, next) {
 function limites(S) {
   const prod = E.tps(S), R = E.RMUL(S);
   return {
-    tk: {sos: R * (prod * DIA * 1.5 + 2e8), imp: R * (prod * DIA * 6 + 1.5e9), txt: "tickets de premios"},
+    tk: {sos: R * (prod * DIA * 1.5 + 2e8), imp: R * (prod * DIA * 3 + 1.5e9), txt: "tickets de premios"},
     ach: {sos: 40, imp: 150, txt: "niveles de logros reclamados"},
     pk: {sos: 500, imp: 4000, txt: "Pokémon nuevos (sin contar tiradas)"},
     leg: {sos: 15, imp: 80, txt: "legendarios y singulares nuevos"},

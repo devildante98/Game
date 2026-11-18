@@ -77,7 +77,7 @@ function hhMul(k){let L;try{L=hhNow()}catch(e){return 1}if(k==="shiny")return L.
 const hhInfo=s=>s.k==="cd"?["🎉 Día de la Comunidad","¡"+s.mon[0]+" aparece muchísimo en tiradas y combates, con variocolores ×5 para él!"]:(HH_KINDS.find(x=>x[0]===s.k)||["","",""]).slice(1);
 const SH0={g:SHINY_G,s:SHINY_S,w:SHINY_W};let _hhk="";
 function hhTick(){const L=hhNow(),m=hhMul("shiny");SHINY_G=SH0.g*m;SHINY_S=SH0.s*m;SHINY_W=SH0.w*m;
-  const k=L.map(s=>s.k+s.a).join("|");if(k!==_hhk){if(_hhk!==""&&L.length){const i=hhInfo(L[0]);toast("🎉 ¡Empieza "+i[0]+"! "+i[1]);snd("lvl")}_hhk=k}hhBan()}
+  const k=L.map(s=>s.k+s.a).join("|");if(k!==_hhk){if(_hhk!==""&&L.length){const i=hhInfo(L[0]);/* el aviso sale en una ventana: p_evpop.js */void i}_hhk=k}hhBan()}
 setInterval(hhTick,15e3);
 {const _gx=gainXp;gainXp=function(p,amt){return _gx.call(this,p,Math.round(amt*hhMul("xp")))}}
 {const _r=roll;roll=function(){if(hhNow().some(s=>s.k==="leg")&&Math.random()<.02){const p=pickR("L");S.pity=0;return p}return _r.apply(this,arguments)}}

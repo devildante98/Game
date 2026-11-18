@@ -55,9 +55,9 @@ setInterval(()=>{if(!RW.t||Date.now()-RW.t>30*6e4)rwFetch();window.WXENV=rwEnv()
 
 // ================= NOCHEVIEJA Y AÑO NUEVO =================
 // cuenta atrás en el último minuto del año (hora de España) y, el 1 de enero, ventana con el gran regalo
-// Regalo de Año Nuevo (el mismo para todos): tickets (30 horas de producción o 150 millones, lo que sea mayor), objetos…
+// Regalo de Año Nuevo (el mismo para todos): tickets (48 horas de producción o 150 millones, lo que sea mayor), objetos…
 // y, además, cada jugador elige 2 legendarios variocolor entre 5 que le tocan solo a él (cambian de un jugador a otro).
-const NY_GIFT=y=>({t:Math.max(150000000+y%100*100000,Math.round((typeof tps==="function"?tps():0)*3600*30)),it:{mb:12,crys:6,cand:50,ppmax:10,tshard:20},hold:6,pick:2,of:5});
+const NY_GIFT=y=>({t:Math.max(150000000+y%100*100000,Math.round((typeof tps==="function"?tps():0)*3600*48)),it:{mb:12,crys:6,cand:50,ppmax:10,tshard:20},hold:6,pick:2,of:5});
 function nyTxt(g){return "✨ "+g.pick+" legendarios variocolor a elegir entre "+g.of+" (distintos para cada entrenador) + "+fmt(Math.round(g.t*RMUL()))+" 🎟️ + "+g.it.mb+" Master Ball + "+g.it.crys+" Cristales Supremos + "+g.it.cand+" Caramelos Raros + "+g.it.ppmax+" PP máximos + "+g.it.tshard+" Teralitos + "+g.hold+" objetos equipables"}
 // los 5 legendarios de cada jugador: salen de su cuenta y del año, así son siempre los mismos aunque cambie de dispositivo
 const NY_LEGS=()=>P.filter(p=>p[2]==="L"&&!/^Mega-|Primigenio|Forma |Gigamax|Dinamax/.test(p[0])&&!(typeof isSup==="function"&&isSup(p[0]))&&!(typeof isMegaF==="function"&&isMegaF(p[0]))).map(p=>p[0]);

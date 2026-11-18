@@ -36,10 +36,12 @@ function creditoLogros(prev, next) {
 }
 
 // límites del día: «sos» = se apunta para moderación (una vez al día) · «imp» = no se guarda
-function limites(S) {
+function limites(S, hoy) {
   const prod = E.tps(S), R = E.RMUL(S);
+  // el 1 de enero (hora de Madrid) llega el regalo de Año Nuevo: hasta 48 horas de producción de una vez
+  const anyo = /-01-01$/.test(String(hoy || "")) ? R * (prod * DIA * 2 + 2e8) : 0;
   return {
-    tk: {sos: R * (prod * DIA * 1.5 + 2e8), imp: R * (prod * DIA * 3 + 1.5e9), txt: "tickets de premios"},
+    tk: {sos: R * (prod * DIA * 1.5 + 2e8) + anyo, imp: R * (prod * DIA * 3 + 1.5e9) + anyo, txt: "tickets de premios"},
     ach: {sos: 40, imp: 150, txt: "niveles de logros reclamados"},
     pk: {sos: 500, imp: 4000, txt: "Pokémon nuevos (sin contar tiradas)"},
     leg: {sos: 15, imp: 80, txt: "legendarios y singulares nuevos"},
@@ -184,7 +186,7 @@ function revisar(prevIn, next, dtSeg, extra, op) {
     ach: logros.niveles,
     crys: Math.max(0, n(bag.crys) - n(prevBag.crys)),
   };
-  const L = limites(prev);
+  const L = limites(prev, op && op.hoy);
   for (const k in L) {
     eco[k] = n(eco[k]) + suma[k];
     if (eco[k] > L[k].imp) marca("imposible", "hoy, demasiados " + L[k].txt + ": " + f(eco[k]) + " (máximo " + f(L[k].imp) + ")");

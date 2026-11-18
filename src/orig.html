@@ -2879,7 +2879,7 @@ const ACH0=[
 ["cap","🔴","Atrapalotodo","Captura {g} Pokémon en combate",()=>stt().cap||0,[[5,0],[30,1],[100,2],[300,3]]],
 ["lvl","⭐","Entrenador experto","Sube un Pokémon al nivel {g}",maxLv,[[10,0],[25,1],[50,2],[75,3],[100,4]]],
 ["l100","💯","Equipo de élite","Ten {g} Pokémon al nivel 100",()=>Object.keys(S.lv||{}).filter(n=>S.owned[n]&&S.lv[n]&&S.lv[n].l>=100).length,[[1,3],[4,4],[10,5]]],
-["leg","🌟","Cazador de leyendas","Consigue {g} Pokémon legendarios distintos",()=>P.filter(p=>p[2]==="L"&&S.owned[p[0]]).length,[[1,1],[10,2],[40,3],[80,4],[Math.min(120,LEGN),5]]],
+["leg","🌟","Cazador de leyendas","Consigue {g} Pokémon legendarios distintos",()=>P.filter(p=>p[2]==="L"&&S.owned[p[0]]).length,[[1,1],[10,2],[50,3],[100,4],[LEGN,5]]],
 ["lg","🏆","Campeón regional","Gana {g} Ligas distintas",()=>Object.keys(S.lgDone||{}).filter(k=>S.lgDone[k]>0).length,[[1,2],[3,3],[6,4],[9,5]]],
 ["pvp","🌐","Rey del PVP","Gana {g} duelos PVP",()=>(S.pvp&&S.pvp.w)||0,[[1,0],[10,2],[50,3],[200,4],[500,5]],"x"],
 ["heal","🏥","Cliente habitual","Cura a tu equipo {g} veces en el Centro Pokémon",()=>stt().heal||0,[[5,0],[25,1],[80,2]]],

@@ -1233,3 +1233,7 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 #hlpM .hlpok{align-self:center;min-width:160px}
 #hlpM .hlpx{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;padding:0!important;line-height:1!important;font-size:1.1rem;background:rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.15);color:inherit;cursor:pointer}
 .infor[hidden]{display:none!important}
+#hlpM .hlph{margin:14px 0 8px;font-size:1.02rem}
+#hlpM .hlpl{margin:0;padding:0 0 0 4px;list-style:none}
+#hlpM .hlpl li{position:relative;margin:0 0 8px;padding:8px 12px 8px 30px;line-height:1.45;border-radius:12px;background:rgba(80,140,255,.1)}
+#hlpM .hlpl li:before{content:"•";position:absolute;left:13px;top:6px;font-weight:900;color:#3a8cff;font-size:1.1rem}

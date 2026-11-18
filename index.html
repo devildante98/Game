@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794982253">
+<meta name="game-build" content="1794982798">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2924,6 +2924,10 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 #hlpM .hlpok{align-self:center;min-width:160px}
 #hlpM .hlpx{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;padding:0!important;line-height:1!important;font-size:1.1rem;background:rgba(0,0,0,.08);border:2px solid rgba(0,0,0,.15);color:inherit;cursor:pointer}
 .infor[hidden]{display:none!important}
+#hlpM .hlph{margin:14px 0 8px;font-size:1.02rem}
+#hlpM .hlpl{margin:0;padding:0 0 0 4px;list-style:none}
+#hlpM .hlpl li{position:relative;margin:0 0 8px;padding:8px 12px 8px 30px;line-height:1.45;border-radius:12px;background:rgba(80,140,255,.1)}
+#hlpM .hlpl li:before{content:"•";position:absolute;left:13px;top:6px;font-weight:900;color:#3a8cff;font-size:1.1rem}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2989,7 +2993,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.8.2</small>
+    <small class="pcver">Versión 7.8.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -3400,7 +3404,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
 </section>
 <section class="panel" aria-label="Clasificación" id="rkP">
   <div class="hhead"><h2>📊 Clasificación</h2><button id="rkRe" style="background:var(--line);color:var(--ink)">🔄 Actualizar</button></div>
-  <p class="rates">Los mejores entrenadores entre todos los jugadores con cuenta. Tu puntuación se actualiza cuando la partida se guarda en la nube (cada 5 minutos o al pulsar «💾 Guardar»).</p>
+  <p class="rates">Los mejores entrenadores entre todos los jugadores con cuenta. Tu puntuación se actualiza cuando la partida se guarda en la nube (cada 2 minutos o al pulsar «💾 Guardar»).</p>
   <div class="rktabs" id="rkTabs"></div>
   <div id="rkBox"></div>
 </section>
@@ -7672,8 +7676,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.2";
+const GAME_VER="7.8.3";
 const NEWS=[
+{v:"2026-11-18-7.8.3",ver:"7.8.3",at:"2026-11-18T07:19",t:"📖 Ayuda más completa",l:["El botón (?) explica ahora con detalle cómo funcionan el Gacha, los Premios, las Mejoras, la Pokédex, la Guardería, el Compañero, la Torre Batalla, las Expediciones, las Horas felices, el Calendario, los Minijuegos, las Incursiones, el Mercadillo, el Pase, los Logros, Tu entrenador, Novedades, Próximamente e Invitar amigos","Corregido: algunos textos aún decían que la partida se guarda en la nube cada 5 minutos (ahora son 2)"]},
 {v:"2026-11-18-7.8.2",ver:"7.8.2",at:"2026-11-18T07:09",t:"🧹 Fuera el botón «Más información»",l:["Las ventanas ya no tienen el enlace «Más información»: toda la explicación de cada apartado está en el botón (?)"]},
 {v:"2026-11-18-7.8.1",ver:"7.8.1",at:"2026-11-18T07:02",t:"💡 El botón (?) ahora explica cada sección",l:["Al pulsar el botón (?) de cualquier ventana se abre una ventana con toda la información de ese apartado: la explicación completa (lo de «Más información») y los consejos y probabilidades","Se cierra con «Entendido», con la ✕, tocando fuera o con Esc"]},
 {v:"2026-11-18-7.8",ver:"7.8",at:"2026-11-18T06:50",t:"🌾 Zona Safari en 3D",l:["La Zona Safari ahora es un paisaje en 3D: una sabana con hierba alta que se mueve con el viento, acacias, una charca, montañas y mariposas","El cielo cambia con tu hora: de día, al atardecer o de noche con estrellas y luciérnagas","El Pokémon salvaje aparece entre la hierba, con su sombra, y la Safari Ball, el cebo y la roca se lanzan en 3D: verás cómo la Ball se mueve en el suelo antes de saber si lo has atrapado","Si tu dispositivo no puede mostrar 3D, la Zona Safari se ve como antes"]},
@@ -8052,7 +8057,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794982253";
+const GAME_B="1794982798";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8257,7 +8262,7 @@ function gBossHTML(g){
     '<small class="mut">Todo el daño que hacéis los miembros en vuestros combates se le resta. Si cae antes del lunes, cada miembro que haya participado recibe <b>'+esc(rwTxt(GB_RW))+'</b> y ¡el propio <b>'+esc(bp)+'</b> para su colección (1 de cada 10 veces, variocolor)! Quien más daño haga se lleva el doble de tickets.</small>'+
     (top.length?'<small>'+top.map((u,i)=>(["🥇","🥈","🥉"][i]||"·")+" "+esc(pvClean((g.members[u]||{}).n||"?"))+" "+fmt(bd[u])).join("  ")+'</small>':'')+
     (dead&&mine>0?(S.gbc===w?'<small>✅ Premio reclamado</small>':'<button data-gbc="1">🎁 Reclamar premio del jefe</button>'):'')+'</div></div>';
-  h+='<div class="qgrid">'+GQ.map(q=>{const tg=q[2]*n,v=gm[q[0]]||0,ok=v>=tg,cl=S.gqc&&S.gqc.w===w&&S.gqc[q[0]];return '<div class="qc'+(ok&&!cl?' ready':cl?' claimed':'')+'"><b>'+q[1]+' (gremio)</b><div class="bar"><i style="width:'+Math.min(100,v/tg*100)+'%"></i></div><small>'+fmt(Math.min(v,tg))+' / '+fmt(tg)+(pend[q[0]]?' · +'+pend[q[0]]+' tuyos pendientes':'')+'</small><small>🎁 '+rwTxt(GQ_RW)+'</small>'+(cl?'<small>✅ Reclamado</small>':'<div class="qbtn"><button data-gqc="'+q[0]+'"'+(ok?'':' disabled')+'>Reclamar</button></div>')+'</div>'}).join("")+'</div><small class="mut">Las aportaciones se suben al guardar la partida en la nube (cada 5 minutos o con 💾). El jefe y las misiones se renuevan cada lunes.</small>';
+  h+='<div class="qgrid">'+GQ.map(q=>{const tg=q[2]*n,v=gm[q[0]]||0,ok=v>=tg,cl=S.gqc&&S.gqc.w===w&&S.gqc[q[0]];return '<div class="qc'+(ok&&!cl?' ready':cl?' claimed':'')+'"><b>'+q[1]+' (gremio)</b><div class="bar"><i style="width:'+Math.min(100,v/tg*100)+'%"></i></div><small>'+fmt(Math.min(v,tg))+' / '+fmt(tg)+(pend[q[0]]?' · +'+pend[q[0]]+' tuyos pendientes':'')+'</small><small>🎁 '+rwTxt(GQ_RW)+'</small>'+(cl?'<small>✅ Reclamado</small>':'<div class="qbtn"><button data-gqc="'+q[0]+'"'+(ok?'':' disabled')+'>Reclamar</button></div>')+'</div>'}).join("")+'</div><small class="mut">Las aportaciones se suben al guardar la partida en la nube (cada 2 minutos o con 💾). El jefe y las misiones se renuevan cada lunes.</small>';
   return h;
 }
 document.addEventListener("click",e=>{
@@ -14829,10 +14834,13 @@ function gmHelpT(w){
     sec.querySelectorAll(":scope>p.rates,:scope>p.nxi").forEach(e=>add(e,"hlpi"));
     sec.querySelectorAll(".ghelp").forEach(e=>add(e,""));
     sec.querySelectorAll("small.mut,p.mut").forEach(e=>{const pe=e.parentElement;if((pe===sec||(pe&&pe.parentElement===sec))&&vis(e)&&!e.closest("button,label,.ghelp")&&(e.textContent||"").trim().length>60)add(e,"")})});
-  // ayuda propia de las pantallas que no tienen texto de introducción
-  const HX={shopP:["Cada edificio de tu pueblo produce tickets cada segundo, también mientras no juegas. Cuanto más nivel tiene, más produce.","Los Guantes de entrenador aumentan los tickets que ganas con cada toque en la Poké Ball.","Con los botones ×1, ×10, ×50 y Máx compras varios niveles de una vez. El precio de cada nivel sube un poco cada vez."]};
-  if(inScr&&HX[GM.scr]&&parts.length<2)HX[GM.scr].forEach(t=>parts.push('<p>'+esc(t)+'</p>'));
-  const body=parts.slice(0,14).join("")||'<p class="hlpi">'+esc(sub||"")+'</p><p class="mut">Esta sección no tiene información extra.</p>';
+  // «Cómo funciona»: la ayuda ampliada de p_help.js de las secciones abiertas
+  const ids=[];if(inScr&&GM.scr)ids.push(GM.scr);if(root)root.querySelectorAll("section.panel[id],aside.panel[id]").forEach(sec=>{if(vis(sec)&&!ids.includes(sec.id))ids.push(sec.id)});
+  const HX=typeof HELPX!=="undefined"?HELPX:{},hx=[];ids.forEach(id=>(HX[id]||[]).forEach(t=>{if(!hx.includes(t))hx.push(t)}));
+  // (si la introducción ya dice lo mismo que la ayuda ampliada, no se repite)
+  for(let i=parts.length-1;i>=0;i--){const t=parts[i].replace(/<[^>]*>/g,"").trim();if(hx.some(h=>h.indexOf(t)>=0))parts.splice(i,1)}
+  if(hx.length)parts.push('<h3 class="hlph">📖 Cómo funciona</h3><ul class="hlpl">'+hx.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul>');
+  const body=parts.slice(0,16).join("")||'<p class="hlpi">'+esc(sub||"")+'</p><p class="mut">Esta sección no tiene información extra.</p>';
   const old=$("hlpM");if(old)old.remove();
   const o=document.createElement("div");o.id="hlpM";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-label","Ayuda");
   o.innerHTML='<div class="hlpbox"><button type="button" class="hlpx" aria-label="Cerrar">✕</button><div class="hlpic">💡</div><h2>'+esc(head||"Ayuda")+'</h2>'+(tit&&head!==tit?'<small class="hlps">'+esc(tit)+'</small>':'')+
@@ -20286,6 +20294,133 @@ setInterval(()=>{try{
   const k=[medCount(),xb,ch,Object.keys(S.lgDone||{}).length,(S.hof||[]).length,S.prs|0].join(",");
   if(_hito!==null&&k!==_hito){save();window.cloudFlush(true);setTimeout(()=>{try{window.cloudFlush(true)}catch(e){}},6000)}_hito=k}catch(e){}},2000);
 
+// =====================================================================================
+// AYUDA AMPLIADA DEL BOTÓN (?)
+// Explicación de «cómo funciona» de las secciones que tenían poca información o ninguna. La ventana de ayuda
+// (gmHelpT, p_game.js) la añade debajo de la introducción de cada sección, con el título «📖 Cómo funciona».
+// Clave: el id de la sección (pestaña del menú o pantalla del modo juego).
+// =====================================================================================
+const HELPX={
+  stage:[
+    "Cada tirada te da un Pokémon al azar. Puedes hacer 1, 10 o 100 tiradas a la vez.",
+    "Garantía: si encadenas muchas tiradas normales sin un Épico o un Legendario, la siguiente es Épico o mejor seguro (cada 30 tiradas; cada 25 desde el prestigio 3 y cada 20 desde el prestigio 6).",
+    "La Súper tirada cuesta más, pero da muchas más probabilidades de Épico y Legendario, y el doble de probabilidad de variocolor (1 de cada 250, frente a 1 de cada 500).",
+    "El precio sube cada 10 tiradas que haces. Cada nivel de prestigio te da un 5 % de descuento en las tiradas (hasta un 50 %).",
+    "Cada semana hay un Pokémon destacado que sale más a menudo, y durante los eventos de temporada salen más los Pokémon de sus tipos.",
+    "Los Pokémon que ya tienes salen algo más a menudo. Si sale un repetido, recuperas tickets según su rareza, y con 5 copias consigues su pegatina brillante en el Álbum.",
+    "En las horas felices de «Lluvia de legendarios» hay más legendarios, y en las de «Variocolores ×3» salen tres veces más variocolores.",
+  ],
+  earnP:[
+    "🎁 Regalo diario: reclámalo una vez al día. Cada día que lo reclamas da más tickets (sigue subiendo durante 60 días).",
+    "🔥 Racha: si lo reclamas días seguidos, la racha sube y cada día da un premio extra (objetos, Caramelos Raros, Master Ball…). Los premios se repiten cada 30 días y son mejores en cada vuelta. Si te saltas un día, la racha vuelve a 1.",
+    "⏱️ Ticket automático: mientras tienes el juego abierto y a la vista, cada 30 segundos recibes tickets, y cada vez 10 más que la anterior.",
+    "Además puedes ganar tickets con los minijuegos, el Pase de temporada, las misiones, los combates y tocando la Poké Ball.",
+  ],
+  shopP:[
+    "Cada edificio de tu pueblo produce tickets cada segundo, también mientras no juegas. Cuanto más nivel tiene, más produce.",
+    "Cada nivel de los Guantes de entrenador duplica los tickets que ganas con cada toque en la Poké Ball.",
+    "Con los botones ×1, ×10, ×50 y Máx compras varios niveles de una vez. El precio de cada nivel sube un poco cada vez.",
+    "Cada nivel de prestigio aumenta un 50 % la producción de todo tu pueblo.",
+  ],
+  collP:[
+    "Aquí están todos los Pokémon del juego. Los que tienes se ven en color y los que te faltan aparecen como ❔.",
+    "Toca un Pokémon que tengas para abrir su ficha con toda su información.",
+    "Usa los filtros para buscar por rareza, tipo, generación o fecha, ver solo los que te faltan, los repetidos, los variocolores o tus favoritos, y cambiar el orden.",
+    "El número ×N indica cuántas copias tienes. Con 5 copias consigues su pegatina brillante en el Álbum.",
+  ],
+  dcP:[
+    "Elige dos Pokémon que se lleven bien: del mismo tipo, o cualquiera junto a Ditto. Los legendarios y las formas especiales no pueden criar.",
+    "Cada 30 minutos el encargado encuentra un huevo. Puedes llevar hasta 6 huevos a la vez.",
+    "El huevo es de la primera fase de la evolución del Pokémon (si dejas un Charizard, sale un Charmander).",
+    "Los huevos eclosionan después de unos combates (4 si es común, 5 si es raro, 7 si es épico) o, si no, a las 3 horas.",
+    "Puede heredar la naturaleza de uno de los padres y, con mucha suerte (1 de cada 120), salir variocolor.",
+    "Los Pokémon de la Guardería no pueden estar a la vez en tu equipo.",
+  ],
+  budP:[
+    "Toca a tu compañero para hacerle mimos y dale bayas (una vez cada 30 minutos) para que suba vuestra amistad. También sube cuando ganas combates con él en el equipo.",
+    "Cada 10 minutos encuentra un regalo con tickets.",
+    "Niveles de amistad: Conocido, Buen amigo (regalos con más tickets y a veces objetos), Gran amigo (objetos más valiosos), Muy buen amigo (en combate a veces aguanta un golpe con 1 PS) y Mejor amigo (puede evolucionar por amistad sin Cascabel Alivio).",
+    "Puedes cambiar de compañero cuando quieras: cada Pokémon recuerda su amistad.",
+  ],
+  twP:[
+    "Cada combate es contra un entrenador con 3 Pokémon, y cada vez son más fuertes. A partir del combate 9, algunos llevan objetos.",
+    "Cada 10 combates te espera el As de la Torre, con 4 Pokémon y uno de ellos legendario. Vencerlo da el triple de Puntos Torre.",
+    "Cada victoria da Puntos Torre (más cuanto más alta es tu racha). Si pierdes, la racha vuelve a 0, pero no pierdes los puntos.",
+    "Gasta los Puntos Torre en la Tienda de la Torre: objetos para equipar (Restos, Vidasfera, Banda Focus…), Caramelos Raros, PP máximos, Cristal Supremo y Master Ball.",
+  ],
+  expP:[
+    "Puedes tener 3 expediciones a la vez. Elige el lugar, la duración (1, 4 u 8 horas) y un Pokémon que no esté en tu equipo.",
+    "Cuanto más larga es la expedición, más traen. Si el tipo del Pokémon encaja con el lugar (los marcados en verde), traen un 50 % más.",
+    "Vuelven con tickets (más cuanto mayor sea su nivel y su rareza), Poké Balls, pociones y, a veces, Caramelos Raros, objetos evolutivos u objetos para equipar.",
+    "También ganan experiencia, sin pasar el límite de nivel del próximo gimnasio.",
+  ],
+  hhP:[
+    "Hay 5 tipos de hora feliz: ✨ Variocolores ×3 · 🎟️ Tickets ×2 por toque · ⭐ Experiencia ×2 · 🌟 Lluvia de legendarios en las tiradas · 🎮 Premios de minijuegos ×2.",
+    "🎉 Día de la Comunidad (sábados de 16:00 a 19:00): un Pokémon sale muchísimo en tiradas y combates, con variocolores ×5 para él. Los demás variocolores salen el doble.",
+    "Las horas son las mismas para todos los jugadores (hora de España). Te avisamos cuando empieza una.",
+  ],
+  calP:[
+    "Aquí ves las horas felices, el Día de la Comunidad y los jefes de incursión de los próximos días, con su hora.",
+    "Cada día a medianoche hay misiones diarias nuevas y vuelven a dar premio las partidas de los minijuegos.",
+    "El jefe de incursión cambia cada 3 horas: mira cuál viene para preparar un equipo con ventaja de tipo.",
+  ],
+  mgP:[
+    "Cada minijuego da premio en sus 3 primeras partidas de cada día: tickets según tu puntuación y, a veces, Super Ball, Ultra Ball o pociones. Si bates tu récord, a veces también un Caramelo Raro.",
+    "En la hora feliz de «Minijuegos ×2» los premios se duplican.",
+    "🏆 Torneo semanal: cada semana hay un minijuego de torneo. Los mejores de la semana ganan Pokémon exclusivos, Master Ball y muchos tickets.",
+    "Además, cada minijuego tiene su propia clasificación semanal (Clasificación). Para competir necesitas una cuenta iniciada.",
+    "Jugar minijuegos también da experiencia para el Pase de temporada.",
+  ],
+  raidP:[
+    "Crea una sala o únete a una abierta. Cuando estéis listos (de 1 a 4 entrenadores), tenéis 3 minutos para quitarle todos los PS al jefe entre todos.",
+    "Usa Pokémon con ventaja de tipo: debajo del jefe ves a qué tipos es débil.",
+    "Si lo derrotáis, cada uno recibe tickets, Ultra Balls y a veces un Caramelo Raro u objeto para equipar. Quien hace más daño gana más tickets y más Poké Balls Honor.",
+    "Con las Poké Balls Honor puedes intentar capturar al jefe (1 de cada 50 sale variocolor).",
+    "Los premios se cobran en las 5 primeras incursiones de cada día. Puedes seguir jugando después, pero sin premio.",
+  ],
+  mktP:[
+    "Vende Pokémon y objetos poniendo el precio que quieras (entre 1.000 y 2.000.000.000 🎟️). Puedes tener hasta 5 cosas a la venta a la vez.",
+    "Cuando alguien compra lo tuyo, cobras automáticamente el precio menos un 5 % de comisión.",
+    "Puedes retirar lo que tengas a la venta mientras nadie lo haya comprado, y lo recuperas.",
+    "Lo que compras llega al momento a tu Pokédex o a tu Mochila.",
+  ],
+  passP:[
+    "Ganas experiencia del pase jugando: combate ganado +12 · captura +10 · tirada +2 (súper +3, hasta 200 al día) · minijuego +15 · combate PVP +15 (+10 si ganas) · Pokémon nuevo +6 · evolución +20 · regalo diario +30 · variocolor +25 · misión diaria +8.",
+    "Cada nivel tiene su premio: tickets, Poké Balls, pociones, Caramelos Raros, piedras evolutivas, Master Ball… Y en el nivel 30, un Pokémon legendario.",
+    "El pase dura un mes. Cuando termina empieza uno nuevo desde el nivel 0, con otros premios.",
+  ],
+  achP:[
+    "Cada logro tiene varios niveles. Cuando completas uno, pulsa «Reclamar» (o «Reclamar todos») para recibir su premio y pasar al siguiente nivel.",
+    "La dificultad (★) indica lo difícil que es: cuantas más estrellas, mejor premio.",
+    "Para subir de prestigio necesitas todos los logros, menos los marcados como «extra».",
+  ],
+  trAchP:[
+    "Aquí ves los logros que ya has reclamado y cuánto llevas del total.",
+    "Para conseguir más, ve a Progreso › Logros y reclama los que tengas completados.",
+    "Al subir de prestigio empiezan unos logros nuevos, distintos y al azar.",
+  ],
+  trP:[
+    "Elige el cuerpo, la cara, el pelo, la ropa y los accesorios de tu entrenador.",
+    "Arrástralo para girarlo y verlo en 3D, y pulsa «Ver lanzamiento» para ver cómo lanza la Poké Ball en combate.",
+    "Guarda hasta 5 conjuntos en «Mis conjuntos» para cambiar de aspecto con un toque, o pulsa «Aleatorio» para probar algo nuevo.",
+    "Más ropa en la Tienda de Evento y como premio al subir de prestigio.",
+  ],
+  newsP:[
+    "Aquí están todas las actualizaciones del juego, de la más nueva a la más antigua, con su fecha y lo que ha cambiado.",
+    "Cuando sale una versión nueva te avisamos con una ventana para actualizar (puedes hacerlo más tarde si estás en mitad de algo).",
+  ],
+  roadP:[
+    "Lo que aparece aquí está en preparación y llegará en próximas actualizaciones.",
+    "¿Echas algo en falta? Envíalo desde Más › Sugerencias: el creador del juego las lee todas.",
+  ],
+  refP:[
+    "Comparte tu código con quien quieras. Sirve para personas que empiezan a jugar (hasta 15 invitados).",
+    "Tú ganas por cada invitado: 300.000 🎟️ + 2 Ultra Ball cuando se une, 1.000.000 🎟️ + 2 Caramelos Raros cuando consigue 2 medallas y 2.500.000 🎟️ + 1 Master Ball cuando consigue 4. Los reclamas aquí, en la lista de tus invitados.",
+    "Tu invitado recibe 500.000 🎟️ + 10 Poké Ball al entrar, y 1.000.000 🎟️ cuando consigue 4 medallas.",
+    "Necesitas una cuenta iniciada para invitar.",
+  ],
+};
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -20528,7 +20663,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.8.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.8.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

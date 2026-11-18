@@ -295,10 +295,13 @@ function gmHelpT(w){
     sec.querySelectorAll(":scope>p.rates,:scope>p.nxi").forEach(e=>add(e,"hlpi"));
     sec.querySelectorAll(".ghelp").forEach(e=>add(e,""));
     sec.querySelectorAll("small.mut,p.mut").forEach(e=>{const pe=e.parentElement;if((pe===sec||(pe&&pe.parentElement===sec))&&vis(e)&&!e.closest("button,label,.ghelp")&&(e.textContent||"").trim().length>60)add(e,"")})});
-  // ayuda propia de las pantallas que no tienen texto de introducción
-  const HX={shopP:["Cada edificio de tu pueblo produce tickets cada segundo, también mientras no juegas. Cuanto más nivel tiene, más produce.","Los Guantes de entrenador aumentan los tickets que ganas con cada toque en la Poké Ball.","Con los botones ×1, ×10, ×50 y Máx compras varios niveles de una vez. El precio de cada nivel sube un poco cada vez."]};
-  if(inScr&&HX[GM.scr]&&parts.length<2)HX[GM.scr].forEach(t=>parts.push('<p>'+esc(t)+'</p>'));
-  const body=parts.slice(0,14).join("")||'<p class="hlpi">'+esc(sub||"")+'</p><p class="mut">Esta sección no tiene información extra.</p>';
+  // «Cómo funciona»: la ayuda ampliada de p_help.js de las secciones abiertas
+  const ids=[];if(inScr&&GM.scr)ids.push(GM.scr);if(root)root.querySelectorAll("section.panel[id],aside.panel[id]").forEach(sec=>{if(vis(sec)&&!ids.includes(sec.id))ids.push(sec.id)});
+  const HX=typeof HELPX!=="undefined"?HELPX:{},hx=[];ids.forEach(id=>(HX[id]||[]).forEach(t=>{if(!hx.includes(t))hx.push(t)}));
+  // (si la introducción ya dice lo mismo que la ayuda ampliada, no se repite)
+  for(let i=parts.length-1;i>=0;i--){const t=parts[i].replace(/<[^>]*>/g,"").trim();if(hx.some(h=>h.indexOf(t)>=0))parts.splice(i,1)}
+  if(hx.length)parts.push('<h3 class="hlph">📖 Cómo funciona</h3><ul class="hlpl">'+hx.map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul>');
+  const body=parts.slice(0,16).join("")||'<p class="hlpi">'+esc(sub||"")+'</p><p class="mut">Esta sección no tiene información extra.</p>';
   const old=$("hlpM");if(old)old.remove();
   const o=document.createElement("div");o.id="hlpM";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-label","Ayuda");
   o.innerHTML='<div class="hlpbox"><button type="button" class="hlpx" aria-label="Cerrar">✕</button><div class="hlpic">💡</div><h2>'+esc(head||"Ayuda")+'</h2>'+(tit&&head!==tit?'<small class="hlps">'+esc(tit)+'</small>':'')+

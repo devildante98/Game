@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.2";
+const GAME_VER="7.8.3";
 const NEWS=[
+{v:"2026-11-18-7.8.3",ver:"7.8.3",at:"2026-11-18T07:19",t:"📖 Ayuda más completa",l:["El botón (?) explica ahora con detalle cómo funcionan el Gacha, los Premios, las Mejoras, la Pokédex, la Guardería, el Compañero, la Torre Batalla, las Expediciones, las Horas felices, el Calendario, los Minijuegos, las Incursiones, el Mercadillo, el Pase, los Logros, Tu entrenador, Novedades, Próximamente e Invitar amigos","Corregido: algunos textos aún decían que la partida se guarda en la nube cada 5 minutos (ahora son 2)"]},
 {v:"2026-11-18-7.8.2",ver:"7.8.2",at:"2026-11-18T07:09",t:"🧹 Fuera el botón «Más información»",l:["Las ventanas ya no tienen el enlace «Más información»: toda la explicación de cada apartado está en el botón (?)"]},
 {v:"2026-11-18-7.8.1",ver:"7.8.1",at:"2026-11-18T07:02",t:"💡 El botón (?) ahora explica cada sección",l:["Al pulsar el botón (?) de cualquier ventana se abre una ventana con toda la información de ese apartado: la explicación completa (lo de «Más información») y los consejos y probabilidades","Se cierra con «Entendido», con la ✕, tocando fuera o con Esc"]},
 {v:"2026-11-18-7.8",ver:"7.8",at:"2026-11-18T06:50",t:"🌾 Zona Safari en 3D",l:["La Zona Safari ahora es un paisaje en 3D: una sabana con hierba alta que se mueve con el viento, acacias, una charca, montañas y mariposas","El cielo cambia con tu hora: de día, al atardecer o de noche con estrellas y luciérnagas","El Pokémon salvaje aparece entre la hierba, con su sombra, y la Safari Ball, el cebo y la roca se lanzan en 3D: verás cómo la Ball se mueve en el suelo antes de saber si lo has atrapado","Si tu dispositivo no puede mostrar 3D, la Zona Safari se ve como antes"]},

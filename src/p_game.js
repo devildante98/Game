@@ -24,6 +24,7 @@ const GMI={
   gift:'<rect x="7" y="19" width="34" height="23" rx="3" fill="#ff5a6a" '+GMK+'/><rect x="5" y="13" width="38" height="9" rx="3" fill="#ff7a88" '+GMK+'/><path d="M24 13v29" stroke="#ffd23f" stroke-width="6"/><path d="M24 13v29" stroke="#1b2340" stroke-width="1" opacity=".3"/><path d="M24 13c-4-8-13-8-11-2 1 3 7 2 11 2zm0 0c4-8 13-8 11-2-1 3-7 2-11 2z" fill="#ffd23f" '+GMK.replace('3"','2.4"')+'/>',
   pass:'<path d="M6 12h36v8a4 4 0 0 0 0 8v8H6v-8a4 4 0 0 0 0-8z" fill="#7a5cff" '+GMK+'/><path d="M24 15l2.6 5.4 5.9.8-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z" fill="#ffd23f" '+GMK.replace('3"','2"')+'/>',
   game:'<path d="M12 15h24c5 0 8 4 8 10l-1 9c-1 5-6 6-9 2l-3-4H17l-3 4c-3 4-8 3-9-2l-1-9c0-6 3-10 8-10z" fill="#7a5cff" '+GMK+'/><path d="M14 21v8M10 25h8" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="22" r="2.4" fill="#ffd23f"/><circle cx="37" cy="27" r="2.4" fill="#5ad1a0"/>',
+  news:'<rect x="7" y="9" width="30" height="32" rx="4" fill="#fff" '+GMK+'/><path d="M37 15h4v20a6 6 0 0 1-6 6" fill="#f3e7ff" '+GMK+'/><rect x="12" y="14" width="20" height="9" rx="2" fill="#ff6aa0"/><path d="M12 28h20M12 33h20M12 38h13" stroke="#1b2340" stroke-width="2.6" stroke-linecap="round"/>',
   quest:'<rect x="9" y="7" width="30" height="36" rx="4" fill="#fff6e0" '+GMK+'/><rect x="17" y="4" width="14" height="7" rx="2" fill="#c8a06a" '+GMK.replace('3"','2.4"')+'/><path d="M15 21l3 3 5-6M15 32l3 3 5-6" stroke="#0e9f6e" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M27 22h6M27 33h6" stroke="#1b2340" stroke-width="2.6" stroke-linecap="round"/>',
   bag:'<path d="M19 9c0-3.5 10-3.5 10 0" fill="none" '+GMK+'/><path d="M12 22c-5 3-5 13-1 18M36 22c5 3 5 13 1 18" fill="none" '+GMK.replace('3"','3.4"')+'/><rect x="10" y="9" width="28" height="35" rx="10" fill="#f08a24" '+GMK+'/><path d="M10 20c0-7 5-11 14-11s14 4 14 11v3c-9 4-19 4-28 0z" fill="#c9601a" '+GMK+'/><rect x="21" y="21" width="6" height="6" rx="1.6" fill="#ffd23f" '+GMK.replace('3"','2.2"')+'/><rect x="15" y="30" width="18" height="11" rx="4" fill="#ffb24d" '+GMK.replace('3"','2.6"')+'/><path d="M18 34h12" fill="none" stroke="#c9601a" stroke-width="2" stroke-linecap="round"/>',
   party:'<path d="M8 42l8-26 18 18z" fill="#ffd23f" '+GMK+'/><path d="M12 30l4 4M14 23l9 9" stroke="#e8414f" stroke-width="2.6"/><circle cx="34" cy="10" r="2.5" fill="#ff7aa8"/><circle cx="40" cy="20" r="2.5" fill="#6cc8ff"/><circle cx="26" cy="7" r="2" fill="#5ad1a0"/><path d="M30 16c2-3 6-3 7-6" stroke="#7a5cff" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
@@ -180,7 +181,7 @@ function gmInit(){
   const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");
   // escenario: botones laterales, entrenador y compañero, y el pueblo
   const farm=$("farm");
-  const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["bag","Mochila","bagU","#f0a020"]];
+  const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["bag","Mochila","bagU","#f0a020"],["news","Novedades","news","#e0447a"]];
   gmEl("div","gSideL","gside",SL.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   gmEl("div","gSideR","gside",SR.map(s=>'<button data-gs="'+s[2]+'" style="--c:'+s[3]+'"><span class="gsi">'+gI(s[0],36)+'</span><b>'+s[1]+'</b><i class="gbd" hidden></i></button>').join(""),farm);
   const orb=farm.querySelector(".orb");if(orb){gmEl("div","gRays","",'',orb);gmEl("div","gPed","",'<i></i>',orb);gmEl("div","gTr","",'',orb);gmEl("div","gBud","",'',orb);gmEl("i","gGround","",'',orb)}
@@ -268,7 +269,7 @@ function gmClick(e){const t=e.target;if(!t.closest||!gmOn())return;
     setTimeout(gmNav,40);return}
   const sb=t.closest("[data-gs]");if(sb){e.stopPropagation();const k=sb.dataset.gs;snd("ui");gmVib(10);
     if(k==="earnP")gmOpen("earnP");else if(k==="mg")$("mgBan")&&$("mgBan").click();else if(k==="pass")$("passMini")&&$("passMini").click();else if(k==="hh")$("hhBan")&&$("hhBan").click();
-    else if(k==="qP")hubOpen("prg","qP");else if(k==="upg"&&typeof upgOpen==="function")upgOpen();else if(k==="bagU")hubOpen("bag","bagU");return}
+    else if(k==="qP")hubOpen("prg","qP");else if(k==="upg"&&typeof upgOpen==="function")upgOpen();else if(k==="bagU")hubOpen("bag","bagU");else if(k==="news"&&typeof newsShow==="function"){newsShow(true);try{S.newsV=GAME_V;save()}catch(e){}}return}
   const bd=t.closest("[data-gb]");if(bd){e.stopPropagation();const i=+bd.dataset.gb;snd("ui");gmVib(8);if(typeof upgOpen==="function"){upgOpen(i);return}gmOpen("shopP");
     setTimeout(()=>{const tl=$("bg"+i);if(!tl)return;try{tl._siv({block:"center",behavior:"smooth"})}catch(x){}tl.classList.remove("gflash");void tl.offsetWidth;tl.classList.add("gflash")},90);return}
   if(t.closest("#gMed")){e.stopPropagation();e.preventDefault();snd("ui");hubOpen("adv","gymP");return}
@@ -327,6 +328,7 @@ function gmTop(){
 }
 function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   const set=(el,v)=>{if(!el)return;const i=el.querySelector(".gbd");if(!i)return;i.hidden=!v;if(v)i.textContent=v===true?"!":v};
+  try{set(document.querySelector('[data-gs="news"]'),typeof GAME_V!=="undefined"&&S.newsV!==GAME_V)}catch(e){}
   set(document.querySelector('[data-gn="soc"]'),bd.soc);set(document.querySelector('[data-gn="menu"]'),(+bd.prg||0)+(+bd.bag||0)||0);set(document.querySelector('[data-gn="exp"]'),bd.adv);
   let dl=false;try{dl=S.daily!==today()}catch(e){}set(document.querySelector('[data-gs="earnP"]'),dl);
   set(document.querySelector('[data-gs="qP"]'),bd.prg);set(document.querySelector('[data-gs="bagU"]'),bd.bag);

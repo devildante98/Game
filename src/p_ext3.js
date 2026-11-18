@@ -2,7 +2,12 @@
 // CALENDARIO DE EVENTOS, VITRINA DEL PERFIL Y ESTADÍSTICAS
 // =====================================================================================
 // ---------- tiempo jugado ----------
-setInterval(()=>{if(!document.hidden){S.ptime=(S.ptime||0)+30}},30000);
+// Se suma el tiempo real con el juego abierto (también minimizado o en otra pestaña, mientras sigues «Conectado»),
+// comprobando cada 5 s. Si entre dos comprobaciones pasa mucho rato (equipo suspendido), solo cuenta 65 s.
+// Cada dispositivo recuerda el máximo de la cuenta, para que otra partida guardada con menos horas no lo baje.
+{let last=Date.now();const key=()=>{let u="local";try{u=(window.FB&&window.FB.uid&&window.FB.uid())||"local"}catch(e){}return "pgc-pt-"+u};
+  setInterval(()=>{const now=Date.now(),d=Math.min(65000,Math.max(0,now-last));last=now;if(typeof S==="undefined"||!S)return;S.ptime=(S.ptime||0)+d/1000;
+    try{const k=key(),m=+localStorage.getItem(k)||0;if(m>S.ptime)S.ptime=m;else if(S.ptime-m>=5)localStorage.setItem(k,String(Math.floor(S.ptime)))}catch(e){}},5000)}
 // ---------- CALENDARIO ----------
 nxPanel("calP","📅 Calendario de eventos","Todo lo que pasa en los próximos 7 días, a la misma hora para todos los jugadores (hora de España). ¡Conéctate a tiempo!");
 {const g=HUB.find(x=>x.k==="act");if(g&&!g.tabs.some(t=>t[0]==="calP"))g.tabs.push(["calP","Calendario"]);HUBP.calP="act";HUBR.calP=()=>calUI()}

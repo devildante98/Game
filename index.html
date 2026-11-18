@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.17.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.17.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795037961">
+<meta name="game-build" content="1795038227">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3121,7 +3121,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.17.1</small>
+    <small class="pcver">Versión 7.17.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7872,8 +7872,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.17.1";
+const GAME_VER="7.17.2";
 const NEWS=[
+{v:"2026-11-18-7.17.2",ver:"7.17.2",at:"2026-11-18T22:43",t:"⏱️ Las horas jugadas se cuentan bien",l:["Las horas jugadas cuentan ahora todo el tiempo que tienes el juego abierto, también minimizado o en otra pestaña (antes solo contaba con la pestaña a la vista)","Ya no se pierde tiempo al recargar la página ni al jugar en varios dispositivos"]},
 {v:"2026-11-18-7.17.1",ver:"7.17.1",at:"2026-11-18T22:16",t:"⚡ Mejor rendimiento en la pantalla principal",l:["Tu entrenador en 3D gasta mucho menos: cuando está en una pose quieta se dibuja 8 veces por segundo en lugar de 24 (casi no se nota)","El pueblo en 3D se dibuja a 15 imágenes por segundo y, si el equipo va justo, pasa solo al modo ligero (antes el modo ligero automático no lo afectaba)","Menos trabajo de fondo mientras juegas","Si aún va lento, activa ⚙️ Ajustes › Animaciones ligeras"]},
 {v:"2026-11-18-7.17",ver:"7.17",at:"2026-11-18T19:36",t:"🏆 Logros menos exagerados",l:["Muchos logros piden ahora bastante menos, para que el prestigio no se haga pesado. Los premios de cada nivel son los mismos","Adicto al gacha: 100 · 500 · 2.500 · 10.000 · 25.000 tiradas (antes hasta 100.000) · Dedo de acero: hasta 200.000 toques (antes 1.000.000)","Combatiente: 10 · 50 · 150 · 400 · 1.000 victorias · Rival temido y Atrapalotodo: hasta 300 · Cliente habitual: 5 · 25 · 80 curas · Constancia: 5 · 20 · 50 · 100 misiones","Evolucionista: hasta 80 · Rey del PVP: hasta 500","Los logros de los niveles de prestigio también piden menos tiradas, toques, curas, compras, misiones, combates y capturas","Si ya cumplías alguno de los nuevos objetivos, ya puedes reclamarlo"]},
 {v:"2026-11-18-7.16.1",ver:"7.16.1",at:"2026-11-18T19:22",t:"🎆 Más tickets en el regalo de Año Nuevo",l:["El regalo de Año Nuevo da ahora 48 horas de producción de tu pueblo (antes 30), o 150 millones de tickets si es más"]},
@@ -8279,7 +8280,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795037961";
+const GAME_B="1795038227";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -14497,7 +14498,12 @@ function dbStart(){
 // CALENDARIO DE EVENTOS, VITRINA DEL PERFIL Y ESTADÍSTICAS
 // =====================================================================================
 // ---------- tiempo jugado ----------
-setInterval(()=>{if(!document.hidden){S.ptime=(S.ptime||0)+30}},30000);
+// Se suma el tiempo real con el juego abierto (también minimizado o en otra pestaña, mientras sigues «Conectado»),
+// comprobando cada 5 s. Si entre dos comprobaciones pasa mucho rato (equipo suspendido), solo cuenta 65 s.
+// Cada dispositivo recuerda el máximo de la cuenta, para que otra partida guardada con menos horas no lo baje.
+{let last=Date.now();const key=()=>{let u="local";try{u=(window.FB&&window.FB.uid&&window.FB.uid())||"local"}catch(e){}return "pgc-pt-"+u};
+  setInterval(()=>{const now=Date.now(),d=Math.min(65000,Math.max(0,now-last));last=now;if(typeof S==="undefined"||!S)return;S.ptime=(S.ptime||0)+d/1000;
+    try{const k=key(),m=+localStorage.getItem(k)||0;if(m>S.ptime)S.ptime=m;else if(S.ptime-m>=5)localStorage.setItem(k,String(Math.floor(S.ptime)))}catch(e){}},5000)}
 // ---------- CALENDARIO ----------
 nxPanel("calP","📅 Calendario de eventos","Todo lo que pasa en los próximos 7 días, a la misma hora para todos los jugadores (hora de España). ¡Conéctate a tiempo!");
 {const g=HUB.find(x=>x.k==="act");if(g&&!g.tabs.some(t=>t[0]==="calP"))g.tabs.push(["calP","Calendario"]);HUBP.calP="act";HUBR.calP=()=>calUI()}
@@ -21530,7 +21536,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.17.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.17.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

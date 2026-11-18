@@ -312,7 +312,8 @@ window.addEventListener("keydown",e=>{if(!EX.cv||!EX.cv.isConnected||EX.title||E
 // VENTANAS DE CONFIRMACIÓN (¿Activar…? ¿Borrar…?): con el mando o el teclado se elige entre sus botones,
 // y el panel de detrás se queda quieto mientras están abiertas
 // =====================================================================================
-const uiDlgOpen=()=>{const d=[...document.querySelectorAll(".uidlg")].find(x=>!x.hidden&&x.getClientRects().length>0);return d||null};
+// (rendimiento) casi siempre no hay ninguna: se mira primero sin medir nada, para no forzar al navegador a recalcular la página
+const uiDlgOpen=()=>{if(!document.querySelector(".uidlg:not([hidden])"))return null;const d=[...document.querySelectorAll(".uidlg:not([hidden])")].find(x=>x.getClientRects().length>0);return d||null};
 {const _eo=exOverlay;exOverlay=function(){if(uiDlgOpen())return null;return _eo.apply(this,arguments)}}
 function udBtns(d){return [...d.querySelectorAll("button")].filter(b=>b.offsetParent!==null&&!b.disabled)}
 function udMove(d,dir){const L=udBtns(d);if(!L.length)return;const a=document.activeElement;let i=L.indexOf(a);

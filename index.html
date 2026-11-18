@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.17"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.17.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795027543">
+<meta name="game-build" content="1795036596">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3117,7 +3117,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.17</small>
+    <small class="pcver">Versión 7.17.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7868,8 +7868,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.17";
+const GAME_VER="7.17.1";
 const NEWS=[
+{v:"2026-11-18-7.17.1",ver:"7.17.1",at:"2026-11-18T22:16",t:"⚡ Mejor rendimiento en la pantalla principal",l:["Tu entrenador en 3D gasta mucho menos: cuando está en una pose quieta se dibuja 8 veces por segundo en lugar de 24 (casi no se nota)","El pueblo en 3D se dibuja a 15 imágenes por segundo y, si el equipo va justo, pasa solo al modo ligero (antes el modo ligero automático no lo afectaba)","Menos trabajo de fondo mientras juegas","Si aún va lento, activa ⚙️ Ajustes › Animaciones ligeras"]},
 {v:"2026-11-18-7.17",ver:"7.17",at:"2026-11-18T19:36",t:"🏆 Logros menos exagerados",l:["Muchos logros piden ahora bastante menos, para que el prestigio no se haga pesado. Los premios de cada nivel son los mismos","Adicto al gacha: 100 · 500 · 2.500 · 10.000 · 25.000 tiradas (antes hasta 100.000) · Dedo de acero: hasta 200.000 toques (antes 1.000.000)","Combatiente: 10 · 50 · 150 · 400 · 1.000 victorias · Rival temido y Atrapalotodo: hasta 300 · Cliente habitual: 5 · 25 · 80 curas · Constancia: 5 · 20 · 50 · 100 misiones","Evolucionista: hasta 80 · Rey del PVP: hasta 500","Los logros de los niveles de prestigio también piden menos tiradas, toques, curas, compras, misiones, combates y capturas","Si ya cumplías alguno de los nuevos objetivos, ya puedes reclamarlo"]},
 {v:"2026-11-18-7.16.1",ver:"7.16.1",at:"2026-11-18T19:22",t:"🎆 Más tickets en el regalo de Año Nuevo",l:["El regalo de Año Nuevo da ahora 48 horas de producción de tu pueblo (antes 30), o 150 millones de tickets si es más"]},
 {v:"2026-11-18-7.16",ver:"7.16",at:"2026-11-18T19:16",t:"🎆 Regalo de Año Nuevo tremendamente especial",l:["El 1 de enero podrás elegir 2 legendarios variocolor entre 5. ¡Cada entrenador tiene sus propios 5, distintos a los de los demás!","Además, para todos lo mismo: 150 millones de tickets (o 48 horas de producción de tu pueblo, si es más), 12 Master Ball, 6 Cristales Supremos, 50 Caramelos Raros, 10 PP máximos, 20 Teralitos y 6 objetos equipables","💬 La ventana del chat es más ancha en ordenador"]},
@@ -8274,7 +8275,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795027543";
+const GAME_B="1795036596";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -16430,7 +16431,8 @@ window.addEventListener("keydown",e=>{if(!EX.cv||!EX.cv.isConnected||EX.title||E
 // VENTANAS DE CONFIRMACIÓN (¿Activar…? ¿Borrar…?): con el mando o el teclado se elige entre sus botones,
 // y el panel de detrás se queda quieto mientras están abiertas
 // =====================================================================================
-const uiDlgOpen=()=>{const d=[...document.querySelectorAll(".uidlg")].find(x=>!x.hidden&&x.getClientRects().length>0);return d||null};
+// (rendimiento) casi siempre no hay ninguna: se mira primero sin medir nada, para no forzar al navegador a recalcular la página
+const uiDlgOpen=()=>{if(!document.querySelector(".uidlg:not([hidden])"))return null;const d=[...document.querySelectorAll(".uidlg:not([hidden])")].find(x=>x.getClientRects().length>0);return d||null};
 {const _eo=exOverlay;exOverlay=function(){if(uiDlgOpen())return null;return _eo.apply(this,arguments)}}
 function udBtns(d){return [...d.querySelectorAll("button")].filter(b=>b.offsetParent!==null&&!b.disabled)}
 function udMove(d,dir){const L=udBtns(d);if(!L.length)return;const a=document.activeElement;let i=L.indexOf(a);
@@ -19765,12 +19767,14 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
 (function(){const tryAttach=()=>{const bg=document.getElementById("gBg");if(!bg)return false;if(document.getElementById("gLand3"))return true;
     const cv=document.createElement("canvas");cv.id="gLand3";cv.setAttribute("aria-hidden","true");let L=null;try{L=LAND3(cv)}catch(e){L=null}if(!L)return true;
     bg.appendChild(cv);document.body.classList.add("land3");try{L._coarse=matchMedia("(pointer:coarse)").matches}catch(e){}window.pcPause=1;window.LAND3I=L;
-    const fit=()=>{const lite=document.body.classList.contains("lite")||(window.S&&S.o&&S.o.lite);L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",fit);
+    // modo ligero: el de Ajustes o el automático (si el equipo va justo, GM.liteAuto pone «glite»)
+    const isLite=()=>document.body.classList.contains("lite")||document.body.classList.contains("glite")||!!(window.S&&S.o&&S.o.lite);
+    const fit=()=>{const lite=isLite();L._fl=lite;L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",fit);
     const t0=performance.now();let last=0;
     const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm"))return;
       // con una ventana o una sección abierta encima, el paisaje se queda quieto
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
-      const lite=document.body.classList.contains("lite")||(window.S&&S.o&&S.o.lite),gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?66:50;if(ts-last<gap)return;last=ts;
+      const lite=isLite();if(lite!==L._fl)fit();const gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?80:66;if(ts-last<gap)return;last=ts;
       try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
         L.env=window.WXENV||null;L.lite=!!lite;
         L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L)}catch(e){console.error(e)}};
@@ -20210,8 +20214,12 @@ function av3Attach(host,key,getLook,o){if(!av3Attach.ready)return false;o=o||{};
   if(v.big&&host.id!=="av3BigH")return true;
   if(v.bad)return false;v.get=getLook;v.o=o;if(v.cv.parentNode!==host){host.innerHTML="";host.appendChild(v.cv)}
   if(!v.run){v.run=true;v.last=0;const calm=()=>typeof hubCalm==="function"&&hubCalm(),gap=o.fps?1000/o.fps:33;
-    const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(v.o.pause&&v.o.pause())return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
-      const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(v.o.lo?1.5:2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
+    // (rendimiento) primero lo barato: si aún no toca dibujar, no se mira nada más. Las poses quietas (solo respiran)
+    // se dibujan a 8 imágenes por segundo, y el tamaño del lienzo se comprueba una vez por segundo.
+    const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);const po0=typeof v.o.pose==="function"?v.o.pose():v.o.pose,still=!v.drag&&(!po0||po0==="i"||/^f_/.test(po0)),g2=still?Math.max(gap,125):gap;if(ts-v.last<g2)return;
+      if(document.hidden||v.cv.offsetParent===null)return;if(v.o.pause&&v.o.pause())return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;v.last=ts;
+      if(!v._bt||ts-v._bt>1000||v.drag){v._bt=ts;v._b=v.cv.parentNode.getBoundingClientRect()}
+      const b=v._b,d=Math.min(v.o.lo?1.5:2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
       try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L,v.o.lo)&&!(v.o.lo&&av3mHas(L,false))){v.sig=null;return}v.sig2=v.sig;const po=typeof v.o.pose==="function"?v.o.pose():v.o.pose;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy+"|"+po;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy,lo:v.o.lo,pose:po})}catch(e){}};requestAnimationFrame(loop)}
   return true}
 // zoom de una vista viva: k multiplica el zoom actual (1 = solo recolocar) y f es la altura del puntero (0 arriba, 1 abajo),
@@ -21510,7 +21518,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.17";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.17.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

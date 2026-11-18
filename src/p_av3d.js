@@ -319,8 +319,12 @@ function av3Attach(host,key,getLook,o){if(!av3Attach.ready)return false;o=o||{};
   if(v.big&&host.id!=="av3BigH")return true;
   if(v.bad)return false;v.get=getLook;v.o=o;if(v.cv.parentNode!==host){host.innerHTML="";host.appendChild(v.cv)}
   if(!v.run){v.run=true;v.last=0;const calm=()=>typeof hubCalm==="function"&&hubCalm(),gap=o.fps?1000/o.fps:33;
-    const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(v.o.pause&&v.o.pause())return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
-      const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(v.o.lo?1.5:2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
+    // (rendimiento) primero lo barato: si aún no toca dibujar, no se mira nada más. Las poses quietas (solo respiran)
+    // se dibujan a 8 imágenes por segundo, y el tamaño del lienzo se comprueba una vez por segundo.
+    const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);const po0=typeof v.o.pose==="function"?v.o.pose():v.o.pose,still=!v.drag&&(!po0||po0==="i"||/^f_/.test(po0)),g2=still?Math.max(gap,125):gap;if(ts-v.last<g2)return;
+      if(document.hidden||v.cv.offsetParent===null)return;if(v.o.pause&&v.o.pause())return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;v.last=ts;
+      if(!v._bt||ts-v._bt>1000||v.drag){v._bt=ts;v._b=v.cv.parentNode.getBoundingClientRect()}
+      const b=v._b,d=Math.min(v.o.lo?1.5:2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
       try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L,v.o.lo)&&!(v.o.lo&&av3mHas(L,false))){v.sig=null;return}v.sig2=v.sig;const po=typeof v.o.pose==="function"?v.o.pose():v.o.pose;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy+"|"+po;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy,lo:v.o.lo,pose:po})}catch(e){}};requestAnimationFrame(loop)}
   return true}
 // zoom de una vista viva: k multiplica el zoom actual (1 = solo recolocar) y f es la altura del puntero (0 arriba, 1 abajo),

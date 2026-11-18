@@ -43,14 +43,17 @@ const G_MEM={id:"mem",n:"Memoria Pokémon",ic:"🃏",c:"#7a4ae0",d:"Encuentra la
   rw:s=>s*90,
   start(B,end){
     const pk=mgPick(P.filter(p=>p[2]!=="M"),8),cards=pk.concat(pk).sort(()=>Math.random()-.5);let open=[],moves=0,pairs=0,lock=false;const t0=Date.now();
-    B.innerHTML='<div class="whohd"><span>Intentos: <b id="memM">0</b></span><span>Parejas: <b id="memP">0</b>/8</span><span>⏱️ <b id="memT">0</b> s</span></div><div class="memg">'+cards.map((p,i)=>'<button class="memc" data-mi="'+i+'" aria-label="Carta"><span class="memf memb"></span><span class="memf memp '+p[2]+'">'+ico(p,64)+'</span></button>').join("")+'</div>';
+    B.innerHTML='<div class="whohd"><span>Intentos: <b id="memM">0</b></span><span>Parejas: <b id="memP">0</b>/8</span><span>⏱️ <b id="memT">0</b> s</span></div><div class="memg">'+cards.map((p,i)=>'<button class="memc" data-mi="'+i+'" aria-label="Carta"><span class="memf memb"></span><span class="memf memp '+p[2]+'"></span></button>').join("")+'</div>';
     mgI(()=>{const e=$("memT");if(e)e.textContent=Math.floor((Date.now()-t0)/1000)},250);mgSet(0);
     B.querySelectorAll(".memc").forEach(c=>c.onclick=()=>{
-      if(lock||c.classList.contains("up"))return;c.classList.add("up");snd("click");open.push(c);
+      if(lock||c.classList.contains("up"))return;
+      // la imagen solo se pone al dar la vuelta a la carta (así no se puede ver antes arrastrando o seleccionando)
+      {const f=c.querySelector(".memp");if(f)f.innerHTML=ico(cards[+c.dataset.mi],64);clearTimeout(c._clr)}c.classList.add("up");snd("click");open.push(c);
       if(open.length<2)return;moves++;$("memM").textContent=moves;const [a,b]=open;open=[];
       if(cards[+a.dataset.mi]===cards[+b.dataset.mi]){pairs++;$("memP").textContent=pairs;snd("buff");mgT(()=>{a.classList.add("done");b.classList.add("done")},250);const r=b.getBoundingClientRect();mgPop(r.left+r.width/2,r.top,"¡Pareja!","#3ecf8e");
         if(pairs===8){const sec=(Date.now()-t0)/1000;mgSet(Math.max(100,1600-moves*40-sec*8));mgT(()=>end(MG.score),900)}}
-      else{lock=true;mgT(()=>{a.classList.remove("up");b.classList.remove("up");lock=false},800)}
+      else{lock=true;mgT(()=>{a.classList.remove("up");b.classList.remove("up");lock=false;
+        [a,b].forEach(x=>{x._clr=setTimeout(()=>{if(!x.classList.contains("up")){const f=x.querySelector(".memp");if(f)f.innerHTML=""}},450)})},800)}
     });
   }};
 
@@ -201,3 +204,8 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 // (si no, al pulsar «Otra vez» muy rápido la marca llegaba con el reloj ya reiniciado y se rechazaba)
 function mgPlayStart(id){try{if(typeof mgrW==="function")mgrW().ls[id]=Date.now()}catch(e){}
   try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid()){const go=()=>window.FB.playStart(id);const b=typeof MGR!=="undefined"&&MGR.busy;if(b)Promise.race([b,new Promise(r=>setTimeout(r,8000))]).then(go,go);else go()}}catch(e){}}
+
+// (minijuegos) nada se puede arrastrar ni abrir con el botón derecho: así no se ven las imágenes ocultas o en silueta
+document.addEventListener("dragstart",e=>{if(e.target&&e.target.closest&&e.target.closest("#mgM"))e.preventDefault()},true);
+document.addEventListener("contextmenu",e=>{if(e.target&&e.target.closest&&e.target.closest("#mgM img,#mgM canvas"))e.preventDefault()},true);
+document.addEventListener("selectstart",e=>{const t=e.target&&e.target.nodeType===1?e.target:e.target&&e.target.parentElement;if(t&&t.closest&&t.closest("#mgM")&&!t.closest("input,textarea"))e.preventDefault()},true);

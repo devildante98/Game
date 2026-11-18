@@ -1361,3 +1361,7 @@ body.calm #nyM .nyshine{animation:none;display:none}
 
 /* ventana del chat más ancha (en móvil sigue a pantalla completa) */
 @media (min-width:621px){#chw{width:min(560px,calc(100vw - 24px))}}
+
+/* minijuegos: no se puede seleccionar ni arrastrar nada (las imágenes ocultas no se pueden ver así) */
+#mgM{-webkit-user-select:none;user-select:none}#mgM img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
+#mgM input,#mgM textarea{-webkit-user-select:text;user-select:text}

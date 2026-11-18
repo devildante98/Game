@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.7"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.7.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794978331">
+<meta name="game-build" content="1794978733">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2967,7 +2967,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.7</small>
+    <small class="pcver">Versión 7.7.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7157,7 +7157,7 @@ function clSum(txt,at){
 function clUI(){
   const T={
     init:"Comprobando tu cuenta…",
-    local:window.FB?"Tu progreso se guarda siempre en este navegador y se sube a tu cuenta en la nube automáticamente cada 5 minutos, al cerrar o cambiar de pestaña y cuando pulses «💾 Guardar» (arriba).":"Juegas sin cuenta: tu progreso solo se guarda en este navegador. Usa Exportar para hacer una copia.",
+    local:window.FB?"Tu progreso se guarda siempre en este navegador y se sube a tu cuenta en la nube automáticamente cada 2 minutos, en cuanto consigues algo importante (una medalla, la Liga…), al cerrar o cambiar de pestaña y cuando pulses «💾 Guardar» (arriba).":"Juegas sin cuenta: tu progreso solo se guarda en este navegador. Usa Exportar para hacer una copia.",
     anon:"Sin cuenta: inicia sesión en claude.ai para guardar tu progreso en la nube. Mientras, se guarda en este navegador.",
     readonly:"Tu nivel de acceso a esta página no permite guardar en la nube. Tu progreso se guarda en este navegador y puedes usar Exportar/Importar.",
     ok:"Conectado"+(CL.name?" como "+CL.name:"")+". Tu progreso se guarda solo, en tu espacio privado"+(CL.at?" (última copia: "+new Date(CL.at).toLocaleTimeString("es")+")":"")+".",
@@ -7650,8 +7650,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.7";
+const GAME_VER="7.7.1";
 const NEWS=[
+{v:"2026-11-18-7.7.1",ver:"7.7.1",at:"2026-11-18T06:12",t:"💾 Lo importante se guarda en la nube al momento",l:["Arreglado: si conseguías una medalla y cerrabas el juego (o lo abrías en otro dispositivo) antes del siguiente guardado en la nube, al volver podía no estar","Ahora las medallas (de gimnasio y de Exploración), la Liga, el Salón de la Fama y el prestigio se suben a la nube en cuanto los consigues","Además, el guardado automático en la nube pasa a ser cada 2 minutos en vez de cada 5"]},
 {v:"2026-11-18-7.7",ver:"7.7",at:"2026-11-18T06:05",t:"📸 14 poses fijas nuevas para tu tarjeta",l:["En «Mi tarjeta» hay ahora poses fijas además de las animadas: Puño en alto, Manos en la cintura, Brazos cruzados, Mirando a lo lejos, Mano al pecho, ¡Listo para combatir!, Mano en la nuca, Brazos abiertos, Manos a la espalda, Victoria con la mano, Encogerse de hombros, Una mano en la cintura, Puño al frente y Sacar músculo","Como las animadas, se ven en tu tarjeta (también la que ven los demás) y en tu entrenador de la pantalla principal"]},
 {v:"2026-11-18-7.6",ver:"7.6",at:"2026-11-18T05:56",t:"🕺 Poses animadas para tu entrenador",l:["En «Tu entrenador → Mi tarjeta» puedes elegir una pose: Normal, Saludar, ¡Victoria!, Lanzar Poké Ball, Señalar, Bailar o Pensativo","La pose se mueve: saluda con la mano, lanza la Poké Ball una y otra vez, baila…","Se ve en tu tarjeta en 3D (también en la que ven los demás jugadores) y en tu entrenador de la pantalla principal"]},
 {v:"2026-11-18-7.5",ver:"7.5",at:"2026-11-18T05:42",t:"🎮 Premios de los minijuegos desde el servidor",l:["Con cuenta, el premio de cada partida de minijuego lo calcula ahora el servidor: comprueba la puntuación y lleva las 3 partidas con premio de cada día","El premio aparece en la pantalla final en cuanto responde el servidor (un instante)","Las cantidades son las mismas de siempre, también el doble en la franja de minijuegos"]},
@@ -8024,7 +8025,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794978331";
+const GAME_B="1794978733";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -19937,6 +19938,17 @@ function srvDayApply(d){
       else show('<span class="mut">⚠️ '+(srvErr(r)||"No se ha podido dar el premio.")+'</span>')})
     .catch(()=>show('<span class="mut">⚠️ '+SRV_RED+'</span>'))}}
 
+// ---- lo importante se sube a la nube al momento ----
+// Medallas (gimnasios y Exploración), Liga, Salón de la Fama, campeón de Exploración y prestigio: en cuanto cambian,
+// la partida se guarda en la nube sin esperar al guardado automático. Así, si se cierra el juego de golpe o se
+// abre en otro dispositivo, no se pierden.
+let _hito=null;
+setInterval(()=>{try{
+  if(!window.FB||!window.cloudFlush||(typeof XGSW!=="undefined"&&XGSW))return;
+  let xb=0,ch=0;try{const f=stSt().f;for(let i=0;i<8;i++)if(f["xb"+i])xb++;ch=f.champ?1:0}catch(e){}
+  const k=[medCount(),xb,ch,Object.keys(S.lgDone||{}).length,(S.hof||[]).length,S.prs|0].join(",");
+  if(_hito!==null&&k!==_hito){save();window.cloudFlush(true);setTimeout(()=>{try{window.cloudFlush(true)}catch(e){}},6000)}_hito=k}catch(e){}},2000);
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -20172,14 +20184,14 @@ async function main(){
     async leave(){this.closed=true;clearInterval(this.hb);try{this.unsub()}catch(e){}try{await S.deleteDoc(S.doc(this.db,...this.path,this.uid))}catch(e){}}
   }
   // Guardado en la nube con pocas escrituras: el juego guarda en el navegador continuamente, pero a Firestore
-  // solo se sube cada 5 minutos (si hay cambios), al ocultar/cerrar la pestaña y al pulsar el boton 💾.
-  const AUTO=5*60000;let lastW=0,lastSaved="",busy=false;
+  // solo se sube cada 2 minutos (si hay cambios), al conseguir algo importante (p_srv.js), al ocultar/cerrar la pestaña y al pulsar el boton 💾.
+  const AUTO=2*60000;let lastW=0,lastSaved="",busy=false;
   const hhmm=t=>new Date(t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});
-  const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;{const a=g("acct");if(a)a.classList.toggle("dirty",dirty)}e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 5 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
+  const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;{const a=g("acct");if(a)a.classList.toggle("dirty",dirty)}e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 2 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.7";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.7.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

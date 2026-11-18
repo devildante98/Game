@@ -155,3 +155,14 @@ function srvDayApply(d){
       else if(r&&r.why==="puntos")show('<span class="mut">⚠️ Esta puntuación no cuadra con el tiempo jugado: sin premio.</span>');
       else show('<span class="mut">⚠️ '+(srvErr(r)||"No se ha podido dar el premio.")+'</span>')})
     .catch(()=>show('<span class="mut">⚠️ '+SRV_RED+'</span>'))}}
+
+// ---- lo importante se sube a la nube al momento ----
+// Medallas (gimnasios y Exploración), Liga, Salón de la Fama, campeón de Exploración y prestigio: en cuanto cambian,
+// la partida se guarda en la nube sin esperar al guardado automático. Así, si se cierra el juego de golpe o se
+// abre en otro dispositivo, no se pierden.
+let _hito=null;
+setInterval(()=>{try{
+  if(!window.FB||!window.cloudFlush||(typeof XGSW!=="undefined"&&XGSW))return;
+  let xb=0,ch=0;try{const f=stSt().f;for(let i=0;i<8;i++)if(f["xb"+i])xb++;ch=f.champ?1:0}catch(e){}
+  const k=[medCount(),xb,ch,Object.keys(S.lgDone||{}).length,(S.hof||[]).length,S.prs|0].join(",");
+  if(_hito!==null&&k!==_hito){save();window.cloudFlush(true);setTimeout(()=>{try{window.cloudFlush(true)}catch(e){}},6000)}_hito=k}catch(e){}},2000);

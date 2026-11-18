@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.7";
+const GAME_VER="7.7.1";
 const NEWS=[
+{v:"2026-11-18-7.7.1",ver:"7.7.1",at:"2026-11-18T06:12",t:"💾 Lo importante se guarda en la nube al momento",l:["Arreglado: si conseguías una medalla y cerrabas el juego (o lo abrías en otro dispositivo) antes del siguiente guardado en la nube, al volver podía no estar","Ahora las medallas (de gimnasio y de Exploración), la Liga, el Salón de la Fama y el prestigio se suben a la nube en cuanto los consigues","Además, el guardado automático en la nube pasa a ser cada 2 minutos en vez de cada 5"]},
 {v:"2026-11-18-7.7",ver:"7.7",at:"2026-11-18T06:05",t:"📸 14 poses fijas nuevas para tu tarjeta",l:["En «Mi tarjeta» hay ahora poses fijas además de las animadas: Puño en alto, Manos en la cintura, Brazos cruzados, Mirando a lo lejos, Mano al pecho, ¡Listo para combatir!, Mano en la nuca, Brazos abiertos, Manos a la espalda, Victoria con la mano, Encogerse de hombros, Una mano en la cintura, Puño al frente y Sacar músculo","Como las animadas, se ven en tu tarjeta (también la que ven los demás) y en tu entrenador de la pantalla principal"]},
 {v:"2026-11-18-7.6",ver:"7.6",at:"2026-11-18T05:56",t:"🕺 Poses animadas para tu entrenador",l:["En «Tu entrenador → Mi tarjeta» puedes elegir una pose: Normal, Saludar, ¡Victoria!, Lanzar Poké Ball, Señalar, Bailar o Pensativo","La pose se mueve: saluda con la mano, lanza la Poké Ball una y otra vez, baila…","Se ve en tu tarjeta en 3D (también en la que ven los demás jugadores) y en tu entrenador de la pantalla principal"]},
 {v:"2026-11-18-7.5",ver:"7.5",at:"2026-11-18T05:42",t:"🎮 Premios de los minijuegos desde el servidor",l:["Con cuenta, el premio de cada partida de minijuego lo calcula ahora el servidor: comprueba la puntuación y lleva las 3 partidas con premio de cada día","El premio aparece en la pantalla final en cuanto responde el servidor (un instante)","Las cantidades son las mismas de siempre, también el doble en la franja de minijuegos"]},
@@ -686,7 +687,7 @@ rep('async function pvInit0(){\n  $("pvNick").value=pvNick();', 'async function 
 rep("PR.onPeers(()=>pvRender(),()=>{PR=null;pvRender()});", "PR.onPeers(()=>{pvRender();gUI()},()=>{PR=null;pvRender()});")
 # guardado en la nube: textos
 rep('local:"Si has iniciado sesión, tu progreso se guarda también en tu cuenta (nube). Si juegas sin cuenta, solo se guarda en este navegador.",',
-    'local:window.FB?"Tu progreso se guarda siempre en este navegador y se sube a tu cuenta en la nube automáticamente cada 5 minutos, al cerrar o cambiar de pestaña y cuando pulses «💾 Guardar» (arriba).":"Juegas sin cuenta: tu progreso solo se guarda en este navegador. Usa Exportar para hacer una copia.",')
+    'local:window.FB?"Tu progreso se guarda siempre en este navegador y se sube a tu cuenta en la nube automáticamente cada 2 minutos, en cuanto consigues algo importante (una medalla, la Liga…), al cerrar o cambiar de pestaña y cuando pulses «💾 Guardar» (arriba).":"Juegas sin cuenta: tu progreso solo se guarda en este navegador. Usa Exportar para hacer una copia.",')
 rep('function clBind(){', 'function clBind(){\n  if(window.FB){$("clCloud").hidden=false;$("clCloud").onclick=()=>$("asave").click()}')
 
 # ---------------------------------------------------------------- Firebase: menos escrituras + amigos y gremios
@@ -701,10 +702,10 @@ rep('''  async function flush(){
   addEventListener("beforeunload",flush);
   document.addEventListener("visibilitychange",()=>{if(document.hidden)flush()});''',
 '''  // Guardado en la nube con pocas escrituras: el juego guarda en el navegador continuamente, pero a Firestore
-  // solo se sube cada 5 minutos (si hay cambios), al ocultar/cerrar la pestaña y al pulsar el boton 💾.
-  const AUTO=5*60000;let lastW=0,lastSaved="",busy=false;
+  // solo se sube cada 2 minutos (si hay cambios), al conseguir algo importante (p_srv.js), al ocultar/cerrar la pestaña y al pulsar el boton 💾.
+  const AUTO=2*60000;let lastW=0,lastSaved="",busy=false;
   const hhmm=t=>new Date(t).toLocaleTimeString("es",{hour:"2-digit",minute:"2-digit"});
-  const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;{const a=g("acct");if(a)a.classList.toggle("dirty",dirty)}e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 5 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
+  const syncTxt=()=>{const e=g("sync");if(!e)return;const dirty=pending!==null&&pending!==lastSaved;{const a=g("acct");if(a)a.classList.toggle("dirty",dirty)}e.textContent=dirty?"● Sin subir":"☁️ "+(lastW?hhmm(lastW):"OK");e.title=(dirty?"Hay cambios que se subirán a la nube en breve. ":"")+(lastW?"Último guardado en la nube: "+hhmm(lastW)+". ":"")+"Se guarda solo cada 2 minutos, al cerrar o cambiar de pestaña y al pulsar 💾."};
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.

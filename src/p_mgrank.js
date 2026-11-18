@@ -54,7 +54,9 @@ async function mgrClaim(){
   const pw=tourPrevWeek();if(!window.FB||!window.FB.tourTop||!window.FB.uid||!window.FB.uid())return;const PM_=S.mgw&&S.mgw.w===pw?S.mgw:S.mgwPrev&&S.mgwPrev.w===pw?S.mgwPrev:null;if(!PM_||S.mgrDone===pw)return;
   const me=window.FB.uid(),won=[];
   for(const gid of Object.keys(PM_.b||{})){if(!(PM_.b[gid]>0))continue;let top=null;try{top=await window.FB.tourTop(MGR_KEY(pw,gid),25)}catch(e){return}const i=(top||[]).findIndex(x=>x.id===me);const rw=mgrRw(gid,i);if(rw){grant(rw);won.push({g:MGS.find(x=>x.id===gid),i:i,rw:rw})}}
-  S.mgrDone=pw;delete S.mgwPrev;save();render();if(!won.length)return;snd("win");
+  S.mgrDone=pw;delete S.mgwPrev;save();render();mgrShow(won,pw);
+}
+function mgrShow(won,pw){if(!won.length)return;snd("win");
   nxModal('<div class="hofb">📊</div><h3>¡Premios de la clasificación semanal!</h3><p class="mut">Semana '+pw.split("-W")[1]+'</p><div class="mgrwon">'+won.map(x=>'<div><span>'+(MGR_TIER.find(t=>t.p>=x.i+1)||{}).ic+'</span><b>'+(x.g?x.g.ic+" "+x.g.n:"")+'</b><small>'+(x.i+1)+'º · '+rwTxt(x.rw)+'</small></div>').join("")+'</div><button id="mgrOk">¡Genial!</button>');$("mgrOk").onclick=nxModalClose;
 }
 setTimeout(()=>{try{mgrClaim()}catch(e){}},9000);

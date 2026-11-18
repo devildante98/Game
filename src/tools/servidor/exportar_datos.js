@@ -24,6 +24,13 @@ const URL = process.argv[2] || "http://localhost:8765/index.html";
     // logros sin prestigio: [id, dificultad de cada nivel] · AR: premio de cada dificultad
     logros0: ACH0.map((a) => [a[0], a[5].map((l) => l[1])]),
     AR: AR,
+    // premios semanales: torneo y clasificaciones de minijuegos (_server/semana.js)
+    semanal: {
+      tourTiers: TOUR_TIERS.map((T) => ({k: T.k, t: T.t, h: T.h, it: T.it, hold: T.hold | 0, mon: T.mon || null, sh: T.sh || 0})),
+      mgrTier: MGR_TIER.map((T) => ({p: T.p, t: T.t, h: T.h, x: T.x, it: T.it})),
+      mgrEx: MGR_EX, tourRot: TOUR_ROT, tourMgrFrom: TOUR_MGR_FROM, mgs: MGS.map((g) => g.id),
+      hold: HOLD.map((h) => h[0]), evo: ITEMS.filter((q) => q[7] === "evo").map((q) => q[0]),
+    },
   }));
   await b.close();
   const out = path.join(__dirname, "..", "..", "..", "_server", "datos.json");

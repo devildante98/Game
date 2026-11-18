@@ -65,3 +65,41 @@ const SRVSH={};
       r=>{const m=r.mejora;if(!m)return;S.t-=m.coste;if(i<0){S.cl=m.nivel;window._fk=null}else{S.g[i]=m.nivel}window._gk=null;save();render()})
     .then(r=>{if(SRVSH[k]===job)delete SRVSH[k];if(!r||!r.ok||!r.mejora){const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m)}})
     .catch(()=>{if(SRVSH[k]===job)delete SRVSH[k];toast("⚠️ "+SRV_RED)})}}
+
+// ---- premios de la semana pasada (torneo semanal y clasificación de cada minijuego) ----
+// Con cuenta los calcula el servidor (_server/semana.js): mira tu puesto real en cada clasificación, te da el premio y
+// apunta que ya lo has cobrado. Aquí solo se añade a tu partida lo mismo que ha guardado él y se enseña como siempre.
+let SRVSEM=0;
+function srvSemApply(s){
+  if(!s)return null;const pw=s.pw;
+  const xg=typeof XGSW!=="undefined"&&XGSW&&typeof xgOut==="function";if(xg)xgOut();
+  let tr=null,won=[];
+  try{
+    S.tourDone=pw;S.mgrDone=pw;delete S.mgwPrev;
+    if(!s.ya){
+      const t=s.torneo;
+      if(t){grant(t.rw);let isNew=false;
+        if(t.mon&&PM[t.mon]){const lv=clampL(Math.max(10,Math.min(lvCap(),leadLevel())));isNew=giveMon(t.mon,lv,!!t.sh)}
+        if(t.pos>=0&&t.pos<10){S.trophies=S.trophies||[];S.trophies.push({w:pw,p:t.pos+1,g:t.g});if(t.pos<3)S.crown={w:tourWeek(),p:t.pos+1}}
+        tr={rw:t.rw,mon:t.mon&&PM[t.mon]?PM[t.mon]:null,isNew:isNew,T:tierOf(t.pos),sh:!!t.sh,pos:t.pos}}
+      won=(s.mgr||[]).map(x=>{grant(x.rw);return {g:MGS.find(g=>g.id===x.gid),i:x.pos,rw:x.rw}});
+    }
+  }finally{if(xg&&typeof xgIn==="function")xgIn()}
+  save();render();return {pw:pw,tr:tr,won:won};
+}
+function srvSemShow(o){
+  const mg=()=>mgrShow(o.won,o.pw);
+  if(o.tr){tourGiveShow(o.tr.pos,o.pw,o.tr);const b=$("tourOk");if(b&&o.won.length)b.onclick=()=>{nxModalClose();setTimeout(mg,300)}}
+  else mg();
+}
+async function srvSemana(){
+  if(SRVSEM||!srvOn())return;const pw=tourPrevWeek();if(S.tourDone===pw&&S.mgrDone===pw)return;SRVSEM=1;
+  let o=null,r=null;
+  try{r=await window.srvAccion({k:"semana"},srvJ,x=>{o=srvSemApply(x.semana)})}catch(e){r=null}
+  if(!r||!r.ok){SRVSEM=0;if(!r||!["version","sesion","rechazado","pausa"].includes(r.why))setTimeout(srvSemana,60000);return}
+  if(o&&(o.tr||o.won.length))srvSemShow(o);
+}
+// con cuenta, el cobro siempre va por el servidor (aunque en ese momento no se pueda: se reintenta solo)
+{const _tc=tourClaim;tourClaim=function(){if(window.FB&&window.FB.uid&&window.FB.uid())return srvSemana();return _tc.apply(this,arguments)}}
+{const _mc=mgrClaim;mgrClaim=function(){if(window.FB&&window.FB.uid&&window.FB.uid())return srvSemana();return _mc.apply(this,arguments)}}
+setTimeout(()=>{try{srvSemana()}catch(e){}},20000);

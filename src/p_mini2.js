@@ -344,8 +344,9 @@ async function tourClaim(){
   let top=null;try{top=await window.FB.tourTop(tourKey(pw),25)}catch(e){return}S.tourDone=pw;const me=window.FB.uid(),i=(top||[]).findIndex(x=>x.id===me);
   const g=tourGiveShow(i,pw);
 }
-function tourGiveShow(i,pw){
-  const r=tourGive(i,pw),T=r.T,big=i>=0&&i<3;snd(big?"lvl":"win");setTimeout(()=>snd("win"),big?500:0);
+// rr: premio ya calculado (con cuenta lo calcula el servidor: p_srv.js)
+function tourGiveShow(i,pw,rr){
+  const r=rr||tourGive(i,pw),T=r.T,big=i>=0&&i<3;snd(big?"lvl":"win");setTimeout(()=>snd("win"),big?500:0);
   const m=nxModal('<div class="tourwin'+(big?' big':'')+'"><div class="tourrays"></div><div class="hofb">'+T.ic+'</div></div><h3>'+(i>=0&&i<25?'¡Has quedado '+(i+1)+'º en el Torneo semanal!':'¡Gracias por participar en el Torneo semanal!')+'</h3><p class="mut">'+esc(tourGameOf(pw).n)+' · semana '+pw.split("-W")[1]+'</p>'+
     (r.mon?'<div class="tourmonw">'+icoHD(r.mon,150,false,!!r.sh)+'<b>'+(r.sh?"✨ ":"")+esc(r.mon[0])+(r.isNew?' <span class="mgnew">¡NUEVO!</span>':'')+'</b><small>¡Se une a tu equipo!</small></div>':'')+
     '<p>Premio: <b>'+rwTxt(r.rw)+'</b></p>'+(T.tit?'<p class="tourtit">Esta semana luces el título <b>'+T.tit+'</b> en el chat y en tu perfil.</p>':'')+'<button id="tourOk">¡Increíble!</button>');

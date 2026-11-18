@@ -50,7 +50,7 @@ function chBtn(){
 function chToggle(v){
   CH.open=v==null?!CH.open:v;let w=$("chw");
   if(!w){w=document.createElement("aside");w.id="chw";w.setAttribute("role","dialog");w.setAttribute("aria-label","Chat");w.hidden=true;
-    w.innerHTML='<div class="chh"><b>💬 Chat</b><button class="chx" aria-label="Cerrar el chat">✕</button></div><div class="chtabs" id="chTabs"></div><div class="chsub" id="chSub"></div><div class="chl" id="chL" aria-live="polite"></div>'+
+    w.innerHTML='<div class="chh"><b>💬 Chat</b><button class="chx" aria-label="Cerrar el chat">✕</button></div><div class="chtabs" id="chTabs"></div><div class="chsub" id="chSub"></div><div class="chdmq" id="chDmQw" hidden><input id="chDmQ" type="search" placeholder="🔍 Buscar conversación…" aria-label="Buscar conversación" autocomplete="off"></div><div class="chl" id="chL" aria-live="polite"></div>'+
       '<div class="chpk" id="chPk" hidden></div><div class="chemo" id="chEmo" hidden></div>'+
       '<form class="chf" id="chF"><button type="button" class="chib" id="chEB" title="Emojis" aria-label="Emojis">😊</button><button type="button" class="chib" id="chVB" title="Enviar una invitación (gremio o combate)" aria-label="Invitar">✉️</button><button type="button" class="chib" id="chIB" title="Enviar una foto temporal (desaparece en 24 h)" aria-label="Enviar foto">📷</button><input type="file" id="chFile" accept="image/*" hidden><button type="button" class="chib" id="chPB" title="Enseñar un Pokémon" aria-label="Enseñar un Pokémon">'+'<svg viewBox="0 0 100 100" width="20" height="20" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#fff" stroke="#1c1f3a" stroke-width="8"/><path d="M6 50A44 44 0 0 1 94 50Z" fill="#e3263a" stroke="#1c1f3a" stroke-width="8"/><circle cx="50" cy="50" r="13" fill="#fff" stroke="#1c1f3a" stroke-width="8"/></svg>'+'</button><input id="chI" maxlength="'+CH_MAX+'" placeholder="Escribe un mensaje..." autocomplete="off" aria-label="Mensaje"><button class="red" id="chS" aria-label="Enviar">➤</button></form>';
     document.body.appendChild(w);
@@ -67,6 +67,11 @@ function chToggle(v){
   if(CH.open){chSync();chTabs();chRender();w.animate([{transform:"translateX(30px)",opacity:0},{transform:"none",opacity:1}],{duration:200,easing:"ease-out"});setTimeout(()=>{const i=$("chI");if(i&&matchMedia("(pointer:fine)").matches)i.focus()},50)}
   chBtn();
 }
+// conversaciones privadas: primero las personas con las que hablaste por última vez; las que no tienen mensajes, por orden alfabético
+const chDmAt=u=>{const l=CH.msgs["d:"+dmKey(u)]||[];return l.length?(l[l.length-1].at||0):0};
+const chDmSort=ids=>ids.slice().sort((a,b)=>chDmAt(b)-chDmAt(a)||String(frName(a)).localeCompare(String(frName(b))));
+const chDmMatch=(u,q)=>!q||nrm(pvClean(frName(u)||"")).includes(q)||nrm(pvClean((FR.l[u]||{}).n||"")).includes(q);
+document.addEventListener("input",e=>{const t=e.target;if(!t)return;if(t.id==="chDmQ"){CH.dq=t.value;chRender(true)}else if(t.id==="chHubQ"){CH.hq=t.value;chHubUI()}});
 function chTabs(){
   const t=$("chTabs");if(!t)return;const gu=GS.gid?chUnread("g:"+GS.gid):0,du=Object.keys(FR.l||{}).reduce((a,u)=>a+chUnread("d:"+dmKey(u)),0);
   const b=(k,lab,n)=>'<button class="'+(CH.tab===k?'on':'')+'" data-cht="'+k+'">'+lab+(n?'<i>'+n+'</i>':'')+'</button>';
@@ -79,8 +84,10 @@ function chRender(keep){
   $("chF").hidden=false;sub.innerHTML="";
   if(!window.FB||!me){L.innerHTML='<p class="chempty">Inicia sesión con tu cuenta para chatear con otros jugadores.</p>';$("chF").hidden=true;return}
   if(CH.tab==="guild"&&!GS.gid){L.innerHTML='<p class="chempty">Únete a un gremio para hablar con sus miembros. Lo encontrarás en Social → Gremio.</p>';$("chF").hidden=true;return}
+  {const qw=$("chDmQw");if(qw)qw.hidden=!(CH.tab==="dm"&&!CH.dm&&Object.keys(FR.l||{}).length)}
   if(CH.tab==="dm"&&!CH.dm){
-    const ids=Object.keys(FR.l||{});$("chF").hidden=true;
+    const all=Object.keys(FR.l||{}),q=nrm(CH.dq||""),ids=chDmSort(all).filter(u=>chDmMatch(u,q));$("chF").hidden=true;
+    if(all.length&&!ids.length){L.innerHTML='<p class="chempty">Ningún amigo coincide con «'+esc(CH.dq)+'».</p>';return}
     L.innerHTML=ids.length?'<div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),l=CH.msgs[k]||[],last=l[l.length-1],n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chdm="'+esc(u)+'"><span class="chav">'+(last&&last.u===u?chAv(last.tr):'👤')+'</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(last?esc((last.u===me?"Tú: ":"")+(last.p?"📸 Pokémon: "+last.p.n:last.t)).slice(0,60):"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'</button>'}).join("")+'</div>':'<p class="chempty">Añade amigos en Social → Amigos para poder escribirles en privado.</p>';
     return;
   }
@@ -156,8 +163,9 @@ function chHubUI(){
   let h='<div class="chcards">'+card("🌍","Chat global","Todos los jugadores conectados","global","Abrir",'data-cho="global"',0,chLast("global"))+
     card("🛡️","Chat del gremio",GS.gid?"Solo para los miembros de "+esc((GS.doc&&GS.doc.name)||"tu gremio"):"Únete a un gremio para usarlo","guild","Abrir",'data-cho="guild"'+(GS.gid?'':' disabled'),GS.gid?chUnread("g:"+GS.gid):0,GS.gid?chLast("g:"+GS.gid):"")+
     card("👥","Mensajes privados",ids.length?ids.length+" amigo"+(ids.length===1?"":"s"):"Añade amigos para escribirles","dm","Abrir",'data-cho="dm"',du,"")+'</div>';
-  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3><div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
-  box.innerHTML=h;
+  const q=nrm(CH.hq||""),L2=chDmSort(ids).filter(u=>chDmMatch(u,q));
+  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3>'+(ids.length>1?'<div class="shopqw"><input id="chHubQ" type="search" placeholder="🔍 Buscar conversación…" aria-label="Buscar conversación" autocomplete="off" value="'+esc(CH.hq||"")+'"></div>':'')+(L2.length?'':'<small class="mut">Ningún amigo coincide con «'+esc(CH.hq||"")+'».</small>')+'<div class="chdml">'+L2.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
+  const a=document.activeElement,af=a&&a.id==="chHubQ",pos=af?a.selectionStart:null;box.innerHTML=h;if(af){const i=$("chHubQ");if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(e){}}}
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cho],[data-chodm],[data-frmsg]");if(!b)return;
   if(b.dataset.cho)chOpenAt(b.dataset.cho);else chOpenAt("dm",b.dataset.chodm||b.dataset.frmsg)});

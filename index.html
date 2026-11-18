@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.14"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.15"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795025085">
+<meta name="game-build" content="1795025415">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3030,6 +3030,10 @@ body.calm #evpM .evpic{animation:none}
 .shcbar i{display:block;height:6px;margin-top:6px;border-radius:99px;background:linear-gradient(90deg,#ffd23f var(--p),rgba(255,255,255,.15) var(--p))}
 .shcbar.have{border-color:#ffd23f;box-shadow:0 0 14px rgba(255,214,90,.45)}
 
+/* buscador de conversaciones en la ventana del chat */
+.chdmq{padding:6px 10px 0}.chdmq[hidden]{display:none}.chdmq input{width:100%;box-sizing:border-box;font:inherit;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+#frQw[hidden]{display:none}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -3094,7 +3098,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.14</small>
+    <small class="pcver">Versión 7.15</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7134,17 +7138,22 @@ async function frSend(nick,btn){
   try{const r=await window.FB.frSend(nick,pvClean(pvNick()));frMsg(r==="accepted"?"✅ ¡Ahora sois amigos!":r==="already"?"Ya sois amigos.":"📨 Solicitud enviada a «"+nick+"».");if($("frNick"))$("frNick").value=""}
   catch(e){frMsg(e&&e.code==="nf"?"❌ No existe ningún jugador con el apodo «"+nick+"».":e&&e.code==="self"?"No puedes enviarte una solicitud a ti mismo.":"No se pudo enviar ("+((e&&e.code)||"error")+").")}
 }
+let FRQ="";
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="frQ"){FRQ=e.target.value;frUI()}});
 function frUI(){
   const box=$("frBox");if(!box)return;
   if(!window.FB){box.innerHTML='<small class="mut">Inicia sesión con tu cuenta para añadir amigos, ver cuándo están conectados e invitarlos a combatir.</small>';return}
   const on={};pvOthers().forEach(p=>{on[p.peer]=p.presence.pvp});
-  const key=JSON.stringify([typeof GF!=="undefined"?GF.inc.map(g=>g.id):0,S.gfs,FR,Object.keys(on).map(k=>k+on[k].st+on[k].n),PV.st,!!R2,R2&&R2.ph,fcd,PV.inv]);if(key===_frk)return;_frk=key;
-  const ids=Object.keys(FR.l).sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)||String(FR.l[a].n).localeCompare(FR.l[b].n));
+  if(!$("frQw"))box.insertAdjacentHTML("beforebegin",'<div class="shopqw" id="frQw" hidden><input id="frQ" type="search" placeholder="🔍 Buscar amigo…" aria-label="Buscar amigo" autocomplete="off"></div>');
+  const key=JSON.stringify([FRQ,typeof GF!=="undefined"?GF.inc.map(g=>g.id):0,S.gfs,FR,Object.keys(on).map(k=>k+on[k].st+on[k].n),PV.st,!!R2,R2&&R2.ph,fcd,PV.inv]);if(key===_frk)return;_frk=key;
+  const all=Object.keys(FR.l).sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)||String(FR.l[a].n).localeCompare(FR.l[b].n)),fq=nrm(FRQ);
+  const ids=fq?all.filter(u=>nrm(pvClean(on[u]?on[u].n:frName(u))).includes(fq)||nrm(pvClean(FR.l[u].n||"")).includes(fq)):all;$("frQw").hidden=all.length<2;
   let h="";
   if(FR.inc.length)h+='<div class="lgnow"><b>📩 Solicitudes recibidas</b>'+FR.inc.map(r=>'<div class="pvrow"><b>'+esc(pvClean(r.fn))+'</b><span style="flex:1"></span><button data-fra="'+esc(r.from)+'" data-frn="'+esc(pvClean(r.fn))+'">✅ Aceptar</button><button class="alt" data-frd="'+esc(r.from)+'">Rechazar</button></div>').join("")+'</div>';
   {const gi=typeof GF!=="undefined"?GF.inc:[];if(gi.length)h+='<div class="lgnow gfin"><b>🎁 Regalos recibidos ('+gi.length+')</b><small class="mut">Tus amigos te han enviado un detalle. Puedes abrir hasta 20 al día.</small>'+(()=>{const lf=Math.min(gi.length,Math.max(0,20-(S.gfo&&S.gfo.d===today()?S.gfo.n:0)));return gi.length>1&&lf>0?'<button class="red gfoa" data-gfoa="1">🎁 Abrir todos ('+lf+')</button>':''})()+'<div class="gfl">'+gi.slice(0,30).map(g=>'<button class="gfb" data-gfo="'+esc(g.id)+'"><span>🎁</span><b>'+esc(pvClean(g.fn||"Amigo"))+'</b><small>Abrir</small></button>').join("")+'</div></div>'}
-  if(ids.length&&window.FB&&window.FB.gfSend){const left=ids.filter(u=>!gfSentToday(u)).length;h+='<div class="gfsend"><small class="mut">🎁 Envía un regalo a cada amigo una vez al día: tickets, Poké Balls u objetos.</small>'+(left?'<button data-gfall="1">🎁 Enviar a todos ('+left+')</button>':'<small>✅ Hoy ya has enviado regalos a todos</small>')+'</div>'}
+  if(all.length&&window.FB&&window.FB.gfSend){const left=all.filter(u=>!gfSentToday(u)).length;h+='<div class="gfsend"><small class="mut">🎁 Envía un regalo a cada amigo una vez al día: tickets, Poké Balls u objetos.</small>'+(left?'<button data-gfall="1">🎁 Enviar a todos ('+left+')</button>':'<small>✅ Hoy ya has enviado regalos a todos</small>')+'</div>'}
   if(FR.out.length)h+='<small class="mut">Solicitudes enviadas: '+FR.out.map(r=>esc(pvClean(r.tn))+' <button class="alt mini" data-frc="'+esc(r.to)+'" title="Cancelar">✕</button>').join(" · ")+'</small>';
+  if(fq&&!ids.length)h+='<small class="mut">Ningún amigo coincide con «'+esc(FRQ)+'».</small>';
   h+=ids.length?'<div class="frl">'+ids.map(u=>{const f=FR.l[u],o=on[u],n=o?pvClean(o.n):frName(u);
     const st=o?(o.st==="duel"?"🟠 En un duelo":o.st==="room"?"🟠 En una sala 2vs2":o.st==="wait"?"🟠 Retando":"🟢 Conectado"):"⚫ Desconectado";
     const canDuel=o&&o.st==="idle"&&PV.st==="idle"&&!fcd&&!R2&&pvTeamData().length,canInv=o&&R2&&R2.ph==="lobby";
@@ -7154,8 +7163,8 @@ function frUI(){
       '<button data-fr2="'+esc(u)+'"'+(o&&!R2&&!fcd&&PV.st==="idle"?'':' disabled')+' title="Crear una sala 2 vs 2 e invitarle">👥 2vs2</button>'+
       (window.FB&&window.FB.gfSend?'<button class="'+(gfSentToday(u)?'alt':'')+'" data-gfs="'+esc(u)+'"'+(gfSentToday(u)?' disabled title="Ya le has enviado un regalo hoy"':' title="Enviar un regalo"')+'>'+(gfSentToday(u)?'✅':'🎁')+'</button>':'')+
       (window.FB&&window.FB.chSend?'<button class="alt" data-frmsg="'+esc(u)+'" title="Enviar un mensaje privado">💬</button>':'')+
-      (o?'<button data-ltr="'+esc(u)+'" data-ltn="'+esc(n)+'" title="Intercambiar en directo, como en los juegos"'+(fcd||(typeof LT!=="undefined"&&LT.st!=="idle")?' disabled':'')+'>🔄 Intercambiar</button>':'<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Dejarle una oferta de intercambio (está desconectado)">🔄</button>')+'<button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
-  box.innerHTML=h;$("frCnt").textContent=ids.length+" amigo"+(ids.length===1?"":"s")+" · "+ids.filter(u=>on[u]).length+" conectados";
+      (o?'<button data-ltr="'+esc(u)+'" data-ltn="'+esc(n)+'" title="Intercambiar en directo, como en los juegos"'+(fcd||(typeof LT!=="undefined"&&LT.st!=="idle")?' disabled':'')+'>🔄 Intercambiar</button>':'<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Dejarle una oferta de intercambio (está desconectado)">🔄</button>')+'<button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':fq?'':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
+  box.innerHTML=h;$("frCnt").textContent=all.length+" amigo"+(all.length===1?"":"s")+" · "+all.filter(u=>on[u]).length+" conectados";
   const n=FR.inc.length;if($("navfr"))$("navfr").hidden=!n,$("navfr").textContent=n;
 }
 let _frAsk="";
@@ -7840,8 +7849,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.14";
+const GAME_VER="7.15";
 const NEWS=[
+{v:"2026-11-18-7.15",ver:"7.15",at:"2026-11-18T19:10",t:"🔍 Buscar amigos y conversaciones",l:["Social › Amigos: nueva barra de búsqueda para encontrar enseguida a un amigo por su apodo","Chat › Amigos (y Social › Chat): barra para buscar conversaciones","Las conversaciones privadas salen ordenadas: primero las personas con las que hablaste por última vez"]},
 {v:"2026-11-18-7.14",ver:"7.14",at:"2026-11-18T19:04",t:"🎫 Pases gratuitos mucho mejores",l:["Pase de temporada: cada nivel da bastante más que el anterior. Los tickets crecen con el nivel y con lo que produce tu pueblo (el nivel 30 da 6 horas de producción). Además: 14 Master Ball, 7 Cristales Supremos, 137 Caramelos Raros, 30 Teralitos, objetos equipables…","Pokémon del pase: un épico en el nivel 10, épicos variocolor en el 15 y el 25, un legendario en el 20 y, en el 30, ¡el legendario de la temporada en variocolor!","Pase diario (racha): premios cada día mayores, con días grandes el 7, 14, 21 y 28 y un día 30 enorme (2 Master Ball, Cristal Supremo, 20 Caramelos Raros, 3 objetos equipables, Teralitos…). Los tickets extra también crecen con tu producción","Cada vuelta de 30 días seguidos multiplica los premios de la racha, hasta 5,5 veces"]},
 {v:"2026-11-18-7.13",ver:"7.13",at:"2026-11-18T19:00",t:"👆 Toca a tu entrenador o a tu compañero",l:["En la pantalla principal, toca a tu entrenador (junto a la Poké Ball) para ir directamente a su personalización","Toca a tu compañero para ir a la zona de Compañero, en Actividades, y darle mimos o bayas"]},
 {v:"2026-11-18-7.12.4",ver:"7.12.4",at:"2026-11-18T18:55",t:"💬 Arreglo en el chat: menciones y respuestas",l:["Los mensajes con una mención (@apodo) o que responden a otro mensaje ya se envían bien. Antes el servidor los rechazaba y no llegaban"]},
@@ -8242,7 +8252,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795025085";
+const GAME_B="1795025415";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9439,7 +9449,7 @@ function chBtn(){
 function chToggle(v){
   CH.open=v==null?!CH.open:v;let w=$("chw");
   if(!w){w=document.createElement("aside");w.id="chw";w.setAttribute("role","dialog");w.setAttribute("aria-label","Chat");w.hidden=true;
-    w.innerHTML='<div class="chh"><b>💬 Chat</b><button class="chx" aria-label="Cerrar el chat">✕</button></div><div class="chtabs" id="chTabs"></div><div class="chsub" id="chSub"></div><div class="chl" id="chL" aria-live="polite"></div>'+
+    w.innerHTML='<div class="chh"><b>💬 Chat</b><button class="chx" aria-label="Cerrar el chat">✕</button></div><div class="chtabs" id="chTabs"></div><div class="chsub" id="chSub"></div><div class="chdmq" id="chDmQw" hidden><input id="chDmQ" type="search" placeholder="🔍 Buscar conversación…" aria-label="Buscar conversación" autocomplete="off"></div><div class="chl" id="chL" aria-live="polite"></div>'+
       '<div class="chpk" id="chPk" hidden></div><div class="chemo" id="chEmo" hidden></div>'+
       '<form class="chf" id="chF"><button type="button" class="chib" id="chEB" title="Emojis" aria-label="Emojis">😊</button><button type="button" class="chib" id="chVB" title="Enviar una invitación (gremio o combate)" aria-label="Invitar">✉️</button><button type="button" class="chib" id="chIB" title="Enviar una foto temporal (desaparece en 24 h)" aria-label="Enviar foto">📷</button><input type="file" id="chFile" accept="image/*" hidden><button type="button" class="chib" id="chPB" title="Enseñar un Pokémon" aria-label="Enseñar un Pokémon">'+'<svg viewBox="0 0 100 100" width="20" height="20" aria-hidden="true"><circle cx="50" cy="50" r="44" fill="#fff" stroke="#1c1f3a" stroke-width="8"/><path d="M6 50A44 44 0 0 1 94 50Z" fill="#e3263a" stroke="#1c1f3a" stroke-width="8"/><circle cx="50" cy="50" r="13" fill="#fff" stroke="#1c1f3a" stroke-width="8"/></svg>'+'</button><input id="chI" maxlength="'+CH_MAX+'" placeholder="Escribe un mensaje..." autocomplete="off" aria-label="Mensaje"><button class="red" id="chS" aria-label="Enviar">➤</button></form>';
     document.body.appendChild(w);
@@ -9456,6 +9466,11 @@ function chToggle(v){
   if(CH.open){chSync();chTabs();chRender();w.animate([{transform:"translateX(30px)",opacity:0},{transform:"none",opacity:1}],{duration:200,easing:"ease-out"});setTimeout(()=>{const i=$("chI");if(i&&matchMedia("(pointer:fine)").matches)i.focus()},50)}
   chBtn();
 }
+// conversaciones privadas: primero las personas con las que hablaste por última vez; las que no tienen mensajes, por orden alfabético
+const chDmAt=u=>{const l=CH.msgs["d:"+dmKey(u)]||[];return l.length?(l[l.length-1].at||0):0};
+const chDmSort=ids=>ids.slice().sort((a,b)=>chDmAt(b)-chDmAt(a)||String(frName(a)).localeCompare(String(frName(b))));
+const chDmMatch=(u,q)=>!q||nrm(pvClean(frName(u)||"")).includes(q)||nrm(pvClean((FR.l[u]||{}).n||"")).includes(q);
+document.addEventListener("input",e=>{const t=e.target;if(!t)return;if(t.id==="chDmQ"){CH.dq=t.value;chRender(true)}else if(t.id==="chHubQ"){CH.hq=t.value;chHubUI()}});
 function chTabs(){
   const t=$("chTabs");if(!t)return;const gu=GS.gid?chUnread("g:"+GS.gid):0,du=Object.keys(FR.l||{}).reduce((a,u)=>a+chUnread("d:"+dmKey(u)),0);
   const b=(k,lab,n)=>'<button class="'+(CH.tab===k?'on':'')+'" data-cht="'+k+'">'+lab+(n?'<i>'+n+'</i>':'')+'</button>';
@@ -9468,8 +9483,10 @@ function chRender(keep){
   $("chF").hidden=false;sub.innerHTML="";
   if(!window.FB||!me){L.innerHTML='<p class="chempty">Inicia sesión con tu cuenta para chatear con otros jugadores.</p>';$("chF").hidden=true;return}
   if(CH.tab==="guild"&&!GS.gid){L.innerHTML='<p class="chempty">Únete a un gremio para hablar con sus miembros. Lo encontrarás en Social → Gremio.</p>';$("chF").hidden=true;return}
+  {const qw=$("chDmQw");if(qw)qw.hidden=!(CH.tab==="dm"&&!CH.dm&&Object.keys(FR.l||{}).length)}
   if(CH.tab==="dm"&&!CH.dm){
-    const ids=Object.keys(FR.l||{});$("chF").hidden=true;
+    const all=Object.keys(FR.l||{}),q=nrm(CH.dq||""),ids=chDmSort(all).filter(u=>chDmMatch(u,q));$("chF").hidden=true;
+    if(all.length&&!ids.length){L.innerHTML='<p class="chempty">Ningún amigo coincide con «'+esc(CH.dq)+'».</p>';return}
     L.innerHTML=ids.length?'<div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),l=CH.msgs[k]||[],last=l[l.length-1],n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chdm="'+esc(u)+'"><span class="chav">'+(last&&last.u===u?chAv(last.tr):'👤')+'</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(last?esc((last.u===me?"Tú: ":"")+(last.p?"📸 Pokémon: "+last.p.n:last.t)).slice(0,60):"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'</button>'}).join("")+'</div>':'<p class="chempty">Añade amigos en Social → Amigos para poder escribirles en privado.</p>';
     return;
   }
@@ -9545,8 +9562,9 @@ function chHubUI(){
   let h='<div class="chcards">'+card("🌍","Chat global","Todos los jugadores conectados","global","Abrir",'data-cho="global"',0,chLast("global"))+
     card("🛡️","Chat del gremio",GS.gid?"Solo para los miembros de "+esc((GS.doc&&GS.doc.name)||"tu gremio"):"Únete a un gremio para usarlo","guild","Abrir",'data-cho="guild"'+(GS.gid?'':' disabled'),GS.gid?chUnread("g:"+GS.gid):0,GS.gid?chLast("g:"+GS.gid):"")+
     card("👥","Mensajes privados",ids.length?ids.length+" amigo"+(ids.length===1?"":"s"):"Añade amigos para escribirles","dm","Abrir",'data-cho="dm"',du,"")+'</div>';
-  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3><div class="chdml">'+ids.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
-  box.innerHTML=h;
+  const q=nrm(CH.hq||""),L2=chDmSort(ids).filter(u=>chDmMatch(u,q));
+  if(ids.length)h+='<h3 class="shh">Escribir a un amigo</h3>'+(ids.length>1?'<div class="shopqw"><input id="chHubQ" type="search" placeholder="🔍 Buscar conversación…" aria-label="Buscar conversación" autocomplete="off" value="'+esc(CH.hq||"")+'"></div>':'')+(L2.length?'':'<small class="mut">Ningún amigo coincide con «'+esc(CH.hq||"")+'».</small>')+'<div class="chdml">'+L2.map(u=>{const k="d:"+dmKey(u),n=chUnread(k),f=FR.l[u];return '<button class="chdm" data-chodm="'+esc(u)+'"><span class="chav">👤</span><span class="chdmt"><b>'+esc(frName(u))+'</b><small>'+(chLast(k)||"Sin mensajes todavía")+'</small></span>'+(n?'<i>'+n+'</i>':'')+'<span>💬</span></button>'}).join("")+'</div>';
+  const a=document.activeElement,af=a&&a.id==="chHubQ",pos=af?a.selectionStart:null;box.innerHTML=h;if(af){const i=$("chHubQ");if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(e){}}}
 }
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-cho],[data-chodm],[data-frmsg]");if(!b)return;
   if(b.dataset.cho)chOpenAt(b.dataset.cho);else chOpenAt("dm",b.dataset.chodm||b.dataset.frmsg)});
@@ -21447,7 +21465,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.14";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.15";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

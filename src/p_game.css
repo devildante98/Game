@@ -1338,3 +1338,7 @@ body.calm #evpM .evpic{animation:none}
 .shcbar span{font-size:1.6rem}.shcbar>div{flex:1;min-width:0}.shcbar b{display:block}.shcbar small{opacity:.85;line-height:1.35;display:block}
 .shcbar i{display:block;height:6px;margin-top:6px;border-radius:99px;background:linear-gradient(90deg,#ffd23f var(--p),rgba(255,255,255,.15) var(--p))}
 .shcbar.have{border-color:#ffd23f;box-shadow:0 0 14px rgba(255,214,90,.45)}
+
+/* buscador de conversaciones en la ventana del chat */
+.chdmq{padding:6px 10px 0}.chdmq[hidden]{display:none}.chdmq input{width:100%;box-sizing:border-box;font:inherit;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+#frQw[hidden]{display:none}

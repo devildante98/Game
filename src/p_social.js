@@ -32,17 +32,22 @@ async function frSend(nick,btn){
   try{const r=await window.FB.frSend(nick,pvClean(pvNick()));frMsg(r==="accepted"?"✅ ¡Ahora sois amigos!":r==="already"?"Ya sois amigos.":"📨 Solicitud enviada a «"+nick+"».");if($("frNick"))$("frNick").value=""}
   catch(e){frMsg(e&&e.code==="nf"?"❌ No existe ningún jugador con el apodo «"+nick+"».":e&&e.code==="self"?"No puedes enviarte una solicitud a ti mismo.":"No se pudo enviar ("+((e&&e.code)||"error")+").")}
 }
+let FRQ="";
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="frQ"){FRQ=e.target.value;frUI()}});
 function frUI(){
   const box=$("frBox");if(!box)return;
   if(!window.FB){box.innerHTML='<small class="mut">Inicia sesión con tu cuenta para añadir amigos, ver cuándo están conectados e invitarlos a combatir.</small>';return}
   const on={};pvOthers().forEach(p=>{on[p.peer]=p.presence.pvp});
-  const key=JSON.stringify([typeof GF!=="undefined"?GF.inc.map(g=>g.id):0,S.gfs,FR,Object.keys(on).map(k=>k+on[k].st+on[k].n),PV.st,!!R2,R2&&R2.ph,fcd,PV.inv]);if(key===_frk)return;_frk=key;
-  const ids=Object.keys(FR.l).sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)||String(FR.l[a].n).localeCompare(FR.l[b].n));
+  if(!$("frQw"))box.insertAdjacentHTML("beforebegin",'<div class="shopqw" id="frQw" hidden><input id="frQ" type="search" placeholder="🔍 Buscar amigo…" aria-label="Buscar amigo" autocomplete="off"></div>');
+  const key=JSON.stringify([FRQ,typeof GF!=="undefined"?GF.inc.map(g=>g.id):0,S.gfs,FR,Object.keys(on).map(k=>k+on[k].st+on[k].n),PV.st,!!R2,R2&&R2.ph,fcd,PV.inv]);if(key===_frk)return;_frk=key;
+  const all=Object.keys(FR.l).sort((a,b)=>(on[b]?1:0)-(on[a]?1:0)||String(FR.l[a].n).localeCompare(FR.l[b].n)),fq=nrm(FRQ);
+  const ids=fq?all.filter(u=>nrm(pvClean(on[u]?on[u].n:frName(u))).includes(fq)||nrm(pvClean(FR.l[u].n||"")).includes(fq)):all;$("frQw").hidden=all.length<2;
   let h="";
   if(FR.inc.length)h+='<div class="lgnow"><b>📩 Solicitudes recibidas</b>'+FR.inc.map(r=>'<div class="pvrow"><b>'+esc(pvClean(r.fn))+'</b><span style="flex:1"></span><button data-fra="'+esc(r.from)+'" data-frn="'+esc(pvClean(r.fn))+'">✅ Aceptar</button><button class="alt" data-frd="'+esc(r.from)+'">Rechazar</button></div>').join("")+'</div>';
   {const gi=typeof GF!=="undefined"?GF.inc:[];if(gi.length)h+='<div class="lgnow gfin"><b>🎁 Regalos recibidos ('+gi.length+')</b><small class="mut">Tus amigos te han enviado un detalle. Puedes abrir hasta 20 al día.</small>'+(()=>{const lf=Math.min(gi.length,Math.max(0,20-(S.gfo&&S.gfo.d===today()?S.gfo.n:0)));return gi.length>1&&lf>0?'<button class="red gfoa" data-gfoa="1">🎁 Abrir todos ('+lf+')</button>':''})()+'<div class="gfl">'+gi.slice(0,30).map(g=>'<button class="gfb" data-gfo="'+esc(g.id)+'"><span>🎁</span><b>'+esc(pvClean(g.fn||"Amigo"))+'</b><small>Abrir</small></button>').join("")+'</div></div>'}
-  if(ids.length&&window.FB&&window.FB.gfSend){const left=ids.filter(u=>!gfSentToday(u)).length;h+='<div class="gfsend"><small class="mut">🎁 Envía un regalo a cada amigo una vez al día: tickets, Poké Balls u objetos.</small>'+(left?'<button data-gfall="1">🎁 Enviar a todos ('+left+')</button>':'<small>✅ Hoy ya has enviado regalos a todos</small>')+'</div>'}
+  if(all.length&&window.FB&&window.FB.gfSend){const left=all.filter(u=>!gfSentToday(u)).length;h+='<div class="gfsend"><small class="mut">🎁 Envía un regalo a cada amigo una vez al día: tickets, Poké Balls u objetos.</small>'+(left?'<button data-gfall="1">🎁 Enviar a todos ('+left+')</button>':'<small>✅ Hoy ya has enviado regalos a todos</small>')+'</div>'}
   if(FR.out.length)h+='<small class="mut">Solicitudes enviadas: '+FR.out.map(r=>esc(pvClean(r.tn))+' <button class="alt mini" data-frc="'+esc(r.to)+'" title="Cancelar">✕</button>').join(" · ")+'</small>';
+  if(fq&&!ids.length)h+='<small class="mut">Ningún amigo coincide con «'+esc(FRQ)+'».</small>';
   h+=ids.length?'<div class="frl">'+ids.map(u=>{const f=FR.l[u],o=on[u],n=o?pvClean(o.n):frName(u);
     const st=o?(o.st==="duel"?"🟠 En un duelo":o.st==="room"?"🟠 En una sala 2vs2":o.st==="wait"?"🟠 Retando":"🟢 Conectado"):"⚫ Desconectado";
     const canDuel=o&&o.st==="idle"&&PV.st==="idle"&&!fcd&&!R2&&pvTeamData().length,canInv=o&&R2&&R2.ph==="lobby";
@@ -52,8 +57,8 @@ function frUI(){
       '<button data-fr2="'+esc(u)+'"'+(o&&!R2&&!fcd&&PV.st==="idle"?'':' disabled')+' title="Crear una sala 2 vs 2 e invitarle">👥 2vs2</button>'+
       (window.FB&&window.FB.gfSend?'<button class="'+(gfSentToday(u)?'alt':'')+'" data-gfs="'+esc(u)+'"'+(gfSentToday(u)?' disabled title="Ya le has enviado un regalo hoy"':' title="Enviar un regalo"')+'>'+(gfSentToday(u)?'✅':'🎁')+'</button>':'')+
       (window.FB&&window.FB.chSend?'<button class="alt" data-frmsg="'+esc(u)+'" title="Enviar un mensaje privado">💬</button>':'')+
-      (o?'<button data-ltr="'+esc(u)+'" data-ltn="'+esc(n)+'" title="Intercambiar en directo, como en los juegos"'+(fcd||(typeof LT!=="undefined"&&LT.st!=="idle")?' disabled':'')+'>🔄 Intercambiar</button>':'<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Dejarle una oferta de intercambio (está desconectado)">🔄</button>')+'<button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
-  box.innerHTML=h;$("frCnt").textContent=ids.length+" amigo"+(ids.length===1?"":"s")+" · "+ids.filter(u=>on[u]).length+" conectados";
+      (o?'<button data-ltr="'+esc(u)+'" data-ltn="'+esc(n)+'" title="Intercambiar en directo, como en los juegos"'+(fcd||(typeof LT!=="undefined"&&LT.st!=="idle")?' disabled':'')+'>🔄 Intercambiar</button>':'<button class="alt" data-frt="'+esc(u)+'" data-frtn="'+esc(n)+'" title="Dejarle una oferta de intercambio (está desconectado)">🔄</button>')+'<button class="alt" data-frx="'+esc(u)+'" title="Eliminar de amigos">🗑️</button></div>'}).join("")+'</div>':fq?'':'<small class="mut">Todavía no tienes amigos. Escribe el apodo de otro jugador para enviarle una solicitud, o pulsa «+👥» junto a un jugador en el PVP.</small>';
+  box.innerHTML=h;$("frCnt").textContent=all.length+" amigo"+(all.length===1?"":"s")+" · "+all.filter(u=>on[u]).length+" conectados";
   const n=FR.inc.length;if($("navfr"))$("navfr").hidden=!n,$("navfr").textContent=n;
 }
 let _frAsk="";

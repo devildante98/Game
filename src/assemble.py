@@ -280,7 +280,7 @@ for a in ['P.filter(p=>S.owned[p[0]]).length', 'P.filter(p=>p[2]==="L"&&S.owned[
     if n == 0: raise SystemExit('missing ' + a)
     H = H.replace(a, a.replace('S.owned[p[0]]', 'hasP(p[0])'))
 rep('["jp","🎉","¡Qué suerte!","Consigue el premio gordo ({g} vez)",()=>S.jp||0,[[1,5]],"x"]];',
-    '["evo","🧬","Evolucionista","Evoluciona {g} Pokémon",()=>stt().evo||0,[[1,0],[10,1],[50,2],[200,3]]],\n["jp","🎉","¡Qué suerte!","Consigue el premio gordo ({g} vez)",()=>S.jp||0,[[1,5]],"x"]];')
+    '["evo","🧬","Evolucionista","Evoluciona {g} Pokémon",()=>stt().evo||0,[[1,0],[10,1],[30,2],[80,3]]],\n["jp","🎉","¡Qué suerte!","Consigue el premio gordo ({g} vez)",()=>S.jp||0,[[1,5]],"x"]];')
 rep('["new","🆕","Descubridor","Consigue {g} Pokémon nuevos",()=>stt().new||0,[20,80,250,500,800]],', '["new","🆕","Descubridor","Consigue {g} Pokémon nuevos",()=>stt().new||0,[20,80,250,500,800]],\n["evo","🧬","Evolucionista","Evoluciona {g} Pokémon",()=>stt().evo||0,[1,5,20,60,150]],')
 rep("(a[6]===\"x\"?' <small>(extra)</small>':'')", "(a[6]===\"x\"?' <small title=\"No hace falta para el prestigio\">(extra · no cuenta para el prestigio)</small>':'')", 2)
 rep('["m_daily","daily",1,"Reclama el regalo diario",{t:50000}]];', '["m_daily","daily",1,"Reclama el regalo diario",{t:50000}],\n["m_evo","evo",1,"Haz evolucionar a 1 Pokémon",{t:250000,it:{cand:1}}]];')
@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.16.1";
+const GAME_VER="7.17";
 const NEWS=[
+{v:"2026-11-18-7.17",ver:"7.17",at:"2026-11-18T19:36",t:"🏆 Logros menos exagerados",l:["Muchos logros piden ahora bastante menos, para que el prestigio no se haga pesado. Los premios de cada nivel son los mismos","Adicto al gacha: 100 · 500 · 1.500 · 4.000 · 8.000 tiradas (antes hasta 100.000) · Dedo de acero: hasta 60.000 toques (antes 1.000.000)","Combatiente: 10 · 75 · 250 · 750 · 2.000 victorias · Rival temido y Atrapalotodo: hasta 300 · Cliente habitual: 5 · 25 · 80 curas · Constancia: 5 · 20 · 50 · 100 misiones","Evolucionista: hasta 80 · Equipo de élite: 1 · 4 · 10 Pokémon al nivel 100 · Cazador de leyendas: hasta 120 legendarios · Coleccionista: hasta 1.000 Pokémon · Rey del PVP: hasta 500","Los logros de los niveles de prestigio también piden menos tiradas, toques, curas, compras, misiones, combates y capturas","Si ya cumplías alguno de los nuevos objetivos, ya puedes reclamarlo"]},
 {v:"2026-11-18-7.16.1",ver:"7.16.1",at:"2026-11-18T19:22",t:"🎆 Más tickets en el regalo de Año Nuevo",l:["El regalo de Año Nuevo da ahora 48 horas de producción de tu pueblo (antes 30), o 150 millones de tickets si es más"]},
 {v:"2026-11-18-7.16",ver:"7.16",at:"2026-11-18T19:16",t:"🎆 Regalo de Año Nuevo tremendamente especial",l:["El 1 de enero podrás elegir 2 legendarios variocolor entre 5. ¡Cada entrenador tiene sus propios 5, distintos a los de los demás!","Además, para todos lo mismo: 150 millones de tickets (o 48 horas de producción de tu pueblo, si es más), 12 Master Ball, 6 Cristales Supremos, 50 Caramelos Raros, 10 PP máximos, 20 Teralitos y 6 objetos equipables","💬 La ventana del chat es más ancha en ordenador"]},
 {v:"2026-11-18-7.15",ver:"7.15",at:"2026-11-18T19:10",t:"🔍 Buscar amigos y conversaciones",l:["Social › Amigos: nueva barra de búsqueda para encontrar enseguida a un amigo por su apodo","Chat › Amigos (y Social › Chat): barra para buscar conversaciones","Las conversaciones privadas salen ordenadas: primero las personas con las que hablaste por última vez"]},

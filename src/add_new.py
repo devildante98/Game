@@ -69,10 +69,19 @@ $("updGo").onclick=async()=>{save();try{if(window.cloudFlush)await window.cloudF
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
-  fetch(verURL(),{cache:"no-store"}).then(r=>r.text()).then(h=>{const m=h.match(/name="game-build" content="(\\d+)"/);if(m&&m[1]!==GAME_B&&+m[1]>+GAME_B){if(auto===true&&!fcd)verGo();else $("updB").hidden=false}}).catch(()=>{});
+  fetch(verURL(),{cache:"no-store"}).then(r=>r.text()).then(h=>{const m=h.match(/name="game-build" content="(\\d+)"/);if(m&&m[1]!==GAME_B&&+m[1]>+GAME_B){if(auto===true&&!fcd)verGo();else verAsk(h)}}).catch(()=>{});
 }
 async function verGo(){try{save()}catch(e){}try{if(window.cloudFlush)await window.cloudFlush()}catch(e){}const u=new URL(location.href);u.searchParams.set("v",Date.now());location.replace(u.toString())}
 $("updGo").onclick=verGo;
+// versión nueva con la partida en marcha: ventana en el centro para actualizar ahora o más tarde (por si estás en un
+// combate); con «Más tarde» queda el aviso de arriba y la ventana no vuelve a salir hasta recargar
+let _updLater=false;
+function verAsk(h){if(_updLater||$("updM")){if(_updLater)$("updB").hidden=false;return}
+  const m=/ver:"([^"]+)",at:"[^"]+",t:"([^"]+)"/.exec(h||""),o=document.createElement("div");o.id="updM";o.setAttribute("role","dialog");o.setAttribute("aria-modal","true");o.setAttribute("aria-label","Versión nueva");
+  o.innerHTML='<div class="updbox"><div class="updic">🆕</div><h2>¡Hay una versión nueva!</h2>'+(m?'<p class="updv"><b>Versión '+esc(m[1])+'</b> · '+esc(m[2])+'</p>':'')+'<p>Actualiza para tener las últimas novedades. Tu partida se guarda antes. Si estás en mitad de algo (un combate, un minijuego…), puedes hacerlo más tarde.</p><div class="updbtn"><button type="button" class="red" id="updNow">🔄 Actualizar ahora</button><button type="button" class="alt" id="updLater">Más tarde</button></div></div>';
+  document.body.appendChild(o);try{snd("lvl")}catch(e){}
+  $("updNow").onclick=()=>{$("updNow").disabled=true;$("updNow").textContent="Actualizando…";verGo()};
+  $("updLater").onclick=()=>{_updLater=true;o.remove();$("updB").hidden=false};try{$("updNow").focus()}catch(e){}}
 setTimeout(()=>verCheck(true),1500);document.addEventListener("visibilitychange",()=>{if(!document.hidden)verCheck(false)});""".replace("__BID__",_BID))
 rep('setInterval(verCheck,5*60000);','setInterval(()=>verCheck(false),2*60000);')
 rep('else if(/^[1-6]$/.test(k)&&!e.repeat)','else if(/^[1-8]$/.test(k)&&!e.repeat&&!(typeof kbFight==="function"&&kbFight()))')

@@ -1194,3 +1194,12 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
   background:#fff;color:#1c1f3a;border:3px solid #ffb62e;font-size:1.15rem;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.3)}
 #newsM .newsX:hover{background:#ffe9b8}
 #newsM .newsX:focus-visible{outline:3px solid #6aa8ff;outline-offset:2px}
+/* versión nueva: ventana en el centro (Actualizar ahora / Más tarde) */
+#updM{position:fixed;inset:0;z-index:190;background:rgba(10,12,30,.72);display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(2px)}
+#updM .updbox{max-width:440px;width:100%;background:var(--panel);color:var(--ink);border:4px solid #ffb62e;border-radius:22px;padding:22px 20px;text-align:center;box-shadow:0 0 40px 8px rgba(255,182,46,.45);animation:jpop .5s cubic-bezier(.2,1.4,.4,1)}
+#updM .updic{font-size:2.6rem;line-height:1}
+#updM h2{margin:8px 0 6px}
+#updM p{margin:6px 0;line-height:1.4}
+#updM .updv{color:var(--mute)}
+#updM .updbtn{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+#updM .updbtn button{padding:10px 18px;font-size:1rem}

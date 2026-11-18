@@ -217,7 +217,7 @@ const CARD_BG=[["sun","Atardecer",3e7,null,"linear-gradient(160deg,#ffb36e,#ff6f
 const CARD_FR=[["gold","Marco dorado",7.5e7,null],["rain","Marco arcoíris",1.5e8,null],["neon","Marco de neón",3e8,null],
   ["hw","Marco fantasmal",5e7,"🎃 Halloween"],["xm","Marco de guirnalda",5e7,"🎄 Navidad"],["vl","Marco latido",5e7,"💘 San Valentín"],["sp","Marco floral",5e7,"🌸 Primavera"],["su","Marco de olas",5e7,"☀️ Verano"]];
 const cardIt=(t,id)=>(t==="bg"?CARD_BG:CARD_FR).find(x=>x[0]===id)||null;
-function cardGet(){const c=S.card||{};return{bg:c.bg&&trOwn("bg",c.bg)?c.bg:"",fr:c.fr&&trOwn("fr",c.fr)?c.fr:""}}
+function cardGet(){const c=S.card||{};return{bg:c.bg&&trOwn("bg",c.bg)?c.bg:"",fr:c.fr&&trOwn("fr",c.fr)?c.fr:"",po:typeof av3PoseOk==="function"&&av3PoseOk(c.po)?c.po:"i"}}
 // clase y estilo de una tarjeta (también para la de otros jugadores)
 function cardAttr(bg,fr){const b=cardIt("bg",bg),f=cardIt("fr",fr);return ' class="pcard'+(b&&b[5]?' cba':'')+(b?' cbg':'')+(f?' fr fr-'+f[0]:'')+'"'+(b?' style="background:'+b[4].replace(/"/g,"&quot;")+'"':'')}
 function cardMini(L,bg,fr,name){return '<div'+cardAttr(bg,fr)+'><div class="pcmini">'+trImg(L,"f","i")+'<b>'+esc(name)+'</b></div></div>'}
@@ -262,16 +262,19 @@ document.addEventListener("click",async e=>{const t=e.target;if(!t.closest)retur
     S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn[k+":"+v]=1;trSet(k,v);save();render();snd("lvl");toast("🛍️ ¡Has comprado «"+o[2][v]+"» en la Tienda de Evento! Ya la llevas puesta.");trShopUI()}
 });
 // la tarjeta se publica con el perfil
-{const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;return d}}
+{const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;d.cpo=c.po;return d}}
 // ================= MI TARJETA: tu perfil tal y como lo ven los demás =================
 nxPanel("myCardP","🪪 Mi tarjeta","Así ven tu perfil los demás jugadores cuando lo abren desde la clasificación, el chat o la lista de amigos.");
 {const g=HUB.find(x=>x.k==="trn");if(g&&!g.tabs.some(t=>t[0]==="myCardP"))g.tabs.splice(1,0,["myCardP","Mi tarjeta"]);HUBP.myCardP="trn";HUBR.myCardP=()=>myCardUI()}
 function myCardData(){window._rdForce=1;let d=null;try{d=window.rankData?window.rankData():null}catch(e){}window._rdForce=0;
-  d=d||{n:pvClean(pvNick())||"Entrenador",tr:trEnc(myLook()),dex:P.filter(p=>hasP(p[0])).length,prs:S.prs|0};const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;return d}
+  d=d||{n:pvClean(pvNick())||"Entrenador",tr:trEnc(myLook()),dex:P.filter(p=>hasP(p[0])).length,prs:S.prs|0};const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;d.cpo=c.po;return d}
 async function myCardUI(){const box=$("myCardPB");if(!box)return;
-  box.innerHTML='<div class="mycbar"><button class="red" data-mycs>🛍️ Personalizar en la Tienda de Evento</button><button class="alt" data-mycv>🧑 Cambiar mi entrenador</button></div><div class="mycwrap" id="myCardV"></div>'+(typeof nickOk==="function"&&nickOk()&&window.FB?'':'<small class="mut">Para que los demás puedan ver tu perfil necesitas una cuenta iniciada y un apodo registrado (en PVP online).</small>');
+  box.innerHTML='<div class="mycbar"><button class="red" data-mycs>🛍️ Personalizar en la Tienda de Evento</button><button class="alt" data-mycv>🧑 Cambiar mi entrenador</button></div>'+
+    (typeof AV3POSE!=="undefined"?'<div class="mypose"><b>🕺 Pose</b><small class="mut">Se ve en tu tarjeta (también la que ven los demás) y en tu entrenador de la pantalla principal.</small><div class="myposeb">'+AV3POSE.map(x=>'<button type="button" class="mini '+(cardGet().po===x[0]?'on':'alt')+'" data-mypo="'+x[0]+'">'+x[1]+' '+x[2]+'</button>').join("")+'</div></div>':'')+
+    '<div class="mycwrap" id="myCardV"></div>'+(typeof nickOk==="function"&&nickOk()&&window.FB?'':'<small class="mut">Para que los demás puedan ver tu perfil necesitas una cuenta iniciada y un apodo registrado (en PVP online).</small>');
   const me=window.FB&&window.FB.uid?window.FB.uid():"me";await openProf(me,myCardData(),$("myCardV"))}
-document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;if(t.closest("[data-mycs]")){snd("ui");hubOpen("trn","trShopP")}else if(t.closest("[data-mycv]")){snd("ui");hubOpen("trn","trP")}else if(t.closest("[data-myc]")){e.preventDefault();snd("ui");hubOpen("trn","myCardP")}});
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;if(t.closest("[data-mycs]")){snd("ui");hubOpen("trn","trShopP")}else if(t.closest("[data-mycv]")){snd("ui");hubOpen("trn","trP")}else if(t.closest("[data-myc]")){e.preventDefault();snd("ui");hubOpen("trn","myCardP")}
+  else{const po=t.closest("[data-mypo]");if(po){S.card=Object.assign({},S.card,{po:po.dataset.mypo});save();snd("ui");myCardUI()}}});
 // ================= TIENDA DE MT: compra discos que enseñan movimientos fuera de combate =================
 nxPanel("mtP","💿 Tienda de MT","Las MT enseñan un movimiento a un Pokémon fuera de combate. Cada Pokémon solo puede aprender las MT que aprende en los juegos originales. Se usan desde la Mochila (un solo uso).");
 {const g=HUB.find(x=>x.k==="bag");if(g&&!g.tabs.some(t=>t[0]==="mtP")){const i=g.tabs.findIndex(t=>t[0]==="bagP");g.tabs.splice(i+1,0,["mtP","Tienda de MT"])}HUBP.mtP="bag";HUBR.mtP=()=>mtShopUI()}

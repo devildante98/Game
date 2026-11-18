@@ -157,6 +157,7 @@ async function openProf(uid,dIn,tgt){
     (Array.isArray(d.tm)&&d.tm.length?'<b>Equipo</b><div class="proftm">'+d.tm.filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],56,false,!!x.s)+'<small>'+esc(x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
     '<div class="jrow">'+(uid!==me&&!isFriend(uid)?'<button data-pfr="'+esc(pvClean(d.n))+'">+👥 Añadir amigo</button>':'')+(on&&uid!==me&&PV.st==="idle"&&!fcd?'<button class="red" data-pch="'+esc(uid)+'">⚔️ Retar</button>':'')+'<button class="alt" data-pcl="1">Cerrar</button></div>';
   if(tgt){const r=box.querySelector('.jrow');if(r)r.remove()}
+  try{if(typeof prof3d==="function")prof3d(box,d,uid===me)}catch(e){}
 }
 document.addEventListener("click",e=>{
   const l=e.target.closest&&e.target.closest("[data-prof]");if(l&&l.dataset.prof){e.preventDefault();openProf(l.dataset.prof);return}

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.5"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.6"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794976949">
+<meta name="game-build" content="1794977769">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2894,6 +2894,13 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 #updM .updv{color:var(--mute)}
 #updM .updbtn{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
 #updM .updbtn button{padding:10px 18px;font-size:1rem}
+/* poses de la tarjeta */
+.mypose{margin:6px 0 10px;display:flex;flex-direction:column;gap:4px}
+.myposeb{display:flex;flex-wrap:wrap;gap:6px}
+.myposeb button.on{background:var(--yel,#ffcb3d);color:#1c1f3a}
+.profav.prof3d{height:150px;padding:0;overflow:hidden}
+.profav.prof3d .av3cv{width:100%;height:100%;display:block}
+.myposeb button{padding:6px 11px;font-size:.88rem}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2959,7 +2966,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.5</small>
+    <small class="pcver">Versión 7.6</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7642,8 +7649,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.5";
+const GAME_VER="7.6";
 const NEWS=[
+{v:"2026-11-18-7.6",ver:"7.6",at:"2026-11-18T05:56",t:"🕺 Poses animadas para tu entrenador",l:["En «Tu entrenador → Mi tarjeta» puedes elegir una pose: Normal, Saludar, ¡Victoria!, Lanzar Poké Ball, Señalar, Bailar o Pensativo","La pose se mueve: saluda con la mano, lanza la Poké Ball una y otra vez, baila…","Se ve en tu tarjeta en 3D (también en la que ven los demás jugadores) y en tu entrenador de la pantalla principal"]},
 {v:"2026-11-18-7.5",ver:"7.5",at:"2026-11-18T05:42",t:"🎮 Premios de los minijuegos desde el servidor",l:["Con cuenta, el premio de cada partida de minijuego lo calcula ahora el servidor: comprueba la puntuación y lleva las 3 partidas con premio de cada día","El premio aparece en la pantalla final en cuanto responde el servidor (un instante)","Las cantidades son las mismas de siempre, también el doble en la franja de minijuegos"]},
 {v:"2026-11-18-7.4",ver:"7.4",at:"2026-11-18T05:34",t:"🔥 Regalo diario y racha desde el servidor",l:["Con cuenta, el regalo diario y los premios de la racha los da ahora el servidor: una vez al día, con tu racha guardada en la nube","Si lo cobras en un dispositivo, el otro lo sabe y no se puede cobrar dos veces","Las cantidades y los premios de cada día de la racha son los mismos de siempre"]},
 {v:"2026-11-18-7.3",ver:"7.3",at:"2026-11-18T05:28",t:"🏆 Premios semanales calculados por el servidor",l:["Con cuenta, los premios de la semana pasada (Torneo semanal y clasificación de cada minijuego) los calcula ahora el servidor: mira tu puesto real, te da el premio y lo guarda en la nube al momento","Los premios son los mismos de siempre, y se cobran una sola vez","Si al entrar no hay conexión, se vuelven a pedir solos en cuanto la haya"]},
@@ -8014,7 +8022,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794976949";
+const GAME_B="1794977769";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8250,6 +8258,7 @@ async function openProf(uid,dIn,tgt){
     (Array.isArray(d.hft)&&d.hft.length?'<b>🏛️ Último equipo en el Salón de la Fama</b><div class="proftm">'+d.hft.filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],56,false,!!x.s)+'<small>'+esc(x.k||x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
     '<div class="jrow">'+(uid!==me&&!isFriend(uid)?'<button data-pfr="'+esc(pvClean(d.n))+'">+👥 Añadir amigo</button>':'')+(on&&uid!==me&&PV.st==="idle"&&!fcd?'<button class="red" data-pch="'+esc(uid)+'">⚔️ Retar</button>':'')+'<button class="alt" data-pcl="1">Cerrar</button></div>';
   if(tgt){const r=box.querySelector('.jrow');if(r)r.remove()}
+  try{if(typeof prof3d==="function")prof3d(box,d,uid===me)}catch(e){}
 }
 document.addEventListener("click",e=>{
   const l=e.target.closest&&e.target.closest("[data-prof]");if(l&&l.dataset.prof){e.preventDefault();openProf(l.dataset.prof);return}
@@ -11022,7 +11031,7 @@ const CARD_BG=[["sun","Atardecer",3e7,null,"linear-gradient(160deg,#ffb36e,#ff6f
 const CARD_FR=[["gold","Marco dorado",7.5e7,null],["rain","Marco arcoíris",1.5e8,null],["neon","Marco de neón",3e8,null],
   ["hw","Marco fantasmal",5e7,"🎃 Halloween"],["xm","Marco de guirnalda",5e7,"🎄 Navidad"],["vl","Marco latido",5e7,"💘 San Valentín"],["sp","Marco floral",5e7,"🌸 Primavera"],["su","Marco de olas",5e7,"☀️ Verano"]];
 const cardIt=(t,id)=>(t==="bg"?CARD_BG:CARD_FR).find(x=>x[0]===id)||null;
-function cardGet(){const c=S.card||{};return{bg:c.bg&&trOwn("bg",c.bg)?c.bg:"",fr:c.fr&&trOwn("fr",c.fr)?c.fr:""}}
+function cardGet(){const c=S.card||{};return{bg:c.bg&&trOwn("bg",c.bg)?c.bg:"",fr:c.fr&&trOwn("fr",c.fr)?c.fr:"",po:typeof av3PoseOk==="function"&&av3PoseOk(c.po)?c.po:"i"}}
 // clase y estilo de una tarjeta (también para la de otros jugadores)
 function cardAttr(bg,fr){const b=cardIt("bg",bg),f=cardIt("fr",fr);return ' class="pcard'+(b&&b[5]?' cba':'')+(b?' cbg':'')+(f?' fr fr-'+f[0]:'')+'"'+(b?' style="background:'+b[4].replace(/"/g,"&quot;")+'"':'')}
 function cardMini(L,bg,fr,name){return '<div'+cardAttr(bg,fr)+'><div class="pcmini">'+trImg(L,"f","i")+'<b>'+esc(name)+'</b></div></div>'}
@@ -11067,16 +11076,19 @@ document.addEventListener("click",async e=>{const t=e.target;if(!t.closest)retur
     S.t-=it[2];S.trOwn=S.trOwn||{};S.trOwn[k+":"+v]=1;trSet(k,v);save();render();snd("lvl");toast("🛍️ ¡Has comprado «"+o[2][v]+"» en la Tienda de Evento! Ya la llevas puesta.");trShopUI()}
 });
 // la tarjeta se publica con el perfil
-{const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;return d}}
+{const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;d.cpo=c.po;return d}}
 // ================= MI TARJETA: tu perfil tal y como lo ven los demás =================
 nxPanel("myCardP","🪪 Mi tarjeta","Así ven tu perfil los demás jugadores cuando lo abren desde la clasificación, el chat o la lista de amigos.");
 {const g=HUB.find(x=>x.k==="trn");if(g&&!g.tabs.some(t=>t[0]==="myCardP"))g.tabs.splice(1,0,["myCardP","Mi tarjeta"]);HUBP.myCardP="trn";HUBR.myCardP=()=>myCardUI()}
 function myCardData(){window._rdForce=1;let d=null;try{d=window.rankData?window.rankData():null}catch(e){}window._rdForce=0;
-  d=d||{n:pvClean(pvNick())||"Entrenador",tr:trEnc(myLook()),dex:P.filter(p=>hasP(p[0])).length,prs:S.prs|0};const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;return d}
+  d=d||{n:pvClean(pvNick())||"Entrenador",tr:trEnc(myLook()),dex:P.filter(p=>hasP(p[0])).length,prs:S.prs|0};const c=cardGet();d.cbg=c.bg;d.cfr=c.fr;d.cpo=c.po;return d}
 async function myCardUI(){const box=$("myCardPB");if(!box)return;
-  box.innerHTML='<div class="mycbar"><button class="red" data-mycs>🛍️ Personalizar en la Tienda de Evento</button><button class="alt" data-mycv>🧑 Cambiar mi entrenador</button></div><div class="mycwrap" id="myCardV"></div>'+(typeof nickOk==="function"&&nickOk()&&window.FB?'':'<small class="mut">Para que los demás puedan ver tu perfil necesitas una cuenta iniciada y un apodo registrado (en PVP online).</small>');
+  box.innerHTML='<div class="mycbar"><button class="red" data-mycs>🛍️ Personalizar en la Tienda de Evento</button><button class="alt" data-mycv>🧑 Cambiar mi entrenador</button></div>'+
+    (typeof AV3POSE!=="undefined"?'<div class="mypose"><b>🕺 Pose</b><small class="mut">Se ve en tu tarjeta (también la que ven los demás) y en tu entrenador de la pantalla principal.</small><div class="myposeb">'+AV3POSE.map(x=>'<button type="button" class="mini '+(cardGet().po===x[0]?'on':'alt')+'" data-mypo="'+x[0]+'">'+x[1]+' '+x[2]+'</button>').join("")+'</div></div>':'')+
+    '<div class="mycwrap" id="myCardV"></div>'+(typeof nickOk==="function"&&nickOk()&&window.FB?'':'<small class="mut">Para que los demás puedan ver tu perfil necesitas una cuenta iniciada y un apodo registrado (en PVP online).</small>');
   const me=window.FB&&window.FB.uid?window.FB.uid():"me";await openProf(me,myCardData(),$("myCardV"))}
-document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;if(t.closest("[data-mycs]")){snd("ui");hubOpen("trn","trShopP")}else if(t.closest("[data-mycv]")){snd("ui");hubOpen("trn","trP")}else if(t.closest("[data-myc]")){e.preventDefault();snd("ui");hubOpen("trn","myCardP")}});
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;if(t.closest("[data-mycs]")){snd("ui");hubOpen("trn","trShopP")}else if(t.closest("[data-mycv]")){snd("ui");hubOpen("trn","trP")}else if(t.closest("[data-myc]")){e.preventDefault();snd("ui");hubOpen("trn","myCardP")}
+  else{const po=t.closest("[data-mypo]");if(po){S.card=Object.assign({},S.card,{po:po.dataset.mypo});save();snd("ui");myCardUI()}}});
 // ================= TIENDA DE MT: compra discos que enseñan movimientos fuera de combate =================
 nxPanel("mtP","💿 Tienda de MT","Las MT enseñan un movimiento a un Pokémon fuera de combate. Cada Pokémon solo puede aprender las MT que aprende en los juegos originales. Se usan desde la Mochila (un solo uso).");
 {const g=HUB.find(x=>x.k==="bag");if(g&&!g.tabs.some(t=>t[0]==="mtP")){const i=g.tabs.findIndex(t=>t[0]==="bagP");g.tabs.splice(i+1,0,["mtP","Tienda de MT"])}HUBP.mtP="bag";HUBR.mtP=()=>mtShopUI()}
@@ -14783,7 +14795,7 @@ function gmTop(){
   try{if(GM.scr==="stage"){const pm=+(($("pityM")||{}).textContent)||30,pv=+(($("pity")||{}).textContent)||0,left=Math.max(0,pm-pv);$("gPityN").textContent=left;$("gPityB").style.width=Math.min(100,pv/pm*100)+"%";$("gPity").classList.toggle("gnear",left<=5)}}catch(e){}
   try{const nk=S.nick?String(S.nick).slice(0,18):"Entrenador";if($("gNick").textContent!==nk)$("gNick").textContent=nk}catch(e){}
   try{const cv=parseFloat(($("cpsv")||{}).textContent)||0,cb=$("gCombo");if(cv>=1){$("gCmb").textContent=cv.toFixed(1);if(!cb.classList.contains("on"))cb.classList.add("on");cb.classList.toggle("hot",cv>=6)}else cb.classList.remove("on","hot")}catch(e){}
-  try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr&&!(typeof av3Attach==="function"&&av3Attach(tr,"hub",()=>myLook(),{yaw:.3,drag:false,fps:av3mLo()?15:24,lo:av3mLo(),pause:()=>{const c=document.getElementById("gScr"),h=document.getElementById("hubM");return(c&&!c.hidden)||(h&&!h.hidden)}})))tr.innerHTML=typeof chSpriteImg==="function"?chSpriteImg(myLook(),"d"):trImg(myLook(),"f","i")}}catch(e){}
+  try{const k=trEnc(myLook());if(k!==GM.look){GM.look=k;$("gAv").innerHTML=trImg(myLook(),"f","i");const tr=$("gTr");if(tr&&!(typeof av3Attach==="function"&&av3Attach(tr,"hub",()=>myLook(),{yaw:.3,drag:false,pose:()=>{try{return cardGet().po}catch(e){return "i"}},fps:av3mLo()?15:24,lo:av3mLo(),pause:()=>{const c=document.getElementById("gScr"),h=document.getElementById("hubM");return(c&&!c.hidden)||(h&&!h.hidden)}})))tr.innerHTML=typeof chSpriteImg==="function"?chSpriteImg(myLook(),"d"):trImg(myLook(),"f","i")}}catch(e){}
 }
 function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   const set=(el,v)=>{if(!el)return;const i=el.querySelector(".gbd");if(!i)return;i.hidden=!v;if(v)i.textContent=v===true?"!":v};
@@ -19254,10 +19266,26 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
     disc(M,rx,ry,c,n){n=n||14;for(let i=0;i<n;i++){const t0=Math.PI*2*i/n,t1=Math.PI*2*(i+1)/n,P3=(x,y)=>V(M[0]*x+M[4]*y+M[12],M[1]*x+M[5]*y+M[13],M[2]*x+M[6]*y+M[14],0,0,0,c);P3(0,0);P3(Math.cos(t0)*rx,Math.sin(t0)*ry);P3(Math.cos(t1)*rx,Math.sin(t1)*ry)}}};
   return{ok:true,cv,
     draw(L,o){o=o||{};nv=0;const w=cv.width,h=cv.height;gl.viewport(0,0,w,h);const zoom=o.zoom||1,cy=o.cy==null?.97:o.cy,dist=(o.dist||5.15)/zoom;
-      R0=m4RY(m4I(),o.yaw||0);WP=!o.chibi&&!(av3Model.nowarp&&av3Model.nowarp(L,o));av3Model(E,L,o);
+      {const PZ=av3Pose(o.pose,o.t||0);R0=PZ?m4RZ(m4T(m4RY(m4I(),o.yaw||0),0,PZ.lift||0,0),PZ.roll||0):m4RY(m4I(),o.yaw||0)}WP=!o.chibi&&!(av3Model.nowarp&&av3Model.nowarp(L,o));av3Model(E,L,o);
       const VP=m4Mul(m4Persp((o.fov||24)*Math.PI/180,w/h,Math.max(.2,dist-1.5),dist+1.8),m4Look([0,cy+(o.elev!=null?o.elev*dist:.25/zoom),dist],[0,cy,0]));
       gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);const l=Math.hypot(.38,.5,.78);gl.uniform3f(uL,.38/l,.5/l,.78/l);
       gl.bufferSubData(gl.ARRAY_BUFFER,0,buf.subarray(0,nv*9));gl.drawArrays(gl.TRIANGLES,0,nv);return nv}}}
+// ---------- poses de la tarjeta y del entrenador de la pantalla principal (animadas: t en segundos) ----------
+// L/R: brazo izquierdo/derecho [giro del hombro hacia delante (negativo = arriba), separación del cuerpo, codo] ·
+// hx/hz: cabeza (asentir / inclinar) · lift: bote · roll: balanceo del cuerpo · ball: Poké Ball en la mano
+const AV3POSE=[["i","🧍","Normal"],["hola","👋","Saludar"],["vict","🙌","¡Victoria!"],["lanz","🔴","Lanzar Poké Ball"],["sena","👉","Señalar"],["baile","💃","Bailar"],["pens","🤔","Pensativo"]];
+const av3PoseOk=p=>AV3POSE.some(x=>x[0]===p);
+function av3Pose(p,t){const s=Math.sin,idle=k=>[s(t*1.6+k)*.03,-.03,0];
+  if(p==="hola")return{L:idle(0),R:[-2.65,-.55+s(t*7)*.3,-.35+s(t*7)*.25],hx:s(t*1.8)*.03,hz:-.07,lift:0,roll:-.02};
+  if(p==="vict"){const b=Math.abs(s(t*3.4));return{L:[-2.75,-.62-b*.12,-.1-b*.2],R:[-2.75,-.62-b*.12,-.1-b*.2],hx:-.1,hz:0,lift:b*.06,roll:0}}
+  if(p==="lanz"){// ciclo de 2,6 s: coger impulso con la Poké Ball, brazo arriba, lanzar, seguir el gesto y volver
+    const K=[[0,[.05,-.06,-.1],1],[.5,[1.0,-.2,-1.6],1],[1.0,[-2.6,-.15,-.3],1],[1.15,[-1.5,-.1,-.15],0],[1.5,[-.7,-.05,-.4],0],[2.1,[.05,-.06,-.1],0],[2.6,[.05,-.06,-.1],1]],c=t%2.6;
+    let i=0;while(i<K.length-2&&c>=K[i+1][0])i++;const a=K[i],b=K[i+1],f=Math.min(1,(c-a[0])/(b[0]-a[0])),e=f*f*(3-2*f),R=a[1].map((v,j)=>v+(b[1][j]-v)*e);
+    return{L:idle(0),R:R,hx:c>.9&&c<1.4?-.06:0,hz:0,lift:0,roll:c>.9&&c<1.5?-.04:0,ball:!!a[2]&&c<1.1}}
+  if(p==="sena")return{L:idle(0),R:[-1.5+s(t*2.2)*.05,-.4,0],hx:-.04,hz:-.05,lift:0,roll:-.03};
+  if(p==="baile"){const a=s(t*4.2);return{L:[-1.5+a*1.1,-.5,-.6],R:[-1.5-a*1.1,-.5,-.6],hx:.03*a,hz:a*.09,lift:Math.abs(s(t*8.4))*.04,roll:a*.06}}
+  if(p==="pens")return{L:[-.6,.35,-1.3],R:[-1.2,.18,-2.1],hx:.1+s(t*1.1)*.03,hz:.08,lift:0,roll:.02};
+  return null}
 // ---------- peinados: cada uno con su forma (casco, flequillo, melena en mechones, puntas, coletas, trenzas, moños…) ----------
 function av3Hair(E,L,C){const hs=L.hs;if(hs===22)return;
   const{HM,hrx,hry,hrz,hc,sk,hac,hatOn,zs}=C,dk=(c,k)=>av3Mix(c,[0,0,0],k),lt=(c,k)=>av3Mix(c,[1,1,1],k),hd=dk(hc,.2),hl=lt(hc,.16),h2=C.flat?hc:av3Mix(hc,hl,.5),PI=Math.PI,top=!hatOn;
@@ -19492,7 +19520,7 @@ function av3Attach(host,key,getLook,o){if(!av3Attach.ready)return false;o=o||{};
   if(!v.run){v.run=true;v.last=0;const calm=()=>typeof hubCalm==="function"&&hubCalm(),gap=o.fps?1000/o.fps:33;
     const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(v.o.pause&&v.o.pause())return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
       const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(v.o.lo?1.5:2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
-      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L,v.o.lo)&&!(v.o.lo&&av3mHas(L,false))){v.sig=null;return}v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy,lo:v.o.lo})}catch(e){}};requestAnimationFrame(loop)}
+      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L,v.o.lo)&&!(v.o.lo&&av3mHas(L,false))){v.sig=null;return}v.sig2=v.sig;const po=typeof v.o.pose==="function"?v.o.pose():v.o.pose;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy+"|"+po;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy,lo:v.o.lo,pose:po})}catch(e){}};requestAnimationFrame(loop)}
   return true}
 // zoom de una vista viva: k multiplica el zoom actual (1 = solo recolocar) y f es la altura del puntero (0 arriba, 1 abajo),
 // que se queda quieta al acercar. La vista nunca se sale del modelo.
@@ -19533,6 +19561,10 @@ function ch3Grid(L,dir,fr){if(CH3.ok===false)return null;const S=CH3.S,W=16*S,H=
 {const _ov=ovSprite,OVS4={};ovSprite=function(code){if(OVS4[code])return OVS4[code];const old=()=>_ov.call(this,code);if(CH3.ok===false)return old();let L;try{L=trDec(code)}catch(e){return old()}
   const out={},mk=dir=>{let arr=null;Object.defineProperty(out,dir,{enumerable:true,get(){if(!arr){try{const G=[0,1,3].map(f=>{const g=ch3Grid(L,dir,f);if(!g)throw 0;return chCanvas(g,false,0)});arr=[G[0],G[1],G[0],G[2],G[0],G[1],G[0],G[2]]}catch(e){arr=old()[dir]}}return arr}})};
   ["d","l","u","r"].forEach(mk);return OVS4[code]=out}}
+// tarjeta y perfil: el entrenador en 3D, con su pose animada (si no hay WebGL, se queda la imagen)
+function prof3d(box,d,mine){const av=box&&box.querySelector(".profav");if(!av||!av3Attach.ready)return;let L;try{L=trDec(d.tr)}catch(e){return}
+  const po=av3PoseOk(d.cpo)?d.cpo:"i",lo=typeof av3mLo==="function"&&av3mLo();av.classList.add("prof3d");
+  if(!av3Attach(av,mine?"mycard":"prof",()=>L,{yaw:.3,drag:false,pose:po,fps:lo?15:24,lo:lo}))av.classList.remove("prof3d")}
 
 // =====================================================================================
 // ENTRENADOR 3D CON PIEZAS MODELADAS EN BLENDER
@@ -19586,9 +19618,11 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
   const G=girl?new Float32Array([.93,0,0,0,0,1,0,0,0,0,.95,0,0,0,0,1]):I,pv=meta.piv,J=k=>{const a=pv[k];return[a[0],a[2],-a[1]]},mir=p=>[-p[0],p[1],p[2]];
   const rot=(B,p,rx,rz)=>m4T(m4RX(m4RZ(m4T(B,p[0],p[1],p[2]),rz||0),rx||0),-p[0],-p[1],-p[2]);
   const AP={t:[1.0,-1.6,.3],m:[-2.6,-.3,.2],u:[-1.5,-.15,.1],f:[-.7,-.4,.05],w:[-2.6,-.5,.25]}[pose],sway=Math.sin(t*1.6)*.02,MS={body:G,legL:G,legR:G};
-  MS.armL1=rot(G,J("shL"),sway,pose==="w"?.35:0);MS.armL2=rot(MS.armL1,J("elL"),pose==="w"?-.5:0,0);
-  MS.armR1=rot(G,mir(J("shL")),AP?AP[0]:-sway,AP?-AP[2]:0);MS.armR2=rot(MS.armR1,mir(J("elL")),AP?AP[1]:0,0);
-  const hcy=pv.head[2],hr=pv.hr,MH=rot(I,[0,1.42,0],Math.sin(t*.9)*.012+(pose==="l"?.34:0),0);
+  const PZ=typeof av3Pose==="function"?av3Pose(pose,t):null;
+  if(PZ){MS.armL1=rot(G,J("shL"),PZ.L[0],PZ.L[1]);MS.armL2=rot(MS.armL1,J("elL"),PZ.L[2],0);MS.armR1=rot(G,mir(J("shL")),PZ.R[0],-PZ.R[1]);MS.armR2=rot(MS.armR1,mir(J("elL")),PZ.R[2],0)}
+  else{MS.armL1=rot(G,J("shL"),sway,pose==="w"?.35:0);MS.armL2=rot(MS.armL1,J("elL"),pose==="w"?-.5:0,0);
+  MS.armR1=rot(G,mir(J("shL")),AP?AP[0]:-sway,AP?-AP[2]:0);MS.armR2=rot(MS.armR1,mir(J("elL")),AP?AP[1]:0,0)}
+  const hcy=pv.head[2],hr=pv.hr,MH=PZ?rot(I,[0,1.42,0],PZ.hx+Math.sin(t*.9)*.012,PZ.hz):rot(I,[0,1.42,0],Math.sin(t*.9)*.012+(pose==="l"?.34:0),0);
   // ----- piezas -----
   const stripes=top===14||L.pat===1,sc2=top===14?ac:pcc,tights=L.sck===3?av3Mix(sk,sckc,.8):null;
   // pelo rapado y barba van pintados sobre la propia cabeza (siguen su forma exacta)
@@ -19667,7 +19701,7 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
   if(!hide.shin&&!ms.foot&&L.sck!==3){const top2=L.sck===1?.44:L.sck===2?.36:.21,lg=meta.leg,at=y=>{for(let i=1;i<lg.length;i++)if(y>=lg[i][0]){const a=lg[i-1],b=lg[i],k=(a[0]-y)/(a[0]-b[0]);return a.map((v,j)=>v+(b[j]-v)*k)}return lg[lg.length-1]};
     for(const s of[-1,1]){const R=[];for(let y=top2;y>.1;y-=.04){const q=at(y),c=L.sck===2&&Math.floor(y/.04)%2?lt(sckc,.45):sckc;R.push([y,q[3]+.007,q[4]+.007,c])}const q=at(.1);R.push([.1,q[3]+.007,q[4]+.007,sckc]);const c=at((top2+.1)/2);E.lathe(m4T(s>0?MS.legL:MS.legR,s*c[1],0,-c[2]),R,14)}}
   // Poké Ball en la mano al lanzar
-  if(AP&&(pose==="t"||pose==="m")){const w=mir(wl),B=m4T(MS.armR2,w[0]-.02,w[1]-.1,w[2]+.03);E.ell(B,.05,.05,.05,[.93,.2,.25],(x,y)=>y>=0,1);E.ell(B,.05,.05,.05,[.97,.97,.99],(x,y)=>y<0,1);E.ell(B,.052,.009,.052,K,null,1)}}
+  if((AP&&(pose==="t"||pose==="m"))||(PZ&&PZ.ball)){const w=mir(wl),B=m4T(MS.armR2,w[0]-.02,w[1]-.1,w[2]+.03);E.ell(B,.05,.05,.05,[.93,.2,.25],(x,y)=>y>=0,1);E.ell(B,.05,.05,.05,[.97,.97,.99],(x,y)=>y<0,1);E.ell(B,.052,.009,.052,K,null,1)}}
 // ---------- cara: ojos grandes de varias capas con degradado, cejas, nariz, boca y mejillas ----------
 function av3mFace(E,L,C){const{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W}=C,B0=.0036,DZ=.0011,PI=Math.PI,mix=av3Mix;
   const ey=L.ey,big=ey===1?1.12:ey===4?1.06:1,EY=hcy-.2*hr[2],ex=.4*hr[0],ew=.037*big,eh=(ey===6?.046:.058)*big,slant=ey===6?.24:ey===2?.02:.1,blink=(t%3.7)>3.58||ey===5;
@@ -20128,7 +20162,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.5";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.6";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

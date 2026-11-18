@@ -53,10 +53,26 @@ function AV3(cv,keep){let gl=null;try{const o={antialias:true,alpha:true,premult
     disc(M,rx,ry,c,n){n=n||14;for(let i=0;i<n;i++){const t0=Math.PI*2*i/n,t1=Math.PI*2*(i+1)/n,P3=(x,y)=>V(M[0]*x+M[4]*y+M[12],M[1]*x+M[5]*y+M[13],M[2]*x+M[6]*y+M[14],0,0,0,c);P3(0,0);P3(Math.cos(t0)*rx,Math.sin(t0)*ry);P3(Math.cos(t1)*rx,Math.sin(t1)*ry)}}};
   return{ok:true,cv,
     draw(L,o){o=o||{};nv=0;const w=cv.width,h=cv.height;gl.viewport(0,0,w,h);const zoom=o.zoom||1,cy=o.cy==null?.97:o.cy,dist=(o.dist||5.15)/zoom;
-      R0=m4RY(m4I(),o.yaw||0);WP=!o.chibi&&!(av3Model.nowarp&&av3Model.nowarp(L,o));av3Model(E,L,o);
+      {const PZ=av3Pose(o.pose,o.t||0);R0=PZ?m4RZ(m4T(m4RY(m4I(),o.yaw||0),0,PZ.lift||0,0),PZ.roll||0):m4RY(m4I(),o.yaw||0)}WP=!o.chibi&&!(av3Model.nowarp&&av3Model.nowarp(L,o));av3Model(E,L,o);
       const VP=m4Mul(m4Persp((o.fov||24)*Math.PI/180,w/h,Math.max(.2,dist-1.5),dist+1.8),m4Look([0,cy+(o.elev!=null?o.elev*dist:.25/zoom),dist],[0,cy,0]));
       gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);const l=Math.hypot(.38,.5,.78);gl.uniform3f(uL,.38/l,.5/l,.78/l);
       gl.bufferSubData(gl.ARRAY_BUFFER,0,buf.subarray(0,nv*9));gl.drawArrays(gl.TRIANGLES,0,nv);return nv}}}
+// ---------- poses de la tarjeta y del entrenador de la pantalla principal (animadas: t en segundos) ----------
+// L/R: brazo izquierdo/derecho [giro del hombro hacia delante (negativo = arriba), separación del cuerpo, codo] ·
+// hx/hz: cabeza (asentir / inclinar) · lift: bote · roll: balanceo del cuerpo · ball: Poké Ball en la mano
+const AV3POSE=[["i","🧍","Normal"],["hola","👋","Saludar"],["vict","🙌","¡Victoria!"],["lanz","🔴","Lanzar Poké Ball"],["sena","👉","Señalar"],["baile","💃","Bailar"],["pens","🤔","Pensativo"]];
+const av3PoseOk=p=>AV3POSE.some(x=>x[0]===p);
+function av3Pose(p,t){const s=Math.sin,idle=k=>[s(t*1.6+k)*.03,-.03,0];
+  if(p==="hola")return{L:idle(0),R:[-2.65,-.55+s(t*7)*.3,-.35+s(t*7)*.25],hx:s(t*1.8)*.03,hz:-.07,lift:0,roll:-.02};
+  if(p==="vict"){const b=Math.abs(s(t*3.4));return{L:[-2.75,-.62-b*.12,-.1-b*.2],R:[-2.75,-.62-b*.12,-.1-b*.2],hx:-.1,hz:0,lift:b*.06,roll:0}}
+  if(p==="lanz"){// ciclo de 2,6 s: coger impulso con la Poké Ball, brazo arriba, lanzar, seguir el gesto y volver
+    const K=[[0,[.05,-.06,-.1],1],[.5,[1.0,-.2,-1.6],1],[1.0,[-2.6,-.15,-.3],1],[1.15,[-1.5,-.1,-.15],0],[1.5,[-.7,-.05,-.4],0],[2.1,[.05,-.06,-.1],0],[2.6,[.05,-.06,-.1],1]],c=t%2.6;
+    let i=0;while(i<K.length-2&&c>=K[i+1][0])i++;const a=K[i],b=K[i+1],f=Math.min(1,(c-a[0])/(b[0]-a[0])),e=f*f*(3-2*f),R=a[1].map((v,j)=>v+(b[1][j]-v)*e);
+    return{L:idle(0),R:R,hx:c>.9&&c<1.4?-.06:0,hz:0,lift:0,roll:c>.9&&c<1.5?-.04:0,ball:!!a[2]&&c<1.1}}
+  if(p==="sena")return{L:idle(0),R:[-1.5+s(t*2.2)*.05,-.4,0],hx:-.04,hz:-.05,lift:0,roll:-.03};
+  if(p==="baile"){const a=s(t*4.2);return{L:[-1.5+a*1.1,-.5,-.6],R:[-1.5-a*1.1,-.5,-.6],hx:.03*a,hz:a*.09,lift:Math.abs(s(t*8.4))*.04,roll:a*.06}}
+  if(p==="pens")return{L:[-.6,.35,-1.3],R:[-1.2,.18,-2.1],hx:.1+s(t*1.1)*.03,hz:.08,lift:0,roll:.02};
+  return null}
 // ---------- peinados: cada uno con su forma (casco, flequillo, melena en mechones, puntas, coletas, trenzas, moños…) ----------
 function av3Hair(E,L,C){const hs=L.hs;if(hs===22)return;
   const{HM,hrx,hry,hrz,hc,sk,hac,hatOn,zs}=C,dk=(c,k)=>av3Mix(c,[0,0,0],k),lt=(c,k)=>av3Mix(c,[1,1,1],k),hd=dk(hc,.2),hl=lt(hc,.16),h2=C.flat?hc:av3Mix(hc,hl,.5),PI=Math.PI,top=!hatOn;
@@ -291,7 +307,7 @@ function av3Attach(host,key,getLook,o){if(!av3Attach.ready)return false;o=o||{};
   if(!v.run){v.run=true;v.last=0;const calm=()=>typeof hubCalm==="function"&&hubCalm(),gap=o.fps?1000/o.fps:33;
     const loop=ts=>{if(!v.cv.isConnected){v.run=false;return}requestAnimationFrame(loop);if(document.hidden||v.cv.offsetParent===null)return;if(v.o.pause&&v.o.pause())return;if(calm()&&v.last&&!v.drag&&v.sig===v.sig2)return;if(ts-v.last<gap)return;v.last=ts;
       const b=v.cv.parentNode.getBoundingClientRect(),d=Math.min(v.o.lo?1.5:2,window.devicePixelRatio||1),w=Math.max(40,Math.round(b.width*d)),h=Math.max(60,Math.round(b.height*d));if(v.cv.width!==w||v.cv.height!==h){v.cv.width=w;v.cv.height=h}
-      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L,v.o.lo)&&!(v.o.lo&&av3mHas(L,false))){v.sig=null;return}v.sig2=v.sig;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy,lo:v.o.lo})}catch(e){}};requestAnimationFrame(loop)}
+      try{const L=v.get();if(typeof av3mWait==="function"&&av3mWait(L,v.o.lo)&&!(v.o.lo&&av3mHas(L,false))){v.sig=null;return}v.sig2=v.sig;const po=typeof v.o.pose==="function"?v.o.pose():v.o.pose;v.sig=trEnc(L)+v.yaw+"|"+v.zoom+"|"+v.cy+"|"+po;v.r.draw(L,{t:calm()?1.2:ts/1000,yaw:v.yaw,zoom:(v.o.zoom||1)*(v.zoom||1),cy:v.zoom>1?v.cy:v.o.cy,lo:v.o.lo,pose:po})}catch(e){}};requestAnimationFrame(loop)}
   return true}
 // zoom de una vista viva: k multiplica el zoom actual (1 = solo recolocar) y f es la altura del puntero (0 arriba, 1 abajo),
 // que se queda quieta al acercar. La vista nunca se sale del modelo.
@@ -332,3 +348,7 @@ function ch3Grid(L,dir,fr){if(CH3.ok===false)return null;const S=CH3.S,W=16*S,H=
 {const _ov=ovSprite,OVS4={};ovSprite=function(code){if(OVS4[code])return OVS4[code];const old=()=>_ov.call(this,code);if(CH3.ok===false)return old();let L;try{L=trDec(code)}catch(e){return old()}
   const out={},mk=dir=>{let arr=null;Object.defineProperty(out,dir,{enumerable:true,get(){if(!arr){try{const G=[0,1,3].map(f=>{const g=ch3Grid(L,dir,f);if(!g)throw 0;return chCanvas(g,false,0)});arr=[G[0],G[1],G[0],G[2],G[0],G[1],G[0],G[2]]}catch(e){arr=old()[dir]}}return arr}})};
   ["d","l","u","r"].forEach(mk);return OVS4[code]=out}}
+// tarjeta y perfil: el entrenador en 3D, con su pose animada (si no hay WebGL, se queda la imagen)
+function prof3d(box,d,mine){const av=box&&box.querySelector(".profav");if(!av||!av3Attach.ready)return;let L;try{L=trDec(d.tr)}catch(e){return}
+  const po=av3PoseOk(d.cpo)?d.cpo:"i",lo=typeof av3mLo==="function"&&av3mLo();av.classList.add("prof3d");
+  if(!av3Attach(av,mine?"mycard":"prof",()=>L,{yaw:.3,drag:false,pose:po,fps:lo?15:24,lo:lo}))av.classList.remove("prof3d")}

@@ -50,9 +50,11 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
   const G=girl?new Float32Array([.93,0,0,0,0,1,0,0,0,0,.95,0,0,0,0,1]):I,pv=meta.piv,J=k=>{const a=pv[k];return[a[0],a[2],-a[1]]},mir=p=>[-p[0],p[1],p[2]];
   const rot=(B,p,rx,rz)=>m4T(m4RX(m4RZ(m4T(B,p[0],p[1],p[2]),rz||0),rx||0),-p[0],-p[1],-p[2]);
   const AP={t:[1.0,-1.6,.3],m:[-2.6,-.3,.2],u:[-1.5,-.15,.1],f:[-.7,-.4,.05],w:[-2.6,-.5,.25]}[pose],sway=Math.sin(t*1.6)*.02,MS={body:G,legL:G,legR:G};
-  MS.armL1=rot(G,J("shL"),sway,pose==="w"?.35:0);MS.armL2=rot(MS.armL1,J("elL"),pose==="w"?-.5:0,0);
-  MS.armR1=rot(G,mir(J("shL")),AP?AP[0]:-sway,AP?-AP[2]:0);MS.armR2=rot(MS.armR1,mir(J("elL")),AP?AP[1]:0,0);
-  const hcy=pv.head[2],hr=pv.hr,MH=rot(I,[0,1.42,0],Math.sin(t*.9)*.012+(pose==="l"?.34:0),0);
+  const PZ=typeof av3Pose==="function"?av3Pose(pose,t):null;
+  if(PZ){MS.armL1=rot(G,J("shL"),PZ.L[0],PZ.L[1]);MS.armL2=rot(MS.armL1,J("elL"),PZ.L[2],0);MS.armR1=rot(G,mir(J("shL")),PZ.R[0],-PZ.R[1]);MS.armR2=rot(MS.armR1,mir(J("elL")),PZ.R[2],0)}
+  else{MS.armL1=rot(G,J("shL"),sway,pose==="w"?.35:0);MS.armL2=rot(MS.armL1,J("elL"),pose==="w"?-.5:0,0);
+  MS.armR1=rot(G,mir(J("shL")),AP?AP[0]:-sway,AP?-AP[2]:0);MS.armR2=rot(MS.armR1,mir(J("elL")),AP?AP[1]:0,0)}
+  const hcy=pv.head[2],hr=pv.hr,MH=PZ?rot(I,[0,1.42,0],PZ.hx+Math.sin(t*.9)*.012,PZ.hz):rot(I,[0,1.42,0],Math.sin(t*.9)*.012+(pose==="l"?.34:0),0);
   // ----- piezas -----
   const stripes=top===14||L.pat===1,sc2=top===14?ac:pcc,tights=L.sck===3?av3Mix(sk,sckc,.8):null;
   // pelo rapado y barba van pintados sobre la propia cabeza (siguen su forma exacta)
@@ -131,7 +133,7 @@ function av3mModel(E,L,o){const PC=n=>AV3M.pc[(o&&o.lo?"lo/":"")+n],P=(k,i)=>av3
   if(!hide.shin&&!ms.foot&&L.sck!==3){const top2=L.sck===1?.44:L.sck===2?.36:.21,lg=meta.leg,at=y=>{for(let i=1;i<lg.length;i++)if(y>=lg[i][0]){const a=lg[i-1],b=lg[i],k=(a[0]-y)/(a[0]-b[0]);return a.map((v,j)=>v+(b[j]-v)*k)}return lg[lg.length-1]};
     for(const s of[-1,1]){const R=[];for(let y=top2;y>.1;y-=.04){const q=at(y),c=L.sck===2&&Math.floor(y/.04)%2?lt(sckc,.45):sckc;R.push([y,q[3]+.007,q[4]+.007,c])}const q=at(.1);R.push([.1,q[3]+.007,q[4]+.007,sckc]);const c=at((top2+.1)/2);E.lathe(m4T(s>0?MS.legL:MS.legR,s*c[1],0,-c[2]),R,14)}}
   // Poké Ball en la mano al lanzar
-  if(AP&&(pose==="t"||pose==="m")){const w=mir(wl),B=m4T(MS.armR2,w[0]-.02,w[1]-.1,w[2]+.03);E.ell(B,.05,.05,.05,[.93,.2,.25],(x,y)=>y>=0,1);E.ell(B,.05,.05,.05,[.97,.97,.99],(x,y)=>y<0,1);E.ell(B,.052,.009,.052,K,null,1)}}
+  if((AP&&(pose==="t"||pose==="m"))||(PZ&&PZ.ball)){const w=mir(wl),B=m4T(MS.armR2,w[0]-.02,w[1]-.1,w[2]+.03);E.ell(B,.05,.05,.05,[.93,.2,.25],(x,y)=>y>=0,1);E.ell(B,.05,.05,.05,[.97,.97,.99],(x,y)=>y<0,1);E.ell(B,.052,.009,.052,K,null,1)}}
 // ---------- cara: ojos grandes de varias capas con degradado, cejas, nariz, boca y mejillas ----------
 function av3mFace(E,L,C){const{MH,zAt,hcy,hr,sk,hc,ec,t,P,dk,lt,K,W}=C,B0=.0036,DZ=.0011,PI=Math.PI,mix=av3Mix;
   const ey=L.ey,big=ey===1?1.12:ey===4?1.06:1,EY=hcy-.2*hr[2],ex=.4*hr[0],ew=.037*big,eh=(ey===6?.046:.058)*big,slant=ey===6?.24:ey===2?.02:.1,blink=(t%3.7)>3.58||ey===5;

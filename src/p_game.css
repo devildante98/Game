@@ -1286,3 +1286,21 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 #evpM .evpb{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:12px}
 #evpM .evpx{position:absolute;z-index:3;top:10px;right:10px;width:36px;height:36px;border-radius:50%;display:inline-grid;place-items:center;padding:0!important;line-height:1!important;background:rgba(0,0,0,.2);border:2px solid rgba(255,255,255,.4);color:#fff;cursor:pointer}
 body.calm #evpM .evpic{animation:none}
+/* Nochevieja (p_weather.js) */
+#nyCd{position:fixed;top:calc(var(--gtop,66px) + 10px);left:50%;transform:translateX(-50%);z-index:180;padding:8px 18px;border-radius:99px;background:rgba(20,10,50,.85);color:#ffe680;font-weight:900;box-shadow:0 0 18px rgba(255,90,170,.6);pointer-events:none}
+#nyCd.big{top:14%;padding:18px 34px;border-radius:28px;display:flex;flex-direction:column;align-items:center;background:rgba(20,10,50,.78)}
+#nyCd.big b{font-size:5rem;line-height:1;color:#fff;text-shadow:0 0 24px #ff5aa0,0 0 48px #ffd23f;animation:nypulse 1s ease-out infinite}
+#nyCd.big small{color:#ffe680}
+@keyframes nypulse{0%{transform:scale(1.4);opacity:.4}30%{transform:scale(1);opacity:1}}
+#nyM{position:fixed;inset:0;z-index:187;background:rgba(6,6,24,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+#nyM .nybox{position:relative;overflow:hidden;max-width:480px;width:100%;box-sizing:border-box;text-align:center;color:#fff;border-radius:26px;padding:22px 20px 18px;border:4px solid #ffd23f;background:radial-gradient(circle at 50% 0,#3a2a8a,#120a3a 75%);box-shadow:0 0 50px 12px rgba(255,90,170,.35);animation:jpop .55s cubic-bezier(.2,1.4,.4,1)}
+#nyM h2{margin:2px 0;font-size:2.2rem;background:linear-gradient(90deg,#ffd23f,#ff7ab6,#7ad8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+#nyM .nyk{font-weight:900;letter-spacing:1.5px;color:#ffe680;font-size:.78rem}
+#nyM .nymon{display:flex;justify-content:center;margin:4px 0}
+#nyM .nygift{font-weight:800;background:rgba(255,255,255,.1);border-radius:14px;padding:8px 12px;line-height:1.45}
+#nyM button{margin:6px 4px 0}
+#nyM .nyfw{position:absolute;inset:0;pointer-events:none}
+#nyM .nyfw i{position:absolute;width:6px;height:6px;border-radius:50%;opacity:0;animation:nyspark 2.6s ease-out infinite}
+@keyframes nyspark{0%{transform:scale(.2);opacity:0;box-shadow:0 0 0 0 currentColor}15%{opacity:1}100%{transform:scale(1);opacity:0;box-shadow:0 0 0 22px transparent}}
+.nycal{display:flex;gap:12px;align-items:center;padding:12px 16px;margin-bottom:12px;border-radius:16px;color:#fff;background:linear-gradient(135deg,#3a2a8a,#c8286c)}
+.nycal span{font-size:2rem}.nycal b{display:block}.nycal small{opacity:.92;line-height:1.4}

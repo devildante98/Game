@@ -62,19 +62,26 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
   const padW=(x,z)=>{let w=0,y=0;for(const b of TOWN){const d=Math.hypot(x-b.x,z-b.z),k=d<b.r?1:d<b.r+4?1-(d-b.r)/4:0;if(k>w){w=k;y=b.y}}return[w*w*(3-2*w),y]};
   const H=(x,z)=>{const h=H0(x,z);if(z>70||z<0||x<-60||x>60)return h;const[w,y]=padW(x,z),rd=roadD(x,z),hr=rd<2.4?(1-rd/2.4)*.25:0;return h+(y-h)*w-hr};
   const EYE=[0,15,-28];
+  // entorno (p_weather.js): SNW = suelo nevado, XMAS = adornos de Navidad; XM = bombillas de los árboles
+  let SNW=0,XMAS=0;const XM=[],XTREE=[-16.8,36];/* el árbol de Navidad: detrás de la calle, entre la Liga y el Estadio (no tapa ningún edificio ni cartel) */
   // ---------- paletas de la hora del día ----------
   const PAL={day:{top:"#3f86dc",hor:"#cfe6fb",low:"#f2f6ee",sun:[1,.97,.86],sunCol:"#fff6d8",amb:[.55,.6,.7],gnd:[.42,.4,.32],lit:[.62,.6,.52],sunDir:[-.35,.62,.7],water:"#3a7fbf",waterHi:"#a9d4f2",fog:[120,520],star:0,mtTint:[1,1,1]},
     dawn:{top:"#4d6fb8",hor:"#ffc8a0",low:"#ffe6cc",sun:[1,.8,.6],sunCol:"#ffd9a8",amb:[.5,.48,.58],gnd:[.42,.34,.32],lit:[.78,.58,.44],sunDir:[.75,.18,.62],water:"#5a6fa8",waterHi:"#ffc8a6",fog:[100,460],star:.15,mtTint:[1,.9,.9]},
     dusk:{top:"#3a3f8a",hor:"#ff9a6a",low:"#ffc89a",sun:[1,.6,.4],sunCol:"#ffb070",amb:[.5,.42,.52],gnd:[.42,.3,.3],lit:[.85,.52,.36],sunDir:[-.75,.14,.62],water:"#4a4f8a",waterHi:"#ffa070",fog:[90,440],star:.3,mtTint:[1,.86,.86]},
     night:{top:"#0c1438",hor:"#2c3a72",low:"#3a4a80",sun:[.75,.8,1],sunCol:"#f2f0dc",amb:[.26,.3,.48],gnd:[.16,.17,.24],lit:[.32,.36,.55],sunDir:[.42,.24,.85],water:"#1a2a58",waterHi:"#8aa0d8",fog:[70,380],star:1,mtTint:[.6,.65,.85]}};
-  const lerpP=(a,b,k)=>{const o={};for(const key in a){const va=a[key],vb=b[key];o[key]=typeof va==="string"?mix(hex(va),hex(vb),k):Array.isArray(va)?va.map((v,i)=>v+(vb[i]-v)*k):va+(vb-va)*k}return o};
+  // (los colores pueden venir como "#rrggbb" o ya como [r,g,b]: durante el paso de una hora del día a otra se mezclan los dos)
+  const lerpP=(a,b,k)=>{const o={},cv=v=>typeof v==="string"?hex(v):v;for(const key in a){const va=cv(a[key]),vb=cv(b[key]);o[key]=Array.isArray(va)?va.map((v,i)=>v+(vb[i]-v)*k):va+(vb-va)*k}return o};
   // ---------- lo fijo: relieve y árboles ----------
   const terrainCol=(x,y,z,ny)=>{const n=fbm(x*.08,z*.08,3),g1=[.36,.62,.27],g2=[.5,.7,.32],dry=[.66,.66,.38],rock=[.48,.46,.44],rock2=[.38,.37,.38],snow=[.96,.97,1],sand=[.84,.78,.58];
     let c=mix(g1,g2,n);if(z<34)c=mix(c,dry,fbm(x*.03,z*.03,3)*.5);if(y<1.4&&y>-1)c=mix(c,sand,Math.min(1,(1.4-y)/1.4));
     const steep=1-ny;if(steep>.25)c=mix(c,mix(rock,rock2,n),Math.min(1,(steep-.25)*3.5));
     if(z>0&&z<70&&Math.abs(x)<60){const rd=roadD(x,z),pw=padW(x,z)[0],dirt=mix([.66,.54,.38],[.74,.62,.44],fbm(x*.3,z*.3,2));if(rd<2.2)c=mix(c,dirt,Math.min(1,(2.2-rd)/1.2));else if(pw>.55)c=mix(c,mix(dirt,c,.45),(pw-.55)/.45)}
-    const sl=58+fbm(x*.05,z*.05,3)*16;if(y>sl)c=mix(c,snow,Math.min(1,(y-sl)/6)*(steep>.55?.55:1));return c};
-  const buildStatic=()=>{B=ST;B.n=0;
+    const sl=58+fbm(x*.05,z*.05,3)*16;if(y>sl)c=mix(c,snow,Math.min(1,(y-sl)/6)*(steep>.55?.55:1));
+    // nevado: el suelo llano se cubre de nieve (las pendientes fuertes dejan ver la roca y los caminos quedan pisados)
+    if(SNW){const flat=Math.max(0,Math.min(1,(ny-.62)/.25)),sn=mix([.9,.93,.98],[.98,.99,1],fbm(x*.15,z*.15,2));let k=.95*flat;
+      if(z>0&&z<70&&Math.abs(x)<60&&roadD(x,z)<1.8)k*=.55;if(y<-.15)k=0;c=mix(c,sn,k*SNW)}
+    return c};
+  const buildStatic=()=>{B=ST;B.n=0;XM.length=0;
     // rejilla del terreno, más tupida cerca y más espaciada lejos
     const xs=[],zs=[];for(let x=-320;x<=320;x+=x*x<4000?3:x*x<25000?5:9)xs.push(x);xs.push(320);
     {let z=-6;while(z<520){zs.push(z);z+=z<60?2.5:z<160?4.5:8}}
@@ -93,10 +100,21 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       const e=1.5,sl=Math.abs(H(x+e,z)-H(x-e,z))+Math.abs(H(x,z+e)-H(x,z-e));if(sl>3.4)continue;
       const dens=fbm(x*.022+3,z*.022+9,3);if(dens<.47&&hsh(k,11)>.1)continue;if(Math.abs(x)<10&&z<40)continue;if(z<62&&Math.abs(x)<62&&(TOWN.some(b=>Math.hypot(x-b.x,z-b.z)<b.r+3.5)||roadD(x,z)<3.2))continue;
       const s=(.8+hsh(k,13)*.7)*(1+z/260),pine=hsh(k,17)<.62||y>14,tone=hsh(k,19);n++;
-      if(pine){const g=mix([.12,.36,.2],[.2,.46,.24],tone),g2=mix(g,[1,1,1],.1);trunk(x,y-.2,z,.22*s,1.2*s,[.36,.24,.16]);cone(x,y+.9*s,z,1.7*s,2.6*s,g,g2);cone(x,y+2.2*s,z,1.3*s,2.3*s,g,g2);cone(x,y+3.4*s,z,.9*s,2*s,g2,mix(g2,[1,1,1],.08))}
-      else{const g=mix([.24,.5,.2],[.42,.62,.26],tone),g2=mix(g,[1,.95,.6],.18);trunk(x,y-.2,z,.25*s,1.8*s,[.4,.28,.18]);blob(x,y+2.8*s,z,1.9*s,1.6*s,g,g2)}}
+      if(pine){const g=mix([.12,.36,.2],[.2,.46,.24],tone);let g2=mix(g,[1,1,1],.1);if(SNW)g2=mix(g2,[.95,.97,1],.82);
+        if(XMAS&&XM.length<520&&z<110&&Math.abs(x)<110&&hsh(k,29)<.5)for(let q=0;q<6;q++){const f=.12+q/6*.8,ang=q*2.399+k,rr=(1.7-1.1*f)*s*.92;XM.push({p:[x+Math.cos(ang)*rr,y+.9*s+f*4.6*s,z+Math.sin(ang)*rr],c:q%4,r:.32*s,ph:hsh(k,q)*6})}
+        trunk(x,y-.2,z,.22*s,1.2*s,[.36,.24,.16]);cone(x,y+.9*s,z,1.7*s,2.6*s,g,g2);cone(x,y+2.2*s,z,1.3*s,2.3*s,g,g2);cone(x,y+3.4*s,z,.9*s,2*s,g2,mix(g2,[1,1,1],.08))}
+      else{const g=mix([.24,.5,.2],[.42,.62,.26],tone);let g2=mix(g,[1,.95,.6],.18);if(SNW)g2=mix(g2,[.95,.97,1],.85);trunk(x,y-.2,z,.25*s,1.8*s,[.4,.28,.18]);blob(x,y+2.8*s,z,1.9*s,1.6*s,g,g2)}}
     // rocas sueltas en el prado y en la orilla
-    for(let k=0;k<70;k++){const x=(hsh(k,31)-.5)*200,z=4+hsh(k,37)*120,y=H(x,z);if(y<.2)continue;if(z<62&&Math.abs(x)<62&&(TOWN.some(b=>Math.hypot(x-b.x,z-b.z)<b.r+2)||roadD(x,z)<2.5))continue;const r=.5+hsh(k,41)*1.4,c=mix([.5,.5,.5],[.62,.6,.56],hsh(k,43));blob(x,y,z,r,r*.6,c,mix(c,[1,1,1],.1))}
+    for(let k=0;k<70;k++){const x=(hsh(k,31)-.5)*200,z=4+hsh(k,37)*120,y=H(x,z);if(y<.2)continue;if(z<62&&Math.abs(x)<62&&(TOWN.some(b=>Math.hypot(x-b.x,z-b.z)<b.r+2)||roadD(x,z)<2.5))continue;const r=.5+hsh(k,41)*1.4,c=mix([.5,.5,.5],[.62,.6,.56],hsh(k,43));blob(x,y,z,r,r*.6,c,SNW?[.94,.96,1]:mix(c,[1,1,1],.1))}
+    // el gran árbol de Navidad del pueblo (entre la Liga y el Estadio)
+    if(XMAS){const XT=window._xt||XTREE,x=XT[0],z=XT[1],y=H(x,z)-.1,dg=[.09,.32,.17],dg2=SNW?[.9,.94,.98]:[.16,.42,.22];trunk(x,y,z,.42,2.2,[.36,.22,.12]);
+      // maceta
+      for(let q=0;q<8;q++){const a0=q/8*6.283,a1=(q+1)/8*6.283,p0=[x+Math.cos(a0)*1.1,y,z+Math.sin(a0)*1.1],p1=[x+Math.cos(a1)*1.1,y,z+Math.sin(a1)*1.1],u0=[x+Math.cos(a0)*1.25,y+1,z+Math.sin(a0)*1.25],u1=[x+Math.cos(a1)*1.25,y+1,z+Math.sin(a1)*1.25],nn=[Math.cos((a0+a1)/2),0,Math.sin((a0+a1)/2)];tri(p0,p1,u1,[.72,.12,.14],[.72,.12,.14],[.86,.2,.2],nn,nn,nn);tri(p0,u1,u0,[.72,.12,.14],[.86,.2,.2],[.86,.2,.2],nn,nn,nn)}
+      [[1.6,4.2,3.4],[3.8,3.5,3],[5.9,2.7,2.7],[7.8,1.9,2.4],[9.4,1.1,2]].forEach(([yy,r,h])=>cone(x,y+yy,z,r,h,dg,dg2,10));
+      // guirnalda en espiral y bolas de colores
+      for(let q=0;q<70;q++){const f=q/70,ang=f*6.283*4.5,yy=1.9+f*9.2,rr=4.15*(1-f*.86)+.12;XM.push({p:[x+Math.cos(ang)*rr,y+yy,z+Math.sin(ang)*rr],c:q%4,r:.42,ph:q*.5,big:1})}
+      XM.push({p:[x,y+11.8,z],c:4,r:1.1,ph:0,star:1})}
+
     gl.bindBuffer(gl.ARRAY_BUFFER,ST.vbo);gl.bufferData(gl.ARRAY_BUFFER,ST.a.subarray(0,ST.n*9),gl.STATIC_DRAW)};
   // ---------- los edificios del pueblo (tamaño fijo; al subir de nivel solo ganan detalles) ----------
   const TW=mkB(120000),TB=[];let townKey="";
@@ -146,7 +164,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
         if(o.tr!==false){const tr=o.tr||lt(wall,.35);for(const sx of[-1,1])for(const sz of[-1,1])box(x+sx*hx,0,z+sz*hz,.1,H/2,.1,tr,null,.12)}
         if(o.band)box(x,o.bandY==null?H*.5:o.bandY,z,hx+.03,o.bandH||.05,hz+.03,o.band,null,0)};
       // tejado a dos aguas de tejas en hileras; A = eje de la cumbrera, C = eje transversal
-      const roof=(cx,y0,cz,A,C,ha,hc,h,col,o)=>{o=o||{};const ov=o.ov==null?.35:o.ov,rows=o.rows||6,ends=o.ends,trim=o.trim||[.94,.93,.9],L=(a,c,y)=>[cx+A[0]*a+C[0]*c,y,cz+A[2]*a+C[2]*c];
+      const roof=(cx,y0,cz,A,C,ha,hc,h,col,o)=>{o=o||{};if(SNW)col=mix(col,[.92,.95,1],.82);const ov=o.ov==null?.35:o.ov,rows=o.rows||6,ends=o.ends,trim=o.trim||[.94,.93,.9],L=(a,c,y)=>[cx+A[0]*a+C[0]*c,y,cz+A[2]*a+C[2]*c];
         const knee=o.knee;// tejado de establo: dos pendientes por lado
         const prof=knee?[[hc+ov,-.15],[hc*.62,h*.62],[0,h]]:[[hc+ov,-ov*h/hc],[0,h]];
         for(const s of[-1,1]){for(let seg=0;seg<prof.length-1;seg++){const[c0,y0b]=prof[seg],[c1,y1b]=prof[seg+1];
@@ -280,7 +298,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     for(let k=0;k<Math.floor(n/2);k++)P.push({dx:(hash(i*41+k)-.5)*s*1.2,dy:s*(.35+hash(i*43+k)*.35),r:s*(.22+hash(i*47+k)*.18)});
     CL.push({x:(i/22-.5)*1400+(hash(i)-.5)*40,y:88+hash(i+3)*70+z*.12,z,s,v:.9+hash(i+11)*1.4,P})}
   // ---------- vida en el pueblo: vecinos y Pokémon que pasean por la calle, Miltank pastando, humo de chimeneas y luces de noche ----------
-  const LV=mkB(40000),LB={a:new Float32Array(30000*7),n:0,vbo:gl.createBuffer()},LIFE={smk:[],glo:[],beam:[],cow:null,wg:[]};
+  const LV=mkB(40000),LB={a:new Float32Array(60000*7),n:0,vbo:gl.createBuffer()},LIFE={smk:[],glo:[],beam:[],cow:null,wg:[]};
   // recorrido de los paseantes: la calle del pueblo, alargada por los lados para que entren y salgan de la vista
   // y un sendero junto al lago, por detrás de los edificios (se ve entre ellos aunque los carteles tapen la calle)
   const mkPath=W=>{const seg=[];let len=0;for(let i=0;i<W.length-1;i++){const a=W[i],b=W[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]);seg.push({a,b,l,s:len});len+=l}return{seg,len}};
@@ -329,7 +347,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
         ell(cx+.15,.52,cz,.32,.14,.27,[1,.82,.88]);for(const[lx,lz]of[[-.38,-.22],[.38,-.22],[-.38,.22],[.38,.22]])cyl(cx+lx,0,cz+lz,.08,.5,[.98,.9,.8],null,5);ell(cx+.68,.72,cz+tl,.04,.22,.04,[.95,.66,.72],5);ell(cx+.7,.5,cz+tl*1.6,.07,.08,.07,[.32,.24,.24],5)}}
     B=B0;gl.bindBuffer(gl.ARRAY_BUFFER,LV.vbo);gl.bufferData(gl.ARRAY_BUFFER,LV.a.subarray(0,LV.n*9),gl.DYNAMIC_DRAW)};
   // humo (transparencia normal) y luces de noche (se suman a lo de detrás, como un resplandor)
-  const lifePass=(t,P,VP,night)=>{if(!prC)return;LB.n=0;const A=LB.a,V4=(x,y,z,c,a)=>{if(LB.n>=30000)return;const i=LB.n*7;A[i]=x;A[i+1]=y;A[i+2]=z;A[i+3]=c[0];A[i+4]=c[1];A[i+5]=c[2];A[i+6]=a;LB.n++};
+  const lifePass=(t,P,VP,night)=>{if(!prC)return;LB.n=0;const A=LB.a,V4=(x,y,z,c,a)=>{if(LB.n>=60000)return;const i=LB.n*7;A[i]=x;A[i+1]=y;A[i+2]=z;A[i+3]=c[0];A[i+4]=c[1];A[i+5]=c[2];A[i+6]=a;LB.n++};
     const disc=(c,r,col,a,seg,inner)=>{seg=seg||12;const ri=inner||0;for(let k=0;k<seg;k++){const a0=k/seg*6.283,a1=(k+1)/seg*6.283,c0=Math.cos(a0),s0=Math.sin(a0),c1=Math.cos(a1),s1=Math.sin(a1);
         if(ri){const p0=[c[0]+c0*r*ri,c[1]+s0*r*ri,c[2]],p1=[c[0]+c1*r*ri,c[1]+s1*r*ri,c[2]];V4(c[0],c[1],c[2],col,a);V4(p0[0],p0[1],p0[2],col,a*.85);V4(p1[0],p1[1],p1[2],col,a*.85);
           V4(p0[0],p0[1],p0[2],col,a*.85);V4(c[0]+c0*r,c[1]+s0*r,c[2],col,0);V4(c[0]+c1*r,c[1]+s1*r,c[2],col,0);V4(p0[0],p0[1],p0[2],col,a*.85);V4(c[0]+c1*r,c[1]+s1*r,c[2],col,0);V4(p1[0],p1[1],p1[2],col,a*.85)}
@@ -337,7 +355,11 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     const sc=night?mix([.4,.43,.52],P.hor,.25):mix([.96,.96,.97],P.hor,.12);
     LIFE.smk.forEach((c,ci)=>{for(let k=0;k<10;k++){const ph=(t*.16+k/10+ci*.37)%1,r=.2+ph*.85,a=(night?.34:.55)*(1-ph)*Math.min(1,ph*6);
       disc([c[0]+ph*ph*1.8+Math.sin(t*.7+k*1.3)*.12,c[1]+ph*3.8,c[2]+ph*.5],r,mix(sc,P.hor,ph*.35),a,12,.55)}});
+    const XC=[[1,.18,.2],[1,.82,.25],[.25,.55,1],[.3,1,.45],[1,.9,.45]],on=b=>b.star||Math.sin(t*2.4+b.ph)>-.35;
+    if(XM.length)for(const b of XM){const c=XC[b.c];if(b.star){const r=b.r,cc=[1,.86,.3];for(let q=0;q<5;q++){const a0=q/5*6.283+t*.4,a1=a0+.628,a2=a0+1.256;V4(b.p[0],b.p[1],b.p[2]-.2,cc,1);V4(b.p[0]+Math.sin(a0)*r*1.6,b.p[1]+Math.cos(a0)*r*1.6,b.p[2]-.2,cc,1);V4(b.p[0]+Math.sin(a1)*r*.6,b.p[1]+Math.cos(a1)*r*.6,b.p[2]-.2,cc,1);V4(b.p[0],b.p[1],b.p[2]-.2,cc,1);V4(b.p[0]+Math.sin(a1)*r*.6,b.p[1]+Math.cos(a1)*r*.6,b.p[2]-.2,cc,1);V4(b.p[0]+Math.sin(a2)*r*1.6,b.p[1]+Math.cos(a2)*r*1.6,b.p[2]-.2,cc,1)}continue}
+      const lit=night?on(b):true;disc(b.p,b.r*(b.big?.55:.42),lit?mix(c,[1,1,1],night?.35:.1):mix(c,[0,0,0],.45),1,6)}
     const nS=LB.n;
+    if(night&&XM.length)for(const b of XM){if(!on(b))continue;const c=XC[b.c];disc(b.p,b.r*(b.star?4.5:b.big?2.6:2.1),c,b.star?.8:.55,10)}
     if(night){for(const g of LIFE.glo.concat(LIFE.wg)){const a=g.blink?(Math.sin(t*3.2)>.2?.9:0):.5;if(a)disc(g.p,g.r,g.c,a,14)}
       for(const[h,e]of LIFE.beam){const dx=e[0]-h[0],dy=e[1]-h[1],l=Math.hypot(dx,dy)||1,px=-dy/l,py=dx/l,c=[1,.95,.82],w0=.35,w1=3;
         V4(h[0]-px*w0,h[1]-py*w0,h[2],c,.22);V4(h[0]+px*w0,h[1]+py*w0,h[2],c,.22);V4(e[0]+px*w1,e[1]+py*w1,e[2],c,0);V4(h[0]-px*w0,h[1]-py*w0,h[2],c,.22);V4(e[0]+px*w1,e[1]+py*w1,e[2],c,0);V4(e[0]-px*w1,e[1]-py*w1,e[2],c,0)}}
@@ -352,7 +374,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       // de las bolas de abajo a las de arriba: abajo más oscuras, arriba con la luz del sol
       const order=k.P.slice().sort((a,b)=>a.dy-b.dy);
       for(const b of order){const cx=x0+b.dx,cy=k.y+b.dy,r=b.r,hgt=Math.min(1,Math.max(0,b.dy/(k.s*.7))),seg=18;
-        const cc=mix(mix(shade,lit,.25+hgt*.75),hor,fogK*.7),ce=mix(cc,hor,.25),a0=aMax*(1-far*.35);
+        const cd=P.cdim==null?1:P.cdim,cc=mix(mix(shade,lit,.25+hgt*.75),hor,fogK*.7).map(v=>v*cd),ce=mix(cc,hor,.25),a0=aMax*(1-far*.35);
         for(let s2=0;s2<seg;s2++){const t0=s2/seg*6.283,t1=(s2+1)/seg*6.283,sy=Math.sin(t0)<0?.62:1,sy1=Math.sin(t1)<0?.62:1;
           // cada bola: centro opaco y borde transparente (con un anillo intermedio para que el difuminado sea suave)
           const p0=[cx+Math.cos(t0)*r*.82,cy+Math.sin(t0)*r*.82*sy,k.z],p1=[cx+Math.cos(t1)*r*.82,cy+Math.sin(t1)*r*.82*sy1,k.z],q0=[cx+Math.cos(t0)*r,cy+Math.sin(t0)*r*sy,k.z],q1=[cx+Math.cos(t1)*r,cy+Math.sin(t1)*r*sy1,k.z];
@@ -362,6 +384,47 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     gl.disableVertexAttribArray(2);gl.vertexAttribPointer(0,3,gl.FLOAT,false,28,0);gl.vertexAttribPointer(1,4,gl.FLOAT,false,28,12);
     gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);gl.drawArrays(gl.TRIANGLES,0,CB.n);gl.depthMask(true);gl.disable(gl.BLEND);
     gl.enableVertexAttribArray(2);gl.useProgram(pr)};
+  // ---------- clima (lluvia, nieve, rayos) y fuegos artificiales ----------
+  // se dibujan con transparencia sobre todo lo demás (sin escribir profundidad: los edificios tapan la lluvia de detrás)
+  const WB={a:new Float32Array(70000*7),n:0,vbo:gl.createBuffer()};
+  const FWC=[[1,.3,.35],[1,.8,.3],[.4,.75,1],[.5,1,.55],[.9,.45,1],[1,1,1],[1,.55,.2]];
+  const SPH=[];for(let i=0;i<64;i++){const y=1-(i+.5)/64*2,r=Math.sqrt(1-y*y),a=i*2.39996;SPH.push([Math.cos(a)*r,y,Math.sin(a)*r])}
+  const wxPass=(t,P,VP,eye,W)=>{if(!prC)return;WB.n=0;const A=WB.a,V4=(x,y,z,c,a)=>{if(WB.n>=70000)return;const i=WB.n*7;A[i]=x;A[i+1]=y;A[i+2]=z;A[i+3]=c[0];A[i+4]=c[1];A[i+5]=c[2];A[i+6]=a;WB.n++};
+    const quad=(x,y,z,hw,hh,c,a)=>{V4(x-hw,y,z,c,a);V4(x,y+hh,z,c,a);V4(x+hw,y,z,c,a);V4(x-hw,y,z,c,a);V4(x+hw,y,z,c,a);V4(x,y-hh,z,c,a)};
+    const night=P.star>.5,lite=R.lite?.45:1,cx=eye[0];
+    // nieve: copos que caen meciéndose (más grandes y lentos cerca de la cámara)
+    if(W.snow>.02){const n=Math.round(1700*W.snow*lite),c=night?[.82,.86,1]:[1,1,1];for(let i=0;i<n;i++){const h1=hsh(i,1),h2=hsh(i,2),h3=hsh(i,3),z=-14+h3*h3*125,v=.9+h1*1.1,Hh=26+z*.32,
+        y=Hh-((t*v+h2*Hh)%Hh),x=cx+((h1*190+Math.sin(t*.7+i)*1.4+t*W.wind*.6)%190)-95,r=.07+h2*.08+z*.0016;if(y<H(x,z)-.2)continue;quad(x,y,z,r,r,c,(night?.75:.9)*(1-z/150))}}
+    // lluvia: rayas finas inclinadas por el viento
+    if(W.rain>.02){const n=Math.round(1500*W.rain*lite),c=night?[.55,.62,.8]:[.78,.82,.9],tilt=.18+W.wind*.06;for(let i=0;i<n;i++){const h1=hsh(i,4),h2=hsh(i,5),h3=hsh(i,6),z=-12+h3*h3*110,Hh=24+z*.3,v=26+h1*10,
+        y=Hh-((t*v+h2*Hh)%Hh),x=cx+((h1*170+t*W.wind*3)%170)-85,L=1.3+z*.012,w=.022+z*.0009,a=(night?.28:.38)*(1-z/130);if(y<H(x,z)-.3)continue;
+        V4(x-w,y,z,c,0);V4(x+w,y,z,c,0);V4(x+w+tilt*L,y-L,z,c,a);V4(x-w,y,z,c,0);V4(x+w+tilt*L,y-L,z,c,a);V4(x-w+tilt*L,y-L,z,c,a)}}
+    const nN=WB.n;
+    // rayo (tormenta): una línea quebrada en el cielo, lejos
+    if(R.bolt&&t-R.bolt.t0<.35){const b=R.bolt,a=Math.max(0,1-(t-b.t0)/.35)*(Math.sin((t-b.t0)*90)>-.2?1:.3),c=[.85,.9,1];let px=b.x,py=180;for(let k=0;k<9;k++){const nx=px+(hsh(b.s,k)-.5)*26,ny=py-17;const w=1.6;V4(px-w,py,b.z,c,a);V4(px+w,py,b.z,c,a);V4(nx+w,ny,b.z,c,a);V4(px-w,py,b.z,c,a);V4(nx+w,ny,b.z,c,a);V4(nx-w,ny,b.z,c,a);px=nx;py=ny}}
+    // fuegos artificiales: un cohete sube, estalla en una esfera de chispas de colores que se abre, cae y se apaga
+    if(W.fw>0||(R.fws&&R.fws.length)){R.fws=R.fws||[];if(W.fw>0&&t>(R.fwNext||0)){const r=Math.random;R.fws.push({t0:t,x:cx+(r()-.5)*240,z:190+r()*90,yb:58+r()*48,c:Math.floor(r()*FWC.length),c2:Math.floor(r()*FWC.length),k:r()<.3?1:r()<.5?2:0,s:12+r()*10});R.fwNext=t+(.3+r()*.9)/Math.max(.25,W.fw)}
+      R.fws=R.fws.filter(f=>t-f.t0<4.2);for(const f of R.fws){const e=t-f.t0;
+        if(e<1.1){const k=e/1.1,y=12+(f.yb-12)*(1-(1-k)*(1-k)),c=[1,.85,.55];quad(f.x,y,f.z,.7,.7,c,.95);for(let q=1;q<6;q++){const yy=y-q*2.2*k;if(yy>12)quad(f.x+Math.sin(q*3+e*20)*.3,yy,f.z,.35,.35,c,.5*(1-q/6))}continue}
+        const b=e-1.1,rad=f.s*(1-Math.exp(-b*2.4)),g=1.6*b*b,a=Math.pow(Math.max(0,1-b/3),1.4),c=FWC[f.c],c2=FWC[f.c2];
+        if(b<.25)quad(f.x,f.yb,f.z,6*(1-b*3),6*(1-b*3),[1,1,.9],.6*(1-b*4));// destello
+        for(let i=0;i<SPH.length;i++){const d=SPH[i];if(f.k===1&&Math.abs(d[2])>.35)continue;const x=f.x+d[0]*rad,y=f.yb+d[1]*rad-g,cc=f.k===2&&i%2?c2:c,tw=f.k===2?(Math.sin(t*30+i)>0?1:.35):1,sz=.75+(1-b/3)*.5;
+          quad(x,y,f.z+d[2]*rad*.4,sz,sz,cc,a*tw);if(b<1.6)quad(f.x+d[0]*rad*.82,f.yb+d[1]*rad*.82-g*.9,f.z,sz*.6,sz*.6,cc,a*.45)}}}
+    if(!WB.n)return;gl.useProgram(prC);gl.uniformMatrix4fv(uMC,false,VP);gl.bindBuffer(gl.ARRAY_BUFFER,WB.vbo);gl.bufferData(gl.ARRAY_BUFFER,A.subarray(0,WB.n*7),gl.DYNAMIC_DRAW);
+    gl.disableVertexAttribArray(2);gl.vertexAttribPointer(0,3,gl.FLOAT,false,28,0);gl.vertexAttribPointer(1,4,gl.FLOAT,false,28,12);gl.enable(gl.BLEND);gl.depthMask(false);
+    if(nN){gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.TRIANGLES,0,nN)}if(WB.n>nN){gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.drawArrays(gl.TRIANGLES,nN,WB.n-nN)}
+    gl.depthMask(true);gl.disable(gl.BLEND);gl.enableVertexAttribArray(2);gl.useProgram(pr)};
+  // el cielo y la luz según el tiempo: nublado más gris y sin sol, niebla cerrada, lluvia y nieve con el horizonte apagado
+  const wxPal=(P,W,t)=>{const night=P.star>.5,cl=W.cloud,gray=mix(night?[.1,.12,.18]:[.6,.64,.7],night?[.05,.06,.09]:[.3,.33,.38],Math.min(1,W.rain*.6+W.storm*.4));P.cdim=1-.5*Math.min(1,W.rain*.7+W.storm*.4)-.15*cl;
+    if(cl>.01){P.top=mix(P.top,gray,cl*.68);P.hor=mix(P.hor,mix(gray,[1,1,1],night?.05:.22),cl*.62);P.low=mix(P.low,mix(gray,[1,1,1],.3),cl*.5);P.sunCol=mix(P.sunCol,P.hor,cl*.85);P.lit=P.lit.map(v=>v*(1-.42*cl));P.amb=P.amb.map(v=>v*(1-.12*cl-.12*W.rain));P.star*=1-cl}
+    if(W.snow>.01&&!night){P.hor=mix(P.hor,[.86,.88,.92],W.snow*.45);P.low=mix(P.low,[.9,.92,.95],W.snow*.4)}
+    if(W.fog>.01){const fc=night?[.2,.22,.3]:[.8,.82,.85];P.hor=mix(P.hor,fc,W.fog*.7);P.low=mix(P.low,fc,W.fog*.7);P.top=mix(P.top,fc,W.fog*.4)}
+    const fk=Math.max(.12,1-.3*cl-.25*W.rain-.4*W.snow-.82*W.fog);P.fog=[P.fog[0]*fk,P.fog[1]*Math.max(.25,fk*1.1)];
+    // relámpago
+    if(W.storm>.5&&t>(R.boltNext||0)){R.bolt={t0:t,x:(Math.random()-.5)*600,z:520+Math.random()*200,s:Math.floor(Math.random()*999)};R.boltNext=t+5+Math.random()*10;try{if(window.wxThunder)setTimeout(window.wxThunder,600+Math.random()*1500)}catch(e){}}
+    if(R.bolt&&t-R.bolt.t0<.4){const f=(1-(t-R.bolt.t0)/.4)*(Math.sin((t-R.bolt.t0)*70)>0?1:.4);P.top=mix(P.top,[.85,.88,1],f*.55);P.hor=mix(P.hor,[.9,.92,1],f*.45);P.amb=P.amb.map(v=>v+f*.35)}
+    // los fuegos artificiales tiñen un poco el cielo
+    if(R.fws&&R.fws.length){let gl2=[0,0,0],n=0;for(const f of R.fws){const b=t-f.t0-1.1;if(b>0&&b<1){const c=FWC[f.c],k=1-b;gl2=gl2.map((v,i)=>v+c[i]*k);n++}}if(n)P.top=mix(P.top,gl2.map(v=>Math.min(1,v/n)),Math.min(.25,n*.07))}};
   const buildDyn=(t,P)=>{B=DY;B.n=0;const top=P.top,hor=P.hor,low=P.low,sun=P.sunDir;
     // cúpula del cielo: degradado de arriba al horizonte y un halo alrededor del sol
     const R=1100,sd=[sun[0],sun[1],sun[2]];/* grande y poco achatada: todas las nubes quedan dentro y ninguna sale cortada */const skyC=(dx,dy,dz)=>{const h=Math.max(0,dy);let c=mix(hor,top,Math.min(1,Math.pow(h,.55)));if(dy<0)c=mix(hor,low,Math.min(1,-dy*4));const dd=dx*sd[0]+dy*sd[1]+dz*sd[2];if(dd>0)c=mix(c,P.sunCol,Math.pow(dd,18)*.6+Math.pow(dd,3)*.12);return c};
@@ -381,19 +444,21 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
   let vw=1,vh=1,built=false,cur=null,curK="";
   const R={ok:true,
     resize(w,h,scale){vw=w;vh=h;cv.width=Math.max(1,Math.round(w*scale));cv.height=Math.max(1,Math.round(h*scale));gl.viewport(0,0,cv.width,cv.height)},
-    draw(t,tod){if(!built){buildStatic();built=true}
+    draw(t,tod){const EV=R.env||{},sn=EV.cover?1:0,xm=EV.xmas?1:0;if(sn!==SNW||xm!==XMAS){SNW=sn;XMAS=xm;built=false;townKey=""}if(!built){buildStatic();built=true}
       // la luz cambia poco a poco al pasar de una hora del día a otra
       const tgt=PAL[tod]||PAL.day;if(!cur){cur=JSON.parse(JSON.stringify(tgt));curK=tod}
       if(curK!==tod){R.from=R.from||{p:lerpP(PAL[curK]||PAL.day,PAL[curK]||PAL.day,0),t:t};const k=Math.min(1,(t-R.from.t)/4);cur=lerpP(R.from.p,tgt,k);if(k>=1){curK=tod;R.from=null}}
       const P=lerpP(PAL[curK]||PAL.day,PAL[curK]||PAL.day,0);if(R.from)Object.assign(P,cur);
+      // el tiempo cambia poco a poco (unos segundos) hacia el que toca
+      {const tw=EV.wx||{},W=R.W=R.W||{cloud:0,rain:0,snow:0,fog:0,storm:0,wind:0,fw:0},dt=Math.min(1,Math.max(0,t-(R._wt||t)));R._wt=t;for(const k in W){const v=+(k==="fw"?EV.fw:tw[k])||0;W[k]+=(v-W[k])*Math.min(1,dt*.6+(R._wf?0:1))}R._wf=1;wxPal(P,W,t)}
       // cámara: un balanceo muy lento
       R.pan+=(R.panT-R.pan)*.18;const asp=vw/vh,cam=R.cam||{E:EYE[1],p:Math.atan2(1.5,168)},sw=0,ex=EYE[0]+R.pan+sw,eye=[ex,cam.E,EYE[2]],tg=[R.pan+sw*.5,cam.E+Math.tan(cam.p)*168,140],VP=mul(persp((R.fov||(asp<1?62:44))*Math.PI/180,asp,1,1400),look(eye,tg));
       buildDyn(t,P);
       gl.clearColor(P.hor[0],P.hor[1],P.hor[2],1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.uniformMatrix4fv(uM,false,VP);
       const L=P.sunDir,l=Math.hypot(...L);gl.uniform3f(uL,L[0]/l,L[1]/l,L[2]/l);gl.uniform3fv(uA,P.amb);gl.uniform3fv(uG,P.gnd);gl.uniform3fv(uS,P.lit);gl.uniform2f(uF,P.fog[0],P.fog[1]);gl.uniform3fv(uFc,mix(P.hor,P.low,.3));
       bind(DY);gl.drawArrays(gl.TRIANGLES,0,DY.n);bind(ST);gl.drawArrays(gl.TRIANGLES,0,ST.n);
-      const tk=(R.tiers||[]).join(",")+"|"+(tod==="night"?1:0);if(tk!==townKey&&R.tiers){townKey=tk;buildTown(R.tiers,tod==="night");B=ST}if(TW.n){const tl=tod==="night"?[.35,.7,-.6]:[.5,.72,-.48],l2=Math.hypot(...tl);gl.uniform3f(uL,tl[0]/l2,tl[1]/l2,tl[2]/l2);gl.uniform3fv(uS,P.lit.map(v=>v*1.05));bind(TW);gl.drawArrays(gl.TRIANGLES,0,TW.n);lifeDyn(t,tod==="night");if(LV.n){bind(LV);gl.drawArrays(gl.TRIANGLES,0,LV.n)}}
-      cloudPass(t,P,VP);if(TW.n)lifePass(t,P,VP,tod==="night");R.VP=VP;R.asp=asp;if(R.band&&TB.length){const k=R.band.join(",")+"|"+vw+"x"+vh;if(k!==R.camKey){R.camKey=k;R.fit()}}},
+      const tk=(R.tiers||[]).join(",")+"|"+(tod==="night"?1:0)+"|"+SNW;if(tk!==townKey&&R.tiers){townKey=tk;buildTown(R.tiers,tod==="night");B=ST}if(TW.n){const tl=tod==="night"?[.35,.7,-.6]:[.5,.72,-.48],l2=Math.hypot(...tl);gl.uniform3f(uL,tl[0]/l2,tl[1]/l2,tl[2]/l2);gl.uniform3fv(uS,P.lit.map(v=>v*1.05));bind(TW);gl.drawArrays(gl.TRIANGLES,0,TW.n);lifeDyn(t,tod==="night");if(LV.n){bind(LV);gl.drawArrays(gl.TRIANGLES,0,LV.n)}}
+      cloudPass(t,P,VP);if(TW.n)lifePass(t,P,VP,tod==="night");wxPass(t,P,VP,eye,R.W);R.VP=VP;R.asp=asp;if(R.band&&TB.length){const k=R.band.join(",")+"|"+vw+"x"+vh;if(k!==R.camKey){R.camKey=k;R.fit()}}},
     // coloca la cámara para que todo el pueblo quepa en la franja libre de la pantalla (entre la base de la Poké Ball y la
     // barra de abajo): el cabeceo pone los cimientos más cercanos justo encima de los carteles, y si algún tejado sube
     // por encima de la base de la Poké Ball, la cámara se eleva un poco (vista algo más desde arriba)
@@ -422,6 +487,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
       const lite=document.body.classList.contains("lite")||(window.S&&S.o&&S.o.lite),gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?66:50;if(ts-last<gap)return;last=ts;
       try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
+        L.env=window.WXENV||null;L.lite=!!lite;
         L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L)}catch(e){console.error(e)}};
     requestAnimationFrame(loop);return true};
   if(!tryAttach()){const iv=setInterval(()=>{if(tryAttach())clearInterval(iv)},700)}})();

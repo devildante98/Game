@@ -315,6 +315,18 @@ match /trades/{id} {
       || (request.auth.uid == resource.data.from && resource.data.st == 'resp' && request.resource.data.st in ['acc', 'rej'] && tOnly(['st', 'at'])));
   allow delete: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
 }
+// Intercambio Milagroso: cada uno deja un Pokémon; el siguiente que mande uno se lo lleva y le deja el suyo
+match /wonder/{id} {
+  allow read: if request.auth != null && (resource.data.st == 'wait' || resource.data.u == request.auth.uid || resource.data.get('by', '') == request.auth.uid);
+  allow create: if request.auth != null && request.resource.data.u == request.auth.uid
+    && request.resource.data.keys().hasOnly(['u', 'un', 'm', 'st', 'at']) && request.resource.data.st == 'wait'
+    && monOk(request.resource.data.m) && optStr('un', 30) && request.resource.data.at is number;
+  allow update: if request.auth != null && resource.data.st == 'wait' && resource.data.u != request.auth.uid
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['st', 'b', 'by', 'bn', 'at2'])
+    && request.resource.data.st == 'done' && request.resource.data.by == request.auth.uid
+    && monOk(request.resource.data.b) && optStr('bn', 30);
+  allow delete: if request.auth != null && resource.data.u == request.auth.uid;
+}
 match /gifts/{id} {
   // cada jugador ve los regalos que ha enviado o que le han enviado
   allow read: if request.auth != null && (resource.data.to == request.auth.uid || resource.data.from == request.auth.uid);

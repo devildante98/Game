@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.8.8"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.9"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794993932">
+<meta name="game-build" content="1794996199">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2928,6 +2928,40 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 #hlpM .hlpl{margin:0;padding:0 0 0 4px;list-style:none}
 #hlpM .hlpl li{position:relative;margin:0 0 8px;padding:8px 12px 8px 30px;line-height:1.45;border-radius:12px;background:rgba(80,140,255,.1)}
 #hlpM .hlpl li:before{content:"•";position:absolute;left:13px;top:6px;font-weight:900;color:#3a8cff;font-size:1.1rem}
+/* Calendario de Adviento (p_advent.js) */
+#advBan{display:flex;align-items:center;gap:10px;width:100%;margin:8px 0;padding:10px 14px;border-radius:16px;border:0;cursor:pointer;text-align:left;color:#fff;background:linear-gradient(135deg,#1f7a4a,#c8283c);box-shadow:0 4px 0 rgba(0,0,0,.2);position:relative}
+#advBan .advbi{font-size:1.8rem}#advBan b{display:block}#advBan small{opacity:.9}
+#advBan.todo{animation:advpulse 1.6s ease-in-out infinite}
+@keyframes advpulse{50%{box-shadow:0 0 0 4px rgba(255,215,90,.55),0 4px 0 rgba(0,0,0,.2)}}
+.advdot{position:absolute;top:-6px;right:-6px;background:#ffd23f;color:#5a2a00;font-style:normal;font-weight:900;border-radius:99px;min-width:22px;height:22px;display:grid;place-items:center;font-size:.8rem}
+.advtop{display:flex;flex-direction:column;gap:2px;padding:12px 16px;border-radius:16px;background:linear-gradient(135deg,rgba(31,122,74,.16),rgba(200,40,60,.16));margin-bottom:12px}
+.advgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:640px;margin-left:auto;margin-right:auto;margin-bottom:10px;padding:12px;border-radius:18px;background:linear-gradient(160deg,#173f2c,#0f2a1e);box-shadow:inset 0 0 0 3px #c9a64a}
+@media (max-width:640px){.advgrid{padding:8px;gap:5px}.advc b{font-size:.85rem}.advc .advi{font-size:1.2rem}.advc .advlost{-webkit-line-clamp:2}}
+.advc{position:relative;aspect-ratio:1;border-radius:12px;border:2px solid rgba(255,255,255,.18);background:linear-gradient(160deg,#b8283a,#7e1424);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.advc:nth-child(3n){background:linear-gradient(160deg,#2a8a52,#14552f)}.advc:nth-child(4n+1){background:linear-gradient(160deg,#2f5fb8,#1a3a7a)}
+.advc b{position:absolute;top:4px;left:7px;font-size:1rem;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.advc .advi{font-size:1.6rem;line-height:1}.advc small{font-size:.66rem;font-weight:800;opacity:.9}
+.advc.d24{grid-column:span 2;aspect-ratio:auto;background:linear-gradient(160deg,#d4a017,#9a6a0a)}
+.advc.can{border-color:#ffd23f;animation:advpulse 1.4s ease-in-out infinite}
+.advc.op{filter:saturate(.55) brightness(.9)}.advc.op .advi img{max-width:44px;max-height:44px}
+.advc.miss{filter:grayscale(.45) brightness(.8)}
+.advc[aria-disabled=true]{cursor:default}
+.advgot{text-align:center;position:relative}.advgot .advgn{font-weight:900;color:#c8283c;font-size:1.1rem}.advgot .advgm{display:flex;justify-content:center;gap:6px;margin:6px 0}
+.advsnow{position:absolute;top:-10px;color:#fff;font-style:normal;font-size:1.1rem;pointer-events:none;text-shadow:0 0 6px rgba(120,180,255,.9);animation:advfall 2.8s linear forwards}
+@keyframes advfall{to{transform:translateY(105vh) rotate(240deg);opacity:.2}}
+/* Intercambio Milagroso (p_wonder.js) */
+.wntop{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;margin-bottom:10px}
+.wnbox{display:flex;align-items:center;gap:10px}
+.wnarrow{font-size:1.8rem;font-weight:900;color:#8a5cff}
+.wnside{display:flex;flex-direction:column;align-items:center;gap:6px}
+.wnwait{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.wnw{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:14px;background:rgba(138,92,255,.12)}
+.wnres{text-align:center}.wnres .wnrow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:10px 0}
+.advc.lost{justify-content:flex-start;padding-top:22px}
+.advc.lost .advi img{max-width:40px;max-height:40px}
+.advc .advlost{font-size:.6rem;font-weight:700;line-height:1.15;text-align:center;opacity:.95;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.advc .advlb{font-size:.6rem;font-weight:900;color:#ffd23f;margin-top:auto}
+.advc.miss .advlb{color:#ffd0d0}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2993,7 +3027,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.8.8</small>
+    <small class="pcver">Versión 7.9</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7719,8 +7753,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.8.8";
+const GAME_VER="7.9";
 const NEWS=[
+{v:"2026-11-18-7.9",ver:"7.9",at:"2026-11-18T11:03",t:"🎄 Calendario de Adviento y ✨ Intercambio Milagroso",l:["🎄 Nuevo Calendario de Adviento (Actividades → Adviento): del 1 al 24 de diciembre, cada día abres una casilla con un regalo (tickets que crecen con tu pueblo, Poké Balls, Caramelos Raros, Master Ball, Cristal Supremo, objetos equipables y Pokémon de hielo como Articuno). ¡El 24, un ✨ Delibird variocolor, Regice, 3 Master Ball y muchos tickets!","Si un día no abres tu casilla, verás encima lo que te habría tocado. Del 25 al 31 de diciembre puedes recuperar las que te falten","✨ Nuevo Intercambio Milagroso (Social → Intercambio Milagroso): mandas un Pokémon y recibes al azar el que haya mandado otro entrenador. Si no hay nadie esperando, el tuyo espera y te llega el cambio aunque no estés jugando. Hasta 10 al día","El Pokémon que recibes llega con su nivel, sin pasar tu límite de nivel. Puedes retirar el que está esperando mientras nadie se lo haya llevado"]},
 {v:"2026-11-18-7.8.8",ver:"7.8.8",at:"2026-11-18T10:25",t:"🛡️ Arreglos en los gremios",l:["Arreglado: con un corte de conexión momentáneo (por ejemplo, al volver al juego tras un rato), el juego podía creer que tu gremio se había disuelto y sacarte de él, aunque siguieras dentro","Ahora, antes de sacarte de un gremio, el juego lo comprueba con el servidor","Si el juego te había sacado por error, al abrir Social → Gremio vuelves a estar en tu gremio. Y si pulsas «Solicitar unirse» en un gremio del que ya eres miembro, simplemente vuelves a entrar","Arreglado: el líder ya no recibe avisos para aceptar su propia solicitud ni la de alguien que ya es miembro"]},
 {v:"2026-11-18-7.8.7",ver:"7.8.7",at:"2026-11-18T07:52",t:"📘 Movimientos nuevos al momento, como en los juegos",l:["Si un Pokémon sube de nivel fuera de combate (expediciones, combates dobles, Caramelo Raro en Exploración…) y puede aprender un movimiento, ahora se aprende enseguida: si tiene hueco lo aprende solo, y si ya sabe 4 se abre la ventana para elegir cuál olvidar","Antes tenía que esperar al siguiente combate. Funciona tanto en tu partida como en el modo Exploración"]},
 {v:"2026-11-18-7.8.6",ver:"7.8.6",at:"2026-11-18T07:39",t:"🌾 Zona Safari: capturas a nivel 1",l:["Los Pokémon que atrapas en la Zona Safari llegan ahora a nivel 1. Si ya tenías ese Pokémon, se queda con el nivel que tenía"]},
@@ -8105,7 +8140,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794993932";
+const GAME_B="1794996199";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -20353,6 +20388,18 @@ setInterval(()=>{try{
 // Clave: el id de la sección (pestaña del menú o pantalla del modo juego).
 // =====================================================================================
 const HELPX={
+  advP:[
+    "Del 1 al 24 de diciembre se abre una casilla cada día (con la fecha de España). Solo puedes abrir la del día.",
+    "Si un día no la abres, verás encima lo que te habría tocado. Del 25 al 31 de diciembre puedes recuperar todas las que te falten.",
+    "Los tickets crecen con tu pueblo (son horas de tu producción, con un mínimo). Algunos días hay Pokémon de hielo, y el 24 el regalo más grande: ✨ Delibird variocolor, Regice, 3 Master Ball y muchos tickets.",
+  ],
+  wonP:[
+    "Elige un Pokémon y pulsa «Intercambio Milagroso». Si otro entrenador ha dejado uno, te lo llevas al momento y él recibe el tuyo.",
+    "Si no hay nadie esperando, tu Pokémon se queda esperando (hasta 3 a la vez). En cuanto otro entrenador mande uno, te llega el suyo, aunque no estés jugando.",
+    "Puedes retirar un Pokémon que espera mientras nadie se lo haya llevado, y vuelve contigo.",
+    "Puedes mandar tu Pokémon principal (con su nivel) o un repetido (a nivel 1). El que recibes llega con su nivel, sin pasar tu límite de nivel.",
+    "Puedes hacer hasta 10 Intercambios Milagrosos al día. Necesitas una cuenta iniciada.",
+  ],
   stage:[
     "Cada tirada te da un Pokémon al azar. Puedes hacer 1, 10 o 100 tiradas a la vez.",
     "Garantía: si encadenas muchas tiradas normales sin un Épico o un Legendario, la siguiente es Épico o mejor seguro (cada 30 tiradas; cada 25 desde el prestigio 3 y cada 20 desde el prestigio 6).",
@@ -20473,6 +20520,181 @@ const HELPX={
   ],
 };
 
+// =====================================================================================
+// CALENDARIO DE ADVIENTO (1-24 de diciembre)
+// Una casilla por día con un regalo. Solo se abre la casilla del día (hora de España); del 25 al 31 de diciembre se
+// pueden abrir las que se quedaron sin abrir. El 24, un regalo especial. Se ve desde el 18 de noviembre (con la cuenta
+// atrás) hasta el 31 de diciembre, en Actividades y con un aviso en Premios.
+// Los tickets crecen con tu pueblo (horas de producción, con un mínimo), como los premios semanales.
+// =====================================================================================
+const ADV_OFF=()=>+(window._advOff||0);// (solo para probar: desplaza la fecha)
+const advMadrid=()=>{const p=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(Date.now()+ADV_OFF())).split("-").map(Number);return{y:p[0],m:p[1],d:p[2]}};
+// t: tickets mínimos · h: horas de producción · it: objetos · ev/hold: objetos evolutivos / equipables al azar · mon: [Pokémon, variocolor]
+const ADV=[
+  {t:100000,h:1,it:{pb:5}},
+  {t:0,it:{sb:3,pot:2}},
+  {t:150000,h:2,it:{cand:1}},
+  {t:0,it:{ub:3}},
+  {t:150000,h:1,ev:1},
+  {mon:["Snorunt",0],it:{pb:5}},
+  {t:250000,h:3,it:{cand:2}},
+  {hold:1,it:{ub:5}},
+  {t:0,it:{hpot:2,rev:2}},
+  {t:350000,h:4,it:{ppmax:1}},
+  {t:0,it:{cand:3}},
+  {mon:["Articuno",0],it:{ub:3}},
+  {t:500000,h:5,it:{ub:5}},
+  {ev:1,hold:1},
+  {t:0,it:{mb:1}},
+  {t:750000,h:6,it:{cand:3}},
+  {t:0,it:{crys:1}},
+  {mon:["Cubchoo",1],it:{sb:5}},
+  {t:1000000,h:8,it:{cand:5}},
+  {hold:2},
+  {t:0,it:{mb:2}},
+  {t:1500000,h:12,it:{ppmax:2}},
+  {t:0,it:{cand:10,ub:10}},
+  {mon:["Delibird",1],mon2:["Regice",0],t:5000000,h:24,it:{mb:3}},
+];
+const advTk=r=>r.t||r.h?Math.max(r.t||0,Math.round((typeof tps==="function"?tps():0)*3600*(r.h||0))):0;
+// orden de las casillas en el calendario (desordenadas, como los de verdad, pero siempre igual)
+const ADV_ORD=(()=>{const a=[...Array(24)].map((_,i)=>i+1);let s=1225;const r=()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff};for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a})();
+// estado: "pre" (antes del 1 de diciembre), "on" (1-24), "late" (25-31, se recuperan las que faltan), "off"
+function advPhase(){const t=advMadrid();if(t.m===11&&t.d>=18)return "pre";if(t.m===12&&t.d<=24)return "on";if(t.m===12)return "late";return "off"}
+function advData(){const y=advMadrid().y;if(!S.adv||S.adv.y!==y)S.adv={y:y,o:{}};S.adv.o=S.adv.o||{};return S.adv}
+function advCan(d){const ph=advPhase(),t=advMadrid();if(advData().o[d])return false;if(ph==="on")return d===t.d;if(ph==="late")return d>=1&&d<=24;return false}
+// texto del regalo (sin abrir, para la vista previa del 24 y el resumen)
+function advTxt(r){const L=[];if(r.mon)L.push((r.mon[1]?"✨ ":"")+r.mon[0]);if(r.mon2)L.push((r.mon2[1]?"✨ ":"")+r.mon2[0]);const tk=advTk(r);if(tk)L.push(fmt(Math.round(tk*RMUL()))+" 🎟️");
+  for(const k in r.it||{})L.push(r.it[k]+" "+IN2(k));if(r.ev)L.push(r.ev+" objeto evolutivo");if(r.hold)L.push(r.hold+(r.hold>1?" objetos equipables":" objeto equipable"));return L.join(" + ")}
+async function advOpen(d){
+  if(!advCan(d)){snd("ui");return}if(typeof fcd!=="undefined"&&fcd){toast("Termina el combate primero.");return}
+  const r=ADV[d-1],A=advData();A.o[d]=Date.now();
+  const rw={t:advTk(r),it:Object.assign({},r.it||{})},got=[];
+  for(let i=0;i<(r.ev|0);i++){const ev=ITEMS.filter(q=>q[7]==="evo");const k=ev[Math.floor(Math.random()*ev.length)][0];rw.it[k]=(rw.it[k]||0)+1}
+  for(let i=0;i<(r.hold|0);i++){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}
+  grant(rw);
+  for(const m of[r.mon,r.mon2])if(m&&PM[m[0]]){const nw=giveMon(m[0],1,m[1]);got.push((m[1]?"✨ ":"")+m[0]+(nw?" (¡nuevo!)":""))}
+  save();try{render()}catch(e){}if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}
+  snd(d===24?"lvl":"pop");advUI(true);
+  const mons=[r.mon,r.mon2].filter(m=>m&&PM[m[0]]);
+  nxModal('<div class="advgot'+(d===24?' big':'')+'"><div class="advgn">'+(d===24?'🎄':'🎁')+' Día '+d+'</div>'+(mons.length?'<div class="advgm">'+mons.map(m=>ico(PM[m[0]],96,false,!!m[1])).join("")+'</div>':'')+
+    '<h3>'+(d===24?'¡Feliz Nochebuena!':'¡Regalo del día '+d+'!')+'</h3><p>'+esc([got.join(" + "),rwTxt(rw)].filter(Boolean).join(" + "))+'</p><button class="red" onclick="nxModalClose()">¡Genial!</button></div>');
+  try{if(!hubCalm()){const m=$("nxM");for(let i=0;i<30;i++){const s=document.createElement("i");s.className="advsnow";s.style.left=Math.random()*100+"%";s.style.animationDelay=(Math.random()*1.2)+"s";s.textContent=["❄","✦","❅"][i%3];m.appendChild(s);setTimeout(()=>s.remove(),3200)}}}catch(e){}
+}
+function advUI(force){
+  const box=$("advPB");if(!box)return;const ph=advPhase(),t=advMadrid(),A=advData();
+  let h='';
+  if(ph==="pre"){const left=Math.max(0,Math.ceil((Date.UTC(t.y,11,1)-Date.UTC(t.y,t.m-1,t.d))/864e5));h+='<div class="advtop"><b>🎄 Empieza el 1 de diciembre</b><small>Faltan '+left+' día'+(left===1?'':'s')+'. ¡Cada día una casilla con un regalo y el 24 una sorpresa especial!</small></div>'}
+  else if(ph==="on"){const n=Object.keys(A.o).length;h+='<div class="advtop"><b>'+(A.o[t.d]?'✅ Ya has abierto la casilla de hoy':'🎁 ¡Tu casilla de hoy (día '+t.d+') te espera!')+'</b><small>Has abierto '+n+' de 24. '+(t.d<24?'Vuelve mañana para abrir la siguiente.':'¡Hoy es el gran día!')+'</small></div>'}
+  else if(ph==="late"){const n=Object.keys(A.o).length;h+='<div class="advtop"><b>'+(n<24?'🎁 ¡Recupera las casillas que no abriste!':'🎉 ¡Has abierto todo el calendario!')+'</b><small>Hasta el 31 de diciembre puedes abrir las que te faltan ('+(24-n)+').</small></div>'}
+  h+='<div class="advgrid">'+ADV_ORD.map(d=>{const R=ADV[d-1],op=!!A.o[d],can=advCan(d),past=ph==="late"||(ph==="on"&&d<t.d),miss=!op&&past&&!can,lost=!op&&past;
+    return '<button class="advc'+(op?' op':'')+(can?' can':'')+(miss?' miss':'')+(lost?' lost':'')+(d===24?' d24':'')+'" data-adv="'+d+'"'+(can?'':' aria-disabled="true"')+' title="'+(op?esc(advTxt(R)):lost?esc((can?'Puedes recuperarla: ':'No la abriste a tiempo: ')+advTxt(R)):can?'¡Ábrela!':'Todavía no')+'">'+
+      '<b>'+d+'</b>'+(op?'<span class="advi">'+(R.mon?ico(PM[R.mon[0]],44,false,!!R.mon[1]):'🎁')+'</span><small>Abierta</small>'
+      // las que no se abrieron a tiempo enseñan lo que habrían dado (del 25 al 31 se pueden recuperar)
+      :lost?'<span class="advi">'+(R.mon?ico(PM[R.mon[0]],40,false,!!R.mon[1]):'🎁')+'</span><small class="advlost">'+esc(advTxt(R))+'</small><small class="advlb">'+(can?'¡Recupérala!':'No la abriste')+'</small>'
+      :can?'<span class="advi">🎁</span><small>¡Ábrela!</small>':'<span class="advi">🔒</span>')+'</button>'}).join("")+'</div>';
+  h+='<small class="mut">El regalo del día 24: '+esc(advTxt(ADV[23]))+'. Las casillas se abren con la fecha de España.</small>';
+  box.innerHTML=h;
+}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#advPB [data-adv]");if(!b)return;const d=+b.dataset.adv;if(advCan(d))advOpen(d);else{snd("ui");const ph=advPhase();toast(advData().o[d]?"🎁 "+advTxt(ADV[d-1]):ph==="pre"?"🎄 El calendario empieza el 1 de diciembre.":"🔒 Esa casilla "+(d>advMadrid().d||ph==="pre"?"todavía no se puede abrir.":"ya no se puede abrir."))}});
+nxPanel("advP","🎄 Calendario de Adviento","Del 1 al 24 de diciembre, cada día se abre una casilla con un regalo: tickets, Poké Balls, Caramelos Raros, Master Ball y Pokémon de hielo. ¡El 24 te espera una sorpresa especial!");
+{const g=HUB.find(x=>x.k==="act");if(g&&!g.tabs.some(t=>t[0]==="advP"))g.tabs.unshift(["advP","🎄 Adviento"]);HUBP.advP="act";HUBR.advP=()=>advUI(true)}
+// la pestaña solo existe mientras dura (del 18 de noviembre al 31 de diciembre) y en Premios sale un aviso
+function advBan(){const ph=advPhase(),g=HUB.find(x=>x.k==="act");if(g){const has=g.tabs.some(t=>t[0]==="advP");if(ph==="off"&&has)g.tabs=g.tabs.filter(t=>t[0]!=="advP");else if(ph!=="off"&&!has)g.tabs.unshift(["advP","🎄 Adviento"])}
+  const ep=$("earnP");if(!ep)return;let b=$("advBan");if(ph==="off"){if(b)b.remove();return}
+  if(!b){b=document.createElement("button");b.id="advBan";b.type="button";b.onclick=()=>hubOpen("act","advP");const h=ep.querySelector("h2");if(h)h.after(b);else ep.prepend(b)}
+  const t=advMadrid(),A=advData(),todo=advPhase()==="on"?!A.o[t.d]:advPhase()==="late"?Object.keys(A.o).length<24:false;
+  const html='<span class="advbi">🎄</span><div><b>Calendario de Adviento</b><small>'+(ph==="pre"?"Empieza el 1 de diciembre":todo?(ph==="on"?"¡Abre la casilla de hoy!":"¡Recupera las casillas que te faltan!"):"Vuelve mañana para otra casilla")+'</small></div>'+(todo?'<i class="advdot">1</i>':'');
+  if(b.innerHTML!==html)b.innerHTML=html;b.classList.toggle("todo",todo)}
+setInterval(advBan,3000);setTimeout(advBan,500);
+
+// =====================================================================================
+// INTERCAMBIO MILAGROSO
+// Mandas un Pokémon y recibes al azar el que haya mandado otro entrenador. Si hay alguno esperando, el cambio es al
+// momento; si no, el tuyo se queda esperando y, en cuanto otro entrenador mande uno, te llega el suyo (aunque no estés
+// jugando: lo recibes al volver). Puedes retirar el que espera mientras nadie se lo haya llevado.
+// Usa la colección «wonder» (reglas en firestore.rules) y las mismas copias que los intercambios entre amigos
+// (pkTake / pkGive de p_more.js): el principal con su nivel o un repetido a nivel 1.
+// =====================================================================================
+const WN_DAY=10,WN_WAIT=3;
+const WN={sel:null,q:"",f:"",mine:[],unsub:null,busy:false,last:null};
+const wnDay=()=>{const d=today();if(!S.wt||S.wt.d!==d)S.wt={d:d,n:0};return S.wt};
+const wnOn=()=>!!(window.FB&&window.FB.uid&&window.FB.uid()&&window.FB.wnPool);
+// lo que llega no pasa de tu límite de nivel (el del próximo gimnasio)
+const wnFix=r=>({n:r.n,l:Math.max(1,Math.min(r.l|0,typeof lvCap==="function"?lvCap():100)),s:r.s?1:0});
+function wnShow(sent,got,from){
+  nxModal('<div class="wnres"><h3>✨ ¡Intercambio Milagroso!</h3><div class="wnrow">'+trCard(sent,"Has enviado","")+'<div class="wnarrow">⇄</div>'+trCard(got,"Has recibido",from?"De "+esc(pvClean(from)):"")+'</div>'+
+    '<button class="red" onclick="nxModalClose()">¡Genial!</button></div>');snd("lvl");try{if(got&&PM[got.n])setTimeout(()=>cry(got.n),300)}catch(e){}
+}
+async function wnSend(){
+  if(WN.busy)return;if(!wnOn()){toast("Inicia sesión con tu cuenta para usar el Intercambio Milagroso.");return}
+  if(typeof fcd!=="undefined"&&fcd){toast("Termina el combate primero.");return}
+  const key=WN.sel,rec=trRecK(key);if(!rec){toast("Elige un Pokémon para enviar.");return}
+  const[n,k]=trSplit(key);if(k==="m"&&typeof busyMon==="function"&&busyMon(n)){toast("Ese Pokémon está "+busyTxt(n)+".");return}
+  const day=wnDay();if(day.n>=WN_DAY){toast("Hoy ya has hecho "+WN_DAY+" Intercambios Milagrosos. ¡Vuelve mañana!");return}
+  const waiting=WN.mine.filter(x=>x.st==="wait").length;
+  if(!await askOk("¿Enviar a "+(rec.s?"✨ ":"")+nk(n)+" (Nv"+rec.l+") al Intercambio Milagroso? No sabrás qué Pokémon recibes hasta el final."))return;
+  WN.busy=true;wnUI(true);const nick=pvClean(pvNick());
+  try{
+    // primero se busca uno que esté esperando (de otro entrenador), al azar
+    let pool=[];try{pool=(await window.FB.wnPool()).filter(x=>x.u!==window.FB.uid())}catch(e){pool=[]}
+    for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
+    let got=null,from="";
+    for(const x of pool.slice(0,4)){try{const d=await window.FB.wnTake(x.id,rec,nick);got=d.m;from=d.un||"";break}catch(e){}}
+    if(!got&&waiting>=WN_WAIT){toast("Ya tienes "+WN_WAIT+" Pokémon esperando. Espera a que alguien se los lleve o retira alguno.");return}
+    if(!got)await window.FB.wnPut(rec,nick);
+    // ya en la nube: ahora sale de tu partida
+    const out=trTakeK(key);if(!out){toast("Ese Pokémon ya no está en tu partida.");return}
+    day.n++;WN.sel=null;
+    if(got){const g=wnFix(got);await pkGive(g,true);save();render();wnShow(out,g,from)}
+    else{save();render();snd("throw");toast("🌀 "+nk(n)+" está esperando a otro entrenador. Te avisaremos cuando llegue tu Pokémon.")}
+    if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}
+  }catch(e){toast("No se ha podido hacer el intercambio ("+((e&&e.code)||"error")+"). Inténtalo otra vez.")}
+  finally{WN.busy=false;wnUI(true)}
+}
+// los tuyos que estaban esperando: si alguien se los ha llevado, recibes lo que dejó
+async function wnCollect(){
+  const S2=S.wnGot=S.wnGot||{};
+  for(const x of WN.mine){if(x.st!=="done"||!x.b)continue;
+    if(!S2[x.id]){S2[x.id]=Date.now();const g=wnFix(x.b);await pkGive(g,true);save();render();wnShow(x.m,g,x.bn||"");if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}}
+    window.FB.wnDel(x.id).catch(()=>{});}
+  // (se olvidan los apuntes de hace más de una semana)
+  for(const k in S2)if(Date.now()-S2[k]>7*864e5)delete S2[k];
+}
+async function wnCancel(id){
+  if(WN.busy)return;WN.busy=true;
+  try{const d=await window.FB.wnCancel(id);if(!d)return;
+    if(d.st==="done"&&d.b){S.wnGot=S.wnGot||{};if(!S.wnGot[id]){S.wnGot[id]=Date.now();const g=wnFix(d.b);await pkGive(g,true);save();render();wnShow(d.m,g,d.bn||"")}}
+    else{await pkGive(d.m,false);save();render();toast("↩️ "+nk(d.m.n)+" ha vuelto contigo.")}
+  }catch(e){toast("No se ha podido retirar.")}finally{WN.busy=false;wnUI(true)}
+}
+function wnUI(force){
+  const box=$("wonPB");if(!box)return;
+  if(!wnOn()){box.innerHTML='<p class="mut">Inicia sesión con tu cuenta para usar el Intercambio Milagroso.</p>';return}
+  const day=wnDay(),wait=WN.mine.filter(x=>x.st==="wait"),rec=trRecK(WN.sel);
+  let h='<div class="wntop"><div class="wnbox">'+trCard(rec,"Vas a enviar","Elige abajo")+'<div class="wnarrow">⇄</div><div class="tcard empty wnq"><small>Recibirás</small><div class="tqm">?</div><small class="mut">¡Sorpresa!</small></div></div>'+
+    '<div class="wnside"><button class="red big" id="wnGo"'+(WN.busy||!rec||day.n>=WN_DAY?' disabled':'')+'>'+(WN.busy?'🌀 Buscando entrenador…':'✨ Intercambio Milagroso')+'</button><small class="mut">Hoy: '+day.n+' / '+WN_DAY+'</small></div></div>';
+  if(wait.length)h+='<h3 class="shh">🌀 Esperando a otro entrenador ('+wait.length+'/'+WN_WAIT+')</h3><div class="wnwait">'+wait.map(x=>'<div class="wnw">'+(PM[x.m.n]?ico(PM[x.m.n],48,false,!!x.m.s):'')+'<b>'+recTxt(x.m)+'</b><button class="alt mini" data-wnc="'+esc(x.id)+'">Retirar</button></div>').join("")+'</div>';
+  h+='<h3 class="shh">Elige qué Pokémon envías</h3>';
+  const q=nrm(WN.q),L=trOwnList().filter(p=>(!q||nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))&&(!WN.f||p[2]===WN.f)).sort((a,b)=>WW[a[2]]-WW[b[2]]||lvd(a[0]).l-lvd(b[0]).l).slice(0,240);
+  h+='<div class="tfil"><input id="wnQ" placeholder="Buscar Pokémon..." value="'+esc(WN.q)+'"><select id="wnF"><option value="">Todas</option>'+["C","R","E","L"].map(r=>'<option value="'+r+'"'+(WN.f===r?' selected':'')+'>'+STAR[r]+'</option>').join("")+'</select></div>'+
+    '<div class="tgrid">'+(L.length?trCells(L,WN.sel,"data-wnp"):'<small class="mut">No hay Pokémon con ese filtro.</small>')+'</div>';
+  const a=document.activeElement,aid=a&&a.id==="wnQ",pos=aid?a.selectionStart:null;
+  box.innerHTML=h;if(aid){const i=$("wnQ");if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(e){}}}
+}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest||!t.closest("#wonPB"))return;
+  const p=t.closest("[data-wnp]");if(p){WN.sel=WN.sel===p.dataset.wnp?null:p.dataset.wnp;snd("ui");wnUI(true);return}
+  const c=t.closest("[data-wnc]");if(c){wnCancel(c.dataset.wnc);return}
+  if(t.closest("#wnGo"))wnSend()});
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="wnQ"){WN.q=e.target.value;wnUI(true)}});
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="wnF"){WN.f=e.target.value;wnUI(true)}});
+nxPanel("wonP","✨ Intercambio Milagroso","Manda un Pokémon y recibe al azar el que haya mandado otro entrenador. ¡Nunca sabes qué te va a tocar!");
+{const g=HUB.find(x=>x.k==="soc");if(g&&!g.tabs.some(t=>t[0]==="wonP")){const i=g.tabs.findIndex(t=>t[0]==="mktP");g.tabs.splice(i<0?g.tabs.length:i,0,["wonP","✨ Intercambio Milagroso"])}HUBP.wonP="soc";HUBR.wonP=()=>wnUI(true)}
+// se vigilan tus Pokémon en espera desde que inicias sesión (para recibir el cambio aunque estés en otra parte del juego)
+setInterval(()=>{if(!wnOn()){if(WN.unsub){try{WN.unsub()}catch(e){}WN.unsub=null;WN.mine=[]}return}
+  const u=window.FB.uid();if(WN.unsub&&WN.uid===u)return;if(WN.unsub){try{WN.unsub()}catch(e){}}WN.uid=u;
+  WN.unsub=window.FB.wnMine(L=>{WN.mine=L;wnCollect().catch(()=>{});wnUI(true)})},2000);
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -20584,6 +20806,16 @@ async function main(){
     gid:n=>"g_"+encodeURIComponent(String(n).trim().replace(/\s+/g," ").toLowerCase()).replace(/\./g,"%2E"),
     async gList(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.orderBy("n","desc"),S.limit(50)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     async gMine(){const sn=await S.getDocs(S.query(S.collection(db,"guilds"),S.where("members."+uid+".at",">",0),S.limit(1)));return sn.empty?null:sn.docs[0].id},
+    // ---- Intercambio Milagroso (p_wonder.js) ----
+    async wnPool(){const sn=await S.getDocs(S.query(S.collection(db,"wonder"),S.where("st","==","wait"),S.limit(25)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    // te quedas con el Pokémon de otro y le dejas el tuyo (solo si sigue esperando: si alguien se adelanta, falla)
+    async wnTake(id,mine,nick){const ref=S.doc(db,"wonder",id);return S.runTransaction(db,async tx=>{const s=await tx.get(ref);const d=s.exists()?s.data():null;
+      if(!d||d.st!=="wait"||d.u===uid)throw {code:"taken"};tx.update(ref,{st:"done",b:mine,by:uid,bn:String(nick||"").slice(0,30),at2:Date.now()});return d})},
+    async wnPut(mine,nick){const r=await S.addDoc(S.collection(db,"wonder"),{u:uid,un:String(nick||"").slice(0,30),m:mine,st:"wait",at:Date.now()});return r.id},
+    wnMine:cb=>S.onSnapshot(S.query(S.collection(db,"wonder"),S.where("u","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{}),
+    // retirar el que espera (devuelve lo que había: si ya lo cogió alguien, lo que te dejó)
+    async wnCancel(id){const ref=S.doc(db,"wonder",id);return S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(!s.exists())return null;const d=s.data();tx.delete(ref);return d})},
+    wnDel:id=>S.deleteDoc(S.doc(db,"wonder",id)),
     gWatch:(gid,cb)=>S.onSnapshot(S.doc(db,"guilds",gid),sn=>cb(sn.exists()?sn.data():null,!!(sn.metadata&&sn.metadata.fromCache)),()=>{}),
     // lectura directa del servidor (sin caché) para confirmar que de verdad ya no estás en el gremio
     async gGetSrv(gid){const f=S.getDocFromServer||S.getDoc,sn=await f(S.doc(db,"guilds",gid));return sn.exists()?sn.data():null},
@@ -20717,7 +20949,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.8.8";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.9";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

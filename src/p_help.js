@@ -5,6 +5,18 @@
 // Clave: el id de la sección (pestaña del menú o pantalla del modo juego).
 // =====================================================================================
 const HELPX={
+  advP:[
+    "Del 1 al 24 de diciembre se abre una casilla cada día (con la fecha de España). Solo puedes abrir la del día.",
+    "Si un día no la abres, verás encima lo que te habría tocado. Del 25 al 31 de diciembre puedes recuperar todas las que te falten.",
+    "Los tickets crecen con tu pueblo (son horas de tu producción, con un mínimo). Algunos días hay Pokémon de hielo, y el 24 el regalo más grande: ✨ Delibird variocolor, Regice, 3 Master Ball y muchos tickets.",
+  ],
+  wonP:[
+    "Elige un Pokémon y pulsa «Intercambio Milagroso». Si otro entrenador ha dejado uno, te lo llevas al momento y él recibe el tuyo.",
+    "Si no hay nadie esperando, tu Pokémon se queda esperando (hasta 3 a la vez). En cuanto otro entrenador mande uno, te llega el suyo, aunque no estés jugando.",
+    "Puedes retirar un Pokémon que espera mientras nadie se lo haya llevado, y vuelve contigo.",
+    "Puedes mandar tu Pokémon principal (con su nivel) o un repetido (a nivel 1). El que recibes llega con su nivel, sin pasar tu límite de nivel.",
+    "Puedes hacer hasta 10 Intercambios Milagrosos al día. Necesitas una cuenta iniciada.",
+  ],
   stage:[
     "Cada tirada te da un Pokémon al azar. Puedes hacer 1, 10 o 100 tiradas a la vez.",
     "Garantía: si encadenas muchas tiradas normales sin un Épico o un Legendario, la siguiente es Épico o mejor seguro (cada 30 tiradas; cada 25 desde el prestigio 3 y cada 20 desde el prestigio 6).",

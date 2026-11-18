@@ -11,12 +11,16 @@ const R = D.racha;
 const diaUTC = (t) => new Date(t).toISOString().slice(0, 10);
 const regalo = (dg, S) => { const n = Math.min(60, Math.max(0, Math.floor(E.num(dg)))); return Math.round((15000 + 4500 * n + 450 * n * n) * E.RMUL(S)); };
 const temporada = (d) => Math.floor((Math.max(1, d) - 1) / 30);
+const SUMA = ["mb", "mint", "hold", "ppmax", "crys"];
 function premioRacha(d) {
-  const c = ((d - 1) % 30) + 1, ss = Math.min(4, temporada(d)), m = 1 + ss * 0.5, r = {}, b = R.T[c - 1];
-  for (const k in b) r[k] = k === "mb" || k === "mint" || k === "hold" || k === "ppmax" ? b[k] + (ss >= 2 ? 1 : 0) : Math.max(1, Math.round(b[k] * m));
+  const c = ((d - 1) % 30) + 1, ss = Math.min(6, temporada(d)), m = 1 + ss * 0.75, r = {}, b = R.T[c - 1];
+  for (const k in b) r[k] = SUMA.includes(k) ? b[k] + (ss >= 4 ? 2 : ss >= 2 ? 1 : 0) : Math.max(1, Math.round(b[k] * m));
   if (ss >= 3 && c === 30) r.mb = (r.mb || 0) + 1;
+  if (ss >= 5 && c === 30) r.crys = (r.crys || 0) + 1;
   return r;
 }
+// cada punto de «t»: el 30 % del regalo diario o 1 minuto de producción del pueblo (lo que sea mayor)
+const ticketsRacha = (t, dg, S) => Math.round(Math.max(regalo(dg, S) * 0.3 * t, E.tps(S) * E.RMUL(S) * 60 * t));
 
 // la cuenta del servidor; la primera vez se toma de la última partida guardada, con topes: no más regalos que días
 // tiene la cuenta, ni más racha que regalos
@@ -47,7 +51,7 @@ function cobrarDiario(S, dia, prev, ahora, cuentaSeg, rnd) {
   const rw = premioRacha(c.n), it = {};
   let tk = 0;
   for (const k of Object.keys(rw)) {
-    if (k === "t") { tk = Math.round(regalo(c.dg, S) * 0.3 * rw.t); continue; }
+    if (k === "t") { tk = ticketsRacha(rw.t, c.dg, S); continue; }
     if (k === "evo" || k === "mint" || k === "hold") {
       const L = R[k];
       for (let i = 0; i < rw[k]; i++) if (L.length) { const id = L[Math.floor(rnd() * L.length)]; it[id] = (it[id] || 0) + 1; }
@@ -62,4 +66,4 @@ function cobrarDiario(S, dia, prev, ahora, cuentaSeg, rnd) {
   return {dia: c, out: {hoy, gf, tk, it, dg: c.dg, sk: sk()}};
 }
 
-module.exports = {cobrarDiario, regalo, premioRacha, diaUTC};
+module.exports = {cobrarDiario, regalo, premioRacha, ticketsRacha, diaUTC};

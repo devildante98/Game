@@ -37,7 +37,7 @@ const HELPX={
   ],
   earnP:[
     "🎁 Regalo diario: reclámalo una vez al día. Cada día que lo reclamas da más tickets (sigue subiendo durante 60 días).",
-    "🔥 Racha: si lo reclamas días seguidos, la racha sube y cada día da un premio extra (objetos, Caramelos Raros, Master Ball…). Los premios se repiten cada 30 días y son mejores en cada vuelta. Si te saltas un día, la racha vuelve a 1.",
+    "🔥 Racha: si lo reclamas días seguidos, la racha sube y cada día da un premio extra, cada vez mayor: tickets (más cuanto más produce tu pueblo), Caramelos Raros, objetos equipables, Teralitos, Master Ball y, al final, Cristal Supremo. Los días 7, 14, 21 y 28 son grandes, y el 30, enorme. Cada 30 días empieza una vuelta nueva con premios todavía mayores (hasta 5,5 veces más). Si te saltas un día, la racha vuelve a 1.",
     "⏱️ Ticket automático: mientras tienes el juego abierto y a la vista, cada 30 segundos recibes tickets, y cada vez 10 más que la anterior.",
     "Además puedes ganar tickets con los minijuegos, el Pase de temporada, las misiones, los combates y tocando la Poké Ball.",
   ],
@@ -111,7 +111,7 @@ const HELPX={
   ],
   passP:[
     "Ganas experiencia del pase jugando: combate ganado +12 · captura +10 · tirada +2 (súper +3, hasta 200 al día) · minijuego +15 · combate PVP +15 (+10 si ganas) · Pokémon nuevo +6 · evolución +20 · regalo diario +30 · variocolor +25 · misión diaria +8.",
-    "Cada nivel tiene su premio: tickets, Poké Balls, pociones, Caramelos Raros, piedras evolutivas, Master Ball… Y en el nivel 30, un Pokémon legendario.",
+    "Cada nivel da un premio mucho mejor que el anterior: tickets (más cuanto más produce tu pueblo), Caramelos Raros, objetos equipables, Teralitos, Master Ball, Cristal Supremo… En el nivel 10, un Pokémon épico; en el 15 y el 25, épicos variocolor; en el 20, un legendario; y en el 30, ¡el legendario de la temporada en variocolor!",
     "El pase dura un mes. Cuando termina empieza uno nuevo desde el nivel 0, con otros premios.",
   ],
   achP:[

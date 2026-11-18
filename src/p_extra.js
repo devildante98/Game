@@ -176,13 +176,27 @@ const PASS_N=30;
 const passNeed=L=>150+50*(L-1),passCum=L=>150*L+25*L*(L-1);
 const PASS_PULLCAP=200;// XP máxima al día por tiradas
 const passMonth=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
-function passMon(m){let h=0;for(const ch of "pass"+m)h=(h*31+ch.charCodeAt(0))|0;const L=P.filter(p=>p[2]==="L"),E=P.filter(p=>p[2]==="E");return{leg:L[Math.abs(h)%L.length],shy:E[Math.abs(h>>4)%E.length]}}
-function passRw(i){// i = 1..30
-  if(i===30)return{t:5000000,it:{mb:1},mon:"leg",lab:"¡Legendario de la temporada!"};
-  if(i===25)return{t:2000000,mon:"shy",sh:1,lab:"Pokémon variocolor"};
-  if(i===20)return{t:1500000,hold:2};if(i===15)return{t:1000000,it:{mb:1}};if(i===10)return{t:800000,it:{cand:3}};if(i===5)return{t:500000,it:{ub:5}};
-  const c=[{it:{pb:10}},{it:{pot:5}},{it:{sb:5}},{it:{eter:3}},{it:{ub:2}},{it:{rev:2}},{it:{cand:1}},{evo:1}][i%8];return Object.assign({t:100000+i*40000},c);
-}
+// Pokémon de la temporada (los mismos para todos): legendario final, otro legendario, épico y dos épicos variocolor
+function passMon(m){let h=0;for(const ch of "pass"+m)h=(h*31+ch.charCodeAt(0))|0;const L=P.filter(p=>p[2]==="L"),E=P.filter(p=>p[2]==="E");
+  const pick=(A,k,not)=>{let i=k%A.length;for(let j=0;j<A.length&&not.includes(A[i]);j++)i=(i+1)%A.length;return A[i]};
+  const leg=L[Math.abs(h)%L.length],shy=E[Math.abs(h>>4)%E.length],ep=pick(E,Math.abs(h>>8)+7,[shy]),shy2=pick(E,Math.abs(h>>12)+13,[shy,ep]),leg2=pick(L,Math.abs(h>>6)+5,[leg]);return{leg,shy,ep,shy2,leg2}}
+// Premios: cada nivel bastante mejor que el anterior. Los tickets crecen con el nivel y con lo que produce tu pueblo
+// (t = mínimo; h = horas de producción, lo que sea mayor). Niveles 5, 10, 15, 20, 25 y 30: premios grandes.
+const PASS_RW=[null,
+  {t:150000,h:.08,it:{pb:10,cand:1}},{t:170000,h:.09,it:{sb:5,pot:5}},{t:190000,h:.1,it:{ub:3,cand:2}},{t:220000,h:.12,evo:1,it:{cand:2}},
+  {t:600000,h:.35,hold:1,it:{ub:5,cand:3},lab:"¡Premio grande!"},
+  {t:280000,h:.16,it:{rev:3,cand:3}},{t:320000,h:.18,it:{ub:5,ppmax:1}},{t:360000,h:.2,evo:1,it:{cand:4}},{t:410000,h:.23,hold:1,it:{tshard:2}},
+  {t:1200000,h:.7,mon:"ep",it:{mb:1,cand:5},lab:"Pokémon épico"},
+  {t:530000,h:.3,it:{ub:8,cand:4}},{t:600000,h:.34,it:{tshard:3,ppmax:1}},{t:680000,h:.38,evo:2,it:{cand:5}},{t:770000,h:.43,hold:1,it:{ppmax:1,cand:5}},
+  {t:2200000,h:1.2,mon:"shy",sh:1,hold:1,it:{mb:1,cand:6},lab:"Pokémon variocolor"},
+  {t:1000000,h:.55,it:{ub:10,cand:6}},{t:1150000,h:.62,it:{crys:1,cand:6}},{t:1300000,h:.7,hold:2,it:{tshard:4}},{t:1500000,h:.8,it:{mb:1,ppmax:2}},
+  {t:4000000,h:2,mon:"leg2",hold:2,it:{mb:1,cand:8},lab:"¡Pokémon legendario!"},
+  {t:1900000,h:1,evo:2,it:{cand:8}},{t:2200000,h:1.1,it:{tshard:5,ppmax:2}},{t:2500000,h:1.25,hold:2,it:{mb:1}},{t:2900000,h:1.4,it:{crys:1,cand:10}},
+  {t:7000000,h:3,mon:"shy2",sh:1,it:{mb:2,crys:1,cand:10},lab:"Pokémon variocolor"},
+  {t:3600000,h:1.7,hold:3,it:{cand:10}},{t:4200000,h:1.9,it:{mb:2,ppmax:3}},{t:4800000,h:2.1,it:{tshard:6,cand:12}},{t:5500000,h:2.4,hold:3,it:{mb:2,cand:12}},
+  {t:15000000,h:6,mon:"leg",sh:1,it:{mb:3,crys:2,cand:15,ppmax:3,tshard:10},lab:"¡Legendario variocolor de la temporada!"}];
+function passRw(i){const r=PASS_RW[i]||PASS_RW[1];return Object.assign({},r,{it:Object.assign({},r.it||{})})}
+const passTk=r=>r.t||r.h?Math.max(r.t||0,Math.round((typeof tps==="function"?tps():0)*3600*(r.h||0))):0;
 function passSt(){const m=passMonth();if(!S.pass||S.pass.m!==m)S.pass={m:m,xp:0,cl:{},v:2};const s=S.pass;
   // pases empezados con la curva antigua (200 XP fijos por nivel): se conserva el nivel y el progreso
   if(s.v!==2){const ol=Math.min(PASS_N,Math.floor(s.xp/200)),fr=ol>=PASS_N?0:(s.xp%200)/200;s.xp=passCum(ol)+(ol<PASS_N?Math.floor(fr*passNeed(ol+1)):0);s.v=2}
@@ -193,19 +207,19 @@ const PASS_EV={win:12,cap:10,pull:2,spull:3,mg:15,pvp:15,pvpwin:10,new:6,evo:20,
 {const _q=qEv;qEv=function(ev,n){_q(ev,n);try{const p=PASS_EV[ev];if(p){const s=passSt(),o=passLv();let g=p*(n||1);
   if(ev==="pull"||ev==="spull"){const d=today();if(!s.pd||s.pd.d!==d)s.pd={d:d,x:0};g=Math.max(0,Math.min(g,PASS_PULLCAP-s.pd.x));s.pd.x+=g}
   s.xp+=g;const nl=passLv();if(nl>o){toast("🎫 ¡Pase de temporada: has subido al nivel "+nl+"! Reclama tu premio en Progreso.");snd("lvl")}passMini()}}catch(e){}}}
-nxPanel("passP","🎫 Pase de temporada","Cada mes hay un pase nuevo con 30 niveles. Subes de nivel haciendo de todo: combates, tiradas, minijuegos, PVP… ¡y en el nivel 30 te espera un legendario!");
+nxPanel("passP","🎫 Pase de temporada","Cada mes hay un pase nuevo con 30 niveles. Subes de nivel haciendo de todo: combates, tiradas, minijuegos, PVP… Cada nivel trae un premio mejor que el anterior, y en el nivel 30 te espera ¡un legendario variocolor!");
 {const g=HUB.find(x=>x.k==="prg");if(g&&!g.tabs.some(t=>t[0]==="passP"))g.tabs.unshift(["passP","Pase de temporada"]);HUBP.passP="prg";HUBR.passP=()=>passUI()}
-function passRwTxt(r,m){const M=passMon(m);return [r.mon?(r.sh?"✨ ":"")+M[r.mon][0]:"",r.t?fmt(Math.round(r.t*RMUL()))+" 🎟️":"",...Object.keys(r.it||{}).map(k=>r.it[k]+" "+IN2(k)),r.hold?r.hold+" objetos equipables":"",r.evo?"Piedra evolutiva":""].filter(x=>x).join(" + ")}
+function passRwTxt(r,m){const M=passMon(m);return [r.mon?(r.sh?"✨ ":"")+M[r.mon][0]:"",passTk(r)?fmt(Math.round(passTk(r)*RMUL()))+" 🎟️":"",...Object.keys(r.it||{}).map(k=>r.it[k]+" "+IN2(k)),r.hold?r.hold+" objetos equipables":"",r.evo?"Piedra evolutiva":""].filter(x=>x).join(" + ")}
 function passUI(){
   const box=$("passPB");if(!box)return;const s=passSt(),lv=passLv(),M=passMon(s.m),d=new Date(),end=new Date(d.getFullYear(),d.getMonth()+1,1),left=Math.ceil((end-d)/864e5);
   const ready=[];for(let i=1;i<=lv;i++)if(!s.cl[i])ready.push(i);
-  let h='<div class="passtop"><div class="passmon">'+icoHD(M.leg,110,false,false)+'</div><div><small>TEMPORADA DE '+d.toLocaleDateString("es",{month:"long"}).toUpperCase()+' · termina en '+left+' día'+(left===1?'':'s')+'</small><b>Nivel '+lv+' / '+PASS_N+'</b><div class="nxbar pbig"><i style="width:'+(lv>=PASS_N?100:Math.round(passProg()[0]/passProg()[1]*100))+'%"></i></div><small>'+(lv>=PASS_N?'¡Has completado el pase!':fmt(passProg()[0])+'/'+fmt(passProg()[1])+' XP para el nivel '+(lv+1))+' · Premio final: <b>'+esc(M.leg[0])+'</b></small>'+(ready.length?'<button class="red" data-pass="all">🎁 Reclamar '+ready.length+' premio'+(ready.length>1?'s':'')+'</button>':'')+'</div></div>';
+  let h='<div class="passtop"><div class="passmon">'+icoHD(M.leg,110,false,true)+'</div><div><small>TEMPORADA DE '+d.toLocaleDateString("es",{month:"long"}).toUpperCase()+' · termina en '+left+' día'+(left===1?'':'s')+'</small><b>Nivel '+lv+' / '+PASS_N+'</b><div class="nxbar pbig"><i style="width:'+(lv>=PASS_N?100:Math.round(passProg()[0]/passProg()[1]*100))+'%"></i></div><small>'+(lv>=PASS_N?'¡Has completado el pase!':fmt(passProg()[0])+'/'+fmt(passProg()[1])+' XP para el nivel '+(lv+1))+' · Premio final: <b>✨ '+esc(M.leg[0])+'</b></small>'+(ready.length?'<button class="red" data-pass="all">🎁 Reclamar '+ready.length+' premio'+(ready.length>1?'s':'')+'</button>':'')+'</div></div>';
   h+='<div class="passtrk">'+Array.from({length:PASS_N},(_,k)=>{const i=k+1,r=passRw(i),got=!!s.cl[i],ok=i<=lv,big=!!r.mon||i%5===0;
     return '<div class="passn'+(got?' got':ok?' ok':'')+(big?' big':'')+'"><span class="passl">'+i+'</span><div class="passi">'+(r.mon?icoHD(M[r.mon],56,false,!!r.sh):r.it?itemIco(Object.keys(r.it)[0],34):r.hold?itemIco("left",34):r.evo?'💎':'🎟️')+'</div><small>'+esc(passRwTxt(r,s.m))+'</small>'+(got?'<span class="passok">✅</span>':ok?'<button class="mini red" data-pass="'+i+'">Reclamar</button>':'<span class="passlk">🔒</span>')+'</div>'}).join("")+'</div>';
   h+='<div class="passhow"><b>¿Cómo se gana experiencia?</b><small>Cada nivel pide 50 XP más que el anterior (del 150 del nivel 1 a los 1.600 del nivel 30).</small><small>Combate ganado +12 · Captura +10 · Tirada +2 (súper +3; máx. '+PASS_PULLCAP+' XP al día'+(s.pd&&s.pd.d===today()?', hoy llevas '+s.pd.x:'')+') · Minijuego +15 · Combate PVP +15 (victoria +10 extra) · Pokémon nuevo +6 · Evolución +20 · Regalo diario +30 · Variocolor +25 · Misión diaria +8</small></div>';
   box.innerHTML=h;const t=box.querySelector(".passn.ok:not(.got)")||box.querySelector(".passn:not(.got)");if(t)t.scrollIntoView({block:"nearest",inline:"center"});
 }
-function passClaim(i){const s=passSt();if(s.cl[i]||i>passLv())return null;const r=passRw(i),M=passMon(s.m),rw={t:r.t||0,it:Object.assign({},r.it||{})};
+function passClaim(i){const s=passSt();if(s.cl[i]||i>passLv())return null;const r=passRw(i),M=passMon(s.m),rw={t:passTk(r),it:Object.assign({},r.it||{})};
   if(r.hold)for(let k=0;k<r.hold;k++){const x=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[x]=(rw.it[x]||0)+1}
   if(r.evo){const ev=ITEMS.filter(q=>q[7]==="evo"),x=ev[Math.floor(Math.random()*ev.length)][0];rw.it[x]=(rw.it[x]||0)+1}
   grant(rw);s.cl[i]=1;let mon=null;if(r.mon){mon=M[r.mon];giveMon(mon[0],clampL(Math.max(10,Math.min(lvCap(),leadLevel()))),!!r.sh)}return{rw:rw,mon:mon,r:r}}

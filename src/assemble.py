@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.13";
+const GAME_VER="7.14";
 const NEWS=[
+{v:"2026-11-18-7.14",ver:"7.14",at:"2026-11-18T19:04",t:"🎫 Pases gratuitos mucho mejores",l:["Pase de temporada: cada nivel da bastante más que el anterior. Los tickets crecen con el nivel y con lo que produce tu pueblo (el nivel 30 da 6 horas de producción). Además: 14 Master Ball, 7 Cristales Supremos, 137 Caramelos Raros, 30 Teralitos, objetos equipables…","Pokémon del pase: un épico en el nivel 10, épicos variocolor en el 15 y el 25, un legendario en el 20 y, en el 30, ¡el legendario de la temporada en variocolor!","Pase diario (racha): premios cada día mayores, con días grandes el 7, 14, 21 y 28 y un día 30 enorme (2 Master Ball, Cristal Supremo, 20 Caramelos Raros, 3 objetos equipables, Teralitos…). Los tickets extra también crecen con tu producción","Cada vuelta de 30 días seguidos multiplica los premios de la racha, hasta 5,5 veces"]},
 {v:"2026-11-18-7.13",ver:"7.13",at:"2026-11-18T19:00",t:"👆 Toca a tu entrenador o a tu compañero",l:["En la pantalla principal, toca a tu entrenador (junto a la Poké Ball) para ir directamente a su personalización","Toca a tu compañero para ir a la zona de Compañero, en Actividades, y darle mimos o bayas"]},
 {v:"2026-11-18-7.12.4",ver:"7.12.4",at:"2026-11-18T18:55",t:"💬 Arreglo en el chat: menciones y respuestas",l:["Los mensajes con una mención (@apodo) o que responden a otro mensaje ya se envían bien. Antes el servidor los rechazaba y no llegaban"]},
 {v:"2026-11-18-7.12.3",ver:"7.12.3",at:"2026-11-18T18:54",t:"🔴 Arreglo en las incursiones",l:["La ventana para elegir los ataques de tu equipo ya se abre por encima de la incursión (antes quedaba detrás y había que salir de la sala)"]},

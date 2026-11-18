@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.11"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.11.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795007561">
+<meta name="game-build" content="1795008737">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3085,7 +3085,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.11</small>
+    <small class="pcver">Versión 7.11.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -6639,7 +6639,7 @@ function pvRender(){
   if(PV.st==="idle")inc.ch.forEach(p=>{h+='<div class="lgnow"><b>⚔️ '+esc(pvClean(p.presence.pvp.n))+' te reta a un duelo</b>'+(fcd?'<small class="mut">Termina tu combate actual (pulsa «Volver») para poder aceptar.</small>':'')+'<div class="lgbtn"><button class="red" data-pvacc="'+esc(p.peer)+'"'+(fcd?' disabled':'')+'>Aceptar</button><button class="alt" data-pvno="'+esc(p.peer)+'">Rechazar</button></div></div>'});
   if(PV.st==="idle")inc.inv.forEach(p=>{h+='<div class="lgnow"><b>👥 '+esc(pvClean(p.presence.pvp.n))+' te invita a su sala 2 vs 2</b><div class="lgbtn"><button class="red" data-r2inv="'+esc(p.presence.pvp.inv.code)+'"'+(fcd?' disabled':'')+'>Unirse a la sala '+esc(p.presence.pvp.inv.code)+'</button></div></div>'});
   if(PV.st==="wait"){const o=PV.ch&&others.find(p=>p.peer===PV.ch.to);h+='<div class="lgnow"><b>Reto enviado a '+esc(o?pvClean(o.presence.pvp.n):"otro jugador")+'…</b><small class="mut">Esperando respuesta (30 s).</small><div class="lgbtn"><button class="alt" data-pvcancel="1">Cancelar</button></div></div>'}
-  h='<div class="pvmode"><b>Modo de PVP:</b><button class="'+(pvMd()==="c"?"on":"alt")+'" data-pvmd="c">⚔️ Clásico<small>Sin megas, Dinamax ni movimientos Z</small></button><button class="'+(pvMd()==="l"?"on":"alt")+'" data-pvmd="l">🧬 Libre<small>Con megaevoluciones, Dinamax/Gigamax y movimientos Z</small></button><small class="mut">Solo puedes retar a jugadores que estén en tu mismo modo.</small></div>'+h;
+  h='<div class="pvmode"><b>Modo de PVP:</b><button class="'+(pvMd()==="c"?"on":"alt")+'" data-pvmd="c">⚔️ Clásico<small>Sin megas, Dinamax, movimientos Z ni Teracristalización</small></button><button class="'+(pvMd()==="l"?"on":"alt")+'" data-pvmd="l">🧬 Libre<small>Con megaevoluciones, Dinamax/Gigamax, movimientos Z y Teracristalización</small></button><small class="mut">Solo puedes retar a jugadores que estén en tu mismo modo.</small></div>'+h;
   $("pvIn").innerHTML=h;
   {const c=$("pvCnt");if(c)c.textContent=others.length?others.length+(others.length===1?" jugador":" jugadores"):"Nadie más ahora"}
   $("pvList").innerHTML=others.length?others.map(p=>{const v=p.presence.pvp,busy=v.st==="duel",fr=isFriend(p.peer);return '<div class="pvrow"><span class="pvav">'+trImg(trDec(v.tr),"f","i")+'</span><b class="plink" data-prof="'+esc(p.peer)+'">'+esc(pvClean(v.n))+(v.prs?' 🌟'+(v.prs|0):'')+(fr?' <small title="Amigo">👥</small>':'')+' '+gdBadge(v.gd)+'</b><span class="pvtm">'+(Array.isArray(v.tm)?v.tm.filter(x=>x&&PM[x.n]).slice(0,6).map(x=>'<span title="'+esc(x.n)+' Nv'+(+x.l||1)+'">'+ico(PM[x.n],26)+'</span>').join(""):"")+'</span><small class="mut">'+(busy?"En duelo":v.st==="wait"?"Retando…":v.st==="room"?"En sala 2 vs 2":"Libre")+'</small>'+(fr||!window.FB?'':frPend(p.peer)?'<button class="alt" disabled title="Solicitud de amistad enviada">📨</button>':'<button class="alt" data-fradd="'+esc(pvClean(v.n))+'" title="Enviar solicitud de amistad">+👥</button>')+(v.md==="l"?'<span class="pvmt l" title="Modo Libre">🧬 Libre</span>':'<span class="pvmt" title="Modo Clásico">⚔️ Clásico</span>')+'<button data-pvch="'+esc(p.peer)+'"'+((PV.st!=="idle"||busy||v.st!=="idle"||!tm.length||fcd||(v.md==="l"?"l":"c")!==pvMd())?' disabled title="'+((v.md==="l"?"l":"c")!==pvMd()?'Está en otro modo de PVP':'')+'"':'')+'>⚔️ Retar</button></div>'}).join(""):'<small class="mut">Ahora mismo no hay otros jugadores. Comparte el enlace de la página para que alguien se conecte.</small>';
@@ -7811,8 +7811,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.11";
+const GAME_VER="7.11.1";
 const NEWS=[
+{v:"2026-11-18-7.11.1",ver:"7.11.1",at:"2026-11-18T14:32",t:"💎 Teracristalización en el PVP",l:["En los duelos PVP en modo «🧬 Libre» ya se puede teracristalizar: pulsa «💎 Teracristalizar» y elige el ataque. Una vez por combate y jugador","Tu rival ve la teracristalización con su animación y su corona, y el teratipo es el que tengas puesto en la ficha de tu Pokémon","En el PVP el Teraorbe siempre está cargado (no gasta la carga de tus combates). En el modo «⚔️ Clásico» no hay Teracristalización, igual que no hay megas, Dinamax ni movimientos Z"]},
 {v:"2026-11-18-7.11",ver:"7.11",at:"2026-11-18T14:12",t:"💎 ¡Llega la Teracristalización!",l:["Como en la 9ª generación: una vez por combate puedes teracristalizar a un Pokémon con el botón «💎 Teracristalizar» (actívalo y elige el ataque). Brilla como un cristal, lleva una corona con su teratipo y pasa a ser solo de ese tipo hasta el final del combate","Sus ataques del teratipo ganan el bonus de tipo y conserva el de sus tipos de siempre; si el teratipo era uno de sus tipos, el bonus sube a ×2. Los ataques débiles del teratipo suben a 60 de potencia","El Teraorbe se recarga al curar a tu equipo en el Centro Pokémon","Cada Pokémon tiene un teratipo: cámbialo en su ficha con 10 Teralitos (nuevo objeto: en las incursiones, en la Tienda de la Torre Batalla y en la tienda)","Los Líderes de Gimnasio, la Liga Pokémon y el As de la Torre teracristalizan a su último Pokémon"]},
 {v:"2026-11-18-7.10",ver:"7.10",at:"2026-11-18T13:51",t:"❄️ Navidad, 🎆 Nochevieja y 🌦️ clima real en el pueblo",l:["🌦️ Clima real: el pueblo tiene el tiempo que hace ahora en la ciudad de tu zona horaria: sol, nubes, niebla, lluvia, tormenta con rayos o nieve. Se actualiza cada 30 minutos y se puede desactivar en Ajustes → Gráficos","❄️ En diciembre siempre nieva: copos cayendo y el pueblo nevado (suelo, árboles, rocas y tejados)","🎄 Del 1 de diciembre al 6 de enero, un gran árbol de Navidad en el pueblo, con guirnalda, bolas y estrella, y luces de colores en los pinos que de noche brillan y parpadean","🎆 Nochevieja (hora de España): fuegos artificiales sobre el pueblo desde las 21:00 del 31, cuenta atrás en el último minuto del año y, el 1 de enero, un gran regalo de Año Nuevo con un Pokémon legendario variocolor, Master Ball y muchos premios más. Aparece en el Calendario de eventos","Arreglado: al pasar del día al atardecer o a la noche, el paisaje podía verse negro unos segundos"]},
 {v:"2026-11-18-7.9.3",ver:"7.9.3",at:"2026-11-18T11:52",t:"🎁 Calendario de Adviento: ¡todo sorpresa!",l:["El calendario ya no enseña lo que trae la casilla de mañana ni el regalo del día 24: cada casilla es una sorpresa hasta que la abres","Las casillas que no abriste a tiempo siguen mostrando lo que te habría tocado"]},
@@ -8203,7 +8204,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795007561";
+const GAME_B="1795008737";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -21045,6 +21046,26 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 // ---- Teralitos de premio en las incursiones ----
 {const _g=grant;grant=function(r){try{if(r&&r.it&&r.it.ub===3&&typeof RD!=="undefined"&&RD&&RD.phase==="catch"&&!r._ts){r._ts=1;r.it.tshard=(r.it.tshard||0)+3+Math.floor(Math.random()*4)}}catch(e){}return _g.apply(this,arguments)}}
 
+// ================= TERACRISTALIZACIÓN EN EL PVP (modo «🧬 Libre») =================
+// La acción viaja como «T<teratipo>|m0»: así el rival sabe a qué tipo cambia y los dos juegos calculan lo mismo.
+// En el PVP el Teraorbe siempre está cargado (como en los combates en línea de los juegos): una vez por combate y jugador.
+{const _bt=beTurn;beTurn=function(E,acts,rng){if(!E||!E.pvp)return _bt.apply(this,arguments);const tev=[];
+  acts=(acts||[]).map((a,i)=>{const s=String(a==null?"":a),q=s.match(/^T([a-z]+)\|(.+)$/);if(!q)return a;const sd=E.sd[i];
+    if(E.free&&sd&&!sd.out&&!sd.tu&&TERA_T.includes(q[1])){const m=beAct(sd);if(m&&m.mh>0&&!m.tera&&!m.dmx){sd.tu=1;teraApply(m,q[1]);tev.push({k:"tera",s:i,n:m.p[0],ty:q[1],snap:beSnap(E)})}}
+    return q[2]});
+  const ev=_bt.call(this,E,acts,rng);return tev.concat(ev)}}
+// al reproducir el turno: la animación del cristal antes de los ataques
+{const _bp=bePlay;bePlay=async function(ev){if(!ev||!ev.some(e=>e&&e.k==="tera"))return _bp.apply(this,arguments);let chunk=[];
+  for(const e of ev){if(e&&e.k==="tera"){if(chunk.length){await _bp.call(this,chunk);chunk=[]}try{const E=B&&B.E,m=E&&E.sd[e.s]?E.sd[e.s].t.find(t=>t.tera===e.ty&&t.p[0]===e.n)||beAct(E.sd[e.s]):null;if(m)await teraShow(e.s,m)}catch(x){console.error(x)}}else chunk.push(e)}
+  if(chunk.length)await _bp.call(this,chunk)}}
+// botón en el menú del PVP (junto a Megaevolucionar / Dinamax / Movimiento Z)
+{const _fb=pvFreeBtns;pvFreeBtns=function(side,pm){let h=_fb.apply(this,arguments);try{if(!D||!D.E||!D.E.free||!pm||pm.mh<=0)return h;
+    if(D.pre&&D.pre[0]==="T")h=h.replace(/<small class="pvpre">[\s\S]*?<\/small>/,'');
+    if(!side.tu&&!pm.tera&&!pm.dmx&&!pm.p0){const t=teraOf(pm.p[0]),on=D.pre==="T"+t;h+='<button class="terabtn'+(on?' on':'')+'" data-pv="fT" style="--tc:'+(TC[t]||"#9cf")+'">💎 '+(on?'¡Teracristalizará!':'Teracristalizar · '+EM[t]+' '+TIPO[t])+'</button>'}
+    if(D.pre&&D.pre[0]==="T")h='<small class="pvpre">💎 Se teracristalizará en tipo '+TIPO[D.pre.slice(1)]+' antes de atacar: elige un ataque.</small>'+h}catch(e){console.error(e)}return h}}
+$("menu").addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-pv="fT"]');if(!b||!D||!D.E||!D.E.free)return;e.stopImmediatePropagation();
+  const pm=beAct(D.E.sd[pvMy()]);if(!pm)return;const v="T"+teraOf(pm.p[0]);snd("ui");D.pre=D.pre===v?"":v;D.zm=0;pvMenu()},true);
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -21299,7 +21320,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.11";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.11.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

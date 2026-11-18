@@ -69,3 +69,23 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 
 // ---- Teralitos de premio en las incursiones ----
 {const _g=grant;grant=function(r){try{if(r&&r.it&&r.it.ub===3&&typeof RD!=="undefined"&&RD&&RD.phase==="catch"&&!r._ts){r._ts=1;r.it.tshard=(r.it.tshard||0)+3+Math.floor(Math.random()*4)}}catch(e){}return _g.apply(this,arguments)}}
+
+// ================= TERACRISTALIZACIÓN EN EL PVP (modo «🧬 Libre») =================
+// La acción viaja como «T<teratipo>|m0»: así el rival sabe a qué tipo cambia y los dos juegos calculan lo mismo.
+// En el PVP el Teraorbe siempre está cargado (como en los combates en línea de los juegos): una vez por combate y jugador.
+{const _bt=beTurn;beTurn=function(E,acts,rng){if(!E||!E.pvp)return _bt.apply(this,arguments);const tev=[];
+  acts=(acts||[]).map((a,i)=>{const s=String(a==null?"":a),q=s.match(/^T([a-z]+)\|(.+)$/);if(!q)return a;const sd=E.sd[i];
+    if(E.free&&sd&&!sd.out&&!sd.tu&&TERA_T.includes(q[1])){const m=beAct(sd);if(m&&m.mh>0&&!m.tera&&!m.dmx){sd.tu=1;teraApply(m,q[1]);tev.push({k:"tera",s:i,n:m.p[0],ty:q[1],snap:beSnap(E)})}}
+    return q[2]});
+  const ev=_bt.call(this,E,acts,rng);return tev.concat(ev)}}
+// al reproducir el turno: la animación del cristal antes de los ataques
+{const _bp=bePlay;bePlay=async function(ev){if(!ev||!ev.some(e=>e&&e.k==="tera"))return _bp.apply(this,arguments);let chunk=[];
+  for(const e of ev){if(e&&e.k==="tera"){if(chunk.length){await _bp.call(this,chunk);chunk=[]}try{const E=B&&B.E,m=E&&E.sd[e.s]?E.sd[e.s].t.find(t=>t.tera===e.ty&&t.p[0]===e.n)||beAct(E.sd[e.s]):null;if(m)await teraShow(e.s,m)}catch(x){console.error(x)}}else chunk.push(e)}
+  if(chunk.length)await _bp.call(this,chunk)}}
+// botón en el menú del PVP (junto a Megaevolucionar / Dinamax / Movimiento Z)
+{const _fb=pvFreeBtns;pvFreeBtns=function(side,pm){let h=_fb.apply(this,arguments);try{if(!D||!D.E||!D.E.free||!pm||pm.mh<=0)return h;
+    if(D.pre&&D.pre[0]==="T")h=h.replace(/<small class="pvpre">[\s\S]*?<\/small>/,'');
+    if(!side.tu&&!pm.tera&&!pm.dmx&&!pm.p0){const t=teraOf(pm.p[0]),on=D.pre==="T"+t;h+='<button class="terabtn'+(on?' on':'')+'" data-pv="fT" style="--tc:'+(TC[t]||"#9cf")+'">💎 '+(on?'¡Teracristalizará!':'Teracristalizar · '+EM[t]+' '+TIPO[t])+'</button>'}
+    if(D.pre&&D.pre[0]==="T")h='<small class="pvpre">💎 Se teracristalizará en tipo '+TIPO[D.pre.slice(1)]+' antes de atacar: elige un ataque.</small>'+h}catch(e){console.error(e)}return h}}
+$("menu").addEventListener("click",e=>{const b=e.target.closest&&e.target.closest('[data-pv="fT"]');if(!b||!D||!D.E||!D.E.free)return;e.stopImmediatePropagation();
+  const pm=beAct(D.E.sd[pvMy()]);if(!pm)return;const v="T"+teraOf(pm.p[0]);snd("ui");D.pre=D.pre===v?"":v;D.zm=0;pvMenu()},true);

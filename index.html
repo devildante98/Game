@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.7.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.7.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1794978733">
+<meta name="game-build" content="1794978942">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -2902,6 +2902,8 @@ body.gm.land3{--gtown:224px}@media (max-width:700px){body.gm.land3{--gtown:168px
 .profav.prof3d .av3cv{width:100%;height:100%;display:block}
 .myposeb button{padding:6px 11px;font-size:.88rem}
 .mypose .mypg{font-weight:800;margin-top:4px}
+/* botones redondos de cerrar: la ✕ siempre centrada en el círculo */
+#upgM .upgx,.av3bc,.chx,.mgx,.pkvx,.tpx,#newsM .newsX,.trsdel{display:inline-grid;place-items:center;padding:0!important;line-height:1!important;text-align:center}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -2967,7 +2969,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.7.1</small>
+    <small class="pcver">Versión 7.7.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7650,8 +7652,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.7.1";
+const GAME_VER="7.7.2";
 const NEWS=[
+{v:"2026-11-18-7.7.2",ver:"7.7.2",at:"2026-11-18T06:15",t:"✕ Botones de cerrar centrados",l:["La ✕ de los botones redondos de cerrar (Mejoras, minijuegos, chat, ficha de Pokémon…) queda ahora justo en el centro del círculo"]},
 {v:"2026-11-18-7.7.1",ver:"7.7.1",at:"2026-11-18T06:12",t:"💾 Lo importante se guarda en la nube al momento",l:["Arreglado: si conseguías una medalla y cerrabas el juego (o lo abrías en otro dispositivo) antes del siguiente guardado en la nube, al volver podía no estar","Ahora las medallas (de gimnasio y de Exploración), la Liga, el Salón de la Fama y el prestigio se suben a la nube en cuanto los consigues","Además, el guardado automático en la nube pasa a ser cada 2 minutos en vez de cada 5"]},
 {v:"2026-11-18-7.7",ver:"7.7",at:"2026-11-18T06:05",t:"📸 14 poses fijas nuevas para tu tarjeta",l:["En «Mi tarjeta» hay ahora poses fijas además de las animadas: Puño en alto, Manos en la cintura, Brazos cruzados, Mirando a lo lejos, Mano al pecho, ¡Listo para combatir!, Mano en la nuca, Brazos abiertos, Manos a la espalda, Victoria con la mano, Encogerse de hombros, Una mano en la cintura, Puño al frente y Sacar músculo","Como las animadas, se ven en tu tarjeta (también la que ven los demás) y en tu entrenador de la pantalla principal"]},
 {v:"2026-11-18-7.6",ver:"7.6",at:"2026-11-18T05:56",t:"🕺 Poses animadas para tu entrenador",l:["En «Tu entrenador → Mi tarjeta» puedes elegir una pose: Normal, Saludar, ¡Victoria!, Lanzar Poké Ball, Señalar, Bailar o Pensativo","La pose se mueve: saluda con la mano, lanza la Poké Ball una y otra vez, baila…","Se ve en tu tarjeta en 3D (también en la que ven los demás jugadores) y en tu entrenador de la pantalla principal"]},
@@ -8025,7 +8028,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1794978733";
+const GAME_B="1794978942";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -20191,7 +20194,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.7.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.7.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

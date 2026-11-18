@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795027451">
+<meta name="game-build" content="1795027543">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -7726,7 +7726,7 @@ const ACH0=[
 ["col","📚","Coleccionista","Consigue {g} Pokémon distintos",()=>P.filter(p=>hasP(p[0])).length,[[10,0],[50,1],[150,2],[400,3],[800,4],[P.length,5]]],
 ["pull","🎰","Adicto al gacha","Haz {g} tiradas",()=>S.pulls||0,[[100,0],[500,1],[2500,2],[10000,3],[25000,4]]],
 ["clk","👆","Dedo de acero","Toca la Pokéball {g} veces",()=>S.clicks||0,[[1000,0],[5000,1],[20000,2],[200000,4]]],
-["win","⚔️","Combatiente","Gana {g} combates",()=>stt().win||0,[[10,0],[75,1],[250,2],[750,3],[2000,4]]],
+["win","⚔️","Combatiente","Gana {g} combates",()=>stt().win||0,[[10,0],[50,1],[150,2],[400,3],[1000,4]]],
 ["tr","👤","Rival temido","Derrota a {g} entrenadores",()=>stt().tr||0,[[5,0],[30,1],[100,2],[300,3]]],
 ["cap","🔴","Atrapalotodo","Captura {g} Pokémon en combate",()=>stt().cap||0,[[5,0],[30,1],[100,2],[300,3]]],
 ["lvl","⭐","Entrenador experto","Sube un Pokémon al nivel {g}",maxLv,[[10,0],[25,1],[50,2],[75,3],[100,4]]],
@@ -7870,7 +7870,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
 const GAME_VER="7.17";
 const NEWS=[
-{v:"2026-11-18-7.17",ver:"7.17",at:"2026-11-18T19:36",t:"🏆 Logros menos exagerados",l:["Muchos logros piden ahora bastante menos, para que el prestigio no se haga pesado. Los premios de cada nivel son los mismos","Adicto al gacha: 100 · 500 · 2.500 · 10.000 · 25.000 tiradas (antes hasta 100.000) · Dedo de acero: hasta 200.000 toques (antes 1.000.000)","Combatiente: 10 · 75 · 250 · 750 · 2.000 victorias · Rival temido y Atrapalotodo: hasta 300 · Cliente habitual: 5 · 25 · 80 curas · Constancia: 5 · 20 · 50 · 100 misiones","Evolucionista: hasta 80 · Rey del PVP: hasta 500","Los logros de los niveles de prestigio también piden menos tiradas, toques, curas, compras, misiones, combates y capturas","Si ya cumplías alguno de los nuevos objetivos, ya puedes reclamarlo"]},
+{v:"2026-11-18-7.17",ver:"7.17",at:"2026-11-18T19:36",t:"🏆 Logros menos exagerados",l:["Muchos logros piden ahora bastante menos, para que el prestigio no se haga pesado. Los premios de cada nivel son los mismos","Adicto al gacha: 100 · 500 · 2.500 · 10.000 · 25.000 tiradas (antes hasta 100.000) · Dedo de acero: hasta 200.000 toques (antes 1.000.000)","Combatiente: 10 · 50 · 150 · 400 · 1.000 victorias · Rival temido y Atrapalotodo: hasta 300 · Cliente habitual: 5 · 25 · 80 curas · Constancia: 5 · 20 · 50 · 100 misiones","Evolucionista: hasta 80 · Rey del PVP: hasta 500","Los logros de los niveles de prestigio también piden menos tiradas, toques, curas, compras, misiones, combates y capturas","Si ya cumplías alguno de los nuevos objetivos, ya puedes reclamarlo"]},
 {v:"2026-11-18-7.16.1",ver:"7.16.1",at:"2026-11-18T19:22",t:"🎆 Más tickets en el regalo de Año Nuevo",l:["El regalo de Año Nuevo da ahora 48 horas de producción de tu pueblo (antes 30), o 150 millones de tickets si es más"]},
 {v:"2026-11-18-7.16",ver:"7.16",at:"2026-11-18T19:16",t:"🎆 Regalo de Año Nuevo tremendamente especial",l:["El 1 de enero podrás elegir 2 legendarios variocolor entre 5. ¡Cada entrenador tiene sus propios 5, distintos a los de los demás!","Además, para todos lo mismo: 150 millones de tickets (o 48 horas de producción de tu pueblo, si es más), 12 Master Ball, 6 Cristales Supremos, 50 Caramelos Raros, 10 PP máximos, 20 Teralitos y 6 objetos equipables","💬 La ventana del chat es más ancha en ordenador"]},
 {v:"2026-11-18-7.15",ver:"7.15",at:"2026-11-18T19:10",t:"🔍 Buscar amigos y conversaciones",l:["Social › Amigos: nueva barra de búsqueda para encontrar enseguida a un amigo por su apodo","Chat › Amigos (y Social › Chat): barra para buscar conversaciones","Las conversaciones privadas salen ordenadas: primero las personas con las que hablaste por última vez"]},
@@ -8274,7 +8274,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795027451";
+const GAME_B="1795027543";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

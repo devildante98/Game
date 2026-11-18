@@ -146,7 +146,7 @@ async function eggHatch(i){
   $("hD").innerHTML=(isNew?'<b>¡Nuevo en tu Pokédex!</b> ':'')+(g.sh?'<b>¡Es variocolor!</b> ':'')+'Naturaleza '+NAT[g.nt|0][0]+(had&&g.nt!==natOf(n)?' (como ya lo tenías, puedes elegir esta naturaleza en su ficha)':'')+'.';
   const ok=$("hOk");ok.hidden=false;ok.focus();await new Promise(r=>{ok.onclick=r});nxModalClose();NX.hatching=0;render();dcUI(true);
 }
-function nxModal(html){let m=$("nxM");if(!m){m=document.createElement("div");m.id="nxM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m)}m.innerHTML='<div class="nxmw">'+html+'</div>';m.hidden=false;m.querySelector(".nxmw").animate([{transform:"scale(.7)",opacity:0},{transform:"none",opacity:1}],{duration:260,easing:"cubic-bezier(.2,.9,.3,1.2)"});return m}
+function nxModal(html){let m=$("nxM");if(!m){m=document.createElement("div");m.id="nxM";m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");document.body.appendChild(m)}{const g=$("mgM");m.style.zIndex=g&&!g.hidden?"99":""}m.innerHTML='<div class="nxmw">'+html+'</div>';m.hidden=false;m.querySelector(".nxmw").animate([{transform:"scale(.7)",opacity:0},{transform:"none",opacity:1}],{duration:260,easing:"cubic-bezier(.2,.9,.3,1.2)"});return m}
 function nxModalClose(){const m=$("nxM");if(m)m.hidden=true}
 
 // ================= ZONA SAFARI =================

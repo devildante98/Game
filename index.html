@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.17.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.17.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795038227">
+<meta name="game-build" content="1795068219">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3121,7 +3121,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.17.2</small>
+    <small class="pcver">Versión 7.17.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7872,8 +7872,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.17.2";
+const GAME_VER="7.17.3";
 const NEWS=[
+{v:"2026-11-19-7.17.3",ver:"7.17.3",at:"2026-11-19T07:03",t:"🛠️ Arreglo del fondo al abrir ventanas",l:["El pueblo del fondo ya no se queda a medio pintar al abrir una ventana: el cambio automático de calidad espera a que vuelvas a la pantalla principal"]},
 {v:"2026-11-18-7.17.2",ver:"7.17.2",at:"2026-11-18T22:43",t:"⏱️ Las horas jugadas se cuentan bien",l:["Las horas jugadas cuentan ahora todo el tiempo que tienes el juego abierto, también minimizado o en otra pestaña (antes solo contaba con la pestaña a la vista)","Ya no se pierde tiempo al recargar la página ni al jugar en varios dispositivos"]},
 {v:"2026-11-18-7.17.1",ver:"7.17.1",at:"2026-11-18T22:16",t:"⚡ Mejor rendimiento en la pantalla principal",l:["Tu entrenador en 3D gasta mucho menos: cuando está en una pose quieta se dibuja 8 veces por segundo en lugar de 24 (casi no se nota)","El pueblo en 3D se dibuja a 15 imágenes por segundo y, si el equipo va justo, pasa solo al modo ligero (antes el modo ligero automático no lo afectaba)","Menos trabajo de fondo mientras juegas","Si aún va lento, activa ⚙️ Ajustes › Animaciones ligeras"]},
 {v:"2026-11-18-7.17",ver:"7.17",at:"2026-11-18T19:36",t:"🏆 Logros menos exagerados",l:["Muchos logros piden ahora bastante menos, para que el prestigio no se haga pesado. Los premios de cada nivel son los mismos","Adicto al gacha: 100 · 500 · 2.500 · 10.000 · 25.000 tiradas (antes hasta 100.000) · Dedo de acero: hasta 200.000 toques (antes 1.000.000)","Combatiente: 10 · 50 · 150 · 400 · 1.000 victorias · Rival temido y Atrapalotodo: hasta 300 · Cliente habitual: 5 · 25 · 80 curas · Constancia: 5 · 20 · 50 · 100 misiones","Evolucionista: hasta 80 · Rey del PVP: hasta 500","Los logros de los niveles de prestigio también piden menos tiradas, toques, curas, compras, misiones, combates y capturas","Si ya cumplías alguno de los nuevos objetivos, ya puedes reclamarlo"]},
@@ -8280,7 +8281,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795038227";
+const GAME_B="1795068219";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -19787,12 +19788,15 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     bg.appendChild(cv);document.body.classList.add("land3");try{L._coarse=matchMedia("(pointer:coarse)").matches}catch(e){}window.pcPause=1;window.LAND3I=L;
     // modo ligero: el de Ajustes o el automático (si el equipo va justo, GM.liteAuto pone «glite»)
     const isLite=()=>document.body.classList.contains("lite")||document.body.classList.contains("glite")||!!(window.S&&S.o&&S.o.lite);
-    const fit=()=>{const lite=isLite();L._fl=lite;L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",fit);
+    const fit=()=>{const lite=isLite();L._fl=lite;L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",()=>{fit();L._force=1});
     const t0=performance.now();let last=0;
     const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm"))return;
       // con una ventana o una sección abierta encima, el paisaje se queda quieto
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
-      const lite=isLite();if(lite!==L._fl)fit();const gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?80:66;if(ts-last<gap)return;last=ts;
+      const lite=isLite();
+      // el cambio de calidad (que cambia el tamaño del lienzo) se hace solo con el pueblo a la vista, y se dibuja enseguida:
+      // cambiarlo con una ventana encima dejaba el fondo a medio pintar en algunos equipos
+      if(lite!==L._fl&&!cover){fit();last=0}if(L._force){L._force=0;last=0}const gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?80:66;if(ts-last<gap)return;last=ts;
       try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
         L.env=window.WXENV||null;L.lite=!!lite;
         L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L)}catch(e){console.error(e)}};
@@ -21536,7 +21540,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.17.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.17.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

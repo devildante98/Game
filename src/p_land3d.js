@@ -490,12 +490,15 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     bg.appendChild(cv);document.body.classList.add("land3");try{L._coarse=matchMedia("(pointer:coarse)").matches}catch(e){}window.pcPause=1;window.LAND3I=L;
     // modo ligero: el de Ajustes o el automático (si el equipo va justo, GM.liteAuto pone «glite»)
     const isLite=()=>document.body.classList.contains("lite")||document.body.classList.contains("glite")||!!(window.S&&S.o&&S.o.lite);
-    const fit=()=>{const lite=isLite();L._fl=lite;L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",fit);
+    const fit=()=>{const lite=isLite();L._fl=lite;L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",()=>{fit();L._force=1});
     const t0=performance.now();let last=0;
     const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm"))return;
       // con una ventana o una sección abierta encima, el paisaje se queda quieto
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
-      const lite=isLite();if(lite!==L._fl)fit();const gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?80:66;if(ts-last<gap)return;last=ts;
+      const lite=isLite();
+      // el cambio de calidad (que cambia el tamaño del lienzo) se hace solo con el pueblo a la vista, y se dibuja enseguida:
+      // cambiarlo con una ventana encima dejaba el fondo a medio pintar en algunos equipos
+      if(lite!==L._fl&&!cover){fit();last=0}if(L._force){L._force=0;last=0}const gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?80:66;if(ts-last<gap)return;last=ts;
       try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
         L.env=window.WXENV||null;L.lite=!!lite;
         L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L)}catch(e){console.error(e)}};

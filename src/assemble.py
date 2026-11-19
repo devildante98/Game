@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.22";
+const GAME_VER="7.23";
 const NEWS=[
+{v:"2026-11-19-7.23",ver:"7.23",at:"2026-11-19T14:48",t:"🧪 Título Beta-Tester renovado",l:["El título «Beta-Tester» ahora luce con un formato exclusivo: arcoíris animado con destellos, en tu perfil y en tu vitrina. ¡Gracias por estar desde el principio!","Sorteos: la lista de apuntados ahora solo la ven los administradores; el número de apuntados lo sigue viendo todo el mundo"]},
 {v:"2026-11-19-7.22",ver:"7.22",at:"2026-11-19T14:36",t:"🎉 Sorteos: aviso y lista de apuntados",l:["Cuando haya un sorteo nuevo te saldrá un aviso con el premio y la hora de cierre, para que te apuntes con un toque","En cada sorteo puedes ver la lista de jugadores apuntados con el botón «👥 Ver apuntados»"]},
 {v:"2026-11-19-7.21",ver:"7.21",at:"2026-11-19T14:21",t:"🎉 ¡Sorteos!",l:["Nuevo apartado Más › 🎉 Sorteos: mira los sorteos abiertos, su premio y cuánto falta, y apúntate con un toque (una vez por cuenta; puedes borrarte mientras siga abierto)","Cuando se haga el sorteo, los ganadores salen al azar entre los apuntados. Si te toca, al entrar te avisamos para que reclames tu premio","También puedes ver los ganadores de los últimos sorteos"]},
 {v:"2026-11-19-7.20",ver:"7.20",at:"2026-11-19T14:05",t:"🎁 Códigos de regalo y título Beta-Tester",l:["Nuevo: canjea códigos de regalo en Más › 🎁 Canjear código. Los daremos en sorteos, eventos y redes sociales; cada código se canjea una vez por cuenta","🧪 Título exclusivo «Beta-Tester» para quienes crearon su cuenta en las dos primeras semanas del juego. ¡Gracias por estar desde el principio! Póntelo en Tu entrenador › Mi tarjeta","🚀 En Más › Próximamente: Base secreta, Retos semanales con reglas y Concursos Pokémon"]},
@@ -822,8 +823,12 @@ FB_API = '''
     codeDel:c=>S.deleteDoc(S.doc(db,"codes",c)),
     // sorteos
     async rfList(){const sn=await S.getDocs(S.query(S.collection(db,"raffles"),S.orderBy("end","desc"),S.limit(20)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
-    rfJoin:(id,n)=>S.setDoc(S.doc(db,"raffles",id,"e",uid),{n:String(n||"").slice(0,30),at:Date.now()}),
-    rfLeave:id=>S.deleteDoc(S.doc(db,"raffles",id,"e",uid)),
+    // apuntarse/borrarse: la inscripción y el contador del sorteo (n) cambian juntos; la lista solo la leen los administradores
+    rfJoin:(id,n)=>S.runTransaction(db,async tx=>{const r=S.doc(db,"raffles",id),e=S.doc(db,"raffles",id,"e",uid);const rs=await tx.get(r),es=await tx.get(e);
+      if(!rs.exists())throw Object.assign(new Error("no"),{code:"not-found"});if(es.exists())return;
+      tx.set(e,{n:String(n||"").slice(0,30),at:Date.now()});tx.update(r,{n:(+(rs.data().n)||0)+1})}),
+    rfLeave:id=>S.runTransaction(db,async tx=>{const r=S.doc(db,"raffles",id),e=S.doc(db,"raffles",id,"e",uid);const rs=await tx.get(r),es=await tx.get(e);
+      if(!rs.exists()||!es.exists())return;tx.delete(e);tx.update(r,{n:(+(rs.data().n)||0)-1})}),
     async rfIn(id){const s=await S.getDoc(S.doc(db,"raffles",id,"e",uid));return s.exists()},
     async rfCount(id){try{const c=await S.getCountFromServer(S.collection(db,"raffles",id,"e"));return c.data().count}catch(e){return null}},
     async rfClaimed(id){try{const s=await S.getDoc(S.doc(db,"raffles",id,"c",uid));return s.exists()}catch(e){return false}},

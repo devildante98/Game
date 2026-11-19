@@ -320,15 +320,31 @@ match /trades/{id} {
 // sorteos: todos los ven; solo los administradores los crean y sortean. Cada jugador se apunta una vez (mientras está
 // abierto y antes de la hora de cierre) y puede borrarse. El premio lo entrega el servidor (c/{uid} lo escribe él).
 function rf(r) { return get(/databases/$(database)/documents/raffles/$(r)).data; }
+// contador de apuntados (n): un jugador solo puede sumar 1 al apuntarse o restar 1 al borrarse, en la misma operación
+function rfAfterN(r) { return getAfter(/databases/$(database)/documents/raffles/$(r)).data.get('n', 0); }
+function rfNOk(r) {
+  return request.auth != null && !banned() && resource.data.st == 'open'
+    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['n'])
+    && ((request.resource.data.n == resource.data.get('n', 0) + 1
+         && existsAfter(/databases/$(database)/documents/raffles/$(r)/e/$(request.auth.uid))
+         && !exists(/databases/$(database)/documents/raffles/$(r)/e/$(request.auth.uid)))
+     || (request.resource.data.n == resource.data.get('n', 0) - 1
+         && !existsAfter(/databases/$(database)/documents/raffles/$(r)/e/$(request.auth.uid))
+         && exists(/databases/$(database)/documents/raffles/$(r)/e/$(request.auth.uid))));
+}
 match /raffles/{r} {
   allow read: if request.auth != null;
-  allow write: if isAdmin();
+  allow create, delete: if isAdmin();
+  allow update: if isAdmin() || rfNOk(r);
   match /e/{u} {
-    allow read: if request.auth != null;
+    // cada jugador ve solo su propia inscripción; la lista completa, solo los administradores
+    allow get: if request.auth != null && (request.auth.uid == u || isAdmin());
+    allow list: if isAdmin();
     allow create: if request.auth != null && request.auth.uid == u && !banned()
       && request.resource.data.keys().hasOnly(['n', 'at']) && optStr('n', 30) && request.resource.data.at is number
-      && rf(r).st == 'open' && request.time.toMillis() < rf(r).end;
-    allow delete: if request.auth != null && ((request.auth.uid == u && rf(r).st == 'open') || isAdmin());
+      && rf(r).st == 'open' && request.time.toMillis() < rf(r).end
+      && rfAfterN(r) == rf(r).get('n', 0) + 1;
+    allow delete: if request.auth != null && ((request.auth.uid == u && rf(r).st == 'open' && rfAfterN(r) == rf(r).get('n', 0) - 1) || isAdmin());
   }
   match /c/{u} { allow read: if request.auth != null && (request.auth.uid == u || isAdmin()); }
 }

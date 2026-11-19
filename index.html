@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.22"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.23"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795095419">
+<meta name="game-build" content="1795096081">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3133,6 +3133,22 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 #rfWhoM .rfwl li.me{background:rgba(90,169,240,.18)}#rfWhoM .rfwl li.win{background:rgba(240,164,58,.22)}
 #rfWhoM .rfwn{min-width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;background:rgba(120,110,200,.2);flex:none}
 .rfcard .rfwho{align-self:flex-start;margin:4px 0 0}
+/* título Beta-Tester: arcoíris animado */
+.titbeta{position:relative;display:inline-flex;align-items:center;gap:6px;padding:4px 14px 4px 10px;border-radius:999px;font-weight:900;letter-spacing:.6px;text-transform:uppercase;font-size:.92em;line-height:1.2;
+  border:2px solid transparent;background:linear-gradient(#1d1442,#2a1a5e) padding-box,linear-gradient(90deg,#ff3b5c,#ff9f1a,#ffe11a,#3bd16f,#2fb8ff,#8a5cff,#ff3bd1,#ff3b5c) border-box;
+  background-size:100% 100%,300% 100%;animation:tbBorder 4s linear infinite,tbGlow 2.4s ease-in-out infinite alternate;vertical-align:middle}
+.titbeta .tbe{font-size:1.1em;filter:drop-shadow(0 0 4px rgba(120,255,180,.8));animation:tbBob 1.8s ease-in-out infinite}
+.titbeta .tbtx{background:linear-gradient(90deg,#ff5c7a,#ffb23f,#fff04a,#5cf08a,#4fd0ff,#a07bff,#ff5ce0,#ff5c7a);background-size:300% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:tbText 3s linear infinite}
+.titbeta .tbsp{position:absolute;top:-7px;right:-3px;font-size:13px;color:#fff6a8;text-shadow:0 0 6px #fff,0 0 10px #ffd84a;animation:tbTw 1.6s ease-in-out infinite}
+.titbeta::before{content:"✦";position:absolute;bottom:-6px;left:4px;font-size:10px;color:#a8f0ff;text-shadow:0 0 6px #6fe3ff;animation:tbTw 1.6s ease-in-out .8s infinite}
+@keyframes tbBorder{to{background-position:0 0,300% 0}}
+@keyframes tbText{to{background-position:300% center}}
+@keyframes tbGlow{from{box-shadow:0 0 8px rgba(255,90,200,.45),0 0 2px rgba(255,255,255,.4) inset}to{box-shadow:0 0 16px rgba(80,200,255,.65),0 0 2px rgba(255,255,255,.4) inset}}
+@keyframes tbTw{0%,100%{opacity:.15;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1.15) rotate(25deg)}}
+@keyframes tbBob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-2px) rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.titbeta,.titbeta .tbe,.titbeta .tbtx,.titbeta .tbsp,.titbeta::before{animation:none}}
+.proftit .titbeta{margin:4px 0 6px}
+.shwtp{margin:6px 0 2px}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3198,7 +3214,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.22</small>
+    <small class="pcver">Versión 7.23</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7953,8 +7969,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.22";
+const GAME_VER="7.23";
 const NEWS=[
+{v:"2026-11-19-7.23",ver:"7.23",at:"2026-11-19T14:48",t:"🧪 Título Beta-Tester renovado",l:["El título «Beta-Tester» ahora luce con un formato exclusivo: arcoíris animado con destellos, en tu perfil y en tu vitrina. ¡Gracias por estar desde el principio!","Sorteos: la lista de apuntados ahora solo la ven los administradores; el número de apuntados lo sigue viendo todo el mundo"]},
 {v:"2026-11-19-7.22",ver:"7.22",at:"2026-11-19T14:36",t:"🎉 Sorteos: aviso y lista de apuntados",l:["Cuando haya un sorteo nuevo te saldrá un aviso con el premio y la hora de cierre, para que te apuntes con un toque","En cada sorteo puedes ver la lista de jugadores apuntados con el botón «👥 Ver apuntados»"]},
 {v:"2026-11-19-7.21",ver:"7.21",at:"2026-11-19T14:21",t:"🎉 ¡Sorteos!",l:["Nuevo apartado Más › 🎉 Sorteos: mira los sorteos abiertos, su premio y cuánto falta, y apúntate con un toque (una vez por cuenta; puedes borrarte mientras siga abierto)","Cuando se haga el sorteo, los ganadores salen al azar entre los apuntados. Si te toca, al entrar te avisamos para que reclames tu premio","También puedes ver los ganadores de los últimos sorteos"]},
 {v:"2026-11-19-7.20",ver:"7.20",at:"2026-11-19T14:05",t:"🎁 Códigos de regalo y título Beta-Tester",l:["Nuevo: canjea códigos de regalo en Más › 🎁 Canjear código. Los daremos en sorteos, eventos y redes sociales; cada código se canjea una vez por cuenta","🧪 Título exclusivo «Beta-Tester» para quienes crearon su cuenta en las dos primeras semanas del juego. ¡Gracias por estar desde el principio! Póntelo en Tu entrenador › Mi tarjeta","🚀 En Más › Próximamente: Base secreta, Retos semanales con reglas y Concursos Pokémon"]},
@@ -8371,7 +8388,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795095419";
+const GAME_B="1795096081";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8600,7 +8617,7 @@ async function openProf(uid,dIn,tgt){
   const NN=v=>Math.max(0,Math.floor(+v||0));d=Object.assign({},d,{dex:NN(d.dex),sh:NN(d.sh),win:NN(d.win),pw:NN(d.pw),prs:NN(d.prs),med:Math.min(8,NN(d.med)),bs:NN(d.bs),ach:NN(d.ach)});
   const me=window.FB&&window.FB.uid?window.FB.uid():uid,sp=NN(d[ssnField()]),on=uid===me||pvOthers().find(p=>p.peer===uid);
   const st=[["📚","Pokédex",d.dex],["✨","Variocolor",d.sh],["🎯","Combates ganados",d.win],["⚔️","Victorias PVP",d.pw],["🌟","Prestigio",d.prs],["🏅","Medallas",(d.med|0)+"/8"],["🔥","Mejor racha",d.bs|0],["🗼","Récord Torre",d.tw|0],["🏛️","Salón de la Fama",d.hof|0],["🏆","Trofeos de torneo",Array.isArray(d.tro)?d.tro.reduce((x,y)=>x+(y|0),0):0],["🏆","Logros",d.ach|0],["⏱️","Horas jugadas",d.pt|0],["🎰","Tiradas",d.pulls|0]];
-  box.innerHTML='<div'+(typeof cardAttr==="function"?cardAttr(d.cbg,d.cfr):' class="pcard"')+'><div class="profh"><div class="profav">'+trImg(trDec(d.tr),"f","i")+'</div><div><h2>'+(d.cr>=1&&d.cr<=3?["👑 ","🥈 ","🥉 "][d.cr-1]:"")+esc(pvClean(d.n))+' '+(d.g?'<span class="gtag">'+esc(String(d.g).slice(0,4))+'</span>':'')+'</h2>'+(d.tit?'<div class="proftit">'+esc(String(d.tit).slice(0,40))+'</div>':'')+'<span class="tier t'+tierIdx(sp)+'">'+TIERS[tierIdx(sp)][1]+'</span> <small class="mut">'+sp+' pts esta temporada · '+(on?"🟢 Conectado":"⚫ Desconectado")+'</small><div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,i<(d.med|0),22)).join("")+'</div></div></div></div>'+
+  box.innerHTML='<div'+(typeof cardAttr==="function"?cardAttr(d.cbg,d.cfr):' class="pcard"')+'><div class="profh"><div class="profav">'+trImg(trDec(d.tr),"f","i")+'</div><div><h2>'+(d.cr>=1&&d.cr<=3?["👑 ","🥈 ","🥉 "][d.cr-1]:"")+esc(pvClean(d.n))+' '+(d.g?'<span class="gtag">'+esc(String(d.g).slice(0,4))+'</span>':'')+'</h2>'+(d.tit?'<div class="proftit">'+(typeof titHTML==="function"?titHTML(String(d.tit).slice(0,40),d.tk):esc(String(d.tit).slice(0,40)))+'</div>':'')+'<span class="tier t'+tierIdx(sp)+'">'+TIERS[tierIdx(sp)][1]+'</span> <small class="mut">'+sp+' pts esta temporada · '+(on?"🟢 Conectado":"⚫ Desconectado")+'</small><div class="medrow">'+GYMS.map((g,i)=>gymMedal(i,i<(d.med|0),22)).join("")+'</div></div></div></div>'+
     '<div class="profst">'+st.map(x=>'<div><span>'+x[0]+'</span><b>'+(typeof x[2]==="number"?fmt(x[2]||0):x[2])+'</b><small>'+x[1]+'</small></div>').join("")+'</div>'+
     (Array.isArray(d.shw)&&d.shw.length?'<b>🖼️ Vitrina</b><div class="proftm profshw">'+d.shw.filter(x=>x&&PM[x.n]).map(x=>'<div>'+icoHD(PM[x.n],80,false,!!x.s)+'<small>'+esc(x.k||x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
     (Array.isArray(d.tm)&&d.tm.length?'<b>Equipo</b><div class="proftm">'+d.tm.filter(x=>x&&PM[x.n]).map(x=>'<div>'+ico(PM[x.n],56,false,!!x.s)+'<small>'+esc(x.n)+' Nv'+(x.l|0)+'</small></div>').join("")+'</div>':'')+
@@ -14662,7 +14679,7 @@ function shwUI(){
     ["🗼","Récord Torre Batalla",fmt((S.tw||{}).best|0)],["🏅","Medallas",medCount()+" / 8"],["🏆","Ligas ganadas",fmt(Object.values(S.lgDone||{}).reduce((a,b)=>a+(b|0),0))],["🧬","Evoluciones",fmt(st.evo||0)],["🎮","Partidas de minijuegos",fmt(st.mg||0)],
     ["🥚","Huevos eclosionados",fmt(st.hatch||0)],["🏆","Trofeos de torneo",fmt((S.trophies||[]).length)],["🎖️","Logros",fmt(Object.values(S.ach||{}).reduce((a,b)=>a+b,0))],["🎟️","Tickets ahora",fmt(S.t)]];
   box.innerHTML='<h3 class="shh">🖼️ Tu vitrina</h3><div class="shwg">'+[0,1,2].map(slot).join("")+'</div>'+
-    '<div class="fichr shwt"><span>Título</span><div class="fichin"><select id="shwT">'+TITLES.filter(t=>!isShopTit(t[0])||titleOk(t[0])).map(t=>'<option value="'+t[0]+'"'+(s.tit===t[0]?' selected':'')+(titleOk(t[0])?'':' disabled')+'>'+t[1]+(titleOk(t[0])?'':' 🔒')+'</option>').join("")+'</select><small class="mut">🛍️ Consigue más títulos en la <a href="#" data-trshop>Tienda de Evento</a>.</small></div></div>'+
+    '<div class="fichr shwt"><span>Título</span><div class="fichin"><select id="shwT">'+TITLES.filter(t=>!isShopTit(t[0])||titleOk(t[0])).map(t=>'<option value="'+t[0]+'"'+(s.tit===t[0]?' selected':'')+(titleOk(t[0])?'':' disabled')+'>'+t[1]+(titleOk(t[0])?'':' 🔒')+'</option>').join("")+'</select>'+(s.tit==="beta"&&titleOk("beta")&&typeof titHTML==="function"?'<div class="shwtp">'+titHTML("","beta")+'</div>':'')+'<small class="mut">🛍️ Consigue más títulos en la <a href="#" data-trshop>Tienda de Evento</a>.</small></div></div>'+
     '<small class="mut">Los títulos con 🔒 se desbloquean jugando: Pokédex, variocolores, medallas, Liga, Torre, torneos, incursiones, gremio, prestigio y mercadillo.</small>'+
     (NX.shwSel!=null?'<div class="nxpick"><div class="sets-row"><input id="shwQ" placeholder="Buscar Pokémon..." value="'+esc(NX.shwQ||"")+'"><button class="alt" data-shwx="1">Cancelar</button></div><div class="nxgrid">'+P.filter(p=>S.owned[p[0]]>0&&(!NX.shwQ||nrm(p[0]).includes(nrm(NX.shwQ))||nrm(nk(p[0])).includes(nrm(NX.shwQ)))).sort((a,b)=>"CREML".indexOf(b[2])-"CREML".indexOf(a[2])||lvd(b[0]).l-lvd(a[0]).l).slice(0,90).map(p=>'<button class="nxcell" data-shwn="'+esc(p[0])+'">'+ico(p,48,false,!!(S.shiny&&S.shiny[p[0]]>0))+'<b>'+esc(nk(p[0]))+'</b><small>'+STAR[p[2]]+'</small></button>').join("")+'</div></div>':'')+
     '<h3 class="shh">📊 Tus estadísticas</h3><div class="profst shwst">'+stats.map(x=>'<div><span>'+x[0]+'</span><b>'+x[2]+'</b><small>'+x[1]+'</small></div>').join("")+'</div>';
@@ -14679,7 +14696,7 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 {const _mc=mkCollect;mkCollect=async function(d){const st=stt();if(!(S.mkPaid&&S.mkPaid[d.id])){st.mksold=(st.mksold|0)+1}return _mc.apply(this,arguments)}}
 // datos públicos del perfil
 {const _rd=window.rankData;if(_rd)window.rankData=function(){const d=_rd();if(!d)return d;const s=shwGet();d.shw=(s.pk||[]).filter(n=>n&&PM[n]&&S.owned[n]>0).slice(0,3).map(n=>({n:n,l:lvd(n).l,s:S.shiny&&S.shiny[n]>0?1:0,k:S.mote&&S.mote[n]?String(S.mote[n]).slice(0,12):""}));
-  const t=TITLES.find(x=>x[0]===s.tit);d.tit=t&&titleOk(t[0])?t[1]:"";d.pt=Math.floor((S.ptime||0)/3600);try{d.cap=lvCap()}catch(e){}d.pulls=(S.np||0)+(S.sp||0);return d}}
+  const t=TITLES.find(x=>x[0]===s.tit);d.tit=t&&titleOk(t[0])?t[1]:"";d.tk=d.tit?t[0]:"";d.pt=Math.floor((S.ptime||0)/3600);try{d.cap=lvCap()}catch(e){}d.pulls=(S.np||0)+(S.sp||0);return d}}
 
 // =====================================================================================
 // MODERACIÓN Y PROTECCIÓN: reportes, panel de administrador, silenciar / expulsar,
@@ -21594,6 +21611,8 @@ setInterval(()=>{if(typeof MOD==="undefined"||!MOD.admin||$("codeAP"))return;nxP
 // ---------- título Beta-Tester ----------
 const BETA_HASTA=Date.UTC(2026,10,11,23,0,0);// 12 de noviembre a las 0:00 en España
 TITLES.push(["beta","🧪 Beta-Tester",()=>!!S.beta]);
+// el título Beta-Tester se ve con un formato especial (arcoíris animado) en el perfil y la vitrina
+function titHTML(tx,k){if(k==="beta"||(!k&&/Beta-Tester/.test(String(tx||""))))return '<span class="titbeta" title="Jugó en las dos primeras semanas del juego"><span class="tbe">🧪</span><span class="tbtx">Beta-Tester</span><span class="tbsp" aria-hidden="true">✦</span></span>';return esc(String(tx||""))}
 setInterval(()=>{try{if(typeof S==="undefined"||!S||S.beta||!window.FB||!window.FB.created)return;const c=window.FB.created();if(c&&c<BETA_HASTA){S.beta=1;save();
   toast("🧪 ¡Gracias por jugar desde el principio! Tienes el título exclusivo «Beta-Tester»: póntelo en Tu entrenador › Mi tarjeta.")}}catch(e){}},5000);
 
@@ -21602,7 +21621,7 @@ setInterval(()=>{try{if(typeof S==="undefined"||!S||S.beta||!window.FB||!window.
 // · Jugadores: en Más › 🎉 Sorteos ven los sorteos abiertos (premio, ganadores, cuánto falta y cuántos se han apuntado)
 //   y se apuntan con un toque (una vez por cuenta; pueden borrarse mientras siga abierto). Si ganan, al entrar les sale
 //   un aviso para reclamar el premio, que entrega el servidor (_server/sorteo.js).
-// · Administradores: en el mismo apartado crean sorteos (título, premio, nº de ganadores y fecha de cierre), los sortean
+// · Administradores: ven la lista de apuntados (👥 Ver apuntados) y en el mismo apartado crean sorteos (título, premio, nº de ganadores y fecha de cierre), los sortean
 //   cuando quieran (los ganadores salen al azar entre los apuntados) y los borran.
 // =====================================================================================
 const RF={list:[],cnt:{},inn:{},got:{},busy:false,t:0};
@@ -21610,8 +21629,11 @@ const RF_TXT={"sorteo-no":"Ese sorteo ya no existe.","sorteo-abierto":"Ese sorte
 const rfOn=()=>!!(window.FB&&window.FB.uid&&window.FB.uid()&&window.FB.rfList);
 const rfLeft=ms=>{if(ms<=0)return "cerrado";const d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.ceil(ms%36e5/6e4);return d?d+" d "+h+" h":h?h+" h "+m+" min":m+" min"};
 const rfPrize=r=>typeof codePrizeTxt==="function"?codePrizeTxt({t:r.t,it:r.it,mon:r.mon,sh:r.sh}):"";
-async function rfLoad(){if(!rfOn())return;try{RF.list=await window.FB.rfList()}catch(e){return}const me=window.FB.uid();
-  await Promise.all(RF.list.map(async r=>{RF.cnt[r.id]=await window.FB.rfCount(r.id);if(r.st==="open")try{RF.inn[r.id]=await window.FB.rfIn(r.id)}catch(e){}
+async function rfLoad(){if(!rfOn())return;try{RF.list=await window.FB.rfList()}catch(e){return}const me=window.FB.uid(),adm=typeof MOD!=="undefined"&&MOD.admin;
+  await Promise.all(RF.list.map(async r=>{
+    // los jugadores ven el contador del sorteo; los administradores cuentan la lista real y corrigen el contador si no cuadra
+    if(adm){const c=await window.FB.rfCount(r.id);RF.cnt[r.id]=c;if(c!=null&&r.st==="open"&&(+r.n||0)!==c)try{await window.FB.rfSave(r.id,{n:c});r.n=c}catch(e){}}
+    else RF.cnt[r.id]=typeof r.n==="number"?Math.max(0,r.n):null;if(r.st==="open")try{RF.inn[r.id]=await window.FB.rfIn(r.id)}catch(e){}
     if(r.st==="done"&&Array.isArray(r.win)&&r.win.includes(me)&&RF.got[r.id]==null)RF.got[r.id]=await window.FB.rfClaimed(r.id)}));RF.t=Date.now()}
 function rfUI(){const b=$("rafPB");if(!b)return;if(!rfOn()){b.innerHTML='<p class="mut">Inicia sesión con tu cuenta para apuntarte a los sorteos.</p>';return}
   const me=window.FB.uid(),adm=typeof MOD!=="undefined"&&MOD.admin,now=Date.now();
@@ -21622,7 +21644,7 @@ function rfUI(){const b=$("rafPB");if(!b)return;if(!rfOn()){b.innerHTML='<p clas
     else act=(r.wn&&r.wn.length?'<span class="rfwin">🏆 '+r.wn.map(n=>esc(pvClean(n))).join(" · ")+'</span>':'<span class="mut">Nadie se apuntó</span>')+(win?(RF.got[r.id]?'<span class="rfin">✅ Premio reclamado</span>':'<button class="red" data-rfc="'+esc(r.id)+'">🎁 ¡Reclamar mi premio!</button>'):'');
     const ad=adm?'<div class="rfadm">'+(r.st==="open"?'<button class="alt mini" data-rfd="'+esc(r.id)+'">🎲 Sortear ahora</button>':'')+'<button class="alt mini" data-rfx="'+esc(r.id)+'">🗑️ Borrar</button></div>':'';
     return '<div class="rfcard'+(r.st==="done"?' done':'')+(win?' won':'')+'"><div class="rfh"><b>'+esc(r.tt||"Sorteo")+'</b><small>'+(r.st==="open"?(left>0?'Cierra en '+rfLeft(left):'Cerrado'):'Sorteado')+'</small></div>'+
-      '<div class="rfp">🎁 '+esc(rfPrize(r))+'</div><small class="mut">'+(r.nw|0)+' ganador'+((r.nw|0)===1?'':'es')+(cnt!=null?' · '+cnt+' apuntado'+(cnt===1?'':'s'):'')+'</small>'+(cnt?'<button class="alt mini rfwho" data-rfw="'+esc(r.id)+'">👥 Ver apuntados</button>':'')+'<div class="rfact">'+act+'</div>'+ad+'</div>'};
+      '<div class="rfp">🎁 '+esc(rfPrize(r))+'</div><small class="mut">'+(r.nw|0)+' ganador'+((r.nw|0)===1?'':'es')+(cnt!=null?' · '+cnt+' apuntado'+(cnt===1?'':'s'):'')+'</small>'+(adm&&cnt?'<button class="alt mini rfwho" data-rfw="'+esc(r.id)+'">👥 Ver apuntados</button>':'')+'<div class="rfact">'+act+'</div>'+ad+'</div>'};
   let h='';
   if(adm)h+='<details class="rfnew"'+(RF.newOpen?' open':'')+'><summary>➕ Crear un sorteo (solo administradores)</summary><div class="codeform">'+
     '<label class="cdwide">Título<input id="rfT" maxlength="80" placeholder="Sorteo de Navidad"></label><label>Tickets<input id="rfTk" type="number" min="0" value="0"></label>'+
@@ -21679,7 +21701,7 @@ document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.c
   if(t.closest("#rfWinX")){const m=$("rfWinM");if(m)m.remove()}});
 // ---------- lista de apuntados ----------
 const RFW={E:[],q:"",id:null};
-async function rfWho(id){const r=RF.list.find(x=>x.id===id);if(!r)return;let E;
+async function rfWho(id){if(typeof MOD==="undefined"||!MOD.admin)return;const r=RF.list.find(x=>x.id===id);if(!r)return;let E;
   try{E=await window.FB.rfEntries(id)}catch(e){toast("No se han podido leer los apuntados.");return}
   E.sort((a,b)=>(a.at||0)-(b.at||0));RFW.E=E;RFW.q="";RFW.id=id;let M=$("rfWhoM");if(M)M.remove();
   M=document.createElement("div");M.id="rfWhoM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");
@@ -21808,8 +21830,12 @@ async function main(){
     codeDel:c=>S.deleteDoc(S.doc(db,"codes",c)),
     // sorteos
     async rfList(){const sn=await S.getDocs(S.query(S.collection(db,"raffles"),S.orderBy("end","desc"),S.limit(20)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
-    rfJoin:(id,n)=>S.setDoc(S.doc(db,"raffles",id,"e",uid),{n:String(n||"").slice(0,30),at:Date.now()}),
-    rfLeave:id=>S.deleteDoc(S.doc(db,"raffles",id,"e",uid)),
+    // apuntarse/borrarse: la inscripción y el contador del sorteo (n) cambian juntos; la lista solo la leen los administradores
+    rfJoin:(id,n)=>S.runTransaction(db,async tx=>{const r=S.doc(db,"raffles",id),e=S.doc(db,"raffles",id,"e",uid);const rs=await tx.get(r),es=await tx.get(e);
+      if(!rs.exists())throw Object.assign(new Error("no"),{code:"not-found"});if(es.exists())return;
+      tx.set(e,{n:String(n||"").slice(0,30),at:Date.now()});tx.update(r,{n:(+(rs.data().n)||0)+1})}),
+    rfLeave:id=>S.runTransaction(db,async tx=>{const r=S.doc(db,"raffles",id),e=S.doc(db,"raffles",id,"e",uid);const rs=await tx.get(r),es=await tx.get(e);
+      if(!rs.exists()||!es.exists())return;tx.delete(e);tx.update(r,{n:(+(rs.data().n)||0)-1})}),
     async rfIn(id){const s=await S.getDoc(S.doc(db,"raffles",id,"e",uid));return s.exists()},
     async rfCount(id){try{const c=await S.getCountFromServer(S.collection(db,"raffles",id,"e"));return c.data().count}catch(e){return null}},
     async rfClaimed(id){try{const s=await S.getDoc(S.doc(db,"raffles",id,"c",uid));return s.exists()}catch(e){return false}},
@@ -21985,7 +22011,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.22";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.23";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

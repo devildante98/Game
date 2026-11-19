@@ -94,5 +94,7 @@ setInterval(()=>{if(typeof MOD==="undefined"||!MOD.admin||$("codeAP"))return;nxP
 // ---------- título Beta-Tester ----------
 const BETA_HASTA=Date.UTC(2026,10,11,23,0,0);// 12 de noviembre a las 0:00 en España
 TITLES.push(["beta","🧪 Beta-Tester",()=>!!S.beta]);
+// el título Beta-Tester se ve con un formato especial (arcoíris animado) en el perfil y la vitrina
+function titHTML(tx,k){if(k==="beta"||(!k&&/Beta-Tester/.test(String(tx||""))))return '<span class="titbeta" title="Jugó en las dos primeras semanas del juego"><span class="tbe">🧪</span><span class="tbtx">Beta-Tester</span><span class="tbsp" aria-hidden="true">✦</span></span>';return esc(String(tx||""))}
 setInterval(()=>{try{if(typeof S==="undefined"||!S||S.beta||!window.FB||!window.FB.created)return;const c=window.FB.created();if(c&&c<BETA_HASTA){S.beta=1;save();
   toast("🧪 ¡Gracias por jugar desde el principio! Tienes el título exclusivo «Beta-Tester»: póntelo en Tu entrenador › Mi tarjeta.")}}catch(e){}},5000);

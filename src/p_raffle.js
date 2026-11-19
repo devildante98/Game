@@ -3,7 +3,7 @@
 // · Jugadores: en Más › 🎉 Sorteos ven los sorteos abiertos (premio, ganadores, cuánto falta y cuántos se han apuntado)
 //   y se apuntan con un toque (una vez por cuenta; pueden borrarse mientras siga abierto). Si ganan, al entrar les sale
 //   un aviso para reclamar el premio, que entrega el servidor (_server/sorteo.js).
-// · Administradores: en el mismo apartado crean sorteos (título, premio, nº de ganadores y fecha de cierre), los sortean
+// · Administradores: ven la lista de apuntados (👥 Ver apuntados) y en el mismo apartado crean sorteos (título, premio, nº de ganadores y fecha de cierre), los sortean
 //   cuando quieran (los ganadores salen al azar entre los apuntados) y los borran.
 // =====================================================================================
 const RF={list:[],cnt:{},inn:{},got:{},busy:false,t:0};
@@ -11,8 +11,11 @@ const RF_TXT={"sorteo-no":"Ese sorteo ya no existe.","sorteo-abierto":"Ese sorte
 const rfOn=()=>!!(window.FB&&window.FB.uid&&window.FB.uid()&&window.FB.rfList);
 const rfLeft=ms=>{if(ms<=0)return "cerrado";const d=Math.floor(ms/864e5),h=Math.floor(ms%864e5/36e5),m=Math.ceil(ms%36e5/6e4);return d?d+" d "+h+" h":h?h+" h "+m+" min":m+" min"};
 const rfPrize=r=>typeof codePrizeTxt==="function"?codePrizeTxt({t:r.t,it:r.it,mon:r.mon,sh:r.sh}):"";
-async function rfLoad(){if(!rfOn())return;try{RF.list=await window.FB.rfList()}catch(e){return}const me=window.FB.uid();
-  await Promise.all(RF.list.map(async r=>{RF.cnt[r.id]=await window.FB.rfCount(r.id);if(r.st==="open")try{RF.inn[r.id]=await window.FB.rfIn(r.id)}catch(e){}
+async function rfLoad(){if(!rfOn())return;try{RF.list=await window.FB.rfList()}catch(e){return}const me=window.FB.uid(),adm=typeof MOD!=="undefined"&&MOD.admin;
+  await Promise.all(RF.list.map(async r=>{
+    // los jugadores ven el contador del sorteo; los administradores cuentan la lista real y corrigen el contador si no cuadra
+    if(adm){const c=await window.FB.rfCount(r.id);RF.cnt[r.id]=c;if(c!=null&&r.st==="open"&&(+r.n||0)!==c)try{await window.FB.rfSave(r.id,{n:c});r.n=c}catch(e){}}
+    else RF.cnt[r.id]=typeof r.n==="number"?Math.max(0,r.n):null;if(r.st==="open")try{RF.inn[r.id]=await window.FB.rfIn(r.id)}catch(e){}
     if(r.st==="done"&&Array.isArray(r.win)&&r.win.includes(me)&&RF.got[r.id]==null)RF.got[r.id]=await window.FB.rfClaimed(r.id)}));RF.t=Date.now()}
 function rfUI(){const b=$("rafPB");if(!b)return;if(!rfOn()){b.innerHTML='<p class="mut">Inicia sesión con tu cuenta para apuntarte a los sorteos.</p>';return}
   const me=window.FB.uid(),adm=typeof MOD!=="undefined"&&MOD.admin,now=Date.now();
@@ -23,7 +26,7 @@ function rfUI(){const b=$("rafPB");if(!b)return;if(!rfOn()){b.innerHTML='<p clas
     else act=(r.wn&&r.wn.length?'<span class="rfwin">🏆 '+r.wn.map(n=>esc(pvClean(n))).join(" · ")+'</span>':'<span class="mut">Nadie se apuntó</span>')+(win?(RF.got[r.id]?'<span class="rfin">✅ Premio reclamado</span>':'<button class="red" data-rfc="'+esc(r.id)+'">🎁 ¡Reclamar mi premio!</button>'):'');
     const ad=adm?'<div class="rfadm">'+(r.st==="open"?'<button class="alt mini" data-rfd="'+esc(r.id)+'">🎲 Sortear ahora</button>':'')+'<button class="alt mini" data-rfx="'+esc(r.id)+'">🗑️ Borrar</button></div>':'';
     return '<div class="rfcard'+(r.st==="done"?' done':'')+(win?' won':'')+'"><div class="rfh"><b>'+esc(r.tt||"Sorteo")+'</b><small>'+(r.st==="open"?(left>0?'Cierra en '+rfLeft(left):'Cerrado'):'Sorteado')+'</small></div>'+
-      '<div class="rfp">🎁 '+esc(rfPrize(r))+'</div><small class="mut">'+(r.nw|0)+' ganador'+((r.nw|0)===1?'':'es')+(cnt!=null?' · '+cnt+' apuntado'+(cnt===1?'':'s'):'')+'</small>'+(cnt?'<button class="alt mini rfwho" data-rfw="'+esc(r.id)+'">👥 Ver apuntados</button>':'')+'<div class="rfact">'+act+'</div>'+ad+'</div>'};
+      '<div class="rfp">🎁 '+esc(rfPrize(r))+'</div><small class="mut">'+(r.nw|0)+' ganador'+((r.nw|0)===1?'':'es')+(cnt!=null?' · '+cnt+' apuntado'+(cnt===1?'':'s'):'')+'</small>'+(adm&&cnt?'<button class="alt mini rfwho" data-rfw="'+esc(r.id)+'">👥 Ver apuntados</button>':'')+'<div class="rfact">'+act+'</div>'+ad+'</div>'};
   let h='';
   if(adm)h+='<details class="rfnew"'+(RF.newOpen?' open':'')+'><summary>➕ Crear un sorteo (solo administradores)</summary><div class="codeform">'+
     '<label class="cdwide">Título<input id="rfT" maxlength="80" placeholder="Sorteo de Navidad"></label><label>Tickets<input id="rfTk" type="number" min="0" value="0"></label>'+
@@ -80,7 +83,7 @@ document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.c
   if(t.closest("#rfWinX")){const m=$("rfWinM");if(m)m.remove()}});
 // ---------- lista de apuntados ----------
 const RFW={E:[],q:"",id:null};
-async function rfWho(id){const r=RF.list.find(x=>x.id===id);if(!r)return;let E;
+async function rfWho(id){if(typeof MOD==="undefined"||!MOD.admin)return;const r=RF.list.find(x=>x.id===id);if(!r)return;let E;
   try{E=await window.FB.rfEntries(id)}catch(e){toast("No se han podido leer los apuntados.");return}
   E.sort((a,b)=>(a.at||0)-(b.at||0));RFW.E=E;RFW.q="";RFW.id=id;let M=$("rfWhoM");if(M)M.remove();
   M=document.createElement("div");M.id="rfWhoM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");

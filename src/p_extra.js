@@ -177,7 +177,7 @@ const passNeed=L=>150+50*(L-1),passCum=L=>150*L+25*L*(L-1);
 const PASS_PULLCAP=200;// XP máxima al día por tiradas
 const passMonth=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
 // Pokémon de la temporada (los mismos para todos): legendario final, otro legendario, épico y dos épicos variocolor
-function passMon(m){let h=0;for(const ch of "pass"+m)h=(h*31+ch.charCodeAt(0))|0;const L=P.filter(p=>p[2]==="L"),E=P.filter(p=>p[2]==="E");
+function passMon(m){let h=0;for(const ch of "pass"+m)h=(h*31+ch.charCodeAt(0))|0;const P0=P.filter(p=>!(typeof MEGA_ZA!=="undefined"&&MEGA_ZA.has(p[0]))),L=P0.filter(p=>p[2]==="L"),E=P0.filter(p=>p[2]==="E");
   const pick=(A,k,not)=>{let i=k%A.length;for(let j=0;j<A.length&&not.includes(A[i]);j++)i=(i+1)%A.length;return A[i]};
   const leg=L[Math.abs(h)%L.length],shy=E[Math.abs(h>>4)%E.length],ep=pick(E,Math.abs(h>>8)+7,[shy]),shy2=pick(E,Math.abs(h>>12)+13,[shy,ep]),leg2=pick(L,Math.abs(h>>6)+5,[leg]);return{leg,shy,ep,shy2,leg2}}
 // Premios: cada nivel bastante mejor que el anterior. Los tickets crecen con el nivel y con lo que produce tu pueblo

@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.20";
+const GAME_VER="7.21";
 const NEWS=[
+{v:"2026-11-19-7.21",ver:"7.21",at:"2026-11-19T14:21",t:"🎉 ¡Sorteos!",l:["Nuevo apartado Más › 🎉 Sorteos: mira los sorteos abiertos, su premio y cuánto falta, y apúntate con un toque (una vez por cuenta; puedes borrarte mientras siga abierto)","Cuando se haga el sorteo, los ganadores salen al azar entre los apuntados. Si te toca, al entrar te avisamos para que reclames tu premio","También puedes ver los ganadores de los últimos sorteos"]},
 {v:"2026-11-19-7.20",ver:"7.20",at:"2026-11-19T14:05",t:"🎁 Códigos de regalo y título Beta-Tester",l:["Nuevo: canjea códigos de regalo en Más › 🎁 Canjear código. Los daremos en sorteos, eventos y redes sociales; cada código se canjea una vez por cuenta","🧪 Título exclusivo «Beta-Tester» para quienes crearon su cuenta en las dos primeras semanas del juego. ¡Gracias por estar desde el principio! Póntelo en Tu entrenador › Mi tarjeta","🚀 En Más › Próximamente: Base secreta, Retos semanales con reglas y Concursos Pokémon"]},
 {v:"2026-11-19-7.19.2",ver:"7.19.2",at:"2026-11-19T13:44",t:"🏆 Torneo de esta semana: Mega-Pidgeot para el 2.º puesto",l:["El subcampeón del torneo semanal de esta semana gana Mega-Pidgeot (con un 50 % de probabilidad de que sea variocolor). El campeón sigue ganando ✨ Lugia y el tercero ✨ Ninetales de Alola"]},
 {v:"2026-11-19-7.19.1",ver:"7.19.1",at:"2026-11-19T13:35",t:"🛠️ Arreglos de las nuevas Megaevoluciones",l:["Los premios del torneo semanal y los Pokémon del Pase de temporada vuelven a ser los que estaban anunciados (al añadir las Megas habían cambiado)","Las Megas de Z-A tienen ahora la misma rareza que el resto de Megas (forma especial ★★★★; legendarias las de Zygarde, Heatran, Darkrai, Magearna y Zeraora)"]},
@@ -818,6 +819,16 @@ FB_API = '''
     async codeList(){const sn=await S.getDocs(S.collection(db,"codes"));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     codeSet:(c,d)=>S.setDoc(S.doc(db,"codes",c),d,{merge:true}),
     codeDel:c=>S.deleteDoc(S.doc(db,"codes",c)),
+    // sorteos
+    async rfList(){const sn=await S.getDocs(S.query(S.collection(db,"raffles"),S.orderBy("end","desc"),S.limit(20)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    rfJoin:(id,n)=>S.setDoc(S.doc(db,"raffles",id,"e",uid),{n:String(n||"").slice(0,30),at:Date.now()}),
+    rfLeave:id=>S.deleteDoc(S.doc(db,"raffles",id,"e",uid)),
+    async rfIn(id){const s=await S.getDoc(S.doc(db,"raffles",id,"e",uid));return s.exists()},
+    async rfCount(id){try{const c=await S.getCountFromServer(S.collection(db,"raffles",id,"e"));return c.data().count}catch(e){return null}},
+    async rfClaimed(id){try{const s=await S.getDoc(S.doc(db,"raffles",id,"c",uid));return s.exists()}catch(e){return false}},
+    async rfEntries(id){const sn=await S.getDocs(S.collection(db,"raffles",id,"e"));return sn.docs.map(d=>Object.assign({u:d.id},d.data()))},
+    rfSave:(id,d)=>id?S.setDoc(S.doc(db,"raffles",id),d,{merge:true}):S.addDoc(S.collection(db,"raffles"),d),
+    rfDel:id=>S.deleteDoc(S.doc(db,"raffles",id)),
     // hora del servidor para los campos que la necesitan, e inicio de cada partida de minijuego (las reglas comprueban
     // con ella que una puntuación de un juego sin final sea posible en el tiempo jugado)
     srvTs:()=>S.serverTimestamp(),

@@ -1404,3 +1404,14 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 .cdrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;margin-bottom:6px;background:var(--bg)}
 .cdrow b{font-family:monospace;font-size:1rem;letter-spacing:1px}.cdrow span{flex:1;min-width:180px}.cdrow small{color:var(--mute)}
 .cdrow.off{opacity:.55}
+
+/* Sorteos */
+.rfl{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:12px}
+.rfcard{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:16px;border:2px solid var(--line);background:linear-gradient(160deg,rgba(255,210,63,.12),transparent 60%),var(--bg)}
+.rfcard.done{background:var(--bg);opacity:.92}.rfcard.won{border-color:#ffd23f;box-shadow:0 0 0 3px rgba(255,210,63,.3)}
+.rfh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.rfh b{font-size:1.05rem}.rfh small{color:var(--mute);white-space:nowrap}
+.rfp{font-weight:800}.rfact{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.rfin{color:#13a37f;font-weight:800}.rfwin{font-weight:800}
+.rfadm{display:flex;gap:6px;border-top:1px dashed var(--line);padding-top:6px}
+.rfnew{margin:6px 0 12px;padding:10px;border:1px dashed var(--line);border-radius:14px}.rfnew summary{cursor:pointer;font-weight:800}
+#rfWinM{position:fixed;inset:0;z-index:186;background:rgba(10,12,30,.72);display:grid;place-items:center;padding:16px}
+#rfWinM .rfbig{font-size:3.4rem;line-height:1}#rfWinM .nxmw{animation:jpop .45s cubic-bezier(.2,1.4,.4,1)}

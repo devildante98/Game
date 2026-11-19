@@ -317,6 +317,21 @@ match /trades/{id} {
   allow delete: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
 }
 // Intercambio Milagroso: cada uno deja un Pokémon; el siguiente que mande uno se lo lleva y le deja el suyo
+// sorteos: todos los ven; solo los administradores los crean y sortean. Cada jugador se apunta una vez (mientras está
+// abierto y antes de la hora de cierre) y puede borrarse. El premio lo entrega el servidor (c/{uid} lo escribe él).
+function rf(r) { return get(/databases/$(database)/documents/raffles/$(r)).data; }
+match /raffles/{r} {
+  allow read: if request.auth != null;
+  allow write: if isAdmin();
+  match /e/{u} {
+    allow read: if request.auth != null;
+    allow create: if request.auth != null && request.auth.uid == u && !banned()
+      && request.resource.data.keys().hasOnly(['n', 'at']) && optStr('n', 30) && request.resource.data.at is number
+      && rf(r).st == 'open' && request.time.toMillis() < rf(r).end;
+    allow delete: if request.auth != null && ((request.auth.uid == u && rf(r).st == 'open') || isAdmin());
+  }
+  match /c/{u} { allow read: if request.auth != null && (request.auth.uid == u || isAdmin()); }
+}
 // códigos de regalo: solo los administradores los ven y los crean; el canje lo hace el servidor
 match /codes/{c} {
   allow read, write: if isAdmin();

@@ -472,7 +472,7 @@ function roadUI(){const b=$("roadPB");if(!b)return;b.innerHTML=(ROADMAP.length?'
 
 // ================= megaevoluciones: solo en combate, nunca directamente en el equipo =================
 const isMegaF=n=>/^Mega-| Gigamax$/.test(String(n||""))&&!(typeof isSup==="function"&&isSup(n));
-const megaBase=n=>String(n).replace(/^Mega-/,"").replace(/ [XY]$/,"").replace(/ Gigamax$/,"");
+const megaBase=n=>String(n).replace(/^Mega-/,"").replace(/ [XYZ]$/,"").replace(/ Gigamax$/,"");
 const megaVerb=n=>/ Gigamax$/.test(String(n))?"gigamaxízalo":"megaevoluciónalo";
 // compensación: quien tenía una mega o Gigamax y no tenía su forma base, la recibe (al nivel de la forma, si es mayor)
 function megaComp(n){const b=megaBase(n);if(!PM[b]||isMegaF(b)||(typeof isSup==="function"&&isSup(b)))return "";const L=Math.max(1,Math.min(100,(S.lv[n]&&S.lv[n].l)||1));let got="";

@@ -6,7 +6,7 @@
 // ================= MEGAEVOLUCIÓN, GIGAMAX Y DINAMAX =================
 const FORMS={};// base -> [[nombre de la forma, "mega"|"gmax"]]
 P.forEach(p=>{if(p[2]!=="M"&&!/^Mega-| Gigamax$/.test(p[0]))return;let b=null,k="";const n=p[0];
-  if(/^Mega-/.test(n)){b=n.replace(/^Mega-/,"").replace(/ [XY]$/,"");k="mega"}else if(/ Gigamax$/.test(n)){b=n.replace(/ Gigamax$/,"");k="gmax"}
+  if(/^Mega-/.test(n)){b=n.replace(/^Mega-/,"").replace(/ [XYZ]$/,"");k="mega"}else if(/ Gigamax$/.test(n)){b=n.replace(/ Gigamax$/,"");k="gmax"}
   if(b&&PM[b])(FORMS[b]=FORMS[b]||[]).push([n,k])});
 const formsOwned=(base,k,m)=>(FORMS[base]||[]).filter(f=>f[1]===k&&f[0]!=="Mega-Rayquaza"&&S.owned[f[0]]>0);
 function formBtns(){

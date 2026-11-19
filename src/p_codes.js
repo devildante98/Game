@@ -32,6 +32,29 @@ function codeUI(){const b=$("codePB");if(!b)return;if($("codeIn"))return;
   $("codeIn").addEventListener("input",e=>{const t=e.target,p=t.selectionStart;t.value=codeClean(t.value);try{t.setSelectionRange(p,p)}catch(x){}})}
 nxPanel("codeP","🎁 Canjear código","Escribe un código de regalo para recibir su premio.");
 {const gk=(typeof HUBP!=="undefined"&&HUBP.earnP)||"mas",g=HUB.find(x=>x.k===gk)||HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="codeP"))g.tabs.push(["codeP","🎁 Canjear código"]);HUBP.codeP=g?g.k:"mas";HUBR.codeP=()=>codeUI()}
+// ---------- elegir un Pokémon en una ventana con imágenes y buscador (formularios de administración) ----------
+// el campo guarda el nombre en un <input hidden> y enseña la imagen del elegido
+function pkPickField(id){return '<span class="pkpf" data-pkpf="'+id+'"><input type="hidden" id="'+id+'"><button type="button" class="alt pkpfb" data-pkpick="'+id+'"><span class="pkpfi">❔</span><span class="pkpfn">Elegir Pokémon…</span></button><button type="button" class="alt mini pkpfx" data-pkclr="'+id+'" hidden title="Quitar">✕</button></span>'}
+function pkPickSet(id,n){const i=$(id);if(!i)return;i.value=n||"";const w=document.querySelector('[data-pkpf="'+id+'"]');if(!w)return;
+  w.querySelector(".pkpfi").innerHTML=n&&PM[n]?ico(PM[n],34):"❔";w.querySelector(".pkpfn").textContent=n||"Elegir Pokémon…";w.querySelector(".pkpfx").hidden=!n}
+const PKP={id:null,q:"",r:""};
+function pkPickOpen(id){PKP.id=id;let M=$("pkPickM");if(M)M.remove();M=document.createElement("div");M.id="pkPickM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Elegir Pokémon");
+  M.innerHTML='<div class="nxmw pkpw"><div class="pkph"><h3>Elige un Pokémon</h3><button type="button" class="alt pkpxb" data-pkpx="1" aria-label="Cerrar">✕</button></div>'+
+    '<div class="tfil"><input id="pkpQ" placeholder="🔍 Buscar Pokémon…" autocomplete="off" value="'+esc(PKP.q)+'"><select id="pkpR"><option value="">Todas</option>'+["C","R","E","M","L"].map(r=>'<option value="'+r+'"'+(PKP.r===r?' selected':'')+'>'+(STAR[r]||r)+'</option>').join("")+'</select></div>'+
+    '<div class="pkpg" id="pkpG"></div><small class="mut" id="pkpN"></small></div>';
+  document.body.appendChild(M);pkPickDraw();setTimeout(()=>{try{$("pkpQ").focus()}catch(e){}},50)}
+function pkPickDraw(){const g=$("pkpG");if(!g)return;const q=nrm(PKP.q||""),L=P.filter(p=>(!q||nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))&&(!PKP.r||p[2]===PKP.r)),S2=L.slice(0,240);
+  g.innerHTML=S2.length?S2.map(p=>'<button type="button" class="pkpc r'+p[2]+'" data-pkpn="'+esc(p[0])+'" title="'+esc(p[0])+'">'+'<span class="pkpci">'+ico(p,56)+'</span><small>'+esc(p[0])+'</small></button>').join(""):'<small class="mut">Ningún Pokémon coincide.</small>';
+  $("pkpN").textContent=L.length>S2.length?"Se ven "+S2.length+" de "+L.length+". Escribe para buscar.":L.length+" Pokémon"}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
+  const o=t.closest("[data-pkpick]");if(o){pkPickOpen(o.dataset.pkpick);return}
+  const c=t.closest("[data-pkclr]");if(c){pkPickSet(c.dataset.pkclr,"");return}
+  const M=$("pkPickM");if(!M||!M.contains(t))return;
+  const n=t.closest("[data-pkpn]");if(n){pkPickSet(PKP.id,n.dataset.pkpn);M.remove();snd("ui");return}
+  if(t===M||t.closest("[data-pkpx]"))M.remove()});
+document.addEventListener("input",e=>{if(e.target&&e.target.id==="pkpQ"){PKP.q=e.target.value;pkPickDraw()}});
+document.addEventListener("change",e=>{if(e.target&&e.target.id==="pkpR"){PKP.r=e.target.value;pkPickDraw()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("pkPickM")){e.stopPropagation();$("pkPickM").remove()}},true);
 // ---------- crear y gestionar (administradores) ----------
 const CODE_ITEMS=[["mb","Master Ball"],["crys","Cristal Supremo"],["cand","Caramelo Raro"],["ppmax","PP máximos"],["tshard","Teralito"],["ub","Ultra Ball"],["sb","Super Ball"],["pb","Poké Ball"]];
 let CODES=[];
@@ -41,7 +64,7 @@ async function codeAdmUI(reload){const b=$("codeAPB");if(!b||!(typeof MOD!=="und
       '<label>Código<input id="cdC" maxlength="24" placeholder="NAVIDAD2026"></label>'+
       '<label>Tickets<input id="cdT" type="number" min="0" value="0"></label>'+
       CODE_ITEMS.map(x=>'<label>'+x[1]+'<input data-cdi="'+x[0]+'" type="number" min="0" value="0"></label>').join("")+
-      '<label>Pokémon (opcional)<input id="cdM" list="cdML" placeholder="Nombre exacto"></label><datalist id="cdML">'+P.map(p=>'<option value="'+esc(p[0])+'">').join("")+'</datalist>'+
+      '<label>Pokémon (opcional)'+pkPickField("cdM")+'</label>'+
       '<label class="cdchk"><input id="cdS" type="checkbox"> Variocolor</label>'+
       '<label>Usos máximos (0 = sin límite)<input id="cdN" type="number" min="0" value="0"></label>'+
       '<label>Válido hasta (opcional)<input id="cdU" type="date"></label>'+

@@ -1413,5 +1413,32 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 .rfp{font-weight:800}.rfact{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.rfin{color:#13a37f;font-weight:800}.rfwin{font-weight:800}
 .rfadm{display:flex;gap:6px;border-top:1px dashed var(--line);padding-top:6px}
 .rfnew{margin:6px 0 12px;padding:10px;border:1px dashed var(--line);border-radius:14px}.rfnew summary{cursor:pointer;font-weight:800}
-#rfWinM{position:fixed;inset:0;z-index:186;background:rgba(10,12,30,.72);display:grid;place-items:center;padding:16px}
-#rfWinM .rfbig{font-size:3.4rem;line-height:1}#rfWinM .nxmw{animation:jpop .45s cubic-bezier(.2,1.4,.4,1)}
+#rfWinM,#rfAnnM{position:fixed;inset:0;z-index:186;background:rgba(10,12,30,.72);display:grid;place-items:center;padding:16px}
+#rfWinM .rfbig,#rfAnnM .rfbig{font-size:3.4rem;line-height:1}#rfWinM .nxmw,#rfAnnM .nxmw{animation:jpop .45s cubic-bezier(.2,1.4,.4,1)}
+
+/* Elegir Pokémon con imágenes (formularios de administración) */
+.pkpf{display:flex;align-items:center;gap:6px}
+.pkpfb{display:flex;align-items:center;gap:6px;flex:1;min-width:0;justify-content:flex-start;text-align:left;padding:4px 10px;margin:0}
+.pkpfi{width:34px;height:34px;display:grid;place-items:center;flex:none}.pkpfi img{max-width:34px;max-height:34px}
+.pkpfn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#pkPickM{position:fixed;inset:0;z-index:150;background:rgba(10,12,30,.72);display:grid;place-items:center;padding:16px}
+#pkPickM .pkpw{width:min(760px,100%);max-height:calc(100vh - 32px);align-items:stretch;text-align:left}
+#pkPickM .pkph{display:flex;justify-content:space-between;align-items:center}#pkPickM .pkph h3{margin:0}
+#pkPickM .pkpg{max-height:60vh;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;padding:8px;border-radius:12px;background:rgba(120,110,200,.08)}
+#pkPickM .pkpxb{width:38px;height:38px;min-width:0;padding:0;margin:0;flex:none;border-radius:50%;display:grid;place-items:center;font-size:16px}
+#pkPickM .pkpc{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:4px;margin:0;padding:8px 4px 6px;min-width:0;height:auto;border-radius:12px;background:#fff;color:#2b2550;border:2px solid #d8d3f0;box-shadow:none;cursor:pointer}
+#pkPickM .pkpc:hover{transform:translateY(-2px);border-color:#7b6cf6}
+#pkPickM .pkpci{width:60px;height:60px;display:grid;place-items:center;overflow:hidden;flex:none}
+#pkPickM .pkpc small{display:block;width:100%;font-size:11px;line-height:1.2;white-space:normal;overflow-wrap:anywhere;text-align:center}
+#pkPickM .pkpc.rR{border-color:#5aa9f0}#pkPickM .pkpc.rE{border-color:#b06cf0}#pkPickM .pkpc.rM{border-color:#f0a43a}#pkPickM .pkpc.rL{border-color:#e64a6a}
+/* sorteos: lista de apuntados */
+#rfWhoM{position:fixed;inset:0;z-index:150;background:rgba(10,12,30,.72);display:grid;place-items:center;padding:16px}
+#rfWhoM .rfww{width:min(460px,100%);max-height:calc(100vh - 32px);align-items:stretch;text-align:left;gap:8px}
+#rfWhoM .pkph{display:flex;justify-content:space-between;align-items:center}#rfWhoM .pkph h3{margin:0}
+#rfWhoM .pkpxb{width:38px;height:38px;min-width:0;padding:0;margin:0;flex:none;border-radius:50%;display:grid;place-items:center;font-size:16px}
+#rfWhoM .rfwl{list-style:none;margin:0;padding:0;max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+#rfWhoM .rfwl li{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;background:rgba(120,110,200,.08)}
+#rfWhoM .rfwl li .mut{margin-left:auto;font-size:11px;white-space:nowrap}
+#rfWhoM .rfwl li.me{background:rgba(90,169,240,.18)}#rfWhoM .rfwl li.win{background:rgba(240,164,58,.22)}
+#rfWhoM .rfwn{min-width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;background:rgba(120,110,200,.2);flex:none}
+.rfcard .rfwho{align-self:flex-start;margin:4px 0 0}

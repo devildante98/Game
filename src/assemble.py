@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.21";
+const GAME_VER="7.22";
 const NEWS=[
+{v:"2026-11-19-7.22",ver:"7.22",at:"2026-11-19T14:36",t:"🎉 Sorteos: aviso y lista de apuntados",l:["Cuando haya un sorteo nuevo te saldrá un aviso con el premio y la hora de cierre, para que te apuntes con un toque","En cada sorteo puedes ver la lista de jugadores apuntados con el botón «👥 Ver apuntados»"]},
 {v:"2026-11-19-7.21",ver:"7.21",at:"2026-11-19T14:21",t:"🎉 ¡Sorteos!",l:["Nuevo apartado Más › 🎉 Sorteos: mira los sorteos abiertos, su premio y cuánto falta, y apúntate con un toque (una vez por cuenta; puedes borrarte mientras siga abierto)","Cuando se haga el sorteo, los ganadores salen al azar entre los apuntados. Si te toca, al entrar te avisamos para que reclames tu premio","También puedes ver los ganadores de los últimos sorteos"]},
 {v:"2026-11-19-7.20",ver:"7.20",at:"2026-11-19T14:05",t:"🎁 Códigos de regalo y título Beta-Tester",l:["Nuevo: canjea códigos de regalo en Más › 🎁 Canjear código. Los daremos en sorteos, eventos y redes sociales; cada código se canjea una vez por cuenta","🧪 Título exclusivo «Beta-Tester» para quienes crearon su cuenta en las dos primeras semanas del juego. ¡Gracias por estar desde el principio! Póntelo en Tu entrenador › Mi tarjeta","🚀 En Más › Próximamente: Base secreta, Retos semanales con reglas y Concursos Pokémon"]},
 {v:"2026-11-19-7.19.2",ver:"7.19.2",at:"2026-11-19T13:44",t:"🏆 Torneo de esta semana: Mega-Pidgeot para el 2.º puesto",l:["El subcampeón del torneo semanal de esta semana gana Mega-Pidgeot (con un 50 % de probabilidad de que sea variocolor). El campeón sigue ganando ✨ Lugia y el tercero ✨ Ninetales de Alola"]},

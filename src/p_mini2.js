@@ -303,10 +303,14 @@ const TOUR_MGR_FROM="2026-W44",tourKey=w=>String(w)>=TOUR_MGR_FROM?w+"_"+tourGam
 const tourBest=w=>Math.max(S.tour&&S.tour.w===w?S.tour.b|0:0,S.mgw&&S.mgw.w===w?(S.mgw.b[tourGameOf(w).id]|0):0);
 const tourEndsIn=()=>{const d=new Date(),k=(8-(d.getDay()||7))%7||7,e=new Date(d.getFullYear(),d.getMonth(),d.getDate()+k);return e-d};
 // premios del torneo: cada semana tiene su propio legendario, su forma especial y su variocolor de premio
+// premios fijados a mano (semana → {leg|mega|shy|top: nombre}); el servidor usa la misma tabla (datos.json → semanal)
+const TOUR_FIX={"2026-W47":{mega:"Mega-Pidgeot"}};
 function tourMons(w){let h=0;for(const ch of String(w))h=(h*31+ch.charCodeAt(0))|0;const r=rngSeed(h),pk=a=>a[Math.floor(r()*a.length)];
   // (los Pokémon añadidos después, como las Megas de Z-A, no entran: así los premios ya anunciados no cambian)
   const P0=P.filter(p=>!(typeof MEGA_ZA!=="undefined"&&MEGA_ZA.has(p[0])));
-  const leg=pk(P0.filter(p=>p[2]==="L")),mega=pk(P0.filter(p=>p[2]==="M")),shy=pk(P0.filter(p=>p[2]==="E"));return{leg,mega,shy,top:pk(P0.filter(p=>p[2]==="E"&&p!==shy))}}
+  const o={leg:pk(P0.filter(p=>p[2]==="L")),mega:pk(P0.filter(p=>p[2]==="M")),shy:null};o.shy=pk(P0.filter(p=>p[2]==="E"));o.top=pk(P0.filter(p=>p[2]==="E"&&p!==o.shy));
+  // premios fijados a mano para alguna semana
+  const fx=TOUR_FIX[w];if(fx)for(const k in fx)if(PM[fx[k]])o[k]=PM[fx[k]];return o}
 // los tickets de premio crecen con tu pueblo: te llevas lo que sea mayor entre una cantidad fija y unas horas de tu producción
 const prodH=h=>{let p=0;try{p=tps()}catch(e){}return Math.round(p*3600*(h||0))};
 const tkOf=T=>Math.max(T.t,prodH(T.h));

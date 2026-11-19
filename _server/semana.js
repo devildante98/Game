@@ -37,8 +37,15 @@ function pokemonSemana(w) {
   let h = 0;
   for (const ch of String(w)) h = (h * 31 + ch.charCodeAt(0)) | 0;
   const r = rngS(h), pk = (a) => a[Math.floor(r() * a.length)];
-  const leg = pk(P.filter((p) => p[2] === "L")), mega = pk(P.filter((p) => p[2] === "M")), shy = pk(P.filter((p) => p[2] === "E"));
-  return {leg, mega, shy, top: pk(P.filter((p) => p[2] === "E" && p !== shy))};
+  // los Pokémon añadidos después (Megas de Z-A) no entran, para que los premios anunciados no cambien
+  const fuera = new Set(W.tourFuera || []), P0 = P.filter((p) => !fuera.has(p[0]));
+  const o = {leg: pk(P0.filter((p) => p[2] === "L")), mega: pk(P0.filter((p) => p[2] === "M"))};
+  o.shy = pk(P0.filter((p) => p[2] === "E"));
+  o.top = pk(P0.filter((p) => p[2] === "E" && p !== o.shy));
+  // premios fijados a mano para alguna semana
+  const fx = (W.tourFix || {})[w];
+  if (fx) for (const k in fx) { const q = P.find((p) => p[0] === fx[k]); if (q) o[k] = q; }
+  return o;
 }
 
 // tickets: lo mayor entre una cantidad fija y unas horas de producción (el juego multiplica después por el prestigio)

@@ -28,7 +28,7 @@ const URL = process.argv[2] || "http://localhost:8765/index.html";
     semanal: {
       tourTiers: TOUR_TIERS.map((T) => ({k: T.k, t: T.t, h: T.h, it: T.it, hold: T.hold | 0, mon: T.mon || null, sh: T.sh || 0})),
       mgrTier: MGR_TIER.map((T) => ({p: T.p, t: T.t, h: T.h, x: T.x, it: T.it})),
-      mgrEx: MGR_EX, tourRot: TOUR_ROT, tourMgrFrom: TOUR_MGR_FROM, mgs: MGS.map((g) => g.id),
+      mgrEx: MGR_EX, tourRot: TOUR_ROT, tourFix: TOUR_FIX, tourFuera: [...MEGA_ZA], tourMgrFrom: TOUR_MGR_FROM, mgs: MGS.map((g) => g.id),
       hold: HOLD.map((h) => h[0]), evo: ITEMS.filter((q) => q[7] === "evo").map((q) => q[0]),
     },
     // regalo diario y racha (_server/diario.js): premios de cada día del ciclo de 30 y objetos que pueden tocar

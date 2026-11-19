@@ -317,6 +317,11 @@ match /trades/{id} {
   allow delete: if request.auth != null && (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
 }
 // Intercambio Milagroso: cada uno deja un Pokémon; el siguiente que mande uno se lo lleva y le deja el suyo
+// códigos de regalo: solo los administradores los ven y los crean; el canje lo hace el servidor
+match /codes/{c} {
+  allow read, write: if isAdmin();
+  match /r/{u} { allow read: if isAdmin(); }
+}
 match /wonder/{id} {
   allow read: if request.auth != null && (resource.data.st == 'wait' || resource.data.u == request.auth.uid || resource.data.get('by', '') == request.auth.uid);
   allow create: if request.auth != null && request.resource.data.u == request.auth.uid

@@ -19,6 +19,7 @@ const tienda = require("./tienda");
 const semana = require("./semana");
 const diario = require("./diario");
 const minijuego = require("./minijuego");
+const codigo = require("./codigo");
 
 const MAX = 1000000;
 const VMIN = [7, 2];
@@ -65,7 +66,7 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
   const q = p && typeof p.q === "number" && isFinite(p.q) ? p.q : 0;
   if (typeof data !== "string" || data.length > MAX) return {ok: false, why: "formato"};
   if (!leer(data)) return {ok: false, why: "formato"};
-  if (ac && !["tirar", "mejorar", "semana", "diario", "minijuego"].includes(ac.k)) return {ok: false, why: "accion"};
+  if (ac && !["tirar", "mejorar", "semana", "diario", "minijuego", "codigo"].includes(ac.k)) return {ok: false, why: "accion"};
 
   let flags = [];
   const out = await db.runTransaction(async (tx) => {
@@ -113,6 +114,12 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
       const d = diario.cobrarDiario(next, cur && cur.dia, prev, ahora, cuentaSeg, rnd || rndCripto);
       Object.assign(extra, {diario: d.out});
       extra.dia = d.dia;
+      dataOut = firmar(next, uid);
+    } else if (ac && ac.k === "codigo") {
+      // código de regalo: comprobado aquí (existe, quedan usos, no lo has usado ya) y su premio va en este guardado
+      const k = await codigo.canjear(tx, db, uid, next, ac, ahora);
+      if (k.error) return {ok: false, why: k.error};
+      Object.assign(extra, {codigo: k.out});
       dataOut = firmar(next, uid);
     } else if (ac && ac.k === "minijuego") {
       // premio de una partida de minijuego: puntuación comprobada y 3 partidas con premio al día, contadas aquí

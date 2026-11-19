@@ -1391,3 +1391,16 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 #wnResM{position:fixed;inset:0;z-index:2147482500;background:rgba(14,16,40,.62);display:grid;place-items:center;padding:16px}
 #wnResM .nxmw{animation:jpop .4s cubic-bezier(.2,1.4,.4,1)}
 #wnResM #wnResOk{min-width:160px;margin-top:6px}
+
+/* Códigos de regalo */
+.codebox{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;max-width:520px;margin:6px auto}
+.codei{font-size:3rem;line-height:1}
+.coderow{display:flex;gap:8px;width:100%}
+.coderow input{flex:1;min-width:0;font:inherit;font-size:1.15rem;letter-spacing:2px;text-transform:uppercase;text-align:center;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.codeform{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-bottom:8px}
+.codeform label{display:flex;flex-direction:column;gap:3px;font-size:.82rem;font-weight:700}
+.codeform input{font:inherit;padding:7px 9px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.codeform .cdchk{flex-direction:row;align-items:center;gap:6px}.codeform .cdwide{grid-column:1/-1}
+.cdrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;margin-bottom:6px;background:var(--bg)}
+.cdrow b{font-family:monospace;font-size:1rem;letter-spacing:1px}.cdrow span{flex:1;min-width:180px}.cdrow small{color:var(--mute)}
+.cdrow.off{opacity:.55}

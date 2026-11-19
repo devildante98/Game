@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.19.2";
+const GAME_VER="7.20";
 const NEWS=[
+{v:"2026-11-19-7.20",ver:"7.20",at:"2026-11-19T14:05",t:"🎁 Códigos de regalo y título Beta-Tester",l:["Nuevo: canjea códigos de regalo en Más › 🎁 Canjear código. Los daremos en sorteos, eventos y redes sociales; cada código se canjea una vez por cuenta","🧪 Título exclusivo «Beta-Tester» para quienes crearon su cuenta en las dos primeras semanas del juego. ¡Gracias por estar desde el principio! Póntelo en Tu entrenador › Mi tarjeta","🚀 En Más › Próximamente: Base secreta, Retos semanales con reglas y Concursos Pokémon"]},
 {v:"2026-11-19-7.19.2",ver:"7.19.2",at:"2026-11-19T13:44",t:"🏆 Torneo de esta semana: Mega-Pidgeot para el 2.º puesto",l:["El subcampeón del torneo semanal de esta semana gana Mega-Pidgeot (con un 50 % de probabilidad de que sea variocolor). El campeón sigue ganando ✨ Lugia y el tercero ✨ Ninetales de Alola"]},
 {v:"2026-11-19-7.19.1",ver:"7.19.1",at:"2026-11-19T13:35",t:"🛠️ Arreglos de las nuevas Megaevoluciones",l:["Los premios del torneo semanal y los Pokémon del Pase de temporada vuelven a ser los que estaban anunciados (al añadir las Megas habían cambiado)","Las Megas de Z-A tienen ahora la misma rareza que el resto de Megas (forma especial ★★★★; legendarias las de Zygarde, Heatran, Darkrai, Magearna y Zeraora)"]},
 {v:"2026-11-19-7.19",ver:"7.19",at:"2026-11-19T13:23",t:"🧬 45 Megaevoluciones nuevas de Leyendas Pokémon Z-A",l:["Ya puedes conseguirlas en el gacha y usarlas en combate como el resto de Megas (lleva al Pokémon base en tu equipo y megaevoluciona)","Z-A: Mega-Clefable, Mega-Victreebel, Mega-Starmie, Mega-Dragonite, Mega-Meganium, Mega-Feraligatr, Mega-Skarmory, Mega-Froslass, Mega-Emboar, Mega-Excadrill, Mega-Scolipede, Mega-Scrafty, Mega-Eelektross, Mega-Chandelure, Mega-Chesnaught, Mega-Delphox, Mega-Greninja, Mega-Pyroar, Mega-Floette, Mega-Malamar, Mega-Barbaracle, Mega-Dragalge, Mega-Hawlucha, Mega-Zygarde, Mega-Drampa y Mega-Falinks","Megadimensión: Mega-Raichu X y Mega-Raichu Y, Mega-Chimecho, Mega-Absol Z, Mega-Staraptor, Mega-Garchomp Z, Mega-Lucario Z, Mega-Heatran, Mega-Darkrai, Mega-Golurk, Mega-Meowstic, Mega-Crabominable, Mega-Golisopod, Mega-Magearna, Mega-Zeraora, Mega-Scovillain, Mega-Glimmora, Mega-Tatsugiri y Mega-Baxcalibur","Con sus tipos y estadísticas oficiales. Son formas especiales (★★★★), y las de Zygarde, Heatran, Darkrai, Magearna y Zeraora, legendarias"]},
@@ -811,6 +812,12 @@ FB_API = '''
   // ---- amigos y gremios (Firestore: friends, freq, guilds) ----
   const FB={
     uid:()=>uid,
+    // fecha de creación de la cuenta (para el título Beta-Tester)
+    created:()=>{try{const u=auth.currentUser;return u&&u.metadata&&u.metadata.creationTime?Date.parse(u.metadata.creationTime)||0:0}catch(e){return 0}},
+    // códigos de regalo (solo administradores: las reglas lo comprueban)
+    async codeList(){const sn=await S.getDocs(S.collection(db,"codes"));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    codeSet:(c,d)=>S.setDoc(S.doc(db,"codes",c),d,{merge:true}),
+    codeDel:c=>S.deleteDoc(S.doc(db,"codes",c)),
     // hora del servidor para los campos que la necesitan, e inicio de cada partida de minijuego (las reglas comprueban
     // con ella que una puntuación de un juego sin final sea posible en el tiempo jugado)
     srvTs:()=>S.serverTimestamp(),

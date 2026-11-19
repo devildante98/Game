@@ -465,6 +465,9 @@ function fstatHTML(n){const p=PM[n];if(!p)return "";const l=lvd(n).l,N=NAT[natOf
 // ================= Más → Próximamente: proyectos que vienen =================
 // Para añadir un proyecto: una línea nueva en ROADMAP [icono, título, descripción]
 const ROADMAP=[
+ ["🏠","Base secreta","Tu propia habitación para decorar con muebles, peluches, alfombras y los trofeos que consigas jugando. Tus amigos podrán visitarla y dejarte un «me gusta»."],
+ ["📜","Retos semanales con reglas","Cada semana, un reto especial con normas distintas: «solo tipo Agua», «equipo de nivel 50», «sin legendarios»… Enfréntate a entrenadores y a la Torre con esas reglas, con premios y clasificación propia."],
+ ["🎀","Concursos Pokémon","Luce a tus Pokémon en concursos de Belleza, Carisma, Dulzura, Ingenio y Dureza. Elige bien sus movimientos para ganarte al público y consigue cintas para su ficha."],
 ];
 nxPanel("roadP","🚀 Próximas actualizaciones","Lo que estamos preparando para el juego. ¡Atento a las Novedades!");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="roadP"))g.tabs.splice(1,0,["roadP","Próximamente"]);HUBP.roadP="mas";HUBR.roadP=()=>roadUI()}

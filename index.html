@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.19.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.20"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795092299">
+<meta name="game-build" content="1795093508">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3083,6 +3083,19 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 #wnResM .nxmw{animation:jpop .4s cubic-bezier(.2,1.4,.4,1)}
 #wnResM #wnResOk{min-width:160px;margin-top:6px}
 
+/* Códigos de regalo */
+.codebox{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;max-width:520px;margin:6px auto}
+.codei{font-size:3rem;line-height:1}
+.coderow{display:flex;gap:8px;width:100%}
+.coderow input{flex:1;min-width:0;font:inherit;font-size:1.15rem;letter-spacing:2px;text-transform:uppercase;text-align:center;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.codeform{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-bottom:8px}
+.codeform label{display:flex;flex-direction:column;gap:3px;font-size:.82rem;font-weight:700}
+.codeform input{font:inherit;padding:7px 9px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.codeform .cdchk{flex-direction:row;align-items:center;gap:6px}.codeform .cdwide{grid-column:1/-1}
+.cdrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;margin-bottom:6px;background:var(--bg)}
+.cdrow b{font-family:monospace;font-size:1rem;letter-spacing:1px}.cdrow span{flex:1;min-width:180px}.cdrow small{color:var(--mute)}
+.cdrow.off{opacity:.55}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -3147,7 +3160,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.19.2</small>
+    <small class="pcver">Versión 7.20</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7902,8 +7915,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.19.2";
+const GAME_VER="7.20";
 const NEWS=[
+{v:"2026-11-19-7.20",ver:"7.20",at:"2026-11-19T14:05",t:"🎁 Códigos de regalo y título Beta-Tester",l:["Nuevo: canjea códigos de regalo en Más › 🎁 Canjear código. Los daremos en sorteos, eventos y redes sociales; cada código se canjea una vez por cuenta","🧪 Título exclusivo «Beta-Tester» para quienes crearon su cuenta en las dos primeras semanas del juego. ¡Gracias por estar desde el principio! Póntelo en Tu entrenador › Mi tarjeta","🚀 En Más › Próximamente: Base secreta, Retos semanales con reglas y Concursos Pokémon"]},
 {v:"2026-11-19-7.19.2",ver:"7.19.2",at:"2026-11-19T13:44",t:"🏆 Torneo de esta semana: Mega-Pidgeot para el 2.º puesto",l:["El subcampeón del torneo semanal de esta semana gana Mega-Pidgeot (con un 50 % de probabilidad de que sea variocolor). El campeón sigue ganando ✨ Lugia y el tercero ✨ Ninetales de Alola"]},
 {v:"2026-11-19-7.19.1",ver:"7.19.1",at:"2026-11-19T13:35",t:"🛠️ Arreglos de las nuevas Megaevoluciones",l:["Los premios del torneo semanal y los Pokémon del Pase de temporada vuelven a ser los que estaban anunciados (al añadir las Megas habían cambiado)","Las Megas de Z-A tienen ahora la misma rareza que el resto de Megas (forma especial ★★★★; legendarias las de Zygarde, Heatran, Darkrai, Magearna y Zeraora)"]},
 {v:"2026-11-19-7.19",ver:"7.19",at:"2026-11-19T13:23",t:"🧬 45 Megaevoluciones nuevas de Leyendas Pokémon Z-A",l:["Ya puedes conseguirlas en el gacha y usarlas en combate como el resto de Megas (lleva al Pokémon base en tu equipo y megaevoluciona)","Z-A: Mega-Clefable, Mega-Victreebel, Mega-Starmie, Mega-Dragonite, Mega-Meganium, Mega-Feraligatr, Mega-Skarmory, Mega-Froslass, Mega-Emboar, Mega-Excadrill, Mega-Scolipede, Mega-Scrafty, Mega-Eelektross, Mega-Chandelure, Mega-Chesnaught, Mega-Delphox, Mega-Greninja, Mega-Pyroar, Mega-Floette, Mega-Malamar, Mega-Barbaracle, Mega-Dragalge, Mega-Hawlucha, Mega-Zygarde, Mega-Drampa y Mega-Falinks","Megadimensión: Mega-Raichu X y Mega-Raichu Y, Mega-Chimecho, Mega-Absol Z, Mega-Staraptor, Mega-Garchomp Z, Mega-Lucario Z, Mega-Heatran, Mega-Darkrai, Mega-Golurk, Mega-Meowstic, Mega-Crabominable, Mega-Golisopod, Mega-Magearna, Mega-Zeraora, Mega-Scovillain, Mega-Glimmora, Mega-Tatsugiri y Mega-Baxcalibur","Con sus tipos y estadísticas oficiales. Son formas especiales (★★★★), y las de Zygarde, Heatran, Darkrai, Magearna y Zeraora, legendarias"]},
@@ -8317,7 +8331,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795092299";
+const GAME_B="1795093508";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11614,6 +11628,9 @@ function fstatHTML(n){const p=PM[n];if(!p)return "";const l=lvd(n).l,N=NAT[natOf
 // ================= Más → Próximamente: proyectos que vienen =================
 // Para añadir un proyecto: una línea nueva en ROADMAP [icono, título, descripción]
 const ROADMAP=[
+ ["🏠","Base secreta","Tu propia habitación para decorar con muebles, peluches, alfombras y los trofeos que consigas jugando. Tus amigos podrán visitarla y dejarte un «me gusta»."],
+ ["📜","Retos semanales con reglas","Cada semana, un reto especial con normas distintas: «solo tipo Agua», «equipo de nivel 50», «sin legendarios»… Enfréntate a entrenadores y a la Torre con esas reglas, con premios y clasificación propia."],
+ ["🎀","Concursos Pokémon","Luce a tus Pokémon en concursos de Belleza, Carisma, Dulzura, Ingenio y Dureza. Elige bien sus movimientos para ganarte al público y consigue cintas para su ficha."],
 ];
 nxPanel("roadP","🚀 Próximas actualizaciones","Lo que estamos preparando para el juego. ¡Atento a las Novedades!");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="roadP"))g.tabs.splice(1,0,["roadP","Próximamente"]);HUBP.roadP="mas";HUBR.roadP=()=>roadUI()}
@@ -21441,6 +21458,82 @@ setInterval(()=>{const b=$("bdSetBox"),k=JSON.stringify(S.bday||0);if(!b||b.data
 // (para el orden de las ventanas al entrar)
 {const _pb=popBusy;popBusy=function(){return _pb.apply(this,arguments)||!!$("bdAskM")||!!$("bdM")}}
 
+// =====================================================================================
+// CÓDIGOS DE REGALO Y TÍTULO BETA-TESTER
+// · Los jugadores canjean códigos en Premios › 🎁 Canjear código. El servidor comprueba el código y que no lo hayas
+//   usado ya, y mete el premio en tu partida (_server/codigo.js). Hace falta una cuenta iniciada.
+// · Los administradores crean, desactivan y borran códigos en Más › 🎁 Códigos (solo lo ven ellos).
+// · Título «🧪 Beta-Tester»: para las cuentas creadas en las dos primeras semanas del juego (del 29 de octubre al 11 de
+//   noviembre de 2026, ambos incluidos).
+// =====================================================================================
+const CODE_TXT={"codigo-mal":"Escribe un código válido.","codigo-no":"Ese código no existe. Revisa que esté bien escrito.","codigo-off":"Ese código ya no está activo.",
+  "codigo-caducado":"Ese código ha caducado.","codigo-usado":"Ya has canjeado ese código.","codigo-agotado":"Ese código ya se ha usado todas las veces posibles."};
+const codeClean=c=>String(c||"").toUpperCase().replace(/[^A-Z0-9_-]/g,"").slice(0,24);
+function codePrizeTxt(p){const L=[];if(p.mon)L.push((p.sh?"✨ ":"")+p.mon);if(p.t)L.push(fmt(p.t)+" 🎟️");Object.keys(p.it||{}).forEach(k=>L.push(p.it[k]+" "+IN2(k)));return L.join(" + ")||"—"}
+// ---------- canjear (jugadores) ----------
+let CODE_BUSY=false;
+function codeRedeem(){if(CODE_BUSY)return;const i=$("codeIn"),msg=$("codeMsg"),c=codeClean(i&&i.value);
+  if(!(window.FB&&window.FB.uid&&window.FB.uid())||typeof window.srvAccion!=="function"){msg.textContent="Inicia sesión con tu cuenta para canjear códigos.";return}
+  if(c.length<3){msg.textContent=CODE_TXT["codigo-mal"];return}
+  CODE_BUSY=true;$("codeGo").disabled=true;msg.textContent="⏳ Comprobando el código…";
+  window.srvAccion({k:"codigo",c:c},srvJ,r=>{const p=r.codigo;if(!p)return;
+      S.t=(S.t||0)+(p.t||0);S.bag=S.bag||{};Object.keys(p.it||{}).forEach(k=>{S.bag[k]=(S.bag[k]||0)+p.it[k]});
+      if(p.mon&&PM[p.mon]){const lv=typeof clampL==="function"?clampL(Math.max(5,Math.min(typeof lvCap==="function"?lvCap():50,typeof leadLevel==="function"?leadLevel():5))):5;giveMon(p.mon,lv,!!p.sh)}
+      (S.codes=S.codes||{})[p.c]=Date.now();save();try{render()}catch(e){}
+      snd("win");i.value="";msg.innerHTML="✅ ¡Código canjeado! Has recibido: <b>"+esc(codePrizeTxt(p))+"</b>"+(p.msg?"<br>"+esc(p.msg):"");
+      toast("🎁 ¡Código canjeado! "+codePrizeTxt(p))})
+    .then(r=>{if(!r||!r.ok){msg.textContent=(r&&CODE_TXT[r.why])||(r&&typeof srvErr==="function"&&srvErr(r))||"No se ha podido canjear. Inténtalo en un momento."}})
+    .catch(()=>{msg.textContent="No hay conexión con el servidor. Inténtalo en un momento."})
+    .finally(()=>{CODE_BUSY=false;const b=$("codeGo");if(b)b.disabled=false})}
+function codeUI(){const b=$("codePB");if(!b)return;if($("codeIn"))return;
+  b.innerHTML='<div class="codebox"><div class="codei">🎁</div><p>¿Tienes un código de regalo? Lo damos en sorteos, eventos y redes sociales. Cada código se puede canjear una vez por cuenta.</p>'+
+    '<div class="coderow"><input id="codeIn" maxlength="24" autocomplete="off" spellcheck="false" placeholder="ESCRIBE TU CÓDIGO" aria-label="Código de regalo"><button class="red" id="codeGo">Canjear</button></div><small id="codeMsg" class="mut"></small></div>';
+  $("codeGo").onclick=codeRedeem;$("codeIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();codeRedeem()}});
+  $("codeIn").addEventListener("input",e=>{const t=e.target,p=t.selectionStart;t.value=codeClean(t.value);try{t.setSelectionRange(p,p)}catch(x){}})}
+nxPanel("codeP","🎁 Canjear código","Escribe un código de regalo para recibir su premio.");
+{const gk=(typeof HUBP!=="undefined"&&HUBP.earnP)||"mas",g=HUB.find(x=>x.k===gk)||HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="codeP"))g.tabs.push(["codeP","🎁 Canjear código"]);HUBP.codeP=g?g.k:"mas";HUBR.codeP=()=>codeUI()}
+// ---------- crear y gestionar (administradores) ----------
+const CODE_ITEMS=[["mb","Master Ball"],["crys","Cristal Supremo"],["cand","Caramelo Raro"],["ppmax","PP máximos"],["tshard","Teralito"],["ub","Ultra Ball"],["sb","Super Ball"],["pb","Poké Ball"]];
+let CODES=[];
+async function codeAdmUI(reload){const b=$("codeAPB");if(!b||!(typeof MOD!=="undefined"&&MOD.admin))return;
+  if(reload||!b.dataset.ok){b.dataset.ok=1;
+    b.innerHTML='<h3 class="shh">Nuevo código</h3><div class="codeform">'+
+      '<label>Código<input id="cdC" maxlength="24" placeholder="NAVIDAD2026"></label>'+
+      '<label>Tickets<input id="cdT" type="number" min="0" value="0"></label>'+
+      CODE_ITEMS.map(x=>'<label>'+x[1]+'<input data-cdi="'+x[0]+'" type="number" min="0" value="0"></label>').join("")+
+      '<label>Pokémon (opcional)<input id="cdM" list="cdML" placeholder="Nombre exacto"></label><datalist id="cdML">'+P.map(p=>'<option value="'+esc(p[0])+'">').join("")+'</datalist>'+
+      '<label class="cdchk"><input id="cdS" type="checkbox"> Variocolor</label>'+
+      '<label>Usos máximos (0 = sin límite)<input id="cdN" type="number" min="0" value="0"></label>'+
+      '<label>Válido hasta (opcional)<input id="cdU" type="date"></label>'+
+      '<label class="cdwide">Mensaje al canjearlo (opcional)<input id="cdG" maxlength="140" placeholder="¡Gracias por participar en el sorteo!"></label>'+
+      '</div><button class="red" id="cdSave">🎁 Crear código</button><small id="cdMsg" class="mut"></small><h3 class="shh">Códigos creados</h3><div id="cdList" class="mut">Cargando…</div>';
+    $("cdC").addEventListener("input",e=>{e.target.value=codeClean(e.target.value)})}
+  try{CODES=(await window.FB.codeList()).sort((a,z)=>(z.at||0)-(a.at||0))}catch(e){$("cdList").textContent="No se han podido cargar los códigos ("+((e&&e.code)||"error")+").";return}
+  const L=$("cdList");if(!L)return;
+  L.innerHTML=CODES.length?CODES.map(c=>{const p={t:c.t,it:c.it,mon:c.mon,sh:c.sh},exp=c.until&&Date.now()>c.until,full=c.max&&(c.n||0)>=c.max;
+    return '<div class="cdrow'+(c.on===false||exp||full?' off':'')+'"><b class="noi18n">'+esc(c.id)+'</b><span>'+esc(codePrizeTxt(p))+'</span><small>'+(c.n||0)+(c.max?' / '+c.max:'')+' usos'+(c.until?' · hasta el '+new Date(c.until).toLocaleDateString("es"):'')+(c.on===false?' · desactivado':exp?' · caducado':full?' · agotado':'')+'</small>'+
+      '<button class="alt mini" data-cdon="'+esc(c.id)+'">'+(c.on===false?'Activar':'Desactivar')+'</button><button class="alt mini" data-cddel="'+esc(c.id)+'">🗑️</button></div>'}).join(""):'Todavía no hay códigos.'}
+async function codeAdmSave(){const m=$("cdMsg"),c=codeClean($("cdC").value);if(c.length<3){m.textContent="El código debe tener al menos 3 letras o números.";return}
+  if(CODES.some(x=>x.id===c)&&!(await askOk("El código «"+c+"» ya existe. ¿Sustituir su premio?")))return;
+  const it={};document.querySelectorAll("#codeAPB [data-cdi]").forEach(i=>{const v=Math.floor(+i.value||0);if(v>0)it[i.dataset.cdi]=Math.min(v,9999)});
+  const mon=$("cdM").value.trim(),t=Math.max(0,Math.floor(+$("cdT").value||0));if(mon&&!PM[mon]){m.textContent="Ese Pokémon no existe. Elige uno de la lista.";return}
+  if(!t&&!mon&&!Object.keys(it).length){m.textContent="Pon al menos un premio.";return}
+  const u=$("cdU").value,d={t:t,it:it,mon:mon||null,sh:mon&&$("cdS").checked?1:0,max:Math.max(0,Math.floor(+$("cdN").value||0)),until:u?new Date(u+"T23:59:59").getTime():0,msg:$("cdG").value.trim().slice(0,140),on:true,at:Date.now()};
+  if(!CODES.some(x=>x.id===c))d.n=0;
+  try{await window.FB.codeSet(c,d);m.textContent="✅ Código «"+c+"» creado: "+codePrizeTxt(d);snd("win");$("cdC").value="";codeAdmUI(false)}catch(e){m.textContent="No se ha podido guardar ("+((e&&e.code)||"error")+")."}}
+document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#codeAPB"))return;
+  if(t.closest("#cdSave")){codeAdmSave();return}
+  const on=t.closest("[data-cdon]");if(on){const c=CODES.find(x=>x.id===on.dataset.cdon);if(c)try{await window.FB.codeSet(c.id,{on:c.on===false});codeAdmUI()}catch(x){toast("No se ha podido cambiar.")}return}
+  const del=t.closest("[data-cddel]");if(del){if(!(await askOk("¿Borrar el código «"+del.dataset.cddel+"»? Ya no se podrá canjear.")))return;try{await window.FB.codeDel(del.dataset.cddel);codeAdmUI()}catch(x){toast("No se ha podido borrar.")}}});
+// la pestaña solo aparece a los administradores
+setInterval(()=>{if(typeof MOD==="undefined"||!MOD.admin||$("codeAP"))return;nxPanel("codeAP","🎁 Códigos de regalo","Solo lo ves tú porque eres administrador. Crea códigos con premio para sorteos, eventos o compensaciones. Cada cuenta puede canjear cada código una vez.");
+  const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="codeAP"))g.tabs.push(["codeAP","🎁 Códigos"]);HUBP.codeAP="mas";HUBR.codeAP=()=>codeAdmUI(true)},2000);
+// ---------- título Beta-Tester ----------
+const BETA_HASTA=Date.UTC(2026,10,11,23,0,0);// 12 de noviembre a las 0:00 en España
+TITLES.push(["beta","🧪 Beta-Tester",()=>!!S.beta]);
+setInterval(()=>{try{if(typeof S==="undefined"||!S||S.beta||!window.FB||!window.FB.created)return;const c=window.FB.created();if(c&&c<BETA_HASTA){S.beta=1;save();
+  toast("🧪 ¡Gracias por jugar desde el principio! Tienes el título exclusivo «Beta-Tester»: póntelo en Tu entrenador › Mi tarjeta.")}}catch(e){}},5000);
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -21526,6 +21619,12 @@ async function main(){
   // ---- amigos y gremios (Firestore: friends, freq, guilds) ----
   const FB={
     uid:()=>uid,
+    // fecha de creación de la cuenta (para el título Beta-Tester)
+    created:()=>{try{const u=auth.currentUser;return u&&u.metadata&&u.metadata.creationTime?Date.parse(u.metadata.creationTime)||0:0}catch(e){return 0}},
+    // códigos de regalo (solo administradores: las reglas lo comprueban)
+    async codeList(){const sn=await S.getDocs(S.collection(db,"codes"));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    codeSet:(c,d)=>S.setDoc(S.doc(db,"codes",c),d,{merge:true}),
+    codeDel:c=>S.deleteDoc(S.doc(db,"codes",c)),
     // hora del servidor para los campos que la necesitan, e inicio de cada partida de minijuego (las reglas comprueban
     // con ella que una puntuación de un juego sin final sea posible en el tiempo jugado)
     srvTs:()=>S.serverTimestamp(),
@@ -21695,7 +21794,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.19.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.20";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

@@ -22,6 +22,7 @@ const HELPX={
   wonP:[
     "Elige un Pokémon y pulsa «Intercambio Milagroso». Si otro entrenador ha dejado uno, te lo llevas al momento y él recibe el tuyo.",
     "Si no hay nadie esperando, tu Pokémon se queda esperando (hasta 3 a la vez). En cuanto otro entrenador mande uno, te llega el suyo, aunque no estés jugando.",
+    "Si en 20 minutos nadie se lo ha llevado, lo cambia un entrenador de otra región: recibes un Pokémon al azar de la misma rareza y nivel (variocolor si el tuyo lo era). Para eso tienes que tener el juego abierto; si no, ocurre en cuanto vuelvas.",
     "Puedes retirar un Pokémon que espera mientras nadie se lo haya llevado, y vuelve contigo.",
     "Puedes mandar tu Pokémon principal (con su nivel) o un repetido (a nivel 1). El que recibes llega con su nivel, sin pasar tu límite de nivel.",
     "Puedes hacer hasta 10 Intercambios Milagrosos al día. Necesitas una cuenta iniciada.",

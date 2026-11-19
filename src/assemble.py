@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.18";
+const GAME_VER="7.18.1";
 const NEWS=[
+{v:"2026-11-19-7.18.1",ver:"7.18.1",at:"2026-11-19T12:50",t:"✨ Intercambio Milagroso arreglado",l:["Si nadie se lleva tu Pokémon en 20 minutos, lo cambia un entrenador de otra región: recibes un Pokémon al azar de la misma rareza y nivel (variocolor si el tuyo lo era). Ya no se queda esperando para siempre","Junto a cada Pokémon que espera ves cuántos minutos faltan","Si la conexión va lenta o se corta, el botón ya no se queda en «Buscando entrenador…»: tu Pokémon sigue contigo y puedes volver a intentarlo","Si se corta la conexión que vigila tus Pokémon en espera, se vuelve a conectar sola (antes no te llegaba el cambio)","En la ventana del intercambio se ve quién te ha mandado el Pokémon"]},
 {v:"2026-11-19-7.18",ver:"7.18",at:"2026-11-19T12:02",t:"🎂 ¡Regalo de cumpleaños!",l:["Pon el día y el mes de tu cumpleaños (te lo preguntamos después del apodo, o en ⚙️ Ajustes › Juego)","El día de tu cumpleaños te felicitaremos con un gran regalo: un legendario variocolor solo para ti, 100 millones de tickets (o 24 horas de producción, si es más), 5 Master Ball, 3 Cristales Supremos, 30 Caramelos Raros, 5 PP máximos, 10 Teralitos y 3 objetos equipables","Si ese día no puedes entrar, el regalo te espera durante 6 días más","La fecha no se puede cambiar una vez puesta, y el regalo llega si la pusiste al menos 7 días antes","Tu cumpleaños también aparece en el Calendario de eventos cuando se acerca"]},
 {v:"2026-11-19-7.17.3",ver:"7.17.3",at:"2026-11-19T07:03",t:"🛠️ Arreglo del fondo al abrir ventanas",l:["El pueblo del fondo ya no se queda a medio pintar al abrir una ventana: el cambio automático de calidad espera a que vuelvas a la pantalla principal"]},
 {v:"2026-11-18-7.17.2",ver:"7.17.2",at:"2026-11-18T22:43",t:"⏱️ Las horas jugadas se cuentan bien",l:["Las horas jugadas cuentan ahora todo el tiempo que tienes el juego abierto, también minimizado o en otra pestaña (antes solo contaba con la pestaña a la vista)","Ya no se pierde tiempo al recargar la página ni al jugar en varios dispositivos"]},
@@ -838,7 +839,7 @@ FB_API = '''
     async wnTake(id,mine,nick){const ref=S.doc(db,"wonder",id);return S.runTransaction(db,async tx=>{const s=await tx.get(ref);const d=s.exists()?s.data():null;
       if(!d||d.st!=="wait"||d.u===uid)throw {code:"taken"};tx.update(ref,{st:"done",b:mine,by:uid,bn:String(nick||"").slice(0,30),at2:Date.now()});return d})},
     async wnPut(mine,nick){const r=await S.addDoc(S.collection(db,"wonder"),{u:uid,un:String(nick||"").slice(0,30),m:mine,st:"wait",at:Date.now()});return r.id},
-    wnMine:cb=>S.onSnapshot(S.query(S.collection(db,"wonder"),S.where("u","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{}),
+    wnMine:(cb,eb)=>S.onSnapshot(S.query(S.collection(db,"wonder"),S.where("u","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),e=>{try{eb&&eb(e)}catch(x){}}),
     // retirar el que espera (devuelve lo que había: si ya lo cogió alguien, lo que te dejó)
     async wnCancel(id){const ref=S.doc(db,"wonder",id);return S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(!s.exists())return null;const d=s.data();tx.delete(ref);return d})},
     wnDel:id=>S.deleteDoc(S.doc(db,"wonder",id)),

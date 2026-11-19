@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.18"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.18.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795086168">
+<meta name="game-build" content="1795089001">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3142,7 +3142,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.18</small>
+    <small class="pcver">Versión 7.18.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7893,8 +7893,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.18";
+const GAME_VER="7.18.1";
 const NEWS=[
+{v:"2026-11-19-7.18.1",ver:"7.18.1",at:"2026-11-19T12:50",t:"✨ Intercambio Milagroso arreglado",l:["Si nadie se lleva tu Pokémon en 20 minutos, lo cambia un entrenador de otra región: recibes un Pokémon al azar de la misma rareza y nivel (variocolor si el tuyo lo era). Ya no se queda esperando para siempre","Junto a cada Pokémon que espera ves cuántos minutos faltan","Si la conexión va lenta o se corta, el botón ya no se queda en «Buscando entrenador…»: tu Pokémon sigue contigo y puedes volver a intentarlo","Si se corta la conexión que vigila tus Pokémon en espera, se vuelve a conectar sola (antes no te llegaba el cambio)","En la ventana del intercambio se ve quién te ha mandado el Pokémon"]},
 {v:"2026-11-19-7.18",ver:"7.18",at:"2026-11-19T12:02",t:"🎂 ¡Regalo de cumpleaños!",l:["Pon el día y el mes de tu cumpleaños (te lo preguntamos después del apodo, o en ⚙️ Ajustes › Juego)","El día de tu cumpleaños te felicitaremos con un gran regalo: un legendario variocolor solo para ti, 100 millones de tickets (o 24 horas de producción, si es más), 5 Master Ball, 3 Cristales Supremos, 30 Caramelos Raros, 5 PP máximos, 10 Teralitos y 3 objetos equipables","Si ese día no puedes entrar, el regalo te espera durante 6 días más","La fecha no se puede cambiar una vez puesta, y el regalo llega si la pusiste al menos 7 días antes","Tu cumpleaños también aparece en el Calendario de eventos cuando se acerca"]},
 {v:"2026-11-19-7.17.3",ver:"7.17.3",at:"2026-11-19T07:03",t:"🛠️ Arreglo del fondo al abrir ventanas",l:["El pueblo del fondo ya no se queda a medio pintar al abrir una ventana: el cambio automático de calidad espera a que vuelvas a la pantalla principal"]},
 {v:"2026-11-18-7.17.2",ver:"7.17.2",at:"2026-11-18T22:43",t:"⏱️ Las horas jugadas se cuentan bien",l:["Las horas jugadas cuentan ahora todo el tiempo que tienes el juego abierto, también minimizado o en otra pestaña (antes solo contaba con la pestaña a la vista)","Ya no se pierde tiempo al recargar la página ni al jugar en varios dispositivos"]},
@@ -8303,7 +8304,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795086168";
+const GAME_B="1795089001";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -20739,6 +20740,7 @@ const HELPX={
   wonP:[
     "Elige un Pokémon y pulsa «Intercambio Milagroso». Si otro entrenador ha dejado uno, te lo llevas al momento y él recibe el tuyo.",
     "Si no hay nadie esperando, tu Pokémon se queda esperando (hasta 3 a la vez). En cuanto otro entrenador mande uno, te llega el suyo, aunque no estés jugando.",
+    "Si en 20 minutos nadie se lo ha llevado, lo cambia un entrenador de otra región: recibes un Pokémon al azar de la misma rareza y nivel (variocolor si el tuyo lo era). Para eso tienes que tener el juego abierto; si no, ocurre en cuanto vuelvas.",
     "Puedes retirar un Pokémon que espera mientras nadie se lo haya llevado, y vuelve contigo.",
     "Puedes mandar tu Pokémon principal (con su nivel) o un repetido (a nivel 1). El que recibes llega con su nivel, sin pasar tu límite de nivel.",
     "Puedes hacer hasta 10 Intercambios Milagrosos al día. Necesitas una cuenta iniciada.",
@@ -20964,13 +20966,17 @@ setInterval(advBan,3000);setTimeout(advBan,500);
 // (pkTake / pkGive de p_more.js): el principal con su nivel o un repetido a nivel 1.
 // =====================================================================================
 const WN_DAY=10,WN_WAIT=3;
+// si nadie se lleva tu Pokémon en 20 minutos, lo cambia un entrenador de otra región (un Pokémon al azar de la misma rareza)
+const WN_NPC=20*60*1000;
+// las llamadas al servidor no pueden quedarse colgadas para siempre (conexión lenta o caída)
+const wnTO=(p,ms)=>Promise.race([p,new Promise((_,r)=>setTimeout(()=>r({code:"timeout"}),ms||15000))]);
 const WN={sel:null,q:"",f:"",mine:[],unsub:null,busy:false,last:null};
 const wnDay=()=>{const d=today();if(!S.wt||S.wt.d!==d)S.wt={d:d,n:0};return S.wt};
 const wnOn=()=>!!(window.FB&&window.FB.uid&&window.FB.uid()&&window.FB.wnPool);
 // lo que llega no pasa de tu límite de nivel (el del próximo gimnasio)
 const wnFix=r=>({n:r.n,l:Math.max(1,Math.min(r.l|0,typeof lvCap==="function"?lvCap():100)),s:r.s?1:0});
 function wnShow(sent,got,from){
-  nxModal('<div class="wnres"><h3>✨ ¡Intercambio Milagroso!</h3><div class="wnrow">'+trCard(sent,"Has enviado","")+'<div class="wnarrow">⇄</div>'+trCard(got,"Has recibido",from?"De "+esc(pvClean(from)):"")+'</div>'+
+  nxModal('<div class="wnres"><h3>✨ ¡Intercambio Milagroso!</h3><div class="wnrow">'+trCard(sent,"Has enviado","")+'<div class="wnarrow">⇄</div>'+trCard(got,"Has recibido",from?"De "+esc(pvClean(from)):"")+'</div>'+(from?'<p class="mut wnfrom">Te lo ha mandado <b>'+esc(/^Entrenador de /.test(from)?String(from).slice(0,30):pvClean(from))+'</b></p>':'')+
     '<button class="red" onclick="nxModalClose()">¡Genial!</button></div>');snd("lvl");try{if(got&&PM[got.n])setTimeout(()=>cry(got.n),300)}catch(e){}
 }
 async function wnSend(){
@@ -20984,19 +20990,24 @@ async function wnSend(){
   WN.busy=true;wnUI(true);const nick=pvClean(pvNick());
   try{
     // primero se busca uno que esté esperando (de otro entrenador), al azar
-    let pool=[];try{pool=(await window.FB.wnPool()).filter(x=>x.u!==window.FB.uid())}catch(e){pool=[]}
+    let pool=[];try{pool=(await wnTO(window.FB.wnPool(),12000)).filter(x=>x.u!==window.FB.uid())}catch(e){pool=[]}
     for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}
     let got=null,from="";
-    for(const x of pool.slice(0,4)){try{const d=await window.FB.wnTake(x.id,rec,nick);got=d.m;from=d.un||"";break}catch(e){}}
+    for(const x of pool.slice(0,4)){const pr=window.FB.wnTake(x.id,rec,nick);
+      try{const d=await wnTO(pr,15000);got=d.m;from=d.un||"";break}
+      catch(e){if(e&&e.code==="timeout"){
+        // la conexión va lenta: si al final el cambio sale, se termina en cuanto llegue la respuesta
+        pr.then(d=>{const out=trTakeK(key);if(!out)return;day.n++;const g=wnFix(d.m);pkGive(g,true).then(()=>{save();render();wnShow(out,g,d.un||"");if(window.cloudFlush)try{window.cloudFlush(true)}catch(x){}})}).catch(()=>{});
+        toast("📶 La conexión va lenta. Si el intercambio termina, te avisaremos.");return}}}
     if(!got&&waiting>=WN_WAIT){toast("Ya tienes "+WN_WAIT+" Pokémon esperando. Espera a que alguien se los lleve o retira alguno.");return}
-    if(!got)await window.FB.wnPut(rec,nick);
+    if(!got)await wnTO(window.FB.wnPut(rec,nick),15000);
     // ya en la nube: ahora sale de tu partida
     const out=trTakeK(key);if(!out){toast("Ese Pokémon ya no está en tu partida.");return}
     day.n++;WN.sel=null;
     if(got){const g=wnFix(got);await pkGive(g,true);save();render();wnShow(out,g,from)}
-    else{save();render();snd("throw");toast("🌀 "+nk(n)+" está esperando a otro entrenador. Te avisaremos cuando llegue tu Pokémon.")}
+    else{save();render();snd("throw");toast("🌀 "+nk(n)+" está esperando a otro entrenador. Si nadie se lo lleva en 20 minutos, lo cambiará un entrenador de otra región.")}
     if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}
-  }catch(e){toast("No se ha podido hacer el intercambio ("+((e&&e.code)||"error")+"). Inténtalo otra vez.")}
+  }catch(e){toast(e&&e.code==="timeout"?"📶 No hay conexión con el servidor. Tu Pokémon sigue contigo: inténtalo en un momento.":"No se ha podido hacer el intercambio ("+((e&&e.code)||"error")+"). Inténtalo otra vez.")}
   finally{WN.busy=false;wnUI(true)}
 }
 // los tuyos que estaban esperando: si alguien se los ha llevado, recibes lo que dejó
@@ -21008,9 +21019,20 @@ async function wnCollect(){
   // (se olvidan los apuntes de hace más de una semana)
   for(const k in S2)if(Date.now()-S2[k]>7*864e5)delete S2[k];
 }
+// ---------- entrenadores de otras regiones: se llevan los que llevan 20 minutos esperando ----------
+const WN_REG=["Kanto","Johto","Hoenn","Sinnoh","Teselia","Kalos","Alola","Galar","Paldea"];
+function wnNpcMon(sent){const r=PM[sent.n]?PM[sent.n][2]:"C",L=P.filter(p=>p[2]===r&&p[0]!==sent.n&&!(typeof isSup==="function"&&isSup(p[0]))&&!/^Mega-|Gigamax|Primigenio/.test(p[0]));
+  const A=L.length?L:P.filter(p=>p[2]==="C"),p=A[Math.floor(Math.random()*A.length)];return{n:p[0],l:Math.max(1,sent.l|0),s:sent.s?1:(Math.random()<.01?1:0)}}
+async function wnNpc(){if(WN.busy||WN.npc||!wnOn())return;const old=WN.mine.filter(x=>x.st==="wait"&&x.at&&Date.now()-x.at>WN_NPC);if(!old.length)return;WN.npc=true;
+  try{for(const x of old){let d=null;try{d=await wnTO(window.FB.wnCancel(x.id),15000)}catch(e){continue}if(!d)continue;S.wnGot=S.wnGot||{};if(S.wnGot[x.id])continue;S.wnGot[x.id]=Date.now();
+      if(d.st==="done"&&d.b){const g=wnFix(d.b);await pkGive(g,true);save();render();wnShow(d.m,g,d.bn||"");continue}
+      const g=wnFix(wnNpcMon(d.m)),from="Entrenador de "+WN_REG[Math.floor(Math.random()*WN_REG.length)];await pkGive(g,true);save();render();wnShow(d.m,g,from);
+      if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}}}
+  finally{WN.npc=false;wnUI(true)}}
+setInterval(()=>{try{wnNpc()}catch(e){}},30000);
 async function wnCancel(id){
   if(WN.busy)return;WN.busy=true;
-  try{const d=await window.FB.wnCancel(id);if(!d)return;
+  try{const d=await wnTO(window.FB.wnCancel(id),15000);if(!d)return;
     if(d.st==="done"&&d.b){S.wnGot=S.wnGot||{};if(!S.wnGot[id]){S.wnGot[id]=Date.now();const g=wnFix(d.b);await pkGive(g,true);save();render();wnShow(d.m,g,d.bn||"")}}
     else{await pkGive(d.m,false);save();render();toast("↩️ "+nk(d.m.n)+" ha vuelto contigo.")}
   }catch(e){toast("No se ha podido retirar.")}finally{WN.busy=false;wnUI(true)}
@@ -21021,7 +21043,7 @@ function wnUI(force){
   const day=wnDay(),wait=WN.mine.filter(x=>x.st==="wait"),rec=trRecK(WN.sel);
   let h='<div class="wntop"><div class="wnbox">'+trCard(rec,"Vas a enviar","Elige abajo")+'<div class="wnarrow">⇄</div><div class="tcard empty wnq"><small>Recibirás</small><div class="tqm">?</div><small class="mut">¡Sorpresa!</small></div></div>'+
     '<div class="wnside"><button class="red big" id="wnGo"'+(WN.busy||!rec||day.n>=WN_DAY?' disabled':'')+'>'+(WN.busy?'🌀 Buscando entrenador…':'✨ Intercambio Milagroso')+'</button><small class="mut">Hoy: '+day.n+' / '+WN_DAY+'</small></div></div>';
-  if(wait.length)h+='<h3 class="shh">🌀 Esperando a otro entrenador ('+wait.length+'/'+WN_WAIT+')</h3><div class="wnwait">'+wait.map(x=>'<div class="wnw">'+(PM[x.m.n]?ico(PM[x.m.n],48,false,!!x.m.s):'')+'<b>'+recTxt(x.m)+'</b><button class="alt mini" data-wnc="'+esc(x.id)+'">Retirar</button></div>').join("")+'</div>';
+  if(wait.length)h+='<h3 class="shh">🌀 Esperando a otro entrenador ('+wait.length+'/'+WN_WAIT+')</h3><div class="wnwait">'+wait.map(x=>'<div class="wnw">'+(PM[x.m.n]?ico(PM[x.m.n],48,false,!!x.m.s):'')+'<b>'+recTxt(x.m)+'</b><small class="mut">'+(x.at?(Date.now()-x.at>=WN_NPC?'Buscando un entrenador de otra región…':'Otra región en '+Math.max(1,Math.ceil((WN_NPC-(Date.now()-x.at))/6e4))+' min'):'')+'</small><button class="alt mini" data-wnc="'+esc(x.id)+'">Retirar</button></div>').join("")+'</div>';
   h+='<h3 class="shh">Elige qué Pokémon envías</h3>';
   const q=nrm(WN.q),L=trOwnList().filter(p=>(!q||nrm(p[0]).includes(q)||nrm(nk(p[0])).includes(q))&&(!WN.f||p[2]===WN.f)).sort((a,b)=>WW[a[2]]-WW[b[2]]||lvd(a[0]).l-lvd(b[0]).l).slice(0,240);
   h+='<div class="tfil"><input id="wnQ" placeholder="Buscar Pokémon..." value="'+esc(WN.q)+'"><select id="wnF"><option value="">Todas</option>'+["C","R","E","L"].map(r=>'<option value="'+r+'"'+(WN.f===r?' selected':'')+'>'+STAR[r]+'</option>').join("")+'</select></div>'+
@@ -21040,7 +21062,8 @@ nxPanel("wonP","✨ Intercambio Milagroso","Manda un Pokémon y recibe al azar e
 // se vigilan tus Pokémon en espera desde que inicias sesión (para recibir el cambio aunque estés en otra parte del juego)
 setInterval(()=>{if(!wnOn()){if(WN.unsub){try{WN.unsub()}catch(e){}WN.unsub=null;WN.mine=[]}return}
   const u=window.FB.uid();if(WN.unsub&&WN.uid===u)return;if(WN.unsub){try{WN.unsub()}catch(e){}}WN.uid=u;
-  WN.unsub=window.FB.wnMine(L=>{WN.mine=L;wnCollect().catch(()=>{});wnUI(true)})},2000);
+  WN.unsub=window.FB.wnMine(L=>{WN.mine=L;wnCollect().catch(()=>{});wnNpc().catch(()=>{});wnUI(true)},
+    ()=>{/* se ha cortado: se vuelve a conectar en la próxima vuelta */const f=WN.unsub;WN.unsub=null;try{f&&f()}catch(e){}})},2000);
 
 // =====================================================================================
 // AVISO DE EVENTOS EN UNA VENTANA
@@ -21508,7 +21531,7 @@ async function main(){
     async wnTake(id,mine,nick){const ref=S.doc(db,"wonder",id);return S.runTransaction(db,async tx=>{const s=await tx.get(ref);const d=s.exists()?s.data():null;
       if(!d||d.st!=="wait"||d.u===uid)throw {code:"taken"};tx.update(ref,{st:"done",b:mine,by:uid,bn:String(nick||"").slice(0,30),at2:Date.now()});return d})},
     async wnPut(mine,nick){const r=await S.addDoc(S.collection(db,"wonder"),{u:uid,un:String(nick||"").slice(0,30),m:mine,st:"wait",at:Date.now()});return r.id},
-    wnMine:cb=>S.onSnapshot(S.query(S.collection(db,"wonder"),S.where("u","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{}),
+    wnMine:(cb,eb)=>S.onSnapshot(S.query(S.collection(db,"wonder"),S.where("u","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),e=>{try{eb&&eb(e)}catch(x){}}),
     // retirar el que espera (devuelve lo que había: si ya lo cogió alguien, lo que te dejó)
     async wnCancel(id){const ref=S.doc(db,"wonder",id);return S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(!s.exists())return null;const d=s.data();tx.delete(ref);return d})},
     wnDel:id=>S.deleteDoc(S.doc(db,"wonder",id)),
@@ -21645,7 +21668,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.18";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.18.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

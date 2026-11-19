@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.18.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.18.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795089001">
+<meta name="game-build" content="1795090139">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3078,6 +3078,11 @@ body.calm #nyM .nyshine{animation:none;display:none}
 @keyframes bdfall{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(620px) rotate(540deg);opacity:.2}}
 body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 
+/* Intercambio Milagroso: ventana del resultado (capa propia, por encima de todo salvo los diálogos) */
+#wnResM{position:fixed;inset:0;z-index:2147482500;background:rgba(14,16,40,.62);display:grid;place-items:center;padding:16px}
+#wnResM .nxmw{animation:jpop .4s cubic-bezier(.2,1.4,.4,1)}
+#wnResM #wnResOk{min-width:160px;margin-top:6px}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -3142,7 +3147,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.18.1</small>
+    <small class="pcver">Versión 7.18.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7893,8 +7898,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.18.1";
+const GAME_VER="7.18.2";
 const NEWS=[
+{v:"2026-11-19-7.18.2",ver:"7.18.2",at:"2026-11-19T13:08",t:"✨ Intercambio Milagroso: la ventana del resultado ya no se bloquea",l:["La ventana «¡Intercambio Milagroso!» va ahora por encima de todo y se cierra con «¡Genial!», tocando fuera de ella o con Esc / Intro","Si un intercambio se queda a medias, el botón se desbloquea solo"]},
 {v:"2026-11-19-7.18.1",ver:"7.18.1",at:"2026-11-19T12:50",t:"✨ Intercambio Milagroso arreglado",l:["Si nadie se lleva tu Pokémon en 20 minutos, lo cambia un entrenador de otra región: recibes un Pokémon al azar de la misma rareza y nivel (variocolor si el tuyo lo era). Ya no se queda esperando para siempre","Junto a cada Pokémon que espera ves cuántos minutos faltan","Si la conexión va lenta o se corta, el botón ya no se queda en «Buscando entrenador…»: tu Pokémon sigue contigo y puedes volver a intentarlo","Si se corta la conexión que vigila tus Pokémon en espera, se vuelve a conectar sola (antes no te llegaba el cambio)","En la ventana del intercambio se ve quién te ha mandado el Pokémon"]},
 {v:"2026-11-19-7.18",ver:"7.18",at:"2026-11-19T12:02",t:"🎂 ¡Regalo de cumpleaños!",l:["Pon el día y el mes de tu cumpleaños (te lo preguntamos después del apodo, o en ⚙️ Ajustes › Juego)","El día de tu cumpleaños te felicitaremos con un gran regalo: un legendario variocolor solo para ti, 100 millones de tickets (o 24 horas de producción, si es más), 5 Master Ball, 3 Cristales Supremos, 30 Caramelos Raros, 5 PP máximos, 10 Teralitos y 3 objetos equipables","Si ese día no puedes entrar, el regalo te espera durante 6 días más","La fecha no se puede cambiar una vez puesta, y el regalo llega si la pusiste al menos 7 días antes","Tu cumpleaños también aparece en el Calendario de eventos cuando se acerca"]},
 {v:"2026-11-19-7.17.3",ver:"7.17.3",at:"2026-11-19T07:03",t:"🛠️ Arreglo del fondo al abrir ventanas",l:["El pueblo del fondo ya no se queda a medio pintar al abrir una ventana: el cambio automático de calidad espera a que vuelvas a la pantalla principal"]},
@@ -8304,7 +8310,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795089001";
+const GAME_B="1795090139";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -20976,8 +20982,16 @@ const wnOn=()=>!!(window.FB&&window.FB.uid&&window.FB.uid()&&window.FB.wnPool);
 // lo que llega no pasa de tu límite de nivel (el del próximo gimnasio)
 const wnFix=r=>({n:r.n,l:Math.max(1,Math.min(r.l|0,typeof lvCap==="function"?lvCap():100)),s:r.s?1:0});
 function wnShow(sent,got,from){
-  nxModal('<div class="wnres"><h3>✨ ¡Intercambio Milagroso!</h3><div class="wnrow">'+trCard(sent,"Has enviado","")+'<div class="wnarrow">⇄</div>'+trCard(got,"Has recibido",from?"De "+esc(pvClean(from)):"")+'</div>'+(from?'<p class="mut wnfrom">Te lo ha mandado <b>'+esc(/^Entrenador de /.test(from)?String(from).slice(0,30):pvClean(from))+'</b></p>':'')+
-    '<button class="red" onclick="nxModalClose()">¡Genial!</button></div>');snd("lvl");try{if(got&&PM[got.n])setTimeout(()=>cry(got.n),300)}catch(e){}
+  // ventana propia, por encima de todo (salvo los diálogos), que se cierra con el botón, tocando fuera o con Esc
+  let M=$("wnResM");if(M)M.remove();M=document.createElement("div");M.id="wnResM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Intercambio Milagroso");
+  M.innerHTML='<div class="nxmw wnres"><h3>✨ ¡Intercambio Milagroso!</h3><div class="wnrow">'+trCard(sent,"Has enviado","")+'<div class="wnarrow">⇄</div>'+trCard(got,"Has recibido",from?"De "+esc(pvClean(from)):"")+'</div>'+(from?'<p class="mut wnfrom">Te lo ha mandado <b>'+esc(/^Entrenador de /.test(from)?String(from).slice(0,30):pvClean(from))+'</b></p>':'')+
+    '<button type="button" class="red" id="wnResOk">¡Genial!</button></div>';
+  document.body.appendChild(M);
+  const close=()=>{M.remove();document.removeEventListener("keydown",kd,true);try{wnUI(true)}catch(e){}};
+  const kd=e=>{if(e.key==="Escape"||e.key==="Enter"){e.preventDefault();e.stopPropagation();close()}};document.addEventListener("keydown",kd,true);
+  M.addEventListener("click",e=>{if(e.target===M||e.target.closest("#wnResOk"))close()});
+  setTimeout(()=>{try{$("wnResOk").focus()}catch(e){}},50);
+  snd("lvl");try{if(got&&PM[got.n])setTimeout(()=>cry(got.n),300)}catch(e){}
 }
 async function wnSend(){
   if(WN.busy)return;if(!wnOn()){toast("Inicia sesión con tu cuenta para usar el Intercambio Milagroso.");return}
@@ -20987,7 +21001,7 @@ async function wnSend(){
   const day=wnDay();if(day.n>=WN_DAY){toast("Hoy ya has hecho "+WN_DAY+" Intercambios Milagrosos. ¡Vuelve mañana!");return}
   const waiting=WN.mine.filter(x=>x.st==="wait").length;
   if(!await askOk("¿Enviar a "+(rec.s?"✨ ":"")+nk(n)+" (Nv"+rec.l+") al Intercambio Milagroso? No sabrás qué Pokémon recibes hasta el final."))return;
-  WN.busy=true;wnUI(true);const nick=pvClean(pvNick());
+  WN.busy=true;WN.busyAt=Date.now();wnUI(true);const nick=pvClean(pvNick());
   try{
     // primero se busca uno que esté esperando (de otro entrenador), al azar
     let pool=[];try{pool=(await wnTO(window.FB.wnPool(),12000)).filter(x=>x.u!==window.FB.uid())}catch(e){pool=[]}
@@ -21029,7 +21043,7 @@ async function wnNpc(){if(WN.busy||WN.npc||!wnOn())return;const old=WN.mine.filt
       const g=wnFix(wnNpcMon(d.m)),from="Entrenador de "+WN_REG[Math.floor(Math.random()*WN_REG.length)];await pkGive(g,true);save();render();wnShow(d.m,g,from);
       if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}}}
   finally{WN.npc=false;wnUI(true)}}
-setInterval(()=>{try{wnNpc()}catch(e){}},30000);
+setInterval(()=>{try{if(WN.busy&&WN.busyAt&&Date.now()-WN.busyAt>40000){WN.busy=false;wnUI(true)}wnNpc()}catch(e){}},10000);
 async function wnCancel(id){
   if(WN.busy)return;WN.busy=true;
   try{const d=await wnTO(window.FB.wnCancel(id),15000);if(!d)return;
@@ -21668,7 +21682,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.18.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.18.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

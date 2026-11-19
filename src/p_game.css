@@ -1386,3 +1386,8 @@ body.calm #nyM .nyshine{animation:none;display:none}
 #bdM .bdconf i{position:absolute;top:-10px;width:7px;height:12px;border-radius:2px;opacity:.9;animation:bdfall 3s linear infinite}
 @keyframes bdfall{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(620px) rotate(540deg);opacity:.2}}
 body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
+
+/* Intercambio Milagroso: ventana del resultado (capa propia, por encima de todo salvo los diálogos) */
+#wnResM{position:fixed;inset:0;z-index:2147482500;background:rgba(14,16,40,.62);display:grid;place-items:center;padding:16px}
+#wnResM .nxmw{animation:jpop .4s cubic-bezier(.2,1.4,.4,1)}
+#wnResM #wnResOk{min-width:160px;margin-top:6px}

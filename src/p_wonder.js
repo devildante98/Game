@@ -17,8 +17,16 @@ const wnOn=()=>!!(window.FB&&window.FB.uid&&window.FB.uid()&&window.FB.wnPool);
 // lo que llega no pasa de tu límite de nivel (el del próximo gimnasio)
 const wnFix=r=>({n:r.n,l:Math.max(1,Math.min(r.l|0,typeof lvCap==="function"?lvCap():100)),s:r.s?1:0});
 function wnShow(sent,got,from){
-  nxModal('<div class="wnres"><h3>✨ ¡Intercambio Milagroso!</h3><div class="wnrow">'+trCard(sent,"Has enviado","")+'<div class="wnarrow">⇄</div>'+trCard(got,"Has recibido",from?"De "+esc(pvClean(from)):"")+'</div>'+(from?'<p class="mut wnfrom">Te lo ha mandado <b>'+esc(/^Entrenador de /.test(from)?String(from).slice(0,30):pvClean(from))+'</b></p>':'')+
-    '<button class="red" onclick="nxModalClose()">¡Genial!</button></div>');snd("lvl");try{if(got&&PM[got.n])setTimeout(()=>cry(got.n),300)}catch(e){}
+  // ventana propia, por encima de todo (salvo los diálogos), que se cierra con el botón, tocando fuera o con Esc
+  let M=$("wnResM");if(M)M.remove();M=document.createElement("div");M.id="wnResM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Intercambio Milagroso");
+  M.innerHTML='<div class="nxmw wnres"><h3>✨ ¡Intercambio Milagroso!</h3><div class="wnrow">'+trCard(sent,"Has enviado","")+'<div class="wnarrow">⇄</div>'+trCard(got,"Has recibido",from?"De "+esc(pvClean(from)):"")+'</div>'+(from?'<p class="mut wnfrom">Te lo ha mandado <b>'+esc(/^Entrenador de /.test(from)?String(from).slice(0,30):pvClean(from))+'</b></p>':'')+
+    '<button type="button" class="red" id="wnResOk">¡Genial!</button></div>';
+  document.body.appendChild(M);
+  const close=()=>{M.remove();document.removeEventListener("keydown",kd,true);try{wnUI(true)}catch(e){}};
+  const kd=e=>{if(e.key==="Escape"||e.key==="Enter"){e.preventDefault();e.stopPropagation();close()}};document.addEventListener("keydown",kd,true);
+  M.addEventListener("click",e=>{if(e.target===M||e.target.closest("#wnResOk"))close()});
+  setTimeout(()=>{try{$("wnResOk").focus()}catch(e){}},50);
+  snd("lvl");try{if(got&&PM[got.n])setTimeout(()=>cry(got.n),300)}catch(e){}
 }
 async function wnSend(){
   if(WN.busy)return;if(!wnOn()){toast("Inicia sesión con tu cuenta para usar el Intercambio Milagroso.");return}
@@ -28,7 +36,7 @@ async function wnSend(){
   const day=wnDay();if(day.n>=WN_DAY){toast("Hoy ya has hecho "+WN_DAY+" Intercambios Milagrosos. ¡Vuelve mañana!");return}
   const waiting=WN.mine.filter(x=>x.st==="wait").length;
   if(!await askOk("¿Enviar a "+(rec.s?"✨ ":"")+nk(n)+" (Nv"+rec.l+") al Intercambio Milagroso? No sabrás qué Pokémon recibes hasta el final."))return;
-  WN.busy=true;wnUI(true);const nick=pvClean(pvNick());
+  WN.busy=true;WN.busyAt=Date.now();wnUI(true);const nick=pvClean(pvNick());
   try{
     // primero se busca uno que esté esperando (de otro entrenador), al azar
     let pool=[];try{pool=(await wnTO(window.FB.wnPool(),12000)).filter(x=>x.u!==window.FB.uid())}catch(e){pool=[]}
@@ -70,7 +78,7 @@ async function wnNpc(){if(WN.busy||WN.npc||!wnOn())return;const old=WN.mine.filt
       const g=wnFix(wnNpcMon(d.m)),from="Entrenador de "+WN_REG[Math.floor(Math.random()*WN_REG.length)];await pkGive(g,true);save();render();wnShow(d.m,g,from);
       if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}}}
   finally{WN.npc=false;wnUI(true)}}
-setInterval(()=>{try{wnNpc()}catch(e){}},30000);
+setInterval(()=>{try{if(WN.busy&&WN.busyAt&&Date.now()-WN.busyAt>40000){WN.busy=false;wnUI(true)}wnNpc()}catch(e){}},10000);
 async function wnCancel(id){
   if(WN.busy)return;WN.busy=true;
   try{const d=await wnTO(window.FB.wnCancel(id),15000);if(!d)return;

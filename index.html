@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.17.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.18"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795068219">
+<meta name="game-build" content="1795086168">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3057,6 +3057,27 @@ body.calm #nyM .nyshine{animation:none;display:none}
 #mgM{-webkit-user-select:none;user-select:none}#mgM img{-webkit-user-drag:none;user-drag:none;-webkit-touch-callout:none}
 #mgM input,#mgM textarea{-webkit-user-select:text;user-select:text}
 
+/* Cumpleaños: pregunta (como la del apodo) y ventana de felicitación */
+#bdAskM{position:fixed;inset:0;z-index:170;background:rgba(10,12,30,.75);display:flex;align-items:center;justify-content:center;padding:16px}
+#bdAskM .jbox{width:min(440px,calc(100vw - 24px));box-sizing:border-box;text-align:center}
+#bdAskM .bdsel{display:flex;gap:8px;justify-content:center;margin:10px 0 6px}
+#bdAskM select{font:inherit;font-size:1.05rem;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+#bdAskM #bdMsg{display:block;min-height:1.2em;margin-bottom:6px}
+#bdM{position:fixed;inset:0;z-index:187;background:rgba(6,6,24,.72);display:flex;align-items:center;justify-content:center;padding:16px}
+#bdM .bdbox{position:relative;overflow:hidden;max-width:500px;width:100%;max-height:calc(100vh - 32px);overflow-y:auto;box-sizing:border-box;text-align:center;color:#fff;border-radius:26px;padding:22px 20px 18px;border:4px solid #ff9ac8;background:radial-gradient(circle at 50% 0,#8a2a6a,#2a0a3a 75%);box-shadow:0 0 50px 12px rgba(255,120,190,.4);animation:jpop .55s cubic-bezier(.2,1.4,.4,1)}
+#bdM h2{margin:2px 0;font-size:2rem;background:linear-gradient(90deg,#ffd23f,#ff9ac8,#9ad8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+#bdM .bdk{font-weight:900;letter-spacing:1.5px;color:#ffe680;font-size:.78rem}
+#bdM .bdcake{font-size:3.4rem;line-height:1;animation:bdcake 1.6s ease-in-out infinite}
+@keyframes bdcake{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-6px) rotate(4deg)}}
+#bdM .bdmon{display:flex;flex-direction:column;align-items:center;gap:2px;margin:6px 0}
+#bdM .bdimg{height:124px;width:100%;display:flex;align-items:center;justify-content:center}#bdM .bdimg img{max-width:120px!important;max-height:120px!important;width:auto!important;height:auto!important;margin:0!important;object-fit:contain;filter:drop-shadow(0 0 14px rgba(255,230,120,.7))}#bdM #bdGo{display:block;width:100%;max-width:400px;margin:10px auto 4px}
+#bdM .bdgift{font-weight:800;background:rgba(255,255,255,.1);border-radius:14px;padding:8px 12px;line-height:1.45}
+#bdM button{margin:6px 4px 0}
+#bdM .bdconf{position:absolute;inset:0;pointer-events:none}
+#bdM .bdconf i{position:absolute;top:-10px;width:7px;height:12px;border-radius:2px;opacity:.9;animation:bdfall 3s linear infinite}
+@keyframes bdfall{0%{transform:translateY(0) rotate(0)}100%{transform:translateY(620px) rotate(540deg);opacity:.2}}
+body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -3121,7 +3142,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.17.3</small>
+    <small class="pcver">Versión 7.18</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7872,8 +7893,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.17.3";
+const GAME_VER="7.18";
 const NEWS=[
+{v:"2026-11-19-7.18",ver:"7.18",at:"2026-11-19T12:02",t:"🎂 ¡Regalo de cumpleaños!",l:["Pon el día y el mes de tu cumpleaños (te lo preguntamos después del apodo, o en ⚙️ Ajustes › Juego)","El día de tu cumpleaños te felicitaremos con un gran regalo: un legendario variocolor solo para ti, 100 millones de tickets (o 24 horas de producción, si es más), 5 Master Ball, 3 Cristales Supremos, 30 Caramelos Raros, 5 PP máximos, 10 Teralitos y 3 objetos equipables","Si ese día no puedes entrar, el regalo te espera durante 6 días más","La fecha no se puede cambiar una vez puesta, y el regalo llega si la pusiste al menos 7 días antes","Tu cumpleaños también aparece en el Calendario de eventos cuando se acerca"]},
 {v:"2026-11-19-7.17.3",ver:"7.17.3",at:"2026-11-19T07:03",t:"🛠️ Arreglo del fondo al abrir ventanas",l:["El pueblo del fondo ya no se queda a medio pintar al abrir una ventana: el cambio automático de calidad espera a que vuelvas a la pantalla principal"]},
 {v:"2026-11-18-7.17.2",ver:"7.17.2",at:"2026-11-18T22:43",t:"⏱️ Las horas jugadas se cuentan bien",l:["Las horas jugadas cuentan ahora todo el tiempo que tienes el juego abierto, también minimizado o en otra pestaña (antes solo contaba con la pestaña a la vista)","Ya no se pierde tiempo al recargar la página ni al jugar en varios dispositivos"]},
 {v:"2026-11-18-7.17.1",ver:"7.17.1",at:"2026-11-18T22:16",t:"⚡ Mejor rendimiento en la pantalla principal",l:["Tu entrenador en 3D gasta mucho menos: cuando está en una pose quieta se dibuja 8 veces por segundo en lugar de 24 (casi no se nota)","El pueblo en 3D se dibuja a 15 imágenes por segundo y, si el equipo va justo, pasa solo al modo ligero (antes el modo ligero automático no lo afectaba)","Menos trabajo de fondo mientras juegas","Si aún va lento, activa ⚙️ Ajustes › Animaciones ligeras"]},
@@ -8281,7 +8303,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795068219";
+const GAME_B="1795086168";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -21286,6 +21308,89 @@ setInterval(()=>{try{if(typeof S==="undefined"||!S||S.shc||typeof EX==="undefine
   if(shcCount()<SHC_LIST.length)return;S.shc=1;save();if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}snd("lvl");
   exSay(["📞 ¡Bip, bip! Te llama la Profesora Vega.","«¡No me lo puedo creer! ¡Has completado la Pokédex de Exploración! Has registrado las "+SHC_LIST.length+" especies.»","«¡Qué talento tienes con los Pokémon! Toma, te lo has ganado: es el objeto más especial de mi laboratorio.»","✨ ¡Has recibido el Amuleto Iris!","Desde ahora, los Pokémon variocolor aparecerán tres veces más a menudo en la hierba alta, al hacer surf y al pescar."])}catch(e){}},2500);
 
+// =====================================================================================
+// CUMPLEAÑOS DEL ENTRENADOR
+// Después del apodo (y del tutorial) el juego pregunta el día y el mes del cumpleaños (sin año). El día de tu cumpleaños
+// (o en los 6 días siguientes, si no entras ese día) sale una ventana felicitándote con un gran regalo, una vez al año.
+// Para que nadie haga trampas, la fecha no se puede cambiar una vez puesta y el regalo solo llega si la pusiste al
+// menos 7 días antes del cumpleaños. Se usa la fecha de tu dispositivo. El 29 de febrero, en los años no bisiestos,
+// se celebra el 28.
+// =====================================================================================
+const BD_MES=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const BD_DIAS=[31,29,31,30,31,30,31,31,30,31,30,31];
+const BD_TXT=b=>b.d+" de "+BD_MES[b.m-1];
+const bdOk=b=>!!(b&&b.m>=1&&b.m<=12&&b.d>=1&&b.d<=BD_DIAS[b.m-1]);
+// el regalo: lo mismo para todos (tickets, objetos) y un legendario variocolor que cambia de un jugador a otro
+const BD_GIFT=()=>({t:Math.max(100000000,Math.round((typeof tps==="function"?tps():0)*3600*24)),it:{mb:5,crys:3,cand:30,ppmax:5,tshard:10},hold:3});
+// fecha del cumpleaños en un año (a las 0:00 de tu dispositivo)
+function bdDate(b,y){let d=b.d;if(b.m===2&&d===29&&!(y%4===0&&(y%100!==0||y%400===0)))d=28;return new Date(y,b.m-1,d)}
+// ¿hay un cumpleaños por celebrar ahora? Devuelve su año o 0
+function bdNow(){const b=S.bday;if(!bdOk(b))return 0;const now=new Date(),t0=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  for(const y of [now.getFullYear(),now.getFullYear()-1]){const d=bdDate(b,y).getTime();
+    if(t0>=d&&t0<=d+6*864e5&&S.bdy!==y&&(b.at||0)<=d-7*864e5)return y}
+  return 0}
+function bdLeg(y){const L=typeof NY_LEGS==="function"?NY_LEGS():P.filter(p=>p[2]==="L").map(p=>p[0]);if(!L.length)return null;
+  let id="";try{id=(window.FB&&window.FB.uid&&window.FB.uid())||""}catch(e){}if(!id){S.nyid=S.nyid||Math.random().toString(36).slice(2);id=S.nyid}
+  let h=2166136261;for(const ch of id+"|bday|"+y){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0}return L[h%L.length]}
+function bdTxt(g,leg){return "✨ "+(leg||"Un legendario")+" variocolor + "+fmt(Math.round(g.t*RMUL()))+" 🎟️ + "+g.it.mb+" Master Ball + "+g.it.crys+" Cristales Supremos + "+g.it.cand+" Caramelos Raros + "+g.it.ppmax+" PP máximos + "+g.it.tshard+" Teralitos + "+g.hold+" objetos equipables"}
+function bdClaim(y){if(S.bdy===y||bdNow()!==y)return null;const g=BD_GIFT(),leg=bdLeg(y);S.bdy=y;
+  const rw={t:g.t,it:Object.assign({},g.it)};for(let i=0;i<g.hold;i++){const k=HOLD[Math.floor(Math.random()*HOLD.length)][0];rw.it[k]=(rw.it[k]||0)+1}grant(rw);
+  let nw=false;if(leg){const lv=typeof clampL==="function"?clampL(Math.max(10,Math.min(typeof lvCap==="function"?lvCap():50,typeof leadLevel==="function"?leadLevel():10))):10;nw=giveMon(leg,lv,true)}
+  save();try{render()}catch(e){}if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}return{leg,nw,g}}
+// ---------- ventana: ¡feliz cumpleaños! ----------
+function bdShow(y){if($("bdM"))return;const g=BD_GIFT(),leg=bdLeg(y),nick=typeof pvNick==="function"?pvClean(pvNick()):"";
+  const M=document.createElement("div");M.id="bdM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Feliz cumpleaños");
+  M.innerHTML='<div class="bdbox"><div class="bdconf" aria-hidden="true"></div><div class="bdcake" aria-hidden="true">🎂</div><small class="bdk">🎈 HOY ES UN DÍA ESPECIAL 🎈</small><h2>¡Feliz cumpleaños'+(nick?', '+esc(nick):'')+'!</h2>'+
+    '<p>Todo el equipo de Poke Gacha Online te desea un día genial. ¡Gracias por jugar con nosotros! Aquí tienes tu regalo de cumpleaños:</p>'+
+    (leg&&PM[leg]?'<div class="bdmon"><span class="bdimg">'+icoHD(PM[leg],120,false,true)+'</span><b>✨ '+esc(leg)+'</b><small>¡Un legendario variocolor solo para ti!</small></div>':'')+
+    '<p class="bdgift">'+fmt(Math.round(g.t*RMUL()))+' 🎟️ · '+g.it.mb+' Master Ball · '+g.it.crys+' Cristales Supremos · '+g.it.cand+' Caramelos Raros · '+g.it.ppmax+' PP máximos · '+g.it.tshard+' Teralitos · '+g.hold+' objetos equipables</p>'+
+    '<button type="button" class="red big" id="bdGo">🎁 ¡Abrir mi regalo!</button><button type="button" class="alt" id="bdX">Más tarde</button></div>';
+  document.body.appendChild(M);try{snd("lvl")}catch(e){}
+  const cf=M.querySelector(".bdconf");if(!(typeof hubCalm==="function"&&hubCalm()))for(let i=0;i<60;i++){const s=document.createElement("i");s.style.left=(Math.random()*100)+"%";s.style.background=["#ff5a6a","#ffd23f","#5ab4ff","#7aff8a","#e07aff","#ff9a3c"][i%6];s.style.animationDelay=(Math.random()*3)+"s";s.style.animationDuration=(2.4+Math.random()*2)+"s";cf.appendChild(s)}
+  M.querySelector("#bdX").onclick=()=>M.remove();
+  M.querySelector("#bdGo").onclick=()=>{const r=bdClaim(y);const b=M.querySelector("#bdGo");if(!r){b.disabled=true;b.textContent="✅ Ya lo has abierto";return}
+    b.disabled=true;b.textContent="✅ ¡Regalo abierto!";M.querySelector("#bdX").textContent="Cerrar";snd("capok");try{if(r.leg&&PM[r.leg])cry(r.leg)}catch(e){}
+    toast("🎂 ¡Feliz cumpleaños! "+(r.leg?"✨ "+r.leg+" se une a tu equipo. ":"")+"¡Regalo recibido!")};
+}
+// ---------- ventana: ¿cuándo es tu cumpleaños? ----------
+function bdAsk(fromSettings){if($("bdAskM"))return;
+  const M=document.createElement("div");M.id="bdAskM";M.setAttribute("role","dialog");M.setAttribute("aria-modal","true");M.setAttribute("aria-label","Tu cumpleaños");
+  M.innerHTML='<div class="jbox"><h2>🎂 ¿Cuándo es tu cumpleaños?</h2><p>El día de tu cumpleaños te felicitaremos con un <b>gran regalo</b>: tickets, Master Ball, Cristales Supremos… ¡y un legendario variocolor!</p>'+
+    '<div class="bdsel"><select id="bdD" aria-label="Día"><option value="">Día</option>'+Array.from({length:31},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'</option>').join("")+'</select>'+
+    '<select id="bdMo" aria-label="Mes"><option value="">Mes</option>'+BD_MES.map((m,i)=>'<option value="'+(i+1)+'">'+m+'</option>').join("")+'</select></div>'+
+    '<small id="bdMsg" class="mut">Solo el día y el mes, sin el año. Ojo: después no se puede cambiar.</small>'+
+    '<div class="jrow"><button class="red" id="bdOk">Guardar</button><button class="alt" id="bdLater">'+(fromSettings?'Cancelar':'Más tarde')+'</button></div></div>';
+  document.body.appendChild(M);
+  const close=()=>{M.remove();bdSetUI()};
+  M.querySelector("#bdLater").onclick=()=>{if(!fromSettings){if(S.bdAsk)S.bdAsk2=1;S.bdAsk=Date.now();save()}close()};
+  M.querySelector("#bdOk").onclick=async()=>{const d=+$("bdD").value,m=+$("bdMo").value,msg=$("bdMsg");
+    if(!d||!m){msg.textContent="Elige el día y el mes.";return}const b={d:d,m:m};if(!bdOk(b)){msg.textContent="Esa fecha no existe. Revisa el día y el mes.";return}
+    if(!(await askOk("¿Tu cumpleaños es el "+BD_TXT(b)+"? Después no se podrá cambiar.")))return;
+    S.bday={d:d,m:m,at:Date.now()};save();if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}snd("lvl");
+    toast("🎂 ¡Apuntado! El "+BD_TXT(b)+" te espera un regalo especial.");close()};
+}
+// se pregunta después del apodo y del tutorial, sin pisar otras ventanas; si dices «Más tarde», se vuelve a preguntar una vez a la semana
+function bdAskCheck(){try{if(typeof S==="undefined"||!S||S.bday||$("bdAskM")||$("bdM"))return;if(S.bdAsk2||(S.bdAsk&&Date.now()-S.bdAsk<7*864e5))return;
+  if(!S.tutDone&&!((S.pulls|0)>0))return;if(typeof nkPopNeeded==="function"&&nkPopNeeded())return;if(typeof evpFree==="function"&&!evpFree())return;
+  if($("nyM")||$("advM"))return;bdAsk(false)}catch(e){}}
+function bdCheck(){try{if(typeof S==="undefined"||!S||$("bdM"))return;const y=bdNow();if(!y)return;if(window._bdShown===y)return;
+  if(typeof evpFree==="function"&&!evpFree())return;if($("nyM")||$("bdAskM"))return;window._bdShown=y;bdShow(y)}catch(e){}}
+setInterval(()=>{bdCheck();bdAskCheck()},4000);
+// ---------- en Ajustes › Juego ----------
+function bdSetUI(){const host=document.querySelector('#optp .setpane[data-st="game"]');if(!host)return;let box=$("bdSetBox");
+  if(!box){box=document.createElement("div");box.id="bdSetBox";host.appendChild(box)}
+  const b=S.bday;box.innerHTML='<h4>🎂 Cumpleaños</h4>'+(bdOk(b)?'<div class="slid"><span>Tu cumpleaños: <b>'+BD_TXT(b)+'</b></span><small class="mut">No se puede cambiar</small></div>':
+    '<div class="slid"><span>Pon tu cumpleaños y te felicitaremos con un gran regalo</span><button type="button" id="bdSetBtn">🎂 Poner mi cumpleaños</button></div>')}
+document.addEventListener("click",e=>{if(e.target&&e.target.id==="bdSetBtn")bdAsk(true)});
+setInterval(()=>{const b=$("bdSetBox"),k=JSON.stringify(S.bday||0);if(!b||b.dataset.k!==k){bdSetUI();const n=$("bdSetBox");if(n)n.dataset.k=k}},2000);
+// ---------- en el calendario de eventos: tu cumpleaños, si es en los próximos 7 días ----------
+{const _ce=calEvents;calEvents=function(){const L=_ce.apply(this,arguments);try{const b=S.bday;if(bdOk(b)){const now=new Date();
+  for(const y of [now.getFullYear(),now.getFullYear()+1]){const a=bdDate(b,y).getTime();if(a+864e5>Date.now()&&a<Date.now()+7*864e5){
+    L.push({a:a,b:a+864e5,ic:"🎂",t:"¡Tu cumpleaños!",d:"Te espera un regalo especial: "+bdTxt(BD_GIFT(),bdLeg(y)),c:"#ff7ab6"});break}}}
+  L.sort((x,z)=>x.a-z.a)}catch(e){}return L}}
+// (para el orden de las ventanas al entrar)
+{const _pb=popBusy;popBusy=function(){return _pb.apply(this,arguments)||!!$("bdAskM")||!!$("bdM")}}
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -21540,7 +21645,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.17.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.18";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

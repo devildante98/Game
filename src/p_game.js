@@ -333,7 +333,7 @@ function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   let dl=false;try{dl=S.daily!==today()}catch(e){}set(document.querySelector('[data-gs="earnP"]'),dl);
   set(document.querySelector('[data-gs="qP"]'),bd.prg);set(document.querySelector('[data-gs="bagU"]'),bd.bag);
   const hh=$("hhBan"),ev=document.querySelector('[data-gs="hh"]');if(ev)ev.hidden=!(hh&&hh.classList.contains("on")&&hh.offsetParent!==null||hh&&hh.classList.contains("on"));
-  const sh=document.querySelector('[data-gn="shop"]');if(sh){let can=0;try{can=(G.some((g,i)=>S.t>=gc(i))||(typeof GLMAX!=="undefined"&&(S.cl|0)<GLMAX&&S.t>=Math.round(25*Math.pow(3,S.cl|0))))?1:0}catch(e){}set(sh,can?"↑":0)}}
+  const sh=document.querySelector('[data-gn="shop"]');if(sh){let can=0;try{can=(G.some((g,i)=>S.t>=gc(i))||(typeof GLMAX!=="undefined"&&(S.cl|0)<GLMAX&&S.t>=glc(S.cl|0)))?1:0}catch(e){}set(sh,can?"↑":0)}}
 // ---------- hora del día ----------
 function gmTod(){const h=new Date().getHours()+new Date().getMinutes()/60;let k=GM.todF||"day";if(!GM.todF)
   if(h>=21||h<6)k="night";else if(h<8.5)k="dawn";else if(h>=18.5)k="dusk";if(document.body.dataset.tod!==k)document.body.dataset.tod=k}

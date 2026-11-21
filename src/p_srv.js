@@ -50,7 +50,7 @@ function srvPullApply(t,n,sup){
 // Van de una en una: cada compra se calcula cuando le toca, con los tickets y niveles ya actualizados. Si tocas varias
 // veces seguidas el mismo edificio mientras otra compra está en camino, se juntan en una sola petición.
 // srvShopN: cuántos niveles (como mucho lim) se pueden pagar ahora y cuánto cuestan (como shopN)
-function srvShopN(i,lim){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?Math.round(25*Math.pow(3,lv0+k)):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
+function srvShopN(i,lim){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?glc(lv0+k):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
   let n=0,c=0;while(n<lim){if(i<0&&lv0+n>=GLMAX)break;const u=unit(n);if(c+u>S.t)break;c+=u;n++}return [n,c]}
 const SRVSH={};
 {const _sb=shopBuy;shopBuy=function(i){

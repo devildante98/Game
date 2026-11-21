@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.23"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.24"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795096081">
+<meta name="game-build" content="1795261557">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3214,7 +3214,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.23</small>
+    <small class="pcver">Versión 7.24</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -3798,7 +3798,7 @@ const today=()=>new Date().toISOString().slice(0,10);
 const G=[["Entrenador",15,.1],["Granja de Miltank",100,.6],["Centro Pokémon",600,3],["Guardería",3500,15],["Liga Pokémon",20000,80]];
 const NF0=new Intl.NumberFormat("es"),NF1=new Intl.NumberFormat("es",{maximumFractionDigits:1});const fmt=n=>n>=1000?NF0.format(Math.floor(n)):NF1.format(Math.floor(n*10)/10);
 const PRS=()=>S.prs||0,PMUL=()=>1+.5*PRS(),RMUL=()=>1+.25*PRS(),PDISC=()=>Math.max(.5,1-.05*PRS()),PITY=()=>PRS()>=6?20:PRS()>=3?25:30;
-const cpc=()=>.1*Math.pow(2,S.cl)*PMUL()*(typeof hhMul==="function"?hhMul("tk"):1),clc=()=>Math.round(25*Math.pow(3,S.cl));
+const cpc=()=>.1*Math.pow(2,S.cl)*PMUL()*(typeof hhMul==="function"?hhMul("tk"):1),clc=()=>glc(S.cl|0);/* guantes: ×3 por nivel hasta el 20 y ×2,3 desde ahí (igual que el servidor) */function glc(l){return Math.round(25*Math.pow(3,Math.min(l,20))*Math.pow(2.3,Math.max(0,l-20)))}
 var gc=i=>Math.ceil(G[i][1]*Math.pow(1.15,S.g[i]));
 const tps=()=>G.reduce((a,g,i)=>a+g[2]*S.g[i],0)*PMUL();
 const gift=()=>{const n=Math.min(60,S.dg||0);return Math.round((15000+4500*n+450*n*n)*RMUL())};
@@ -7969,8 +7969,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.23";
+const GAME_VER="7.24";
 const NEWS=[
+{v:"2026-11-21-7.24",ver:"7.24",at:"2026-11-21T12:45",t:"🥊 Guantes de entrenador más baratos",l:["A partir del nivel 20, cada nivel de los guantes cuesta ×2,3 el anterior en vez de ×3. Por ejemplo, el nivel 21→22 baja de 261 a 200 mil millones, el 22→23 de 785 a 461 mil millones y el 25→26 de 21 billones a 5,6 billones","Los niveles hasta el 20 cuestan lo mismo que antes"]},
 {v:"2026-11-19-7.23",ver:"7.23",at:"2026-11-19T14:48",t:"🧪 Título Beta-Tester renovado",l:["El título «Beta-Tester» ahora luce con un formato exclusivo: arcoíris animado con destellos, en tu perfil y en tu vitrina. ¡Gracias por estar desde el principio!","Sorteos: la lista de apuntados ahora solo la ven los administradores; el número de apuntados lo sigue viendo todo el mundo"]},
 {v:"2026-11-19-7.22",ver:"7.22",at:"2026-11-19T14:36",t:"🎉 Sorteos: aviso y lista de apuntados",l:["Cuando haya un sorteo nuevo te saldrá un aviso con el premio y la hora de cierre, para que te apuntes con un toque","En cada sorteo puedes ver la lista de jugadores apuntados con el botón «👥 Ver apuntados»"]},
 {v:"2026-11-19-7.21",ver:"7.21",at:"2026-11-19T14:21",t:"🎉 ¡Sorteos!",l:["Nuevo apartado Más › 🎉 Sorteos: mira los sorteos abiertos, su premio y cuánto falta, y apúntate con un toque (una vez por cuenta; puedes borrarte mientras siga abierto)","Cuando se haga el sorteo, los ganadores salen al azar entre los apuntados. Si te toca, al entrar te avisamos para que reclames tu premio","También puedes ver los ganadores de los últimos sorteos"]},
@@ -8388,7 +8389,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795096081";
+const GAME_B="1795261557";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11737,7 +11738,7 @@ function megaDup(n){if(!isMegaF(n))return null;S.owned[n]=Math.max(1,(S.owned[n]
 const GLMAX=30;
 if((S.cl|0)>GLMAX){S.cl=GLMAX;save()}
 let SHQ=(()=>{try{return localStorage.getItem("pg_shq")||"1"}catch(e){return "1"}})();
-function shopN(i){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?Math.round(25*Math.pow(3,lv0+k)):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
+function shopN(i){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?glc(lv0+k):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
   const mx=SHQ==="max",lim=mx?100000:+SHQ;let n=0,c=0;
   while(n<lim){if(i<0&&lv0+n>=GLMAX)break;const u=unit(n);if(mx&&c+u>S.t){if(!n)c=u;break}c+=u;n++}
   return [n,c]}
@@ -15251,7 +15252,7 @@ function gmBadges(){let bd={};try{bd=hubBadges()}catch(e){}
   let dl=false;try{dl=S.daily!==today()}catch(e){}set(document.querySelector('[data-gs="earnP"]'),dl);
   set(document.querySelector('[data-gs="qP"]'),bd.prg);set(document.querySelector('[data-gs="bagU"]'),bd.bag);
   const hh=$("hhBan"),ev=document.querySelector('[data-gs="hh"]');if(ev)ev.hidden=!(hh&&hh.classList.contains("on")&&hh.offsetParent!==null||hh&&hh.classList.contains("on"));
-  const sh=document.querySelector('[data-gn="shop"]');if(sh){let can=0;try{can=(G.some((g,i)=>S.t>=gc(i))||(typeof GLMAX!=="undefined"&&(S.cl|0)<GLMAX&&S.t>=Math.round(25*Math.pow(3,S.cl|0))))?1:0}catch(e){}set(sh,can?"↑":0)}}
+  const sh=document.querySelector('[data-gn="shop"]');if(sh){let can=0;try{can=(G.some((g,i)=>S.t>=gc(i))||(typeof GLMAX!=="undefined"&&(S.cl|0)<GLMAX&&S.t>=glc(S.cl|0)))?1:0}catch(e){}set(sh,can?"↑":0)}}
 // ---------- hora del día ----------
 function gmTod(){const h=new Date().getHours()+new Date().getMinutes()/60;let k=GM.todF||"day";if(!GM.todF)
   if(h>=21||h<6)k="night";else if(h<8.5)k="dawn";else if(h>=18.5)k="dusk";if(document.body.dataset.tod!==k)document.body.dataset.tod=k}
@@ -20692,7 +20693,7 @@ function srvPullApply(t,n,sup){
 // Van de una en una: cada compra se calcula cuando le toca, con los tickets y niveles ya actualizados. Si tocas varias
 // veces seguidas el mismo edificio mientras otra compra está en camino, se juntan en una sola petición.
 // srvShopN: cuántos niveles (como mucho lim) se pueden pagar ahora y cuánto cuestan (como shopN)
-function srvShopN(i,lim){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?Math.round(25*Math.pow(3,lv0+k)):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
+function srvShopN(i,lim){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?glc(lv0+k):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
   let n=0,c=0;while(n<lim){if(i<0&&lv0+n>=GLMAX)break;const u=unit(n);if(c+u>S.t)break;c+=u;n++}return [n,c]}
 const SRVSH={};
 {const _sb=shopBuy;shopBuy=function(i){
@@ -22011,7 +22012,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.23";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.24";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

@@ -32,7 +32,7 @@ function costeEdificio(i, a, b) {
 // lo que cuestan los guantes del nivel a al b
 function costeGuantes(a, b) {
   let t = 0;
-  for (let l = Math.max(0, a); l < b && l < 200; l++) t += Math.round(25 * Math.pow(3, l));
+  for (let l = Math.max(0, a); l < b && l < 200; l++) t += Math.round(25 * Math.pow(3, Math.min(l, 20)) * Math.pow(2.3, Math.max(0, l - 20))); // ×3 por nivel hasta el 20, ×2,3 desde ahí
   return t;
 }
 // lo que cuestan las tiradas desde el contador c1 al c2 (normales o súper)

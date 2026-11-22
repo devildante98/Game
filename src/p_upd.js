@@ -469,6 +469,13 @@ const ROADMAP=[
  ["🏠","Base secreta","Tu propia habitación para decorar con muebles, peluches, alfombras y los trofeos que consigas jugando. Tus amigos podrán visitarla y dejarte un «me gusta»."],
  ["📜","Retos semanales con reglas","Cada semana, un reto especial con normas distintas: «solo tipo Agua», «equipo de nivel 50», «sin legendarios»… Enfréntate a entrenadores y a la Torre con esas reglas, con premios y clasificación propia."],
  ["🎀","Concursos Pokémon","Luce a tus Pokémon en concursos de Belleza, Carisma, Dulzura, Ingenio y Dureza. Elige bien sus movimientos para ganarte al público y consigue cintas para su ficha."],
+ ["🔎","Pokémon del día","Una adivinanza nueva cada día: acierta el Pokémon en 6 intentos con pistas de tipo, generación, altura y color. Mantén tu racha y comparte tu resultado en Discord sin destripar la solución."],
+ ["🧳","Mercader misterioso","De vez en cuando llega al pueblo un mercader con ofertas raras durante solo 30 minutos: Pokémon poco comunes, lotes de objetos y huevos especiales. Te avisaremos en el juego y en Discord cuando aparezca."],
+ ["🏟️","Torneos de amigos","Crea tu propio torneo por eliminatorias de 4, 8 o 16 entrenadores, invita a tus amigos o a tu gremio y jugadlo por rondas. El cuadro se ve en el juego y el campeón se lleva un trofeo."],
+ ["👀","Modo espectador","Mira en directo los combates PVP de otros entrenadores, sobre todo las finales del torneo semanal, y anímalos con reacciones que salen en pantalla."],
+ ["📔","Diario del entrenador","El juego apuntará tus grandes momentos: tu primer variocolor, tu primer legendario, el día que ganaste la Liga o tu mejor tirada. Míralos en una línea del tiempo y compártelos."],
+ ["🎨","Aspectos para la Poké Ball","Cambia el aspecto de la Poké Ball grande del gacha y de su animación al tirar: de hielo, galáctica, dorada… Se consiguen en eventos, con logros y en la Tienda de Evento."],
+ ["🎓","Especialidades de entrenador","Al subir de nivel elegirás un camino: Criador (huevos más rápidos), Coleccionista (más variocolores) o Estratega (más experiencia en combate). Cada uno con sus mejoras y su propio título."],
 ];
 nxPanel("roadP","🚀 Próximas actualizaciones","Lo que estamos preparando para el juego. ¡Atento a las Novedades!");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="roadP"))g.tabs.splice(1,0,["roadP","Próximamente"]);HUBP.roadP="mas";HUBR.roadP=()=>roadUI()}

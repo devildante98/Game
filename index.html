@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.25.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.26"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795352522">
+<meta name="game-build" content="1795353046">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3164,6 +3164,13 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 .cpgot{font-size:.85rem;font-weight:700;color:#1b7fc4}
 .cpend{font-size:.85rem;font-weight:700;color:#7a7590}
 .cph .mini{margin:0}
+/* botón de Discord (barra de arriba) */
+#dcb{position:fixed;z-index:61;display:flex;align-items:center;gap:7px;padding:0 14px 0 11px;border-radius:13px;background:linear-gradient(#6b78ff,#4752c4);color:#fff;font-weight:900;font-size:.95rem;text-decoration:none;border:2px solid #0a0f30;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 3px 0 #0a0f30;box-sizing:border-box;transition:transform .12s,filter .12s;white-space:nowrap}
+#dcb:hover{transform:translateY(-1px);filter:brightness(1.08)}
+#dcb:active{transform:translateY(2px);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 1px 0 #0a0f30}
+#dcb[hidden]{display:none!important}
+#dcb.mini{padding:0;width:40px;justify-content:center}#dcb.mini span{display:none}
+#hubTabs [data-ha="discord"]{background:linear-gradient(#6b78ff,#4752c4)!important;color:#fff!important}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3229,7 +3236,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.25.1</small>
+    <small class="pcver">Versión 7.26</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7984,8 +7991,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.25.1";
+const GAME_VER="7.26";
 const NEWS=[
+{v:"2026-11-22-7.26",ver:"7.26",at:"2026-11-22T14:10",t:"💬 ¡Servidor de Discord!",l:["Ya tenemos servidor de Discord para los jugadores: entra con el botón «Discord» de la barra de arriba o desde Más › 💬 Discord","Es nuevo y lo iremos mejorando poco a poco. ¡Te esperamos!"]},
 {v:"2026-11-22-7.25.1",ver:"7.25.1",at:"2026-11-22T13:58",t:"🎨 Nuevo icono del juego",l:["El juego estrena icono: una Poké Ball brillante a punto de abrirse, con rayos de premio raro, tres estrellas y destellos. Lo verás en la pestaña del navegador y en la app instalada (en el móvil puede tardar un poco en cambiar)"]},
 {v:"2026-11-22-7.25",ver:"7.25",at:"2026-11-22T13:52",t:"🎁 Lista de códigos de regalo",l:["En Más › 🎁 Canjear código ahora puedes ver todos los códigos activos: su premio, cuántos usos quedan y hasta cuándo valen. Toca uno para canjearlo o copiarlo","Debajo están los códigos que ya han pasado (caducados o agotados), y en cada código te marcamos si ya lo canjeaste"]},
 {v:"2026-11-22-7.24.4",ver:"7.24.4",at:"2026-11-22T13:36",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball muy seguido (o con varias teclas a la vez) ya no afecta a la fluidez de las animaciones: la partida se guarda cada 2 segundos en vez de cada 10 toques, la pantalla se refresca menos veces y las chispas salen como mucho unas 9 veces por segundo"]},
@@ -8410,7 +8418,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795352522";
+const GAME_B="1795353046";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -21813,6 +21821,37 @@ document.addEventListener("click",e=>{const M=$("rfAnnM");if(!M||!e.target.close
   if(e.target.closest("#rfAnnX")||e.target===M)M.remove();else if(e.target.closest("#rfAnnV")){M.remove();try{hubOpen("mas","rafP")}catch(x){}}});
 setTimeout(rfWinCheck,8000);setInterval(()=>{rfWinCheck().then(()=>setTimeout(rfAnnCheck,1500))},60000);setTimeout(rfAnnCheck,14000);
 
+// =====================================================================================
+// DISCORD: botón para entrar al servidor de Discord de los jugadores
+// · Pantallas anchas: botón «Discord» en la barra de arriba, a la izquierda del chat (el recuadro Guardar/Salir se aparta).
+// · En cualquier pantalla: acceso «Discord» en el menú Más.
+// =====================================================================================
+const DISCORD_URL="https://discord.gg/Eqt62JDPGF";
+const DC_IC='<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.3 5.4A16.6 16.6 0 0 0 15.2 4l-.5 1.1a15.3 15.3 0 0 0-5.4 0L8.8 4a16.6 16.6 0 0 0-4.1 1.4C2.1 9.3 1.4 13.1 1.8 16.8a16.8 16.8 0 0 0 5 2.6l1.1-1.7c-.6-.2-1.2-.5-1.7-.9l.4-.3a11.9 11.9 0 0 0 10.8 0l.4.3c-.5.4-1.1.7-1.7.9l1.1 1.7a16.8 16.8 0 0 0 5-2.6c.5-4.3-.8-8.1-2.9-11.4zM8.7 14.6c-1 0-1.8-.9-1.8-2.1s.8-2.1 1.8-2.1 1.8.9 1.8 2.1-.8 2.1-1.8 2.1zm6.6 0c-1 0-1.8-.9-1.8-2.1s.8-2.1 1.8-2.1 1.8.9 1.8 2.1-.8 2.1-1.8 2.1z"/></svg>';
+function dcOpen(){try{snd("ui")}catch(e){}window.open(DISCORD_URL,"_blank","noopener")}
+(function(){if(document.getElementById("dcb"))return;
+  const a=document.createElement("a");a.id="dcb";a.href=DISCORD_URL;a.target="_blank";a.rel="noopener";a.title="Únete al servidor de Discord de Poke Gacha Online";a.setAttribute("aria-label",a.title);
+  a.innerHTML=DC_IC+'<span>Discord</span>';a.addEventListener("click",()=>{try{snd("ui")}catch(e){}});document.body.appendChild(a)})();
+// colocación: a la izquierda del primero de los botones redondos de arriba (chat, pantalla completa, ajustes)
+function dcPlace(){const a=document.getElementById("dcb");if(!a)return;
+  const vis=e=>{if(!e||e.hidden)return false;const c=getComputedStyle(e);return c.display!=="none"&&c.visibility!=="hidden"};// (son fijos: offsetParent siempre es null)
+  const R=["chb","fsb","optb"].map(id=>document.getElementById(id)).filter(vis).map(e=>e.getBoundingClientRect()).filter(r=>r.top<80&&r.width>0);
+  const ac=document.getElementById("acct");
+  if(innerWidth<900||!R.length||document.body.classList.contains("hubon")||document.body.classList.contains("exfsOn")){a.hidden=true;if(ac&&ac._dcR){ac.style.right="";ac._dcR=0}return}
+  const L=Math.min(...R.map(r=>r.left)),top=R[0].top,h=R[0].height;a.hidden=false;
+  a.style.right=Math.round(innerWidth-L+8)+"px";a.style.top=Math.round(top)+"px";a.style.height=Math.round(h)+"px";
+  // hasta dónde llega lo de la izquierda de la barra (avatar, tickets, racha, nivel)
+  const gt=document.getElementById("gTop"),edge=gt?Math.max(0,...[...gt.children].filter(e=>e.id!=="acct"&&e.id!=="dcb").map(e=>e.getBoundingClientRect()).filter(r=>r.width>0&&r.top<80).map(r=>r.right)):0;
+  const acOn=ac&&!ac.hidden&&ac.getBoundingClientRect().top<80,acW=acOn?ac.getBoundingClientRect().width:0;
+  // con texto si cabe; si no, solo el logo; y si tampoco, se oculta (sigue en el menú Más)
+  for(const mini of [false,true]){a.classList.toggle("mini",mini);const w=a.getBoundingClientRect().width,leftAll=L-8-w-(acOn?10+acW:0);
+    if(leftAll>edge+8){if(acOn){const r=Math.round(innerWidth-L+8+w+10);if(ac._dcR!==r){ac.style.right=r+"px";ac._dcR=r}}return}}
+  a.hidden=true;if(ac&&ac._dcR){ac.style.right="";ac._dcR=0}}
+addEventListener("resize",dcPlace);setInterval(dcPlace,1000);setTimeout(dcPlace,300);
+// acceso en el menú Más
+{const g=HUB.find(x=>x.k==="mas");if(g){g.act=g.act||[];if(!g.act.some(x=>x[1]==="discord"))g.act.unshift(["💬 Discord","discord"])}}
+document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;const b=t.closest('#hubTabs [data-ha="discord"]');if(b){e.preventDefault();dcOpen()}});
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -22091,7 +22130,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.25.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.26";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

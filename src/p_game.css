@@ -1471,3 +1471,10 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 .cpgot{font-size:.85rem;font-weight:700;color:#1b7fc4}
 .cpend{font-size:.85rem;font-weight:700;color:#7a7590}
 .cph .mini{margin:0}
+/* botón de Discord (barra de arriba) */
+#dcb{position:fixed;z-index:61;display:flex;align-items:center;gap:7px;padding:0 14px 0 11px;border-radius:13px;background:linear-gradient(#6b78ff,#4752c4);color:#fff;font-weight:900;font-size:.95rem;text-decoration:none;border:2px solid #0a0f30;box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 3px 0 #0a0f30;box-sizing:border-box;transition:transform .12s,filter .12s;white-space:nowrap}
+#dcb:hover{transform:translateY(-1px);filter:brightness(1.08)}
+#dcb:active{transform:translateY(2px);box-shadow:inset 0 2px 0 rgba(255,255,255,.35),0 1px 0 #0a0f30}
+#dcb[hidden]{display:none!important}
+#dcb.mini{padding:0;width:40px;justify-content:center}#dcb.mini span{display:none}
+#hubTabs [data-ha="discord"]{background:linear-gradient(#6b78ff,#4752c4)!important;color:#fff!important}

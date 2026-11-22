@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.25.1";
+const GAME_VER="7.26";
 const NEWS=[
+{v:"2026-11-22-7.26",ver:"7.26",at:"2026-11-22T14:10",t:"💬 ¡Servidor de Discord!",l:["Ya tenemos servidor de Discord para los jugadores: entra con el botón «Discord» de la barra de arriba o desde Más › 💬 Discord","Es nuevo y lo iremos mejorando poco a poco. ¡Te esperamos!"]},
 {v:"2026-11-22-7.25.1",ver:"7.25.1",at:"2026-11-22T13:58",t:"🎨 Nuevo icono del juego",l:["El juego estrena icono: una Poké Ball brillante a punto de abrirse, con rayos de premio raro, tres estrellas y destellos. Lo verás en la pestaña del navegador y en la app instalada (en el móvil puede tardar un poco en cambiar)"]},
 {v:"2026-11-22-7.25",ver:"7.25",at:"2026-11-22T13:52",t:"🎁 Lista de códigos de regalo",l:["En Más › 🎁 Canjear código ahora puedes ver todos los códigos activos: su premio, cuántos usos quedan y hasta cuándo valen. Toca uno para canjearlo o copiarlo","Debajo están los códigos que ya han pasado (caducados o agotados), y en cada código te marcamos si ya lo canjeaste"]},
 {v:"2026-11-22-7.24.4",ver:"7.24.4",at:"2026-11-22T13:36",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball muy seguido (o con varias teclas a la vez) ya no afecta a la fluidez de las animaciones: la partida se guarda cada 2 segundos en vez de cada 10 toques, la pantalla se refresca menos veces y las chispas salen como mucho unas 9 veces por segundo"]},

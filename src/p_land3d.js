@@ -492,15 +492,21 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     const isLite=()=>document.body.classList.contains("lite")||document.body.classList.contains("glite")||!!(window.S&&S.o&&S.o.lite);
     const fit=()=>{const lite=isLite();L._fl=lite;L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",()=>{fit();L._force=1});
     const t0=performance.now();let last=0;
-    const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm"))return;
+    let pts=0;const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm")){pts=0;return}
+      // fluidez del navegador (intervalo entre fotogramas): si no llega a ~60 imágenes por segundo, el paisaje baja de nivel
+      // (60 → 30 → 15) para no quitarle fluidez al resto del juego; vuelve a subir si después va sobrado unos segundos
+      if(pts){const d=Math.min(100,ts-pts);L._ri=L._ri?L._ri*.95+d*.05:d;const nw=ts;L._lv=L._lv||0;
+        if(L._ri>22&&L._lv<2&&nw-(L._lc||0)>2000){L._lv++;L._lc=nw;L._ri=16.7}else if(L._ri<17.6&&L._lv>0&&nw-(L._lc||0)>8000){L._lv--;L._lc=nw}}pts=ts;
       // con una ventana o una sección abierta encima, el paisaje se queda quieto
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
       const lite=isLite();
       // el cambio de calidad (que cambia el tamaño del lienzo) se hace solo con el pueblo a la vista, y se dibuja enseguida:
       // cambiarlo con una ventana encima dejaba el fondo a medio pintar en algunos equipos
-      if(lite!==L._fl&&!cover){fit();last=0}if(L._force){L._force=0;last=0}const gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?80:66;if(ts-last<gap)return;last=ts;
+      if(lite!==L._fl&&!cover){fit();last=0}if(L._force){L._force=0;last=0}// fluidez: si dibujar el paisaje cuesta poco, va a ~60 imágenes por segundo (nunca más, aunque la pantalla sea de 144 Hz);
+      // si cuesta más, a ~30 o ~15. En modo ligero sigue a 8.
+      const dc=L._dc||5,lv=Math.max(L._lv||0,dc<3?0:dc<7?1:2),fast=[12,28,66][lv],gap=cover?1500:Math.abs(L.panT-L.pan)>.05?12:lite?125:L._coarse?Math.max(28,fast):fast;if(ts-last<gap)return;last=ts;const t1=performance.now();
       try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
         L.env=window.WXENV||null;L.lite=!!lite;
-        L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L)}catch(e){console.error(e)}};
+        L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L);const d2=performance.now()-t1;L._dc=L._dc?L._dc*.9+Math.min(d2,40)*.1:d2}catch(e){console.error(e)}};
     requestAnimationFrame(loop);return true};
   if(!tryAttach()){const iv=setInterval(()=>{if(tryAttach())clearInterval(iv)},700)}})();

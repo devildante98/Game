@@ -17,7 +17,7 @@ function hubPark(id){const p=$(id);if(!p)return;if(id==="pvpP"&&p.dataset.duel)r
 // refresco del contenido al abrir cada pestaña (por si cambió mientras estaba guardado)
 const HUBR={collP:()=>render(),bagU:()=>{bagUI()},bagP:()=>{bagUI()},healP:()=>{healUI()},gymP:()=>{_gyk="";gymUI()},lgP:()=>{leagueUI()},rkP:()=>{rkLoad()},frP:()=>{frUI()},gdP:()=>{gUI(true)},qP:()=>{qUI()},achP:()=>render(),prsP:()=>{prsUI()},trP:()=>{trUI()},trAchP:()=>{trAchUI()},newsP:()=>{newsUI()},supP:()=>{supUI()},pvpP:()=>{seasonUI()}};
 function hubOpen(k,tab){
-  const g=hubG(k);if(!g)return;hubMenu(false);
+  const g=hubG(k);if(!g)return;hubMenu(false);window._uiBusy=performance.now()+2500;
   if(g.k==="onl"&&$("pvpP")&&$("pvpP").dataset.duel){try{Element.prototype._siv.call($("pvpP"),{behavior:"smooth",block:"start"})}catch(e){}return}
   tab=tab||HB.last[k]||g.tabs[0][0];
   if(HB.t&&HB.t!==tab)hubPark(HB.t);
@@ -33,7 +33,7 @@ function hubOpen(k,tab){
   snd("ui");
 }
 function hubClose(){
-  const M=$("hubM");if(!M||M.hidden)return;
+  const M=$("hubM");if(!M||M.hidden)return;window._uiBusy=performance.now()+2500;
   if(HB.t)hubPark(HB.t);HB.t=null;HB.g=null;M.hidden=true;document.body.classList.remove("hubon");
 }
 // ---- cuadrícula del botón flotante ----

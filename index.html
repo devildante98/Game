@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.24"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.24.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795261557">
+<meta name="game-build" content="1795344953">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3214,7 +3214,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.24</small>
+    <small class="pcver">Versión 7.24.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7969,8 +7969,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.24";
+const GAME_VER="7.24.1";
 const NEWS=[
+{v:"2026-11-22-7.24.1",ver:"7.24.1",at:"2026-11-22T11:55",t:"🔧 Arreglos/Mejoras",l:["Animaciones más fluidas: el paisaje de la pantalla principal (pájaros, nubes, agua) se mueve hasta a 60 imágenes por segundo en los equipos que lo aguantan, en vez de a 15","El modo ligero automático ya no se activa por un tirón al abrir un menú, y se quita solo cuando el juego vuelve a ir fluido (antes se quedaba puesto hasta recargar la página)","La Tienda de Evento se abre al instante: los entrenadores en 3D aparecen poco a poco en vez de congelar el juego al abrirla"]},
 {v:"2026-11-21-7.24",ver:"7.24",at:"2026-11-21T12:45",t:"🥊 Guantes de entrenador más baratos",l:["A partir del nivel 20, cada nivel de los guantes cuesta ×2,3 el anterior en vez de ×3. Por ejemplo, el nivel 21→22 baja de 261 a 200 mil millones, el 22→23 de 785 a 461 mil millones y el 25→26 de 21 billones a 5,6 billones","Los niveles hasta el 20 cuestan lo mismo que antes"]},
 {v:"2026-11-19-7.23",ver:"7.23",at:"2026-11-19T14:48",t:"🧪 Título Beta-Tester renovado",l:["El título «Beta-Tester» ahora luce con un formato exclusivo: arcoíris animado con destellos, en tu perfil y en tu vitrina. ¡Gracias por estar desde el principio!","Sorteos: la lista de apuntados ahora solo la ven los administradores; el número de apuntados lo sigue viendo todo el mundo"]},
 {v:"2026-11-19-7.22",ver:"7.22",at:"2026-11-19T14:36",t:"🎉 Sorteos: aviso y lista de apuntados",l:["Cuando haya un sorteo nuevo te saldrá un aviso con el premio y la hora de cierre, para que te apuntes con un toque","En cada sorteo puedes ver la lista de jugadores apuntados con el botón «👥 Ver apuntados»"]},
@@ -8389,7 +8390,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795261557";
+const GAME_B="1795344953";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -8868,7 +8869,7 @@ function hubPark(id){const p=$(id);if(!p)return;if(id==="pvpP"&&p.dataset.duel)r
 // refresco del contenido al abrir cada pestaña (por si cambió mientras estaba guardado)
 const HUBR={collP:()=>render(),bagU:()=>{bagUI()},bagP:()=>{bagUI()},healP:()=>{healUI()},gymP:()=>{_gyk="";gymUI()},lgP:()=>{leagueUI()},rkP:()=>{rkLoad()},frP:()=>{frUI()},gdP:()=>{gUI(true)},qP:()=>{qUI()},achP:()=>render(),prsP:()=>{prsUI()},trP:()=>{trUI()},trAchP:()=>{trAchUI()},newsP:()=>{newsUI()},supP:()=>{supUI()},pvpP:()=>{seasonUI()}};
 function hubOpen(k,tab){
-  const g=hubG(k);if(!g)return;hubMenu(false);
+  const g=hubG(k);if(!g)return;hubMenu(false);window._uiBusy=performance.now()+2500;
   if(g.k==="onl"&&$("pvpP")&&$("pvpP").dataset.duel){try{Element.prototype._siv.call($("pvpP"),{behavior:"smooth",block:"start"})}catch(e){}return}
   tab=tab||HB.last[k]||g.tabs[0][0];
   if(HB.t&&HB.t!==tab)hubPark(HB.t);
@@ -8884,7 +8885,7 @@ function hubOpen(k,tab){
   snd("ui");
 }
 function hubClose(){
-  const M=$("hubM");if(!M||M.hidden)return;
+  const M=$("hubM");if(!M||M.hidden)return;window._uiBusy=performance.now()+2500;
   if(HB.t)hubPark(HB.t);HB.t=null;HB.g=null;M.hidden=true;document.body.classList.remove("hubon");
 }
 // ---- cuadrícula del botón flotante ----
@@ -11449,7 +11450,8 @@ function cardShopCard(t,it,mode){const[id,nm,pr,e]=it,own=trOwn(t,id),cur=cardGe
 function titShopCard(it,mode){const[id,tx,pr,e]=it,own=trOwn("ti",id),on=typeof shwGet==="function"&&shwGet().tit===id;
   const btn=mode==="soon"?'<small class="mut">🔒 Vuelve en '+esc(e)+' ('+evDates(e)+')</small>':own?(on?'<span class="tshon">✅ Lo llevas puesto</span>':'<button data-tiw="'+id+'">🏷️ Ponérmelo</button>'):'<button class="red" data-tib="'+id+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button>';
   return '<div class="tshc'+(own?' own':'')+(mode==="soon"?' soon':'')+'"><div class="tshtit"><span>'+esc(tx)+'</span></div><b>Título</b><small class="mut">Para tu vitrina y tu perfil'+(e?' · '+esc(e):'')+'</small>'+btn+'</div>'}
-function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=ev?ev.n:null;
+function trShopUI(){trURL.lazy=1;try{trShopUI0()}finally{trURL.lazy=0}}
+function trShopUI0(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=ev?ev.n:null;
   // todo lo de la tienda como [tipo, item]: ropa ("tr") y tarjeta ("bg"/"fr")
   const all=[...TRSHOP.map(x=>["tr",x,x[3]]),...CARD_BG.map(x=>["bg",x,x[3]]),...CARD_FR.map(x=>["fr",x,x[3]]),...(typeof TITLE_SHOP!=="undefined"?TITLE_SHOP.map(x=>["ti",x,x[3]]):[])],own=q=>q[0]==="tr"?trOwn(q[1][0],q[1][1]):trOwn(q[0],q[1][0]);
   const card=(q,m)=>q[0]==="tr"?trShopCard(q[1],m):q[0]==="ti"?titShopCard(q[1],m):cardShopCard(q[0],q[1],m);
@@ -15132,9 +15134,13 @@ function gmInit(){
   const ar=$("arena");if(ar)new MutationObserver(()=>{document.body.classList.toggle("gbat",!ar.hidden&&!!ar.closest("#gScr"));if(!gmOn()||ar.hidden)return;const p=ar.closest("#batP,#pvpP");if(p&&(p.id==="batP"||($("pvpP")&&$("pvpP").dataset.duel))&&GM.scr!=="batP")gmOpen("batP",1);if(GM.scr==="batP")setTimeout(()=>{try{ar._siv({block:"start"})}catch(e){}},60)}).observe(ar,{attributes:true,attributeFilter:["hidden"]});
   const pd=$("pvDuel");if(pd)new MutationObserver(()=>{if(!gmOn())return;const p=$("pvpP");if(p&&p.dataset.duel&&pd.querySelector("#arena")){gmOpen("batP",1);$("batP").after(p);setTimeout(()=>{try{p._siv({block:"start"})}catch(e){}},60)}}).observe(pd,{childList:true});
   gmApply();gmLite();gmLoad();
-  let lt=0,tt=0,pf=0,fc=0,fs=0;const loop=t=>{requestAnimationFrame(loop);if(document.hidden||!gmOn()){pf=0;return}
-    // fluidez: si el escenario va a menos de ~30 imágenes por segundo, se activan las animaciones ligeras
-    if(pf&&document.body.classList.contains("gmhome")&&!GM.liteAuto&&!O.lite){const d=t-pf;if(d<250){fc++;fs+=d;if(fc>=150){if(fs/fc>34){GM.liteAuto=1;gmLite()}fc=0;fs=0}}}pf=t;
+  let lt=0,tt=0,pf=0,fc=0,fs=0,ln=0;const t00=performance.now();const loop=t=>{requestAnimationFrame(loop);if(document.hidden||!gmOn()){pf=0;return}
+    // fluidez: modo ligero automático. Solo se mide en la pantalla principal sin ventanas, pasados los primeros 15 s y
+    // nunca justo después de abrir o cerrar un menú (esos tirones puntuales no cuentan). Se activa si durante ~10 s va a
+    // menos de ~25 imágenes por segundo, y se quita solo si después va fluido otros ~10 s (como mucho 3 veces por sesión;
+    // antes se quedaba puesto hasta recargar la página)
+    const quiet=t-t00>15000&&t>(window._uiBusy||0)&&document.body.classList.contains("gmhome")&&$("hubM").hidden&&!O.lite;
+    if(pf&&quiet){const d=t-pf;if(d<150){fc++;fs+=d;if(fc>=600){const av=fs/fc;if(!GM.liteAuto&&av>40&&ln<3){GM.liteAuto=1;ln++;gmLite()}else if(GM.liteAuto&&av<21){GM.liteAuto=0;gmLite()}fc=0;fs=0}}}else if(!quiet){fc=0;fs=0}pf=t;
     if(t-tt>=32){tt=t;gmTown(t)}if(t-lt>120){lt=t;gmTop()}};requestAnimationFrame(loop);
   setInterval(()=>{if(!gmOn()||document.hidden)return;gmBadges();gmTod();gmHero();if(GM.scr)gmHelpMark($("gScrB"));if(!$("hubM").hidden)gmHelpMark($("hubB"))},1000);
   gmTod();gmHero();gmBadges();
@@ -15156,7 +15162,7 @@ function gmLoad(){if(!gmOn()||hubCalm())return;const L=gmEl("div","gLoad","",'<i
   const chk=()=>{const n=performance.now();if(n-t0>3500||(n-t0>600&&n-last>300))go();else setTimeout(chk,100)};setTimeout(chk,300);
   const bye=()=>{if(L.isConnected)L.remove()};L.addEventListener("animationend",e=>{if(e.target===L)bye()});setTimeout(bye,6000)}
 // ---------- abrir y cerrar secciones ----------
-function gmOpen(id,auto){
+function gmOpen(id,auto){window._uiBusy=performance.now()+2500;
   if(!gmOn()||!GM.init)return;const P=$(id),D=GMSCR[id];if(!P||!D)return;
   try{hubMenu(false)}catch(e){}try{if(!$("hubM").hidden)hubClose()}catch(e){}
   if(GM.scr===id){gmNav();return}
@@ -15168,7 +15174,7 @@ function gmOpen(id,auto){
   gmMusic(D.mus);gmNav();const a2=$("arena");document.body.classList.toggle("gbat",!!a2&&!a2.hidden&&!!a2.closest("#gScr"))}
 function gmPark(){const id=GM.scr;if(!id)return;const P=$(id),m=GM.ph[id];if(P&&m&&m.parentNode)m.parentNode.insertBefore(P,m.nextSibling);
   const pv=$("pvpP");if(pv&&pv.parentNode===$("gScrB")){if(pv.dataset.duel)$("batP").after(pv);else try{hubPark("pvpP")}catch(e){}}}
-function gmClose(silent){document.body.classList.remove("gbat");if(!GM.scr){if(!silent)gmNav();return}gmPark();GM.scr=null;GM.auto=0;$("gScr").hidden=true;if(!silent)gmMusic(null);gmNav()}
+function gmClose(silent){window._uiBusy=performance.now()+2500;document.body.classList.remove("gbat");if(!GM.scr){if(!silent)gmNav();return}gmPark();GM.scr=null;GM.auto=0;$("gScr").hidden=true;if(!silent)gmMusic(null);gmNav()}
 {const _ho=hubOpen;hubOpen=function(k,tab){if(gmOn()&&GM.scr)gmClose(1);const r=_ho.apply(this,arguments);try{if(gmOn()&&GM.init){gmHelpMark($("hubB"));gmMusic(GMMUS[HB.t]!=null?GMMUS[HB.t]:null);gmNav()}}catch(e){}return r}}
 {const _hc=hubClose;hubClose=function(){const r=_hc.apply(this,arguments);try{if(gmOn()&&GM.init){if(!GM.scr)gmMusic(null);gmNav()}}catch(e){}return r}}
 {const _s=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(o){
@@ -19907,16 +19913,22 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     const isLite=()=>document.body.classList.contains("lite")||document.body.classList.contains("glite")||!!(window.S&&S.o&&S.o.lite);
     const fit=()=>{const lite=isLite();L._fl=lite;L.resize(innerWidth,innerHeight,Math.min(1,window.devicePixelRatio||1)*(lite?.6:.85))};fit();addEventListener("resize",()=>{fit();L._force=1});
     const t0=performance.now();let last=0;
-    const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm"))return;
+    let pts=0;const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm")){pts=0;return}
+      // fluidez del navegador (intervalo entre fotogramas): si no llega a ~60 imágenes por segundo, el paisaje baja de nivel
+      // (60 → 30 → 15) para no quitarle fluidez al resto del juego; vuelve a subir si después va sobrado unos segundos
+      if(pts){const d=Math.min(100,ts-pts);L._ri=L._ri?L._ri*.95+d*.05:d;const nw=ts;L._lv=L._lv||0;
+        if(L._ri>22&&L._lv<2&&nw-(L._lc||0)>2000){L._lv++;L._lc=nw;L._ri=16.7}else if(L._ri<17.6&&L._lv>0&&nw-(L._lc||0)>8000){L._lv--;L._lc=nw}}pts=ts;
       // con una ventana o una sección abierta encima, el paisaje se queda quieto
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
       const lite=isLite();
       // el cambio de calidad (que cambia el tamaño del lienzo) se hace solo con el pueblo a la vista, y se dibuja enseguida:
       // cambiarlo con una ventana encima dejaba el fondo a medio pintar en algunos equipos
-      if(lite!==L._fl&&!cover){fit();last=0}if(L._force){L._force=0;last=0}const gap=cover?1500:Math.abs(L.panT-L.pan)>.05?16:lite?125:L._coarse?80:66;if(ts-last<gap)return;last=ts;
+      if(lite!==L._fl&&!cover){fit();last=0}if(L._force){L._force=0;last=0}// fluidez: si dibujar el paisaje cuesta poco, va a ~60 imágenes por segundo (nunca más, aunque la pantalla sea de 144 Hz);
+      // si cuesta más, a ~30 o ~15. En modo ligero sigue a 8.
+      const dc=L._dc||5,lv=Math.max(L._lv||0,dc<3?0:dc<7?1:2),fast=[12,28,66][lv],gap=cover?1500:Math.abs(L.panT-L.pan)>.05?12:lite?125:L._coarse?Math.max(28,fast):fast;if(ts-last<gap)return;last=ts;const t1=performance.now();
       try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
         L.env=window.WXENV||null;L.lite=!!lite;
-        L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L)}catch(e){console.error(e)}};
+        L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L);const d2=performance.now()-t1;L._dc=L._dc?L._dc*.9+Math.min(d2,40)*.1:d2}catch(e){console.error(e)}};
     requestAnimationFrame(loop);return true};
   if(!tryAttach()){const iv=setInterval(()=>{if(tryAttach())clearInterval(iv)},700)}})();
 
@@ -19943,7 +19955,7 @@ function town3Layer(){if(T3.layer&&T3.layer.isConnected)return T3.layer;const f=
   const tl=document.getElementById("gTL"),tr=document.getElementById("gTR");if(tl)tl.onclick=()=>step(-1);if(tr)tr.onclick=()=>step(1);
   return L}
 // cada fotograma del paisaje: coloca los carteles sobre los edificios
-function town3Frame(L3){const L=town3Layer();if(!L)return;const R=L3.rects();if(!R)return;const fr=document.getElementById("farm").getBoundingClientRect();
+function town3Frame(L3){const L=town3Layer();if(!L)return;const ck=(L3.pan||0).toFixed(3)+"|"+innerWidth+"x"+innerHeight+"|"+(L3.camKey||""),nw=performance.now();if(ck===T3.ck&&nw-(T3.ct||0)<500)return;T3.ck=ck;T3.ct=nw;const R=L3.rects();if(!R)return;const fr=document.getElementById("farm").getBoundingClientRect();
   L.querySelectorAll(".gb3").forEach((b,i)=>{const r=R[i];if(!r)return;const n=S.g[i]||0,t=typeof gbTier==="function"?gbTier(n):0;
     const st="left:"+Math.round(r.x-fr.left)+"px;top:"+Math.round(r.y-fr.top)+"px;width:"+Math.round(r.w)+"px;height:"+Math.round(r.h)+"px";if(b._st!==st){b.style.cssText=st;b._st=st}
     const nm=GBS[i]||G[i][0],sub=t?'<i>'+"★".repeat(t)+'</i> Nv '+fmt(n):'🔒 '+gmK(gc(i)),key=nm+sub;if(b._k!==key){b._k=key;b.querySelector("b").textContent=nm;b.querySelector("em").innerHTML=sub;b.classList.toggle("lock",!t);b.title=nm}
@@ -20332,7 +20344,10 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   else if(L.bp===3)E.ell(T(.04,.975,TZ+.005),.08,.04,.04,bpc,null,1)}
 // ---------- imágenes fijas (tarjeta, perfil…) y vistas vivas (editor y juego base) ----------
 const AV3S={c:null,r:null,url:{},n:0};
-function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=Object.assign({lo:typeof av3mLo==="function"&&av3mLo()},o||{});const k=trEnc(L)+"|"+w+"x"+h+"|"+(o.yaw||0)+"|"+(o.zoom||1)+"|"+(o.cy||"")+"|"+(o.pose||"")+(o.lo?"|lo":"");if(AV3S.url[k])return AV3S.url[k];
+const av3Key=(L,w,h,o)=>trEnc(L)+"|"+w+"x"+h+"|"+(o.yaw||0)+"|"+(o.zoom||1)+"|"+(o.cy||"")+"|"+(o.pose||"")+(o.lo?"|lo":"");
+// solo mira si la imagen ya está hecha (no dibuja nada)
+function av3URLc(L,w,h,o){if(!av3Attach.ready)return null;o=Object.assign({lo:typeof av3mLo==="function"&&av3mLo()},o||{});return AV3S.url[av3Key(L,w,h,o)]||null}
+function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=Object.assign({lo:typeof av3mLo==="function"&&av3mLo()},o||{});const k=av3Key(L,w,h,o);if(AV3S.url[k])return AV3S.url[k];
   if(AV3S.r===null){AV3S.c=document.createElement("canvas");AV3S.r=AV3(AV3S.c,true)||false}if(!AV3S.r)return null;
   if(AV3S.n>400){AV3S.url={};AV3S.n=0}AV3S.c.width=w;AV3S.c.height=h;AV3S.r.draw(L,Object.assign({t:1.2},o));AV3S.n++;try{document.body.classList.add("av3")}catch(e){}return AV3S.url[k]=AV3S.c.toDataURL("image/png")}
 // vista viva en un contenedor (se puede girar arrastrando). Cada «clave» conserva su lienzo aunque el contenedor se
@@ -20374,7 +20389,14 @@ function av3Big(key,getLook){const v=AV3V[key];if(!v||v.bad||!v.cv)return;let d=
   v.big=false;av3Attach(document.getElementById("av3BigH"),key,get,o);v.big=true}
 // ---------- todas las imágenes del entrenador (frente, espaldas y poses de combate) salen del modelo 3D ----------
 // La figura de píxel solo se sigue generando por dentro para sacar de ella el personaje del modo Exploración.
-{const _tu=trURL;trURL=function(L,view,pose){if(trURL.want||!av3Attach.ready)return _tu.apply(this,arguments);let u=null;try{u=av3URL(L,288,432,{yaw:view==="b"?Math.PI-.42:.0,pose:pose||"i"})}catch(e){}return u||_tu.apply(this,arguments)}}
+{const _tu=trURL,LZ={q:[],on:0};
+  // (rendimiento) con trURL.lazy, las imágenes 3D que aún no están hechas salen primero con el dibujo plano y se cambian
+  // por la 3D de una en una, en los fotogramas siguientes: así una lista con muchos entrenadores se abre al instante
+  const lzRun=()=>{const it=LZ.q.shift();if(!it){LZ.on=0;return}let u=null;try{u=av3URL(it[1],288,432,it[2])}catch(e){}
+    if(u&&u!==it[0])document.querySelectorAll("img.trimg").forEach(im=>{if(im.getAttribute("src")===it[0])im.src=u});requestAnimationFrame(lzRun)};
+  trURL=function(L,view,pose){if(trURL.want||!av3Attach.ready)return _tu.apply(this,arguments);const o={yaw:view==="b"?Math.PI-.42:.0,pose:pose||"i"};
+    if(trURL.lazy){const c=av3URLc(L,288,432,o);if(c)return c;const f=_tu.apply(this,arguments);if(!LZ.q.some(q=>q[0]===f))LZ.q.push([f,Object.assign({},L),o]);if(!LZ.on){LZ.on=1;requestAnimationFrame(lzRun)}return f}
+    let u=null;try{u=av3URL(L,288,432,o)}catch(e){}return u||_tu.apply(this,arguments)}}
 // (las funciones de arriba pueden llamarse mientras el juego aún se carga: hasta aquí responden «no disponible»)
 av3Attach.ready=1;
 
@@ -22012,7 +22034,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.24";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.24.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.24";
+const GAME_VER="7.24.1";
 const NEWS=[
+{v:"2026-11-22-7.24.1",ver:"7.24.1",at:"2026-11-22T11:55",t:"🔧 Arreglos/Mejoras",l:["Animaciones más fluidas: el paisaje de la pantalla principal (pájaros, nubes, agua) se mueve hasta a 60 imágenes por segundo en los equipos que lo aguantan, en vez de a 15","El modo ligero automático ya no se activa por un tirón al abrir un menú, y se quita solo cuando el juego vuelve a ir fluido (antes se quedaba puesto hasta recargar la página)","La Tienda de Evento se abre al instante: los entrenadores en 3D aparecen poco a poco en vez de congelar el juego al abrirla"]},
 {v:"2026-11-21-7.24",ver:"7.24",at:"2026-11-21T12:45",t:"🥊 Guantes de entrenador más baratos",l:["A partir del nivel 20, cada nivel de los guantes cuesta ×2,3 el anterior en vez de ×3. Por ejemplo, el nivel 21→22 baja de 261 a 200 mil millones, el 22→23 de 785 a 461 mil millones y el 25→26 de 21 billones a 5,6 billones","Los niveles hasta el 20 cuestan lo mismo que antes"]},
 {v:"2026-11-19-7.23",ver:"7.23",at:"2026-11-19T14:48",t:"🧪 Título Beta-Tester renovado",l:["El título «Beta-Tester» ahora luce con un formato exclusivo: arcoíris animado con destellos, en tu perfil y en tu vitrina. ¡Gracias por estar desde el principio!","Sorteos: la lista de apuntados ahora solo la ven los administradores; el número de apuntados lo sigue viendo todo el mundo"]},
 {v:"2026-11-19-7.22",ver:"7.22",at:"2026-11-19T14:36",t:"🎉 Sorteos: aviso y lista de apuntados",l:["Cuando haya un sorteo nuevo te saldrá un aviso con el premio y la hora de cierre, para que te apuntes con un toque","En cada sorteo puedes ver la lista de jugadores apuntados con el botón «👥 Ver apuntados»"]},

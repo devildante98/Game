@@ -298,7 +298,10 @@ function av3Model(E,L,o){const P=(k,i)=>av3Hex(TRP[k][i]!=null?TRP[k][i]:TRP[k][
   else if(L.bp===3)E.ell(T(.04,.975,TZ+.005),.08,.04,.04,bpc,null,1)}
 // ---------- imágenes fijas (tarjeta, perfil…) y vistas vivas (editor y juego base) ----------
 const AV3S={c:null,r:null,url:{},n:0};
-function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=Object.assign({lo:typeof av3mLo==="function"&&av3mLo()},o||{});const k=trEnc(L)+"|"+w+"x"+h+"|"+(o.yaw||0)+"|"+(o.zoom||1)+"|"+(o.cy||"")+"|"+(o.pose||"")+(o.lo?"|lo":"");if(AV3S.url[k])return AV3S.url[k];
+const av3Key=(L,w,h,o)=>trEnc(L)+"|"+w+"x"+h+"|"+(o.yaw||0)+"|"+(o.zoom||1)+"|"+(o.cy||"")+"|"+(o.pose||"")+(o.lo?"|lo":"");
+// solo mira si la imagen ya está hecha (no dibuja nada)
+function av3URLc(L,w,h,o){if(!av3Attach.ready)return null;o=Object.assign({lo:typeof av3mLo==="function"&&av3mLo()},o||{});return AV3S.url[av3Key(L,w,h,o)]||null}
+function av3URL(L,w,h,o){if(!av3Attach.ready)return null;o=Object.assign({lo:typeof av3mLo==="function"&&av3mLo()},o||{});const k=av3Key(L,w,h,o);if(AV3S.url[k])return AV3S.url[k];
   if(AV3S.r===null){AV3S.c=document.createElement("canvas");AV3S.r=AV3(AV3S.c,true)||false}if(!AV3S.r)return null;
   if(AV3S.n>400){AV3S.url={};AV3S.n=0}AV3S.c.width=w;AV3S.c.height=h;AV3S.r.draw(L,Object.assign({t:1.2},o));AV3S.n++;try{document.body.classList.add("av3")}catch(e){}return AV3S.url[k]=AV3S.c.toDataURL("image/png")}
 // vista viva en un contenedor (se puede girar arrastrando). Cada «clave» conserva su lienzo aunque el contenedor se
@@ -340,7 +343,14 @@ function av3Big(key,getLook){const v=AV3V[key];if(!v||v.bad||!v.cv)return;let d=
   v.big=false;av3Attach(document.getElementById("av3BigH"),key,get,o);v.big=true}
 // ---------- todas las imágenes del entrenador (frente, espaldas y poses de combate) salen del modelo 3D ----------
 // La figura de píxel solo se sigue generando por dentro para sacar de ella el personaje del modo Exploración.
-{const _tu=trURL;trURL=function(L,view,pose){if(trURL.want||!av3Attach.ready)return _tu.apply(this,arguments);let u=null;try{u=av3URL(L,288,432,{yaw:view==="b"?Math.PI-.42:.0,pose:pose||"i"})}catch(e){}return u||_tu.apply(this,arguments)}}
+{const _tu=trURL,LZ={q:[],on:0};
+  // (rendimiento) con trURL.lazy, las imágenes 3D que aún no están hechas salen primero con el dibujo plano y se cambian
+  // por la 3D de una en una, en los fotogramas siguientes: así una lista con muchos entrenadores se abre al instante
+  const lzRun=()=>{const it=LZ.q.shift();if(!it){LZ.on=0;return}let u=null;try{u=av3URL(it[1],288,432,it[2])}catch(e){}
+    if(u&&u!==it[0])document.querySelectorAll("img.trimg").forEach(im=>{if(im.getAttribute("src")===it[0])im.src=u});requestAnimationFrame(lzRun)};
+  trURL=function(L,view,pose){if(trURL.want||!av3Attach.ready)return _tu.apply(this,arguments);const o={yaw:view==="b"?Math.PI-.42:.0,pose:pose||"i"};
+    if(trURL.lazy){const c=av3URLc(L,288,432,o);if(c)return c;const f=_tu.apply(this,arguments);if(!LZ.q.some(q=>q[0]===f))LZ.q.push([f,Object.assign({},L),o]);if(!LZ.on){LZ.on=1;requestAnimationFrame(lzRun)}return f}
+    let u=null;try{u=av3URL(L,288,432,o)}catch(e){}return u||_tu.apply(this,arguments)}}
 // (las funciones de arriba pueden llamarse mientras el juego aún se carga: hasta aquí responden «no disponible»)
 av3Attach.ready=1;
 

@@ -21,7 +21,7 @@ function town3Layer(){if(T3.layer&&T3.layer.isConnected)return T3.layer;const f=
   const tl=document.getElementById("gTL"),tr=document.getElementById("gTR");if(tl)tl.onclick=()=>step(-1);if(tr)tr.onclick=()=>step(1);
   return L}
 // cada fotograma del paisaje: coloca los carteles sobre los edificios
-function town3Frame(L3){const L=town3Layer();if(!L)return;const R=L3.rects();if(!R)return;const fr=document.getElementById("farm").getBoundingClientRect();
+function town3Frame(L3){const L=town3Layer();if(!L)return;const ck=(L3.pan||0).toFixed(3)+"|"+innerWidth+"x"+innerHeight+"|"+(L3.camKey||""),nw=performance.now();if(ck===T3.ck&&nw-(T3.ct||0)<500)return;T3.ck=ck;T3.ct=nw;const R=L3.rects();if(!R)return;const fr=document.getElementById("farm").getBoundingClientRect();
   L.querySelectorAll(".gb3").forEach((b,i)=>{const r=R[i];if(!r)return;const n=S.g[i]||0,t=typeof gbTier==="function"?gbTier(n):0;
     const st="left:"+Math.round(r.x-fr.left)+"px;top:"+Math.round(r.y-fr.top)+"px;width:"+Math.round(r.w)+"px;height:"+Math.round(r.h)+"px";if(b._st!==st){b.style.cssText=st;b._st=st}
     const nm=GBS[i]||G[i][0],sub=t?'<i>'+"★".repeat(t)+'</i> Nv '+fmt(n):'🔒 '+gmK(gc(i)),key=nm+sub;if(b._k!==key){b._k=key;b.querySelector("b").textContent=nm;b.querySelector("em").innerHTML=sub;b.classList.toggle("lock",!t);b.title=nm}

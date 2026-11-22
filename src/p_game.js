@@ -213,9 +213,13 @@ function gmInit(){
   const ar=$("arena");if(ar)new MutationObserver(()=>{document.body.classList.toggle("gbat",!ar.hidden&&!!ar.closest("#gScr"));if(!gmOn()||ar.hidden)return;const p=ar.closest("#batP,#pvpP");if(p&&(p.id==="batP"||($("pvpP")&&$("pvpP").dataset.duel))&&GM.scr!=="batP")gmOpen("batP",1);if(GM.scr==="batP")setTimeout(()=>{try{ar._siv({block:"start"})}catch(e){}},60)}).observe(ar,{attributes:true,attributeFilter:["hidden"]});
   const pd=$("pvDuel");if(pd)new MutationObserver(()=>{if(!gmOn())return;const p=$("pvpP");if(p&&p.dataset.duel&&pd.querySelector("#arena")){gmOpen("batP",1);$("batP").after(p);setTimeout(()=>{try{p._siv({block:"start"})}catch(e){}},60)}}).observe(pd,{childList:true});
   gmApply();gmLite();gmLoad();
-  let lt=0,tt=0,pf=0,fc=0,fs=0;const loop=t=>{requestAnimationFrame(loop);if(document.hidden||!gmOn()){pf=0;return}
-    // fluidez: si el escenario va a menos de ~30 imágenes por segundo, se activan las animaciones ligeras
-    if(pf&&document.body.classList.contains("gmhome")&&!GM.liteAuto&&!O.lite){const d=t-pf;if(d<250){fc++;fs+=d;if(fc>=150){if(fs/fc>34){GM.liteAuto=1;gmLite()}fc=0;fs=0}}}pf=t;
+  let lt=0,tt=0,pf=0,fc=0,fs=0,ln=0;const t00=performance.now();const loop=t=>{requestAnimationFrame(loop);if(document.hidden||!gmOn()){pf=0;return}
+    // fluidez: modo ligero automático. Solo se mide en la pantalla principal sin ventanas, pasados los primeros 15 s y
+    // nunca justo después de abrir o cerrar un menú (esos tirones puntuales no cuentan). Se activa si durante ~10 s va a
+    // menos de ~25 imágenes por segundo, y se quita solo si después va fluido otros ~10 s (como mucho 3 veces por sesión;
+    // antes se quedaba puesto hasta recargar la página)
+    const quiet=t-t00>15000&&t>(window._uiBusy||0)&&document.body.classList.contains("gmhome")&&$("hubM").hidden&&!O.lite;
+    if(pf&&quiet){const d=t-pf;if(d<150){fc++;fs+=d;if(fc>=600){const av=fs/fc;if(!GM.liteAuto&&av>40&&ln<3){GM.liteAuto=1;ln++;gmLite()}else if(GM.liteAuto&&av<21){GM.liteAuto=0;gmLite()}fc=0;fs=0}}}else if(!quiet){fc=0;fs=0}pf=t;
     if(t-tt>=32){tt=t;gmTown(t)}if(t-lt>120){lt=t;gmTop()}};requestAnimationFrame(loop);
   setInterval(()=>{if(!gmOn()||document.hidden)return;gmBadges();gmTod();gmHero();if(GM.scr)gmHelpMark($("gScrB"));if(!$("hubM").hidden)gmHelpMark($("hubB"))},1000);
   gmTod();gmHero();gmBadges();
@@ -237,7 +241,7 @@ function gmLoad(){if(!gmOn()||hubCalm())return;const L=gmEl("div","gLoad","",'<i
   const chk=()=>{const n=performance.now();if(n-t0>3500||(n-t0>600&&n-last>300))go();else setTimeout(chk,100)};setTimeout(chk,300);
   const bye=()=>{if(L.isConnected)L.remove()};L.addEventListener("animationend",e=>{if(e.target===L)bye()});setTimeout(bye,6000)}
 // ---------- abrir y cerrar secciones ----------
-function gmOpen(id,auto){
+function gmOpen(id,auto){window._uiBusy=performance.now()+2500;
   if(!gmOn()||!GM.init)return;const P=$(id),D=GMSCR[id];if(!P||!D)return;
   try{hubMenu(false)}catch(e){}try{if(!$("hubM").hidden)hubClose()}catch(e){}
   if(GM.scr===id){gmNav();return}
@@ -249,7 +253,7 @@ function gmOpen(id,auto){
   gmMusic(D.mus);gmNav();const a2=$("arena");document.body.classList.toggle("gbat",!!a2&&!a2.hidden&&!!a2.closest("#gScr"))}
 function gmPark(){const id=GM.scr;if(!id)return;const P=$(id),m=GM.ph[id];if(P&&m&&m.parentNode)m.parentNode.insertBefore(P,m.nextSibling);
   const pv=$("pvpP");if(pv&&pv.parentNode===$("gScrB")){if(pv.dataset.duel)$("batP").after(pv);else try{hubPark("pvpP")}catch(e){}}}
-function gmClose(silent){document.body.classList.remove("gbat");if(!GM.scr){if(!silent)gmNav();return}gmPark();GM.scr=null;GM.auto=0;$("gScr").hidden=true;if(!silent)gmMusic(null);gmNav()}
+function gmClose(silent){window._uiBusy=performance.now()+2500;document.body.classList.remove("gbat");if(!GM.scr){if(!silent)gmNav();return}gmPark();GM.scr=null;GM.auto=0;$("gScr").hidden=true;if(!silent)gmMusic(null);gmNav()}
 {const _ho=hubOpen;hubOpen=function(k,tab){if(gmOn()&&GM.scr)gmClose(1);const r=_ho.apply(this,arguments);try{if(gmOn()&&GM.init){gmHelpMark($("hubB"));gmMusic(GMMUS[HB.t]!=null?GMMUS[HB.t]:null);gmNav()}}catch(e){}return r}}
 {const _hc=hubClose;hubClose=function(){const r=_hc.apply(this,arguments);try{if(gmOn()&&GM.init){if(!GM.scr)gmMusic(null);gmNav()}}catch(e){}return r}}
 {const _s=Element.prototype.scrollIntoView;Element.prototype.scrollIntoView=function(o){

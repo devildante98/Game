@@ -228,7 +228,8 @@ function cardShopCard(t,it,mode){const[id,nm,pr,e]=it,own=trOwn(t,id),cur=cardGe
 function titShopCard(it,mode){const[id,tx,pr,e]=it,own=trOwn("ti",id),on=typeof shwGet==="function"&&shwGet().tit===id;
   const btn=mode==="soon"?'<small class="mut">🔒 Vuelve en '+esc(e)+' ('+evDates(e)+')</small>':own?(on?'<span class="tshon">✅ Lo llevas puesto</span>':'<button data-tiw="'+id+'">🏷️ Ponérmelo</button>'):'<button class="red" data-tib="'+id+'"'+(S.t<pr?' disabled title="Te faltan tickets"':'')+'>Comprar · '+fmt(pr)+' 🎟️</button>';
   return '<div class="tshc'+(own?' own':'')+(mode==="soon"?' soon':'')+'"><div class="tshtit"><span>'+esc(tx)+'</span></div><b>Título</b><small class="mut">Para tu vitrina y tu perfil'+(e?' · '+esc(e):'')+'</small>'+btn+'</div>'}
-function trShopUI(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=ev?ev.n:null;
+function trShopUI(){trURL.lazy=1;try{trShopUI0()}finally{trURL.lazy=0}}
+function trShopUI0(){const box=$("trShopPB");if(!box)return;const ev=evNow(),en=ev?ev.n:null;
   // todo lo de la tienda como [tipo, item]: ropa ("tr") y tarjeta ("bg"/"fr")
   const all=[...TRSHOP.map(x=>["tr",x,x[3]]),...CARD_BG.map(x=>["bg",x,x[3]]),...CARD_FR.map(x=>["fr",x,x[3]]),...(typeof TITLE_SHOP!=="undefined"?TITLE_SHOP.map(x=>["ti",x,x[3]]):[])],own=q=>q[0]==="tr"?trOwn(q[1][0],q[1][1]):trOwn(q[0],q[1][0]);
   const card=(q,m)=>q[0]==="tr"?trShopCard(q[1],m):q[0]==="ti"?titShopCard(q[1],m):cardShopCard(q[0],q[1],m);

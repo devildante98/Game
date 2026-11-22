@@ -1,1 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5d73"/><stop offset="1" stop-color="#a50f35"/></linearGradient><radialGradient id="tp" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff3b8"/><stop offset=".6" stop-color="#ffc23a"/><stop offset="1" stop-color="#f08a00"/></radialGradient><linearGradient id="bt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfd5ee"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#bg)"/><g transform="rotate(-24 32 34)"><path d="M13 34a19 19 0 0 1 38 0z" fill="url(#tp)" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/><path d="M13 34a19 19 0 0 0 38 0z" fill="url(#bt)" stroke="#2b1d3a" stroke-width="3" stroke-linejoin="round"/><path d="M11.5 34h41" stroke="#2b1d3a" stroke-width="4.5" stroke-linecap="round"/><path d="M32 18.5l2.3 4.7 5.2.8-3.8 3.6.9 5.1-4.6-2.4-4.6 2.4.9-5.1-3.8-3.6 5.2-.8z" fill="#fff" stroke="#c86a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M19 26a14 14 0 0 1 6-7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" fill="none" opacity=".8"/></g><path d="M52 6.5l1.6 3.5 3.8.6-2.8 2.6.7 3.8-3.3-1.9-3.3 1.9.7-3.8-2.8-2.6 3.8-.6z" fill="#ffe27a" stroke="#7a2a00" stroke-width=".8"/><circle cx="10" cy="54" r="2.2" fill="#fff" opacity=".85"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+<radialGradient id="bg" cx=".5" cy=".5" r=".8"><stop offset="0" stop-color="#8a2be2"/><stop offset=".45" stop-color="#4a128f"/><stop offset="1" stop-color="#1a0838"/></radialGradient>
+<radialGradient id="ray" cx=".5" cy=".555" r=".6"><stop offset="0" stop-color="#ffe9a0" stop-opacity=".95"/><stop offset=".55" stop-color="#ffb43a" stop-opacity=".35"/><stop offset="1" stop-color="#ff7ad9" stop-opacity="0"/></radialGradient>
+<radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff6c8" stop-opacity=".95"/><stop offset=".5" stop-color="#ffc94a" stop-opacity=".55"/><stop offset="1" stop-color="#ff9a1a" stop-opacity="0"/></radialGradient>
+<linearGradient id="red" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" stop-color="#ff6b78"/><stop offset=".45" stop-color="#ec1c3a"/><stop offset="1" stop-color="#9e0022"/></linearGradient>
+<linearGradient id="wht" x1=".3" y1="0" x2=".7" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e6e9f7"/><stop offset="1" stop-color="#b9bfdc"/></linearGradient>
+<radialGradient id="btn" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#fff4c4"/><stop offset="1" stop-color="#ffc23a"/></radialGradient>
+<linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3a6"/><stop offset=".5" stop-color="#ffcc33"/><stop offset="1" stop-color="#e08a00"/></linearGradient>
+<linearGradient id="seam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffb52e"/><stop offset=".5" stop-color="#fffbe0"/><stop offset="1" stop-color="#ffb52e"/></linearGradient>
+<clipPath id="frame"><rect width="512" height="512" rx="112"/></clipPath>
+<clipPath id="ball"><circle cx="256" cy="256" r="148"/></clipPath>
+</defs>
+<rect width="512" height="512" rx="112" fill="url(#bg)"/>
+<g clip-path="url(#frame)"><g transform="translate(256 256) scale(1.22) translate(-256 -256)">
+
+<circle cx="256" cy="256" r="215" fill="url(#glow)"/>
+<g transform="rotate(-16 256 256)">
+<circle cx="262" cy="268" r="152" fill="#12051f" opacity=".35"/>
+<g clip-path="url(#ball)"><rect x="96" y="96" width="320" height="160" fill="url(#red)"/><rect x="96" y="256" width="320" height="160" fill="url(#wht)"/><ellipse cx="256" cy="406" rx="170" ry="60" fill="#8f97c4" opacity=".35"/><ellipse cx="236" cy="106" rx="160" ry="55" fill="#ffffff" opacity=".12"/></g>
+<rect x="104" y="241" width="304" height="30" rx="6" fill="#1b0f2e"/>
+<rect x="110" y="252" width="292" height="8" rx="4" fill="url(#seam)"/>
+<circle cx="256" cy="256" r="148" fill="none" stroke="#1b0f2e" stroke-width="13"/>
+<path d="M144,194 A126,126 0 0 1 226,128" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" opacity=".75"/>
+<circle cx="256" cy="256" r="54" fill="#1b0f2e"/><circle cx="256" cy="256" r="44" fill="url(#gold)"/><circle cx="256" cy="256" r="32" fill="url(#btn)" stroke="#c97a00" stroke-width="3"/>
+<polygon points="256.0,236.0 261.0,249.1 275.0,249.8 264.1,258.6 267.8,272.2 256.0,264.5 244.2,272.2 247.9,258.6 237.0,249.8 251.0,249.1" fill="#ffb800" stroke="#b86200" stroke-width="2.5" stroke-linejoin="round"/>
+</g>
+</g></g></svg>

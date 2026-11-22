@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795353046">
+<meta name="game-build" content="1795359214">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -112,15 +112,15 @@
 <meta property="og:title" content="Poke Gacha Online">
 <meta property="og:description" content="Colecciona más de 1.200 Pokémon, haz tiradas, combate en gimnasios, incursiones y torneos, y juega con entrenadores de todo el mundo. Gratis y en el navegador.">
 <meta property="og:url" content="https://pokegachaonline.es/">
-<meta property="og:image" content="https://pokegachaonline.es/og.png">
+<meta property="og:image" content="https://pokegachaonline.es/og.png?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Poke Gacha Online: Mewtwo, Charizard y Pikachu">
+<meta property="og:image:alt" content="Poke Gacha Online: una Poké Ball brillante con tres estrellas de rareza">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Poke Gacha Online">
 <meta name="twitter:description" content="Colecciona más de 1.200 Pokémon, haz tiradas, combate en gimnasios, incursiones y torneos, y juega con entrenadores de todo el mundo. Gratis y en el navegador.">
-<meta name="twitter:image" content="https://pokegachaonline.es/og.png">
+<meta name="twitter:image" content="https://pokegachaonline.es/og.png?v=2">
 <style>
 :root{--bg:#f3f1fb;--panel:#fff;--ink:#1c1f3a;--mute:#6b6f90;--red:#e63950;--yel:#f5b82e;--teal:#0fa97d;--line:#d9d6ee;
 --C:#8d93b5;--R:#2f7de1;--E:#9b4de0;--L:#f5a300;--M:#e0479e;
@@ -8418,7 +8418,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795353046";
+const GAME_B="1795359214";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;

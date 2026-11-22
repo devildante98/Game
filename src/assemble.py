@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.24.4";
+const GAME_VER="7.25";
 const NEWS=[
+{v:"2026-11-22-7.25",ver:"7.25",at:"2026-11-22T13:52",t:"🎁 Lista de códigos de regalo",l:["En Más › 🎁 Canjear código ahora puedes ver todos los códigos activos: su premio, cuántos usos quedan y hasta cuándo valen. Toca uno para canjearlo o copiarlo","Debajo están los códigos que ya han pasado (caducados o agotados), y en cada código te marcamos si ya lo canjeaste"]},
 {v:"2026-11-22-7.24.4",ver:"7.24.4",at:"2026-11-22T13:36",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball muy seguido (o con varias teclas a la vez) ya no afecta a la fluidez de las animaciones: la partida se guarda cada 2 segundos en vez de cada 10 toques, la pantalla se refresca menos veces y las chispas salen como mucho unas 9 veces por segundo"]},
 {v:"2026-11-22-7.24.3",ver:"7.24.3",at:"2026-11-22T13:27",t:"🔧 Arreglos/Mejoras",l:["Al cerrar un menú y volver a la pantalla principal, las animaciones van fluidas al momento (antes tardaban unos segundos en recuperarse)"]},
 {v:"2026-11-22-7.24.2",ver:"7.24.2",at:"2026-11-22T13:25",t:"🔧 Arreglos/Mejoras",l:["Con un menú abierto, el paisaje y el pueblo del fondo siguen moviéndose con fluidez (antes se actualizaban cada segundo y medio y se veían a tirones)"]},
@@ -826,6 +827,10 @@ FB_API = '''
     async codeList(){const sn=await S.getDocs(S.collection(db,"codes"));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     codeSet:(c,d)=>S.setDoc(S.doc(db,"codes",c),d,{merge:true}),
     codeDel:c=>S.deleteDoc(S.doc(db,"codes",c)),
+    // lista pública de códigos (la ven todos; solo la escriben los administradores, y el servidor cuenta los usos)
+    async codePubList(){const sn=await S.getDocs(S.query(S.collection(db,"codesPub"),S.orderBy("at","desc"),S.limit(60)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    codePubSet:(c,d)=>S.setDoc(S.doc(db,"codesPub",c),d,{merge:true}),
+    codePubDel:c=>S.deleteDoc(S.doc(db,"codesPub",c)),
     // sorteos
     async rfList(){const sn=await S.getDocs(S.query(S.collection(db,"raffles"),S.orderBy("end","desc"),S.limit(20)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     // apuntarse/borrarse: la inscripción y el contador del sorteo (n) cambian juntos; la lista solo la leen los administradores

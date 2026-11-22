@@ -1458,3 +1458,16 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 @media (prefers-reduced-motion:reduce){.titbeta,.titbeta .tbe,.titbeta .tbtx,.titbeta .tbsp,.titbeta::before{animation:none}}
 .proftit .titbeta{margin:4px 0 6px}
 .shwtp{margin:6px 0 2px}
+/* lista pública de códigos (Más › Canjear código) */
+#codeLst{margin-top:10px}
+.cpl{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.cpcard{border:2px solid #b9e8c8;background:linear-gradient(180deg,#f3fff6,#fff);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.cpcard.old{border-color:#d9d6e8;background:#f6f5fb;opacity:.82}
+.cpcard.got{border-color:#9fd3f5}
+.cph{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cpc{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.05rem;letter-spacing:1px;background:#1d1442;color:#fff;padding:3px 10px;border-radius:8px;cursor:pointer;user-select:all}
+.cpcard.old .cpc{background:#6b6880;text-decoration:line-through}
+.cpp{font-weight:700}
+.cpgot{font-size:.85rem;font-weight:700;color:#1b7fc4}
+.cpend{font-size:.85rem;font-weight:700;color:#7a7590}
+.cph .mini{margin:0}

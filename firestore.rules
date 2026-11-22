@@ -353,6 +353,11 @@ match /codes/{c} {
   allow read, write: if isAdmin();
   match /r/{u} { allow read: if isAdmin(); }
 }
+// lista pública de códigos (Más › 🎁 Canjear código): la leen los jugadores; la escriben los administradores y el servidor
+match /codesPub/{c} {
+  allow read: if request.auth != null;
+  allow write: if isAdmin();
+}
 match /wonder/{id} {
   allow read: if request.auth != null && (resource.data.st == 'wait' || resource.data.u == request.auth.uid || resource.data.get('by', '') == request.auth.uid);
   allow create: if request.auth != null && request.resource.data.u == request.auth.uid

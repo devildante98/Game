@@ -50,6 +50,8 @@ async function canjear(tx, db, uid, S, ac, ahora) {
   }
   tx.update(ref, {n: FieldValue.increment(1)});
   tx.set(rref, {at: ahora});
+  // si el código está en la lista pública, también se cuenta allí el uso
+  if (d.pub) tx.set(db.doc("codesPub/" + c), {n: FieldValue.increment(1)}, {merge: true});
   return {out: Object.assign({c, msg: String(d.msg || "").slice(0, 140)}, p)};
 }
 

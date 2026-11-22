@@ -21,16 +21,37 @@ function codeRedeem(){if(CODE_BUSY)return;const i=$("codeIn"),msg=$("codeMsg"),c
       if(p.mon&&PM[p.mon]){const lv=typeof clampL==="function"?clampL(Math.max(5,Math.min(typeof lvCap==="function"?lvCap():50,typeof leadLevel==="function"?leadLevel():5))):5;giveMon(p.mon,lv,!!p.sh)}
       (S.codes=S.codes||{})[p.c]=Date.now();save();try{render()}catch(e){}
       snd("win");i.value="";msg.innerHTML="✅ ¡Código canjeado! Has recibido: <b>"+esc(codePrizeTxt(p))+"</b>"+(p.msg?"<br>"+esc(p.msg):"");
-      toast("🎁 ¡Código canjeado! "+codePrizeTxt(p))})
-    .then(r=>{if(!r||!r.ok){msg.textContent=(r&&CODE_TXT[r.why])||(r&&typeof srvErr==="function"&&srvErr(r))||"No se ha podido canjear. Inténtalo en un momento."}})
+      toast("🎁 ¡Código canjeado! "+codePrizeTxt(p));setTimeout(()=>codePubLoad(true),800)})
+    .then(r=>{if(r&&r.why==="codigo-usado"){(S.codes=S.codes||{})[c]=S.codes[c]||Date.now();codePubDraw()}if(!r||!r.ok){msg.textContent=(r&&CODE_TXT[r.why])||(r&&typeof srvErr==="function"&&srvErr(r))||"No se ha podido canjear. Inténtalo en un momento."}})
     .catch(()=>{msg.textContent="No hay conexión con el servidor. Inténtalo en un momento."})
     .finally(()=>{CODE_BUSY=false;const b=$("codeGo");if(b)b.disabled=false})}
-function codeUI(){const b=$("codePB");if(!b)return;if($("codeIn"))return;
+function codeUI(){const b=$("codePB");if(!b)return;codePubLoad();if($("codeIn"))return;
   b.innerHTML='<div class="codebox"><div class="codei">🎁</div><p>¿Tienes un código de regalo? Lo damos en sorteos, eventos y redes sociales. Cada código se puede canjear una vez por cuenta.</p>'+
-    '<div class="coderow"><input id="codeIn" maxlength="24" autocomplete="off" spellcheck="false" placeholder="ESCRIBE TU CÓDIGO" aria-label="Código de regalo"><button class="red" id="codeGo">Canjear</button></div><small id="codeMsg" class="mut"></small></div>';
+    '<div class="coderow"><input id="codeIn" maxlength="24" autocomplete="off" spellcheck="false" placeholder="ESCRIBE TU CÓDIGO" aria-label="Código de regalo"><button class="red" id="codeGo">Canjear</button></div><small id="codeMsg" class="mut"></small></div><div id="codeLst"></div>';
   $("codeGo").onclick=codeRedeem;$("codeIn").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();codeRedeem()}});
   $("codeIn").addEventListener("input",e=>{const t=e.target,p=t.selectionStart;t.value=codeClean(t.value);try{t.setSelectionRange(p,p)}catch(x){}})}
-nxPanel("codeP","🎁 Canjear código","Escribe un código de regalo para recibir su premio.");
+// ---------- lista pública: códigos activos y pasados ----------
+const CPUB={L:null,t:0,busy:false};
+const codeState=c=>c.on===false?"off":c.until&&Date.now()>c.until?"exp":c.max&&(c.n||0)>=c.max?"full":"ok";
+async function codePubLoad(force){if(CPUB.busy||!(window.FB&&window.FB.codePubList&&window.FB.uid&&window.FB.uid()))return codePubDraw();
+  if(!force&&CPUB.L&&Date.now()-CPUB.t<60000)return codePubDraw();CPUB.busy=true;
+  try{CPUB.L=await window.FB.codePubList();CPUB.t=Date.now()}catch(e){if(!CPUB.L)CPUB.L=[]}finally{CPUB.busy=false}codePubDraw()}
+function codePubDraw(){const b=$("codeLst");if(!b)return;
+  if(!(window.FB&&window.FB.uid&&window.FB.uid())){b.innerHTML='<p class="mut">Inicia sesión con tu cuenta para ver los códigos activos.</p>';return}
+  if(!CPUB.L){b.innerHTML='<p class="mut">Cargando códigos…</p>';return}
+  const mine=S.codes||{},act=CPUB.L.filter(c=>codeState(c)==="ok"),old=CPUB.L.filter(c=>codeState(c)!=="ok").sort((a,z)=>(z.until||z.at||0)-(a.until||a.at||0)).slice(0,20);
+  const day=ms=>new Date(ms).toLocaleDateString("es-ES",{day:"numeric",month:"long",year:"numeric"});
+  const left=ms=>{const d=ms-Date.now();if(d<=0)return "";const D=Math.floor(d/864e5),H=Math.floor(d%864e5/36e5);return D?"quedan "+D+" d "+H+" h":H?"quedan "+H+" h":"¡última hora!"};
+  const card=(c,on)=>{const p={t:c.t,it:c.it,mon:c.mon,sh:c.sh},st=codeState(c),got=!!mine[c.id];
+    const info=[c.max?(on?Math.max(0,c.max-(c.n||0))+" de "+c.max+" usos disponibles":c.max+(c.max===1?" uso":" usos")):"Usos ilimitados",c.until?(on?"válido hasta el "+day(c.until)+(left(c.until)?" ("+left(c.until)+")":""):"caducó el "+day(c.until)):"sin fecha límite"];
+    const tag=on?(got?'<span class="cpgot">✅ Ya lo has canjeado</span>':'<button class="red mini" data-cpuse="'+esc(c.id)+'">🎁 Canjear</button>'):'<span class="cpend">'+(st==="exp"?"⌛ Caducado":st==="full"?"🚫 Agotado":"⛔ Desactivado")+(got?" · ✅ lo canjeaste":"")+'</span>';
+    return '<div class="cpcard'+(on?'':' old')+(got?' got':'')+'"><div class="cph"><b class="cpc noi18n" title="Toca para copiarlo" data-cpcopy="'+esc(c.id)+'">'+esc(c.id)+'</b>'+tag+'</div><div class="cpp">🎁 '+esc(codePrizeTxt(p))+'</div><small class="mut">'+esc(info.join(" · "))+'</small></div>'};
+  b.innerHTML='<h3 class="shh">🟢 Códigos activos</h3>'+(act.length?'<div class="cpl">'+act.map(c=>card(c,true)).join("")+'</div>':'<p class="mut">Ahora mismo no hay códigos activos. ¡Atento a las Novedades, al chat y a las redes!</p>')+
+    (old.length?'<h3 class="shh">⌛ Códigos pasados</h3><div class="cpl">'+old.map(c=>card(c,false)).join("")+'</div>':'')}
+document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#codeLst"))return;
+  const u=t.closest("[data-cpuse]");if(u){const i=$("codeIn");if(i){i.value=u.dataset.cpuse;codeRedeem()}return}
+  const c=t.closest("[data-cpcopy]");if(c){try{await navigator.clipboard.writeText(c.dataset.cpcopy);toast("📋 Código «"+c.dataset.cpcopy+"» copiado")}catch(x){}const i=$("codeIn");if(i)i.value=c.dataset.cpcopy}});
+nxPanel("codeP","🎁 Canjear código","Escribe un código de regalo para recibir su premio. Debajo tienes los códigos activos y los que ya han pasado.");
 {const gk=(typeof HUBP!=="undefined"&&HUBP.earnP)||"mas",g=HUB.find(x=>x.k===gk)||HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="codeP"))g.tabs.push(["codeP","🎁 Canjear código"]);HUBP.codeP=g?g.k:"mas";HUBR.codeP=()=>codeUI()}
 // ---------- elegir un Pokémon en una ventana con imágenes y buscador (formularios de administración) ----------
 // el campo guarda el nombre en un <input hidden> y enseña la imagen del elegido
@@ -69,25 +90,29 @@ async function codeAdmUI(reload){const b=$("codeAPB");if(!b||!(typeof MOD!=="und
       '<label>Usos máximos (0 = sin límite)<input id="cdN" type="number" min="0" value="0"></label>'+
       '<label>Válido hasta (opcional)<input id="cdU" type="date"></label>'+
       '<label class="cdwide">Mensaje al canjearlo (opcional)<input id="cdG" maxlength="140" placeholder="¡Gracias por participar en el sorteo!"></label>'+
+      '<label class="cdchk cdwide"><input id="cdP" type="checkbox" checked> 📢 Mostrar en la lista pública de códigos (desmárcalo para códigos personales)</label>'+
       '</div><button class="red" id="cdSave">🎁 Crear código</button><small id="cdMsg" class="mut"></small><h3 class="shh">Códigos creados</h3><div id="cdList" class="mut">Cargando…</div>';
     $("cdC").addEventListener("input",e=>{e.target.value=codeClean(e.target.value)})}
   try{CODES=(await window.FB.codeList()).sort((a,z)=>(z.at||0)-(a.at||0))}catch(e){$("cdList").textContent="No se han podido cargar los códigos ("+((e&&e.code)||"error")+").";return}
   const L=$("cdList");if(!L)return;
   L.innerHTML=CODES.length?CODES.map(c=>{const p={t:c.t,it:c.it,mon:c.mon,sh:c.sh},exp=c.until&&Date.now()>c.until,full=c.max&&(c.n||0)>=c.max;
-    return '<div class="cdrow'+(c.on===false||exp||full?' off':'')+'"><b class="noi18n">'+esc(c.id)+'</b><span>'+esc(codePrizeTxt(p))+'</span><small>'+(c.n||0)+(c.max?' / '+c.max:'')+' usos'+(c.until?' · hasta el '+new Date(c.until).toLocaleDateString("es"):'')+(c.on===false?' · desactivado':exp?' · caducado':full?' · agotado':'')+'</small>'+
-      '<button class="alt mini" data-cdon="'+esc(c.id)+'">'+(c.on===false?'Activar':'Desactivar')+'</button><button class="alt mini" data-cddel="'+esc(c.id)+'">🗑️</button></div>'}).join(""):'Todavía no hay códigos.'}
+    return '<div class="cdrow'+(c.on===false||exp||full?' off':'')+'"><b class="noi18n">'+esc(c.id)+'</b><span>'+esc(codePrizeTxt(p))+'</span><small>'+(c.n||0)+(c.max?' / '+c.max:'')+' usos'+(c.until?' · hasta el '+new Date(c.until).toLocaleDateString("es"):'')+(c.on===false?' · desactivado':exp?' · caducado':full?' · agotado':'')+(c.pub?' · 📢 público':' · 🔒 oculto')+'</small>'+
+      '<button class="alt mini" data-cdpub="'+esc(c.id)+'">'+(c.pub?'Ocultar':'📢 Publicar')+'</button><button class="alt mini" data-cdon="'+esc(c.id)+'">'+(c.on===false?'Activar':'Desactivar')+'</button><button class="alt mini" data-cddel="'+esc(c.id)+'">🗑️</button></div>'}).join(""):'Todavía no hay códigos.'}
 async function codeAdmSave(){const m=$("cdMsg"),c=codeClean($("cdC").value);if(c.length<3){m.textContent="El código debe tener al menos 3 letras o números.";return}
   if(CODES.some(x=>x.id===c)&&!(await askOk("El código «"+c+"» ya existe. ¿Sustituir su premio?")))return;
   const it={};document.querySelectorAll("#codeAPB [data-cdi]").forEach(i=>{const v=Math.floor(+i.value||0);if(v>0)it[i.dataset.cdi]=Math.min(v,9999)});
   const mon=$("cdM").value.trim(),t=Math.max(0,Math.floor(+$("cdT").value||0));if(mon&&!PM[mon]){m.textContent="Ese Pokémon no existe. Elige uno de la lista.";return}
   if(!t&&!mon&&!Object.keys(it).length){m.textContent="Pon al menos un premio.";return}
   const u=$("cdU").value,d={t:t,it:it,mon:mon||null,sh:mon&&$("cdS").checked?1:0,max:Math.max(0,Math.floor(+$("cdN").value||0)),until:u?new Date(u+"T23:59:59").getTime():0,msg:$("cdG").value.trim().slice(0,140),on:true,at:Date.now()};
-  if(!CODES.some(x=>x.id===c))d.n=0;
-  try{await window.FB.codeSet(c,d);m.textContent="✅ Código «"+c+"» creado: "+codePrizeTxt(d);snd("win");$("cdC").value="";codeAdmUI(false)}catch(e){m.textContent="No se ha podido guardar ("+((e&&e.code)||"error")+")."}}
+  const old=CODES.find(x=>x.id===c);if(!old)d.n=0;d.pub=!!($("cdP")&&$("cdP").checked);
+  try{await window.FB.codeSet(c,d);if(d.pub)await window.FB.codePubSet(c,codePubData(Object.assign({},old||{},d)));else if(old&&old.pub)await window.FB.codePubDel(c);m.textContent="✅ Código «"+c+"» creado: "+codePrizeTxt(d);snd("win");$("cdC").value="";codeAdmUI(false)}catch(e){m.textContent="No se ha podido guardar ("+((e&&e.code)||"error")+")."}}
 document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#codeAPB"))return;
   if(t.closest("#cdSave")){codeAdmSave();return}
-  const on=t.closest("[data-cdon]");if(on){const c=CODES.find(x=>x.id===on.dataset.cdon);if(c)try{await window.FB.codeSet(c.id,{on:c.on===false});codeAdmUI()}catch(x){toast("No se ha podido cambiar.")}return}
-  const del=t.closest("[data-cddel]");if(del){if(!(await askOk("¿Borrar el código «"+del.dataset.cddel+"»? Ya no se podrá canjear.")))return;try{await window.FB.codeDel(del.dataset.cddel);codeAdmUI()}catch(x){toast("No se ha podido borrar.")}}});
+  const on=t.closest("[data-cdon]");if(on){const c=CODES.find(x=>x.id===on.dataset.cdon);if(c)try{await window.FB.codeSet(c.id,{on:c.on===false});if(c.pub)await window.FB.codePubSet(c.id,{on:c.on===false});codeAdmUI()}catch(x){toast("No se ha podido cambiar.")}return}
+  const pb=t.closest("[data-cdpub]");if(pb){const c=CODES.find(x=>x.id===pb.dataset.cdpub);if(c)try{if(c.pub){await window.FB.codePubDel(c.id);await window.FB.codeSet(c.id,{pub:false})}else{await window.FB.codeSet(c.id,{pub:true});await window.FB.codePubSet(c.id,codePubData(c))}codeAdmUI()}catch(x){toast("No se ha podido cambiar ("+((x&&x.code)||"error")+").")}return}
+  const del=t.closest("[data-cddel]");if(del){if(!(await askOk("¿Borrar el código «"+del.dataset.cddel+"»? Ya no se podrá canjear.")))return;try{const c=CODES.find(x=>x.id===del.dataset.cddel);await window.FB.codeDel(del.dataset.cddel);if(c&&c.pub)await window.FB.codePubDel(del.dataset.cddel);codeAdmUI()}catch(x){toast("No se ha podido borrar.")}}});
+// lo que se publica de un código en la lista pública (el mensaje al canjearlo no, que es una sorpresa)
+function codePubData(c){return {t:c.t||0,it:c.it||{},mon:c.mon||null,sh:c.sh?1:0,max:c.max||0,n:c.n||0,until:c.until||0,on:c.on!==false,at:c.at||Date.now()}}
 // la pestaña solo aparece a los administradores
 setInterval(()=>{if(typeof MOD==="undefined"||!MOD.admin||$("codeAP"))return;nxPanel("codeAP","🎁 Códigos de regalo","Solo lo ves tú porque eres administrador. Crea códigos con premio para sorteos, eventos o compensaciones. Cada cuenta puede canjear cada código una vez.");
   const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="codeAP"))g.tabs.push(["codeAP","🎁 Códigos"]);HUBP.codeAP="mas";HUBR.codeAP=()=>codeAdmUI(true)},2000);

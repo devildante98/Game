@@ -297,7 +297,7 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.26";
+const GAME_VER="7.26.1";
 const NEWS=[
 {v:"2026-11-22-7.26",ver:"7.26",at:"2026-11-22T14:10",t:"💬 ¡Servidor de Discord!",l:["Ya tenemos servidor de Discord para los jugadores: entra con el botón «Discord» de la barra de arriba o desde Más › 💬 Discord","Es nuevo y lo iremos mejorando poco a poco. ¡Te esperamos!"]},
 {v:"2026-11-22-7.25.1",ver:"7.25.1",at:"2026-11-22T13:58",t:"🎨 Nuevo icono del juego",l:["El juego estrena icono: una Poké Ball brillante a punto de abrirse, con rayos de premio raro, tres estrellas y destellos. Lo verás en la pestaña del navegador y en la app instalada (en el móvil puede tardar un poco en cambiar)"]},
@@ -833,6 +833,8 @@ FB_API = '''
     async codePubList(){const sn=await S.getDocs(S.query(S.collection(db,"codesPub"),S.orderBy("at","desc"),S.limit(60)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     codePubSet:(c,d)=>S.setDoc(S.doc(db,"codesPub",c),d,{merge:true}),
     codePubDel:c=>S.deleteDoc(S.doc(db,"codesPub",c)),
+    // avisa en Discord (solo administradores; el servidor comprueba el permiso y no repite avisos)
+    discord:(k,id)=>Fn.httpsCallable(Fn.getFunctions(app,"europe-west1"),"discord",{timeout:20000})({k:k,id:id}).then(r=>r.data).catch(()=>({ok:false})),
     // sorteos
     async rfList(){const sn=await S.getDocs(S.query(S.collection(db,"raffles"),S.orderBy("end","desc"),S.limit(20)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     // apuntarse/borrarse: la inscripción y el contador del sorteo (n) cambian juntos; la lista solo la leen los administradores

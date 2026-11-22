@@ -61,7 +61,7 @@ async function rfDraw(id){const r=RF.list.find(x=>x.id===id);if(!r)return;
   const rnd=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n};
   for(let i=E.length-1;i>0;i--){const j=rnd(i+1);[E[i],E[j]]=[E[j],E[i]]}
   const W=E.slice(0,Math.max(0,r.nw|0));
-  try{await window.FB.rfSave(id,{st:"done",win:W.map(x=>x.u),wn:W.map(x=>String(x.n||"Entrenador").slice(0,30)),drawAt:Date.now()});snd("win");
+  try{await window.FB.rfSave(id,{st:"done",win:W.map(x=>x.u),wn:W.map(x=>String(x.n||"Entrenador").slice(0,30)),drawAt:Date.now()});snd("win");if(typeof dcAviso==="function")dcAviso("sorteo",id);
     toast(W.length?"🎉 Ganador"+(W.length>1?"es":"")+": "+W.map(x=>pvClean(x.n||"")).join(", "):"Nadie se había apuntado.");rfRefresh()}catch(e){toast("No se ha podido guardar el resultado ("+((e&&e.code)||"error")+").")}}
 async function rfCreate(){const m=$("rfMsg"),tt=$("rfT").value.trim().slice(0,80);if(!tt){m.textContent="Ponle un título al sorteo.";return}
   const it={};document.querySelectorAll("[data-rfi]").forEach(i=>{const v=Math.floor(+i.value||0);if(v>0)it[i.dataset.rfi]=Math.min(v,9999)});
@@ -70,7 +70,7 @@ async function rfCreate(){const m=$("rfMsg"),tt=$("rfT").value.trim().slice(0,80
   const d=$("rfD").value,h=$("rfH").value||"21:00";if(!d){m.textContent="Elige el día de cierre.";return}const end=new Date(d+"T"+h+":00").getTime();
   if(!(end>Date.now())){m.textContent="La fecha de cierre tiene que ser en el futuro.";return}
   const nw=Math.max(1,Math.min(100,Math.floor(+$("rfN").value||1)));
-  try{await window.FB.rfSave(null,{tt:tt,t:t,it:it,mon:mon||null,sh:mon&&$("rfS").checked?1:0,nw:nw,end:end,st:"open",win:[],wn:[],at:Date.now()});RF.msg="✅ Sorteo «"+tt+"» creado.";$("rfT").value="";snd("win");rfRefresh()}
+  try{const ref=await window.FB.rfSave(null,{tt:tt,t:t,it:it,mon:mon||null,sh:mon&&$("rfS").checked?1:0,nw:nw,end:end,st:"open",win:[],wn:[],at:Date.now()});RF.msg="✅ Sorteo «"+tt+"» creado.";if(ref&&ref.id&&typeof dcAviso==="function")dcAviso("sorteo",ref.id);$("rfT").value="";snd("win");rfRefresh()}
   catch(e){m.textContent="No se ha podido crear ("+((e&&e.code)||"error")+")."}}
 document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#rafPB,#rfWinM,#rfAnnM"))return;
   if(t.closest("#rfSave")){rfCreate();return}

@@ -105,12 +105,14 @@ async function codeAdmSave(){const m=$("cdMsg"),c=codeClean($("cdC").value);if(c
   if(!t&&!mon&&!Object.keys(it).length){m.textContent="Pon al menos un premio.";return}
   const u=$("cdU").value,d={t:t,it:it,mon:mon||null,sh:mon&&$("cdS").checked?1:0,max:Math.max(0,Math.floor(+$("cdN").value||0)),until:u?new Date(u+"T23:59:59").getTime():0,msg:$("cdG").value.trim().slice(0,140),on:true,at:Date.now()};
   const old=CODES.find(x=>x.id===c);if(!old)d.n=0;d.pub=!!($("cdP")&&$("cdP").checked);
-  try{await window.FB.codeSet(c,d);if(d.pub)await window.FB.codePubSet(c,codePubData(Object.assign({},old||{},d)));else if(old&&old.pub)await window.FB.codePubDel(c);m.textContent="✅ Código «"+c+"» creado: "+codePrizeTxt(d);snd("win");$("cdC").value="";codeAdmUI(false)}catch(e){m.textContent="No se ha podido guardar ("+((e&&e.code)||"error")+")."}}
+  try{await window.FB.codeSet(c,d);if(d.pub){await window.FB.codePubSet(c,codePubData(Object.assign({},old||{},d)));dcAviso("codigo",c)}else if(old&&old.pub)await window.FB.codePubDel(c);m.textContent="✅ Código «"+c+"» creado: "+codePrizeTxt(d);snd("win");$("cdC").value="";codeAdmUI(false)}catch(e){m.textContent="No se ha podido guardar ("+((e&&e.code)||"error")+")."}}
 document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#codeAPB"))return;
   if(t.closest("#cdSave")){codeAdmSave();return}
   const on=t.closest("[data-cdon]");if(on){const c=CODES.find(x=>x.id===on.dataset.cdon);if(c)try{await window.FB.codeSet(c.id,{on:c.on===false});if(c.pub)await window.FB.codePubSet(c.id,{on:c.on===false});codeAdmUI()}catch(x){toast("No se ha podido cambiar.")}return}
-  const pb=t.closest("[data-cdpub]");if(pb){const c=CODES.find(x=>x.id===pb.dataset.cdpub);if(c)try{if(c.pub){await window.FB.codePubDel(c.id);await window.FB.codeSet(c.id,{pub:false})}else{await window.FB.codeSet(c.id,{pub:true});await window.FB.codePubSet(c.id,codePubData(c))}codeAdmUI()}catch(x){toast("No se ha podido cambiar ("+((x&&x.code)||"error")+").")}return}
+  const pb=t.closest("[data-cdpub]");if(pb){const c=CODES.find(x=>x.id===pb.dataset.cdpub);if(c)try{if(c.pub){await window.FB.codePubDel(c.id);await window.FB.codeSet(c.id,{pub:false})}else{await window.FB.codeSet(c.id,{pub:true});await window.FB.codePubSet(c.id,codePubData(c));dcAviso("codigo",c.id)}codeAdmUI()}catch(x){toast("No se ha podido cambiar ("+((x&&x.code)||"error")+").")}return}
   const del=t.closest("[data-cddel]");if(del){if(!(await askOk("¿Borrar el código «"+del.dataset.cddel+"»? Ya no se podrá canjear.")))return;try{const c=CODES.find(x=>x.id===del.dataset.cddel);await window.FB.codeDel(del.dataset.cddel);if(c&&c.pub)await window.FB.codePubDel(del.dataset.cddel);codeAdmUI()}catch(x){toast("No se ha podido borrar.")}}});
+// aviso en el servidor de Discord (si está configurado); no molesta si falla
+function dcAviso(k,id){try{if(window.FB&&window.FB.discord)window.FB.discord(k,id).then(r=>{if(r&&r.ok&&!r.ya)toast("💬 Anunciado en Discord")})}catch(e){}}
 // lo que se publica de un código en la lista pública (el mensaje al canjearlo no, que es una sorpresa)
 function codePubData(c){return {t:c.t||0,it:c.it||{},mon:c.mon||null,sh:c.sh?1:0,max:c.max||0,n:c.n||0,until:c.until||0,on:c.on!==false,at:c.at||Date.now()}}
 // la pestaña solo aparece a los administradores

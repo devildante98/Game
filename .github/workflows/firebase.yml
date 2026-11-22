@@ -39,6 +39,14 @@ jobs:
         env:
           SA: ${{ secrets.FIREBASE_SA }}
         run: printf '%s' "$SA" > "$RUNNER_TEMP/sa.json"
+      - name: Avisos de Discord (webhooks desde los secretos; si falta alguno, ese aviso no se envía)
+        if: env.HAS_SA == 'true'
+        env:
+          WC: ${{ secrets.DISCORD_WEBHOOK_CODIGOS }}
+          WS: ${{ secrets.DISCORD_WEBHOOK_SORTEOS }}
+          WT: ${{ secrets.DISCORD_WEBHOOK_TORNEOS }}
+          RA: ${{ secrets.DISCORD_ROL_AVISOS }}
+        run: printf 'DISCORD_WEBHOOK_CODIGOS=%s\nDISCORD_WEBHOOK_SORTEOS=%s\nDISCORD_WEBHOOK_TORNEOS=%s\nDISCORD_ROL_AVISOS=%s\n' "$WC" "$WS" "$WT" "$RA" > _server/.env
       - name: Publicar en Firebase (funciones y reglas)
         if: env.HAS_SA == 'true'
         env:
@@ -46,4 +54,4 @@ jobs:
         run: npx --yes firebase-tools@15.36.0 deploy --only functions,firestore:rules --project pokegacha-fdef9 --non-interactive --force
       - name: Borrar la clave
         if: always()
-        run: rm -f "$RUNNER_TEMP/sa.json"
+        run: rm -f "$RUNNER_TEMP/sa.json" _server/.env

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.26"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.26.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795359214">
+<meta name="game-build" content="1795362754">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3236,7 +3236,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.26</small>
+    <small class="pcver">Versión 7.26.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7991,7 +7991,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.26";
+const GAME_VER="7.26.1";
 const NEWS=[
 {v:"2026-11-22-7.26",ver:"7.26",at:"2026-11-22T14:10",t:"💬 ¡Servidor de Discord!",l:["Ya tenemos servidor de Discord para los jugadores: entra con el botón «Discord» de la barra de arriba o desde Más › 💬 Discord","Es nuevo y lo iremos mejorando poco a poco. ¡Te esperamos!"]},
 {v:"2026-11-22-7.25.1",ver:"7.25.1",at:"2026-11-22T13:58",t:"🎨 Nuevo icono del juego",l:["El juego estrena icono: una Poké Ball brillante a punto de abrirse, con rayos de premio raro, tres estrellas y destellos. Lo verás en la pestaña del navegador y en la app instalada (en el móvil puede tardar un poco en cambiar)"]},
@@ -8418,7 +8418,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795359214";
+const GAME_B="1795362754";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -21681,12 +21681,14 @@ async function codeAdmSave(){const m=$("cdMsg"),c=codeClean($("cdC").value);if(c
   if(!t&&!mon&&!Object.keys(it).length){m.textContent="Pon al menos un premio.";return}
   const u=$("cdU").value,d={t:t,it:it,mon:mon||null,sh:mon&&$("cdS").checked?1:0,max:Math.max(0,Math.floor(+$("cdN").value||0)),until:u?new Date(u+"T23:59:59").getTime():0,msg:$("cdG").value.trim().slice(0,140),on:true,at:Date.now()};
   const old=CODES.find(x=>x.id===c);if(!old)d.n=0;d.pub=!!($("cdP")&&$("cdP").checked);
-  try{await window.FB.codeSet(c,d);if(d.pub)await window.FB.codePubSet(c,codePubData(Object.assign({},old||{},d)));else if(old&&old.pub)await window.FB.codePubDel(c);m.textContent="✅ Código «"+c+"» creado: "+codePrizeTxt(d);snd("win");$("cdC").value="";codeAdmUI(false)}catch(e){m.textContent="No se ha podido guardar ("+((e&&e.code)||"error")+")."}}
+  try{await window.FB.codeSet(c,d);if(d.pub){await window.FB.codePubSet(c,codePubData(Object.assign({},old||{},d)));dcAviso("codigo",c)}else if(old&&old.pub)await window.FB.codePubDel(c);m.textContent="✅ Código «"+c+"» creado: "+codePrizeTxt(d);snd("win");$("cdC").value="";codeAdmUI(false)}catch(e){m.textContent="No se ha podido guardar ("+((e&&e.code)||"error")+")."}}
 document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#codeAPB"))return;
   if(t.closest("#cdSave")){codeAdmSave();return}
   const on=t.closest("[data-cdon]");if(on){const c=CODES.find(x=>x.id===on.dataset.cdon);if(c)try{await window.FB.codeSet(c.id,{on:c.on===false});if(c.pub)await window.FB.codePubSet(c.id,{on:c.on===false});codeAdmUI()}catch(x){toast("No se ha podido cambiar.")}return}
-  const pb=t.closest("[data-cdpub]");if(pb){const c=CODES.find(x=>x.id===pb.dataset.cdpub);if(c)try{if(c.pub){await window.FB.codePubDel(c.id);await window.FB.codeSet(c.id,{pub:false})}else{await window.FB.codeSet(c.id,{pub:true});await window.FB.codePubSet(c.id,codePubData(c))}codeAdmUI()}catch(x){toast("No se ha podido cambiar ("+((x&&x.code)||"error")+").")}return}
+  const pb=t.closest("[data-cdpub]");if(pb){const c=CODES.find(x=>x.id===pb.dataset.cdpub);if(c)try{if(c.pub){await window.FB.codePubDel(c.id);await window.FB.codeSet(c.id,{pub:false})}else{await window.FB.codeSet(c.id,{pub:true});await window.FB.codePubSet(c.id,codePubData(c));dcAviso("codigo",c.id)}codeAdmUI()}catch(x){toast("No se ha podido cambiar ("+((x&&x.code)||"error")+").")}return}
   const del=t.closest("[data-cddel]");if(del){if(!(await askOk("¿Borrar el código «"+del.dataset.cddel+"»? Ya no se podrá canjear.")))return;try{const c=CODES.find(x=>x.id===del.dataset.cddel);await window.FB.codeDel(del.dataset.cddel);if(c&&c.pub)await window.FB.codePubDel(del.dataset.cddel);codeAdmUI()}catch(x){toast("No se ha podido borrar.")}}});
+// aviso en el servidor de Discord (si está configurado); no molesta si falla
+function dcAviso(k,id){try{if(window.FB&&window.FB.discord)window.FB.discord(k,id).then(r=>{if(r&&r.ok&&!r.ya)toast("💬 Anunciado en Discord")})}catch(e){}}
 // lo que se publica de un código en la lista pública (el mensaje al canjearlo no, que es una sorpresa)
 function codePubData(c){return {t:c.t||0,it:c.it||{},mon:c.mon||null,sh:c.sh?1:0,max:c.max||0,n:c.n||0,until:c.until||0,on:c.on!==false,at:c.at||Date.now()}}
 // la pestaña solo aparece a los administradores
@@ -21763,7 +21765,7 @@ async function rfDraw(id){const r=RF.list.find(x=>x.id===id);if(!r)return;
   const rnd=n=>{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n};
   for(let i=E.length-1;i>0;i--){const j=rnd(i+1);[E[i],E[j]]=[E[j],E[i]]}
   const W=E.slice(0,Math.max(0,r.nw|0));
-  try{await window.FB.rfSave(id,{st:"done",win:W.map(x=>x.u),wn:W.map(x=>String(x.n||"Entrenador").slice(0,30)),drawAt:Date.now()});snd("win");
+  try{await window.FB.rfSave(id,{st:"done",win:W.map(x=>x.u),wn:W.map(x=>String(x.n||"Entrenador").slice(0,30)),drawAt:Date.now()});snd("win");if(typeof dcAviso==="function")dcAviso("sorteo",id);
     toast(W.length?"🎉 Ganador"+(W.length>1?"es":"")+": "+W.map(x=>pvClean(x.n||"")).join(", "):"Nadie se había apuntado.");rfRefresh()}catch(e){toast("No se ha podido guardar el resultado ("+((e&&e.code)||"error")+").")}}
 async function rfCreate(){const m=$("rfMsg"),tt=$("rfT").value.trim().slice(0,80);if(!tt){m.textContent="Ponle un título al sorteo.";return}
   const it={};document.querySelectorAll("[data-rfi]").forEach(i=>{const v=Math.floor(+i.value||0);if(v>0)it[i.dataset.rfi]=Math.min(v,9999)});
@@ -21772,7 +21774,7 @@ async function rfCreate(){const m=$("rfMsg"),tt=$("rfT").value.trim().slice(0,80
   const d=$("rfD").value,h=$("rfH").value||"21:00";if(!d){m.textContent="Elige el día de cierre.";return}const end=new Date(d+"T"+h+":00").getTime();
   if(!(end>Date.now())){m.textContent="La fecha de cierre tiene que ser en el futuro.";return}
   const nw=Math.max(1,Math.min(100,Math.floor(+$("rfN").value||1)));
-  try{await window.FB.rfSave(null,{tt:tt,t:t,it:it,mon:mon||null,sh:mon&&$("rfS").checked?1:0,nw:nw,end:end,st:"open",win:[],wn:[],at:Date.now()});RF.msg="✅ Sorteo «"+tt+"» creado.";$("rfT").value="";snd("win");rfRefresh()}
+  try{const ref=await window.FB.rfSave(null,{tt:tt,t:t,it:it,mon:mon||null,sh:mon&&$("rfS").checked?1:0,nw:nw,end:end,st:"open",win:[],wn:[],at:Date.now()});RF.msg="✅ Sorteo «"+tt+"» creado.";if(ref&&ref.id&&typeof dcAviso==="function")dcAviso("sorteo",ref.id);$("rfT").value="";snd("win");rfRefresh()}
   catch(e){m.textContent="No se ha podido crear ("+((e&&e.code)||"error")+")."}}
 document.addEventListener("click",async e=>{const t=e.target;if(!t.closest||!t.closest("#rafPB,#rfWinM,#rfAnnM"))return;
   if(t.closest("#rfSave")){rfCreate();return}
@@ -21947,6 +21949,8 @@ async function main(){
     async codePubList(){const sn=await S.getDocs(S.query(S.collection(db,"codesPub"),S.orderBy("at","desc"),S.limit(60)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     codePubSet:(c,d)=>S.setDoc(S.doc(db,"codesPub",c),d,{merge:true}),
     codePubDel:c=>S.deleteDoc(S.doc(db,"codesPub",c)),
+    // avisa en Discord (solo administradores; el servidor comprueba el permiso y no repite avisos)
+    discord:(k,id)=>Fn.httpsCallable(Fn.getFunctions(app,"europe-west1"),"discord",{timeout:20000})({k:k,id:id}).then(r=>r.data).catch(()=>({ok:false})),
     // sorteos
     async rfList(){const sn=await S.getDocs(S.query(S.collection(db,"raffles"),S.orderBy("end","desc"),S.limit(20)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
     // apuntarse/borrarse: la inscripción y el contador del sorteo (n) cambian juntos; la lista solo la leen los administradores
@@ -22130,7 +22134,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.26";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.26.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

@@ -9,6 +9,7 @@ const {initializeApp} = require("firebase-admin/app");
 const {getFirestore} = require("firebase-admin/firestore");
 const {getAuth} = require("firebase-admin/auth");
 const {guardar} = require("./guardar");
+const discord = require("./discord");
 
 initializeApp();
 const db = getFirestore();
@@ -31,5 +32,13 @@ exports.guardar = onCall({memory: "512MiB", timeoutSeconds: 30}, async (req) => 
       cuentaSeg = 0;
     }
   }
-  return guardar(db, uid, req.data, Date.now(), cuentaSeg);
+  const r = await guardar(db, uid, req.data, Date.now(), cuentaSeg);
+  // el primer guardado de la semana nueva anuncia en Discord el podio del torneo de la anterior (una sola vez)
+  try { await discord.torneoSemanal(db, Date.now()); } catch (e) { /* un fallo de Discord nunca afecta al guardado */ }
+  return r;
+});
+
+// avisos en Discord de códigos públicos y sorteos (solo administradores; lo pide el juego al crearlos o sortearlos)
+exports.discord = onCall({timeoutSeconds: 20}, async (req) => {
+  try { return await discord.avisar(db, req.auth ? req.auth.uid : null, req.data); } catch (e) { return {ok: false, why: "error"}; }
 });

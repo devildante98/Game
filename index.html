@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.26.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.26.4"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795388584">
+<meta name="game-build" content="1795389044">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3240,7 +3240,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.26.3</small>
+    <small class="pcver">Versión 7.26.4</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7995,8 +7995,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.26.3";
+const GAME_VER="7.26.4";
 const NEWS=[
+{v:"2026-11-23-7.26.4",ver:"7.26.4",at:"2026-11-23T00:10",t:"🚀 Más proyectos en Próximamente",l:["Tres proyectos nuevos en Más › Próximamente: Búsqueda del tesoro semanal, Rival personal e Investigaciones del Profesor"]},
 {v:"2026-11-22-7.26.2",ver:"7.26.2",at:"2026-11-22T23:50",t:"🚀 Nuevos proyectos en Próximamente",l:["Hemos añadido 7 proyectos nuevos a Más › Próximamente: Pokémon del día, Mercader misterioso, Torneos de amigos, Modo espectador, Diario del entrenador, Aspectos para la Poké Ball y Especialidades de entrenador","¿Cuál te apetece más? ¡Cuéntanoslo en Discord o en Sugerencias!"]},
 {v:"2026-11-22-7.26",ver:"7.26",at:"2026-11-22T14:10",t:"💬 ¡Servidor de Discord!",l:["Ya tenemos servidor de Discord para los jugadores: entra con el botón «Discord» de la barra de arriba o desde Más › 💬 Discord","Es nuevo y lo iremos mejorando poco a poco. ¡Te esperamos!"]},
 {v:"2026-11-22-7.25.1",ver:"7.25.1",at:"2026-11-22T13:58",t:"🎨 Nuevo icono del juego",l:["El juego estrena icono: una Poké Ball brillante a punto de abrirse, con rayos de premio raro, tres estrellas y destellos. Lo verás en la pestaña del navegador y en la app instalada (en el móvil puede tardar un poco en cambiar)"]},
@@ -8423,7 +8424,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795388584";
+const GAME_B="1795389044";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -11731,6 +11732,9 @@ const ROADMAP=[
  ["📔","Diario del entrenador","El juego apuntará tus grandes momentos: tu primer variocolor, tu primer legendario, el día que ganaste la Liga o tu mejor tirada. Míralos en una línea del tiempo y compártelos."],
  ["🎨","Aspectos para la Poké Ball","Cambia el aspecto de la Poké Ball grande del gacha y de su animación al tirar: de hielo, galáctica, dorada… Se consiguen en eventos, con logros y en la Tienda de Evento."],
  ["🎓","Especialidades de entrenador","Al subir de nivel elegirás un camino: Criador (huevos más rápidos), Coleccionista (más variocolores) o Estratega (más experiencia en combate). Cada uno con sus mejoras y su propio título."],
+ ["🗺️","Búsqueda del tesoro semanal","Cada semana habrá un tesoro escondido en el mapa de Exploración. Cada día se desbloquea una pista nueva (¡y alguna se dará en Discord!). Los primeros en encontrarlo entrarán en el cuadro de honor."],
+ ["🥊","Rival personal","Un entrenador rival con nombre y carácter propios que crece contigo: cada pocos días te reta con un equipo a tu nivel, te deja mensajes y, si le ganas varias veces seguidas, te hace un regalo especial."],
+ ["🔬","Investigaciones del Profesor","Cadenas de misiones con historia que duran semanas, como «Investiga a los Pokémon de tipo Fantasma de la región»: varias etapas, diálogos y una gran recompensa final."],
 ];
 nxPanel("roadP","🚀 Próximas actualizaciones","Lo que estamos preparando para el juego. ¡Atento a las Novedades!");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="roadP"))g.tabs.splice(1,0,["roadP","Próximamente"]);HUBP.roadP="mas";HUBR.roadP=()=>roadUI()}
@@ -22146,7 +22150,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.26.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.26.4";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

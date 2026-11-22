@@ -476,6 +476,9 @@ const ROADMAP=[
  ["📔","Diario del entrenador","El juego apuntará tus grandes momentos: tu primer variocolor, tu primer legendario, el día que ganaste la Liga o tu mejor tirada. Míralos en una línea del tiempo y compártelos."],
  ["🎨","Aspectos para la Poké Ball","Cambia el aspecto de la Poké Ball grande del gacha y de su animación al tirar: de hielo, galáctica, dorada… Se consiguen en eventos, con logros y en la Tienda de Evento."],
  ["🎓","Especialidades de entrenador","Al subir de nivel elegirás un camino: Criador (huevos más rápidos), Coleccionista (más variocolores) o Estratega (más experiencia en combate). Cada uno con sus mejoras y su propio título."],
+ ["🗺️","Búsqueda del tesoro semanal","Cada semana habrá un tesoro escondido en el mapa de Exploración. Cada día se desbloquea una pista nueva (¡y alguna se dará en Discord!). Los primeros en encontrarlo entrarán en el cuadro de honor."],
+ ["🥊","Rival personal","Un entrenador rival con nombre y carácter propios que crece contigo: cada pocos días te reta con un equipo a tu nivel, te deja mensajes y, si le ganas varias veces seguidas, te hace un regalo especial."],
+ ["🔬","Investigaciones del Profesor","Cadenas de misiones con historia que duran semanas, como «Investiga a los Pokémon de tipo Fantasma de la región»: varias etapas, diálogos y una gran recompensa final."],
 ];
 nxPanel("roadP","🚀 Próximas actualizaciones","Lo que estamos preparando para el juego. ¡Atento a las Novedades!");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="roadP"))g.tabs.splice(1,0,["roadP","Próximamente"]);HUBP.roadP="mas";HUBR.roadP=()=>roadUI()}

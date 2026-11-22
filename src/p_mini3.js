@@ -64,11 +64,11 @@ const hlVal=(p,k)=>{const b=BSD[p[0]];if(!b)return 0;return k<0?b.reduce((a,x)=>
 const G_HL={id:"hl",n:"Más o menos",ic:"📊",c:"#3a7be0",d:"Mira la estadística base de un Pokémon y adivina si el siguiente tiene MÁS o MENOS. Acierta seguidas todas las que puedas: un fallo y se acaba.",
   rw:s=>s*110,
   start(B,end){
-    const pool=P.filter(p=>p[2]!=="M"&&BSD[p[0]]);let a=pool[Math.floor(Math.random()*pool.length)],streak=0,busy=false;
+    const pool=P.filter(p=>p[2]!=="M"&&BSD[p[0]]);let a=pool[Math.floor(mgR()*pool.length)],streak=0,busy=false;
     const round=()=>{
-      const st=HL_ST[Math.floor(Math.random()*HL_ST.length)],va=hlVal(a,st[1]),hard=Math.min(.85,.3+streak*.05);
+      const st=HL_ST[Math.floor(mgR()*HL_ST.length)],va=hlVal(a,st[1]),hard=Math.min(.85,.3+streak*.05);
       // con la racha, los valores se parecen cada vez más
-      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(Math.random()*pool.length)];if(c===a)continue;const vb=hlVal(c,st[1]),r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(Math.random()<hard&&r>(st[1]<0?1.15:1.35))continue;b=c}
+      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(mgR()*pool.length)];if(c===a)continue;const vb=hlVal(c,st[1]),r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(mgR()<hard&&r>(st[1]<0?1.15:1.35))continue;b=c}
       if(!b)b=pool.find(c=>c!==a);
       const T=Math.max(4500,10000-streak*400),t0=performance.now();busy=false;
       B.innerHTML='<div class="whohd"><span>🔥 Racha: <b>'+streak+'</b></span><span>📊 '+st[0]+'</span></div><div class="mgtime"><i id="hlT"></i></div>'+

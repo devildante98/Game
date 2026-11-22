@@ -212,16 +212,16 @@ const EXT=[// [id, nombre, ancho, alto, valor, tipo de premio]
  ["helix","Fósil Hélix",3,3,300,{fos:"helix"}],["dome","Fósil Domo",3,3,300,{fos:"dome"}]];
 const G_EXC={id:"exc",n:"Excavación subterránea",ic:"⛏️",c:"#8a5a2b",d:"Pica la pared para desenterrar tesoros: esferas, piedras evolutivas, objetos y fósiles. ¡Si golpeas demasiado, la pared se derrumba!",
   rw:s=>s*150,
-  start(B,end){excRun(B,end,{pool:EXT,weights:[12,12,9,5,8,4,4,6,5,2,1,1],want:2+Math.floor(Math.random()*3)})},
+  start(B,end){excRun(B,end,{pool:EXT,weights:[12,12,9,5,8,4,4,6,5,2,1,1],want:4})},
   after(score,prize){return excAfter(score,prize,"⛏️ Tesoros")}};
 // pared de excavación común (12x12: múltiplo de 3 para el martillo 3x3 y el pico en cruz)
 // o: {pool, weights, want, must (tesoros que salen siempre), art}
 function excRun(B,end,o){
     const CW=12,CH=12,cells=[],items=[],EXP=o.pool,weights=o.weights,want=o.want,art=o.art||exArt;let stab=100,tool="pick",over=false;
-    for(let i=0;i<CW*CH;i++)cells.push({h:1+Math.floor(Math.random()*3)+(Math.random()<.25?2:0),it:-1});
+    for(let i=0;i<CW*CH;i++)cells.push({h:1+Math.floor(mgR()*3)+(mgR()<.25?2:0),it:-1});
     const must=(o.must||[]).slice();
-    for(let tries=0;items.length<want&&tries<300;tries++){let e;if(must.length)e=must[0];else{let t=weights.reduce((a,b)=>a+b,0),x=Math.random()*t,k=0;for(;k<EXP.length;k++){x-=weights[k];if(x<=0)break}e=EXP[Math.min(k,EXP.length-1)]}
-      const cx=Math.floor(Math.random()*(CW-e[2]+1)),cy=Math.floor(Math.random()*(CH-e[3]+1));let free=true;for(let a=0;a<e[2];a++)for(let b=0;b<e[3];b++)if(cells[(cy+b)*CW+cx+a].it>=0)free=false;if(!free)continue;
+    for(let tries=0;items.length<want&&tries<300;tries++){let e;if(must.length)e=must[0];else{let t=weights.reduce((a,b)=>a+b,0),x=mgR()*t,k=0;for(;k<EXP.length;k++){x-=weights[k];if(x<=0)break}e=EXP[Math.min(k,EXP.length-1)]}
+      const cx=Math.floor(mgR()*(CW-e[2]+1)),cy=Math.floor(mgR()*(CH-e[3]+1));let free=true;for(let a=0;a<e[2];a++)for(let b=0;b<e[3];b++)if(cells[(cy+b)*CW+cx+a].it>=0)free=false;if(!free)continue;
       if(must.length&&must[0]===e)must.shift();
       const id=items.length;items.push({e:e,x:cx,y:cy,got:false});for(let a=0;a<e[2];a++)for(let b=0;b<e[3];b++)cells[(cy+b)*CW+cx+a].it=id}
     B.innerHTML='<div class="whohd"><span>💎 Tesoros: <b id="exF">0</b>/'+items.length+'</span><div class="exstab"><i id="exS"></i></div></div><div class="exwall" id="exW" style="--cw:'+CW+';--ch:'+CH+'">'+cells.map((c,i)=>'<button class="excell h'+Math.min(5,c.h)+'" data-ec="'+i+'" style="grid-column:'+(i%CW+1)+';grid-row:'+(Math.floor(i/CW)+1)+'" aria-label="Roca"></button>').join("")+'</div>'+
@@ -233,7 +233,10 @@ function excRun(B,end,o){
     const hit=(i,d)=>{const c=cells[i];if(!c||c.h<=0)return;c.h=Math.max(0,c.h-d);const el=W.querySelector('[data-ec="'+i+'"]');el.className="excell h"+Math.min(5,c.h)+(c.h<=0?" gone":"");if(c.h<=0&&c.it>=0)showIt(c.it)};
     const check=()=>{let f=0;items.forEach((it,k)=>{if(it.got)return;let all=true;for(let a=0;a<it.e[2];a++)for(let b=0;b<it.e[3];b++)if(cells[(it.y+b)*CW+it.x+a].h>0)all=false;
       if(all){it.got=true;snd("lvl");showIt(k);const el=W.querySelector('[data-ei="'+k+'"]');el.classList.add("found");const r=el.getBoundingClientRect();mgPop(r.left+r.width/2,r.top,"¡"+it.e[1]+"!","#ffd35c");mgSet(MG.score+it.e[4])}});
-      f=items.filter(x=>x.got).length;$("exF").textContent=f;if(f===items.length&&!over){over=true;mgT(()=>finish(true),900)}};
+      f=items.filter(x=>x.got).length;$("exF").textContent=f;if(f===items.length&&!over){over=true;
+        // bonus por desenterrarlo todo con la pared entera: cuenta la habilidad, no la suerte
+        const bon=Math.max(0,Math.round(stab*3));if(bon){mgSet(MG.score+bon);try{const r=W.getBoundingClientRect();mgPop(r.left+r.width/2,r.top+r.height/2,"🧱 Bonus de estabilidad +"+bon,"#7ae7ff")}catch(e){}}
+        mgT(()=>finish(true),900)}};
     const finish=ok=>{over=true;MG.exc=items.filter(x=>x.got).map(x=>x.e);if(!ok){snd("hit",1);W.classList.add("collapse")}mgT(()=>end(MG.score),ok?300:1200)};
     W.addEventListener("click",e=>{const b=e.target.closest("[data-ec]");if(!b||over)return;const i=+b.dataset.ec,x=i%CW,y=Math.floor(i/CW);
       if(tool==="pick"){hit(i,2);[[1,0],[-1,0],[0,1],[0,-1]].forEach(q=>{const X=x+q[0],Y=y+q[1];if(X>=0&&X<CW&&Y>=0&&Y<CH)hit(Y*CW+X,1)});stab-=2.2;snd("click")}
@@ -268,13 +271,13 @@ function exArt(e){
 const G_WGT={id:"wgt",n:"Peso y altura",ic:"⚖️",c:"#13a37f",d:"Dos Pokémon: ¿cuál pesa más o menos?, ¿cuál es más alto o más bajo? Acierta seguidas todas las que puedas. Un fallo y se acaba.",
   rw:s=>s*110,
   start(B,end){
-    const pool=P.filter(p=>p[2]!=="M"&&pkW(p)>0&&pkH(p)>0);let a=pool[Math.floor(Math.random()*pool.length)],streak=0,busy=false;
+    const pool=P.filter(p=>p[2]!=="M"&&pkW(p)>0&&pkH(p)>0);let a=pool[Math.floor(mgR()*pool.length)],streak=0,busy=false;
     const round=()=>{
-      const mode=Math.random()<.6?"w":"h",inv=Math.random()<.5,val=p=>mode==="w"?pkW(p):pkH(p),oth=p=>mode==="w"?pkH(p):pkW(p),va=val(a),hard=Math.min(.9,.55+streak*.04),trick=Math.random()<.35;
+      const mode=mgR()<.6?"w":"h",inv=mgR()<.5,val=p=>mode==="w"?pkW(p):pkH(p),oth=p=>mode==="w"?pkH(p):pkW(p),va=val(a),hard=Math.min(.9,.55+streak*.04),trick=mgR()<.35;
       // cuanto más larga la racha, más parecidos los datos; a veces "trampa": el que parece más grande pesa menos (o al revés)
-      const fits=b=>{if(b===a)return false;const vb=val(b);if(vb===va)return false;const r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(Math.random()<hard){if(r>1.3)return false}if(trick){const big=va>vb?a:b,sm=va>vb?b:a;return oth(sm)>oth(big)}return true};
-      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(Math.random()*pool.length)];if(fits(c))b=c}
-      if(!b)for(let g=0;g<200&&!b;g++){const c=pool[Math.floor(Math.random()*pool.length)];if(c!==a&&val(c)!==va)b=c}
+      const fits=b=>{if(b===a)return false;const vb=val(b);if(vb===va)return false;const r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(mgR()<hard){if(r>1.3)return false}if(trick){const big=va>vb?a:b,sm=va>vb?b:a;return oth(sm)>oth(big)}return true};
+      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(mgR()*pool.length)];if(fits(c))b=c}
+      if(!b)for(let g=0;g<200&&!b;g++){const c=pool[Math.floor(mgR()*pool.length)];if(c!==a&&val(c)!==va)b=c}
       const T=Math.max(5000,10000-streak*350),t0=performance.now();busy=false;
       B.innerHTML='<div class="whohd"><span>🔥 Racha: <b>'+streak+'</b></span><span>⏱️ <b id="wgS">'+Math.round(T/1000)+'</b> s</span></div><div class="wgq '+mode+(inv?' inv':'')+'"><span>'+(mode==="w"?"⚖️":"📏")+'</span>'+(mode==="w"?(inv?'¿Cuál <b>PESA MENOS</b>?':'¿Cuál <b>PESA MÁS</b>?'):(inv?'¿Cuál es <b>MÁS BAJO</b>?':'¿Cuál es <b>MÁS ALTO</b>?'))+'</div><div class="mgtime"><i id="wgT"></i></div><div class="wgvs">'+[a,b].map((p,i)=>'<button class="wgc '+p[2]+'" data-wg="'+i+'"><div class="wgs">'+icoHD(p,150,false,false)+'</div><b>'+esc(p[0])+'</b><span class="wgv" data-v="'+val(p)+'">?</span></button>').join('<span class="wgor">VS</span>')+'</div>';
       const tick=()=>{if(busy)return;const k=1-(performance.now()-t0)/T,bar=$("wgT");if(bar)bar.style.width=Math.max(0,k*100)+"%";{const sv=$("wgS"),sec=String(Math.max(0,Math.ceil(k*T/1000)));if(sv&&sv.textContent!==sec)sv.textContent=sec}if(k<=0){pick(-1);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);

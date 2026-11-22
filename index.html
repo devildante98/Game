@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.26.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.27"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795389044">
+<meta name="game-build" content="1795390866">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3240,7 +3240,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.26.4</small>
+    <small class="pcver">Versión 7.27</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7995,8 +7995,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.26.4";
+const GAME_VER="7.27";
 const NEWS=[
+{v:"2026-11-23-7.27",ver:"7.27",at:"2026-11-23T00:41",t:"⚖️ Minijuegos más justos",l:["Ahora la partida número 1 de la semana de cada minijuego es igual para todos los jugadores, la número 2 también, y así con todas: misma pared, mismos peces, mismos Pokémon… En el torneo y la clasificación gana quien juega mejor, no quien tiene más suerte","Excavación subterránea: siempre 4 tesoros por pared, y si lo desentierras todo te llevas un bonus según la estabilidad que le quede a la pared","Cazafósiles: siempre 3 hallazgos (un fósil y dos más), con el mismo bonus de estabilidad","Pesca, ¿Quién es ese Pokémon?, Memoria, Diglett, Lanzamiento perfecto, Más o menos y Peso y altura también usan el azar común"]},
 {v:"2026-11-23-7.26.4",ver:"7.26.4",at:"2026-11-23T00:10",t:"🚀 Más proyectos en Próximamente",l:["Tres proyectos nuevos en Más › Próximamente: Búsqueda del tesoro semanal, Rival personal e Investigaciones del Profesor"]},
 {v:"2026-11-22-7.26.2",ver:"7.26.2",at:"2026-11-22T23:50",t:"🚀 Nuevos proyectos en Próximamente",l:["Hemos añadido 7 proyectos nuevos a Más › Próximamente: Pokémon del día, Mercader misterioso, Torneos de amigos, Modo espectador, Diario del entrenador, Aspectos para la Poké Ball y Especialidades de entrenador","¿Cuál te apetece más? ¡Cuéntanoslo en Discord o en Sugerencias!"]},
 {v:"2026-11-22-7.26",ver:"7.26",at:"2026-11-22T14:10",t:"💬 ¡Servidor de Discord!",l:["Ya tenemos servidor de Discord para los jugadores: entra con el botón «Discord» de la barra de arriba o desde Más › 💬 Discord","Es nuevo y lo iremos mejorando poco a poco. ¡Te esperamos!"]},
@@ -8424,7 +8425,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795389044";
+const GAME_B="1795390866";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9887,6 +9888,15 @@ const mgT=(f,ms)=>{const h=setTimeout(f,ms);MG.t.push(h);return h};
 const mgI=(f,ms)=>{const h=setInterval(f,ms);MG.t.push(h);return h};
 function mgStop(){MG.runKey=null;MG.t.forEach(h=>{clearTimeout(h);clearInterval(h)});MG.t=[];if(MG.raf)cancelAnimationFrame(MG.raf);MG.raf=0}
 const mgPick=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(Math.random()*c.length),1)[0]);return o};
+// ---- azar común (justo para el torneo y la clasificación) ----
+// La partida n.º k de la semana de cada minijuego usa la misma secuencia de azar para todos los jugadores: misma pared,
+// mismos peces, mismos Pokémon… Así nadie gana solo por suerte. Solo afecta a lo que decide la partida, no a los efectos.
+const mgR=()=>MG.rng?MG.rng():Math.random();
+const mgPickR=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(mgR()*c.length),1)[0]);return o};
+const mgShuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(mgR()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a};
+function mgSeed(id){try{const w=typeof isoWeek==="function"?isoWeek(new Date()):"";if(!S.mgAt||S.mgAt.w!==w)S.mgAt={w:w,n:{}};const k=(S.mgAt.n[id]|0)+1;S.mgAt.n[id]=k;
+  let h=2166136261;for(const ch of w+"|"+id+"|"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}let a=h>>>0;
+  MG.rng=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};MG.att=k}catch(e){MG.rng=null}}
 const mgSet=s=>{MG.score=Math.max(0,Math.round(s));const e=$("mgSc");if(e)e.textContent=fmt(MG.score)};
 function mgPop(x,y,txt,col){const b=$("mgB");if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement("span");s.className="mgpop";s.textContent=txt;s.style.left=(x-r.left)+"px";s.style.top=(y-r.top)+"px";if(col)s.style.color=col;b.appendChild(s);s.animate([{transform:"translate(-50%,-50%) scale(.6)",opacity:1},{transform:"translate(-50%,-160%) scale(1.15)",opacity:0}],{duration:800,easing:"ease-out"}).onfinish=()=>s.remove()}
 function mgConfetti(){if(hubCalm())return;const b=$("mgB");if(!b)return;for(let i=0;i<40;i++){const s=document.createElement("span");s.className="mgconf";s.textContent=["🎉","✨","⭐","🎊","💥"][i%5];s.style.left=Math.random()*100+"%";b.appendChild(s);s.animate([{transform:"translateY(-20px) rotate(0)",opacity:1},{transform:"translateY("+(250+Math.random()*250)+"px) rotate("+(Math.random()*720-360)+"deg)",opacity:0}],{duration:1400+Math.random()*900,delay:Math.random()*300,easing:"ease-in"}).onfinish=()=>s.remove()}}
@@ -9898,7 +9908,7 @@ const G_WHO={id:"who",n:"¿Quién es ese Pokémon?",ic:"❓",c:"#2f6fd8",d:"Adiv
     let r=0,streak=0;const R=10;
     const round=()=>{
       if(r>=R){end(MG.score);return}r++;
-      const pool=P.filter(p=>p[2]!=="M"),ans=pool[Math.floor(Math.random()*pool.length)],same=pool.filter(p=>p!==ans&&p[3]===ans[3]),opts=mgPick(same.length>=3?same:pool.filter(p=>p!==ans),3).concat([ans]).sort(()=>Math.random()-.5);
+      const pool=P.filter(p=>p[2]!=="M"),ans=pool[Math.floor(mgR()*pool.length)],same=pool.filter(p=>p!==ans&&p[3]===ans[3]),opts=mgShuf(mgPickR(same.length>=3?same:pool.filter(p=>p!==ans),3).concat([ans]));
       B.innerHTML='<div class="whohd"><span>Ronda <b>'+r+'</b>/'+R+'</span>'+(streak>1?'<span class="whost">🔥 Racha ×'+streak+'</span>':'')+'</div><div class="whobg"><div class="whosil">'+icoHD(ans,190,false,false)+'</div><div class="whoq">¿Quién es ese Pokémon?</div></div><div class="mgtime"><i id="whoT"></i></div><div class="whoopt">'+opts.map(o=>'<button data-who="'+esc(o[0])+'">'+esc(o[0])+'</button>').join("")+'</div>';
       const T=8000,t0=performance.now(),bar=$("whoT");let done=false;
       const tick=()=>{if(done)return;const k=1-(performance.now()-t0)/T;if(bar)bar.style.width=Math.max(0,k*100)+"%";if(k<=0){pick(null);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
@@ -9919,7 +9929,7 @@ const G_WHO={id:"who",n:"¿Quién es ese Pokémon?",ic:"❓",c:"#2f6fd8",d:"Adiv
 const G_MEM={id:"mem",n:"Memoria Pokémon",ic:"🃏",c:"#7a4ae0",d:"Encuentra las 8 parejas con el menor número de intentos y lo más rápido posible.",
   rw:s=>s*90,
   start(B,end){
-    const pk=mgPick(P.filter(p=>p[2]!=="M"),8),cards=pk.concat(pk).sort(()=>Math.random()-.5);let open=[],moves=0,pairs=0,lock=false;const t0=Date.now();
+    const pk=mgPickR(P.filter(p=>p[2]!=="M"),8),cards=mgShuf(pk.concat(pk));let open=[],moves=0,pairs=0,lock=false;const t0=Date.now();
     B.innerHTML='<div class="whohd"><span>Intentos: <b id="memM">0</b></span><span>Parejas: <b id="memP">0</b>/8</span><span>⏱️ <b id="memT">0</b> s</span></div><div class="memg">'+cards.map((p,i)=>'<button class="memc" data-mi="'+i+'" aria-label="Carta"><span class="memf memb"></span><span class="memf memp '+p[2]+'"></span></button>').join("")+'</div>';
     mgI(()=>{const e=$("memT");if(e)e.textContent=Math.floor((Date.now()-t0)/1000)},250);mgSet(0);
     B.querySelectorAll(".memc").forEach(c=>c.onclick=()=>{
@@ -9947,7 +9957,7 @@ const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a l
     const spawn=()=>{
       if(over)return;const el=now()-t0;if(el>=dur){finish();return}
       try{const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
-      if(free.length){const h=free[Math.floor(Math.random()*free.length)],m=h.querySelector(".digm"),r=Math.random(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
+      if(free.length){const h=free[Math.floor(mgR()*free.length)],m=h.querySelector(".digm"),r=mgR(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
         const sid=(+m.dataset.sid||0)+1;m.dataset.sid=sid;m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-el/45);
         mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
       mgT(spawn,Math.max(330,780-el/60));
@@ -9975,13 +9985,13 @@ const G_FISH={id:"fish",n:"Pesca",ic:"🎣",c:"#1e88c8",d:"Lanza la caña y puls
       const K=$("fiK");F3.start(b=>{ex.style.left=(b[0]*100)+"%";ex.style.top=(b[1]*100)+"%";if(K){K.style.left=(b[0]*100)+"%";K.style.top=(b[1]*100)+"%"}})}
     else{const c3=$("fiC3");if(c3)c3.remove()}
     const f3=k=>{if(F3)try{F3.ev(k)}catch(e){}};
-    const pickFish=()=>{const t=FISH.reduce((a,f)=>a+f[1],0);let x=Math.random()*t;for(const f of FISH){x-=f[1];if(x<=0)return PM[f[0]]}return PM[FISH[0][0]]};
+    const pickFish=()=>{const t=FISH.reduce((a,f)=>a+f[1],0);let x=mgR()*t;for(const f of FISH){x-=f[1];if(x<=0)return PM[f[0]]}return PM[FISH[0][0]]};
     const reset=()=>{st="idle";f3("idle");ex.hidden=true;bob.className="fibob";go.textContent=cast>=N?"🏁 Ver resultado":"🎣 Lanzar";go.disabled=false};
     const doCast=()=>{
       if(cast>=N){end(MG.score);return}
       cast++;$("fiN").textContent=cast;st="wait";go.textContent="✋ ¡Tirar!";msg.textContent="Esperando a que pique…";snd("throw");bob.className="fibob in";fish=pickFish();f3("cast");mgT(()=>{if(st==="wait")f3("wait")},900);
       // amagos antes de picar de verdad
-      const wait=1600+Math.random()*3800;let t=600;while(t<wait-500){const q=t;mgT(()=>{if(st==="wait"){bob.classList.remove("nib");void bob.offsetWidth;bob.classList.add("nib");snd("click");f3("nib")}},q);t+=500+Math.random()*900}
+      const wait=1600+mgR()*3800;let t=600;while(t<wait-500){const q=t;mgT(()=>{if(st==="wait"){bob.classList.remove("nib");void bob.offsetWidth;bob.classList.add("nib");snd("click");f3("nib")}},q);t+=500+mgR()*900}
       mgT(()=>{if(st!=="wait")return;st="bite";bite=performance.now();win=fish[2]==="C"?900:fish[2]==="R"?620:430;ex.hidden=false;bob.className="fibob bite";snd("flash");msg.textContent="¡Ha picado!";f3("bite");
         mgT(()=>{if(st==="bite"){st="miss";f3("miss");ex.hidden=true;msg.textContent="Se ha escapado… ¡Has tardado demasiado!";snd("miss");mgT(reset,1100)}},win)},wait);
     };
@@ -10010,7 +10020,7 @@ const G_THR={id:"thr",n:"Lanzamiento perfecto",ic:"🎯",c:"#e63950",d:"Lanza la
     let n=0,combo=0,busy=false;const N=10;
     B.innerHTML='<div class="whohd"><span>Lanzamiento <b id="thN">1</b>/'+N+'</span><span id="thC"></span></div><div class="thw" id="thW"><div class="thgr"></div><div class="thmon" id="thMon"><div class="thring" id="thR"></div><div class="thspr" id="thS"></div></div><div class="thball" id="thB"></div><div class="thmsg" id="thM">¡Toca para lanzar!</div></div>';
     mgSet(0);const W=$("thW"),mon=$("thMon"),ring=$("thR"),spr=$("thS"),ball=$("thB"),msg=$("thM");let p=null,t0=0,amp=0,per=1500,spd=1;
-    const next=()=>{if(n>=N){end(MG.score);return}n++;$("thN").textContent=n;const pool=P.filter(x=>x[2]!=="M");p=pool[Math.floor(Math.random()*pool.length)];spr.innerHTML=ico(p,96);spr.style.opacity=1;amp=n<=3?0:Math.min(110,(n-3)*18);per=Math.max(700,1500-n*70);spd=.6+n*.08;t0=performance.now();busy=false;ball.className="thball";msg.textContent=amp?"¡Se mueve! Espera a que pase por el centro…":"¡Toca para lanzar!";loop()};
+    const next=()=>{if(n>=N){end(MG.score);return}n++;$("thN").textContent=n;const pool=P.filter(x=>x[2]!=="M");p=pool[Math.floor(mgR()*pool.length)];spr.innerHTML=ico(p,96);spr.style.opacity=1;amp=n<=3?0:Math.min(110,(n-3)*18);per=Math.max(700,1500-n*70);spd=.6+n*.08;t0=performance.now();busy=false;ball.className="thball";msg.textContent=amp?"¡Se mueve! Espera a que pase por el centro…":"¡Toca para lanzar!";loop()};
     const st=()=>{const t=performance.now()-t0,k=(t%per)/per,sc=1-.78*k,x=amp*Math.sin(t/1000*spd*3.2);return{sc:sc,x:x}};
     const loop=()=>{const s=st();ring.style.transform="translate(-50%,-50%) scale("+s.sc.toFixed(3)+")";ring.style.borderColor=s.sc<.45?"#3ecf8e":s.sc<.7?"#ffd35c":"#ff8a3c";mon.style.transform="translateX("+s.x.toFixed(1)+"px)";MG.raf=requestAnimationFrame(loop)};
     const throwB=async()=>{
@@ -10042,9 +10052,9 @@ function mgOpen(id){
   $("mgGo").onclick=()=>{snd("ui");MG.t0=Date.now();mgPlayStart(g.id);g.start($("mgB"),mgEnd)};
   m.querySelector(".mgw").animate([{transform:"scale(.85)",opacity:0},{transform:"none",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.9,.3,1.2)"});
 }
-function mgClose(){if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
+function mgClose(){MG.rng=null;if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
 function mgEnd(score){
-  const g=MG.g;if(!g)return;MG.onClose=null;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
+  const g=MG.g;if(!g)return;MG.rng=null;MG.onClose=null;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
   if(rec)st.best[g.id]=score;let rw=null,extra="";
   if(left>0&&score>0){st.n[g.id]=(st.n[g.id]|0)+1;rw={t:Math.min(400000,Math.round(g.rw(score)))*(typeof hhMul==="function"?hhMul("mg"):1),it:{}};
     const q=Math.random();if(q<.12)rw.it.ub=1;else if(q<.35)rw.it.sb=2;else if(q<.5)rw.it.pot=2;
@@ -10079,7 +10089,7 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 // el servidor apunta la hora a la que empieza cada partida (sirve para comprobar que la puntuación es posible)
 // el servidor cuenta el tiempo de cada partida desde aquí; antes se espera a que se haya subido la marca de la anterior
 // (si no, al pulsar «Otra vez» muy rápido la marca llegaba con el reloj ya reiniciado y se rechazaba)
-function mgPlayStart(id){try{if(typeof mgrW==="function")mgrW().ls[id]=Date.now()}catch(e){}
+function mgPlayStart(id){mgSeed(id);try{if(typeof mgrW==="function")mgrW().ls[id]=Date.now()}catch(e){}
   try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid()){const go=()=>window.FB.playStart(id);const b=typeof MGR!=="undefined"&&MGR.busy;if(b)Promise.race([b,new Promise(r=>setTimeout(r,8000))]).then(go,go);else go()}}catch(e){}}
 
 // (minijuegos) nada se puede arrastrar ni abrir con el botón derecho: así no se ven las imágenes ocultas o en silueta
@@ -10301,16 +10311,16 @@ const EXT=[// [id, nombre, ancho, alto, valor, tipo de premio]
  ["helix","Fósil Hélix",3,3,300,{fos:"helix"}],["dome","Fósil Domo",3,3,300,{fos:"dome"}]];
 const G_EXC={id:"exc",n:"Excavación subterránea",ic:"⛏️",c:"#8a5a2b",d:"Pica la pared para desenterrar tesoros: esferas, piedras evolutivas, objetos y fósiles. ¡Si golpeas demasiado, la pared se derrumba!",
   rw:s=>s*150,
-  start(B,end){excRun(B,end,{pool:EXT,weights:[12,12,9,5,8,4,4,6,5,2,1,1],want:2+Math.floor(Math.random()*3)})},
+  start(B,end){excRun(B,end,{pool:EXT,weights:[12,12,9,5,8,4,4,6,5,2,1,1],want:4})},
   after(score,prize){return excAfter(score,prize,"⛏️ Tesoros")}};
 // pared de excavación común (12x12: múltiplo de 3 para el martillo 3x3 y el pico en cruz)
 // o: {pool, weights, want, must (tesoros que salen siempre), art}
 function excRun(B,end,o){
     const CW=12,CH=12,cells=[],items=[],EXP=o.pool,weights=o.weights,want=o.want,art=o.art||exArt;let stab=100,tool="pick",over=false;
-    for(let i=0;i<CW*CH;i++)cells.push({h:1+Math.floor(Math.random()*3)+(Math.random()<.25?2:0),it:-1});
+    for(let i=0;i<CW*CH;i++)cells.push({h:1+Math.floor(mgR()*3)+(mgR()<.25?2:0),it:-1});
     const must=(o.must||[]).slice();
-    for(let tries=0;items.length<want&&tries<300;tries++){let e;if(must.length)e=must[0];else{let t=weights.reduce((a,b)=>a+b,0),x=Math.random()*t,k=0;for(;k<EXP.length;k++){x-=weights[k];if(x<=0)break}e=EXP[Math.min(k,EXP.length-1)]}
-      const cx=Math.floor(Math.random()*(CW-e[2]+1)),cy=Math.floor(Math.random()*(CH-e[3]+1));let free=true;for(let a=0;a<e[2];a++)for(let b=0;b<e[3];b++)if(cells[(cy+b)*CW+cx+a].it>=0)free=false;if(!free)continue;
+    for(let tries=0;items.length<want&&tries<300;tries++){let e;if(must.length)e=must[0];else{let t=weights.reduce((a,b)=>a+b,0),x=mgR()*t,k=0;for(;k<EXP.length;k++){x-=weights[k];if(x<=0)break}e=EXP[Math.min(k,EXP.length-1)]}
+      const cx=Math.floor(mgR()*(CW-e[2]+1)),cy=Math.floor(mgR()*(CH-e[3]+1));let free=true;for(let a=0;a<e[2];a++)for(let b=0;b<e[3];b++)if(cells[(cy+b)*CW+cx+a].it>=0)free=false;if(!free)continue;
       if(must.length&&must[0]===e)must.shift();
       const id=items.length;items.push({e:e,x:cx,y:cy,got:false});for(let a=0;a<e[2];a++)for(let b=0;b<e[3];b++)cells[(cy+b)*CW+cx+a].it=id}
     B.innerHTML='<div class="whohd"><span>💎 Tesoros: <b id="exF">0</b>/'+items.length+'</span><div class="exstab"><i id="exS"></i></div></div><div class="exwall" id="exW" style="--cw:'+CW+';--ch:'+CH+'">'+cells.map((c,i)=>'<button class="excell h'+Math.min(5,c.h)+'" data-ec="'+i+'" style="grid-column:'+(i%CW+1)+';grid-row:'+(Math.floor(i/CW)+1)+'" aria-label="Roca"></button>').join("")+'</div>'+
@@ -10322,7 +10332,10 @@ function excRun(B,end,o){
     const hit=(i,d)=>{const c=cells[i];if(!c||c.h<=0)return;c.h=Math.max(0,c.h-d);const el=W.querySelector('[data-ec="'+i+'"]');el.className="excell h"+Math.min(5,c.h)+(c.h<=0?" gone":"");if(c.h<=0&&c.it>=0)showIt(c.it)};
     const check=()=>{let f=0;items.forEach((it,k)=>{if(it.got)return;let all=true;for(let a=0;a<it.e[2];a++)for(let b=0;b<it.e[3];b++)if(cells[(it.y+b)*CW+it.x+a].h>0)all=false;
       if(all){it.got=true;snd("lvl");showIt(k);const el=W.querySelector('[data-ei="'+k+'"]');el.classList.add("found");const r=el.getBoundingClientRect();mgPop(r.left+r.width/2,r.top,"¡"+it.e[1]+"!","#ffd35c");mgSet(MG.score+it.e[4])}});
-      f=items.filter(x=>x.got).length;$("exF").textContent=f;if(f===items.length&&!over){over=true;mgT(()=>finish(true),900)}};
+      f=items.filter(x=>x.got).length;$("exF").textContent=f;if(f===items.length&&!over){over=true;
+        // bonus por desenterrarlo todo con la pared entera: cuenta la habilidad, no la suerte
+        const bon=Math.max(0,Math.round(stab*3));if(bon){mgSet(MG.score+bon);try{const r=W.getBoundingClientRect();mgPop(r.left+r.width/2,r.top+r.height/2,"🧱 Bonus de estabilidad +"+bon,"#7ae7ff")}catch(e){}}
+        mgT(()=>finish(true),900)}};
     const finish=ok=>{over=true;MG.exc=items.filter(x=>x.got).map(x=>x.e);if(!ok){snd("hit",1);W.classList.add("collapse")}mgT(()=>end(MG.score),ok?300:1200)};
     W.addEventListener("click",e=>{const b=e.target.closest("[data-ec]");if(!b||over)return;const i=+b.dataset.ec,x=i%CW,y=Math.floor(i/CW);
       if(tool==="pick"){hit(i,2);[[1,0],[-1,0],[0,1],[0,-1]].forEach(q=>{const X=x+q[0],Y=y+q[1];if(X>=0&&X<CW&&Y>=0&&Y<CH)hit(Y*CW+X,1)});stab-=2.2;snd("click")}
@@ -10357,13 +10370,13 @@ function exArt(e){
 const G_WGT={id:"wgt",n:"Peso y altura",ic:"⚖️",c:"#13a37f",d:"Dos Pokémon: ¿cuál pesa más o menos?, ¿cuál es más alto o más bajo? Acierta seguidas todas las que puedas. Un fallo y se acaba.",
   rw:s=>s*110,
   start(B,end){
-    const pool=P.filter(p=>p[2]!=="M"&&pkW(p)>0&&pkH(p)>0);let a=pool[Math.floor(Math.random()*pool.length)],streak=0,busy=false;
+    const pool=P.filter(p=>p[2]!=="M"&&pkW(p)>0&&pkH(p)>0);let a=pool[Math.floor(mgR()*pool.length)],streak=0,busy=false;
     const round=()=>{
-      const mode=Math.random()<.6?"w":"h",inv=Math.random()<.5,val=p=>mode==="w"?pkW(p):pkH(p),oth=p=>mode==="w"?pkH(p):pkW(p),va=val(a),hard=Math.min(.9,.55+streak*.04),trick=Math.random()<.35;
+      const mode=mgR()<.6?"w":"h",inv=mgR()<.5,val=p=>mode==="w"?pkW(p):pkH(p),oth=p=>mode==="w"?pkH(p):pkW(p),va=val(a),hard=Math.min(.9,.55+streak*.04),trick=mgR()<.35;
       // cuanto más larga la racha, más parecidos los datos; a veces "trampa": el que parece más grande pesa menos (o al revés)
-      const fits=b=>{if(b===a)return false;const vb=val(b);if(vb===va)return false;const r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(Math.random()<hard){if(r>1.3)return false}if(trick){const big=va>vb?a:b,sm=va>vb?b:a;return oth(sm)>oth(big)}return true};
-      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(Math.random()*pool.length)];if(fits(c))b=c}
-      if(!b)for(let g=0;g<200&&!b;g++){const c=pool[Math.floor(Math.random()*pool.length)];if(c!==a&&val(c)!==va)b=c}
+      const fits=b=>{if(b===a)return false;const vb=val(b);if(vb===va)return false;const r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(mgR()<hard){if(r>1.3)return false}if(trick){const big=va>vb?a:b,sm=va>vb?b:a;return oth(sm)>oth(big)}return true};
+      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(mgR()*pool.length)];if(fits(c))b=c}
+      if(!b)for(let g=0;g<200&&!b;g++){const c=pool[Math.floor(mgR()*pool.length)];if(c!==a&&val(c)!==va)b=c}
       const T=Math.max(5000,10000-streak*350),t0=performance.now();busy=false;
       B.innerHTML='<div class="whohd"><span>🔥 Racha: <b>'+streak+'</b></span><span>⏱️ <b id="wgS">'+Math.round(T/1000)+'</b> s</span></div><div class="wgq '+mode+(inv?' inv':'')+'"><span>'+(mode==="w"?"⚖️":"📏")+'</span>'+(mode==="w"?(inv?'¿Cuál <b>PESA MENOS</b>?':'¿Cuál <b>PESA MÁS</b>?'):(inv?'¿Cuál es <b>MÁS BAJO</b>?':'¿Cuál es <b>MÁS ALTO</b>?'))+'</div><div class="mgtime"><i id="wgT"></i></div><div class="wgvs">'+[a,b].map((p,i)=>'<button class="wgc '+p[2]+'" data-wg="'+i+'"><div class="wgs">'+icoHD(p,150,false,false)+'</div><b>'+esc(p[0])+'</b><span class="wgv" data-v="'+val(p)+'">?</span></button>').join('<span class="wgor">VS</span>')+'</div>';
       const tick=()=>{if(busy)return;const k=1-(performance.now()-t0)/T,bar=$("wgT");if(bar)bar.style.width=Math.max(0,k*100)+"%";{const sv=$("wgS"),sec=String(Math.max(0,Math.ceil(k*T/1000)));if(sv&&sv.textContent!==sec)sv.textContent=sec}if(k<=0){pick(-1);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
@@ -10562,9 +10575,9 @@ const fosEnt=f=>[f[0],f[1],f[4],f[5],f[7],{fos:f[0]}];
 const G_FOS={id:"fos",n:"Cazafósiles",ic:"🦴",c:"#6b7a3a",d:"Excava una pared llena de fósiles. Desentiérralos sin que se derrumbe y llévalos al Laboratorio para revivir Pokémon prehistóricos, ¡como en los juegos!",
   rw:s=>s*120,
   start(B,end){
-    const pick=()=>{const t=FOSD.reduce((a,f)=>a+f[6],0);let x=Math.random()*t;for(const f of FOSD){x-=f[6];if(x<=0)return f}return FOSD[0]};
-    const must=[fosEnt(pick())];if(Math.random()<.3)must.push(fosEnt(pick()));
-    const extra=Math.floor(Math.random()*3),pool=FOSX;
+    const pick=()=>{const t=FOSD.reduce((a,f)=>a+f[6],0);let x=mgR()*t;for(const f of FOSD){x-=f[6];if(x<=0)return f}return FOSD[0]};
+    const must=[fosEnt(pick())];
+    const extra=2,pool=FOSX;
     excRun(B,end,{pool:pool,weights:[3,3,2,1],must:must,want:must.length+extra,art:e=>FOSK[e[0]]?'<span class="exfoss">'+fosIco(e[0],64)+'</span>':exArt(e)});
     // el marcador usa los hallazgos que de verdad se han enterrado (a veces no caben todos los que se piden)
     const h=B.querySelector(".whohd span");if(h)h.innerHTML=h.innerHTML.replace("💎 Tesoros","🦴 Hallazgos");
@@ -15585,11 +15598,11 @@ const hlVal=(p,k)=>{const b=BSD[p[0]];if(!b)return 0;return k<0?b.reduce((a,x)=>
 const G_HL={id:"hl",n:"Más o menos",ic:"📊",c:"#3a7be0",d:"Mira la estadística base de un Pokémon y adivina si el siguiente tiene MÁS o MENOS. Acierta seguidas todas las que puedas: un fallo y se acaba.",
   rw:s=>s*110,
   start(B,end){
-    const pool=P.filter(p=>p[2]!=="M"&&BSD[p[0]]);let a=pool[Math.floor(Math.random()*pool.length)],streak=0,busy=false;
+    const pool=P.filter(p=>p[2]!=="M"&&BSD[p[0]]);let a=pool[Math.floor(mgR()*pool.length)],streak=0,busy=false;
     const round=()=>{
-      const st=HL_ST[Math.floor(Math.random()*HL_ST.length)],va=hlVal(a,st[1]),hard=Math.min(.85,.3+streak*.05);
+      const st=HL_ST[Math.floor(mgR()*HL_ST.length)],va=hlVal(a,st[1]),hard=Math.min(.85,.3+streak*.05);
       // con la racha, los valores se parecen cada vez más
-      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(Math.random()*pool.length)];if(c===a)continue;const vb=hlVal(c,st[1]),r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(Math.random()<hard&&r>(st[1]<0?1.15:1.35))continue;b=c}
+      let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(mgR()*pool.length)];if(c===a)continue;const vb=hlVal(c,st[1]),r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(mgR()<hard&&r>(st[1]<0?1.15:1.35))continue;b=c}
       if(!b)b=pool.find(c=>c!==a);
       const T=Math.max(4500,10000-streak*400),t0=performance.now();busy=false;
       B.innerHTML='<div class="whohd"><span>🔥 Racha: <b>'+streak+'</b></span><span>📊 '+st[0]+'</span></div><div class="mgtime"><i id="hlT"></i></div>'+
@@ -22150,7 +22163,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.26.4";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.27";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

@@ -10,6 +10,15 @@ const mgT=(f,ms)=>{const h=setTimeout(f,ms);MG.t.push(h);return h};
 const mgI=(f,ms)=>{const h=setInterval(f,ms);MG.t.push(h);return h};
 function mgStop(){MG.runKey=null;MG.t.forEach(h=>{clearTimeout(h);clearInterval(h)});MG.t=[];if(MG.raf)cancelAnimationFrame(MG.raf);MG.raf=0}
 const mgPick=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(Math.random()*c.length),1)[0]);return o};
+// ---- azar común (justo para el torneo y la clasificación) ----
+// La partida n.º k de la semana de cada minijuego usa la misma secuencia de azar para todos los jugadores: misma pared,
+// mismos peces, mismos Pokémon… Así nadie gana solo por suerte. Solo afecta a lo que decide la partida, no a los efectos.
+const mgR=()=>MG.rng?MG.rng():Math.random();
+const mgPickR=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(mgR()*c.length),1)[0]);return o};
+const mgShuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(mgR()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a};
+function mgSeed(id){try{const w=typeof isoWeek==="function"?isoWeek(new Date()):"";if(!S.mgAt||S.mgAt.w!==w)S.mgAt={w:w,n:{}};const k=(S.mgAt.n[id]|0)+1;S.mgAt.n[id]=k;
+  let h=2166136261;for(const ch of w+"|"+id+"|"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}let a=h>>>0;
+  MG.rng=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};MG.att=k}catch(e){MG.rng=null}}
 const mgSet=s=>{MG.score=Math.max(0,Math.round(s));const e=$("mgSc");if(e)e.textContent=fmt(MG.score)};
 function mgPop(x,y,txt,col){const b=$("mgB");if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement("span");s.className="mgpop";s.textContent=txt;s.style.left=(x-r.left)+"px";s.style.top=(y-r.top)+"px";if(col)s.style.color=col;b.appendChild(s);s.animate([{transform:"translate(-50%,-50%) scale(.6)",opacity:1},{transform:"translate(-50%,-160%) scale(1.15)",opacity:0}],{duration:800,easing:"ease-out"}).onfinish=()=>s.remove()}
 function mgConfetti(){if(hubCalm())return;const b=$("mgB");if(!b)return;for(let i=0;i<40;i++){const s=document.createElement("span");s.className="mgconf";s.textContent=["🎉","✨","⭐","🎊","💥"][i%5];s.style.left=Math.random()*100+"%";b.appendChild(s);s.animate([{transform:"translateY(-20px) rotate(0)",opacity:1},{transform:"translateY("+(250+Math.random()*250)+"px) rotate("+(Math.random()*720-360)+"deg)",opacity:0}],{duration:1400+Math.random()*900,delay:Math.random()*300,easing:"ease-in"}).onfinish=()=>s.remove()}}
@@ -21,7 +30,7 @@ const G_WHO={id:"who",n:"¿Quién es ese Pokémon?",ic:"❓",c:"#2f6fd8",d:"Adiv
     let r=0,streak=0;const R=10;
     const round=()=>{
       if(r>=R){end(MG.score);return}r++;
-      const pool=P.filter(p=>p[2]!=="M"),ans=pool[Math.floor(Math.random()*pool.length)],same=pool.filter(p=>p!==ans&&p[3]===ans[3]),opts=mgPick(same.length>=3?same:pool.filter(p=>p!==ans),3).concat([ans]).sort(()=>Math.random()-.5);
+      const pool=P.filter(p=>p[2]!=="M"),ans=pool[Math.floor(mgR()*pool.length)],same=pool.filter(p=>p!==ans&&p[3]===ans[3]),opts=mgShuf(mgPickR(same.length>=3?same:pool.filter(p=>p!==ans),3).concat([ans]));
       B.innerHTML='<div class="whohd"><span>Ronda <b>'+r+'</b>/'+R+'</span>'+(streak>1?'<span class="whost">🔥 Racha ×'+streak+'</span>':'')+'</div><div class="whobg"><div class="whosil">'+icoHD(ans,190,false,false)+'</div><div class="whoq">¿Quién es ese Pokémon?</div></div><div class="mgtime"><i id="whoT"></i></div><div class="whoopt">'+opts.map(o=>'<button data-who="'+esc(o[0])+'">'+esc(o[0])+'</button>').join("")+'</div>';
       const T=8000,t0=performance.now(),bar=$("whoT");let done=false;
       const tick=()=>{if(done)return;const k=1-(performance.now()-t0)/T;if(bar)bar.style.width=Math.max(0,k*100)+"%";if(k<=0){pick(null);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
@@ -42,7 +51,7 @@ const G_WHO={id:"who",n:"¿Quién es ese Pokémon?",ic:"❓",c:"#2f6fd8",d:"Adiv
 const G_MEM={id:"mem",n:"Memoria Pokémon",ic:"🃏",c:"#7a4ae0",d:"Encuentra las 8 parejas con el menor número de intentos y lo más rápido posible.",
   rw:s=>s*90,
   start(B,end){
-    const pk=mgPick(P.filter(p=>p[2]!=="M"),8),cards=pk.concat(pk).sort(()=>Math.random()-.5);let open=[],moves=0,pairs=0,lock=false;const t0=Date.now();
+    const pk=mgPickR(P.filter(p=>p[2]!=="M"),8),cards=mgShuf(pk.concat(pk));let open=[],moves=0,pairs=0,lock=false;const t0=Date.now();
     B.innerHTML='<div class="whohd"><span>Intentos: <b id="memM">0</b></span><span>Parejas: <b id="memP">0</b>/8</span><span>⏱️ <b id="memT">0</b> s</span></div><div class="memg">'+cards.map((p,i)=>'<button class="memc" data-mi="'+i+'" aria-label="Carta"><span class="memf memb"></span><span class="memf memp '+p[2]+'"></span></button>').join("")+'</div>';
     mgI(()=>{const e=$("memT");if(e)e.textContent=Math.floor((Date.now()-t0)/1000)},250);mgSet(0);
     B.querySelectorAll(".memc").forEach(c=>c.onclick=()=>{
@@ -70,7 +79,7 @@ const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a l
     const spawn=()=>{
       if(over)return;const el=now()-t0;if(el>=dur){finish();return}
       try{const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
-      if(free.length){const h=free[Math.floor(Math.random()*free.length)],m=h.querySelector(".digm"),r=Math.random(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
+      if(free.length){const h=free[Math.floor(mgR()*free.length)],m=h.querySelector(".digm"),r=mgR(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
         const sid=(+m.dataset.sid||0)+1;m.dataset.sid=sid;m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-el/45);
         mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
       mgT(spawn,Math.max(330,780-el/60));
@@ -98,13 +107,13 @@ const G_FISH={id:"fish",n:"Pesca",ic:"🎣",c:"#1e88c8",d:"Lanza la caña y puls
       const K=$("fiK");F3.start(b=>{ex.style.left=(b[0]*100)+"%";ex.style.top=(b[1]*100)+"%";if(K){K.style.left=(b[0]*100)+"%";K.style.top=(b[1]*100)+"%"}})}
     else{const c3=$("fiC3");if(c3)c3.remove()}
     const f3=k=>{if(F3)try{F3.ev(k)}catch(e){}};
-    const pickFish=()=>{const t=FISH.reduce((a,f)=>a+f[1],0);let x=Math.random()*t;for(const f of FISH){x-=f[1];if(x<=0)return PM[f[0]]}return PM[FISH[0][0]]};
+    const pickFish=()=>{const t=FISH.reduce((a,f)=>a+f[1],0);let x=mgR()*t;for(const f of FISH){x-=f[1];if(x<=0)return PM[f[0]]}return PM[FISH[0][0]]};
     const reset=()=>{st="idle";f3("idle");ex.hidden=true;bob.className="fibob";go.textContent=cast>=N?"🏁 Ver resultado":"🎣 Lanzar";go.disabled=false};
     const doCast=()=>{
       if(cast>=N){end(MG.score);return}
       cast++;$("fiN").textContent=cast;st="wait";go.textContent="✋ ¡Tirar!";msg.textContent="Esperando a que pique…";snd("throw");bob.className="fibob in";fish=pickFish();f3("cast");mgT(()=>{if(st==="wait")f3("wait")},900);
       // amagos antes de picar de verdad
-      const wait=1600+Math.random()*3800;let t=600;while(t<wait-500){const q=t;mgT(()=>{if(st==="wait"){bob.classList.remove("nib");void bob.offsetWidth;bob.classList.add("nib");snd("click");f3("nib")}},q);t+=500+Math.random()*900}
+      const wait=1600+mgR()*3800;let t=600;while(t<wait-500){const q=t;mgT(()=>{if(st==="wait"){bob.classList.remove("nib");void bob.offsetWidth;bob.classList.add("nib");snd("click");f3("nib")}},q);t+=500+mgR()*900}
       mgT(()=>{if(st!=="wait")return;st="bite";bite=performance.now();win=fish[2]==="C"?900:fish[2]==="R"?620:430;ex.hidden=false;bob.className="fibob bite";snd("flash");msg.textContent="¡Ha picado!";f3("bite");
         mgT(()=>{if(st==="bite"){st="miss";f3("miss");ex.hidden=true;msg.textContent="Se ha escapado… ¡Has tardado demasiado!";snd("miss");mgT(reset,1100)}},win)},wait);
     };
@@ -133,7 +142,7 @@ const G_THR={id:"thr",n:"Lanzamiento perfecto",ic:"🎯",c:"#e63950",d:"Lanza la
     let n=0,combo=0,busy=false;const N=10;
     B.innerHTML='<div class="whohd"><span>Lanzamiento <b id="thN">1</b>/'+N+'</span><span id="thC"></span></div><div class="thw" id="thW"><div class="thgr"></div><div class="thmon" id="thMon"><div class="thring" id="thR"></div><div class="thspr" id="thS"></div></div><div class="thball" id="thB"></div><div class="thmsg" id="thM">¡Toca para lanzar!</div></div>';
     mgSet(0);const W=$("thW"),mon=$("thMon"),ring=$("thR"),spr=$("thS"),ball=$("thB"),msg=$("thM");let p=null,t0=0,amp=0,per=1500,spd=1;
-    const next=()=>{if(n>=N){end(MG.score);return}n++;$("thN").textContent=n;const pool=P.filter(x=>x[2]!=="M");p=pool[Math.floor(Math.random()*pool.length)];spr.innerHTML=ico(p,96);spr.style.opacity=1;amp=n<=3?0:Math.min(110,(n-3)*18);per=Math.max(700,1500-n*70);spd=.6+n*.08;t0=performance.now();busy=false;ball.className="thball";msg.textContent=amp?"¡Se mueve! Espera a que pase por el centro…":"¡Toca para lanzar!";loop()};
+    const next=()=>{if(n>=N){end(MG.score);return}n++;$("thN").textContent=n;const pool=P.filter(x=>x[2]!=="M");p=pool[Math.floor(mgR()*pool.length)];spr.innerHTML=ico(p,96);spr.style.opacity=1;amp=n<=3?0:Math.min(110,(n-3)*18);per=Math.max(700,1500-n*70);spd=.6+n*.08;t0=performance.now();busy=false;ball.className="thball";msg.textContent=amp?"¡Se mueve! Espera a que pase por el centro…":"¡Toca para lanzar!";loop()};
     const st=()=>{const t=performance.now()-t0,k=(t%per)/per,sc=1-.78*k,x=amp*Math.sin(t/1000*spd*3.2);return{sc:sc,x:x}};
     const loop=()=>{const s=st();ring.style.transform="translate(-50%,-50%) scale("+s.sc.toFixed(3)+")";ring.style.borderColor=s.sc<.45?"#3ecf8e":s.sc<.7?"#ffd35c":"#ff8a3c";mon.style.transform="translateX("+s.x.toFixed(1)+"px)";MG.raf=requestAnimationFrame(loop)};
     const throwB=async()=>{
@@ -165,9 +174,9 @@ function mgOpen(id){
   $("mgGo").onclick=()=>{snd("ui");MG.t0=Date.now();mgPlayStart(g.id);g.start($("mgB"),mgEnd)};
   m.querySelector(".mgw").animate([{transform:"scale(.85)",opacity:0},{transform:"none",opacity:1}],{duration:240,easing:"cubic-bezier(.2,.9,.3,1.2)"});
 }
-function mgClose(){if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
+function mgClose(){MG.rng=null;if(MG.onClose){const f=MG.onClose;MG.onClose=null;try{f()}catch(e){}}mgStop();const m=$("mgM");if(m){m.hidden=true;m.innerHTML=""}MG.g=null;try{if(nxOpen("mgP"))mgUI()}catch(e){}}
 function mgEnd(score){
-  const g=MG.g;if(!g)return;MG.onClose=null;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
+  const g=MG.g;if(!g)return;MG.rng=null;MG.onClose=null;mgStop();score=Math.max(0,Math.round(score));const st=mgState(),old=st.best[g.id]|0,rec=score>old&&score>0,left=mgLeft(g.id);
   if(rec)st.best[g.id]=score;let rw=null,extra="";
   if(left>0&&score>0){st.n[g.id]=(st.n[g.id]|0)+1;rw={t:Math.min(400000,Math.round(g.rw(score)))*(typeof hhMul==="function"?hhMul("mg"):1),it:{}};
     const q=Math.random();if(q<.12)rw.it.ub=1;else if(q<.35)rw.it.sb=2;else if(q<.5)rw.it.pot=2;
@@ -202,7 +211,7 @@ document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest
 // el servidor apunta la hora a la que empieza cada partida (sirve para comprobar que la puntuación es posible)
 // el servidor cuenta el tiempo de cada partida desde aquí; antes se espera a que se haya subido la marca de la anterior
 // (si no, al pulsar «Otra vez» muy rápido la marca llegaba con el reloj ya reiniciado y se rechazaba)
-function mgPlayStart(id){try{if(typeof mgrW==="function")mgrW().ls[id]=Date.now()}catch(e){}
+function mgPlayStart(id){mgSeed(id);try{if(typeof mgrW==="function")mgrW().ls[id]=Date.now()}catch(e){}
   try{if(window.FB&&window.FB.playStart&&window.FB.uid&&window.FB.uid()){const go=()=>window.FB.playStart(id);const b=typeof MGR!=="undefined"&&MGR.busy;if(b)Promise.race([b,new Promise(r=>setTimeout(r,8000))]).then(go,go);else go()}}catch(e){}}
 
 // (minijuegos) nada se puede arrastrar ni abrir con el botón derecho: así no se ven las imágenes ocultas o en silueta

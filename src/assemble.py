@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.26.4";
+const GAME_VER="7.27";
 const NEWS=[
+{v:"2026-11-23-7.27",ver:"7.27",at:"2026-11-23T00:41",t:"⚖️ Minijuegos más justos",l:["Ahora la partida número 1 de la semana de cada minijuego es igual para todos los jugadores, la número 2 también, y así con todas: misma pared, mismos peces, mismos Pokémon… En el torneo y la clasificación gana quien juega mejor, no quien tiene más suerte","Excavación subterránea: siempre 4 tesoros por pared, y si lo desentierras todo te llevas un bonus según la estabilidad que le quede a la pared","Cazafósiles: siempre 3 hallazgos (un fósil y dos más), con el mismo bonus de estabilidad","Pesca, ¿Quién es ese Pokémon?, Memoria, Diglett, Lanzamiento perfecto, Más o menos y Peso y altura también usan el azar común"]},
 {v:"2026-11-23-7.26.4",ver:"7.26.4",at:"2026-11-23T00:10",t:"🚀 Más proyectos en Próximamente",l:["Tres proyectos nuevos en Más › Próximamente: Búsqueda del tesoro semanal, Rival personal e Investigaciones del Profesor"]},
 {v:"2026-11-22-7.26.2",ver:"7.26.2",at:"2026-11-22T23:50",t:"🚀 Nuevos proyectos en Próximamente",l:["Hemos añadido 7 proyectos nuevos a Más › Próximamente: Pokémon del día, Mercader misterioso, Torneos de amigos, Modo espectador, Diario del entrenador, Aspectos para la Poké Ball y Especialidades de entrenador","¿Cuál te apetece más? ¡Cuéntanoslo en Discord o en Sugerencias!"]},
 {v:"2026-11-22-7.26",ver:"7.26",at:"2026-11-22T14:10",t:"💬 ¡Servidor de Discord!",l:["Ya tenemos servidor de Discord para los jugadores: entra con el botón «Discord» de la barra de arriba o desde Más › 💬 Discord","Es nuevo y lo iremos mejorando poco a poco. ¡Te esperamos!"]},

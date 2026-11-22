@@ -25,9 +25,9 @@ const fosEnt=f=>[f[0],f[1],f[4],f[5],f[7],{fos:f[0]}];
 const G_FOS={id:"fos",n:"Cazafósiles",ic:"🦴",c:"#6b7a3a",d:"Excava una pared llena de fósiles. Desentiérralos sin que se derrumbe y llévalos al Laboratorio para revivir Pokémon prehistóricos, ¡como en los juegos!",
   rw:s=>s*120,
   start(B,end){
-    const pick=()=>{const t=FOSD.reduce((a,f)=>a+f[6],0);let x=Math.random()*t;for(const f of FOSD){x-=f[6];if(x<=0)return f}return FOSD[0]};
-    const must=[fosEnt(pick())];if(Math.random()<.3)must.push(fosEnt(pick()));
-    const extra=Math.floor(Math.random()*3),pool=FOSX;
+    const pick=()=>{const t=FOSD.reduce((a,f)=>a+f[6],0);let x=mgR()*t;for(const f of FOSD){x-=f[6];if(x<=0)return f}return FOSD[0]};
+    const must=[fosEnt(pick())];
+    const extra=2,pool=FOSX;
     excRun(B,end,{pool:pool,weights:[3,3,2,1],must:must,want:must.length+extra,art:e=>FOSK[e[0]]?'<span class="exfoss">'+fosIco(e[0],64)+'</span>':exArt(e)});
     // el marcador usa los hallazgos que de verdad se han enterrado (a veces no caben todos los que se piden)
     const h=B.querySelector(".whohd span");if(h)h.innerHTML=h.innerHTML.replace("💎 Tesoros","🦴 Hallazgos");

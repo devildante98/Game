@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.24.3";
+const GAME_VER="7.24.4";
 const NEWS=[
+{v:"2026-11-22-7.24.4",ver:"7.24.4",at:"2026-11-22T13:36",t:"🔧 Arreglos/Mejoras",l:["Tocar la Poké Ball muy seguido (o con varias teclas a la vez) ya no afecta a la fluidez de las animaciones: la partida se guarda cada 2 segundos en vez de cada 10 toques, la pantalla se refresca menos veces y las chispas salen como mucho unas 9 veces por segundo"]},
 {v:"2026-11-22-7.24.3",ver:"7.24.3",at:"2026-11-22T13:27",t:"🔧 Arreglos/Mejoras",l:["Al cerrar un menú y volver a la pantalla principal, las animaciones van fluidas al momento (antes tardaban unos segundos en recuperarse)"]},
 {v:"2026-11-22-7.24.2",ver:"7.24.2",at:"2026-11-22T13:25",t:"🔧 Arreglos/Mejoras",l:["Con un menú abierto, el paisaje y el pueblo del fondo siguen moviéndose con fluidez (antes se actualizaban cada segundo y medio y se veían a tirones)"]},
 {v:"2026-11-22-7.24.1",ver:"7.24.1",at:"2026-11-22T11:55",t:"🔧 Arreglos/Mejoras",l:["Animaciones más fluidas: el paisaje de la pantalla principal (pájaros, nubes, agua) se mueve hasta a 60 imágenes por segundo en los equipos que lo aguantan, en vez de a 15","El modo ligero automático ya no se activa por un tirón al abrir un menú, y se quita solo cuando el juego vuelve a ir fluido (antes se quedaba puesto hasta recargar la página)","La Tienda de Evento se abre al instante: los entrenadores en 3D aparecen poco a poco en vez de congelar el juego al abrirla"]},

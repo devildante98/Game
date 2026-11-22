@@ -202,8 +202,8 @@ function gmInit(){
   document.addEventListener("click",gmClick,true);
   $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT("scr");
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GM.scr&&gmOn()&&!document.querySelector("#gacM:not([hidden]),#uiDlg:not([hidden]),#pkv:not([hidden])")){gmClose()}});
-  $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const Q=window._gsq||(window._gsq={x:0,y:0,on:0});Q.x=e.clientX||0;Q.y=e.clientY||0;if(Q.on)return;Q.on=1;
-    // chispas y salto del entrenador: una vez por fotograma aunque toques muchas veces a la vez
+  $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const Q=window._gsq||(window._gsq={x:0,y:0,on:0});Q.x=e.clientX||0;Q.y=e.clientY||0;if(Q.on)return;const nw=performance.now();if(nw-(Q.last||0)<110)return;Q.on=1;Q.last=nw;
+    // chispas y salto del entrenador: como mucho ~9 veces por segundo aunque toques muchas veces a la vez (varias teclas, autoclicker)
     requestAnimationFrame(()=>{Q.on=0;const f=$("fx"),r=f.getBoundingClientRect(),b=$("train").getBoundingClientRect();gmSparks(f,(Q.x||b.left+b.width/2)-r.left,(Q.y||b.top+b.height/2)-r.top,6);const tr=$("gTr");if(tr){tr.classList.remove("gjump");void tr.offsetWidth;tr.classList.add("gjump")}})});
   // gacha: barra de garantía; combate: botón de filtros y barra de combatir fija
   {const gv=document.querySelector("#stage>.gview");if(gv&&!$("gPity")){gv.insertAdjacentHTML("afterend",'<div id="gPity" class="gmo"><span class="gpi">'+gI("medal",30)+'</span><div class="gpt"><b>Épico o mejor garantizado</b><i><u id="gPityB"></u></i></div><em><b id="gPityN">30</b><small>tiradas</small></em></div>');}
@@ -442,3 +442,6 @@ window.GM=GM;window.gmOpen=gmOpen;window.gmClose=gmClose;
 // como los números al tocar la Poké Ball, se quedaban en pausa hasta abrir y cerrar algún menú)
 setTimeout(()=>{try{if(gmOn()&&GM.init)gmNav()}catch(e){}},0);
 setInterval(()=>{try{if(!gmOn()||!GM.init)return;const b=document.body,home=!GM.scr&&$("hubM").hidden&&(!$("hubG")||$("hubG").hidden);if(b.classList.contains("gmhome")!==home)gmNav()}catch(e){}},1000);
+
+// si se cierra la página con un guardado de toques pendiente, se guarda ya
+addEventListener("pagehide",()=>{try{if(window._csv){clearTimeout(window._csv);window._csv=0;save()}}catch(e){}});

@@ -875,7 +875,7 @@ $("p10").onclick=()=>pull(10);
 $("ps").onclick=()=>pull(1,true);
 $("ps10").onclick=()=>pull(10,true);
 let cd=false;
-$("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");if(S.clicks%10===0)save();if(!window._rq)window._rq=requestAnimationFrame(()=>{window._rq=0;render()})};
+$("train").onclick=()=>{S.t+=cpc();S.clicks=(S.clicks||0)+1;qEv("click");/* (rendimiento) al tocar muy seguido: guardado como mucho cada 2 s y la interfaz entera ~5 veces por segundo */if(!window._csv)window._csv=setTimeout(()=>{window._csv=0;save()},2000);if(!window._rq){const w=Math.max(0,180-(performance.now()-(window._rqT||0)));window._rq=setTimeout(()=>requestAnimationFrame(()=>{window._rq=0;window._rqT=performance.now();render()}),w)}};
 $("daily").onclick=()=>{if(S.daily===today())return;S.daily=today();const gf=gift();S.t+=gf;S.dg=(S.dg||0)+1;qEv("daily");save();render();$("msg").textContent="¡+"+gf+" 🎟️ de regalo diario! Mañana será mayor."};
 function newGame(prs,seed){
   const keep={nick:S.nick,prs:prs,prsSeed:seed,welc:S.welc,newsV:S.newsV,pvd:S.pvd,pvp:S.pvp};
@@ -3099,7 +3099,7 @@ document.addEventListener("keydown",e=>{
   const k=e.key.toLowerCase();
   // Enter sobre la Poké Ball enfocada haría clics nativos a la velocidad de autorrepetición: se limita igual que las demás teclas
   const trEnt=k==="enter"&&e.target&&e.target.id==="train";
-  if((O.tkeys||["u"]).includes(k)||trEnt){e.preventDefault();if(!e.repeat||Date.now()-(window._u||0)>=250){window._u=Date.now();$("train").click();$("train").animate([{transform:"scale(.93)"},{transform:"none"}],120)}}
+  if((O.tkeys||["u"]).includes(k)||trEnt){e.preventDefault();if(!e.repeat||Date.now()-(window._u||0)>=250){window._u=Date.now();$("train").click();if(Date.now()-(window._ua||0)>90){window._ua=Date.now();$("train").animate([{transform:"scale(.93)"},{transform:"none"}],120)}}}
   else if((k===" "||e.code==="Space"||k==="e")&&sk){e.preventDefault();window._sp=k==="e"?0:1;sk()}
   else if(/^[1-6]$/.test(k)&&!e.repeat){const b=$(k==="1"?"bcl":"bg"+(+k-2));if(b&&!b.disabled){b.click();b.animate([{transform:"scale(.96)"},{transform:"none"}],140)}}
 });

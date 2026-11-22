@@ -1478,3 +1478,7 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 #dcb[hidden]{display:none!important}
 #dcb.mini{padding:0;width:40px;justify-content:center}#dcb.mini span{display:none}
 #hubTabs [data-ha="discord"]{background:linear-gradient(#6b78ff,#4752c4)!important;color:#fff!important}
+/* ventanas emergentes (nxModal): nunca más altas que la pantalla; si no caben, se desplazan */
+#nxM>.nxmw{max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain}
+/* premios de la clasificación semanal: la lista se desplaza y el botón queda siempre visible */
+.mgrwon{max-height:min(56vh,560px);overflow-y:auto;overscroll-behavior:contain;padding-right:4px}

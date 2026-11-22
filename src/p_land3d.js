@@ -495,8 +495,12 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     let pts=0;const loop=ts=>{requestAnimationFrame(loop);if(document.hidden||!document.body.classList.contains("gm")){pts=0;return}
       // fluidez del navegador (intervalo entre fotogramas): si no llega a ~60 imágenes por segundo, el paisaje baja de nivel
       // (60 → 30 → 15) para no quitarle fluidez al resto del juego; vuelve a subir si después va sobrado unos segundos
-      if(pts){const d=Math.min(100,ts-pts);L._ri=L._ri?L._ri*.95+d*.05:d;const nw=ts;L._lv=L._lv||0;
-        if(L._ri>22&&L._lv<2&&nw-(L._lc||0)>2000){L._lv++;L._lc=nw;L._ri=16.7}else if(L._ri<17.6&&L._lv>0&&nw-(L._lc||0)>8000){L._lv--;L._lc=nw}}pts=ts;
+      // Solo se mide en la pantalla principal sin ventanas y fuera de los 2,5 s de abrir o cerrar un menú: el trabajo de
+      // abrir un menú no debe bajar la calidad (antes la bajaba y al volver tardaba varios segundos en ir fluido)
+      const calmT=ts>(window._uiBusy||0)&&document.body.classList.contains("gmhome")&&(!document.getElementById("hubM")||document.getElementById("hubM").hidden);
+      if(!calmT){pts=0;L._ri=0}
+      else{if(pts){const d=Math.min(100,ts-pts);L._ri=L._ri?L._ri*.95+d*.05:d;const nw=ts;L._lv=L._lv||0;
+        if(L._ri>22&&L._lv<2&&nw-(L._lc||0)>2000){L._lv++;L._lc=nw;L._ri=16.7}else if(L._ri<17.6&&L._lv>0&&nw-(L._lc||0)>3000){L._lv--;L._lc=nw}}pts=ts}
       // con una ventana o una sección abierta encima el paisaje sigue moviéndose igual de fluido (se ve alrededor de la ventana;
       // antes se redibujaba cada 1,5 s y se veía a tirones). Si el equipo va justo, el ajuste automático de abajo lo baja a 30 o 15
       const cover=(document.getElementById("gScr")&&!document.getElementById("gScr").hidden)||(document.getElementById("hubM")&&!document.getElementById("hubM").hidden);
@@ -508,6 +512,6 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       const dc=L._dc||5,lv=Math.max(L._lv||0,dc<3?0:dc<7?1:2),fast=[12,28,66][lv],gap=Math.abs(L.panT-L.pan)>.05?12:lite?125:L._coarse?Math.max(28,fast):fast;if(ts-last<gap)return;last=ts;const t1=performance.now();
       try{if(!L._bt||ts-L._bt>1000){L._bt=ts;const pd=document.getElementById("gPed"),nv=document.getElementById("gNav");if(pd&&nv&&pd.offsetParent){const a=pd.getBoundingClientRect(),gb=nv.querySelector(".gbig .gni")||nv.querySelector(".gbig"),b=nv.getBoundingClientRect(),bt=Math.min(b.top,gb?gb.getBoundingClientRect().top+2:b.top),lh=innerWidth<700?36:44;if(bt>a.bottom+40){const nb=[Math.round(bt-lh-4),Math.round(a.bottom+5)];/* el botón del Gacha late: se ignoran cambios pequeños para que el pueblo no se mueva */if(!L.band||Math.abs(nb[0]-L.band[0])>8||Math.abs(nb[1]-L.band[1])>8||L._bw!==innerWidth+'x'+innerHeight){L.band=nb;L._bw=innerWidth+'x'+innerHeight}}}}
         L.env=window.WXENV||null;L.lite=!!lite;
-        L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L);const d2=performance.now()-t1;L._dc=L._dc?L._dc*.9+Math.min(d2,40)*.1:d2}catch(e){console.error(e)}};
+        L.tiers=((typeof S!=="undefined"&&S&&S.g)||[]).map(n=>typeof gbTier==="function"?gbTier(n):0);L.draw((ts-t0)/1000,document.body.dataset.tod||"day");if(typeof town3Frame==="function")town3Frame(L);const d2=performance.now()-t1;if(performance.now()>(window._uiBusy||0))L._dc=L._dc?L._dc*.9+Math.min(d2,40)*.1:d2}catch(e){console.error(e)}};
     requestAnimationFrame(loop);return true};
   if(!tryAttach()){const iv=setInterval(()=>{if(tryAttach())clearInterval(iv)},700)}})();

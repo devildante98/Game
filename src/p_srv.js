@@ -52,19 +52,31 @@ function srvPullApply(t,n,sup){
 // srvShopN: cuántos niveles (como mucho lim) se pueden pagar ahora y cuánto cuestan (como shopN)
 function srvShopN(i,lim){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?glc(lv0+k):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
   let n=0,c=0;while(n<lim){if(i<0&&lv0+n>=GLMAX)break;const u=unit(n);if(c+u>S.t)break;c+=u;n++}return [n,c]}
-const SRVSH={};
+const SRVSH={},SHJOBS=new Set();let SHDEF=0;
+// (fluidez) la mejora se ve al instante: se aplica ya en la partida y, cuando contesta el servidor, se ajusta a lo que él
+// diga (o se deshace si la rechaza). Mientras haya alguna sin confirmar, la partida que se envía al servidor es la que él
+// conoce (sin esas mejoras) y el guardado automático espera, para que no la rechace por «mejora hecha fuera del servidor».
+const shLv=(i,d)=>{if(i<0){S.cl=(S.cl|0)+d;window._fk=null}else{S.g[i]=(S.g[i]|0)+d}window._gk=null};
+const shRm=j=>{if(!j.on&&!j.oc)return;S.t=(S.t||0)+j.oc;shLv(j.i,-j.on)},shAp=j=>{if(!j.on&&!j.oc)return;S.t=(S.t||0)-j.oc;shLv(j.i,j.on)};
+function shGuard(){const cs=window.cloudSave;if(typeof cs!=="function"||cs._sh)return;const w=function(){if(SHJOBS.size){SHDEF=1;return}return cs.apply(this,arguments)};w._sh=1;window.cloudSave=w}
+function shDone(){if(!SHJOBS.size&&SHDEF){SHDEF=0;try{save()}catch(e){}}}
 {const _sb=shopBuy;shopBuy=function(i){
   if(!srvOn())return _sb.apply(this,arguments);
   if(i<0&&(S.cl|0)>=GLMAX)return;const [n0,c0]=shopN(i);if(!n0||S.t<c0)return;
-  const mx=SHQ==="max",k=String(i),q=SRVSH[k];
-  // ya hay una compra de este edificio esperando su turno: se suma a esa
-  if(q&&!q.go){if(mx)q.mx=1;else q.u+=n0;return}
-  const ac={k:"mejorar",i:i,n:0},job={u:n0,mx:mx,go:0};SRVSH[k]=job;
-  // (si cuando le toca ya no llega para ninguna, no se envía)
-  window.srvAccion(ac,()=>{job.go=1;if(SRVSH[k]===job)delete SRVSH[k];const [n]=job.mx?shopN(i):srvShopN(i,job.u);if(!n)return null;ac.n=n;return srvJ()},
-      r=>{const m=r.mejora;if(!m)return;S.t-=m.coste;if(i<0){S.cl=m.nivel;window._fk=null}else{S.g[i]=m.nivel}window._gk=null;save();render()})
-    .then(r=>{if(SRVSH[k]===job)delete SRVSH[k];if(!r||!r.ok||!r.mejora){const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m)}})
-    .catch(()=>{if(SRVSH[k]===job)delete SRVSH[k];toast("⚠️ "+SRV_RED)})}}
+  shGuard();const mx=SHQ==="max",k=String(i),q=SRVSH[k];
+  // ya hay una compra de este edificio esperando su turno: se suma a esa (y también se ve al instante)
+  if(q&&!q.go){if(mx)q.mx=1;q.u+=n0;q.on+=n0;q.oc+=c0;S.t-=c0;shLv(i,n0);try{render()}catch(e){}return}
+  const ac={k:"mejorar",i:i,n:0},job={i:i,u:n0,mx:mx,go:0,on:n0,oc:c0};S.t-=c0;shLv(i,n0);SHJOBS.add(job);SRVSH[k]=job;try{render()}catch(e){}
+  const undo=()=>{if(SHJOBS.has(job)){shRm(job);SHJOBS.delete(job);window._gk=null;try{render()}catch(e){}}shDone()};
+  // al salir la petición: la partida sin las mejoras aún sin confirmar (las de todas las compras pendientes)
+  window.srvAccion(ac,()=>{job.go=1;if(SRVSH[k]===job)delete SRVSH[k];const L=[...SHJOBS];L.forEach(shRm);let out=null;
+      try{const [n]=job.mx?shopN(i):srvShopN(i,job.u);if(n){ac.n=n;out=srvJ()}}finally{L.forEach(shAp)}
+      if(out==null)undo();return out},
+      r=>{const m=r.mejora;if(!m)return;shRm(job);SHJOBS.delete(job);S.t-=m.coste;
+        if(m.n!=null)shLv(i,m.n);else{const other=[...SHJOBS].filter(x=>x.i===i).reduce((a,x)=>a+x.on,0);if(i<0)S.cl=m.nivel+other;else S.g[i]=m.nivel+other}
+        window._fk=null;window._gk=null;save();render();shDone()})
+    .then(r=>{if(SRVSH[k]===job)delete SRVSH[k];if(!r||!r.ok||!r.mejora){undo();const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m)}})
+    .catch(()=>{if(SRVSH[k]===job)delete SRVSH[k];undo();toast("⚠️ "+SRV_RED)})}}
 
 // ---- premios de la semana pasada (torneo semanal y clasificación de cada minijuego) ----
 // Con cuenta los calcula el servidor (_server/semana.js): mira tu puesto real en cada clasificación, te da el premio y

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.27"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.27.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795390866">
+<meta name="game-build" content="1795416595">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3240,7 +3240,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.27</small>
+    <small class="pcver">Versión 7.27.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7995,8 +7995,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.27";
+const GAME_VER="7.27.1";
 const NEWS=[
+{v:"2026-11-23-7.27.1",ver:"7.27.1",at:"2026-11-23T07:49",t:"🔧 Arreglos/Mejoras",l:["Las mejoras de la tienda (edificios y guantes) se aplican al instante al comprarlas, sin esperar unos segundos. El servidor las sigue comprobando por detrás y, si alguna no fuera válida, se deshace sola"]},
 {v:"2026-11-23-7.27",ver:"7.27",at:"2026-11-23T00:41",t:"⚖️ Minijuegos más justos",l:["Ahora la partida número 1 de la semana de cada minijuego es igual para todos los jugadores, la número 2 también, y así con todas: misma pared, mismos peces, mismos Pokémon… En el torneo y la clasificación gana quien juega mejor, no quien tiene más suerte","Excavación subterránea: siempre 4 tesoros por pared, y si lo desentierras todo te llevas un bonus según la estabilidad que le quede a la pared","Cazafósiles: siempre 3 hallazgos (un fósil y dos más), con el mismo bonus de estabilidad","Pesca, ¿Quién es ese Pokémon?, Memoria, Diglett, Lanzamiento perfecto, Más o menos y Peso y altura también usan el azar común"]},
 {v:"2026-11-23-7.26.4",ver:"7.26.4",at:"2026-11-23T00:10",t:"🚀 Más proyectos en Próximamente",l:["Tres proyectos nuevos en Más › Próximamente: Búsqueda del tesoro semanal, Rival personal e Investigaciones del Profesor"]},
 {v:"2026-11-22-7.26.2",ver:"7.26.2",at:"2026-11-22T23:50",t:"🚀 Nuevos proyectos en Próximamente",l:["Hemos añadido 7 proyectos nuevos a Más › Próximamente: Pokémon del día, Mercader misterioso, Torneos de amigos, Modo espectador, Diario del entrenador, Aspectos para la Poké Ball y Especialidades de entrenador","¿Cuál te apetece más? ¡Cuéntanoslo en Discord o en Sugerencias!"]},
@@ -8425,7 +8426,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795390866";
+const GAME_B="1795416595";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -20782,19 +20783,31 @@ function srvPullApply(t,n,sup){
 // srvShopN: cuántos niveles (como mucho lim) se pueden pagar ahora y cuánto cuestan (como shopN)
 function srvShopN(i,lim){const lv0=i<0?(S.cl|0):(S.g[i]|0),unit=k=>i<0?glc(lv0+k):Math.ceil(G[i][1]*Math.pow(GGR[i]||1.15,lv0+k));
   let n=0,c=0;while(n<lim){if(i<0&&lv0+n>=GLMAX)break;const u=unit(n);if(c+u>S.t)break;c+=u;n++}return [n,c]}
-const SRVSH={};
+const SRVSH={},SHJOBS=new Set();let SHDEF=0;
+// (fluidez) la mejora se ve al instante: se aplica ya en la partida y, cuando contesta el servidor, se ajusta a lo que él
+// diga (o se deshace si la rechaza). Mientras haya alguna sin confirmar, la partida que se envía al servidor es la que él
+// conoce (sin esas mejoras) y el guardado automático espera, para que no la rechace por «mejora hecha fuera del servidor».
+const shLv=(i,d)=>{if(i<0){S.cl=(S.cl|0)+d;window._fk=null}else{S.g[i]=(S.g[i]|0)+d}window._gk=null};
+const shRm=j=>{if(!j.on&&!j.oc)return;S.t=(S.t||0)+j.oc;shLv(j.i,-j.on)},shAp=j=>{if(!j.on&&!j.oc)return;S.t=(S.t||0)-j.oc;shLv(j.i,j.on)};
+function shGuard(){const cs=window.cloudSave;if(typeof cs!=="function"||cs._sh)return;const w=function(){if(SHJOBS.size){SHDEF=1;return}return cs.apply(this,arguments)};w._sh=1;window.cloudSave=w}
+function shDone(){if(!SHJOBS.size&&SHDEF){SHDEF=0;try{save()}catch(e){}}}
 {const _sb=shopBuy;shopBuy=function(i){
   if(!srvOn())return _sb.apply(this,arguments);
   if(i<0&&(S.cl|0)>=GLMAX)return;const [n0,c0]=shopN(i);if(!n0||S.t<c0)return;
-  const mx=SHQ==="max",k=String(i),q=SRVSH[k];
-  // ya hay una compra de este edificio esperando su turno: se suma a esa
-  if(q&&!q.go){if(mx)q.mx=1;else q.u+=n0;return}
-  const ac={k:"mejorar",i:i,n:0},job={u:n0,mx:mx,go:0};SRVSH[k]=job;
-  // (si cuando le toca ya no llega para ninguna, no se envía)
-  window.srvAccion(ac,()=>{job.go=1;if(SRVSH[k]===job)delete SRVSH[k];const [n]=job.mx?shopN(i):srvShopN(i,job.u);if(!n)return null;ac.n=n;return srvJ()},
-      r=>{const m=r.mejora;if(!m)return;S.t-=m.coste;if(i<0){S.cl=m.nivel;window._fk=null}else{S.g[i]=m.nivel}window._gk=null;save();render()})
-    .then(r=>{if(SRVSH[k]===job)delete SRVSH[k];if(!r||!r.ok||!r.mejora){const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m)}})
-    .catch(()=>{if(SRVSH[k]===job)delete SRVSH[k];toast("⚠️ "+SRV_RED)})}}
+  shGuard();const mx=SHQ==="max",k=String(i),q=SRVSH[k];
+  // ya hay una compra de este edificio esperando su turno: se suma a esa (y también se ve al instante)
+  if(q&&!q.go){if(mx)q.mx=1;q.u+=n0;q.on+=n0;q.oc+=c0;S.t-=c0;shLv(i,n0);try{render()}catch(e){}return}
+  const ac={k:"mejorar",i:i,n:0},job={i:i,u:n0,mx:mx,go:0,on:n0,oc:c0};S.t-=c0;shLv(i,n0);SHJOBS.add(job);SRVSH[k]=job;try{render()}catch(e){}
+  const undo=()=>{if(SHJOBS.has(job)){shRm(job);SHJOBS.delete(job);window._gk=null;try{render()}catch(e){}}shDone()};
+  // al salir la petición: la partida sin las mejoras aún sin confirmar (las de todas las compras pendientes)
+  window.srvAccion(ac,()=>{job.go=1;if(SRVSH[k]===job)delete SRVSH[k];const L=[...SHJOBS];L.forEach(shRm);let out=null;
+      try{const [n]=job.mx?shopN(i):srvShopN(i,job.u);if(n){ac.n=n;out=srvJ()}}finally{L.forEach(shAp)}
+      if(out==null)undo();return out},
+      r=>{const m=r.mejora;if(!m)return;shRm(job);SHJOBS.delete(job);S.t-=m.coste;
+        if(m.n!=null)shLv(i,m.n);else{const other=[...SHJOBS].filter(x=>x.i===i).reduce((a,x)=>a+x.on,0);if(i<0)S.cl=m.nivel+other;else S.g[i]=m.nivel+other}
+        window._fk=null;window._gk=null;save();render();shDone()})
+    .then(r=>{if(SRVSH[k]===job)delete SRVSH[k];if(!r||!r.ok||!r.mejora){undo();const m=r&&r.ok?"El servidor se está actualizando: espera un momento y vuelve a intentarlo.":srvErr(r);if(m)toast("⚠️ "+m)}})
+    .catch(()=>{if(SRVSH[k]===job)delete SRVSH[k];undo();toast("⚠️ "+SRV_RED)})}}
 
 // ---- premios de la semana pasada (torneo semanal y clasificación de cada minijuego) ----
 // Con cuenta los calcula el servidor (_server/semana.js): mira tu puesto real en cada clasificación, te da el premio y
@@ -22163,7 +22176,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.27";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.27.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

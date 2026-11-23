@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.27.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.27.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795416595">
+<meta name="game-build" content="1795422398">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3175,6 +3175,10 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 #nxM>.nxmw{max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain}
 /* premios de la clasificación semanal: la lista se desplaza y el botón queda siempre visible */
 .mgrwon{max-height:min(56vh,560px);overflow-y:auto;overscroll-behavior:contain;padding-right:4px}
+/* Diglett: número de tecla de cada hueco (solo con ratón; en pantallas táctiles no se ve) */
+.digh{position:relative}
+.digk{position:absolute;left:6px;top:4px;z-index:5;font:800 13px/1 system-ui,sans-serif;color:#fff;background:rgba(20,10,40,.55);border:1px solid rgba(255,255,255,.35);border-radius:6px;padding:3px 6px;pointer-events:none}
+@media (hover:none),(pointer:coarse){.digk{display:none}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3240,7 +3244,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.27.1</small>
+    <small class="pcver">Versión 7.27.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -7995,8 +7999,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.27.1";
+const GAME_VER="7.27.2";
 const NEWS=[
+{v:"2026-11-23-7.27.2",ver:"7.27.2",at:"2026-11-23T09:26",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett! ya se puede jugar con el teclado numérico: cada número es un hueco, igual que en la cuadrícula (7 8 9 arriba, 4 5 6 en medio, 1 2 3 abajo). También valen los números de arriba del teclado. En ordenador, cada hueco muestra su número"]},
 {v:"2026-11-23-7.27.1",ver:"7.27.1",at:"2026-11-23T07:49",t:"🔧 Arreglos/Mejoras",l:["Las mejoras de la tienda (edificios y guantes) se aplican al instante al comprarlas, sin esperar unos segundos. El servidor las sigue comprobando por detrás y, si alguna no fuera válida, se deshace sola"]},
 {v:"2026-11-23-7.27",ver:"7.27",at:"2026-11-23T00:41",t:"⚖️ Minijuegos más justos",l:["Ahora la partida número 1 de la semana de cada minijuego es igual para todos los jugadores, la número 2 también, y así con todas: misma pared, mismos peces, mismos Pokémon… En el torneo y la clasificación gana quien juega mejor, no quien tiene más suerte","Excavación subterránea: siempre 4 tesoros por pared, y si lo desentierras todo te llevas un bonus según la estabilidad que le quede a la pared","Cazafósiles: siempre 3 hallazgos (un fósil y dos más), con el mismo bonus de estabilidad","Pesca, ¿Quién es ese Pokémon?, Memoria, Diglett, Lanzamiento perfecto, Más o menos y Peso y altura también usan el azar común"]},
 {v:"2026-11-23-7.26.4",ver:"7.26.4",at:"2026-11-23T00:10",t:"🚀 Más proyectos en Próximamente",l:["Tres proyectos nuevos en Más › Próximamente: Búsqueda del tesoro semanal, Rival personal e Investigaciones del Profesor"]},
@@ -8426,7 +8431,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795416595";
+const GAME_B="1795422398";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -9946,7 +9951,7 @@ const G_MEM={id:"mem",n:"Memoria Pokémon",ic:"🃏",c:"#7a4ae0",d:"Encuentra la
   }};
 
 // ---------------- GOLPEA AL DIGLETT ----------------
-const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a los Diglett (+1) y a los Dugtrio (+3) antes de que se escondan. ¡Cuidado con Voltorb (−3)! 30 segundos.",
+const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a los Diglett (+1) y a los Dugtrio (+3) antes de que se escondan. ¡Cuidado con Voltorb (−3)! 30 segundos. En ordenador también puedes usar el teclado numérico: cada número es un hueco (7 8 9 arriba, 4 5 6 en medio, 1 2 3 abajo).",
   rw:s=>s*2500,
   start(B,end){
     // reloj propio (performance.now) que no depende de la cadena de apariciones: si algo falla, la partida termina igual a los 30 s
@@ -9963,11 +9968,20 @@ const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a l
         mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
       mgT(spawn,Math.max(330,780-el/60));
     };
-    holes.forEach(h=>h.addEventListener("pointerdown",e=>{const m=h.querySelector(".digm");if(over||!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
+    // golpe en un hueco: con el ratón/dedo o con el teclado numérico (7 8 9 / 4 5 6 / 1 2 3, como la cuadrícula)
+    const hitHole=(h,cx,cy)=>{const m=h.querySelector(".digm");if(over||!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
       const k=m.dataset.k;let pts=k==="t"?3:k==="v"?-3:1;
       if(k==="v"){combo=0;snd("hit",1);h.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:180,iterations:2})}else{combo++;hits++;snd("pop");if(combo>=5)pts+=1}
-      mgSet(MG.score+pts);mgPop(e.clientX,e.clientY,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";
-      mgT(()=>{m.classList.remove("up");mgT(()=>{if(!m.classList.contains("up"))m.classList.remove("hit")},200)},180)}));
+      mgSet(MG.score+pts);mgPop(cx,cy,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";
+      mgT(()=>{m.classList.remove("up");mgT(()=>{if(!m.classList.contains("up"))m.classList.remove("hit")},200)},180)};
+    holes.forEach(h=>h.addEventListener("pointerdown",e=>hitHole(h,e.clientX,e.clientY)));
+    const KMAP={7:0,8:1,9:2,4:3,5:4,6:5,1:6,2:7,3:8};
+    holes.forEach((h,i)=>{const n=Object.keys(KMAP).find(k=>KMAP[k]===i);const s=document.createElement("span");s.className="digk";s.textContent=n;h.appendChild(s)});
+    const onKey=e=>{if(!B.isConnected||over){document.removeEventListener("keydown",onKey,true);return}
+      const c=e.code||"",d=/^Numpad([1-9])$/.test(c)?c.slice(-1):/^Digit([1-9])$/.test(c)?c.slice(-1):/^[1-9]$/.test(e.key)?e.key:null;if(!d)return;
+      e.preventDefault();e.stopPropagation();if(e.repeat)return;const h=holes[KMAP[d]];if(!h)return;const r=h.getBoundingClientRect();
+      h.animate([{transform:"scale(.94)"},{transform:"none"}],{duration:120});hitHole(h,r.left+r.width/2,r.top+r.height*.35)};
+    document.addEventListener("keydown",onKey,true);
     spawn();
   }};
 
@@ -22176,7 +22190,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.27.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.27.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

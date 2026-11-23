@@ -67,7 +67,7 @@ const G_MEM={id:"mem",n:"Memoria Pokémon",ic:"🃏",c:"#7a4ae0",d:"Encuentra la
   }};
 
 // ---------------- GOLPEA AL DIGLETT ----------------
-const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a los Diglett (+1) y a los Dugtrio (+3) antes de que se escondan. ¡Cuidado con Voltorb (−3)! 30 segundos.",
+const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a los Diglett (+1) y a los Dugtrio (+3) antes de que se escondan. ¡Cuidado con Voltorb (−3)! 30 segundos. En ordenador también puedes usar el teclado numérico: cada número es un hueco (7 8 9 arriba, 4 5 6 en medio, 1 2 3 abajo).",
   rw:s=>s*2500,
   start(B,end){
     // reloj propio (performance.now) que no depende de la cadena de apariciones: si algo falla, la partida termina igual a los 30 s
@@ -84,11 +84,20 @@ const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a l
         mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
       mgT(spawn,Math.max(330,780-el/60));
     };
-    holes.forEach(h=>h.addEventListener("pointerdown",e=>{const m=h.querySelector(".digm");if(over||!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
+    // golpe en un hueco: con el ratón/dedo o con el teclado numérico (7 8 9 / 4 5 6 / 1 2 3, como la cuadrícula)
+    const hitHole=(h,cx,cy)=>{const m=h.querySelector(".digm");if(over||!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
       const k=m.dataset.k;let pts=k==="t"?3:k==="v"?-3:1;
       if(k==="v"){combo=0;snd("hit",1);h.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:180,iterations:2})}else{combo++;hits++;snd("pop");if(combo>=5)pts+=1}
-      mgSet(MG.score+pts);mgPop(e.clientX,e.clientY,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";
-      mgT(()=>{m.classList.remove("up");mgT(()=>{if(!m.classList.contains("up"))m.classList.remove("hit")},200)},180)}));
+      mgSet(MG.score+pts);mgPop(cx,cy,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";
+      mgT(()=>{m.classList.remove("up");mgT(()=>{if(!m.classList.contains("up"))m.classList.remove("hit")},200)},180)};
+    holes.forEach(h=>h.addEventListener("pointerdown",e=>hitHole(h,e.clientX,e.clientY)));
+    const KMAP={7:0,8:1,9:2,4:3,5:4,6:5,1:6,2:7,3:8};
+    holes.forEach((h,i)=>{const n=Object.keys(KMAP).find(k=>KMAP[k]===i);const s=document.createElement("span");s.className="digk";s.textContent=n;h.appendChild(s)});
+    const onKey=e=>{if(!B.isConnected||over){document.removeEventListener("keydown",onKey,true);return}
+      const c=e.code||"",d=/^Numpad([1-9])$/.test(c)?c.slice(-1):/^Digit([1-9])$/.test(c)?c.slice(-1):/^[1-9]$/.test(e.key)?e.key:null;if(!d)return;
+      e.preventDefault();e.stopPropagation();if(e.repeat)return;const h=holes[KMAP[d]];if(!h)return;const r=h.getBoundingClientRect();
+      h.animate([{transform:"scale(.94)"},{transform:"none"}],{duration:120});hitHole(h,r.left+r.width/2,r.top+r.height*.35)};
+    document.addEventListener("keydown",onKey,true);
     spawn();
   }};
 

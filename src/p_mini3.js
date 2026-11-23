@@ -70,14 +70,14 @@ const G_HL={id:"hl",n:"Más o menos",ic:"📊",c:"#3a7be0",d:"Mira la estadísti
       // con la racha, los valores se parecen cada vez más
       let b=null;for(let g=0;g<400&&!b;g++){const c=pool[Math.floor(mgR()*pool.length)];if(c===a)continue;const vb=hlVal(c,st[1]),r=Math.max(va,vb)/Math.max(1,Math.min(va,vb));if(mgR()<hard&&r>(st[1]<0?1.15:1.35))continue;b=c}
       if(!b)b=pool.find(c=>c!==a);
-      const T=Math.max(4500,10000-streak*400),t0=performance.now();busy=false;
+      const T=Math.max(4500,10000-streak*400);let t0=performance.now();busy=false;
       B.innerHTML='<div class="whohd"><span>🔥 Racha: <b>'+streak+'</b></span><span>📊 '+st[0]+'</span></div><div class="mgtime"><i id="hlT"></i></div>'+
         '<div class="hlvs"><div class="hlc '+a[2]+'"><div class="hlspr">'+icoHD(a,150,false,false)+'</div><b>'+esc(a[0])+'</b><small>'+tyTxt(a)+'</small><div class="hlv"><small>'+st[0]+' base</small><b>'+va+'</b></div></div>'+
         '<div class="hlmid">VS</div>'+
         '<div class="hlc '+b[2]+'"><div class="hlspr">'+icoHD(b,150,false,false)+'</div><b>'+esc(b[0])+'</b><small>'+tyTxt(b)+'</small><div class="hlv" id="hlV"><small>'+st[0]+' base</small><b>?</b></div>'+
           '<div class="hlbtn"><button class="red" data-hl="1">⬆️ Más</button><button class="alt" data-hl="-1">⬇️ Menos</button></div></div></div>'+
         '<p class="hlq">¿<b>'+esc(b[0])+'</b> tiene más o menos <b>'+st[0]+'</b> que '+esc(a[0])+'?</p>';
-      const tick=()=>{if(busy)return;const k=1-(performance.now()-t0)/T,bar=$("hlT");if(bar)bar.style.width=Math.max(0,k*100)+"%";if(k<=0){pick(0);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
+      const tick=()=>{if(busy)return;const k=1-(performance.now()-t0)/T,bar=$("hlT");if(bar)bar.style.width=Math.max(0,k*100)+"%";if(k<=0){pick(0);return}MG.raf=requestAnimationFrame(tick)};mgGo(B,"[data-hl]",()=>{t0=performance.now();MG.raf=requestAnimationFrame(tick)});
       const pick=dir=>{if(busy)return;busy=true;cancelAnimationFrame(MG.raf);const vb=hlVal(b,st[1]),ok=dir!==0&&(vb===va||(dir>0?vb>va:vb<va)),left=Math.max(0,1-(performance.now()-t0)/T);
         B.querySelectorAll("[data-hl]").forEach(x=>{x.disabled=true});const v=$("hlV");if(v){v.classList.add(ok?"ok":"bad");const n=v.querySelector("b"),s0=performance.now();const an=()=>{const k=Math.min(1,(performance.now()-s0)/600);n.textContent=Math.round(vb*k);if(k<1)requestAnimationFrame(an)};an()}
         if(ok){streak++;const pts=100+Math.round(left*60)+streak*10;mgSet(MG.score+pts);snd("lvl");const c=B.querySelectorAll(".hlc")[1].getBoundingClientRect();mgPop(c.left+c.width/2,c.top+30,"+"+pts,"#ffd35c");a=b;mgT(round,1400)}

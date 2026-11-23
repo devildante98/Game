@@ -14,6 +14,16 @@ const mgPick=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.
 // La partida n.º k de la semana de cada minijuego usa la misma secuencia de azar para todos los jugadores: misma pared,
 // mismos peces, mismos Pokémon… Así nadie gana solo por suerte. Solo afecta a lo que decide la partida, no a los efectos.
 const mgR=()=>MG.rng?MG.rng():Math.random();
+// ---- imágenes listas antes de que corra el tiempo ----
+// Los botones de la ronda se desactivan hasta que sus imágenes se han descargado (como mucho 4 s, por si alguna falla)
+// y solo entonces empieza el reloj: una conexión lenta ya no hace perder tiempo.
+function mgImgsReady(root,max){const L=[...root.querySelectorAll("img")].filter(i=>!(i.complete&&i.naturalWidth));if(!L.length)return Promise.resolve();
+  L.forEach(i=>{try{i.loading="eager"}catch(e){}});
+  return Promise.race([Promise.all(L.map(i=>new Promise(r=>{i.addEventListener("load",r,{once:true});i.addEventListener("error",r,{once:true})}))),new Promise(r=>setTimeout(r,max||4000))])}
+function mgGo(B,sel,go){const bs=[...B.querySelectorAll(sel)],first=bs[0];bs.forEach(b=>b.disabled=true);B.classList.add("mgload");
+  mgImgsReady(B).then(()=>{if(first&&!first.isConnected)return;B.classList.remove("mgload");bs.forEach(b=>b.disabled=false);go()})}
+// descarga por adelantado las imágenes de un trozo de HTML (la siguiente ronda), sin enseñarlas
+function mgPre(html){try{const d=document.createElement("div");d.innerHTML=html;d.querySelectorAll("img").forEach(i=>{const im=new Image();im.decoding="async";im.src=i.getAttribute("src")})}catch(e){}}
 const mgPickR=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(mgR()*c.length),1)[0]);return o};
 const mgShuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(mgR()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a};
 function mgSeed(id){try{const w=typeof isoWeek==="function"?isoWeek(new Date()):"";if(!S.mgAt||S.mgAt.w!==w)S.mgAt={w:w,n:{}};const k=(S.mgAt.n[id]|0)+1;S.mgAt.n[id]=k;
@@ -27,13 +37,16 @@ function mgConfetti(){if(hubCalm())return;const b=$("mgB");if(!b)return;for(let 
 const G_WHO={id:"who",n:"¿Quién es ese Pokémon?",ic:"❓",c:"#2f6fd8",d:"Adivina el Pokémon por su silueta antes de que acabe el tiempo. 10 rondas.",
   rw:s=>s*60,
   start(B,end){
-    let r=0,streak=0;const R=10;
+    let r=0,streak=0,nxt=null;const R=10;
     const round=()=>{
       if(r>=R){end(MG.score);return}r++;
-      const pool=P.filter(p=>p[2]!=="M"),ans=pool[Math.floor(mgR()*pool.length)],same=pool.filter(p=>p!==ans&&p[3]===ans[3]),opts=mgShuf(mgPickR(same.length>=3?same:pool.filter(p=>p!==ans),3).concat([ans]));
+      const pool=P.filter(p=>p[2]!=="M"),ans=nxt||pool[Math.floor(mgR()*pool.length)],same=pool.filter(p=>p!==ans&&p[3]===ans[3]),opts=mgShuf(mgPickR(same.length>=3?same:pool.filter(p=>p!==ans),3).concat([ans]));
       B.innerHTML='<div class="whohd"><span>Ronda <b>'+r+'</b>/'+R+'</span>'+(streak>1?'<span class="whost">🔥 Racha ×'+streak+'</span>':'')+'</div><div class="whobg"><div class="whosil">'+icoHD(ans,190,false,false)+'</div><div class="whoq">¿Quién es ese Pokémon?</div></div><div class="mgtime"><i id="whoT"></i></div><div class="whoopt">'+opts.map(o=>'<button data-who="'+esc(o[0])+'">'+esc(o[0])+'</button>').join("")+'</div>';
-      const T=8000,t0=performance.now(),bar=$("whoT");let done=false;
-      const tick=()=>{if(done)return;const k=1-(performance.now()-t0)/T;if(bar)bar.style.width=Math.max(0,k*100)+"%";if(k<=0){pick(null);return}MG.raf=requestAnimationFrame(tick)};MG.raf=requestAnimationFrame(tick);
+      // la silueta de la ronda siguiente se va descargando mientras juegas esta
+      nxt=r<R?pool[Math.floor(mgR()*pool.length)]:null;if(nxt)mgPre(icoHD(nxt,190,false,false));
+      const T=8000,bar=$("whoT");let t0=performance.now(),done=false;
+      const tick=()=>{if(done)return;const k=1-(performance.now()-t0)/T;if(bar)bar.style.width=Math.max(0,k*100)+"%";if(k<=0){pick(null);return}MG.raf=requestAnimationFrame(tick)};
+      mgGo(B,"[data-who]",()=>{t0=performance.now();MG.raf=requestAnimationFrame(tick)});
       const pick=name=>{
         if(done)return;done=true;cancelAnimationFrame(MG.raf);const ok=name===ans[0],left=Math.max(0,1-(performance.now()-t0)/T);
         B.querySelectorAll("[data-who]").forEach(b=>{b.disabled=true;if(b.dataset.who===ans[0])b.classList.add("ok");else if(b.dataset.who===name)b.classList.add("bad")});

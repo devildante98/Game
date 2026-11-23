@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.27.2";
+const GAME_VER="7.27.3";
 const NEWS=[
+{v:"2026-11-23-7.27.3",ver:"7.27.3",at:"2026-11-23T11:02",t:"🔧 Arreglos/Mejoras",l:["¿Quién es ese Pokémon?, Más o menos y Peso y altura: el tiempo de cada ronda ya no empieza hasta que la imagen se ha cargado, así que una conexión lenta no te hace perder tiempo. Además, en ¿Quién es ese Pokémon? la silueta siguiente se va descargando mientras juegas"]},
 {v:"2026-11-23-7.27.2",ver:"7.27.2",at:"2026-11-23T09:26",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett! ya se puede jugar con el teclado numérico: cada número es un hueco, igual que en la cuadrícula (7 8 9 arriba, 4 5 6 en medio, 1 2 3 abajo). También valen los números de arriba del teclado. En ordenador, cada hueco muestra su número"]},
 {v:"2026-11-23-7.27.1",ver:"7.27.1",at:"2026-11-23T07:49",t:"🔧 Arreglos/Mejoras",l:["Las mejoras de la tienda (edificios y guantes) se aplican al instante al comprarlas, sin esperar unos segundos. El servidor las sigue comprobando por detrás y, si alguna no fuera válida, se deshace sola"]},
 {v:"2026-11-23-7.27",ver:"7.27",at:"2026-11-23T00:41",t:"⚖️ Minijuegos más justos",l:["Ahora la partida número 1 de la semana de cada minijuego es igual para todos los jugadores, la número 2 también, y así con todas: misma pared, mismos peces, mismos Pokémon… En el torneo y la clasificación gana quien juega mejor, no quien tiene más suerte","Excavación subterránea: siempre 4 tesoros por pared, y si lo desentierras todo te llevas un bonus según la estabilidad que le quede a la pared","Cazafósiles: siempre 3 hallazgos (un fósil y dos más), con el mismo bonus de estabilidad","Pesca, ¿Quién es ese Pokémon?, Memoria, Diglett, Lanzamiento perfecto, Más o menos y Peso y altura también usan el azar común"]},

@@ -1486,3 +1486,6 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 .digh{position:relative}
 .digk{position:absolute;left:6px;top:4px;z-index:5;font:800 13px/1 system-ui,sans-serif;color:#fff;background:rgba(20,10,40,.55);border:1px solid rgba(255,255,255,.35);border-radius:6px;padding:3px 6px;pointer-events:none}
 @media (hover:none),(pointer:coarse){.digk{display:none}}
+/* minijuegos: mientras carga la imagen de la ronda, el reloj espera y se avisa */
+#mgB.mgload .whosil,#mgB.mgload .hlspr,#mgB.mgload .wgimg{position:relative}
+#mgB.mgload .whosil::after,#mgB.mgload .hlc:last-of-type .hlspr::after{content:"Cargando…";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:700 13px system-ui,sans-serif;color:#fff;background:rgba(20,10,40,.6);padding:4px 10px;border-radius:999px}

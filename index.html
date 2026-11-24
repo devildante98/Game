@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.29.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.29.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795511330">
+<meta name="game-build" content="1795556199">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3222,6 +3222,39 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 /* vitrina del perfil: el Pokémon ya no tapa su nombre (la imagen sobresale por arriba y los lados, no por abajo) */
 .profshw>div>img{margin:-14px -16px 0!important}
 .profshw>div>small{position:relative;z-index:1;display:block;margin-top:2px;line-height:1.2}
+/* ===== móvil: pantalla principal menos apelotonada ===== */
+@media (max-width:700px){
+  /* botones laterales con aire entre uno y otro (el texto ya no toca el botón de abajo) */
+  .gside{gap:11px}
+  /* guardar (💾): debajo de la columna derecha, con su nombre, como los demás (lo coloca mobSavePlace) */
+  body.gm #acct:not([hidden]){right:14px!important}
+  body.gm #acct:not([hidden]) #asave{position:relative;width:44px;height:44px;overflow:visible}
+  body.gm #acct:not([hidden]) #asave::after{content:"Guardar";position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:6px;font-size:.55rem;font-weight:800;color:#fff;text-shadow:var(--gol);white-space:nowrap;letter-spacing:.2px}
+  /* «por toque»: más pequeño y separado del anillo de guantes */
+  body.gm #tcap{font-size:.78rem;padding:4px 14px;margin-bottom:16px}
+}
+@media (max-width:440px){
+  /* barra de arriba: botones algo más pequeños y juntos a la derecha para que quepan los tickets y la racha */
+  body.gm #optb,body.gm #fsb,body.gm #chb{width:34px!important;height:34px!important}
+  body.gm #optb{right:6px!important}body.gm #fsb{right:44px!important}body.gm #chb{right:82px!important}
+  #gTop{gap:6px!important;padding-right:122px!important}
+  /* sin pantalla completa (iPhone): el chat ocupa su hueco y queda más sitio */
+  body.gm:not(:has(#fsb)) #chb{right:44px!important}
+  body.gm:not(:has(#fsb)) #gTop{padding-right:84px!important}
+  #gTop .gres{margin-left:12px!important}
+  #gTop .gtk b{font-size:1rem!important}
+  #gTop .gtk{padding-right:32px!important}
+}
+/* la palabra «Gacha» por encima de los rayos del botón grande */
+#gNav .gbig b{position:relative;z-index:2}
+@media (max-width:700px){#gNav .gbig .gni:before{inset:-18px}}
+@media (max-width:360px){
+  .gpl .gav{width:36px!important;height:36px!important}.gpl .gav img{width:34px!important;height:34px!important}
+  #gTop .gres{margin-left:10px!important;padding-left:24px!important}#gTop .gres .gic{width:32px;height:32px;left:-10px}#gTop .gres .gic svg{width:22px;height:22px}
+  #gTop .gtk b{font-size:.86rem!important}#gTop .gtk{padding-right:30px!important}
+  #gNav b{font-size:.5rem!important;letter-spacing:0}
+  #gTr{opacity:.9;transform:scale(.85);transform-origin:bottom right}
+}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3287,7 +3320,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.29.1</small>
+    <small class="pcver">Versión 7.29.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -3933,7 +3966,7 @@ function tick(){
 }
 function gBtn(id,t,c){const h=t+"<small>"+fmt(c)+" 🎟️</small>",e=$(id);if(e._h!==h){e._h=h;e.innerHTML=h}}
 function render(){
-  $("tk").textContent=fmt(S.t)+(tps()>0?" ("+fmt(tps())+"/s)":"");$("tcap").textContent="+"+fmt(cpc())+" 🎟️ por toque · tecla "+(O.tkeys||["u"]).map(tkLabel).join(" / ");$("tps").textContent=tps()>0?"Tus ayudantes producen "+fmt(tps())+" 🎟️ por segundo":"Compra ayudantes en la tienda";updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();gUI();strkUI();gymUI();zoneUI();seasonUI();evBanUI();trdUI();
+  $("tk").textContent=fmt(S.t)+(tps()>0?" ("+fmt(tps())+"/s)":"");$("tcap").textContent="+"+fmt(cpc())+" 🎟️ por toque"+(matchMedia("(hover:none) and (pointer:coarse)").matches?"":" · tecla "+(O.tkeys||["u"]).map(tkLabel).join(" / "));$("tps").textContent=tps()>0?"Tus ayudantes producen "+fmt(tps())+" 🎟️ por segundo":"Compra ayudantes en la tienda";updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();gUI();strkUI();gymUI();zoneUI();seasonUI();evBanUI();trdUI();
   $("p1").disabled=S.t<cost(1);$("p10").disabled=S.t<cost(10);$("ps").disabled=S.t<cost(1,true);$("ps10").disabled=S.t<cost(10,true);gBtn("p1","Tirar ×1",cost(1));gBtn("p10","Tirar ×10",cost(10));gBtn("ps","✨ Súper ×1",cost(1,true));gBtn("ps10","✨ Súper ×10",cost(10,true));$("p100").disabled=S.t<cost(100);$("ps100").disabled=S.t<cost(100,true);gBtn("p100","Tirar ×100",cost(100));gBtn("ps100","✨ Súper ×100",cost(100,true));
   $("daily").disabled=S.daily===today();
   $("daily").textContent=S.daily===today()?"Vuelve mañana (+"+gift()+")":"Reclamar +"+gift()+" 🎟️";
@@ -8042,8 +8075,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.29.1";
+const GAME_VER="7.29.2";
 const NEWS=[
+{v:"2026-11-24-7.29.2",ver:"7.29.2",at:"2026-11-24T22:35",t:"🔧 Arreglos/Mejoras",l:["Móvil: la pantalla principal está menos apelotonada. Los botones de los lados tienen más espacio, el botón de guardar ya no tapa Novedades (ahora va debajo, con su nombre), en la barra de arriba los tickets ya no se montan sobre el botón + ni el chat sobre la racha, y el cartel «por toque» es más pequeño, no tapa los guantes y ya no habla de teclas"]},
 {v:"2026-11-24-7.29.1",ver:"7.29.1",at:"2026-11-24T10:08",t:"🔧 Arreglos/Mejoras",l:["Perfil: en la Vitrina, la imagen de los Pokémon ya no tapa su nombre y nivel"]},
 {v:"2026-11-24-7.29",ver:"7.29",at:"2026-11-24T10:02",t:"👑 Novedad",l:["Nuevo título único «👑 Creador del juego»: solo lo tiene el creador de Poke Gacha Online. Brilla en oro y diamante en su perfil, y en el chat su nombre lleva la insignia «👑 Creador». ¡Si lo ves, estás hablando con quien hace el juego!"]},
 {v:"2026-11-24-7.28",ver:"7.28",at:"2026-11-24T09:48",t:"🌦️ Novedad",l:["Clima real con tu ciudad: en Ajustes → Gráficos ya puedes elegir la ciudad del clima del pueblo. Búscala por su nombre o pulsa «Usar mi ubicación»; si no eliges ninguna, se sigue usando la ciudad de tu zona horaria"]},
@@ -8478,7 +8512,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795511330";
+const GAME_B="1795556199";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15498,6 +15532,11 @@ setInterval(()=>{try{if(!gmOn()||!GM.init)return;const b=document.body,home=!GM.
 
 // si se cierra la página con un guardado de toques pendiente, se guarda ya
 addEventListener("pagehide",()=>{try{if(window._csv){clearTimeout(window._csv);window._csv=0;save()}}catch(e){}});
+// móvil: el botón de guardar va justo debajo de la columna derecha (Misiones, Mochila, Novedades…), sin taparla
+function mobSavePlace(){const ac=$("acct"),sr=$("gSideR");if(!ac||!sr)return;
+  if(innerWidth>860||!document.body.classList.contains("gm")||ac.hidden){if(ac._mt){ac.style.removeProperty("top");ac._mt=0}return}
+  const r=sr.getBoundingClientRect();if(!r.height)return;const t=Math.round(r.bottom+10);if(ac._mt!==t){ac.style.setProperty("top",t+"px","important");ac._mt=t}}
+setInterval(mobSavePlace,1000);addEventListener("resize",()=>setTimeout(mobSavePlace,50));
 
 // =====================================================================================
 // ZONA DE ENTRENAMIENTO: combates de práctica para probar habilidades, movimientos y objetos
@@ -22306,7 +22345,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.29.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.29.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

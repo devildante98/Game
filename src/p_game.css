@@ -1529,3 +1529,36 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 /* vitrina del perfil: el Pokémon ya no tapa su nombre (la imagen sobresale por arriba y los lados, no por abajo) */
 .profshw>div>img{margin:-14px -16px 0!important}
 .profshw>div>small{position:relative;z-index:1;display:block;margin-top:2px;line-height:1.2}
+/* ===== móvil: pantalla principal menos apelotonada ===== */
+@media (max-width:700px){
+  /* botones laterales con aire entre uno y otro (el texto ya no toca el botón de abajo) */
+  .gside{gap:11px}
+  /* guardar (💾): debajo de la columna derecha, con su nombre, como los demás (lo coloca mobSavePlace) */
+  body.gm #acct:not([hidden]){right:14px!important}
+  body.gm #acct:not([hidden]) #asave{position:relative;width:44px;height:44px;overflow:visible}
+  body.gm #acct:not([hidden]) #asave::after{content:"Guardar";position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:6px;font-size:.55rem;font-weight:800;color:#fff;text-shadow:var(--gol);white-space:nowrap;letter-spacing:.2px}
+  /* «por toque»: más pequeño y separado del anillo de guantes */
+  body.gm #tcap{font-size:.78rem;padding:4px 14px;margin-bottom:16px}
+}
+@media (max-width:440px){
+  /* barra de arriba: botones algo más pequeños y juntos a la derecha para que quepan los tickets y la racha */
+  body.gm #optb,body.gm #fsb,body.gm #chb{width:34px!important;height:34px!important}
+  body.gm #optb{right:6px!important}body.gm #fsb{right:44px!important}body.gm #chb{right:82px!important}
+  #gTop{gap:6px!important;padding-right:122px!important}
+  /* sin pantalla completa (iPhone): el chat ocupa su hueco y queda más sitio */
+  body.gm:not(:has(#fsb)) #chb{right:44px!important}
+  body.gm:not(:has(#fsb)) #gTop{padding-right:84px!important}
+  #gTop .gres{margin-left:12px!important}
+  #gTop .gtk b{font-size:1rem!important}
+  #gTop .gtk{padding-right:32px!important}
+}
+/* la palabra «Gacha» por encima de los rayos del botón grande */
+#gNav .gbig b{position:relative;z-index:2}
+@media (max-width:700px){#gNav .gbig .gni:before{inset:-18px}}
+@media (max-width:360px){
+  .gpl .gav{width:36px!important;height:36px!important}.gpl .gav img{width:34px!important;height:34px!important}
+  #gTop .gres{margin-left:10px!important;padding-left:24px!important}#gTop .gres .gic{width:32px;height:32px;left:-10px}#gTop .gres .gic svg{width:22px;height:22px}
+  #gTop .gtk b{font-size:.86rem!important}#gTop .gtk{padding-right:30px!important}
+  #gNav b{font-size:.5rem!important;letter-spacing:0}
+  #gTr{opacity:.9;transform:scale(.85);transform-origin:bottom right}
+}

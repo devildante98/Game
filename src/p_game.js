@@ -445,3 +445,8 @@ setInterval(()=>{try{if(!gmOn()||!GM.init)return;const b=document.body,home=!GM.
 
 // si se cierra la página con un guardado de toques pendiente, se guarda ya
 addEventListener("pagehide",()=>{try{if(window._csv){clearTimeout(window._csv);window._csv=0;save()}}catch(e){}});
+// móvil: el botón de guardar va justo debajo de la columna derecha (Misiones, Mochila, Novedades…), sin taparla
+function mobSavePlace(){const ac=$("acct"),sr=$("gSideR");if(!ac||!sr)return;
+  if(innerWidth>860||!document.body.classList.contains("gm")||ac.hidden){if(ac._mt){ac.style.removeProperty("top");ac._mt=0}return}
+  const r=sr.getBoundingClientRect();if(!r.height)return;const t=Math.round(r.bottom+10);if(ac._mt!==t){ac.style.setProperty("top",t+"px","important");ac._mt=t}}
+setInterval(mobSavePlace,1000);addEventListener("resize",()=>setTimeout(mobSavePlace,50));

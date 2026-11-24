@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.29.1";
+const GAME_VER="7.29.2";
 const NEWS=[
+{v:"2026-11-24-7.29.2",ver:"7.29.2",at:"2026-11-24T22:35",t:"🔧 Arreglos/Mejoras",l:["Móvil: la pantalla principal está menos apelotonada. Los botones de los lados tienen más espacio, el botón de guardar ya no tapa Novedades (ahora va debajo, con su nombre), en la barra de arriba los tickets ya no se montan sobre el botón + ni el chat sobre la racha, y el cartel «por toque» es más pequeño, no tapa los guantes y ya no habla de teclas"]},
 {v:"2026-11-24-7.29.1",ver:"7.29.1",at:"2026-11-24T10:08",t:"🔧 Arreglos/Mejoras",l:["Perfil: en la Vitrina, la imagen de los Pokémon ya no tapa su nombre y nivel"]},
 {v:"2026-11-24-7.29",ver:"7.29",at:"2026-11-24T10:02",t:"👑 Novedad",l:["Nuevo título único «👑 Creador del juego»: solo lo tiene el creador de Poke Gacha Online. Brilla en oro y diamante en su perfil, y en el chat su nombre lleva la insignia «👑 Creador». ¡Si lo ves, estás hablando con quien hace el juego!"]},
 {v:"2026-11-24-7.28",ver:"7.28",at:"2026-11-24T09:48",t:"🌦️ Novedad",l:["Clima real con tu ciudad: en Ajustes → Gráficos ya puedes elegir la ciudad del clima del pueblo. Búscala por su nombre o pulsa «Usar mi ubicación»; si no eliges ninguna, se sigue usando la ciudad de tu zona horaria"]},

@@ -811,7 +811,7 @@ function tick(){
   render();
 }
 function render(){
-  $("tk").textContent=fmt(S.t)+(tps()>0?" ("+fmt(tps())+"/s)":"");$("tcap").textContent="+"+fmt(cpc())+" 🎟️ por toque · tecla "+(O.tkeys||["u"]).map(tkLabel).join(" / ");$("tps").textContent=tps()>0?"Tus ayudantes producen "+fmt(tps())+" 🎟️ por segundo":"Compra ayudantes en la tienda";updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();
+  $("tk").textContent=fmt(S.t)+(tps()>0?" ("+fmt(tps())+"/s)":"");$("tcap").textContent="+"+fmt(cpc())+" 🎟️ por toque"+(matchMedia("(hover:none) and (pointer:coarse)").matches?"":" · tecla "+(O.tkeys||["u"]).map(tkLabel).join(" / "));$("tps").textContent=tps()>0?"Tus ayudantes producen "+fmt(tps())+" 🎟️ por segundo":"Compra ayudantes en la tienda";updShop();updBag();rows();fists();healUI();bagUI();leagueUI();qUI();
   $("p1").disabled=S.t<cost(1);$("p10").disabled=S.t<cost(10);$("ps").disabled=S.t<cost(1,true);$("ps10").disabled=S.t<cost(10,true);$("p1").textContent="Tirar ×1 ("+fmt(cost(1))+" 🎟️)";$("p10").textContent="Tirar ×10 ("+fmt(cost(10))+" 🎟️)";$("ps").textContent="✨ Súper ×1 ("+fmt(cost(1,true))+" 🎟️)";$("ps10").textContent="✨ Súper ×10 ("+fmt(cost(10,true))+" 🎟️)";
   $("daily").disabled=S.daily===today();
   $("daily").textContent=S.daily===today()?"Vuelve mañana (+"+gift()+")":"Reclamar +"+gift()+" 🎟️";

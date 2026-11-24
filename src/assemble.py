@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.29";
+const GAME_VER="7.29.1";
 const NEWS=[
+{v:"2026-11-24-7.29.1",ver:"7.29.1",at:"2026-11-24T10:08",t:"🔧 Arreglos/Mejoras",l:["Perfil: en la Vitrina, la imagen de los Pokémon ya no tapa su nombre y nivel"]},
 {v:"2026-11-24-7.29",ver:"7.29",at:"2026-11-24T10:02",t:"👑 Novedad",l:["Nuevo título único «👑 Creador del juego»: solo lo tiene el creador de Poke Gacha Online. Brilla en oro y diamante en su perfil, y en el chat su nombre lleva la insignia «👑 Creador». ¡Si lo ves, estás hablando con quien hace el juego!"]},
 {v:"2026-11-24-7.28",ver:"7.28",at:"2026-11-24T09:48",t:"🌦️ Novedad",l:["Clima real con tu ciudad: en Ajustes → Gráficos ya puedes elegir la ciudad del clima del pueblo. Búscala por su nombre o pulsa «Usar mi ubicación»; si no eliges ninguna, se sigue usando la ciudad de tu zona horaria"]},
 {v:"2026-11-23-7.27.3",ver:"7.27.3",at:"2026-11-23T11:02",t:"🔧 Arreglos/Mejoras",l:["¿Quién es ese Pokémon?, Más o menos y Peso y altura: el tiempo de cada ronda ya no empieza hasta que la imagen se ha cargado, así que una conexión lenta no te hace perder tiempo. Además, en ¿Quién es ese Pokémon? la silueta siguiente se va descargando mientras juegas"]},

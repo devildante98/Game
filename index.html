@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.29"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.29.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795510945">
+<meta name="game-build" content="1795511330">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3219,6 +3219,9 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
   color:#3a2500;background:linear-gradient(90deg,#ffe58a,#ffc93a,#fff1b8,#ffc93a);background-size:200% auto;box-shadow:0 0 8px rgba(255,200,60,.6);animation:tcText 3s linear infinite}
 /* tarjeta para reclamar el título (administradores) */
 .creabox{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:0 0 14px;padding:12px 14px;border-radius:14px;border:2px solid rgba(255,200,60,.55);background:rgba(255,200,60,.08)}
+/* vitrina del perfil: el Pokémon ya no tapa su nombre (la imagen sobresale por arriba y los lados, no por abajo) */
+.profshw>div>img{margin:-14px -16px 0!important}
+.profshw>div>small{position:relative;z-index:1;display:block;margin-top:2px;line-height:1.2}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3284,7 +3287,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.29</small>
+    <small class="pcver">Versión 7.29.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8039,8 +8042,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.29";
+const GAME_VER="7.29.1";
 const NEWS=[
+{v:"2026-11-24-7.29.1",ver:"7.29.1",at:"2026-11-24T10:08",t:"🔧 Arreglos/Mejoras",l:["Perfil: en la Vitrina, la imagen de los Pokémon ya no tapa su nombre y nivel"]},
 {v:"2026-11-24-7.29",ver:"7.29",at:"2026-11-24T10:02",t:"👑 Novedad",l:["Nuevo título único «👑 Creador del juego»: solo lo tiene el creador de Poke Gacha Online. Brilla en oro y diamante en su perfil, y en el chat su nombre lleva la insignia «👑 Creador». ¡Si lo ves, estás hablando con quien hace el juego!"]},
 {v:"2026-11-24-7.28",ver:"7.28",at:"2026-11-24T09:48",t:"🌦️ Novedad",l:["Clima real con tu ciudad: en Ajustes → Gráficos ya puedes elegir la ciudad del clima del pueblo. Búscala por su nombre o pulsa «Usar mi ubicación»; si no eliges ninguna, se sigue usando la ciudad de tu zona horaria"]},
 {v:"2026-11-23-7.27.3",ver:"7.27.3",at:"2026-11-23T11:02",t:"🔧 Arreglos/Mejoras",l:["¿Quién es ese Pokémon?, Más o menos y Peso y altura: el tiempo de cada ronda ya no empieza hasta que la imagen se ha cargado, así que una conexión lenta no te hace perder tiempo. Además, en ¿Quién es ese Pokémon? la silueta siguiente se va descargando mientras juegas"]},
@@ -8474,7 +8478,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795510945";
+const GAME_B="1795511330";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -22302,7 +22306,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.29";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="7.29.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

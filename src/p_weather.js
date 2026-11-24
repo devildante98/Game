@@ -1,6 +1,6 @@
 // =====================================================================================
 // TIEMPO REAL, NAVIDAD Y NOCHEVIEJA EN EL PUEBLO 3D
-// · Clima real: el tiempo que hace ahora en la ciudad de tu zona horaria (Open-Meteo, sin datos personales: solo se
+// · Clima real: el tiempo que hace ahora en tu ciudad (la eliges en Ajustes) o en la de tu zona horaria (Open-Meteo, sin datos personales: solo se
 //   envían las coordenadas de esa ciudad). Sol, nubes, niebla, lluvia, tormenta con rayos o nieve. Se actualiza cada
 //   30 minutos. En diciembre siempre nieva.
 // · Navidad: en diciembre el pueblo está nevado (suelo, árboles, tejados) y, del 1 de diciembre al 6 de enero, hay un
@@ -20,7 +20,9 @@ const RW={code:null,cloud:0,wind:0,city:"",t:0,busy:false};
 const rwTz=()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"Europe/Madrid"}catch(e){return "Europe/Madrid"}};
 const rwOff=()=>{try{return !!(typeof O!=="undefined"&&O.nowx)}catch(e){return false}};
 // tiempo real de tu zona, como mucho una vez cada 30 minutos (se recuerda entre visitas)
-async function rwFetch(){if(RW.busy||rwOff())return;const tz=rwTz(),c=RW_TZ[tz]||RW_TZ["Europe/Madrid"];
+// si eliges tu ciudad en Ajustes (O.wxc={la,lo,n}), se usa esa en vez de la de tu zona horaria
+const rwCity=()=>{const w=typeof O!=="undefined"&&O&&O.wxc;return w&&isFinite(w.la)&&isFinite(w.lo)?[+w.la,+w.lo,String(w.n||"tu ciudad")]:null};
+async function rwFetch(){if(RW.busy||rwOff())return;const mc=rwCity(),c=mc||RW_TZ[rwTz()]||RW_TZ["Europe/Madrid"],tz=mc?"c:"+c[0]+","+c[1]:rwTz();
   try{const o=JSON.parse(localStorage.getItem("pgc-wx")||"null");if(o&&o.tz===tz&&Date.now()-o.t<30*6e4){Object.assign(RW,o);return}}catch(e){}
   RW.busy=true;try{const r=await fetch("https://api.open-meteo.com/v1/forecast?latitude="+c[0]+"&longitude="+c[1]+"&current=weather_code,cloud_cover,wind_speed_10m&timezone=auto");if(!r.ok)throw 0;const j=await r.json(),cu=j&&j.current;if(!cu)throw 0;
     Object.assign(RW,{code:cu.weather_code|0,cloud:(+cu.cloud_cover||0)/100,wind:+cu.wind_speed_10m||0,city:c[2],t:Date.now(),tz});try{localStorage.setItem("pgc-wx",JSON.stringify({code:RW.code,cloud:RW.cloud,wind:RW.wind,city:RW.city,t:RW.t,tz}))}catch(e){}}
@@ -120,5 +122,28 @@ setInterval(()=>{try{nyCountdown();nyCheck()}catch(e){}},500);
 // interruptor del clima real (en Ajustes → Gráficos) y el tiempo de ahora
 setInterval(()=>{const p=document.querySelector('#optp .setpane[data-st="gfx"]');if(!p)return;let l=$("wxOpt");
   if(!l){l=document.createElement("label");l.id="wxOpt";l.className="tog";l.innerHTML='<input type="checkbox" id="wxChk"> <span>🌦️ Clima real en el pueblo (lluvia, nieve, niebla… según el tiempo de tu zona) <small id="rwNow" class="mut"></small></span>';p.appendChild(l);
-    const c=$("wxChk");c.checked=!rwOff();c.onchange=()=>{O.nowx=!c.checked;saveO();window.WXENV=rwEnv();if(c.checked)rwFetch()}}
+    const c=$("wxChk");c.checked=!rwOff();c.onchange=()=>{O.nowx=!c.checked;saveO();window.WXENV=rwEnv();if(c.checked)rwFetch();rwCityUI()};rwCityUI()}
   const e=window.WXENV,t=rwOff()?"(desactivado)":e&&e.name?"Ahora: "+e.name+(e.city&&!/diciembre/.test(e.name)?" en "+e.city:""):"";const n=$("rwNow");if(n&&n.textContent!==t)n.textContent=t},2000);
+
+// ---------- elegir la ciudad del clima ----------
+// buscador de ciudades (Open-Meteo, solo se envía el nombre que escribes) o tu ubicación (redondeada a ~1 km)
+function rwSetCity(v){if(v)O.wxc=v;else delete O.wxc;saveO();RW.t=0;RW.code=null;RW.city="";try{localStorage.removeItem("pgc-wx")}catch(e){}rwFetch().then(()=>{window.WXENV=rwEnv()});rwCityUI()}
+function rwCityUI(){const l=$("wxOpt");if(!l)return;let b=$("wxCity");
+  if(!b){b=document.createElement("div");b.id="wxCity";l.insertAdjacentElement("afterend",b);
+    b.addEventListener("click",async e=>{const t=e.target.closest&&e.target.closest("button");if(!t)return;
+      if(t.dataset.wxs!=null){const i=+t.dataset.wxs,r=(b._res||[])[i];if(r)rwSetCity({la:+r.latitude.toFixed(2),lo:+r.longitude.toFixed(2),n:r.name});return}
+      if(t.id==="wxAuto"){rwSetCity(null);toast("🌦️ Clima según tu zona horaria");return}
+      if(t.id==="wxGeo"){if(!navigator.geolocation){toast("Tu navegador no permite usar la ubicación");return}
+        t.disabled=true;navigator.geolocation.getCurrentPosition(p=>{t.disabled=false;rwSetCity({la:+p.coords.latitude.toFixed(2),lo:+p.coords.longitude.toFixed(2),n:"tu ubicación"});toast("📍 Clima de tu ubicación")},
+          ()=>{t.disabled=false;toast("No se ha podido obtener tu ubicación")},{timeout:12000,maximumAge:36e5});return}
+      if(t.id==="wxGo")rwSearch()});
+    b.addEventListener("keydown",e=>{if(e.target.id==="wxQ"&&e.key==="Enter"){e.preventDefault();rwSearch()}})}
+  const mc=rwCity(),off=rwOff();b.style.display=off?"none":"";
+  b.innerHTML='<div class="wxcur">📍 Ciudad del clima: <b>'+esc(mc?mc[2]:"automática ("+((RW_TZ[rwTz()]||RW_TZ["Europe/Madrid"])[2])+", según tu zona horaria)")+'</b></div>'+
+    '<div class="wxrow"><input id="wxQ" type="search" maxlength="60" placeholder="Busca tu ciudad (p. ej. Jerez de la Frontera)" aria-label="Buscar ciudad"><button type="button" id="wxGo">🔎 Buscar</button></div>'+
+    '<div class="wxrow"><button type="button" id="wxGeo" class="alt">📍 Usar mi ubicación</button>'+(mc?'<button type="button" id="wxAuto" class="alt">↩️ Volver a automática</button>':'')+'</div><div id="wxRes"></div>'}
+async function rwSearch(){const q=($("wxQ")||{}).value||"",R=$("wxRes"),b=$("wxCity");if(!R||!b)return;const n=q.trim();if(n.length<2){R.innerHTML='<small class="mut">Escribe al menos 2 letras</small>';return}
+  R.innerHTML='<small class="mut">Buscando…</small>';
+  try{const r=await fetch("https://geocoding-api.open-meteo.com/v1/search?count=6&language=es&format=json&name="+encodeURIComponent(n));if(!r.ok)throw 0;const j=await r.json(),L=(j&&j.results)||[];b._res=L;
+    R.innerHTML=L.length?L.map((x,i)=>'<button type="button" class="wxopt" data-wxs="'+i+'"><b>'+esc(x.name)+'</b> <small>'+esc([x.admin2&&x.admin2!==x.name?x.admin2:"",x.admin1,x.country].filter(Boolean).join(", "))+'</small></button>').join(""):'<small class="mut">No se ha encontrado ninguna ciudad con ese nombre</small>'}
+  catch(e){R.innerHTML='<small class="mut">No se ha podido buscar ahora. Inténtalo más tarde.</small>'}}

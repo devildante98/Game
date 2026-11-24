@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.27.3";
+const GAME_VER="7.28";
 const NEWS=[
+{v:"2026-11-24-7.28",ver:"7.28",at:"2026-11-24T09:48",t:"🌦️ Novedad",l:["Clima real con tu ciudad: en Ajustes → Gráficos ya puedes elegir la ciudad del clima del pueblo. Búscala por su nombre o pulsa «Usar mi ubicación»; si no eliges ninguna, se sigue usando la ciudad de tu zona horaria"]},
 {v:"2026-11-23-7.27.3",ver:"7.27.3",at:"2026-11-23T11:02",t:"🔧 Arreglos/Mejoras",l:["¿Quién es ese Pokémon?, Más o menos y Peso y altura: el tiempo de cada ronda ya no empieza hasta que la imagen se ha cargado, así que una conexión lenta no te hace perder tiempo. Además, en ¿Quién es ese Pokémon? la silueta siguiente se va descargando mientras juegas"]},
 {v:"2026-11-23-7.27.2",ver:"7.27.2",at:"2026-11-23T09:26",t:"🔧 Arreglos/Mejoras",l:["¡Golpea al Diglett! ya se puede jugar con el teclado numérico: cada número es un hueco, igual que en la cuadrícula (7 8 9 arriba, 4 5 6 en medio, 1 2 3 abajo). También valen los números de arriba del teclado. En ordenador, cada hueco muestra su número"]},
 {v:"2026-11-23-7.27.1",ver:"7.27.1",at:"2026-11-23T07:49",t:"🔧 Arreglos/Mejoras",l:["Las mejoras de la tienda (edificios y guantes) se aplican al instante al comprarlas, sin esperar unos segundos. El servidor las sigue comprobando por detrás y, si alguna no fuera válida, se deshace sola"]},

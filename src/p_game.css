@@ -1489,3 +1489,11 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 /* minijuegos: mientras carga la imagen de la ronda, el reloj espera y se avisa */
 #mgB.mgload .whosil,#mgB.mgload .hlspr,#mgB.mgload .wgimg{position:relative}
 #mgB.mgload .whosil::after,#mgB.mgload .hlc:last-of-type .hlspr::after{content:"Cargando…";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:700 13px system-ui,sans-serif;color:#fff;background:rgba(20,10,40,.6);padding:4px 10px;border-radius:999px}
+/* ciudad del clima (Ajustes → Gráficos) */
+#wxCity{margin:4px 0 10px 28px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+#wxCity .wxrow{display:flex;gap:6px;flex-wrap:wrap}
+#wxCity input{flex:1;min-width:160px;padding:6px 8px;border-radius:8px}
+#wxCity button{padding:6px 10px;font-size:12px}
+#wxRes{display:flex;flex-direction:column;gap:4px}
+#wxRes .wxopt{text-align:left;display:block;width:100%}
+#wxRes .wxopt small{opacity:.75}

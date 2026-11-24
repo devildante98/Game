@@ -1497,3 +1497,32 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 #wxRes{display:flex;flex-direction:column;gap:4px}
 #wxRes .wxopt{text-align:left;display:block;width:100%}
 #wxRes .wxopt small{opacity:.75}
+/* título único «👑 Creador del juego»: oro y diamante con anillo giratorio, brillo que barre y destellos */
+.titcrea{position:relative;display:inline-flex;vertical-align:middle;padding:3px;border-radius:999px;isolation:isolate;animation:tcGlow 2.6s ease-in-out infinite alternate}
+.titcrea .tcring{position:absolute;inset:0;border-radius:inherit;overflow:hidden;z-index:-1}
+.titcrea .tcring::before{content:"";position:absolute;left:50%;top:50%;width:300%;aspect-ratio:1;transform:translate(-50%,-50%);
+  background:conic-gradient(from 0deg,#fff6c2,#ffcf3f,#ff9d1a,#b86bff,#5fe1ff,#fff6c2,#ffcf3f,#ff9d1a,#b86bff,#5fe1ff,#fff6c2);animation:tcSpin 3.2s linear infinite}
+.titcrea .tcin{position:relative;display:inline-flex;align-items:center;gap:7px;padding:5px 16px 5px 12px;border-radius:inherit;overflow:hidden;
+  background:radial-gradient(120% 160% at 50% 0%,#3d2a07 0%,#1a0f2e 55%,#0d0820 100%);font-weight:900;letter-spacing:.8px;text-transform:uppercase;font-size:.95em;line-height:1.2}
+.titcrea .tcin::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:tcShine 2.8s ease-in-out infinite}
+.titcrea .tctx{background:linear-gradient(90deg,#fff3b0,#ffd23f,#ffb01f,#fff7d6,#ffd23f,#e9a7ff,#fff3b0);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 4px rgba(255,200,60,.55));animation:tcText 3.5s linear infinite}
+.titcrea .tcc{font-size:1.15em;filter:drop-shadow(0 0 6px rgba(255,210,80,.95));animation:tcCrown 2s ease-in-out infinite;display:inline-block}
+.titcrea .tcc2{font-size:.95em;filter:drop-shadow(0 0 6px rgba(110,220,255,.95));animation-delay:1s}
+.titcrea .tcs{position:absolute;font-style:normal;pointer-events:none;color:#fff6c2;text-shadow:0 0 6px #fff,0 0 12px #ffcf3f;animation:tbTw 1.8s ease-in-out infinite}
+.titcrea .s1{top:-9px;left:14%;font-size:13px}.titcrea .s2{bottom:-9px;left:42%;font-size:11px;color:#c9f3ff;text-shadow:0 0 6px #fff,0 0 12px #5fe1ff;animation-delay:.45s}
+.titcrea .s3{top:-8px;right:10%;font-size:12px;animation-delay:.9s}.titcrea .s4{bottom:-7px;right:24%;font-size:10px;color:#f1d6ff;text-shadow:0 0 6px #fff,0 0 12px #b86bff;animation-delay:1.35s}
+@keyframes tcSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes tcShine{0%,55%{left:-60%}100%{left:130%}}
+@keyframes tcText{to{background-position:250% center}}
+@keyframes tcCrown{0%,100%{transform:translateY(0) rotate(-8deg) scale(1)}50%{transform:translateY(-2px) rotate(8deg) scale(1.12)}}
+@keyframes tcGlow{from{filter:drop-shadow(0 0 6px rgba(255,190,40,.55))}to{filter:drop-shadow(0 0 14px rgba(255,210,80,.9)) drop-shadow(0 0 22px rgba(170,110,255,.45))}}
+@media (prefers-reduced-motion:reduce){.titcrea,.titcrea *,.titcrea .tcring::before,.titcrea .tcin::after{animation:none!important}}
+.proftit .titcrea{margin:6px 0 8px}
+/* perfil del creador: marco dorado */
+.pcrea{box-shadow:0 0 0 3px #ffcf3f,0 0 24px rgba(255,200,60,.55),0 0 48px rgba(170,110,255,.25)!important;border-radius:16px}
+/* insignia en el chat */
+.chcrea{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.4px;text-transform:uppercase;vertical-align:middle;
+  color:#3a2500;background:linear-gradient(90deg,#ffe58a,#ffc93a,#fff1b8,#ffc93a);background-size:200% auto;box-shadow:0 0 8px rgba(255,200,60,.6);animation:tcText 3s linear infinite}
+/* tarjeta para reclamar el título (administradores) */
+.creabox{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:0 0 14px;padding:12px 14px;border-radius:14px;border:2px solid rgba(255,200,60,.55);background:rgba(255,200,60,.08)}

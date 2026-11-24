@@ -122,6 +122,35 @@ setInterval(()=>{if(typeof MOD==="undefined"||!MOD.admin||$("codeAP"))return;nxP
 const BETA_HASTA=Date.UTC(2026,10,11,23,0,0);// 12 de noviembre a las 0:00 en España
 TITLES.push(["beta","🧪 Beta-Tester",()=>!!S.beta]);
 // el título Beta-Tester se ve con un formato especial (arcoíris animado) en el perfil y la vitrina
-function titHTML(tx,k){if(k==="beta"||(!k&&/Beta-Tester/.test(String(tx||""))))return '<span class="titbeta" title="Jugó en las dos primeras semanas del juego"><span class="tbe">🧪</span><span class="tbtx">Beta-Tester</span><span class="tbsp" aria-hidden="true">✦</span></span>';return esc(String(tx||""))}
+// ---------- título «👑 Creador del juego» (solo una cuenta en todo el juego) ----------
+// quién es el creador lo guarda la base de datos (config/creador): lo reclama un administrador una sola vez y ya no se puede
+// cambiar. Así nadie puede ponerse el título editando su perfil: en los perfiles y el chat se comprueba el uid.
+window.CREADOR_UID=(()=>{try{return localStorage.getItem("pgc-crea")||""}catch(e){return ""}})();
+let CREA_OK=false;
+async function creaLoad(){if(!window.FB||!window.FB.creadorGet)return;try{const d=await window.FB.creadorGet();CREA_OK=true;window.CREADOR_UID=d&&d.uid?String(d.uid):"";
+  try{localStorage.setItem("pgc-crea",window.CREADOR_UID)}catch(e){}}catch(e){}}
+const esCreador=u=>!!(u&&window.CREADOR_UID&&u===window.CREADOR_UID);
+const yoCreador=()=>{try{return esCreador(window.FB&&window.FB.uid&&window.FB.uid())}catch(e){return false}};
+TITLES.unshift(["crea","👑 Creador del juego",yoCreador]);
+setInterval(()=>{if(!CREA_OK&&window.FB&&window.FB.creadorGet&&window.FB.uid&&window.FB.uid())creaLoad()},3000);
+// formato especial de los títulos únicos: Beta-Tester (arcoíris) y Creador del juego (oro y diamante, aún más especial)
+function titHTML(tx,k,u){const s=String(tx||"");
+  if(k==="crea"||(!k&&/Creador del juego/i.test(s))){if(!esCreador(u))return "";
+    return '<span class="titcrea" title="Creador de Poke Gacha Online"><span class="tcring" aria-hidden="true"></span><span class="tcin"><span class="tcc">👑</span><span class="tctx">Creador del juego</span><span class="tcc tcc2" aria-hidden="true">💎</span></span>'+
+      '<i class="tcs s1" aria-hidden="true">✦</i><i class="tcs s2" aria-hidden="true">✧</i><i class="tcs s3" aria-hidden="true">✦</i><i class="tcs s4" aria-hidden="true">✧</i></span>'}
+  if(k==="beta"||(!k&&/Beta-Tester/.test(s)))return '<span class="titbeta" title="Jugó en las dos primeras semanas del juego"><span class="tbe">🧪</span><span class="tbtx">Beta-Tester</span><span class="tbsp" aria-hidden="true">✦</span></span>';return esc(s)}
+// el perfil del creador lleva un marco dorado
+{const _op=openProf;openProf=async function(uid){const r=await _op.apply(this,arguments);try{const me=window.FB&&window.FB.uid&&window.FB.uid(),box=arguments[2]||$("profB"),c=box&&box.firstElementChild;
+  if(c&&esCreador(uid||me)&&c.querySelector(".titcrea"))c.classList.add("pcrea")}catch(e){}return r}}
+// reclamar el título (solo administradores y solo si nadie lo tiene aún): tarjeta en Más › 🎁 Códigos
+setInterval(()=>{const P=$("codeAP"),B=$("codeAPB");if(!P||!B||!CREA_OK||typeof MOD==="undefined"||!MOD.admin)return;let c=$("creaBox");
+  const st=window.CREADOR_UID?(yoCreador()?"yo":"otro"):"libre";if(c&&c.dataset.st===st)return;
+  if(st==="otro"){if(c)c.remove();return}
+  if(!c){c=document.createElement("div");c.id="creaBox";c.className="creabox";P.insertBefore(c,B)}c.dataset.st=st;
+  c.innerHTML=st==="yo"?'<div>'+titHTML("","crea",window.CREADOR_UID)+'</div><small class="mut">Esta cuenta es la del creador del juego. Póntelo en Tu entrenador › Mi tarjeta › Título. En el chat, tu nombre lleva la insignia «👑 Creador».</small>'
+    :'<b>👑 Título «Creador del juego»</b><small class="mut">Un título único: solo lo puede tener una cuenta en todo el juego, y después ya no se puede cambiar. Reclámalo solo si esta es la cuenta del creador.</small><button type="button" id="creaGo" class="red">👑 Esta es la cuenta del creador: reclamar el título</button>';
+  const g=$("creaGo");if(g)g.onclick=async()=>{if(!(await askOk("¿Seguro que esta es la cuenta del creador del juego? Solo una cuenta puede tener este título y no se podrá cambiar.")))return;g.disabled=true;
+    try{await window.FB.creadorSet();await creaLoad();if(yoCreador()){const t=shwGet();t.tit="crea";save();if(window.cloudFlush)try{window.cloudFlush(true)}catch(e){}snd("lvl");toast("👑 ¡Ya tienes el título «Creador del juego»! Lo llevas puesto en tu tarjeta.")}}
+    catch(e){g.disabled=false;await creaLoad();toast(window.CREADOR_UID?"Otra cuenta ya tiene el título de creador.":"No se ha podido reclamar ahora. Inténtalo de nuevo.")}}},1500);
 setInterval(()=>{try{if(typeof S==="undefined"||!S||S.beta||!window.FB||!window.FB.created)return;const c=window.FB.created();if(c&&c<BETA_HASTA){S.beta=1;save();
   toast("🧪 ¡Gracias por jugar desde el principio! Tienes el título exclusivo «Beta-Tester»: póntelo en Tu entrenador › Mi tarjeta.")}}catch(e){}},5000);

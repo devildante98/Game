@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="8.0.3";
+const GAME_VER="8.1";
 const NEWS=[
+{v:"2026-11-25-8.1",ver:"8.1",at:"2026-11-25T17:13",t:"🔥 Novedad",l:["🔥 Rachas de regalos: si tu amigo y tú os enviáis un regalo el mismo día, vuestra racha sube. Si un día alguno no lo envía, vuelve a empezar", "Premios para los dos a los 3, 7, 14, 30, 60 y 100 días seguidos (hasta Master Balls y Cristales Supremos), y el título «🔥 Amistad inquebrantable» a los 30 días", "En Social › Amigos verás la racha 🔥 junto a cada amigo, un aviso ⚠️ si se va a perder y, al abrir un regalo, un botón para devolvérselo al momento"]},
 {v:"2026-11-25-8.0.3",ver:"8.0.3",at:"2026-11-25T17:06",t:"🔧 Arreglos/Mejoras",l:["Minijuegos: el pueblo del fondo vuelve a verse detrás de la ventana del minijuego (se queda quieto mientras juegas, así el juego sigue igual de fluido)"]},
 {v:"2026-11-25-8.0.2",ver:"8.0.2",at:"2026-11-25T14:43",t:"🏠 Novedad",l:["🏠 Base secreta mucho más completa: ahora puedes colgar objetos en las paredes (cuadros de Pokémon, reloj, tele, estante, espejo, aplique, tapiz, banderín…) y poner cosas pequeñas encima de mesas, mesitas, cómodas y baúles", "Gira los muebles hacia los dos lados (↺ ↻ o la tecla R) y muévelos o guárdalos tocándolos (M y Supr en el teclado)", "Muebles nuevos: mesita, cómoda, armario, puf, pecera, chimenea, piano, baúl, litera, lamparita, cactus, jarrón, radio y Poké Ball en peana", "La habitación tiene ahora ventana con cortinas, puerta, zócalo, sombras bajo los muebles y modo noche 🌙 (con estrellas en la ventana y las lámparas encendidas)", "Paredes con dibujo (rayas, ladrillo, madera y Poké Ball) y suelos nuevos (tablones, moqueta azul, arena y ajedrez), y botones para acercar y alejar la cámara en el móvil"]},
 {v:"2026-11-25-8.0.1",ver:"8.0.1",at:"2026-11-25T14:36",t:"🔧 Arreglos/Mejoras",l:["Minijuegos nuevos mucho más fluidos: mientras juegas, el pueblo y las animaciones del fondo se paran (no se ven y le quitaban fluidez al juego), y los juegos 3D se dibujan de forma más ligera","Aspectos de la Poké Ball: cada uno vuelve a verse con su propio dibujo en la lista (se veían todos como el que llevas puesto) y los bloqueados se ven con su color"]},
@@ -867,6 +868,14 @@ FB_API = '''
     duelWatch:(room,cb)=>S.onSnapshot(S.collection(db,"duels",room,"p"),sn=>{const L=[];sn.forEach(d=>{const v=d.data();if(v&&v.p&&v.p.pv)L.push(Object.assign({u:d.id,seen:+v.seen||0},v.p.pv))});cb(L)},()=>cb(null)),
     duelRx:(room,e,n)=>S.addDoc(S.collection(db,"duels",room,"rx"),{e:e,n:n,at:S.serverTimestamp()}),
     duelRxWatch:(room,cb)=>S.onSnapshot(S.query(S.collection(db,"duels",room,"rx"),S.orderBy("at","desc"),S.limit(12)),sn=>{const L=[];sn.forEach(d=>{const v=d.data();L.push({id:d.id,e:v.e,n:v.n,at:v.at&&v.at.toMillis?v.at.toMillis():Date.now()})});cb(L)},()=>{}),
+    // racha de regalos entre dos amigos: gstreak/{a_b} (a < b). Cada uno apunta el día (UTC, en número) en que envió su
+    // regalo; cuando los dos lo han enviado el mismo día, la racha sube (si el día anterior también se completó) o empieza en 1
+    async gsSend(o){const a=uid<o?uid:o,b=uid<o?o:uid,me=uid===a?"la":"lb",ot=me==="la"?"lb":"la",day=Math.floor((window.srvNow?window.srvNow():Date.now())/864e5),ref=S.doc(db,"gstreak",a+"_"+b);
+      return S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(!s.exists()){const d={a:a,b:b,la:0,lb:0,n:0,best:0,d:0};d[me]=day;tx.set(ref,d);return d}
+        const v=s.data();if(v[me]===day)return v;const u={[me]:day};
+        if(v[ot]===day&&v.d!==day){const n=v.d===day-1?(v.n|0)+1:1;u.n=n;u.d=day;u.best=Math.max(v.best|0,n)}
+        tx.update(ref,u);return Object.assign({},v,u)})},
+    async gsMine(){const q=f=>S.getDocs(S.query(S.collection(db,"gstreak"),S.where(f,"==",uid)));const[x,y]=await Promise.all([q("a"),q("b")]);return x.docs.concat(y.docs).map(d=>Object.assign({id:d.id},d.data()))},
     async creadorGet(){const s=await S.getDoc(S.doc(db,"config","creador"));return s.exists()?s.data():null},
     async creadorSet(){await S.setDoc(S.doc(db,"config","creador"),{uid:uid,at:Date.now()})},
     async codePubList(){const sn=await S.getDocs(S.query(S.collection(db,"codesPub"),S.orderBy("at","desc"),S.limit(60)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},

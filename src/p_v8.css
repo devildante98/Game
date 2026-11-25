@@ -166,3 +166,10 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bstag{display:inline-block;padding:1px 8px;border-radius:999px;background:rgba(122,92,255,.14);color:#5a3fd0;font-weight:800;font-size:.66rem!important}
 .bsnote{margin:0 0 8px;font-size:.82rem}
 .bswrap canvas:focus{outline:none}
+/* ---- (8.1) racha de regalos ---- */
+.gsb{display:inline-flex;align-items:center;gap:2px;margin-left:6px;padding:1px 7px;border-radius:999px;background:linear-gradient(90deg,#ff8a3c,#ff4f5a);color:#fff;font-size:.72rem;font-weight:900;vertical-align:middle;box-shadow:0 1px 4px rgba(255,80,60,.35)}
+.gsb.risk{animation:gsPulse 1.2s ease-in-out infinite}@keyframes gsPulse{50%{transform:scale(1.12);box-shadow:0 0 10px rgba(255,80,60,.7)}}
+.gssum{display:flex;flex-direction:column;gap:6px}.gsrisk{color:#d2432a;font-weight:800}
+.gslist{display:flex;flex-wrap:wrap;gap:6px}.gslist span{padding:4px 10px;border-radius:999px;background:var(--bg,#f5f3ff);font-size:.8rem}.gslist span.ok{background:rgba(47,174,90,.15)}.gslist span.risk{background:rgba(255,80,60,.15)}
+.gsrem{margin:8px 0;padding:8px 10px;border-radius:12px;background:rgba(255,138,60,.15);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){.gsb.risk{animation:none}}

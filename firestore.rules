@@ -424,6 +424,29 @@ match /ftours/{id} {
     allow delete: if isAdmin();
   }
 }
+// Racha de regalos entre dos amigos (gstreak/{a_b}, a < b): cada uno solo apunta HOY (día UTC según el servidor) como
+// el día en que envió su regalo; la racha solo puede subir en 1 (o volver a 1) cuando los dos lo han enviado el mismo día
+function gsDay() { return math.floor(request.time.toMillis() / 86400000); }
+function gsNew(id) { let d = request.resource.data; let me = request.auth.uid;
+  return d.keys().hasOnly(['a', 'b', 'la', 'lb', 'n', 'best', 'd']) && d.a is string && d.b is string && d.a < d.b && id == d.a + '_' + d.b
+    && (me == d.a || me == d.b) && d.n == 0 && d.best == 0 && d.d == 0
+    && ((me == d.a && d.la == gsDay() && d.lb == 0) || (me == d.b && d.lb == gsDay() && d.la == 0)); }
+function gsUpd() { let o = resource.data; let d = request.resource.data; let me = request.auth.uid; let t = gsDay();
+  let mine = me == o.a ? 'la' : 'lb'; let other = me == o.a ? 'lb' : 'la';
+  return (me == o.a || me == o.b) && d.keys().hasOnly(['a', 'b', 'la', 'lb', 'n', 'best', 'd']) && d.a == o.a && d.b == o.b
+    && d[mine] == t && o[mine] != t && d[other] == o[other]
+    && ((o[other] == t && o.d != t)
+      ? (d.d == t && d.n == (o.d == t - 1 ? o.n + 1 : 1) && d.best == (d.n > o.best ? d.n : o.best))
+      : (d.n == o.n && d.d == o.d && d.best == o.best)); }
+match /gstreak/{id} {
+  // (se mira por el nombre del documento: así también se puede comprobar si aún no existe, sin enseñar nada de otros)
+  allow get: if request.auth != null && request.auth.uid in id.split('_');
+  // (las listas: solo las tuyas, por los campos a y b)
+  allow list: if request.auth != null && (request.auth.uid == resource.data.a || request.auth.uid == resource.data.b);
+  allow create: if request.auth != null && !banned() && gsNew(id);
+  allow update: if request.auth != null && !banned() && gsUpd();
+  allow delete: if isAdmin();
+}
 // Modo espectador: reacciones del público en un duelo (solo emojis de la lista)
 match /duels/{room}/rx/{rid} {
   allow read: if request.auth != null;

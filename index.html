@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.0.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795622771">
+<meta name="game-build" content="1795623371">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3462,6 +3462,13 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bstag{display:inline-block;padding:1px 8px;border-radius:999px;background:rgba(122,92,255,.14);color:#5a3fd0;font-weight:800;font-size:.66rem!important}
 .bsnote{margin:0 0 8px;font-size:.82rem}
 .bswrap canvas:focus{outline:none}
+/* ---- (8.1) racha de regalos ---- */
+.gsb{display:inline-flex;align-items:center;gap:2px;margin-left:6px;padding:1px 7px;border-radius:999px;background:linear-gradient(90deg,#ff8a3c,#ff4f5a);color:#fff;font-size:.72rem;font-weight:900;vertical-align:middle;box-shadow:0 1px 4px rgba(255,80,60,.35)}
+.gsb.risk{animation:gsPulse 1.2s ease-in-out infinite}@keyframes gsPulse{50%{transform:scale(1.12);box-shadow:0 0 10px rgba(255,80,60,.7)}}
+.gssum{display:flex;flex-direction:column;gap:6px}.gsrisk{color:#d2432a;font-weight:800}
+.gslist{display:flex;flex-wrap:wrap;gap:6px}.gslist span{padding:4px 10px;border-radius:999px;background:var(--bg,#f5f3ff);font-size:.8rem}.gslist span.ok{background:rgba(47,174,90,.15)}.gslist span.risk{background:rgba(255,80,60,.15)}
+.gsrem{margin:8px 0;padding:8px 10px;border-radius:12px;background:rgba(255,138,60,.15);font-size:.9rem}
+@media (prefers-reduced-motion:reduce){.gsb.risk{animation:none}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3527,7 +3534,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.0.3</small>
+    <small class="pcver">Versión 8.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8283,8 +8290,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="8.0.3";
+const GAME_VER="8.1";
 const NEWS=[
+{v:"2026-11-25-8.1",ver:"8.1",at:"2026-11-25T17:13",t:"🔥 Novedad",l:["🔥 Rachas de regalos: si tu amigo y tú os enviáis un regalo el mismo día, vuestra racha sube. Si un día alguno no lo envía, vuelve a empezar", "Premios para los dos a los 3, 7, 14, 30, 60 y 100 días seguidos (hasta Master Balls y Cristales Supremos), y el título «🔥 Amistad inquebrantable» a los 30 días", "En Social › Amigos verás la racha 🔥 junto a cada amigo, un aviso ⚠️ si se va a perder y, al abrir un regalo, un botón para devolvérselo al momento"]},
 {v:"2026-11-25-8.0.3",ver:"8.0.3",at:"2026-11-25T17:06",t:"🔧 Arreglos/Mejoras",l:["Minijuegos: el pueblo del fondo vuelve a verse detrás de la ventana del minijuego (se queda quieto mientras juegas, así el juego sigue igual de fluido)"]},
 {v:"2026-11-25-8.0.2",ver:"8.0.2",at:"2026-11-25T14:43",t:"🏠 Novedad",l:["🏠 Base secreta mucho más completa: ahora puedes colgar objetos en las paredes (cuadros de Pokémon, reloj, tele, estante, espejo, aplique, tapiz, banderín…) y poner cosas pequeñas encima de mesas, mesitas, cómodas y baúles", "Gira los muebles hacia los dos lados (↺ ↻ o la tecla R) y muévelos o guárdalos tocándolos (M y Supr en el teclado)", "Muebles nuevos: mesita, cómoda, armario, puf, pecera, chimenea, piano, baúl, litera, lamparita, cactus, jarrón, radio y Poké Ball en peana", "La habitación tiene ahora ventana con cortinas, puerta, zócalo, sombras bajo los muebles y modo noche 🌙 (con estrellas en la ventana y las lámparas encendidas)", "Paredes con dibujo (rayas, ladrillo, madera y Poké Ball) y suelos nuevos (tablones, moqueta azul, arena y ajedrez), y botones para acercar y alejar la cámara en el móvil"]},
 {v:"2026-11-25-8.0.1",ver:"8.0.1",at:"2026-11-25T14:36",t:"🔧 Arreglos/Mejoras",l:["Minijuegos nuevos mucho más fluidos: mientras juegas, el pueblo y las animaciones del fondo se paran (no se ven y le quitaban fluidez al juego), y los juegos 3D se dibujan de forma más ligera","Aspectos de la Poké Ball: cada uno vuelve a verse con su propio dibujo en la lista (se veían todos como el que llevas puesto) y los bloqueados se ven con su color"]},
@@ -8724,7 +8732,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795622771";
+const GAME_B="1795623371";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -23601,6 +23609,65 @@ setInterval(()=>{try{if(SPX&&!nxOpen("spxP"))spxStop();else if(!SPX&&nxOpen("spx
 // (8.0) móvil: la pestaña abierta siempre a la vista en la fila deslizable
 {const _ho=hubOpen;hubOpen=function(){const r=_ho.apply(this,arguments);try{const T=$("hubTabs"),on=T&&T.querySelector("button.on");if(on&&T.scrollWidth>T.clientWidth){const x=on.offsetLeft-(T.clientWidth-on.offsetWidth)/2;T.scrollLeft=Math.max(0,x)}}catch(e){}return r}}
 
+// =====================================================================================
+// RACHA DE REGALOS (8.1)
+// Con cada amigo: si los dos os enviáis un regalo el mismo día, la racha sube 🔥. Si un día uno de los dos no lo envía,
+// vuelve a empezar. Cada 3, 7, 14, 30, 60 y 100 días seguidos, los dos recibís un premio. Los días son los de la hora
+// UTC (como el regalo diario entre amigos). Firestore: gstreak/{a_b}; las reglas solo dejan subir la racha de 1 en 1.
+// =====================================================================================
+const GSTK={L:{},at:0,busy:false};
+const gsDayN=()=>Math.floor((typeof window.srvNow==="function"?window.srvNow():Date.now())/864e5);
+const gsOther=g=>g.a===v8Uid()?g.b:g.a;
+const gsMyF=g=>g.a===v8Uid()?"la":"lb",gsOtF=g=>g.a===v8Uid()?"lb":"la";
+// racha viva: el último día completo es hoy o ayer
+const gsCur=g=>{if(!g)return 0;return(g.d|0)>=gsDayN()-1?(g.n|0):0};
+const gsOf=u=>GSTK.L[u]||null;
+// estado de hoy con ese amigo: sent = yo ya he enviado, got = él/ella ya ha enviado, done = día completo, risk = se pierde si no
+function gsToday(u){const g=gsOf(u),t=gsDayN();if(!g)return{n:0,sent:false,got:false,done:false,risk:false};const n=gsCur(g),sent=g[gsMyF(g)]===t,got=g[gsOtF(g)]===t,done=(g.d|0)===t;
+  return{n,sent,got,done,risk:n>0&&!done}}
+const GS_MS=[[3,{h:.25,it:{ub:3}}],[7,{h:1,it:{cand:1}}],[14,{h:1.5,it:{cand:2,ppmax:1}}],[30,{h:3,it:{mb:1}}],[60,{h:4,it:{mb:1,crys:1}}],[100,{h:6,it:{mb:2,crys:2}}]];
+// (si ya se está cargando y se pide de nuevo con «force», se espera a que acabe y se vuelve a cargar: así no quedan datos viejos)
+async function gsLoad(force){if(!window.FB||!window.FB.gsMine||!v8Uid())return;if(GSTK.p){if(!force)return GSTK.p;try{await GSTK.p}catch(e){}}if(!force&&Date.now()-GSTK.at<90000)return;
+  GSTK.p=(async()=>{try{const L=await window.FB.gsMine();const o={};L.forEach(g=>{o[gsOther(g)]=g});GSTK.L=o;GSTK.at=Date.now();gsRewards();gsDecor()}catch(e){}})();
+  try{await GSTK.p}finally{GSTK.p=null}}
+setInterval(()=>{try{if(typeof FR!=="undefined"&&Object.keys(FR.l||{}).length)gsLoad(nxOpen&&nxOpen("frP"))}catch(e){}},20000);
+// premios al llegar a cada marca (cada uno cobra el suyo en su partida, una vez por amigo y marca)
+function gsRewards(){S.gsr=S.gsr&&typeof S.gsr==="object"?S.gsr:{};let best=S.gsBest|0;
+  Object.keys(GSTK.L).forEach(u=>{const g=GSTK.L[u],n=gsCur(g);best=Math.max(best,g.best|0);const got=S.gsr[g.id]|0;
+    const ms=GS_MS.filter(m=>m[0]<=n&&m[0]>got);if(!ms.length)return;const m=ms[ms.length-1];S.gsr[g.id]=m[0];
+    const rw={t:v8Tk(m[1].h,300000),it:Object.assign({},m[1].it)};grant(rw);const nm=frName(u);snd("lvl");
+    toast("🔥 ¡Racha de "+m[0]+" días de regalos con "+nm+"! Premio: "+rwTxt(rw));
+    if(m[0]>=7)diaryAdd("🔥","¡"+m[0]+" días seguidos regalándoos cosas con "+nm+"!",null,0,"o")});
+  if(best!==(S.gsBest|0))S.gsBest=best;save();render()}
+TITLES.push(["gs30","🔥 Amistad inquebrantable",()=>(S.gsBest|0)>=30]);
+// al enviar un regalo se apunta también en la racha
+{const _gs=gfSend;gfSend=async function(u){const before=gfSentToday(u);const r=await _gs.apply(this,arguments);
+  if(!before&&gfSentToday(u)&&window.FB&&window.FB.gsSend){try{const g=await window.FB.gsSend(u);g.id=g.id||(g.a+"_"+g.b);GSTK.L[u]=g;const st=gsToday(u);
+      if(st.done&&st.n>0)toast("🔥 ¡Racha de "+st.n+(st.n===1?" día":" días")+" con "+frName(u)+"! Mañana, otra vez.");
+      else if(!st.got)toast("🎁 ¡Regalo enviado! Si "+frName(u)+" te envía uno hoy, la racha "+(st.n?"sube a "+(st.n+1):"empieza")+".");
+      gsRewards();gsDecor()}catch(e){}}
+  return r}}
+// al abrir un regalo: recordatorio para devolverlo y no perder la racha
+{const _go=gfOpen;gfOpen=async function(id){const g=(GF.inc||[]).find(x=>x.id===id),from=g&&g.from;const r=await _go.apply(this,arguments);
+  try{if(from&&!gfSentToday(from)){const st=gsToday(from),m=$("nxM");const box=m&&m.querySelector(".nxmw");if(box&&!box.querySelector(".gsrem")){box.querySelector("button").insertAdjacentHTML("beforebegin",'<p class="gsrem">🔥 '+(st.n?'Tenéis una racha de <b>'+st.n+' días</b>: ':'')+'¡devuélvele el regalo hoy para '+(st.n?'que suba':'empezar una racha')+'!</p><button class="red" id="gsBack">🎁 Enviarle un regalo</button>');
+      const b=$("gsBack");if(b)b.onclick=async()=>{b.disabled=true;await gfSend(from);nxModalClose()}}}}catch(e){}return r}}
+// en la lista de amigos: 🔥 junto al nombre, aviso si está en peligro y resumen arriba
+function gsDecor(){const box=document.querySelector("#frP .frl");if(!box)return;
+  box.querySelectorAll(".pvrow").forEach(row=>{const b=row.querySelector("b.plink[data-prof]");if(!b)return;const u=b.dataset.prof,st=gsToday(u);let s=row.querySelector(".gsb");
+    const html=st.n?'🔥'+st.n+(st.risk?(st.sent?' ⏳':' ⚠️'):''):(st.sent&&!st.got?'⏳':'');
+    const tip=st.n?(st.done?"Racha de "+st.n+" días. ¡Hoy ya está! Mañana, otra vez.":st.sent?"Racha de "+st.n+" días: ya has enviado tu regalo, falta el suyo":"Racha de "+st.n+" días: ¡envíale un regalo hoy o se perderá!"):st.sent?"Si te envía un regalo hoy, empieza vuestra racha":"";
+    if(!html){if(s)s.remove();return}if(!s){s=document.createElement("span");s.className="gsb";b.after(s)}if(s.innerHTML!==html)s.innerHTML=html;s.title=tip;s.classList.toggle("risk",st.risk&&!st.sent)});
+  const p=box.parentNode;let sum=p.querySelector(".gssum");const L=Object.keys(GSTK.L).filter(u=>isFriend(u)).map(u=>({u,st:gsToday(u)})).filter(x=>x.st.n||x.st.sent).sort((a,b)=>b.st.n-a.st.n);
+  if(!L.length){if(sum)sum.remove();return}const risk=L.filter(x=>x.st.risk&&!x.st.sent);
+  const h='<b>🔥 Rachas de regalos</b><small class="mut">Si los dos os enviáis un regalo cada día, la racha sube. Premios a los 3, 7, 14, 30, 60 y 100 días.</small>'+
+    (risk.length?'<small class="gsrisk">⚠️ Envía hoy un regalo a '+risk.slice(0,4).map(x=>esc(frName(x.u))).join(", ")+(risk.length>4?" y "+(risk.length-4)+" más":"")+' para no perder la racha.</small>':'')+
+    '<div class="gslist">'+L.slice(0,8).map(x=>'<span class="'+(x.st.done?'ok':x.st.risk&&!x.st.sent?'risk':'')+'">'+esc(frName(x.u))+' <b>🔥'+x.st.n+'</b>'+(x.st.done?' ✅':x.st.sent?' ⏳':'')+'</span>').join("")+'</div>';
+  if(!sum){sum=document.createElement("div");sum.className="lgnow gssum";p.insertBefore(sum,box)}if(sum._h!==h){sum._h=h;sum.innerHTML=h}}
+{const _f=frUI;frUI=function(){const r=_f.apply(this,arguments);try{gsDecor();gsLoad(false)}catch(e){}return r}}
+setInterval(()=>{try{if(nxOpen("frP"))gsDecor()}catch(e){}},5000);
+// aviso en el menú si alguna racha está en peligro y aún no has enviado tu regalo
+{const _hb=hubBadges;hubBadges=function(){const o=_hb();try{const n=Object.keys(GSTK.L).filter(u=>{const st=gsToday(u);return st.risk&&!st.sent}).length;if(n)o.soc=(o.soc|0)+n}catch(e){}return o}}
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -23716,6 +23783,14 @@ async function main(){
     duelWatch:(room,cb)=>S.onSnapshot(S.collection(db,"duels",room,"p"),sn=>{const L=[];sn.forEach(d=>{const v=d.data();if(v&&v.p&&v.p.pv)L.push(Object.assign({u:d.id,seen:+v.seen||0},v.p.pv))});cb(L)},()=>cb(null)),
     duelRx:(room,e,n)=>S.addDoc(S.collection(db,"duels",room,"rx"),{e:e,n:n,at:S.serverTimestamp()}),
     duelRxWatch:(room,cb)=>S.onSnapshot(S.query(S.collection(db,"duels",room,"rx"),S.orderBy("at","desc"),S.limit(12)),sn=>{const L=[];sn.forEach(d=>{const v=d.data();L.push({id:d.id,e:v.e,n:v.n,at:v.at&&v.at.toMillis?v.at.toMillis():Date.now()})});cb(L)},()=>{}),
+    // racha de regalos entre dos amigos: gstreak/{a_b} (a < b). Cada uno apunta el día (UTC, en número) en que envió su
+    // regalo; cuando los dos lo han enviado el mismo día, la racha sube (si el día anterior también se completó) o empieza en 1
+    async gsSend(o){const a=uid<o?uid:o,b=uid<o?o:uid,me=uid===a?"la":"lb",ot=me==="la"?"lb":"la",day=Math.floor((window.srvNow?window.srvNow():Date.now())/864e5),ref=S.doc(db,"gstreak",a+"_"+b);
+      return S.runTransaction(db,async tx=>{const s=await tx.get(ref);if(!s.exists()){const d={a:a,b:b,la:0,lb:0,n:0,best:0,d:0};d[me]=day;tx.set(ref,d);return d}
+        const v=s.data();if(v[me]===day)return v;const u={[me]:day};
+        if(v[ot]===day&&v.d!==day){const n=v.d===day-1?(v.n|0)+1:1;u.n=n;u.d=day;u.best=Math.max(v.best|0,n)}
+        tx.update(ref,u);return Object.assign({},v,u)})},
+    async gsMine(){const q=f=>S.getDocs(S.query(S.collection(db,"gstreak"),S.where(f,"==",uid)));const[x,y]=await Promise.all([q("a"),q("b")]);return x.docs.concat(y.docs).map(d=>Object.assign({id:d.id},d.data()))},
     async creadorGet(){const s=await S.getDoc(S.doc(db,"config","creador"));return s.exists()?s.data():null},
     async creadorSet(){await S.setDoc(S.doc(db,"config","creador"),{uid:uid,at:Date.now()})},
     async codePubList(){const sn=await S.getDocs(S.query(S.collection(db,"codesPub"),S.orderBy("at","desc"),S.limit(60)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
@@ -23906,7 +23981,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.0.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

@@ -86,8 +86,9 @@ function G3D(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alpha:
       gl.drawArrays(gl.TRIANGLES,0,ms.k);
       if(alpha!=null&&alpha<1){gl.disable(gl.BLEND);gl.depthMask(true);gl.uniform1f(U1.A,1)}},
     // imagen que mira a la cámara: c = punto de los pies, h = alto (el ancho sale de la imagen); k = [r,g,b,a]
-    sprite(t,c,h,k,flip){if(!t||!t.ok)return false;gl.useProgram(P2);gl.disable(gl.CULL_FACE);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
-      gl.uniformMatrix4fv(U2.V,false,E.V);gl.uniform3fv(U2.C,c);gl.uniform2f(U2.Sz,h*t.w/t.h*(flip?-1:1),h);gl.uniform3fv(U2.R,E.R);gl.uniform3fv(U2.U,E.U);gl.uniform3fv(U2.cam,E.cam);gl.uniform3fv(U2.fogc,E.sky);gl.uniform2fv(U2.fog,E.fogR);
+    // R, U (opcionales): orientación fija (un cuadro colgado en una pared) en vez de mirar a la cámara
+    sprite(t,c,h,k,flip,R,U){if(!t||!t.ok)return false;gl.useProgram(P2);gl.disable(gl.CULL_FACE);gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+      gl.uniformMatrix4fv(U2.V,false,E.V);gl.uniform3fv(U2.C,c);gl.uniform2f(U2.Sz,h*t.w/t.h*(flip?-1:1),h);gl.uniform3fv(U2.R,R||E.R);gl.uniform3fv(U2.U,U||E.U);gl.uniform3fv(U2.cam,E.cam);gl.uniform3fv(U2.fogc,E.sky);gl.uniform2fv(U2.fog,E.fogR);
       const kk=k||[1,1,1,1];gl.uniform4f(U2.K,kk[0],kk[1],kk[2],kk[3]==null?1:kk[3]);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,t.g);gl.uniform1i(U2.tx,0);
       gl.bindBuffer(gl.ARRAY_BUFFER,qb);gl.enableVertexAttribArray(A2);gl.vertexAttribPointer(A2,2,gl.FLOAT,false,0,0);gl.drawArrays(gl.TRIANGLES,0,6);
       gl.disableVertexAttribArray(A2);gl.disable(gl.BLEND);gl.enable(gl.CULL_FACE);return true},

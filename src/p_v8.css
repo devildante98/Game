@@ -161,3 +161,9 @@
 /* (8.0) con un minijuego abierto se paran las animaciones de la pantalla principal (no se ven y quitaban fluidez) */
 body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gTop *,body.mgon #gNav *{animation-play-state:paused!important}
 body.mgon #gBg{visibility:hidden}
+/* (8.0.2) base secreta: botones de cámara y etiquetas */
+.bscam{position:absolute;right:8px;bottom:30px;display:flex;flex-direction:column;gap:6px;z-index:2}
+.bscam button{width:38px;height:38px;padding:0;border-radius:12px;font-size:1.1rem;background:rgba(255,255,255,.88);color:#222;border:2px solid rgba(0,0,0,.15);box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.bstag{display:inline-block;padding:1px 8px;border-radius:999px;background:rgba(122,92,255,.14);color:#5a3fd0;font-weight:800;font-size:.66rem!important}
+.bsnote{margin:0 0 8px;font-size:.82rem}
+.bswrap canvas:focus{outline:none}

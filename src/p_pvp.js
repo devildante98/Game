@@ -66,7 +66,8 @@ function pvAccept(peer){
 function pvDecline(peer){const o0=pvOthers().find(p=>p.peer===peer),rm=o0&&o0.presence.pvp.ch?o0.presence.pvp.ch.room:"";PV.no={from:peer,room:rm,t:pvT()};pvPub();setTimeout(()=>{PV.no=null;pvPub()},8000);pvRender()}
 // ---- duelo 1 vs 1 (misma arena, motor y animaciones que los combates normales) ----
 const pvOpp=()=>{if(!D)return null;const p=D.DR.peers().find(x=>!x.isMe&&x.kind==="viewer"&&x.presence&&x.presence.pv&&x.presence.pv.v===3);return p?p.presence.pv:null};
-function pvDPub(){const h={};Object.keys(D.hist).slice(-8).forEach(k=>{h[k]=D.hist[k]});D.DR.presence({pv:Object.assign({},D.base,{h:h})}).catch(()=>{})}
+// (8.0) se publica todo el historial del duelo: así el modo espectador puede seguirlo desde el principio
+function pvDPub(){const h={};Object.keys(D.hist).slice(-400).forEach(k=>{h[k]=D.hist[k]});D.DR.presence({pv:Object.assign({},D.base,{h:h})}).catch(()=>{})}
 const pvMy=()=>D.role==="A"?0:1;
 async function pvStart(role,room,seed){
   PV.st="duel";pvPub();

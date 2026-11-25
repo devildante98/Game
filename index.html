@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.0.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.0.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795614183">
+<meta name="game-build" content="1795622771">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3456,7 +3456,6 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 }
 /* (8.0) con un minijuego abierto se paran las animaciones de la pantalla principal (no se ven y quitaban fluidez) */
 body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gTop *,body.mgon #gNav *{animation-play-state:paused!important}
-body.mgon #gBg{visibility:hidden}
 /* (8.0.2) base secreta: botones de cámara y etiquetas */
 .bscam{position:absolute;right:8px;bottom:30px;display:flex;flex-direction:column;gap:6px;z-index:2}
 .bscam button{width:38px;height:38px;padding:0;border-radius:12px;font-size:1.1rem;background:rgba(255,255,255,.88);color:#222;border:2px solid rgba(0,0,0,.15);box-shadow:0 2px 0 rgba(0,0,0,.25)}
@@ -3528,7 +3527,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.0.2</small>
+    <small class="pcver">Versión 8.0.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8284,8 +8283,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="8.0.2";
+const GAME_VER="8.0.3";
 const NEWS=[
+{v:"2026-11-25-8.0.3",ver:"8.0.3",at:"2026-11-25T17:06",t:"🔧 Arreglos/Mejoras",l:["Minijuegos: el pueblo del fondo vuelve a verse detrás de la ventana del minijuego (se queda quieto mientras juegas, así el juego sigue igual de fluido)"]},
 {v:"2026-11-25-8.0.2",ver:"8.0.2",at:"2026-11-25T14:43",t:"🏠 Novedad",l:["🏠 Base secreta mucho más completa: ahora puedes colgar objetos en las paredes (cuadros de Pokémon, reloj, tele, estante, espejo, aplique, tapiz, banderín…) y poner cosas pequeñas encima de mesas, mesitas, cómodas y baúles", "Gira los muebles hacia los dos lados (↺ ↻ o la tecla R) y muévelos o guárdalos tocándolos (M y Supr en el teclado)", "Muebles nuevos: mesita, cómoda, armario, puf, pecera, chimenea, piano, baúl, litera, lamparita, cactus, jarrón, radio y Poké Ball en peana", "La habitación tiene ahora ventana con cortinas, puerta, zócalo, sombras bajo los muebles y modo noche 🌙 (con estrellas en la ventana y las lámparas encendidas)", "Paredes con dibujo (rayas, ladrillo, madera y Poké Ball) y suelos nuevos (tablones, moqueta azul, arena y ajedrez), y botones para acercar y alejar la cámara en el móvil"]},
 {v:"2026-11-25-8.0.1",ver:"8.0.1",at:"2026-11-25T14:36",t:"🔧 Arreglos/Mejoras",l:["Minijuegos nuevos mucho más fluidos: mientras juegas, el pueblo y las animaciones del fondo se paran (no se ven y le quitaban fluidez al juego), y los juegos 3D se dibujan de forma más ligera","Aspectos de la Poké Ball: cada uno vuelve a verse con su propio dibujo en la lista (se veían todos como el que llevas puesto) y los bloqueados se ven con su color"]},
 {v:"2026-11-25-8.0",ver:"8.0",at:"2026-11-25T10:53",t:"🚀 ¡VERSIÓN 8.0! La gran actualización",l:["🎮 4 minijuegos nuevos: Ekans hambriento, Lluvia de bayas (en 3D), Vuelo de Pidgeot (en 3D) y Cueva oscura. Con premios, récords y su propia clasificación semanal (el torneo semanal no cambia)", "🎯 Nuevo menú «Retos»: Pokémon del día (adivínalo en 6 intentos y comparte tu resultado), Reto semanal con reglas y clasificación, tu Rival personal, las Investigaciones de la Profesora Vega y la Búsqueda del tesoro semanal en la Exploración (con pista adelantada cada día en Discord)", "🧳 Mercader misterioso: llega al pueblo 3 veces al día durante 30 minutos con ofertas únicas (Pokémon poco comunes, lotes de objetos, huevos especiales…). Te avisamos en el juego y en Discord", "🎀 Concursos Pokémon: Belleza, Carisma, Dulzura, Ingenio y Dureza, con 4 rangos y cintas para tus Pokémon", "🏠 Base secreta en 3D: decora tu habitación con muebles, peluches y los trofeos que ganes; publícala para que otros la visiten y te dejen un «me gusta»", "📔 Diario del entrenador: tus grandes momentos se apuntan solos en una línea del tiempo que puedes compartir", "🎨 Aspectos para la Poké Ball del gacha: Super Ball, Ultra Ball, Lujo, Hielo, Dorada, Galáctica, Magma, Fantasma, Hoja, Trueno y Arcoíris", "🎓 Especialidades de entrenador: Criador, Coleccionista o Estratega, con 3 rangos, ventajas propias y título", "🏟️ Torneos de amigos por eliminatorias (4, 8 o 16 entrenadores, con código de invitación) y 👀 Modo espectador para ver duelos PVP en directo y mandar reacciones", "🏅 Nuevos títulos: Maestro de retos, Cazatesoros, Campeón entre amigos, Gran Criador, Gran Coleccionista y Gran Estratega"]},
@@ -8724,7 +8724,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795614183";
+const GAME_B="1795622771";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -23906,7 +23906,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.0.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.0.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

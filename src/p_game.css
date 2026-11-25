@@ -1562,3 +1562,19 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
   #gNav b{font-size:.5rem!important;letter-spacing:0}
   #gTr{opacity:.9;transform:scale(.85);transform-origin:bottom right}
 }
+/* ===== minijuegos 8.0 ===== */
+.m4w{position:relative;width:100%;height:min(380px,52vh);border-radius:18px;overflow:hidden;user-select:none;-webkit-user-select:none;touch-action:none;box-shadow:inset 0 0 0 2px rgba(0,0,0,.15);background:#1b2340}
+.m4w canvas{display:block;width:100%;height:100%}
+.m4w3 canvas{position:absolute;inset:0}.m4w3 canvas.m4ovl{z-index:1;background:transparent}
+.m4w .rumsg{z-index:2}
+.ekw{background:#1f5130}.cuw{background:#06040e;cursor:crosshair}
+.m4pad{display:none;flex-direction:column;align-items:center;gap:6px;margin-top:8px}
+.m4pad>div{display:flex;gap:6px}.m4pad button{width:64px;height:52px;font-size:1.3rem;padding:0;touch-action:none}
+.m4pad2{flex-direction:row;justify-content:center}.m4pad2 button{width:44%;max-width:200px}
+#pgF{width:min(320px,90%);max-width:none;font-size:1.05rem}
+.m4keys{display:block;margin-top:6px;text-align:center}
+@media (hover:none) and (pointer:coarse){.m4pad{display:flex}.m4keys{display:none}}
+.m4combo{font-weight:900;color:#ff8a3c;min-width:60px;text-align:right}
+.cuwant{display:inline-flex;align-items:center;gap:4px;font-size:.92rem}.cuwant .cuwi{display:inline-block;width:34px;height:34px;overflow:hidden}
+.cuwant .cuwi img{filter:brightness(0) invert(.9);width:34px!important;height:34px!important;margin:0!important}
+.mgcard{position:relative}.mgnew{position:absolute;top:8px;right:-6px;padding:2px 10px;border-radius:8px 0 0 8px;background:linear-gradient(90deg,#ff4f7a,#ff9a3c);color:#fff;font-size:.66rem;font-weight:900;letter-spacing:.5px;box-shadow:0 2px 6px rgba(0,0,0,.25)}

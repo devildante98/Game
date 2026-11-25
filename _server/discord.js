@@ -22,7 +22,8 @@ const OBJ = {mb: "Master Ball", crys: "Cristal Supremo", cand: "Caramelo Raro", 
   ub: "Ultra Ball", sb: "Super Ball", pb: "Poké Ball", mint: "Menta", hold: "Objeto equipable"};
 const MG = {fos: "Cazafósiles", who: "¿Quién es ese Pokémon?", mem: "Memoria Pokémon", dig: "¡Golpea al Diglett!", fish: "Pesca",
   thr: "Lanzamiento perfecto", run: "Carrera de Rapidash", exc: "Excavación subterránea", wgt: "Peso y altura",
-  puz: "Rompecabezas Pokémon", hl: "Más o menos", jig: "Puzle de piezas"};
+  puz: "Rompecabezas Pokémon", hl: "Más o menos", jig: "Puzle de piezas",
+  ekn: "Ekans hambriento", bay: "Lluvia de bayas", pdg: "Vuelo de Pidgeot", cue: "Cueva oscura"};
 const n = (v) => (typeof v === "number" && isFinite(v) ? v : 0);
 const fmt = (v) => Math.round(n(v)).toLocaleString("es-ES");
 // texto de otros (títulos, apodos): sin saltos, sin formato de Discord y corto

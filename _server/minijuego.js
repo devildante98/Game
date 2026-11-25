@@ -9,9 +9,12 @@ const gacha = require("./gacha");
 
 const MG_DAY = 3;
 // tickets por punto de cada minijuego (jig: el extra por jugar sin ayuda no cuenta para el premio)
-const RW = {who: 60, mem: 90, dig: 2500, fish: 700, thr: 90, run: 180, exc: 150, wgt: 110, fos: 120, puz: 45, hl: 110, jig: 45};
+const RW = {who: 60, mem: 90, dig: 2500, fish: 700, thr: 90, run: 180, exc: 150, wgt: 110, fos: 120, puz: 45, hl: 110, jig: 45,
+  ekn: 400, bay: 70, pdg: 450, cue: 160};
 // puntuación máxima (los que tienen un número fijo de rondas); run, wgt y hl dependen del tiempo jugado
-const MAX = {who: 6000, mem: 1700, dig: 400, fish: 3000, thr: 2500, exc: 2500, fos: 2500, puz: 50000, jig: 50000};
+// (8.0) ekn: 255 casillas × 40 como mucho · bay: 159 objetos × 50 × 5 · pdg: 194 aros × 35 × 3 + vidas · cue: 8 rondas × 300
+const MAX = {who: 6000, mem: 1700, dig: 400, fish: 3000, thr: 2500, exc: 2500, fos: 2500, puz: 50000, jig: 50000,
+  ekn: 10500, bay: 40000, pdg: 21000, cue: 2400};
 const PORTIEMPO = {
   run: (s) => Math.max(350 * s + 5000, 420 * s + 3000),
   wgt: (s) => { const n = s / 0.45 + 3; return 175 * n + 5 * n * n; },

@@ -35,6 +35,8 @@ exports.guardar = onCall({memory: "512MiB", timeoutSeconds: 30}, async (req) => 
   const r = await guardar(db, uid, req.data, Date.now(), cuentaSeg);
   // el primer guardado de la semana nueva anuncia en Discord el podio del torneo de la anterior (una sola vez)
   try { await discord.torneoSemanal(db, Date.now()); } catch (e) { /* un fallo de Discord nunca afecta al guardado */ }
+  // (8.0) llegada del Mercader misterioso y pista adelantada del tesoro semanal
+  try { await discord.eventosV8(db, Date.now()); } catch (e) { /* tampoco */ }
   return r;
 });
 

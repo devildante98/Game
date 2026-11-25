@@ -46,7 +46,8 @@ jobs:
           WS: ${{ secrets.DISCORD_WEBHOOK_SORTEOS }}
           WT: ${{ secrets.DISCORD_WEBHOOK_TORNEOS }}
           RA: ${{ secrets.DISCORD_ROL_AVISOS }}
-        run: printf 'DISCORD_WEBHOOK_CODIGOS=%s\nDISCORD_WEBHOOK_SORTEOS=%s\nDISCORD_WEBHOOK_TORNEOS=%s\nDISCORD_ROL_AVISOS=%s\n' "$WC" "$WS" "$WT" "$RA" > _server/.env
+          WE: ${{ secrets.DISCORD_WEBHOOK_EVENTOS }}
+        run: printf 'DISCORD_WEBHOOK_CODIGOS=%s\nDISCORD_WEBHOOK_SORTEOS=%s\nDISCORD_WEBHOOK_TORNEOS=%s\nDISCORD_ROL_AVISOS=%s\nDISCORD_WEBHOOK_EVENTOS=%s\n' "$WC" "$WS" "$WT" "$RA" "$WE" > _server/.env
       - name: Publicar en Firebase (funciones y reglas)
         if: env.HAS_SA == 'true'
         env:

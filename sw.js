@@ -1,6 +1,6 @@
 // Poke Gacha Online · service worker
 // Siempre intenta descargar la versión más nueva del juego; la copia guardada solo se usa sin conexión.
-const C="pokegacha-v2";   // (cambiar el número borra la caché vieja de todos los jugadores)
+const C="pokegacha-v3";   // (cambiar el número borra la caché vieja de todos los jugadores)
 self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(["./","manifest.webmanifest","icon-192.png?v=2","icon-512.png?v=2","icon-maskable-512.png?v=2","favicon.svg"]).catch(()=>{})))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==C).map(x=>caches.delete(x)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{

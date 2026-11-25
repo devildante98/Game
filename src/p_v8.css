@@ -151,3 +151,10 @@
 .spxrx{display:flex;gap:8px;justify-content:center;margin:10px 0 4px}.spxrx button{font-size:1.5rem;padding:6px 10px;border-radius:12px}
 .spxfl{position:absolute;bottom:10px;font-size:2rem;animation:spxUp 2.2s ease-out forwards;pointer-events:none;z-index:5}@keyframes spxUp{from{transform:translateY(0) scale(.6);opacity:0}15%{opacity:1;transform:translateY(-20px) scale(1.1)}to{transform:translateY(-180px) scale(1);opacity:0}}
 #arena{position:relative}#arena .spxfl{bottom:30%}
+/* (8.0) en el móvil, las pestañas de cada menú van en una sola fila que se desliza (antes ocupaban media pantalla) */
+@media (max-width:700px){
+  body #hubTabs:not([hidden]){display:flex!important;flex-wrap:nowrap!important;flex-shrink:0!important;height:auto!important;min-height:max-content;align-items:center;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;gap:6px;padding:8px 10px 10px!important;
+    -webkit-mask:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 22px),transparent);mask:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 22px),transparent)}
+  body #hubTabs::-webkit-scrollbar{display:none}
+  body #hubTabs>button{flex:0 0 auto!important;white-space:nowrap;scroll-snap-align:center;margin:0!important}
+}

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=7.29.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.0"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795600153">
+<meta name="game-build" content="1795600738">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3447,6 +3447,13 @@ body.calm #bdM .bdcake,body.calm #bdM .bdconf{animation:none;display:none}
 .spxrx{display:flex;gap:8px;justify-content:center;margin:10px 0 4px}.spxrx button{font-size:1.5rem;padding:6px 10px;border-radius:12px}
 .spxfl{position:absolute;bottom:10px;font-size:2rem;animation:spxUp 2.2s ease-out forwards;pointer-events:none;z-index:5}@keyframes spxUp{from{transform:translateY(0) scale(.6);opacity:0}15%{opacity:1;transform:translateY(-20px) scale(1.1)}to{transform:translateY(-180px) scale(1);opacity:0}}
 #arena{position:relative}#arena .spxfl{bottom:30%}
+/* (8.0) en el móvil, las pestañas de cada menú van en una sola fila que se desliza (antes ocupaban media pantalla) */
+@media (max-width:700px){
+  body #hubTabs:not([hidden]){display:flex!important;flex-wrap:nowrap!important;flex-shrink:0!important;height:auto!important;min-height:max-content;align-items:center;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;gap:6px;padding:8px 10px 10px!important;
+    -webkit-mask:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 22px),transparent);mask:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 22px),transparent)}
+  body #hubTabs::-webkit-scrollbar{display:none}
+  body #hubTabs>button{flex:0 0 auto!important;white-space:nowrap;scroll-snap-align:center;margin:0!important}
+}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3512,7 +3519,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 7.29.2</small>
+    <small class="pcver">Versión 8.0</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8268,8 +8275,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="7.29.2";
+const GAME_VER="8.0";
 const NEWS=[
+{v:"2026-11-25-8.0",ver:"8.0",at:"2026-11-25T10:53",t:"🚀 ¡VERSIÓN 8.0! La gran actualización",l:["🎮 4 minijuegos nuevos: Ekans hambriento, Lluvia de bayas (en 3D), Vuelo de Pidgeot (en 3D) y Cueva oscura. Con premios, récords y su propia clasificación semanal (el torneo semanal no cambia)", "🎯 Nuevo menú «Retos»: Pokémon del día (adivínalo en 6 intentos y comparte tu resultado), Reto semanal con reglas y clasificación, tu Rival personal, las Investigaciones de la Profesora Vega y la Búsqueda del tesoro semanal en la Exploración (con pista adelantada cada día en Discord)", "🧳 Mercader misterioso: llega al pueblo 3 veces al día durante 30 minutos con ofertas únicas (Pokémon poco comunes, lotes de objetos, huevos especiales…). Te avisamos en el juego y en Discord", "🎀 Concursos Pokémon: Belleza, Carisma, Dulzura, Ingenio y Dureza, con 4 rangos y cintas para tus Pokémon", "🏠 Base secreta en 3D: decora tu habitación con muebles, peluches y los trofeos que ganes; publícala para que otros la visiten y te dejen un «me gusta»", "📔 Diario del entrenador: tus grandes momentos se apuntan solos en una línea del tiempo que puedes compartir", "🎨 Aspectos para la Poké Ball del gacha: Super Ball, Ultra Ball, Lujo, Hielo, Dorada, Galáctica, Magma, Fantasma, Hoja, Trueno y Arcoíris", "🎓 Especialidades de entrenador: Criador, Coleccionista o Estratega, con 3 rangos, ventajas propias y título", "🏟️ Torneos de amigos por eliminatorias (4, 8 o 16 entrenadores, con código de invitación) y 👀 Modo espectador para ver duelos PVP en directo y mandar reacciones", "🏅 Nuevos títulos: Maestro de retos, Cazatesoros, Campeón entre amigos, Gran Criador, Gran Coleccionista y Gran Estratega"]},
 {v:"2026-11-24-7.29.2",ver:"7.29.2",at:"2026-11-24T22:35",t:"🔧 Arreglos/Mejoras",l:["Móvil: la pantalla principal está menos apelotonada. Los botones de los lados tienen más espacio, el botón de guardar ya no tapa Novedades (ahora va debajo, con su nombre), en la barra de arriba los tickets ya no se montan sobre el botón + ni el chat sobre la racha, y el cartel «por toque» es más pequeño, no tapa los guantes y ya no habla de teclas"]},
 {v:"2026-11-24-7.29.1",ver:"7.29.1",at:"2026-11-24T10:08",t:"🔧 Arreglos/Mejoras",l:["Perfil: en la Vitrina, la imagen de los Pokémon ya no tapa su nombre y nivel"]},
 {v:"2026-11-24-7.29",ver:"7.29",at:"2026-11-24T10:02",t:"👑 Novedad",l:["Nuevo título único «👑 Creador del juego»: solo lo tiene el creador de Poke Gacha Online. Brilla en oro y diamante en su perfil, y en el chat su nombre lleva la insignia «👑 Creador». ¡Si lo ves, estás hablando con quien hace el juego!"]},
@@ -8705,7 +8713,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795600153";
+const GAME_B="1795600738";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -12037,19 +12045,7 @@ function fstatHTML(n){const p=PM[n];if(!p)return "";const l=lvd(n).l,N=NAT[natOf
 // ================= Más → Próximamente: proyectos que vienen =================
 // Para añadir un proyecto: una línea nueva en ROADMAP [icono, título, descripción]
 const ROADMAP=[
- ["🏠","Base secreta","Tu propia habitación para decorar con muebles, peluches, alfombras y los trofeos que consigas jugando. Tus amigos podrán visitarla y dejarte un «me gusta»."],
- ["📜","Retos semanales con reglas","Cada semana, un reto especial con normas distintas: «solo tipo Agua», «equipo de nivel 50», «sin legendarios»… Enfréntate a entrenadores y a la Torre con esas reglas, con premios y clasificación propia."],
- ["🎀","Concursos Pokémon","Luce a tus Pokémon en concursos de Belleza, Carisma, Dulzura, Ingenio y Dureza. Elige bien sus movimientos para ganarte al público y consigue cintas para su ficha."],
- ["🔎","Pokémon del día","Una adivinanza nueva cada día: acierta el Pokémon en 6 intentos con pistas de tipo, generación, altura y color. Mantén tu racha y comparte tu resultado en Discord sin destripar la solución."],
- ["🧳","Mercader misterioso","De vez en cuando llega al pueblo un mercader con ofertas raras durante solo 30 minutos: Pokémon poco comunes, lotes de objetos y huevos especiales. Te avisaremos en el juego y en Discord cuando aparezca."],
- ["🏟️","Torneos de amigos","Crea tu propio torneo por eliminatorias de 4, 8 o 16 entrenadores, invita a tus amigos o a tu gremio y jugadlo por rondas. El cuadro se ve en el juego y el campeón se lleva un trofeo."],
- ["👀","Modo espectador","Mira en directo los combates PVP de otros entrenadores, sobre todo las finales del torneo semanal, y anímalos con reacciones que salen en pantalla."],
- ["📔","Diario del entrenador","El juego apuntará tus grandes momentos: tu primer variocolor, tu primer legendario, el día que ganaste la Liga o tu mejor tirada. Míralos en una línea del tiempo y compártelos."],
- ["🎨","Aspectos para la Poké Ball","Cambia el aspecto de la Poké Ball grande del gacha y de su animación al tirar: de hielo, galáctica, dorada… Se consiguen en eventos, con logros y en la Tienda de Evento."],
- ["🎓","Especialidades de entrenador","Al subir de nivel elegirás un camino: Criador (huevos más rápidos), Coleccionista (más variocolores) o Estratega (más experiencia en combate). Cada uno con sus mejoras y su propio título."],
- ["🗺️","Búsqueda del tesoro semanal","Cada semana habrá un tesoro escondido en el mapa de Exploración. Cada día se desbloquea una pista nueva (¡y alguna se dará en Discord!). Los primeros en encontrarlo entrarán en el cuadro de honor."],
- ["🥊","Rival personal","Un entrenador rival con nombre y carácter propios que crece contigo: cada pocos días te reta con un equipo a tu nivel, te deja mensajes y, si le ganas varias veces seguidas, te hace un regalo especial."],
- ["🔬","Investigaciones del Profesor","Cadenas de misiones con historia que duran semanas, como «Investiga a los Pokémon de tipo Fantasma de la región»: varias etapas, diálogos y una gran recompensa final."],
+ // (8.0) ¡todo lo anunciado ya está en el juego! Añade aquí los próximos proyectos.
 ];
 nxPanel("roadP","🚀 Próximas actualizaciones","Lo que estamos preparando para el juego. ¡Atento a las Novedades!");
 {const g=HUB.find(x=>x.k==="mas");if(g&&!g.tabs.some(t=>t[0]==="roadP"))g.tabs.splice(1,0,["roadP","Próximamente"]);HUBP.roadP="mas";HUBR.roadP=()=>roadUI()}
@@ -22707,8 +22703,8 @@ v8Group("ret","Retos","🎯","#e2573b","Pokémon del día, retos semanales, riva
 
 // ================= DIARIO DEL ENTRENADOR =================
 // Se apuntan solos los grandes momentos (comparando la partida cada pocos segundos, así no se escapa ninguno) y otras
-// funciones añaden los suyos con diaryAdd(). Se guardan los 250 más recientes.
-const DIA_MAX=250;
+// funciones añaden los suyos con diaryAdd(). Se guardan los 150 más recientes (para que la partida no crezca demasiado).
+const DIA_MAX=150;
 function diaryAdd(ic,txt,n,sh,k){S.dia=Array.isArray(S.dia)?S.dia:[];S.dia.push({t:Date.now(),ic:String(ic||"📔").slice(0,4),x:String(txt||"").slice(0,160),n:n&&PM[n]?n:undefined,sh:sh?1:undefined,k:k||"o"});
   if(S.dia.length>DIA_MAX)S.dia.splice(0,S.dia.length-DIA_MAX);try{save()}catch(e){}if(nxOpen("diaP"))diaUI()}
 function diaSnap(){const sh=Object.keys(S.shiny||{}).filter(n=>S.shiny[n]>0),own=Object.keys(S.owned||{}).filter(n=>S.owned[n]>0&&PM[n]);
@@ -23469,6 +23465,8 @@ setInterval(()=>{try{if(SPX&&!nxOpen("spxP"))spxStop();else if(!SPX&&nxOpen("spx
 {const _ps=pvStart;pvStart=async function(role,room,seed){const r=await _ps.apply(this,arguments);try{if(D&&D.room===room&&window.FB&&window.FB.duelRxWatch){const seen={};const t0=Date.now();
   D.unrx=window.FB.duelRxWatch(room,L=>{L.forEach(x=>{if(seen[x.id])return;seen[x.id]=1;if(x.at>=t0-2000&&Date.now()-x.at<15000){spxFloat(x.e,"#arena");if(!D||!D.rxn){if(D)D.rxn=1;toast("👀 ¡Hay público viendo tu duelo!")}}})})}}catch(e){}return r}}
 {const _pe=pvEnd;pvEnd=function(){try{if(D&&D.unrx){D.unrx();D.unrx=null}}catch(e){}return _pe.apply(this,arguments)}}
+// (8.0) móvil: la pestaña abierta siempre a la vista en la fila deslizable
+{const _ho=hubOpen;hubOpen=function(){const r=_ho.apply(this,arguments);try{const T=$("hubTabs"),on=T&&T.querySelector("button.on");if(on&&T.scrollWidth>T.clientWidth){const x=on.offsetLeft-(T.clientWidth-on.offsetWidth)/2;T.scrollLeft=Math.max(0,x)}}catch(e){}return r}}
 
 </script>
 <script>
@@ -23775,7 +23773,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="7.29.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.0";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

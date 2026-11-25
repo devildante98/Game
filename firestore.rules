@@ -361,6 +361,76 @@ match /codesPub/{c} {
 }
 // el creador del juego (título único «👑 Creador del juego»): lo lee cualquiera; un administrador lo reclama UNA vez
 // para su propia cuenta y después ya no se puede cambiar ni borrar (solo desde la consola de Firebase)
+// ======================= VERSIÓN 8.0 =======================
+// Reto semanal con reglas: cada jugador escribe solo su mejor marca (100 por victoria + vida restante; como mucho 1099)
+match /wch/{week}/s/{u} {
+  allow read: if request.auth != null;
+  allow create, update: if request.auth != null && request.auth.uid == u && !banned()
+    && request.resource.data.keys().hasOnly(['sc', 'n', 'tr', 'at'])
+    && request.resource.data.sc is int && request.resource.data.sc > 0 && request.resource.data.sc <= 1099
+    && optStr('n', 30) && optStr('tr', 80) && optNum('at', 0, 9999999999999);
+  allow delete: if isAdmin();
+}
+// Búsqueda del tesoro: cuadro de honor (cada uno se apunta una vez, con la hora del servidor; no se puede cambiar)
+match /tesoro/{week}/f/{u} {
+  allow read: if request.auth != null;
+  allow create: if request.auth != null && request.auth.uid == u && !banned()
+    && request.resource.data.keys().hasOnly(['n', 'tr', 'at']) && request.resource.data.at == request.time
+    && optStr('n', 30) && optStr('tr', 80);
+  allow update: if false;
+  allow delete: if isAdmin();
+}
+// Base secreta publicada (la lee cualquiera con cuenta; solo la escribe su dueño) y sus «me gusta» (uno por visitante)
+match /bases/{u} {
+  allow read: if request.auth != null;
+  allow create, update: if request.auth != null && request.auth.uid == u && !banned()
+    && request.resource.data.keys().hasOnly(['n', 'tr', 'w', 'f', 'it', 'at']) && request.resource.data.at == request.time
+    && optStr('n', 30) && optStr('tr', 80) && str(request.resource.data.w, 12) && str(request.resource.data.f, 12)
+    && request.resource.data.it is list && request.resource.data.it.size() <= 64;
+  allow delete: if request.auth != null && (request.auth.uid == u || isAdmin());
+  match /l/{v} {
+    allow read: if request.auth != null;
+    allow create: if request.auth != null && request.auth.uid == v && v != u && !banned()
+      && request.resource.data.keys().hasOnly(['at']) && request.resource.data.at == request.time;
+    allow update: if false;
+    allow delete: if request.auth != null && (request.auth.uid == v || isAdmin());
+  }
+}
+// Torneos de amigos: el organizador lo crea; cada jugador solo se añade a sí mismo (con su nombre y su equipo) mientras
+// está abierto; solo el organizador lo empieza o lo cancela. Las puntuaciones: una por jugador y ronda, sin cambios.
+function ftNew() { let d = request.resource.data; return d.keys().hasOnly(['t', 'size', 'st', 'mem', 'names', 'teams', 'seed', 'host', 'at'])
+  && d.host == request.auth.uid && d.size in [4, 8, 16] && d.st == 'open' && d.mem == [request.auth.uid] && d.seed == 0 && d.at == request.time
+  && d.names.keys().hasOnly([request.auth.uid]) && d.teams.keys().hasOnly([request.auth.uid]) && str(d.t, 30)
+  && str(d.names[request.auth.uid], 30) && str(d.teams[request.auth.uid], 4000); }
+function ftJoinOk() { let o = resource.data; let d = request.resource.data; return o.st == 'open' && !(request.auth.uid in o.mem)
+  && d.diff(o).affectedKeys().hasOnly(['mem', 'names', 'teams']) && d.mem == o.mem.concat([request.auth.uid]) && d.mem.size() <= o.size
+  && d.names.diff(o.names).affectedKeys().hasOnly([request.auth.uid]) && d.teams.diff(o.teams).affectedKeys().hasOnly([request.auth.uid])
+  && str(d.names[request.auth.uid], 30) && str(d.teams[request.auth.uid], 4000); }
+function ftStartOk() { let o = resource.data; let d = request.resource.data; return o.host == request.auth.uid && o.st == 'open' && o.mem.size() >= 2
+  && d.diff(o).affectedKeys().hasOnly(['st', 'start', 'seed']) && d.st == 'run' && d.start == request.time && d.seed is int; }
+match /ftours/{id} {
+  allow read: if request.auth != null;
+  allow create: if request.auth != null && !banned() && id.size() == 6 && ftNew();
+  allow update: if request.auth != null && !banned() && (ftJoinOk() || ftStartOk());
+  allow delete: if request.auth != null && ((resource.data.host == request.auth.uid && resource.data.st == 'open') || isAdmin());
+  match /s/{k} {
+    allow read: if request.auth != null;
+    allow create: if request.auth != null && !banned() && k.split('_').size() == 2 && k.split('_')[1] == request.auth.uid
+      && get(/databases/$(database)/documents/ftours/$(id)).data.st == 'run'
+      && request.auth.uid in get(/databases/$(database)/documents/ftours/$(id)).data.mem
+      && request.resource.data.keys().hasOnly(['sc', 'at']) && request.resource.data.sc is int
+      && request.resource.data.sc >= 0 && request.resource.data.sc <= 1000 && request.resource.data.at == request.time;
+    allow update: if false;
+    allow delete: if isAdmin();
+  }
+}
+// Modo espectador: reacciones del público en un duelo (solo emojis de la lista)
+match /duels/{room}/rx/{rid} {
+  allow read: if request.auth != null;
+  allow create: if request.auth != null && !banned() && request.resource.data.keys().hasOnly(['e', 'n', 'at'])
+    && request.resource.data.e in ['👏', '🔥', '😮', '😂', '❤️', '💪'] && str(request.resource.data.n, 30) && request.resource.data.at == request.time;
+  allow update, delete: if false;
+}
 match /config/creador {
   allow read: if true;
   allow create: if isAdmin() && request.resource.data.keys().hasOnly(['uid','at'])

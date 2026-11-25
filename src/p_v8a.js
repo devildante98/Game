@@ -33,8 +33,8 @@ v8Group("ret","Retos","🎯","#e2573b","Pokémon del día, retos semanales, riva
 
 // ================= DIARIO DEL ENTRENADOR =================
 // Se apuntan solos los grandes momentos (comparando la partida cada pocos segundos, así no se escapa ninguno) y otras
-// funciones añaden los suyos con diaryAdd(). Se guardan los 250 más recientes.
-const DIA_MAX=250;
+// funciones añaden los suyos con diaryAdd(). Se guardan los 150 más recientes (para que la partida no crezca demasiado).
+const DIA_MAX=150;
 function diaryAdd(ic,txt,n,sh,k){S.dia=Array.isArray(S.dia)?S.dia:[];S.dia.push({t:Date.now(),ic:String(ic||"📔").slice(0,4),x:String(txt||"").slice(0,160),n:n&&PM[n]?n:undefined,sh:sh?1:undefined,k:k||"o"});
   if(S.dia.length>DIA_MAX)S.dia.splice(0,S.dia.length-DIA_MAX);try{save()}catch(e){}if(nxOpen("diaP"))diaUI()}
 function diaSnap(){const sh=Object.keys(S.shiny||{}).filter(n=>S.shiny[n]>0),own=Object.keys(S.owned||{}).filter(n=>S.owned[n]>0&&PM[n]);

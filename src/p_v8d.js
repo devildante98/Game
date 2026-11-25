@@ -128,3 +128,5 @@ setInterval(()=>{try{if(SPX&&!nxOpen("spxP"))spxStop();else if(!SPX&&nxOpen("spx
 {const _ps=pvStart;pvStart=async function(role,room,seed){const r=await _ps.apply(this,arguments);try{if(D&&D.room===room&&window.FB&&window.FB.duelRxWatch){const seen={};const t0=Date.now();
   D.unrx=window.FB.duelRxWatch(room,L=>{L.forEach(x=>{if(seen[x.id])return;seen[x.id]=1;if(x.at>=t0-2000&&Date.now()-x.at<15000){spxFloat(x.e,"#arena");if(!D||!D.rxn){if(D)D.rxn=1;toast("👀 ¡Hay público viendo tu duelo!")}}})})}}catch(e){}return r}}
 {const _pe=pvEnd;pvEnd=function(){try{if(D&&D.unrx){D.unrx();D.unrx=null}}catch(e){}return _pe.apply(this,arguments)}}
+// (8.0) móvil: la pestaña abierta siempre a la vista en la fila deslizable
+{const _ho=hubOpen;hubOpen=function(){const r=_ho.apply(this,arguments);try{const T=$("hubTabs"),on=T&&T.querySelector("button.on");if(on&&T.scrollWidth>T.clientWidth){const x=on.offsetLeft-(T.clientWidth-on.offsetWidth)/2;T.scrollLeft=Math.max(0,x)}}catch(e){}return r}}

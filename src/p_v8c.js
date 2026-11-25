@@ -176,7 +176,7 @@ function bsRoom(cv,data,opt){let E=null;try{E=G3D(cv)}catch(e){E=null}if(!E)retu
   // casilla bajo el puntero (proyectando las 4 esquinas de cada casilla)
   R.pick=(cx0,cy0)=>{const r=cv.getBoundingClientRect(),px=cx0-r.left,py=cy0-r.top,inq=(q)=>{let c=false;for(let a=0,b=3;a<4;b=a++){const[xa,ya]=q[a],[xb,yb]=q[b];if((ya>py)!==(yb>py)&&px<(xb-xa)*(py-ya)/(yb-ya)+xa)c=!c}return c};
     for(let i=0;i<BS_N;i++)for(let j=0;j<BS_N;j++){const x=i-BS_N/2,z=j-BS_N/2,q=[[x,0,z],[x+1,0,z],[x+1,0,z+1],[x,0,z+1]].map(v=>E.toScreen(v));if(q.some(v=>!v))continue;if(inq(q))return{i,j}}return null};
-  R.fit=()=>{const r=cv.getBoundingClientRect();if(r.width>0){E.resize(r.width,r.height,Math.min(2,window.devicePixelRatio||1));R.dirty=true}};
+  R.fit=()=>{const r=cv.getBoundingClientRect();if(r.width>0){E.resize(r.width,r.height,Math.min(document.body.classList.contains("lite")?1:1.5,window.devicePixelRatio||1));R.dirty=true}};
   try{R.ro=new ResizeObserver(R.fit);R.ro.observe(cv)}catch(e){}R.fit();
   R.free=()=>{R.alive=false;cancelAnimationFrame(R.raf);try{R.ro&&R.ro.disconnect()}catch(e){}E.free()};
   return R}

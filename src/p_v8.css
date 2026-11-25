@@ -31,7 +31,7 @@
 /* ---- Aspectos para la Poké Ball ---- */
 .skgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .skc{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:14px 10px;border-radius:18px;background:var(--bg,#f5f3ff);border:2px solid transparent}
-.skc.on{border-color:#13a37f;box-shadow:0 0 0 3px rgba(19,163,127,.2)}.skc.lock .skball{filter:grayscale(.85) brightness(.85);opacity:.7}
+.skc.on{border-color:#13a37f;box-shadow:0 0 0 3px rgba(19,163,127,.2)}.skc.lock .skball{filter:grayscale(.3) brightness(.92);opacity:.85}
 .skball{height:104px;display:grid;place-items:center}
 .skc .bigball.skprev{width:96px!important;height:96px!important;pointer-events:none;cursor:default}
 .skc small{font-size:.76rem;opacity:.85}.skc .skhow{font-weight:700;color:#7a5cff;opacity:1}
@@ -158,3 +158,6 @@
   body #hubTabs::-webkit-scrollbar{display:none}
   body #hubTabs>button{flex:0 0 auto!important;white-space:nowrap;scroll-snap-align:center;margin:0!important}
 }
+/* (8.0) con un minijuego abierto se paran las animaciones de la pantalla principal (no se ven y quitaban fluidez) */
+body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gTop *,body.mgon #gNav *{animation-play-state:paused!important}
+body.mgon #gBg{visibility:hidden}

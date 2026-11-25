@@ -4,7 +4,8 @@
 // =====================================================================================
 // ---------- utilidades comunes de la 8.0 ----------
 // fecha y hora de España (igual para todos los jugadores)
-function v8Mad(t){const o={};new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false}).formatToParts(new Date(t==null?Date.now():t)).forEach(x=>o[x.type]=x.value);
+let V8MF=null;
+function v8Mad(t){const o={};(V8MF||(V8MF=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Madrid",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",weekday:"short",hour12:false}))).formatToParts(new Date(t==null?Date.now():t)).forEach(x=>o[x.type]=x.value);
   return{y:+o.year,m:+o.month,d:+o.day,h:(+o.hour)%24,mi:+o.minute,wd:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].indexOf(o.weekday),day:o.year+"-"+o.month+"-"+o.day}}
 const v8Day=t=>v8Mad(t).day;
 // número aleatorio a partir de un texto (el mismo para todos con el mismo texto)
@@ -132,7 +133,7 @@ const SKINS=[
 ];
 // los de logro se quedan para siempre en cuanto se cumple; los de evento hay que recogerlos mientras dura
 const skinHas=s=>{if(!s.k||(S.skins&&S.skins[s.k]))return true;if(!s.price&&!s.event&&s.ok&&s.ok()){S.skins=S.skins||{};S.skins[s.k]=1;return true}return false};
-function skinApply(){const k=S.skin||"";const cur=SKINS.find(s=>s.k===k);const ok=cur&&skinHas(cur);document.querySelectorAll(".bigball").forEach(b=>{SKINS.forEach(s=>{if(s.k)b.classList.toggle("bs-"+s.k,ok&&s.k===k)})})}
+function skinApply(){const k=S.skin||"";const cur=SKINS.find(s=>s.k===k);const ok=cur&&skinHas(cur);document.querySelectorAll(".bigball:not(.skprev)").forEach(b=>{SKINS.forEach(s=>{if(s.k)b.classList.toggle("bs-"+s.k,ok&&s.k===k)})})}
 setInterval(()=>{try{skinApply()}catch(e){}},1500);
 v8Tab("trn","skinP","Aspectos de Poké Ball","🎨 Aspectos para la Poké Ball","Cambia el aspecto de la Poké Ball grande del gacha. Unos se compran, otros se ganan con logros y algunos solo están en eventos.",()=>skinUI());
 function skinUI(){const b=$("skinPB");if(!b)return;const cur=S.skin||"";

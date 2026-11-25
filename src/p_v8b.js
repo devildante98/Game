@@ -14,7 +14,9 @@ const MER_D=30*60e3;
 // hora de España → momento exacto (teniendo en cuenta el horario de verano)
 function v8MadTs(y,m,d,h,mi){const base=Date.UTC(y,m-1,d,h,mi);for(const off of [60,120]){const t=base-off*6e4,q=v8Mad(t);if(q.h===h&&q.mi===mi&&q.d===d)return t}return base-60*6e4}
 // visitas de un día: 3 inicios entre las 10:00 y las 23:00, separados al menos 2 horas
-function merSlots(day){const[y,m,d]=day.split("-").map(Number),r=v8Rng("mer|"+day),out=[];let tries=0;
+const MER_C={};
+function merSlots(day){if(MER_C[day])return MER_C[day];return MER_C[day]=merSlots0(day)}
+function merSlots0(day){const[y,m,d]=day.split("-").map(Number),r=v8Rng("mer|"+day),out=[];let tries=0;
   while(out.length<3&&tries++<60){const mi=600+Math.floor(r()*26)*30;if(out.every(x=>Math.abs(x-mi)>=120))out.push(mi)}
   return out.sort((a,b)=>a-b).map((mi,i)=>{const a=v8MadTs(y,m,d,Math.floor(mi/60),mi%60);return{id:day+"_"+i,a,b:a+MER_D}})}
 function merNow(t){t=t||Date.now();for(const off of [0,-864e5]){const s=merSlots(v8Day(t+off)).find(x=>t>=x.a&&t<x.b);if(s)return s}return null}

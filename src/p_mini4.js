@@ -1,7 +1,7 @@
 // =====================================================================================
 // MINIJUEGOS NUEVOS (8.0): Ekans hambriento, Lluvia de bayas (3D), Vuelo de Pidgeot (3D) y Cueva oscura
 // Mismo sistema que los demás: 3 partidas con premio al día (las calcula el servidor), récord, clasificación semanal y
-// azar común (la partida n.º k de la semana es igual para todos: mgR). No entran en la rotación del torneo semanal.
+// azar de cada partida con mgR (semilla imprevisible en cada partida, ver mgSeed). No entran en la rotación del torneo semanal.
 // =====================================================================================
 // ---------- utilidades comunes ----------
 // teclas mientras dura la partida (no se activan si estás escribiendo); devuelve la función que las quita

@@ -10,9 +10,11 @@ const mgT=(f,ms)=>{const h=setTimeout(f,ms);MG.t.push(h);return h};
 const mgI=(f,ms)=>{const h=setInterval(f,ms);MG.t.push(h);return h};
 function mgStop(){MG.runKey=null;MG.t.forEach(h=>{clearTimeout(h);clearInterval(h)});MG.t=[];if(MG.raf)cancelAnimationFrame(MG.raf);MG.raf=0}
 const mgPick=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(Math.random()*c.length),1)[0]);return o};
-// ---- azar común (justo para el torneo y la clasificación) ----
-// La partida n.º k de la semana de cada minijuego usa la misma secuencia de azar para todos los jugadores: misma pared,
-// mismos peces, mismos Pokémon… Así nadie gana solo por suerte. Solo afecta a lo que decide la partida, no a los efectos.
+// ---- azar de cada partida ----
+// (8.6.3) Antes la partida n.º k de la semana tenía la misma secuencia para todos (semana + juego + n.º de partida), pero eso
+// se podía aprovechar: el mismo orden salía otra vez en otro dispositivo o al recargar, y se podía «ver» la partida con otra
+// cuenta y repetirla. Ahora cada partida empieza con una semilla imprevisible (crypto.getRandomValues). La igualdad entre
+// partidas la dan las reglas de cada juego (p. ej., en «¡Golpea al Diglett!», 2 Dugtrio y 1 Voltorb por cada 7 topos).
 const mgR=()=>MG.rng?MG.rng():Math.random();
 // ---- imágenes listas antes de que corra el tiempo ----
 // Los botones de la ronda se desactivan hasta que sus imágenes se han descargado (como mucho 4 s, por si alguna falla)
@@ -27,7 +29,7 @@ function mgPre(html){try{const d=document.createElement("div");d.innerHTML=html;
 const mgPickR=(a,n)=>{const c=a.slice(),o=[];while(o.length<n&&c.length)o.push(c.splice(Math.floor(mgR()*c.length),1)[0]);return o};
 const mgShuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(mgR()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a};
 function mgSeed(id){try{const w=typeof isoWeek==="function"?isoWeek(new Date()):"";if(!S.mgAt||S.mgAt.w!==w)S.mgAt={w:w,n:{}};const k=(S.mgAt.n[id]|0)+1;S.mgAt.n[id]=k;
-  let h=2166136261;for(const ch of w+"|"+id+"|"+k){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}let a=h>>>0;
+  let a;try{const u=new Uint32Array(1);crypto.getRandomValues(u);a=u[0]>>>0}catch(e){a=Math.floor(Math.random()*4294967296)>>>0}
   MG.rng=()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};MG.att=k}catch(e){MG.rng=null}}
 const mgSet=s=>{MG.score=Math.max(0,Math.round(s));const e=$("mgSc");if(e)e.textContent=fmt(MG.score)};
 function mgPop(x,y,txt,col){const b=$("mgB");if(!b)return;const r=b.getBoundingClientRect(),s=document.createElement("span");s.className="mgpop";s.textContent=txt;s.style.left=(x-r.left)+"px";s.style.top=(y-r.top)+"px";if(col)s.style.color=col;b.appendChild(s);s.animate([{transform:"translate(-50%,-50%) scale(.6)",opacity:1},{transform:"translate(-50%,-160%) scale(1.15)",opacity:0}],{duration:800,easing:"ease-out"}).onfinish=()=>s.remove()}

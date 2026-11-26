@@ -454,6 +454,16 @@ match /duels/{room}/rx/{rid} {
     && request.resource.data.e in ['👏', '🔥', '😮', '😂', '❤️', '💪'] && str(request.resource.data.n, 30) && request.resource.data.at == request.time;
   allow update, delete: if false;
 }
+// título «💖 Pareja del Creador»: solo el creador del juego (config/creador) decide qué cuenta lo lleva
+match /config/consorte {
+  allow read: if true;
+  allow create, update: if request.auth != null
+    && request.auth.uid == get(/databases/$(database)/documents/config/creador).data.uid
+    && request.resource.data.keys().hasOnly(['uid', 'n', 'at']) && request.resource.data.uid is string
+    && request.resource.data.uid.size() > 0 && request.resource.data.uid.size() <= 128 && request.resource.data.uid != request.auth.uid
+    && optStr('n', 30) && request.resource.data.at is int;
+  allow delete: if request.auth != null && request.auth.uid == get(/databases/$(database)/documents/config/creador).data.uid;
+}
 match /config/creador {
   allow read: if true;
   allow create: if isAdmin() && request.resource.data.keys().hasOnly(['uid','at'])

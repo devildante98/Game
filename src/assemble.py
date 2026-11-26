@@ -902,6 +902,11 @@ FB_API = '''
     async cmGet(w){const s=await S.getDoc(S.doc(db,"comunidad",w));return s.exists()?(+s.data().n||0):0},
     async cmMe(w){const s=await S.getDoc(S.doc(db,"comunidad",w,"u",uid));return s.exists()?(+s.data().n||0):0},
     async cmTop(w){const sn=await S.getDocs(S.query(S.collection(db,"comunidad",w,"u"),S.orderBy("n","desc"),S.limit(10)));return sn.docs.map(d=>Object.assign({u:d.id},d.data()))},
+    // título «💖 Pareja del Creador»: el creador elige a qué cuenta (por su nombre de jugador)
+    async consGet(){const s=await S.getDoc(S.doc(db,"config","consorte"));return s.exists()?s.data():null},
+    async consSet(nick){const s=await S.getDoc(S.doc(db,"nicks",nkey(nick)));if(!s.exists())throw {code:"nf"};const u=s.data().uid;if(u===uid)throw {code:"self"};
+      await S.setDoc(S.doc(db,"config","consorte"),{uid:u,n:String(nick).slice(0,30),at:Date.now()});return u},
+    consDel:()=>S.deleteDoc(S.doc(db,"config","consorte")),
     async creadorGet(){const s=await S.getDoc(S.doc(db,"config","creador"));return s.exists()?s.data():null},
     async creadorSet(){await S.setDoc(S.doc(db,"config","creador"),{uid:uid,at:Date.now()})},
     async codePubList(){const sn=await S.getDocs(S.query(S.collection(db,"codesPub"),S.orderBy("at","desc"),S.limit(60)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},

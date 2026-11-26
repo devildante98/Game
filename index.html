@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795734750">
+<meta name="game-build" content="1795734864">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3567,6 +3567,21 @@ body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}
 .parw .parhe,.parcard .parhe{font-size:2.6rem}.parben{text-align:left;margin:6px 0;padding-left:18px;font-size:.85rem;display:flex;flex-direction:column;gap:3px}
 .parbt{display:flex;gap:8px;justify-content:center;margin-top:6px}
 .parcard{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,111,174,.15),rgba(224,71,158,.08));margin:0 0 12px}.parcard>div:nth-child(2){flex:1;display:flex;flex-direction:column;gap:2px}
+/* título «💖 Pareja del Creador» */
+.titcons{position:relative;display:inline-flex;vertical-align:middle;padding:3px;border-radius:999px;background:conic-gradient(from var(--tka,0deg),#ff6fae,#ffd23f,#ff9ad8,#ffe9a8,#ff6fae);animation:tkSpin 4s linear infinite,tkGlow 2.4s ease-in-out infinite alternate}
+@property --tka{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes tkSpin{to{--tka:360deg}}@keyframes tkGlow{from{box-shadow:0 0 6px rgba(255,111,174,.5)}to{box-shadow:0 0 16px rgba(255,111,174,.9),0 0 26px rgba(255,210,63,.4)}}
+.titcons .tkin{display:inline-flex;align-items:center;gap:7px;padding:5px 16px 5px 12px;border-radius:inherit;background:linear-gradient(135deg,#4a1238,#7a1f5a 55%,#4a1238)}
+.titcons .tktx{font-weight:900;letter-spacing:.3px;background:linear-gradient(90deg,#ffe0f0,#ff9ad8,#ffd23f,#fff3d6,#ff9ad8,#ffe0f0);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tkTx 3.5s linear infinite}
+@keyframes tkTx{to{background-position:250% center}}
+.titcons .tkh{font-size:1.1em;filter:drop-shadow(0 0 6px rgba(255,111,174,.95));display:inline-block;animation:tkBeat 1.6s ease-in-out infinite}.titcons .tkh2{font-size:.9em;filter:drop-shadow(0 0 6px rgba(255,210,63,.95));animation-delay:.8s}
+@keyframes tkBeat{0%,100%{transform:scale(1)}15%{transform:scale(1.22)}30%{transform:scale(1)}45%{transform:scale(1.12)}}
+.titcons .tks{position:absolute;font-style:normal;color:#ff9ad8;font-size:10px;pointer-events:none;opacity:0;animation:tkSp 2.8s ease-in-out infinite}
+.titcons .k1{left:6px;top:-6px}.titcons .k2{right:10px;top:-7px;color:#ffd23f;animation-delay:.7s}.titcons .k3{right:2px;bottom:-6px;animation-delay:1.4s}.titcons .k4{left:30%;bottom:-7px;color:#ffd23f;animation-delay:2.1s}
+@keyframes tkSp{0%,100%{opacity:0;transform:translateY(2px) scale(.6)}50%{opacity:1;transform:translateY(-3px) scale(1)}}
+.pcons{box-shadow:0 0 0 3px #ff6fae,0 0 24px rgba(255,111,174,.55),0 0 46px rgba(255,210,63,.25)!important;border-radius:16px}
+.chcons{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;vertical-align:middle;color:#fff;background:linear-gradient(135deg,#ff6fae,#e0479e 60%,#ffb01f);box-shadow:0 0 8px rgba(255,111,174,.6)}
+@media (prefers-reduced-motion:reduce){.titcons,.titcons .tktx,.titcons .tkh,.titcons .tks{animation:none}}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -8844,7 +8859,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795734750";
+const GAME_B="1795734864";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -10089,7 +10104,7 @@ function chRender(keep){
   const atB=L.scrollHeight-L.scrollTop-L.clientHeight<60;
   L.innerHTML=list.length?list.map((m,i)=>{if(m.sys)return '<div class="chsys"><span>'+esc(m.t||"")+'</span><small>'+chTime(m.at)+'</small></div>';const mine=m.u===me,prev=list[i-1],grp=prev&&prev.u===m.u&&!prev.sys&&(m.at-prev.at)<120e3;
     const body=(m.rp&&m.rp.id?chQuote(m.rp):'')+(m.inv?chInvHTML(m,mine):'')+(m.img?chImgHTML(m):'')+((m.img||m.inv)&&!m.t?'':(m.p&&PM[m.p.n]?'<div class="chpkm '+PM[m.p.n][2]+(m.p.s?' shiny':'')+'">'+ico(PM[m.p.n],56,false,!!m.p.s)+'<div><b>'+(m.p.s?"✨ ":"")+esc(m.p.k||m.p.n)+'</b><small>'+(m.p.k?esc(m.p.n)+' · ':'')+'Nv'+(m.p.l|0)+' · '+STAR[PM[m.p.n][2]]+'</small></div></div>'+(m.t?'<p>'+chTxt(m.t)+'</p>':''):'<p>'+chTxt(m.t||"")+'</p>'));
-    return '<div class="chm'+(mine?' me':'')+(grp?' grp':'')+(chMent(m)?' chment':'')+'" data-mid="'+esc(m.id||"")+'">'+(mine||grp?'':'<span class="chav" data-prof="'+esc(m.u)+'">'+chAv(m.tr)+'</span>')+'<div class="chbub">'+(grp||mine?'':'<div class="chn"><b class="plink" data-prof="'+esc(m.u)+'">'+(m.cr>=1&&m.cr<=3?'<span class="chcr" title="'+["Campeón","Subcampeón","Podio"][m.cr-1]+' del torneo semanal">'+["👑","🥈","🥉"][m.cr-1]+'</span> ':'')+esc(pvClean(m.n||"Entrenador"))+'</b>'+(window.CREADOR_UID&&m.u===window.CREADOR_UID?' <span class="chcrea" title="Creador del juego">👑 Creador</span>':'')+(m.g?' <span class="gtag">'+esc(String(m.g).slice(0,4))+'</span>':'')+'</div>')+body+'<small class="cht">'+chTime(m.at)+' <button class="chmute" data-chrp="'+esc(m.id||"")+'" title="Responder" aria-label="Responder">↩️</button>'+(mine?' <button class="chdel" data-chdel="'+esc(m.id)+'" title="Borrar mensaje" aria-label="Borrar mensaje">🗑️</button>':' <button class="chmute" data-chmute="'+esc(m.u)+'" data-chmn="'+esc(pvClean(m.n||""))+'" title="Silenciar a este jugador" aria-label="Silenciar">🔇</button> <button class="chmute" data-chrep="'+esc(m.id)+'" title="Reportar este mensaje" aria-label="Reportar">🚩</button>'+((typeof MOD!=="undefined"&&MOD.admin)?' <button class="chmute" data-chadel="'+esc(m.id)+'" title="Borrar (moderación)">🗑️</button>':''))+'</small></div></div>'}).join(""):'<p class="chempty">'+(CH.msgs[k]?'Todavía no hay mensajes. ¡Saluda! 👋':'Cargando mensajes…')+'</p>';
+    return '<div class="chm'+(mine?' me':'')+(grp?' grp':'')+(chMent(m)?' chment':'')+'" data-mid="'+esc(m.id||"")+'">'+(mine||grp?'':'<span class="chav" data-prof="'+esc(m.u)+'">'+chAv(m.tr)+'</span>')+'<div class="chbub">'+(grp||mine?'':'<div class="chn"><b class="plink" data-prof="'+esc(m.u)+'">'+(m.cr>=1&&m.cr<=3?'<span class="chcr" title="'+["Campeón","Subcampeón","Podio"][m.cr-1]+' del torneo semanal">'+["👑","🥈","🥉"][m.cr-1]+'</span> ':'')+esc(pvClean(m.n||"Entrenador"))+'</b>'+(window.CREADOR_UID&&m.u===window.CREADOR_UID?' <span class="chcrea" title="Creador del juego">👑 Creador</span>':'')+(window.CONSORTE_UID&&m.u===window.CONSORTE_UID?' <span class="chcons" title="Pareja del creador del juego">💖 Pareja del creador</span>':'')+(m.g?' <span class="gtag">'+esc(String(m.g).slice(0,4))+'</span>':'')+'</div>')+body+'<small class="cht">'+chTime(m.at)+' <button class="chmute" data-chrp="'+esc(m.id||"")+'" title="Responder" aria-label="Responder">↩️</button>'+(mine?' <button class="chdel" data-chdel="'+esc(m.id)+'" title="Borrar mensaje" aria-label="Borrar mensaje">🗑️</button>':' <button class="chmute" data-chmute="'+esc(m.u)+'" data-chmn="'+esc(pvClean(m.n||""))+'" title="Silenciar a este jugador" aria-label="Silenciar">🔇</button> <button class="chmute" data-chrep="'+esc(m.id)+'" title="Reportar este mensaje" aria-label="Reportar">🚩</button>'+((typeof MOD!=="undefined"&&MOD.admin)?' <button class="chmute" data-chadel="'+esc(m.id)+'" title="Borrar (moderación)">🗑️</button>':''))+'</small></div></div>'}).join(""):'<p class="chempty">'+(CH.msgs[k]?'Todavía no hay mensajes. ¡Saluda! 👋':'Cargando mensajes…')+'</p>';
   if(!keep||atB)L.scrollTop=L.scrollHeight;
   if(list.length)chSeenSet(k,list[list.length-1].at);chBtn();chTabs();
 }
@@ -22270,6 +22285,39 @@ setInterval(()=>{const P=$("codeAP"),B=$("codeAPB");if(!P||!B||!CREA_OK||typeof 
     catch(e){g.disabled=false;await creaLoad();toast(window.CREADOR_UID?"Otra cuenta ya tiene el título de creador.":"No se ha podido reclamar ahora. Inténtalo de nuevo.")}}},1500);
 setInterval(()=>{try{if(typeof S==="undefined"||!S||S.beta||!window.FB||!window.FB.created)return;const c=window.FB.created();if(c&&c<BETA_HASTA){S.beta=1;save();
   toast("🧪 ¡Gracias por jugar desde el principio! Tienes el título exclusivo «Beta-Tester»: póntelo en Tu entrenador › Mi tarjeta.")}}catch(e){}},5000);
+// ---------- título «💖 Pareja del Creador» (solo una cuenta, la que elija el creador) ----------
+// config/consorte = {uid, n}: lo escribe solo el creador del juego (reglas). La cuenta elegida ve el título en su lista y
+// lo lleva con un formato propio (rosa y oro con corazones); en el chat, insignia «💖 Pareja del creador», y marco en el perfil.
+let CONS_OK=false;
+window.CONSORTE_UID=(()=>{try{return localStorage.getItem("pgc-cons")||""}catch(e){return ""}})();
+async function consLoad(){if(!window.FB||!window.FB.consGet)return;try{const d=await window.FB.consGet();CONS_OK=true;window.CONSORTE_UID=d&&d.uid?String(d.uid):"";window.CONSORTE_N=d&&d.n?String(d.n):"";
+  try{localStorage.setItem("pgc-cons",window.CONSORTE_UID)}catch(e){}}catch(e){}}
+const esConsorte=u=>!!(u&&window.CONSORTE_UID&&u===window.CONSORTE_UID);
+const yoConsorte=()=>{try{return esConsorte(window.FB&&window.FB.uid&&window.FB.uid())}catch(e){return false}};
+TITLES.splice(1,0,["cons","💖 Pareja del Creador",yoConsorte]);
+setInterval(()=>{if(!CONS_OK&&window.FB&&window.FB.consGet&&window.FB.uid&&window.FB.uid())consLoad()},3000);
+setInterval(()=>{try{if(window.FB&&window.FB.consGet&&window.FB.uid&&window.FB.uid())consLoad()}catch(e){}},600000);
+{const _t=titHTML;titHTML=function(tx,k,u){const s=String(tx||"");
+  if(k==="cons"||(!k&&/Pareja del Creador/i.test(s))){if(!esConsorte(u))return "";
+    return '<span class="titcons" title="Pareja del creador de Poke Gacha Online"><span class="tkin"><span class="tkh">💖</span><span class="tktx">Pareja del Creador</span><span class="tkh tkh2" aria-hidden="true">👑</span></span>'+
+      '<i class="tks k1" aria-hidden="true">♥</i><i class="tks k2" aria-hidden="true">✦</i><i class="tks k3" aria-hidden="true">♥</i><i class="tks k4" aria-hidden="true">✧</i></span>'}
+  return _t.apply(this,arguments)}}
+// la primera vez que la cuenta elegida entra con el título disponible, se lo ponemos y se lo contamos
+setInterval(()=>{try{if(typeof S==="undefined"||!S||!yoConsorte()||S.consSeen)return;S.consSeen=1;const t=shwGet();t.tit="cons";save();
+  setTimeout(()=>{toast("💖 ¡Tienes un título único: «Pareja del Creador»! Lo llevas puesto en tu tarjeta de entrenador.");snd("win")},1500)}catch(e){}},5000);
+// el perfil de la pareja del creador lleva un marco rosa
+{const _op=openProf;openProf=async function(uid){const r=await _op.apply(this,arguments);try{const me=window.FB&&window.FB.uid&&window.FB.uid(),box=arguments[2]||$("profB"),c=box&&box.firstElementChild;
+  if(c&&esConsorte(uid||me)&&c.querySelector(".titcons"))c.classList.add("pcons")}catch(e){}return r}}
+// tarjeta para el creador (Más › 🎁 Códigos): elegir la cuenta por su nombre de jugador
+setInterval(()=>{const P=$("codeAP"),B=$("codeAPB");if(!P||!B||!CONS_OK||typeof yoCreador!=="function"||!yoCreador())return;let c=$("consBox");const st=window.CONSORTE_UID||"-";
+  if(c&&c.dataset.st===st)return;if(!c){c=document.createElement("div");c.id="consBox";c.className="creabox";const cb=$("creaBox");if(cb&&cb.parentNode===P)cb.after(c);else P.insertBefore(c,B)}c.dataset.st=st;
+  c.innerHTML=window.CONSORTE_UID?'<div>'+titHTML("","cons",window.CONSORTE_UID)+'</div><small class="mut">Lo lleva la cuenta de <b>'+esc(window.CONSORTE_N||"")+'</b>. Solo esa cuenta puede tenerlo; en el chat lleva la insignia «💖 Pareja del creador».</small><button type="button" class="alt mini" id="consDel">Quitar el título</button>'
+    :'<b>💖 Título «Pareja del Creador»</b><small class="mut">Un título único para la pareja del creador del juego. Escribe su nombre de jugador (tal cual sale en el juego):</small><div class="coderow"><input id="consNk" maxlength="30" placeholder="Nombre de jugador"><button class="red" id="consGo">💖 Darle el título</button></div><small id="consMsg" class="mut"></small>';
+  const g=$("consGo");if(g)g.onclick=async()=>{const nk=String(($("consNk")||{}).value||"").trim(),m=$("consMsg");if(!nk){m.textContent="Escribe su nombre de jugador.";return}
+    if(!(await askOk("¿Dar el título «💖 Pareja del Creador» a «"+nk+"»?")))return;g.disabled=true;
+    try{await window.FB.consSet(nk);await consLoad();snd("win");toast("💖 ¡"+nk+" ya tiene el título «Pareja del Creador»!")}
+    catch(e){g.disabled=false;m.textContent=e&&e.code==="nf"?"No hay ningún jugador con ese nombre. Revisa que esté bien escrito (mayúsculas incluidas no importan).":e&&e.code==="self"?"Ese es tu propio nombre.":"No se ha podido guardar. Inténtalo de nuevo."}};
+  const d=$("consDel");if(d)d.onclick=async()=>{if(!(await askOk("¿Quitar el título «Pareja del Creador» a "+(window.CONSORTE_N||"esa cuenta")+"?")))return;try{await window.FB.consDel();await consLoad();toast("Título quitado.")}catch(e){toast("No se ha podido quitar.")}}},1500);
 
 // =====================================================================================
 // SORTEOS
@@ -24425,6 +24473,11 @@ async function main(){
     async cmGet(w){const s=await S.getDoc(S.doc(db,"comunidad",w));return s.exists()?(+s.data().n||0):0},
     async cmMe(w){const s=await S.getDoc(S.doc(db,"comunidad",w,"u",uid));return s.exists()?(+s.data().n||0):0},
     async cmTop(w){const sn=await S.getDocs(S.query(S.collection(db,"comunidad",w,"u"),S.orderBy("n","desc"),S.limit(10)));return sn.docs.map(d=>Object.assign({u:d.id},d.data()))},
+    // título «💖 Pareja del Creador»: el creador elige a qué cuenta (por su nombre de jugador)
+    async consGet(){const s=await S.getDoc(S.doc(db,"config","consorte"));return s.exists()?s.data():null},
+    async consSet(nick){const s=await S.getDoc(S.doc(db,"nicks",nkey(nick)));if(!s.exists())throw {code:"nf"};const u=s.data().uid;if(u===uid)throw {code:"self"};
+      await S.setDoc(S.doc(db,"config","consorte"),{uid:u,n:String(nick).slice(0,30),at:Date.now()});return u},
+    consDel:()=>S.deleteDoc(S.doc(db,"config","consorte")),
     async creadorGet(){const s=await S.getDoc(S.doc(db,"config","creador"));return s.exists()?s.data():null},
     async creadorSet(){await S.setDoc(S.doc(db,"config","creador"),{uid:uid,at:Date.now()})},
     async codePubList(){const sn=await S.getDocs(S.query(S.collection(db,"codesPub"),S.orderBy("at","desc"),S.limit(60)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},

@@ -154,3 +154,36 @@ setInterval(()=>{const P=$("codeAP"),B=$("codeAPB");if(!P||!B||!CREA_OK||typeof 
     catch(e){g.disabled=false;await creaLoad();toast(window.CREADOR_UID?"Otra cuenta ya tiene el título de creador.":"No se ha podido reclamar ahora. Inténtalo de nuevo.")}}},1500);
 setInterval(()=>{try{if(typeof S==="undefined"||!S||S.beta||!window.FB||!window.FB.created)return;const c=window.FB.created();if(c&&c<BETA_HASTA){S.beta=1;save();
   toast("🧪 ¡Gracias por jugar desde el principio! Tienes el título exclusivo «Beta-Tester»: póntelo en Tu entrenador › Mi tarjeta.")}}catch(e){}},5000);
+// ---------- título «💖 Pareja del Creador» (solo una cuenta, la que elija el creador) ----------
+// config/consorte = {uid, n}: lo escribe solo el creador del juego (reglas). La cuenta elegida ve el título en su lista y
+// lo lleva con un formato propio (rosa y oro con corazones); en el chat, insignia «💖 Pareja del creador», y marco en el perfil.
+let CONS_OK=false;
+window.CONSORTE_UID=(()=>{try{return localStorage.getItem("pgc-cons")||""}catch(e){return ""}})();
+async function consLoad(){if(!window.FB||!window.FB.consGet)return;try{const d=await window.FB.consGet();CONS_OK=true;window.CONSORTE_UID=d&&d.uid?String(d.uid):"";window.CONSORTE_N=d&&d.n?String(d.n):"";
+  try{localStorage.setItem("pgc-cons",window.CONSORTE_UID)}catch(e){}}catch(e){}}
+const esConsorte=u=>!!(u&&window.CONSORTE_UID&&u===window.CONSORTE_UID);
+const yoConsorte=()=>{try{return esConsorte(window.FB&&window.FB.uid&&window.FB.uid())}catch(e){return false}};
+TITLES.splice(1,0,["cons","💖 Pareja del Creador",yoConsorte]);
+setInterval(()=>{if(!CONS_OK&&window.FB&&window.FB.consGet&&window.FB.uid&&window.FB.uid())consLoad()},3000);
+setInterval(()=>{try{if(window.FB&&window.FB.consGet&&window.FB.uid&&window.FB.uid())consLoad()}catch(e){}},600000);
+{const _t=titHTML;titHTML=function(tx,k,u){const s=String(tx||"");
+  if(k==="cons"||(!k&&/Pareja del Creador/i.test(s))){if(!esConsorte(u))return "";
+    return '<span class="titcons" title="Pareja del creador de Poke Gacha Online"><span class="tkin"><span class="tkh">💖</span><span class="tktx">Pareja del Creador</span><span class="tkh tkh2" aria-hidden="true">👑</span></span>'+
+      '<i class="tks k1" aria-hidden="true">♥</i><i class="tks k2" aria-hidden="true">✦</i><i class="tks k3" aria-hidden="true">♥</i><i class="tks k4" aria-hidden="true">✧</i></span>'}
+  return _t.apply(this,arguments)}}
+// la primera vez que la cuenta elegida entra con el título disponible, se lo ponemos y se lo contamos
+setInterval(()=>{try{if(typeof S==="undefined"||!S||!yoConsorte()||S.consSeen)return;S.consSeen=1;const t=shwGet();t.tit="cons";save();
+  setTimeout(()=>{toast("💖 ¡Tienes un título único: «Pareja del Creador»! Lo llevas puesto en tu tarjeta de entrenador.");snd("win")},1500)}catch(e){}},5000);
+// el perfil de la pareja del creador lleva un marco rosa
+{const _op=openProf;openProf=async function(uid){const r=await _op.apply(this,arguments);try{const me=window.FB&&window.FB.uid&&window.FB.uid(),box=arguments[2]||$("profB"),c=box&&box.firstElementChild;
+  if(c&&esConsorte(uid||me)&&c.querySelector(".titcons"))c.classList.add("pcons")}catch(e){}return r}}
+// tarjeta para el creador (Más › 🎁 Códigos): elegir la cuenta por su nombre de jugador
+setInterval(()=>{const P=$("codeAP"),B=$("codeAPB");if(!P||!B||!CONS_OK||typeof yoCreador!=="function"||!yoCreador())return;let c=$("consBox");const st=window.CONSORTE_UID||"-";
+  if(c&&c.dataset.st===st)return;if(!c){c=document.createElement("div");c.id="consBox";c.className="creabox";const cb=$("creaBox");if(cb&&cb.parentNode===P)cb.after(c);else P.insertBefore(c,B)}c.dataset.st=st;
+  c.innerHTML=window.CONSORTE_UID?'<div>'+titHTML("","cons",window.CONSORTE_UID)+'</div><small class="mut">Lo lleva la cuenta de <b>'+esc(window.CONSORTE_N||"")+'</b>. Solo esa cuenta puede tenerlo; en el chat lleva la insignia «💖 Pareja del creador».</small><button type="button" class="alt mini" id="consDel">Quitar el título</button>'
+    :'<b>💖 Título «Pareja del Creador»</b><small class="mut">Un título único para la pareja del creador del juego. Escribe su nombre de jugador (tal cual sale en el juego):</small><div class="coderow"><input id="consNk" maxlength="30" placeholder="Nombre de jugador"><button class="red" id="consGo">💖 Darle el título</button></div><small id="consMsg" class="mut"></small>';
+  const g=$("consGo");if(g)g.onclick=async()=>{const nk=String(($("consNk")||{}).value||"").trim(),m=$("consMsg");if(!nk){m.textContent="Escribe su nombre de jugador.";return}
+    if(!(await askOk("¿Dar el título «💖 Pareja del Creador» a «"+nk+"»?")))return;g.disabled=true;
+    try{await window.FB.consSet(nk);await consLoad();snd("win");toast("💖 ¡"+nk+" ya tiene el título «Pareja del Creador»!")}
+    catch(e){g.disabled=false;m.textContent=e&&e.code==="nf"?"No hay ningún jugador con ese nombre. Revisa que esté bien escrito (mayúsculas incluidas no importan).":e&&e.code==="self"?"Ese es tu propio nombre.":"No se ha podido guardar. Inténtalo de nuevo."}};
+  const d=$("consDel");if(d)d.onclick=async()=>{if(!(await askOk("¿Quitar el título «Pareja del Creador» a "+(window.CONSORTE_N||"esa cuenta")+"?")))return;try{await window.FB.consDel();await consLoad();toast("Título quitado.")}catch(e){toast("No se ha podido quitar.")}}},1500);

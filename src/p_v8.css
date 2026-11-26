@@ -271,3 +271,18 @@ body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}
 .parw .parhe,.parcard .parhe{font-size:2.6rem}.parben{text-align:left;margin:6px 0;padding-left:18px;font-size:.85rem;display:flex;flex-direction:column;gap:3px}
 .parbt{display:flex;gap:8px;justify-content:center;margin-top:6px}
 .parcard{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,111,174,.15),rgba(224,71,158,.08));margin:0 0 12px}.parcard>div:nth-child(2){flex:1;display:flex;flex-direction:column;gap:2px}
+/* título «💖 Pareja del Creador» */
+.titcons{position:relative;display:inline-flex;vertical-align:middle;padding:3px;border-radius:999px;background:conic-gradient(from var(--tka,0deg),#ff6fae,#ffd23f,#ff9ad8,#ffe9a8,#ff6fae);animation:tkSpin 4s linear infinite,tkGlow 2.4s ease-in-out infinite alternate}
+@property --tka{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes tkSpin{to{--tka:360deg}}@keyframes tkGlow{from{box-shadow:0 0 6px rgba(255,111,174,.5)}to{box-shadow:0 0 16px rgba(255,111,174,.9),0 0 26px rgba(255,210,63,.4)}}
+.titcons .tkin{display:inline-flex;align-items:center;gap:7px;padding:5px 16px 5px 12px;border-radius:inherit;background:linear-gradient(135deg,#4a1238,#7a1f5a 55%,#4a1238)}
+.titcons .tktx{font-weight:900;letter-spacing:.3px;background:linear-gradient(90deg,#ffe0f0,#ff9ad8,#ffd23f,#fff3d6,#ff9ad8,#ffe0f0);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:tkTx 3.5s linear infinite}
+@keyframes tkTx{to{background-position:250% center}}
+.titcons .tkh{font-size:1.1em;filter:drop-shadow(0 0 6px rgba(255,111,174,.95));display:inline-block;animation:tkBeat 1.6s ease-in-out infinite}.titcons .tkh2{font-size:.9em;filter:drop-shadow(0 0 6px rgba(255,210,63,.95));animation-delay:.8s}
+@keyframes tkBeat{0%,100%{transform:scale(1)}15%{transform:scale(1.22)}30%{transform:scale(1)}45%{transform:scale(1.12)}}
+.titcons .tks{position:absolute;font-style:normal;color:#ff9ad8;font-size:10px;pointer-events:none;opacity:0;animation:tkSp 2.8s ease-in-out infinite}
+.titcons .k1{left:6px;top:-6px}.titcons .k2{right:10px;top:-7px;color:#ffd23f;animation-delay:.7s}.titcons .k3{right:2px;bottom:-6px;animation-delay:1.4s}.titcons .k4{left:30%;bottom:-7px;color:#ffd23f;animation-delay:2.1s}
+@keyframes tkSp{0%,100%{opacity:0;transform:translateY(2px) scale(.6)}50%{opacity:1;transform:translateY(-3px) scale(1)}}
+.pcons{box-shadow:0 0 0 3px #ff6fae,0 0 24px rgba(255,111,174,.55),0 0 46px rgba(255,210,63,.25)!important;border-radius:16px}
+.chcons{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;vertical-align:middle;color:#fff;background:linear-gradient(135deg,#ff6fae,#e0479e 60%,#ffb01f);box-shadow:0 0 8px rgba(255,111,174,.6)}
+@media (prefers-reduced-motion:reduce){.titcons,.titcons .tktx,.titcons .tkh,.titcons .tks{animation:none}}

@@ -15,14 +15,32 @@
 //   bingo/{sala_ronda}/p/{uid}: {c: [cartones en texto], nk, pl: cobrada la línea, pb: cobrado el bingo}
 // =====================================================================================
 const E = require("./economia");
+const D = require("./datos.json");
+
+// Pokémon sorpresa del premio del bingo: especies normales (sin megas, gigamax ni formas) comunes, raras o épicas
+const NOMS = new Set(D.P.map((p) => p[0])), PKB = {C: [], R: [], E: []};
+D.P.forEach((p) => {
+  const n = p[0];
+  if (!PKB[p[2]] || /Mega-|Gigamax|Dinamax|Primigenio|Eternamax|\(/.test(n)) return;
+  if (n.includes(" ") && NOMS.has(n.split(" ")[0])) return;
+  PKB[p[2]].push(n);
+});
 
 const PER = 360000, LOB = 90000, CALL = 3500, POOL = 60, MAXC = 4, DIA = 40, GR = 3;
-// salas: precio del cartón y objetos de premio (línea / bingo / bingo con 3 jugadores o más)
+// salas: precio del cartón, objetos de premio (línea / bingo / bingo con 3 jugadores o más) y el Pokémon sorpresa del
+// bingo (probabilidad de cada rareza y de que salga variocolor)
 const SALAS = {
-  b: {p: 10000, l: {pb: 5}, b: {sb: 5}, b3: {cand: 1}},
-  c: {p: 1000000, l: {sb: 5}, b: {ub: 5}, b3: {cand: 3, ppmax: 1}},
-  l: {p: 100000000, l: {ub: 5}, b: {cand: 3, tshard: 2}, b3: {mb: 1, crys: 1}},
+  b: {p: 10000, l: {pb: 5}, b: {sb: 5}, b3: {cand: 1}, pk: {C: 0.6, R: 0.35, E: 0.05}, sh: 0.02},
+  c: {p: 1000000, l: {sb: 5}, b: {ub: 5}, b3: {cand: 3, ppmax: 1}, pk: {C: 0.3, R: 0.5, E: 0.2}, sh: 0.04},
+  l: {p: 100000000, l: {ub: 5}, b: {cand: 3, tshard: 2}, b3: {mb: 1, crys: 1}, pk: {C: 0, R: 0.4, E: 0.6}, sh: 0.08},
 };
+function sorpresa(s, rnd) {
+  const S = SALAS[s];
+  let x = rnd(), r = "E";
+  for (const k of ["C", "R", "E"]) { if (x < S.pk[k]) { r = k; break; } x -= S.pk[k]; }
+  const L = PKB[r];
+  return {mon: L[Math.floor(rnd() * L.length) % L.length], sh: rnd() < S.sh, rar: r};
+}
 
 function rng(str) {
   let h = 2166136261;
@@ -42,6 +60,8 @@ function cantadas(r, ahora) {
   const t = ahora - (r * PER + LOB);
   return t < 0 ? 0 : Math.min(POOL, Math.floor(t / CALL) + 1);
 }
+// bola «virtual» que tocaría ahora aunque ya no queden (para medir el margen para cantar también en las últimas bolas)
+const bolaT = (r, ahora) => Math.floor((ahora - (r * PER + LOB)) / CALL) + 1;
 // cartón: 15 números distintos (0–59), en texto de 30 letras (2 cifras en base 36 cada uno)
 function carton(rnd) {
   const L = [];
@@ -71,6 +91,7 @@ const idOk = (ac) => {
 // ac: {k:"bingo", op:"comprar"|"cantar"|"cobrar", s: sala, r: ronda, n?: cartones, t?: "l"|"b"}
 // prevDia: {d, n} cartones comprados hoy (del documento del usuario) · hoy: AAAA-MM-DD
 async function bingo(tx, db, uid, S, ac, ahora, prevDia, hoy, rnd) {
+  rnd = rnd || Math.random;
   const op = ac && ac.op, k = idOk(ac);
   if (!k) return {error: "bingo-sala"};
   const ref = db.doc("bingo/" + k.id), pref = db.doc("bingo/" + k.id + "/p/" + uid);
@@ -117,8 +138,9 @@ async function bingo(tx, db, uid, S, ac, ahora, prevDia, hoy, rnd) {
     if (ci === 99) return {error: "bingo-falso"};
     // en el bingo, la línea tiene que estar cerrada antes (siempre lo está: una línea sale antes que el cartón entero)
     const key = t === "l" ? "ln" : "bn", prev = d[key];
-    if (prev && cur > prev.c + GR) return {error: "bingo-tarde"};
-    if (cur > ci + GR) return {error: "bingo-tarde"};
+    const bt = bolaT(k.r, ahora);
+    if (prev && bt > prev.c + GR) return {error: "bingo-tarde"};
+    if (bt > ci + GR) return {error: "bingo-tarde"};
     const nk = String((p && p.nk) || S.nick || "Entrenador").slice(0, 20);
     let nuevo;
     if (!prev || ci < prev.c) nuevo = {c: ci, w: [uid], wn: [nk]};
@@ -132,19 +154,24 @@ async function bingo(tx, db, uid, S, ac, ahora, prevDia, hoy, rnd) {
 
   if (op === "cobrar") {
     if (!p) return {error: "bingo-sin-carton"};
-    const cur = cantadas(k.r, ahora), b = bote(k.s, d);
-    const cerrado = (x) => x && (cur > x.c + GR || ahora >= (k.r + 1) * PER);
-    let t = 0, it = {}, pl = !!p.pl, pb = !!p.pb, ok = 0;
+    const b = bote(k.s, d);
+    const cerrado = (x) => x && (bolaT(k.r, ahora) > x.c + GR || ahora >= (k.r + 1) * PER);
+    let t = 0, it = {}, pl = !!p.pl, pb = !!p.pb, ok = 0, pk = null;
     if (!pl && cerrado(d.ln) && (d.ln.w || []).includes(uid)) { const w = d.ln.w.length; t += Math.floor(b.l / w); it = sumar(it, w === 1 ? b.il : {}); pl = true; ok |= 1; }
-    if (!pb && cerrado(d.bn) && (d.bn.w || []).includes(uid)) { const w = d.bn.w.length; t += Math.floor(b.b / w); it = sumar(it, b.ib); pb = true; ok |= 2; }
+    if (!pb && cerrado(d.bn) && (d.bn.w || []).includes(uid)) { const w = d.bn.w.length; t += Math.floor(b.b / w); it = sumar(it, b.ib); pb = true; ok |= 2; pk = sorpresa(k.s, rnd); }
     if (!ok) return {error: "bingo-nada"};
     S.t = E.num(S.t) + t;
     S.bag = S.bag && typeof S.bag === "object" ? S.bag : {};
     for (const i in it) S.bag[i] = E.num(S.bag[i]) + it[i];
-    tx.set(pref, Object.assign({}, p, {pl, pb}));
-    return {out: {op, s: k.s, r: k.r, t, it, l: !!(ok & 1), b: !!(ok & 2)}};
+    if (pk) {
+      S.owned = S.owned && typeof S.owned === "object" ? S.owned : {};
+      S.owned[pk.mon] = E.num(S.owned[pk.mon]) + 1;
+      if (pk.sh) { S.shiny = S.shiny && typeof S.shiny === "object" ? S.shiny : {}; S.shiny[pk.mon] = E.num(S.shiny[pk.mon]) + 1; }
+    }
+    tx.set(pref, Object.assign({}, p, {pl, pb}, pk ? {pk: pk.mon, psh: pk.sh} : {}));
+    return {out: Object.assign({op, s: k.s, r: k.r, t, it, l: !!(ok & 1), b: !!(ok & 2)}, pk ? {mon: pk.mon, sh: pk.sh, rar: pk.rar} : {})};
   }
   return {error: "bingo-op"};
 }
 
-module.exports = {bingo, bolas, cantadas, carton, completa, bote, leer, SALAS, PER, LOB, CALL, POOL, MAXC, DIA, GR};
+module.exports = {bingo, sorpresa, PKB, bolas, cantadas, bolaT, carton, completa, bote, leer, SALAS, PER, LOB, CALL, POOL, MAXC, DIA, GR};

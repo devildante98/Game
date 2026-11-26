@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795699723">
+<meta name="game-build" content="1795700242">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3515,7 +3515,7 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bngsay b{font-size:.75rem;color:#b0489a}.bngsay p{margin:2px 0 0;font-weight:700}
 .bngnow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .bngball{position:relative;width:110px;height:110px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;font-size:3rem;background:radial-gradient(circle at 35% 30%,#fff,#ffe9a8 45%,#f4b73a);box-shadow:inset -8px -10px 18px rgba(0,0,0,.18),0 6px 18px rgba(0,0,0,.35)}
-.bngball img{position:relative;z-index:1}.bngball i{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-style:normal;font-weight:900;font-size:.95rem;background:#e2573b;color:#fff;border-radius:999px;padding:1px 9px}
+.bngball{overflow:hidden}.bngball img{position:relative;z-index:1;max-width:96%;height:auto}.bngball i{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-style:normal;font-weight:900;font-size:.95rem;background:#e2573b;color:#fff;border-radius:999px;padding:1px 9px}
 .bngball.wait{animation:bngSpin 3s linear infinite}@keyframes bngSpin{to{transform:rotate(360deg)}}
 .bngball.bnew{animation:bngPop .8s cubic-bezier(.2,1.6,.4,1)}@keyframes bngPop{0%{transform:scale(.2) rotate(-200deg);opacity:0}100%{transform:none;opacity:1}}
 .bngst{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}.bngst>b{font-size:1.25rem}.bngst small{opacity:.85}
@@ -3547,6 +3547,11 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bngopts{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0 0 10px;font-size:.88rem}
 @media (max-width:560px){.bngball{width:88px;height:88px}.bngcards{grid-template-columns:1fr}.bngtabs button{font-size:.75rem}.bngpz{grid-template-columns:1fr}.cmums{grid-template-columns:44px 1fr;}.cmums em,.cmums button{grid-column:1/-1;justify-self:end}}
 @media (prefers-reduced-motion:reduce){.bngball.wait,.bngav,.cmuglobe,.tlrdust span,.bngsing button.pulse,.cmulive{animation:none}}
+.bngpk{color:#b0489a;font-weight:800}.bngpkp{font-size:.74rem;opacity:.8}
+.bngmon{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:rgba(20,12,40,.6);padding:16px}
+.bngmonw{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px 26px;border-radius:22px;background:#fff;color:#2a2340;text-align:center;max-width:320px;width:100%;animation:bngPop .7s cubic-bezier(.2,1.6,.4,1)}
+.bngmonw.sh{background:linear-gradient(160deg,#fff,#fff3c4 60%,#ffd9f0);box-shadow:0 0 30px rgba(255,215,90,.8)}.bngmonw b{font-size:1.3rem}
+.bngmonp{width:150px;height:150px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,#fff,#efe9ff)}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -8370,7 +8375,7 @@ $("prsGo").onclick=()=>$("reset").click();
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
 const GAME_VER="8.3";
 const NEWS=[
-{v:"2026-11-26-8.3",ver:"8.3",at:"2026-11-26T14:26",t:"🎱 Novedad",l:["🎱 Bingo Pokémon online (Online › 🎱 Bingo): compra cartones con tickets y juega en directo con otros entrenadores. Bea, la presentadora, va sacando Pokémon del bombo (¡y te los dice en voz alta!) y tú los vas marcando", "Tres salas con su precio de cartón (Bosque, Ciudad y Liga) y una partida nueva cada 6 minutos. Antes de comprar ves el bote: el 90 % de lo vendido, un 30 % para la línea y un 70 % para el bingo, y objetos de premio que mejoran si sois 3 o más", "¡Canta LÍNEA o BINGO a tiempo! Si varios lo completáis con la misma bola, os repartís el premio. Puedes marcar a mano o dejar que el juego marque y cante por ti", "🌍 Meta de la comunidad (Retos): cada tirada del gacha de cualquier entrenador suma en una meta semanal para todos, con la barra en directo. Al llegar al 25, 50, 75, 100 y 150 %, todos los que hayan tirado al menos 10 veces cobran su premio", "♻️ Taller de repetidos (Pokédex): convierte tus repetidos en polvo de estrellas ✨ y fabrica con él los Pokémon que te faltan (¡con un 1 % de que salgan variocolores!). Tu copia principal y tus variocolores no se tocan, y la pegatina brillante del Álbum se queda"]},
+{v:"2026-11-26-8.3",ver:"8.3",at:"2026-11-26T14:26",t:"🎱 Novedad",l:["🎱 Bingo Pokémon online (Online › 🎱 Bingo): compra cartones con tickets y juega en directo con otros entrenadores. Bea, la presentadora, va sacando Pokémon del bombo (¡y te los dice en voz alta!) y tú los vas marcando", "Tres salas con su precio de cartón (Bosque, Ciudad y Liga) y una partida nueva cada 6 minutos. Antes de comprar ves el bote: el 90 % de lo vendido, un 30 % para la línea y un 70 % para el bingo, objetos de premio que mejoran si sois 3 o más y, para quien canta bingo, un 🎁 Pokémon sorpresa al azar (hasta Épico) que puede salir variocolor", "¡Canta LÍNEA o BINGO a tiempo! Si varios lo completáis con la misma bola, os repartís el premio. Puedes marcar a mano o dejar que el juego marque y cante por ti", "🌍 Meta de la comunidad (Retos): cada tirada del gacha de cualquier entrenador suma en una meta semanal para todos, con la barra en directo. Al llegar al 25, 50, 75, 100 y 150 %, todos los que hayan tirado al menos 10 veces cobran su premio", "♻️ Taller de repetidos (Pokédex): convierte tus repetidos en polvo de estrellas ✨ y fabrica con él los Pokémon que te faltan (¡con un 1 % de que salgan variocolores!). Tu copia principal y tus variocolores no se tocan, y la pegatina brillante del Álbum se queda"]},
 {v:"2026-11-26-8.2",ver:"8.2",at:"2026-11-26T13:04",t:"🎓 Novedad",l:["🎓 4 especialidades de entrenador nuevas, cada una con 3 rangos y su propio título:", "🧭 Explorador: los objetos ocultos de la Exploración a veces traen tickets de más y el tesoro semanal da más premio", "🎮 Jugón: los premios de los minijuegos te dan hasta un 30 % más de tickets", "💰 Comerciante: hasta un 24 % de descuento en el Mercader misterioso, en los muebles de la Base secreta y en los aspectos de la Poké Ball", "🔬 Investigador: tickets extra por cada Pokémon nuevo en tu Pokédex, y más premio en las investigaciones de la Profesora y en el Pokémon del día"]},
 {v:"2026-11-25-8.1",ver:"8.1",at:"2026-11-25T17:13",t:"🔥 Novedad",l:["🔥 Rachas de regalos: si tu amigo y tú os enviáis un regalo el mismo día, vuestra racha sube. Si un día alguno no lo envía, vuelve a empezar", "Premios para los dos a los 3, 7, 14, 30, 60 y 100 días seguidos (hasta Master Balls y Cristales Supremos), y el título «🔥 Amistad inquebrantable» a los 30 días", "En Social › Amigos verás la racha 🔥 junto a cada amigo, un aviso ⚠️ si se va a perder y, al abrir un regalo, un botón para devolvérselo al momento"]},
 {v:"2026-11-25-8.0.3",ver:"8.0.3",at:"2026-11-25T17:06",t:"🔧 Arreglos/Mejoras",l:["Minijuegos: el pueblo del fondo vuelve a verse detrás de la ventana del minijuego (se queda quieto mientras juegas, así el juego sigue igual de fluido)"]},
@@ -8812,7 +8817,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795699723";
+const GAME_B="1795700242";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -23870,7 +23875,7 @@ function cmuUI(){const b=$("cmuPB");if(!b)return;if(!v8Uid()){b.innerHTML='<p cl
   if(CMU.n==null){b.innerHTML='<p class="mut">⏳ Cargando la meta de la semana…</p>';cmuLoad(true);return}
   const w=CMU.w,info=cmuInfo(CMU.n,CMU.pn),me=CMU.me|0,got=cmuGot(w);
   const row=(W,inf,mine)=>CMU_MS.map(m=>{const rw={t:v8Tk(m[1].h,300000),it:m[1].it},ok=inf.pct>=m[0],has=cmuGot(W).includes(m[0]);
-    return '<div class="cmums'+(has?' got':ok?' ok':'')+'"><b>'+m[0]+' %</b><span>'+rwTxt(rw)+'</span>'+(has?'<em>✅ Cobrado</em>':ok?(mine>=CMU_ME?'<button class="red mini" data-cmuc="'+W+'|'+m[0]+'">🎁 Cobrar</button>':'<em>Tira '+(CMU_ME-mine)+' vez'+(CMU_ME-mine===1?'':'es')+' más</em>'):'<em>🔒 Faltan '+fmt(Math.max(0,Math.ceil(inf.g*m[0]/100-inf.n)))+'</em>')+'</div>'}).join("");
+    return '<div class="cmums'+(has?' got':ok?' ok':'')+'"><b>'+m[0]+' %</b><span>'+rwTxt(rw)+'</span>'+(has?'<em>✅ Cobrado</em>':ok?(mine>=CMU_ME?'<button class="red mini" data-cmuc="'+W+'|'+m[0]+'">🎁 Cobrar</button>':'<em>Tira '+(CMU_ME-mine)+(CMU_ME-mine===1?' vez':' veces')+' más</em>'):'<em>🔒 Faltan '+fmt(Math.max(0,Math.ceil(inf.g*m[0]/100-inf.n)))+'</em>')+'</div>'}).join("");
   const pInfo=CMU.pn!=null?cmuInfo(CMU.pn,CMU.ppn):null,pCan=pInfo?cmuCan(CMU.pw,pInfo,CMU.pme|0):[];
   b.innerHTML='<div class="cmuhd"><div class="cmuglobe">🌍</div><div><b>¡'+fmt(info.g)+' tiradas entre todos esta semana!</b><small class="mut">Cada tirada del gacha de cualquier entrenador suma. Termina en <b>'+cmuLeft()+'</b>.</small></div></div>'+
     '<div class="cmunum"><b>'+fmt(info.n)+'</b> / '+fmt(info.g)+' <span>('+Math.floor(info.pct)+' %)</span>'+(CMU.unsub?'<small class="cmulive">● EN DIRECTO</small>':'')+'</div>'+cmuBar(info)+
@@ -23893,14 +23898,17 @@ setTimeout(()=>{try{cmuLoad(true)}catch(e){}},15000);setInterval(()=>{try{cmuLoa
 // Las mismas cuentas que _server/bingo.js (si se cambia algo aquí, hay que cambiarlo allí también).
 const BNG={PER:360000,LOB:90000,CALL:3500,POOL:60,MAXC:4,DIA:40,GR:3};
 const BNG_S={
-  b:{n:"Sala Bosque",ic:"🌳",p:10000,l:{pb:5},b:{sb:5},b3:{cand:1}},
-  c:{n:"Sala Ciudad",ic:"🏙️",p:1000000,l:{sb:5},b:{ub:5},b3:{cand:3,ppmax:1}},
-  l:{n:"Sala Liga",ic:"🏆",p:100000000,l:{ub:5},b:{cand:3,tshard:2},b3:{mb:1,crys:1}}};
+  b:{n:"Sala Bosque",ic:"🌳",p:10000,l:{pb:5},b:{sb:5},b3:{cand:1},pk:{C:.6,R:.35,E:.05},sh:.02},
+  c:{n:"Sala Ciudad",ic:"🏙️",p:1000000,l:{sb:5},b:{ub:5},b3:{cand:3,ppmax:1},pk:{C:.3,R:.5,E:.2},sh:.04},
+  l:{n:"Sala Liga",ic:"🏆",p:100000000,l:{ub:5},b:{cand:3,tshard:2},b3:{mb:1,crys:1},pk:{C:0,R:.4,E:.6},sh:.08}};
+// Pokémon sorpresa del bingo (lo sortea el servidor al cobrar): probabilidades de cada rareza y de variocolor
+const bngPkTxt=s=>{const S2=BNG_S[s];return["C","R","E"].filter(r=>S2.pk[r]).map(r=>STAR[r]+" "+Math.round(S2.pk[r]*100)+" %").join(" · ")+" · ✨ "+Math.round(S2.sh*100)+" %"};
 const BNG_HOST="Bea";
 const BNG_TXT={"bingo-cerrado":"La venta de cartones de esa partida ya se ha cerrado.","bingo-max":"Como mucho "+BNG.MAXC+" cartones por partida.","bingo-dia":"Ya has comprado "+BNG.DIA+" cartones hoy. ¡Vuelve mañana!",
   "bingo-falso":"Aún no tienes eso completo.","bingo-tarde":"¡Demasiado tarde! Hay que cantar en cuanto se completa.","bingo-ya":"Otro jugador lo completó antes que tú.","bingo-nada":"No hay premio que cobrar.",
   "bingo-pronto":"La partida aún no ha empezado.","bingo-sin-carton":"No tienes cartones en esa partida.","bingo-sala":"Esa sala no existe.","bingo-n":"Elige cuántos cartones quieres.","saldo":"No tienes tickets suficientes."};
 function bngBolas(s,r,x){const R=v8Rng("bingo|"+s+"|"+r+"|"+((x||0)>>>0)),L=[];for(let i=0;i<BNG.POOL;i++)L.push(i);for(let i=BNG.POOL-1;i>0;i--){const j=Math.floor(R()*(i+1));[L[i],L[j]]=[L[j],L[i]]}return L}
+const bngBT=(r,now)=>Math.floor((now-(r*BNG.PER+BNG.LOB))/BNG.CALL)+1;
 const bngCant=(r,now)=>{const t=now-(r*BNG.PER+BNG.LOB);return t<0?0:Math.min(BNG.POOL,Math.floor(t/BNG.CALL)+1)};
 const bngLeer=c=>{const o=[];for(let i=0;i<30;i+=2)o.push(parseInt(String(c).slice(i,i+2),36));return o};
 function bngComp(c,pos){const v=bngLeer(c),f=k=>Math.max(...v.slice(k*5,k*5+5).map(x=>pos[x]));return{l:Math.min(f(0),f(1),f(2)),b:Math.max(...v.map(x=>pos[x]))}}
@@ -23923,8 +23931,8 @@ function bngAddMy(s,r){const o=bngSt(),id=bngId(s,r);if(!o.my.some(x=>x.id===id)
   Object.keys(o.paid).forEach(k=>{if(!o.my.some(x=>x.id===k))delete o.paid[k]})}
 // fase de una partida: venta, juego (con la bola actual) o terminada
 function bngPhase(s,r,now){const t=now-r*BNG.PER,d=BG.d[bngId(s,r)]||null;if(t<0)return{k:"pre",d};if(t<BNG.LOB)return{k:"lob",d,left:BNG.LOB-t};
-  const cur=bngCant(r,now),closed=x=>x&&(cur>x.c+BNG.GR||now>=(r+1)*BNG.PER);
-  if(!d||!(d.n>0))return{k:"vacia",d,cur};const over=closed(d.bn)||now>=(r+1)*BNG.PER;return{k:over?"fin":"juego",d,cur,lnC:closed(d.ln),bnC:closed(d.bn)}}
+  const cur=bngCant(r,now),bt=bngBT(r,now),closed=x=>x&&(bt>x.c+BNG.GR||now>=(r+1)*BNG.PER);
+  if(!d||!(d.n>0))return{k:"vacia",d,cur};const over=closed(d.bn)||now>=(r+1)*BNG.PER;return{k:over?"fin":"juego",d,cur,bt,lnC:closed(d.ln),bnC:closed(d.bn)}}
 // escuchar en directo las partidas que hacen falta (la de la sala que miras, la siguiente y las tuyas en juego)
 function bngWatch(){const F=window.FB;if(!F||!F.bingoWatch||!v8Uid())return;const now=bngNow(),R=Math.floor(now/BNG.PER),o=bngSt(),need=new Set();
   if(nxOpen("bngP")){need.add(bngId(o.s,R));need.add(bngId(o.s,R+1))}
@@ -23946,10 +23954,13 @@ async function bngSing(id,t){const x=bngSt().my.find(y=>y.id===id);if(!x)return;
   const r=await bngAct({op:"cantar",s:x.s,r:x.r,t},y=>{snd("win");toast(t==="l"?"🙋 ¡Has cantado LÍNEA! Esperando a que se cierre la jugada…":"🎉 ¡Has cantado BINGO! Esperando a que se cierre la jugada…")});
   if(!r||!r.ok){if(r&&(r.why==="bingo-falso"||r.why==="bingo-pronto"))delete BG.sang[k]}bngUI(true)}
 async function bngPay(id){const o=bngSt(),x=o.my.find(y=>y.id===id);if(!x||BG.pay[id])return;BG.pay[id]=1;
-  const r=await bngAct({op:"cobrar",s:x.s,r:x.r},y=>{o.paid[id]=(o.paid[id]|0)|(y.l?1:0)|(y.b?2:0);S.t=(S.t||0)+(y.t||0);S.bag=S.bag||{};Object.keys(y.it||{}).forEach(k=>{S.bag[k]=(S.bag[k]||0)+y.it[k]});save();render();snd("lvl");
-    const tx=[y.t?fmt(y.t)+" 🎟️":"",bngItTxt(y.it)].filter(Boolean).join(" + ");toast("🏆 ¡Premio del Bingo"+(y.b?" (¡BINGO!)":" (línea)")+": "+tx+"!");
-    if(y.b)diaryAdd("🎱","¡Bingo en la "+BNG_S[x.s].n+"! Premio: "+tx,null,0,"o");try{burst("🎉",{x:innerWidth/2,y:innerHeight/2},18,160,26)}catch(e){}});
-  if(r&&!r.ok&&r.why==="bingo-nada"){const d=BG.d[id];if(d&&d.bn&&(d.bn.c+BNG.GR<bngCant(x.r,bngNow())))o.paid[id]=(o.paid[id]|0)|4}
+  const r=await bngAct({op:"cobrar",s:x.s,r:x.r},y=>{o.paid[id]=(o.paid[id]|0)|(y.l?1:0)|(y.b?2:0);S.t=(S.t||0)+(y.t||0);S.bag=S.bag||{};Object.keys(y.it||{}).forEach(k=>{S.bag[k]=(S.bag[k]||0)+y.it[k]});
+    if(y.mon&&PM[y.mon]){const lv=typeof clampL==="function"?clampL(Math.max(5,Math.min(typeof lvCap==="function"?lvCap():50,typeof leadLevel==="function"?leadLevel():5))):5;giveMon(y.mon,lv,!!y.sh)}
+    save();render();snd("lvl");
+    const tx=[y.t?fmt(y.t)+" 🎟️":"",bngItTxt(y.it),y.mon?(y.sh?"✨ ":"")+y.mon+(y.sh?" variocolor":""):""].filter(Boolean).join(" + ");toast("🏆 ¡Premio del Bingo"+(y.b?" (¡BINGO!)":" (línea)")+": "+tx+"!");
+    if(y.b)diaryAdd("🎱","¡Bingo en la "+BNG_S[x.s].n+"! Premio: "+tx,y.mon||null,y.sh?1:0,"o");
+    if(y.mon&&PM[y.mon])setTimeout(()=>bngMonShow(y.mon,!!y.sh),600);try{burst("🎉",{x:innerWidth/2,y:innerHeight/2},18,160,26)}catch(e){}});
+  if(r&&!r.ok&&r.why==="bingo-nada"){const d=BG.d[id];if(d&&d.bn&&(d.bn.c+BNG.GR<bngBT(x.r,bngNow())))o.paid[id]=(o.paid[id]|0)|4}
   setTimeout(()=>{delete BG.pay[id]},8000);bngUI(true)}
 // marcas de cada cartón: con «marcar solo», todo lo que ha salido; si no, lo que hayas tocado tú
 function bngMarks(id,ci,called){const o=bngSt();if(o.auto)return called;BG.mk[id]=BG.mk[id]||{};const m=BG.mk[id][ci]||(BG.mk[id][ci]=new Set());return m}
@@ -23960,8 +23971,8 @@ function bngTick(force){if(typeof S==="undefined"||!S)return;const now=bngNow(),
     if(ph.k==="juego"||ph.k==="fin"){const ord=bngBolas(x.s,x.r,d.x),cur=ph.cur,called=new Set(ord.slice(0,cur)),pos={};ord.forEach((v,i)=>pos[v]=i+1);
       // cantar solo (o avisar) en cuanto se completa
       if(ph.k==="juego"&&o.auto){let bl=99,bb=99;BG.mine[id].forEach(c=>{const m=bngComp(c,pos);if(m.l<=cur)bl=Math.min(bl,m.l);if(m.b<=cur)bb=Math.min(bb,m.b)});
-        if(bl<99&&cur<=bl+BNG.GR&&!(d.ln&&d.ln.c<bl)&&!(d.ln&&(d.ln.w||[]).includes(uid))&&!ph.lnC)bngSing(id,"l");
-        if(bb<99&&cur<=bb+BNG.GR&&!(d.bn&&d.bn.c<bb)&&!(d.bn&&(d.bn.w||[]).includes(uid))&&!ph.bnC)bngSing(id,"b")}
+        if(bl<99&&ph.bt<=bl+BNG.GR&&!(d.ln&&d.ln.c<bl)&&!(d.ln&&(d.ln.w||[]).includes(uid))&&!ph.lnC)bngSing(id,"l");
+        if(bb<99&&ph.bt<=bb+BNG.GR&&!(d.bn&&d.bn.c<bb)&&!(d.bn&&(d.bn.w||[]).includes(uid))&&!ph.bnC)bngSing(id,"b")}
       // cobrar cuando la jugada ya está cerrada
       const pd=o.paid[id]|0,wl=d.ln&&(d.ln.w||[]).includes(uid),wb=d.bn&&(d.bn.w||[]).includes(uid);
       if(!(pd&4)&&((ph.lnC&&wl&&!(pd&1))||(ph.bnC&&wb&&!(pd&2))))bngPay(id);
@@ -23976,9 +23987,14 @@ function bngTick(force){if(typeof S==="undefined"||!S)return;const now=bngNow(),
 function bngSay(t){const o=bngSt();BG.say=t;if(!o.voz||document.hidden||!O.sfx||!O.svol)return;try{const sy=window.speechSynthesis;if(!sy)return;sy.cancel();const u=new SpeechSynthesisUtterance(t.replace(/[¡!¿?…]/g," "));u.lang="es-ES";u.rate=1.05;u.volume=Math.min(1,O.svol*1.5);sy.speak(u)}catch(e){}}
 function bngAnnounce(s,r,ph){const ord=bngBolas(s,r,ph.d.x),v=ord[ph.cur-1],pool=bngPool(s,r),n=pool[v]||"?",f=BNG_PH[Math.floor(v8Rng("bph|"+s+r+"|"+ph.cur)()*BNG_PH.length)];
   snd("pop");bngSay(f.replace("{n}",n).replace("{k}",v+1));BG.pop=Date.now()}
+// ventana con el Pokémon sorpresa que te ha tocado
+function bngMonShow(n,sh){const p=PM[n];if(!p)return;const old=$("bngMonM");if(old)old.remove();const m=document.createElement("div");m.id="bngMonM";m.className="bngmon";m.setAttribute("role","dialog");
+  m.innerHTML='<div class="bngmonw'+(sh?' sh':'')+'"><small>🎱 Pokémon sorpresa del Bingo</small><div class="bngmonp">'+ico(p,110,false,sh)+'</div><b>'+(sh?'✨ ':'')+esc(n)+'</b><small>'+STAR[p[2]]+(sh?' · ¡VARIOCOLOR!':'')+'</small><button class="red">¡Genial!</button></div>';
+  document.body.appendChild(m);m.querySelector("button").onclick=()=>m.remove();m.onclick=e=>{if(e.target===m)m.remove()};if(sh)snd("capok")}
 const bngMS=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
 function bngPrizeBox(s,d,title){const B=bngBote(s,d),S2=BNG_S[s];
-  return '<div class="bngprize"><b>'+title+'</b><div class="bngpz"><div><span>🙋 Línea</span><b>'+fmt(B.l)+' 🎟️</b><small>+ '+bngItTxt(B.il)+'</small></div><div class="bngbig"><span>🎉 Bingo</span><b>'+fmt(B.b)+' 🎟️</b><small>+ '+bngItTxt(B.ib)+'</small></div></div>'+
+  return '<div class="bngprize"><b>'+title+'</b><div class="bngpz"><div><span>🙋 Línea</span><b>'+fmt(B.l)+' 🎟️</b><small>+ '+bngItTxt(B.il)+'</small></div><div class="bngbig"><span>🎉 Bingo</span><b>'+fmt(B.b)+' 🎟️</b><small>+ '+bngItTxt(B.ib)+'</small><small class="bngpk">+ 🎁 Pokémon sorpresa (hasta ★★★ Épico, ¡puede ser variocolor!)</small></div></div>'+
+    '<small class="bngpkp">🎁 Pokémon sorpresa: '+bngPkTxt(s)+'</small>'+
     '<small class="mut">🎟️ '+B.n+' cartón'+(B.n===1?'':'es')+' vendido'+(B.n===1?'':'s')+' · 👥 '+B.np+' jugador'+(B.np===1?'':'es')+' · El bote es el 90 % de lo vendido'+(B.np>=2?'':' (con 2 jugadores o más, mínimo '+fmt(3*S2.p)+' 🎟️)')+(B.np>=3?' · ¡Premio extra por ser 3 o más!':' · Con 3 jugadores o más: + '+bngItTxt(S2.b3))+'</small></div>'}
 function bngBuyBox(s,r,now,lab){const o=bngSt(),S2=BNG_S[s],id=bngId(s,r),ya=(BG.mine[id]||[]).length,left=r*BNG.PER+BNG.LOB-now,maxN=Math.min(BNG.MAXC-ya,BNG.DIA-o.day.n);
   const btn=n=>{const ok=!BG.busy&&n<=maxN&&(S.t||0)>=S2.p*n;return '<button class="'+(ok?'red':'alt')+'" data-bngb="'+s+'|'+r+'|'+n+'"'+(ok?'':' disabled')+'>'+n+' cartón'+(n>1?'es':'')+'<small>'+fmt(S2.p*n)+' 🎟️</small></button>'};
@@ -24020,7 +24036,7 @@ function bngUI(force){const b=$("bngPB");if(!b)return;if(!v8Uid()){b.innerHTML='
     ((ph.k==="lob"||ph.k==="juego"||ph.k==="fin")?bngCards(id,s,R,ph):'')+
     '<div class="bngside">'+nextPz+nextBox+nextMine+'</div>'+players+((ph.k==="juego"||ph.k==="fin")?bngBoard(s,R,ph):'')+
     '<div class="bngopts"><label><input type="checkbox" id="bngAuto"'+(o.auto?' checked':'')+'> 🤖 Marcar y cantar solo</label><label><input type="checkbox" id="bngVoz"'+(o.voz?' checked':'')+'> 🔊 Voz de la presentadora</label></div>'+
-    '<details class="bnghow"'+(BG.how?' open':'')+'><summary>❓ Cómo se juega</summary><p>Cada 6 minutos empieza una partida en cada sala. Durante el minuto y medio antes de empezar puedes comprar hasta '+BNG.MAXC+' cartones (y hasta '+BNG.DIA+' al día). Después, '+BNG_HOST+' va sacando Pokémon del bombo, uno cada pocos segundos.</p><p>Cada cartón tiene 15 Pokémon en 3 filas. Si completas una fila, canta <b>¡LÍNEA!</b>; si completas el cartón entero, canta <b>¡BINGO!</b>. ¡Hay que cantar a tiempo! Si varios lo completáis con la misma bola, os repartís el premio.</p><p>El bote es el 90 % de lo que se vende: un 30 % para la línea y un 70 % para el bingo, y crece con cada cartón. ¡Además hay objetos de premio!</p></details>'}
+    '<details class="bnghow"'+(BG.how?' open':'')+'><summary>❓ Cómo se juega</summary><p>Cada 6 minutos empieza una partida en cada sala. Durante el minuto y medio antes de empezar puedes comprar hasta '+BNG.MAXC+' cartones (y hasta '+BNG.DIA+' al día). Después, '+BNG_HOST+' va sacando Pokémon del bombo, uno cada pocos segundos.</p><p>Cada cartón tiene 15 Pokémon en 3 filas. Si completas una fila, canta <b>¡LÍNEA!</b>; si completas el cartón entero, canta <b>¡BINGO!</b>. ¡Hay que cantar a tiempo! Si varios lo completáis con la misma bola, os repartís el premio.</p><p>El bote es el 90 % de lo que se vende: un 30 % para la línea y un 70 % para el bingo, y crece con cada cartón. ¡Además hay objetos de premio, y quien canta bingo se lleva un Pokémon sorpresa al azar (hasta Épico) que puede salir variocolor!</p></details>'}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#bngPB button");if(!b||b.disabled)return;const o=bngSt();
   if(b.dataset.bngsala){o.s=b.dataset.bngsala;BG.sig="";BG.say="";save();snd("ui");bngWatch();bngUI(true);return}
   if(b.dataset.bngb){const[s,r,n]=b.dataset.bngb.split("|");bngBuy(s,+r,+n);return}

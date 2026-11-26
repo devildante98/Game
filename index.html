@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.4"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795717742">
+<meta name="game-build" content="1795726336">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3624,7 +3624,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.4.3</small>
+    <small class="pcver">Versión 8.4.4</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8380,8 +8380,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.4.3";
+const GAME_VER="8.4.4";
 const NEWS=[
+{v:"2026-11-26-8.4.4",ver:"8.4.4",at:"2026-11-26T21:52",t:"🔧 Arreglos/Mejoras",tt:"¡Golpea al Diglett! igual de justo en todas las partidas",l:["¡Golpea al Diglett!: ahora todas las partidas tienen las mismas oportunidades. Salen siempre el mismo número de Dugtrio (+3) y de Voltorb, bien repartidos a lo largo de la partida. Antes, por pura suerte, en unas salían muchos más Dugtrio que en otras y la puntuación máxima posible cambiaba más de 20 puntos", "Lo que cambia en cada partida es dónde y en qué orden salen, así que sigue haciendo falta reflejos", "En dispositivos lentos, la partida ya no se corta antes de que salgan los últimos topos"]},
 {v:"2026-11-26-8.4.3",ver:"8.4.3",at:"2026-11-26T19:29",t:"🔧 Arreglos/Mejoras",tt:"La X para cerrar, en todas las secciones",l:["Combate, Gacha, Premios (Tickets gratis) y el resto de secciones de la barra de abajo ya tienen la ✕ para cerrar arriba a la derecha, como los demás paneles"]},
 {v:"2026-11-26-8.4.2",ver:"8.4.2",at:"2026-11-26T19:21",t:"🔧 Arreglos/Mejoras",tt:"Bingo más tranquilo",l:["Bingo: el círculo rojo de los Pokémon que ya has marcado se queda fijo. Antes se volvía a animar con cada bola nueva y parecía que parpadeaba", "El sello solo se anima una vez, al marcar la casilla, y el salto de la última bola también"]},
 {v:"2026-11-26-8.4.1",ver:"8.4.1",at:"2026-11-26T19:02",t:"🔧 Arreglos/Mejoras",tt:"Las megas, también en «Todas» del Taller",l:["Taller de repetidos: las megaevoluciones ya salen también con el filtro «Todas», no solo con «🧬 Megas»", "La lista de Fabricar enseña primero lo que puedes fabricar ya (con las megas disponibles arriba del todo) y luego el resto"]},
@@ -8830,7 +8831,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795717742";
+const GAME_B="1795726336";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -10370,15 +10371,24 @@ const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a l
     const D=PM.Diglett||P[0],T=PM.Dugtrio||D,V=PM.Voltorb||D,dur=30000,now=()=>performance.now(),t0=now();let hits=0,combo=0,over=false;
     B.innerHTML='<div class="whohd"><span>⏱️ <b id="digT">30</b> s</span><span id="digC"></span></div><div class="digg">'+[...Array(9)].map((_,i)=>'<div class="digh" data-h="'+i+'"><div class="digback"></div><div class="digclip"><div class="digm"></div></div><div class="diglip"></div></div>').join("")+'</div>';
     mgSet(0);const holes=[...B.querySelectorAll(".digh")];
+    // (8.4.4) mismas oportunidades en todas las partidas: los topos salen siempre en los mismos momentos y, en cada
+    // bloque de 7, hay exactamente 1 Dugtrio y 1 Voltorb (este, pasados 4 s) en posiciones al azar. Así la puntuación
+    // perfecta es igual en cualquier partida; lo que cambia es dónde y en qué orden salen.
+    const DT=[];{let t=0;while(t<dur){DT.push(t);t+=Math.max(330,780-t/60)}}
+    const KS=DT.map(()=>"d");for(let b=0;b<DT.length;b+=7){const idx=[];for(let i=b;i<Math.min(b+7,DT.length);i++)idx.push(i);
+      const ev=idx.filter(i=>DT[i]>4000);if(ev.length){const iv=ev[Math.floor(mgR()*ev.length)];KS[iv]="v";idx.splice(idx.indexOf(iv),1)}
+      const et=idx.filter(i=>DT[i]<dur-1500),pool=et.length?et:idx;KS[pool[Math.floor(mgR()*pool.length)]]="t"}
+    let si=0;
     const finish=()=>{if(over)return;over=true;const e=$("digT");if(e)e.textContent="0";holes.forEach(h=>h.querySelector(".digm").classList.remove("up"));mgT(()=>end(MG.score),600)};
-    mgI(()=>{if(over)return;const el=now()-t0,e=$("digT");if(e)e.textContent=Math.max(0,Math.ceil((dur-el)/1000));if(el>=dur)finish()},200);
+    // termina a los 30 s… pero si el dispositivo va con retraso, espera a que hayan salido todos los topos (como mucho 3 s más)
+    mgI(()=>{if(over)return;const el=now()-t0,e=$("digT");if(e)e.textContent=Math.max(0,Math.ceil((dur-el)/1000));if(el>=dur&&(si>=DT.length||el>=dur+3000))finish()},200);
     const spawn=()=>{
-      if(over)return;const el=now()-t0;if(el>=dur){finish();return}
+      if(over)return;const el=now()-t0;if(si>=DT.length||el>=dur+3000){if(el>=dur)finish();return}
       try{const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
-      if(free.length){const h=free[Math.floor(mgR()*free.length)],m=h.querySelector(".digm"),r=mgR(),k=r<.15?"t":r<.3&&el>4000?"v":"d",p=k==="t"?T:k==="v"?V:D;
-        const sid=(+m.dataset.sid||0)+1;m.dataset.sid=sid;m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-el/45);
+      if(free.length&&si<DT.length){const h=free[Math.floor(mgR()*free.length)],m=h.querySelector(".digm"),tt=DT[si],k=KS[si++],p=k==="t"?T:k==="v"?V:D;
+        const sid=(+m.dataset.sid||0)+1;m.dataset.sid=sid;m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-tt/45);
         mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
-      mgT(spawn,Math.max(330,780-el/60));
+      if(si<DT.length)mgT(spawn,Math.max(40,DT[si]-(now()-t0)));
     };
     // golpe en un hueco: con el ratón/dedo o con el teclado numérico (7 8 9 / 4 5 6 / 1 2 3, como la cuadrícula)
     const hitHole=(h,cx,cy)=>{const m=h.querySelector(".digm");if(over||!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
@@ -24461,7 +24471,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.4.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.4.4";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

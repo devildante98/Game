@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.4.3";
+const GAME_VER="8.4.4";
 const NEWS=[
+{v:"2026-11-26-8.4.4",ver:"8.4.4",at:"2026-11-26T21:52",t:"🔧 Arreglos/Mejoras",tt:"¡Golpea al Diglett! igual de justo en todas las partidas",l:["¡Golpea al Diglett!: ahora todas las partidas tienen las mismas oportunidades. Salen siempre el mismo número de Dugtrio (+3) y de Voltorb, bien repartidos a lo largo de la partida. Antes, por pura suerte, en unas salían muchos más Dugtrio que en otras y la puntuación máxima posible cambiaba más de 20 puntos", "Lo que cambia en cada partida es dónde y en qué orden salen, así que sigue haciendo falta reflejos", "En dispositivos lentos, la partida ya no se corta antes de que salgan los últimos topos"]},
 {v:"2026-11-26-8.4.3",ver:"8.4.3",at:"2026-11-26T19:29",t:"🔧 Arreglos/Mejoras",tt:"La X para cerrar, en todas las secciones",l:["Combate, Gacha, Premios (Tickets gratis) y el resto de secciones de la barra de abajo ya tienen la ✕ para cerrar arriba a la derecha, como los demás paneles"]},
 {v:"2026-11-26-8.4.2",ver:"8.4.2",at:"2026-11-26T19:21",t:"🔧 Arreglos/Mejoras",tt:"Bingo más tranquilo",l:["Bingo: el círculo rojo de los Pokémon que ya has marcado se queda fijo. Antes se volvía a animar con cada bola nueva y parecía que parpadeaba", "El sello solo se anima una vez, al marcar la casilla, y el salto de la última bola también"]},
 {v:"2026-11-26-8.4.1",ver:"8.4.1",at:"2026-11-26T19:02",t:"🔧 Arreglos/Mejoras",tt:"Las megas, también en «Todas» del Taller",l:["Taller de repetidos: las megaevoluciones ya salen también con el filtro «Todas», no solo con «🧬 Megas»", "La lista de Fabricar enseña primero lo que puedes fabricar ya (con las megas disponibles arriba del todo) y luego el resto"]},

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.5"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795734595">
+<meta name="game-build" content="1795734617">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3632,7 +3632,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.5</small>
+    <small class="pcver">Versión 8.6</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8388,8 +8388,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.5";
+const GAME_VER="8.6";
 const NEWS=[
+{v:"2026-11-26-8.6",ver:"8.6",at:"2026-11-27T00:10",t:"💞 Novedad",tt:"¡Gestos y parejas en la Exploración!",l:["En la Exploración, ponte delante de otro jugador y pulsa A: ahora puedes darle un 👉 toque, 🙌 chocar los cinco, 🫂 darle un abrazo o 💃 bailar con él. ¡Le sale en pantalla! Y si los dos chocáis los cinco a la vez, choque perfecto", "💞 Pareja de exploración: desde ese mismo menú puedes pedirle a otro jugador que sea tu pareja. Le saldrá una ventana para aceptar o rechazar. Cada uno solo puede tener una pareja", "Ventajas de la pareja: un ❤️ encima de tu pareja en el mapa, +20 % de experiencia en los combates de la Exploración cuando estáis en el mismo mapa y un regalo para cada uno (tickets, 1 Caramelo Raro y 3 Ultra Balls) la primera vez que os veis cada día", "Contad los días juntos: a los 7, el título «💞 Inseparables». Mira tu pareja (o termínala) en Social › 💞 Pareja"]},
 {v:"2026-11-26-8.5",ver:"8.5",at:"2026-11-26T23:22",t:"🎱 Novedad",tt:"¡Invita a tus amigos al Bingo por el chat!",l:["En el chat, pulsa ✉️ y elige «🎱 Invitar al Bingo»: invitas a la próxima partida de la sala que tengas elegida (Bosque, Ciudad o Liga). Funciona en el chat global, en el del gremio y por privado", "La invitación dice la sala, a qué hora empieza la partida y cuánto cuesta el cartón. Quien la acepte con «¡Voy!» entra directamente en esa sala para comprar sus cartones", "También tienes el botón «✉️ Invitar por el chat» dentro del Bingo. La invitación caduca cuando se cierra la venta de cartones de esa partida"]},
 {v:"2026-11-26-8.4.6",ver:"8.4.6",at:"2026-11-26T23:14",t:"🔧 Arreglos/Mejoras",tt:"Bingo sin animaciones en bucle",l:["Bingo: la presentadora y la bola de espera ya no se mueven sin parar; se quedan fijas", "Solo se anima la bola cuando sale un Pokémon nuevo y el botón ¡LÍNEA!/¡BINGO! cuando ya puedes cantar"]},
 {v:"2026-11-26-8.4.5",ver:"8.4.5",at:"2026-11-26T21:58",t:"🔧 Arreglos/Mejoras",tt:"¡Golpea al Diglett!: puntuación máxima de 136",l:["¡Golpea al Diglett!: ahora salen 2 Dugtrio (+3) por cada 7 topos, así que la puntuación perfecta sube a 136 en todas las partidas", "Así las puntuaciones que ya se hicieron esta semana se pueden superar, y todo el mundo sigue teniendo las mismas oportunidades en cualquier partida", "Arreglado: si el móvil o el ordenador se atascaba un momento, después salían varios topos de golpe casi a la vez. Ahora siempre hay al menos 0,28 s entre uno y otro, y un topo no vuelve a salir en el mismo hueco justo después de irse otro"]},
@@ -8842,7 +8843,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795734595";
+const GAME_B="1795734617";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24606,7 +24607,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.5";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.6";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

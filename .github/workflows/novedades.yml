@@ -1,0 +1,57 @@
+# Anuncia en Discord las novedades de cada versión nueva del juego (src/tools/discord/novedades.js) al publicar en main.
+# Usa el secreto FIREBASE_SA (para apuntar qué versión se ha anunciado ya y no repetirla) y el webhook del canal:
+# DISCORD_WEBHOOK_NOVEDADES si existe; si no, DISCORD_WEBHOOK_EVENTOS; y si tampoco, DISCORD_WEBHOOK_SORTEOS.
+name: Anunciar novedades en Discord
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/assemble.py"
+      - "src/tools/discord/**"
+      - ".github/workflows/novedades.yml"
+  workflow_dispatch:
+concurrency:
+  group: discord-novedades
+  cancel-in-progress: false
+jobs:
+  anunciar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HAS_SA: ${{ secrets.FIREBASE_SA != '' }}
+    steps:
+      - name: Aviso si falta la clave
+        if: env.HAS_SA != 'true'
+        run: echo "::warning::Falta el secreto FIREBASE_SA; no se anuncia nada."
+      - uses: actions/checkout@v4
+        if: env.HAS_SA == 'true'
+      - uses: actions/setup-node@v4
+        if: env.HAS_SA == 'true'
+        with:
+          node-version: 22
+      - name: Instalar dependencias del servidor
+        if: env.HAS_SA == 'true'
+        run: npm ci --prefix _server --no-audit --no-fund
+      - name: Preparar la clave y los webhooks
+        if: env.HAS_SA == 'true'
+        env:
+          SA: ${{ secrets.FIREBASE_SA }}
+          WN: ${{ secrets.DISCORD_WEBHOOK_NOVEDADES }}
+          WE: ${{ secrets.DISCORD_WEBHOOK_EVENTOS }}
+          WS: ${{ secrets.DISCORD_WEBHOOK_SORTEOS }}
+          RA: ${{ secrets.DISCORD_ROL_AVISOS }}
+        run: |
+          printf '%s' "$SA" > "$RUNNER_TEMP/sa.json"
+          printf 'DISCORD_WEBHOOK_NOVEDADES=%s\nDISCORD_WEBHOOK_EVENTOS=%s\nDISCORD_WEBHOOK_SORTEOS=%s\nDISCORD_ROL_AVISOS=%s\n' "$WN" "$WE" "$WS" "$RA" > _server/.env
+      # se espera un poco a que la web (GitHub Pages) ya tenga la versión nueva
+      - name: Esperar a que la web se publique
+        if: env.HAS_SA == 'true'
+        run: sleep 90
+      - name: Anunciar
+        if: env.HAS_SA == 'true'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/sa.json
+        run: node src/tools/discord/novedades.js
+      - name: Borrar la clave
+        if: always()
+        run: rm -f "$RUNNER_TEMP/sa.json" _server/.env

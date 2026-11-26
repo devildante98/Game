@@ -16,6 +16,8 @@ const HOOK = () => ({
   torneo: process.env.DISCORD_WEBHOOK_TORNEOS || "",
   // (8.0) mercader misterioso y pistas del tesoro: canal propio si existe; si no, el de sorteos
   eventos: process.env.DISCORD_WEBHOOK_EVENTOS || process.env.DISCORD_WEBHOOK_SORTEOS || "",
+  // (8.3) novedades de cada versión (src/tools/discord/novedades.js): canal propio si existe; si no, el de eventos
+  novedades: process.env.DISCORD_WEBHOOK_NOVEDADES || process.env.DISCORD_WEBHOOK_EVENTOS || process.env.DISCORD_WEBHOOK_SORTEOS || "",
 });
 const ROL = () => String(process.env.DISCORD_ROL_AVISOS || "").replace(/\D/g, "");
 const ok = (u) => /^https:\/\/(discord\.com|discordapp\.com|canary\.discord\.com|ptb\.discord\.com)\/api\/webhooks\/\d+\/[\w-]+$/.test(u);

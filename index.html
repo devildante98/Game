@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.3"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.4"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795737198">
+<meta name="game-build" content="1795737587">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3650,7 +3650,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.6.3</small>
+    <small class="pcver">Versión 8.6.4</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8406,8 +8406,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.6.3";
+const GAME_VER="8.6.4";
 const NEWS=[
+{v:"2026-11-27-8.6.4",ver:"8.6.4",at:"2026-11-27T00:59",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos sin interrupciones",l:["Mientras juegas una partida de un minijuego ya no te salta ninguna ventana: ni la de versión nueva, ni invitaciones o solicitudes (retos, amistad, gremio…), ni avisos de eventos o novedades, ni el Pokémon sorpresa del Bingo", "Todas esperan y te salen al terminar la partida, después de ver tu puntuación"]},
 {v:"2026-11-27-8.6.3",ver:"8.6.3",at:"2026-11-27T00:53",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos con partidas siempre nuevas",l:["Minijuegos: cada partida empieza ahora con un orden totalmente nuevo e imprevisible. Antes, en algunos casos (por ejemplo, al cambiar del ordenador al móvil o al recargar), podía repetirse la misma partida, con los mismos Pokémon en el mismo sitio", "¡Golpea al Diglett! sigue dando a todos las mismas oportunidades: 2 Dugtrio y 1 Voltorb por cada 7 topos en cualquier partida"]},
 {v:"2026-11-27-8.6.2",ver:"8.6.2",at:"2026-11-27T00:36",t:"🔧 Arreglos/Mejoras",tt:"Avisos visibles en pantalla completa",l:["Exploración a pantalla completa: la ventana de solicitud de pareja y el aviso de «ya tiene pareja» ya salen por encima del mapa (antes se quedaban escondidos detrás)", "Los avisos de abajo (toques, abrazos, regalo de pareja…) también se ven ahora con el mapa a pantalla completa"]},
 {v:"2026-11-26-8.6.1",ver:"8.6.1",at:"2026-11-27T00:12",t:"🔧 Arreglos/Mejoras",tt:"Solicitudes de pareja más claras",l:["Pareja: si le pides ser pareja a alguien que ya tiene una, ahora te sale una ventana en pantalla avisándote («ya tiene pareja») y la solicitud no se envía: a esa persona no le llega nada"]},
@@ -8864,7 +8865,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795737198";
+const GAME_B="1795737587";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24345,6 +24346,22 @@ function parUI(){const b=$("parPB");if(!b)return;const s=parSt();
   const x=$("parBrk");if(x)x.onclick=parBreak}
 v8Tab("soc","parP","💞 Pareja","💞 Pareja de exploración","Forma pareja con otro jugador de la Exploración: juntos ganáis más experiencia, os hacéis un regalo al día y contáis los días juntos.",()=>{parUI();parCheck()});
 
+// ================= NO MOLESTAR DURANTE UN MINIJUEGO (8.6.4) =================
+// Mientras juegas una partida de minijuego (desde «Jugar» hasta que acaba) no salen ventanas que no has pedido: versión
+// nueva, invitaciones y solicitudes (retos, amistad, gremio…), avisos de eventos, novedades ni el Pokémon sorpresa del
+// Bingo. Esperan y salen al terminar (con un pequeño margen para ver tu puntuación).
+const MGPLAY={on:false,end:0,verH:null,mon:[]};
+{const _ps=mgPlayStart;mgPlayStart=function(){MGPLAY.on=true;return _ps.apply(this,arguments)}}
+{const _e=mgEnd;mgEnd=function(){MGPLAY.on=false;MGPLAY.end=Date.now();return _e.apply(this,arguments)}}
+{const _c=mgClose;mgClose=function(){MGPLAY.on=false;MGPLAY.end=Date.now();return _c.apply(this,arguments)}}
+function mgPlaying(){if(MGPLAY.on){const m=document.getElementById("mgM");if(!m||m.hidden)MGPLAY.on=false}return MGPLAY.on||Date.now()-MGPLAY.end<2500}
+{const _pb=popBusy;popBusy=function(){return _pb.apply(this,arguments)||mgPlaying()}}
+{const _rb=rqBusy;rqBusy=function(){return _rb.apply(this,arguments)||mgPlaying()}}
+{const _va=verAsk;verAsk=function(h){if(mgPlaying()){MGPLAY.verH=h==null?"":h;return}return _va.apply(this,arguments)}}
+{const _ms=bngMonShow;bngMonShow=function(n,sh){if(mgPlaying()){MGPLAY.mon.push([n,sh]);return}return _ms.apply(this,arguments)}}
+setInterval(()=>{try{if(mgPlaying())return;if(MGPLAY.verH!=null){const h=MGPLAY.verH;MGPLAY.verH=null;verAsk(h)}
+  if(MGPLAY.mon.length){const x=MGPLAY.mon.shift();bngMonShow(x[0],x[1])}}catch(e){}},1000);
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -24675,7 +24692,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.6.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.6.4";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

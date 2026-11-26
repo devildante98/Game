@@ -446,3 +446,19 @@ function parUI(){const b=$("parPB");if(!b)return;const s=parSt();
     '<h3>Gestos</h3><p class="mut">Con cualquier jugador de la Exploración: ponte delante, pulsa A y elige 👉 Dar un toque, 🙌 Chocar los cinco, 🫂 Abrazo o 💃 Bailar. ¡Si los dos chocáis los cinco a la vez, choque perfecto!</p>';
   const x=$("parBrk");if(x)x.onclick=parBreak}
 v8Tab("soc","parP","💞 Pareja","💞 Pareja de exploración","Forma pareja con otro jugador de la Exploración: juntos ganáis más experiencia, os hacéis un regalo al día y contáis los días juntos.",()=>{parUI();parCheck()});
+
+// ================= NO MOLESTAR DURANTE UN MINIJUEGO (8.6.4) =================
+// Mientras juegas una partida de minijuego (desde «Jugar» hasta que acaba) no salen ventanas que no has pedido: versión
+// nueva, invitaciones y solicitudes (retos, amistad, gremio…), avisos de eventos, novedades ni el Pokémon sorpresa del
+// Bingo. Esperan y salen al terminar (con un pequeño margen para ver tu puntuación).
+const MGPLAY={on:false,end:0,verH:null,mon:[]};
+{const _ps=mgPlayStart;mgPlayStart=function(){MGPLAY.on=true;return _ps.apply(this,arguments)}}
+{const _e=mgEnd;mgEnd=function(){MGPLAY.on=false;MGPLAY.end=Date.now();return _e.apply(this,arguments)}}
+{const _c=mgClose;mgClose=function(){MGPLAY.on=false;MGPLAY.end=Date.now();return _c.apply(this,arguments)}}
+function mgPlaying(){if(MGPLAY.on){const m=document.getElementById("mgM");if(!m||m.hidden)MGPLAY.on=false}return MGPLAY.on||Date.now()-MGPLAY.end<2500}
+{const _pb=popBusy;popBusy=function(){return _pb.apply(this,arguments)||mgPlaying()}}
+{const _rb=rqBusy;rqBusy=function(){return _rb.apply(this,arguments)||mgPlaying()}}
+{const _va=verAsk;verAsk=function(h){if(mgPlaying()){MGPLAY.verH=h==null?"":h;return}return _va.apply(this,arguments)}}
+{const _ms=bngMonShow;bngMonShow=function(n,sh){if(mgPlaying()){MGPLAY.mon.push([n,sh]);return}return _ms.apply(this,arguments)}}
+setInterval(()=>{try{if(mgPlaying())return;if(MGPLAY.verH!=null){const h=MGPLAY.verH;MGPLAY.verH=null;verAsk(h)}
+  if(MGPLAY.mon.length){const x=MGPLAY.mon.shift();bngMonShow(x[0],x[1])}}catch(e){}},1000);

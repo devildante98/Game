@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.6.3";
+const GAME_VER="8.6.4";
 const NEWS=[
+{v:"2026-11-27-8.6.4",ver:"8.6.4",at:"2026-11-27T00:59",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos sin interrupciones",l:["Mientras juegas una partida de un minijuego ya no te salta ninguna ventana: ni la de versión nueva, ni invitaciones o solicitudes (retos, amistad, gremio…), ni avisos de eventos o novedades, ni el Pokémon sorpresa del Bingo", "Todas esperan y te salen al terminar la partida, después de ver tu puntuación"]},
 {v:"2026-11-27-8.6.3",ver:"8.6.3",at:"2026-11-27T00:53",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos con partidas siempre nuevas",l:["Minijuegos: cada partida empieza ahora con un orden totalmente nuevo e imprevisible. Antes, en algunos casos (por ejemplo, al cambiar del ordenador al móvil o al recargar), podía repetirse la misma partida, con los mismos Pokémon en el mismo sitio", "¡Golpea al Diglett! sigue dando a todos las mismas oportunidades: 2 Dugtrio y 1 Voltorb por cada 7 topos en cualquier partida"]},
 {v:"2026-11-27-8.6.2",ver:"8.6.2",at:"2026-11-27T00:36",t:"🔧 Arreglos/Mejoras",tt:"Avisos visibles en pantalla completa",l:["Exploración a pantalla completa: la ventana de solicitud de pareja y el aviso de «ya tiene pareja» ya salen por encima del mapa (antes se quedaban escondidos detrás)", "Los avisos de abajo (toques, abrazos, regalo de pareja…) también se ven ahora con el mapa a pantalla completa"]},
 {v:"2026-11-26-8.6.1",ver:"8.6.1",at:"2026-11-27T00:12",t:"🔧 Arreglos/Mejoras",tt:"Solicitudes de pareja más claras",l:["Pareja: si le pides ser pareja a alguien que ya tiene una, ahora te sale una ventana en pantalla avisándote («ya tiene pareja») y la solicitud no se envía: a esa persona no le llega nada"]},

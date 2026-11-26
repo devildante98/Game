@@ -43,9 +43,9 @@ jobs:
           RA: ${{ secrets.DISCORD_ROL_AVISOS }}
         run: |
           printf '%s' "$SA" > "$RUNNER_TEMP/sa.json"
-          printf 'DISCORD_WEBHOOK_NOVEDADES=%s\nDISCORD_WEBHOOK_AVISOS=%s\nDISCORD_ROL_NOVEDADES=%s\nDISCORD_ROL_AVISOS=%s\n' "$WN" "$WA" "$RN" "$RA"
+          printf 'DISCORD_WEBHOOK_NOVEDADES=%s\nDISCORD_WEBHOOK_AVISOS=%s\nDISCORD_ROL_NOVEDADES=%s\nDISCORD_ROL_AVISOS=%s\n' "$WN" "$WA" "$RN" "$RA" > _server/.env
           # qué secretos hay (sin enseñar su valor), para saber por qué no se envía si falta alguno
-          echo "Webhook de #novedades: $([ -n "$WN" ] && echo sí || echo no) · de Avisos: $([ -n "$WA" ] && echo sí || echo no) · rol: $([ -n "$RN$RA" ] && echo sí || echo no)" > _server/.env
+          echo "Webhook de #novedades: $([ -n "$WN" ] && echo sí || echo no) · de Avisos: $([ -n "$WA" ] && echo sí || echo no) · rol: $([ -n "$RN$RA" ] && echo sí || echo no)"
       # se espera un poco a que la web (GitHub Pages) ya tenga la versión nueva
       - name: Esperar a que la web se publique
         if: env.HAS_SA == 'true'

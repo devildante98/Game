@@ -77,7 +77,7 @@ function treClues(w){const sp=treSpot(w);if(!sp)return[];const M=EXM[sp.m],ns=sp
     "Desde hoy, el Zahorí también reacciona al tesoro: úsalo en «"+M.n+"» y te dirá hacia dónde ir.","¡Hoy el tesoro brilla en el suelo! Mira bien por «"+M.n+"» y pulsa A sobre la casilla que reluce."]}
 const treDay=()=>{const d=v8Mad().wd;return d<0?0:d};
 const treSt=()=>{const w=tourWeek();S.tre=S.tre&&S.tre.w===w?S.tre:{w,f:0};return S.tre};
-function treFind(sp){const s=treSt();if(s.f)return;s.f=Date.now();let rw={t:v8Tk(3,2e6),it:{cand:2,ub:5}};
+function treFind(sp){const s=treSt();if(s.f)return;s.f=Date.now();let rw={t:Math.round(v8Tk(3,2e6)*(1+.25*specRank("X"))),it:{cand:2,ub:5}};
   v8Main(()=>{grant(rw);S.treN=(S.treN|0)+1});save();snd("lvl");setTimeout(()=>snd("win"),400);
   try{exSay(["¡Has encontrado el tesoro de la semana!","Dentro hay: "+rwTxt(rw)+".","¡Mira el cuadro de honor en Retos → Tesoro semanal!"])}catch(e){toast("🗺️ ¡Tesoro encontrado! "+rwTxt(rw))}
   diaryAdd("🗺️","¡Has encontrado el tesoro semanal en «"+EXM[sp.m].n+"»!",null,0,"lg");
@@ -172,8 +172,8 @@ Object.assign(BS_F,{
   diploma:{n:"Diploma de la Liga",ic:"📜",free:1,wall:1,req:()=>Object.values(S.lgDone||{}).reduce((a,b)=>a+(b|0),0)>=1,why:"Gana la Liga Pokémon",mk:()=>G3B.merge([[G3B.box(.6,.45,.05,"#d8b45a"),BT3([0,0,.03])],[G3B.box(.52,.37,.02,"#fff8e0"),BT3([0,0,.06])],[G3B.box(.3,.03,.01,"#333"),BT3([0,.1,.075])],[G3B.box(.36,.02,.01,"#666"),BT3([0,.02,.075])],[G3B.cyl(.05,.05,.02,10,"#e2573b"),BT3([.16,-.1,.075],[1.57,0,0])]])},
 });
 BS_PAINT.forEach(n=>{BS_F["pa_"+n]={n:"Cuadro de "+n,ic:"🖼️",paint:n,h:.3,wall:1,mk:()=>G3B.merge([[G3B.box(.74,.74,.05,"#8a5a3a"),BT3([0,0,.03])],[G3B.box(.64,.64,.02,"#fff8e8"),BT3([0,0,.06])]])}});
-Object.keys(BS_F).forEach(k=>{if(!BS_F[k].free)BS_F[k].price=()=>Math.max(1e6*(1+BS_F[k].h*5),prodH(BS_F[k].h))});
-BS_PLUSH.forEach(n=>{BS_F["pl_"+n]={n:"Peluche de "+n,ic:"🧸",plush:n,h:.25,mk:()=>G3B.merge([[G3B.cyl(.32,.34,.12,14,"#ffb0c8"),BT3([0,.06,0])],[G3B.cyl(.28,.3,.04,14,"#ffd0e0"),BT3([0,.13,0])]])};BS_F["pl_"+n].price=()=>Math.max(2e6,prodH(.25))});
+Object.keys(BS_F).forEach(k=>{if(!BS_F[k].free)BS_F[k].price=()=>v8Disc(Math.max(1e6*(1+BS_F[k].h*5),prodH(BS_F[k].h)))});
+BS_PLUSH.forEach(n=>{BS_F["pl_"+n]={n:"Peluche de "+n,ic:"🧸",plush:n,h:.25,mk:()=>G3B.merge([[G3B.cyl(.32,.34,.12,14,"#ffb0c8"),BT3([0,.06,0])],[G3B.cyl(.28,.3,.04,14,"#ffd0e0"),BT3([0,.13,0])]])};BS_F["pl_"+n].price=()=>v8Disc(Math.max(2e6,prodH(.25)))});
 // Datos de cada objeto colocado: suelo [k, i, j, giro, encima] (encima = 1 si está sobre una mesa, mesita…) ·
 // pared [k, -1 = pared del fondo | -2 = pared izquierda, hueco 0..7, altura 0 abajo | 1 arriba]
 function hbSt(){S.base=S.base&&typeof S.base==="object"?S.base:{w:"cr",f:"wd",it:[],inv:{}};S.base.it=Array.isArray(S.base.it)?S.base.it:[];S.base.inv=S.base.inv||{};return S.base}
@@ -317,7 +317,7 @@ document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.c
   if(t.dataset.bsw){s.w=t.dataset.bsw;save();if(SBASE3)SBASE3.build();bsBody();return}
   if(t.dataset.bsf){s.f=t.dataset.bsf;save();if(SBASE3)SBASE3.build();bsBody();return}
   if(t.dataset.bsput){if(!SBASE3)return;SBASE3.sel=-1;SBASE3.hand={k:t.dataset.bsput,r:0};SBASE3.dirty=true;bsTools();try{$("bsCv").scrollIntoView({behavior:"smooth",block:"center"})}catch(x){}return}
-  if(t.dataset.bsbuy){const k=t.dataset.bsbuy,F=BS_F[k];if(!F||F.free)return;const p=F.price();if(S.t<p){toast("No tienes tickets suficientes.");return}S.t-=p;s.inv[k]=(s.inv[k]|0)+1;save();render();snd("lvl");toast("🏠 ¡Has comprado: "+F.n+"!");bsBody();return}
+  if(t.dataset.bsbuy){const k=t.dataset.bsbuy,F=BS_F[k];if(!F||F.free)return;const p=F.price();if(S.t<p){toast("No tienes tickets suficientes.");return}S.t-=p;s.inv[k]=(s.inv[k]|0)+1;qEv("buy",1);save();render();snd("lvl");toast("🏠 ¡Has comprado: "+F.n+"!");bsBody();return}
   if(t.dataset.bsvis){bsVisit(t.dataset.bsvis);return}
   const a=t.dataset.bsa;if(!a)return;
   if(a==="pub"){if(!(window.FB&&window.FB.baseSet&&v8Uid())){toast("Para publicar tu base necesitas una cuenta.");return}

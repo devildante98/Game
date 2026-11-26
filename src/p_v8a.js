@@ -106,7 +106,7 @@ function pddTry(){const q=$("pddQ");if(!q)return;const s=pddSt(),a=pddAns(s.d),v
   if(!p){toast("No encuentro ese Pokémon. Elige uno de la lista.");return}if(s.g.includes(p[0])){toast("Ya lo has probado.");return}if(s.ok||s.g.length>=PDD_N)return;
   s.g.push(p[0]);snd("ui");
   if(p===a){s.ok=1;pddStreakFix(s);s.st=(s.st|0)+1;s.best=Math.max(s.best|0,s.st);s.w=(s.w|0)+1;s.last=s.d;
-    const k=s.g.length,rw={t:v8Tk(k<=2?1:k<=4?.6:.35,k<=2?600000:300000),it:k===1?{cand:1,ub:3}:k<=3?{ub:2}:{sb:3}};if(s.st%7===0)rw.it.mb=(rw.it.mb||0)+1;
+    const k=s.g.length,rk8=specRank("R"),rw={t:Math.round(v8Tk(k<=2?1:k<=4?.6:.35,k<=2?600000:300000)*(1+.2*rk8)),it:k===1?{cand:1,ub:3}:k<=3?{ub:2}:{sb:3}};if(s.st%7===0)rw.it.mb=(rw.it.mb||0)+1;
     s.rw=rw;grant(rw);snd("lvl");setTimeout(()=>snd("win"),300);try{cry(a[0])}catch(e){}toast("🔎 ¡Era "+a[0]+"! "+rwTxt(rw)+(s.st%7===0?" · ¡Racha de "+s.st+" días: Master Ball de regalo!":""));
     if(s.st===7||s.st===30)diaryAdd("🔎","¡Racha de "+s.st+" días acertando el Pokémon del día!",a[0],0,"lg")}
   else if(s.g.length>=PDD_N){s.st=0;snd("miss")}
@@ -140,10 +140,10 @@ function skinUI(){const b=$("skinPB");if(!b)return;const cur=S.skin||"";
   b.innerHTML='<div class="skgrid">'+SKINS.map(s=>{const has=skinHas(s),on=s.k===cur&&has,pr=s.prog?s.prog():null;
     return '<div class="skc'+(on?' on':'')+(has?'':s.price?' buy':' lock')+'"><div class="skball"><button type="button" class="bigball skprev'+(s.k?' bs-'+s.k:'')+'" tabindex="-1" aria-hidden="true"></button></div><b>'+esc(s.n)+'</b><small>'+esc(s.d)+'</small><small class="skhow">'+(s.event?'🎉 ':'')+esc(s.how)+'</small>'+
       (pr&&!has?'<div class="bar"><i style="width:'+Math.min(100,pr[0]/pr[1]*100)+'%"></i></div><small class="mut">'+fmt(Math.min(pr[0],pr[1]))+' / '+fmt(pr[1])+'</small>':'')+
-      (on?'<span class="skon">✓ Puesta</span>':has?'<button class="red" data-sku="'+s.k+'">Ponérmela</button>':s.price?'<button data-skb="'+s.k+'"'+(S.t<s.price?' disabled':'')+'>Comprar · '+fmt(s.price)+' 🎟️</button>':s.event&&s.ok()?'<button class="red" data-skb="'+s.k+'">🎁 Conseguir gratis</button>':'<span class="mut">🔒 Bloqueada</span>')+'</div>'}).join("")+'</div>'}
+      (on?'<span class="skon">✓ Puesta</span>':has?'<button class="red" data-sku="'+s.k+'">Ponérmela</button>':s.price?'<button data-skb="'+s.k+'"'+(S.t<v8Disc(s.price)?' disabled':'')+'>Comprar · '+fmt(v8Disc(s.price))+' 🎟️</button>':s.event&&s.ok()?'<button class="red" data-skb="'+s.k+'">🎁 Conseguir gratis</button>':'<span class="mut">🔒 Bloqueada</span>')+'</div>'}).join("")+'</div>'}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#skinPB [data-sku],#skinPB [data-skb]");if(!t)return;
   if(t.dataset.sku!=null){S.skin=t.dataset.sku;save();skinApply();snd("ui");toast("🎨 ¡Aspecto cambiado!");skinUI();return}
-  const s=SKINS.find(x=>x.k===t.dataset.skb);if(!s||skinHas(s))return;if(s.event){if(!s.ok())return}else{if(!s.price)return;if(S.t<s.price){toast("No tienes tickets suficientes.");return}S.t-=s.price}
+  const s=SKINS.find(x=>x.k===t.dataset.skb);if(!s||skinHas(s))return;if(s.event){if(!s.ok())return}else{if(!s.price)return;const pr=v8Disc(s.price);if(S.t<pr){toast("No tienes tickets suficientes.");return}S.t-=pr;qEv("buy",1)}
   S.skins=S.skins||{};S.skins[s.k]=1;S.skin=s.k;save();render();skinApply();snd("lvl");toast("🎨 ¡Ya tienes el aspecto «"+s.n+"»!");diaryAdd("🎨","Nuevo aspecto para la Poké Ball: "+s.n+".",null,0,"o");skinUI()});
 
 // ================= ESPECIALIDADES DE ENTRENADOR =================
@@ -155,11 +155,24 @@ const SPECS={
   C:{n:"Coleccionista",ic:"📚",c:"#7a5cff",d:"Más probabilidad de encontrar Pokémon variocolor en combates y en la Exploración.",xp:"Pokémon capturados",need:[0,25,100,300],tit:"📚 Gran Coleccionista",
     fx:r=>["Variocolores salvajes ×"+(1+r*.25).toString().replace(".",","),"Al capturar, "+r*5+" % de probabilidad de una Poké Ball de vuelta"]},
   T:{n:"Estratega",ic:"🧠",c:"#2f8be0",d:"Tus Pokémon ganan más experiencia en los combates.",xp:"combates ganados",need:[0,25,100,300],tit:"🧠 Gran Estratega",
-    fx:r=>["+"+r*10+" % de experiencia en combate"]}
+    fx:r=>["+"+r*10+" % de experiencia en combate"]},
+  // (8.2) cuatro especialidades más
+  X:{n:"Explorador",ic:"🧭",c:"#13a37f",d:"Sacas más partido a la Exploración: los objetos ocultos a veces traen un extra y el tesoro semanal da más premio.",xp:"objetos ocultos encontrados (el tesoro semanal cuenta 10)",need:[0,10,40,100],tit:"🧭 Gran Explorador",
+    fx:r=>[r*15+" % de probabilidad de un extra de tickets al encontrar un objeto oculto","Tesoro semanal: +"+r*25+" % de premio"]},
+  M:{n:"Jugón",ic:"🎮",c:"#e0447a",d:"Los premios de los minijuegos te dan más tickets.",xp:"partidas de minijuegos",need:[0,20,80,250],tit:"🎮 Gran Jugón",
+    fx:r=>["+"+r*10+" % de tickets en los premios de los minijuegos"]},
+  S:{n:"Comerciante",ic:"💰",c:"#d6a51a",d:"Consigues mejores precios en el Mercader misterioso, en los muebles de la Base secreta y en los aspectos de la Poké Ball.",xp:"compras en tiendas",need:[0,30,150,500],tit:"💰 Gran Comerciante",
+    fx:r=>["−"+r*8+" % en el Mercader misterioso","−"+r*8+" % en muebles de la Base secreta y aspectos de la Poké Ball"]},
+  R:{n:"Investigador",ic:"🔬",c:"#5a6ad8",d:"Cada Pokémon nuevo en tu Pokédex te da tickets extra, y las investigaciones de la Profesora y el Pokémon del día dan más premio.",xp:"Pokémon nuevos en la Pokédex",need:[0,15,60,200],tit:"🔬 Gran Investigador",
+    fx:r=>["Tickets extra por cada Pokémon nuevo en la Pokédex","+"+r*15+" % en las investigaciones de la Profesora","+"+r*20+" % en el Pokémon del día"]}
 };
+// de dónde sale la experiencia de cada especialidad
+const SPEC_X={B:()=>stt().hatch|0,C:()=>v8C().cap|0,T:()=>v8C().win|0,X:()=>(v8C().fd|0)+10*(S.treN|0),M:()=>v8C().mg|0,S:()=>v8C().buy|0,R:()=>v8C().new|0};
+// precio con el descuento del Comerciante
+const v8Disc=p=>{let rk=0;try{rk=specRank("S")}catch(e){}return Math.round(p*(1-.08*rk))};
 const SPEC_UNLOCK=()=>medCount()>=1||Object.keys(S.owned||{}).filter(n=>S.owned[n]>0).length>=50;
 function specSt(){S.spec=S.spec&&typeof S.spec==="object"?S.spec:{k:"",at:0,b:{}};S.spec.b=S.spec.b||{};return S.spec}
-const specXp=k=>{const c=v8C(),b=specSt().b[k]||0;return Math.max(0,(k==="B"?((stt().hatch|0)):k==="C"?(c.cap|0):(c.win|0))-b)};
+const specXp=k=>{const b=specSt().b[k]||0;return Math.max(0,(SPEC_X[k]?SPEC_X[k]():0)-b)};
 const specRank=k=>{const s=specSt();if(s.k!==k)return 0;const x=specXp(k),N=SPECS[k].need;return x>=N[3]?3:x>=N[2]?2:1};
 Object.keys(SPECS).forEach(k=>TITLES.push(["sp"+k,SPECS[k].tit,()=>((S.spec||{}).best||{})[k]>=3]));
 // efectos
@@ -167,7 +180,8 @@ Object.keys(SPECS).forEach(k=>TITLES.push(["sp"+k,SPECS[k].tit,()=>((S.spec||{})
   if(S.dc&&S.dc.t)S.dc.t-=DC_T*.1*rk;save()}}catch(e){}return r}}
 {const _hh=hhTick;hhTick=function(){const r=_hh.apply(this,arguments);try{const rk=specRank("C");if(rk)SHINY_W*=1+rk*.25}catch(e){}return r}}
 {const _gx=gainXp;gainXp=function(p,amt){const rk=specRank("T");return _gx.call(this,p,rk?Math.round(amt*(1+rk*.1)):amt)}}
-{const _q2=qEv;qEv=function(ev,n){const r=_q2.apply(this,arguments);try{if(ev==="cap"){const rk=specRank("C");if(rk&&Math.random()<rk*.05){S.bag.pb=(S.bag.pb||0)+1;toast("📚 Coleccionista: ¡recuperas una Poké Ball!")}}
+{const _q2=qEv;qEv=function(ev,n){const r=_q2.apply(this,arguments);try{if(ev==="new"){const rk=specRank("R");if(rk){const k=Math.max(1,Math.min(50,n|0||1)),t=Math.round(v8Tk(.03*rk,20000*rk)*k*RMUL());S.t+=t;if(t)toast("🔬 Investigador: +"+fmt(t)+" 🎟️ por "+(k>1?k+" Pokémon nuevos":"un Pokémon nuevo"))}}
+  if(ev==="cap"){const rk=specRank("C");if(rk&&Math.random()<rk*.05){S.bag.pb=(S.bag.pb||0)+1;toast("📚 Coleccionista: ¡recuperas una Poké Ball!")}}
   const s=S.spec;if(s&&s.k){s.best=s.best||{};const rk=specRank(s.k);if(rk>(s.best[s.k]|0)){s.best[s.k]=rk;if(rk>1){toast(SPECS[s.k].ic+" ¡Has subido a "+SPECS[s.k].n+" de rango "+rk+"!");diaryAdd(SPECS[s.k].ic,"Rango "+rk+" de "+SPECS[s.k].n+(rk===3?": ¡título «"+SPECS[s.k].tit+"» desbloqueado!":"."),null,0,"lg")}}}}catch(e){}return r}}
 v8Tab("trn","specP","Especialidad","🎓 Especialidades de entrenador","Elige tu camino: Criador, Coleccionista o Estratega. Cuanto más practiques tu especialidad, más sube de rango y mejores son sus ventajas.",()=>specUI());
 function specUI(){const b=$("specPB");if(!b)return;const s=specSt(),un=SPEC_UNLOCK(),wk=7*864e5,can=!s.at||Date.now()-s.at>=wk;
@@ -179,4 +193,11 @@ function specUI(){const b=$("specPB");if(!b)return;const s=specSt(),un=SPEC_UNLO
     (s.k&&!can?'<small class="mut">Podrás cambiar de especialidad en '+Math.ceil((wk-(Date.now()-s.at))/864e5)+' día(s). Al cambiar, el rango vuelve a empezar (los títulos conseguidos no se pierden).</small>':s.k?'<small class="mut">Al cambiar, el rango vuelve a empezar (los títulos conseguidos no se pierden).</small>':'')}
 document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.closest("#specPB [data-spc]");if(!t)return;const k=t.dataset.spc,s=specSt();if(!SPECS[k]||!SPEC_UNLOCK())return;
   if(s.k&&s.at&&Date.now()-s.at<7*864e5)return;if(s.k&&!(await askOk("¿Cambiar a "+SPECS[k].n+"? Tu rango empezará de nuevo y no podrás volver a cambiar hasta dentro de 7 días.")))return;
-  const c=v8C();s.k=k;s.at=Date.now();s.b={B:stt().hatch|0,C:c.cap|0,T:c.win|0};save();snd("lvl");toast(SPECS[k].ic+" ¡Ahora eres "+SPECS[k].n+"!");diaryAdd(SPECS[k].ic,"Has elegido la especialidad de "+SPECS[k].n+".",null,0,"o");try{hhTick()}catch(x){}specUI()});
+  s.k=k;s.at=Date.now();s.b={};Object.keys(SPEC_X).forEach(q=>{s.b[q]=SPEC_X[q]()});save();snd("lvl");toast(SPECS[k].ic+" ¡Ahora eres "+SPECS[k].n+"!");diaryAdd(SPECS[k].ic,"Has elegido la especialidad de "+SPECS[k].n+".",null,0,"o");try{hhTick()}catch(x){}specUI()});
+
+// (8.2) efectos de las especialidades nuevas
+// Explorador: cada objeto oculto cuenta y a veces trae tickets de más (en la partida principal)
+{const _fp=fdPick;fdPick=function(){const r=_fp.apply(this,arguments);try{const c=v8C();c.fd=(c.fd|0)+1;const rk=specRank("X");if(rk&&Math.random()<rk*.15){const t=Math.round(v8Tk(.1*rk,50000*rk)*RMUL());const go=()=>{S.t+=t};if(typeof XGSW!=="undefined"&&XGSW){xgOut();try{go()}finally{xgIn()}}else go();save();setTimeout(()=>toast("🧭 Explorador: ¡además encuentras "+fmt(t)+" 🎟️!"),600)}}catch(e){}return r}}
+// Jugón: más tickets en los premios de los minijuegos (el premio lo calcula el servidor; el extra se suma al recibirlo)
+// (window.srvAccion se crea al iniciar sesión: se envuelve en cuanto existe, una sola vez)
+setInterval(()=>{const _sa=window.srvAccion;if(typeof _sa!=="function"||_sa.__v8m)return;const w=function(ac,getJ,apply){if(ac&&ac.k==="minijuego"&&typeof apply==="function"){const ap=apply;apply=function(r){const out=ap.apply(this,arguments);try{const m=r&&r.minijuego,rk=specRank("M");if(rk&&m&&m.premio&&m.premio.t>0){const t=Math.round(m.premio.t*.1*rk*RMUL());S.t+=t;save();setTimeout(()=>{toast("🎮 Jugón: +"+fmt(t)+" 🎟️ extra");try{if(window.cloudFlush)window.cloudFlush(true)}catch(e){}},900)}}catch(e){}return out}}return _sa.call(this,ac,getJ,apply)};w.__v8m=1;window.srvAccion=w},1000);

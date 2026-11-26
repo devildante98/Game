@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795623371">
+<meta name="game-build" content="1795694689">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3534,7 +3534,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.1</small>
+    <small class="pcver">Versión 8.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8290,8 +8290,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="8.1";
+const GAME_VER="8.2";
 const NEWS=[
+{v:"2026-11-26-8.2",ver:"8.2",at:"2026-11-26T13:04",t:"🎓 Novedad",l:["🎓 4 especialidades de entrenador nuevas, cada una con 3 rangos y su propio título:", "🧭 Explorador: los objetos ocultos de la Exploración a veces traen tickets de más y el tesoro semanal da más premio", "🎮 Jugón: los premios de los minijuegos te dan hasta un 30 % más de tickets", "💰 Comerciante: hasta un 24 % de descuento en el Mercader misterioso, en los muebles de la Base secreta y en los aspectos de la Poké Ball", "🔬 Investigador: tickets extra por cada Pokémon nuevo en tu Pokédex, y más premio en las investigaciones de la Profesora y en el Pokémon del día"]},
 {v:"2026-11-25-8.1",ver:"8.1",at:"2026-11-25T17:13",t:"🔥 Novedad",l:["🔥 Rachas de regalos: si tu amigo y tú os enviáis un regalo el mismo día, vuestra racha sube. Si un día alguno no lo envía, vuelve a empezar", "Premios para los dos a los 3, 7, 14, 30, 60 y 100 días seguidos (hasta Master Balls y Cristales Supremos), y el título «🔥 Amistad inquebrantable» a los 30 días", "En Social › Amigos verás la racha 🔥 junto a cada amigo, un aviso ⚠️ si se va a perder y, al abrir un regalo, un botón para devolvérselo al momento"]},
 {v:"2026-11-25-8.0.3",ver:"8.0.3",at:"2026-11-25T17:06",t:"🔧 Arreglos/Mejoras",l:["Minijuegos: el pueblo del fondo vuelve a verse detrás de la ventana del minijuego (se queda quieto mientras juegas, así el juego sigue igual de fluido)"]},
 {v:"2026-11-25-8.0.2",ver:"8.0.2",at:"2026-11-25T14:43",t:"🏠 Novedad",l:["🏠 Base secreta mucho más completa: ahora puedes colgar objetos en las paredes (cuadros de Pokémon, reloj, tele, estante, espejo, aplique, tapiz, banderín…) y poner cosas pequeñas encima de mesas, mesitas, cómodas y baúles", "Gira los muebles hacia los dos lados (↺ ↻ o la tecla R) y muévelos o guárdalos tocándolos (M y Supr en el teclado)", "Muebles nuevos: mesita, cómoda, armario, puf, pecera, chimenea, piano, baúl, litera, lamparita, cactus, jarrón, radio y Poké Ball en peana", "La habitación tiene ahora ventana con cortinas, puerta, zócalo, sombras bajo los muebles y modo noche 🌙 (con estrellas en la ventana y las lámparas encendidas)", "Paredes con dibujo (rayas, ladrillo, madera y Poké Ball) y suelos nuevos (tablones, moqueta azul, arena y ajedrez), y botones para acercar y alejar la cámara en el móvil"]},
@@ -8732,7 +8733,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795623371";
+const GAME_B="1795694689";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -22808,7 +22809,7 @@ function pddTry(){const q=$("pddQ");if(!q)return;const s=pddSt(),a=pddAns(s.d),v
   if(!p){toast("No encuentro ese Pokémon. Elige uno de la lista.");return}if(s.g.includes(p[0])){toast("Ya lo has probado.");return}if(s.ok||s.g.length>=PDD_N)return;
   s.g.push(p[0]);snd("ui");
   if(p===a){s.ok=1;pddStreakFix(s);s.st=(s.st|0)+1;s.best=Math.max(s.best|0,s.st);s.w=(s.w|0)+1;s.last=s.d;
-    const k=s.g.length,rw={t:v8Tk(k<=2?1:k<=4?.6:.35,k<=2?600000:300000),it:k===1?{cand:1,ub:3}:k<=3?{ub:2}:{sb:3}};if(s.st%7===0)rw.it.mb=(rw.it.mb||0)+1;
+    const k=s.g.length,rk8=specRank("R"),rw={t:Math.round(v8Tk(k<=2?1:k<=4?.6:.35,k<=2?600000:300000)*(1+.2*rk8)),it:k===1?{cand:1,ub:3}:k<=3?{ub:2}:{sb:3}};if(s.st%7===0)rw.it.mb=(rw.it.mb||0)+1;
     s.rw=rw;grant(rw);snd("lvl");setTimeout(()=>snd("win"),300);try{cry(a[0])}catch(e){}toast("🔎 ¡Era "+a[0]+"! "+rwTxt(rw)+(s.st%7===0?" · ¡Racha de "+s.st+" días: Master Ball de regalo!":""));
     if(s.st===7||s.st===30)diaryAdd("🔎","¡Racha de "+s.st+" días acertando el Pokémon del día!",a[0],0,"lg")}
   else if(s.g.length>=PDD_N){s.st=0;snd("miss")}
@@ -22842,10 +22843,10 @@ function skinUI(){const b=$("skinPB");if(!b)return;const cur=S.skin||"";
   b.innerHTML='<div class="skgrid">'+SKINS.map(s=>{const has=skinHas(s),on=s.k===cur&&has,pr=s.prog?s.prog():null;
     return '<div class="skc'+(on?' on':'')+(has?'':s.price?' buy':' lock')+'"><div class="skball"><button type="button" class="bigball skprev'+(s.k?' bs-'+s.k:'')+'" tabindex="-1" aria-hidden="true"></button></div><b>'+esc(s.n)+'</b><small>'+esc(s.d)+'</small><small class="skhow">'+(s.event?'🎉 ':'')+esc(s.how)+'</small>'+
       (pr&&!has?'<div class="bar"><i style="width:'+Math.min(100,pr[0]/pr[1]*100)+'%"></i></div><small class="mut">'+fmt(Math.min(pr[0],pr[1]))+' / '+fmt(pr[1])+'</small>':'')+
-      (on?'<span class="skon">✓ Puesta</span>':has?'<button class="red" data-sku="'+s.k+'">Ponérmela</button>':s.price?'<button data-skb="'+s.k+'"'+(S.t<s.price?' disabled':'')+'>Comprar · '+fmt(s.price)+' 🎟️</button>':s.event&&s.ok()?'<button class="red" data-skb="'+s.k+'">🎁 Conseguir gratis</button>':'<span class="mut">🔒 Bloqueada</span>')+'</div>'}).join("")+'</div>'}
+      (on?'<span class="skon">✓ Puesta</span>':has?'<button class="red" data-sku="'+s.k+'">Ponérmela</button>':s.price?'<button data-skb="'+s.k+'"'+(S.t<v8Disc(s.price)?' disabled':'')+'>Comprar · '+fmt(v8Disc(s.price))+' 🎟️</button>':s.event&&s.ok()?'<button class="red" data-skb="'+s.k+'">🎁 Conseguir gratis</button>':'<span class="mut">🔒 Bloqueada</span>')+'</div>'}).join("")+'</div>'}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#skinPB [data-sku],#skinPB [data-skb]");if(!t)return;
   if(t.dataset.sku!=null){S.skin=t.dataset.sku;save();skinApply();snd("ui");toast("🎨 ¡Aspecto cambiado!");skinUI();return}
-  const s=SKINS.find(x=>x.k===t.dataset.skb);if(!s||skinHas(s))return;if(s.event){if(!s.ok())return}else{if(!s.price)return;if(S.t<s.price){toast("No tienes tickets suficientes.");return}S.t-=s.price}
+  const s=SKINS.find(x=>x.k===t.dataset.skb);if(!s||skinHas(s))return;if(s.event){if(!s.ok())return}else{if(!s.price)return;const pr=v8Disc(s.price);if(S.t<pr){toast("No tienes tickets suficientes.");return}S.t-=pr;qEv("buy",1)}
   S.skins=S.skins||{};S.skins[s.k]=1;S.skin=s.k;save();render();skinApply();snd("lvl");toast("🎨 ¡Ya tienes el aspecto «"+s.n+"»!");diaryAdd("🎨","Nuevo aspecto para la Poké Ball: "+s.n+".",null,0,"o");skinUI()});
 
 // ================= ESPECIALIDADES DE ENTRENADOR =================
@@ -22857,11 +22858,24 @@ const SPECS={
   C:{n:"Coleccionista",ic:"📚",c:"#7a5cff",d:"Más probabilidad de encontrar Pokémon variocolor en combates y en la Exploración.",xp:"Pokémon capturados",need:[0,25,100,300],tit:"📚 Gran Coleccionista",
     fx:r=>["Variocolores salvajes ×"+(1+r*.25).toString().replace(".",","),"Al capturar, "+r*5+" % de probabilidad de una Poké Ball de vuelta"]},
   T:{n:"Estratega",ic:"🧠",c:"#2f8be0",d:"Tus Pokémon ganan más experiencia en los combates.",xp:"combates ganados",need:[0,25,100,300],tit:"🧠 Gran Estratega",
-    fx:r=>["+"+r*10+" % de experiencia en combate"]}
+    fx:r=>["+"+r*10+" % de experiencia en combate"]},
+  // (8.2) cuatro especialidades más
+  X:{n:"Explorador",ic:"🧭",c:"#13a37f",d:"Sacas más partido a la Exploración: los objetos ocultos a veces traen un extra y el tesoro semanal da más premio.",xp:"objetos ocultos encontrados (el tesoro semanal cuenta 10)",need:[0,10,40,100],tit:"🧭 Gran Explorador",
+    fx:r=>[r*15+" % de probabilidad de un extra de tickets al encontrar un objeto oculto","Tesoro semanal: +"+r*25+" % de premio"]},
+  M:{n:"Jugón",ic:"🎮",c:"#e0447a",d:"Los premios de los minijuegos te dan más tickets.",xp:"partidas de minijuegos",need:[0,20,80,250],tit:"🎮 Gran Jugón",
+    fx:r=>["+"+r*10+" % de tickets en los premios de los minijuegos"]},
+  S:{n:"Comerciante",ic:"💰",c:"#d6a51a",d:"Consigues mejores precios en el Mercader misterioso, en los muebles de la Base secreta y en los aspectos de la Poké Ball.",xp:"compras en tiendas",need:[0,30,150,500],tit:"💰 Gran Comerciante",
+    fx:r=>["−"+r*8+" % en el Mercader misterioso","−"+r*8+" % en muebles de la Base secreta y aspectos de la Poké Ball"]},
+  R:{n:"Investigador",ic:"🔬",c:"#5a6ad8",d:"Cada Pokémon nuevo en tu Pokédex te da tickets extra, y las investigaciones de la Profesora y el Pokémon del día dan más premio.",xp:"Pokémon nuevos en la Pokédex",need:[0,15,60,200],tit:"🔬 Gran Investigador",
+    fx:r=>["Tickets extra por cada Pokémon nuevo en la Pokédex","+"+r*15+" % en las investigaciones de la Profesora","+"+r*20+" % en el Pokémon del día"]}
 };
+// de dónde sale la experiencia de cada especialidad
+const SPEC_X={B:()=>stt().hatch|0,C:()=>v8C().cap|0,T:()=>v8C().win|0,X:()=>(v8C().fd|0)+10*(S.treN|0),M:()=>v8C().mg|0,S:()=>v8C().buy|0,R:()=>v8C().new|0};
+// precio con el descuento del Comerciante
+const v8Disc=p=>{let rk=0;try{rk=specRank("S")}catch(e){}return Math.round(p*(1-.08*rk))};
 const SPEC_UNLOCK=()=>medCount()>=1||Object.keys(S.owned||{}).filter(n=>S.owned[n]>0).length>=50;
 function specSt(){S.spec=S.spec&&typeof S.spec==="object"?S.spec:{k:"",at:0,b:{}};S.spec.b=S.spec.b||{};return S.spec}
-const specXp=k=>{const c=v8C(),b=specSt().b[k]||0;return Math.max(0,(k==="B"?((stt().hatch|0)):k==="C"?(c.cap|0):(c.win|0))-b)};
+const specXp=k=>{const b=specSt().b[k]||0;return Math.max(0,(SPEC_X[k]?SPEC_X[k]():0)-b)};
 const specRank=k=>{const s=specSt();if(s.k!==k)return 0;const x=specXp(k),N=SPECS[k].need;return x>=N[3]?3:x>=N[2]?2:1};
 Object.keys(SPECS).forEach(k=>TITLES.push(["sp"+k,SPECS[k].tit,()=>((S.spec||{}).best||{})[k]>=3]));
 // efectos
@@ -22869,7 +22883,8 @@ Object.keys(SPECS).forEach(k=>TITLES.push(["sp"+k,SPECS[k].tit,()=>((S.spec||{})
   if(S.dc&&S.dc.t)S.dc.t-=DC_T*.1*rk;save()}}catch(e){}return r}}
 {const _hh=hhTick;hhTick=function(){const r=_hh.apply(this,arguments);try{const rk=specRank("C");if(rk)SHINY_W*=1+rk*.25}catch(e){}return r}}
 {const _gx=gainXp;gainXp=function(p,amt){const rk=specRank("T");return _gx.call(this,p,rk?Math.round(amt*(1+rk*.1)):amt)}}
-{const _q2=qEv;qEv=function(ev,n){const r=_q2.apply(this,arguments);try{if(ev==="cap"){const rk=specRank("C");if(rk&&Math.random()<rk*.05){S.bag.pb=(S.bag.pb||0)+1;toast("📚 Coleccionista: ¡recuperas una Poké Ball!")}}
+{const _q2=qEv;qEv=function(ev,n){const r=_q2.apply(this,arguments);try{if(ev==="new"){const rk=specRank("R");if(rk){const k=Math.max(1,Math.min(50,n|0||1)),t=Math.round(v8Tk(.03*rk,20000*rk)*k*RMUL());S.t+=t;if(t)toast("🔬 Investigador: +"+fmt(t)+" 🎟️ por "+(k>1?k+" Pokémon nuevos":"un Pokémon nuevo"))}}
+  if(ev==="cap"){const rk=specRank("C");if(rk&&Math.random()<rk*.05){S.bag.pb=(S.bag.pb||0)+1;toast("📚 Coleccionista: ¡recuperas una Poké Ball!")}}
   const s=S.spec;if(s&&s.k){s.best=s.best||{};const rk=specRank(s.k);if(rk>(s.best[s.k]|0)){s.best[s.k]=rk;if(rk>1){toast(SPECS[s.k].ic+" ¡Has subido a "+SPECS[s.k].n+" de rango "+rk+"!");diaryAdd(SPECS[s.k].ic,"Rango "+rk+" de "+SPECS[s.k].n+(rk===3?": ¡título «"+SPECS[s.k].tit+"» desbloqueado!":"."),null,0,"lg")}}}}catch(e){}return r}}
 v8Tab("trn","specP","Especialidad","🎓 Especialidades de entrenador","Elige tu camino: Criador, Coleccionista o Estratega. Cuanto más practiques tu especialidad, más sube de rango y mejores son sus ventajas.",()=>specUI());
 function specUI(){const b=$("specPB");if(!b)return;const s=specSt(),un=SPEC_UNLOCK(),wk=7*864e5,can=!s.at||Date.now()-s.at>=wk;
@@ -22881,7 +22896,14 @@ function specUI(){const b=$("specPB");if(!b)return;const s=specSt(),un=SPEC_UNLO
     (s.k&&!can?'<small class="mut">Podrás cambiar de especialidad en '+Math.ceil((wk-(Date.now()-s.at))/864e5)+' día(s). Al cambiar, el rango vuelve a empezar (los títulos conseguidos no se pierden).</small>':s.k?'<small class="mut">Al cambiar, el rango vuelve a empezar (los títulos conseguidos no se pierden).</small>':'')}
 document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.closest("#specPB [data-spc]");if(!t)return;const k=t.dataset.spc,s=specSt();if(!SPECS[k]||!SPEC_UNLOCK())return;
   if(s.k&&s.at&&Date.now()-s.at<7*864e5)return;if(s.k&&!(await askOk("¿Cambiar a "+SPECS[k].n+"? Tu rango empezará de nuevo y no podrás volver a cambiar hasta dentro de 7 días.")))return;
-  const c=v8C();s.k=k;s.at=Date.now();s.b={B:stt().hatch|0,C:c.cap|0,T:c.win|0};save();snd("lvl");toast(SPECS[k].ic+" ¡Ahora eres "+SPECS[k].n+"!");diaryAdd(SPECS[k].ic,"Has elegido la especialidad de "+SPECS[k].n+".",null,0,"o");try{hhTick()}catch(x){}specUI()});
+  s.k=k;s.at=Date.now();s.b={};Object.keys(SPEC_X).forEach(q=>{s.b[q]=SPEC_X[q]()});save();snd("lvl");toast(SPECS[k].ic+" ¡Ahora eres "+SPECS[k].n+"!");diaryAdd(SPECS[k].ic,"Has elegido la especialidad de "+SPECS[k].n+".",null,0,"o");try{hhTick()}catch(x){}specUI()});
+
+// (8.2) efectos de las especialidades nuevas
+// Explorador: cada objeto oculto cuenta y a veces trae tickets de más (en la partida principal)
+{const _fp=fdPick;fdPick=function(){const r=_fp.apply(this,arguments);try{const c=v8C();c.fd=(c.fd|0)+1;const rk=specRank("X");if(rk&&Math.random()<rk*.15){const t=Math.round(v8Tk(.1*rk,50000*rk)*RMUL());const go=()=>{S.t+=t};if(typeof XGSW!=="undefined"&&XGSW){xgOut();try{go()}finally{xgIn()}}else go();save();setTimeout(()=>toast("🧭 Explorador: ¡además encuentras "+fmt(t)+" 🎟️!"),600)}}catch(e){}return r}}
+// Jugón: más tickets en los premios de los minijuegos (el premio lo calcula el servidor; el extra se suma al recibirlo)
+// (window.srvAccion se crea al iniciar sesión: se envuelve en cuanto existe, una sola vez)
+setInterval(()=>{const _sa=window.srvAccion;if(typeof _sa!=="function"||_sa.__v8m)return;const w=function(ac,getJ,apply){if(ac&&ac.k==="minijuego"&&typeof apply==="function"){const ap=apply;apply=function(r){const out=ap.apply(this,arguments);try{const m=r&&r.minijuego,rk=specRank("M");if(rk&&m&&m.premio&&m.premio.t>0){const t=Math.round(m.premio.t*.1*rk*RMUL());S.t+=t;save();setTimeout(()=>{toast("🎮 Jugón: +"+fmt(t)+" 🎟️ extra");try{if(window.cloudFlush)window.cloudFlush(true)}catch(e){}},900)}}catch(e){}return out}}return _sa.call(this,ac,getJ,apply)};w.__v8m=1;window.srvAccion=w},1000);
 
 // =====================================================================================
 // VERSIÓN 8.0 (2/4): Mercader misterioso, Rival personal, Investigaciones del Profesor y Concursos Pokémon
@@ -22921,12 +22943,12 @@ function merUI(){const b=$("merPB");if(!b)return;const w=merNow();
     '<small class="mut">Visitas de hoy: '+today.map(s=>merHM(s.a)).join(" · ")+'. Cada visita dura 30 minutos.</small></div>';return}
   const st=merSt(w),L=merOffers(w),left=w.b-Date.now();
   b.innerHTML='<div class="merhd"><span class="merbig">🧳</span><div><b>¡El mercader está en el pueblo!</b><small>Se va en <b id="merLeft">'+H2(left/1000)+'</b>. Cada oferta se puede comprar una vez.</small></div></div>'+
-    '<div class="mergrid">'+L.map((o,i)=>{const got=st.b[i],can=S.t>=o.price&&!got&&!(o.k==="egg"&&(S.eggs||[]).length>=6);
+    '<div class="mergrid">'+L.map((o,i)=>{const got=st.b[i],can=S.t>=v8Disc(o.price)&&!got&&!(o.k==="egg"&&(S.eggs||[]).length>=6);
       return '<div class="merc'+(got?' got':'')+'"><span class="meric">'+(o.n&&PM[o.n]?icoHD(PM[o.n],72,false,!!o.sh):'<span class="merem">'+o.ic+'</span>')+'</span><b>'+esc(o.t)+'</b><small>'+esc(o.d)+'</small>'+
-        (got?'<span class="skon">✓ Comprado</span>':'<button class="red" data-merb="'+i+'"'+(can?'':' disabled')+'>'+fmt(o.price)+' 🎟️</button>')+(o.k==="egg"&&(S.eggs||[]).length>=6&&!got?'<small class="mut">Ya llevas 6 huevos.</small>':'')+'</div>'}).join("")+'</div>'}
+        (got?'<span class="skon">✓ Comprado</span>':'<button class="red" data-merb="'+i+'"'+(can?'':' disabled')+'>'+(v8Disc(o.price)<o.price?'<s>'+fmt(o.price)+'</s> ':'')+fmt(v8Disc(o.price))+' 🎟️</button>')+(o.k==="egg"&&(S.eggs||[]).length>=6&&!got?'<small class="mut">Ya llevas 6 huevos.</small>':'')+'</div>'}).join("")+'</div>'}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#merPB [data-merb]");if(!t)return;const w=merNow();if(!w){merUI();return}
-  const st=merSt(w),i=+t.dataset.merb,o=merOffers(w)[i];if(!o||st.b[i]||S.t<o.price)return;if(o.k==="egg"&&(S.eggs||[]).length>=6){toast("Ya llevas 6 huevos.");return}
-  S.t-=o.price;st.b[i]=1;
+  const st=merSt(w),i=+t.dataset.merb,o=merOffers(w)[i];if(!o||st.b[i]||S.t<v8Disc(o.price))return;if(o.k==="egg"&&(S.eggs||[]).length>=6){toast("Ya llevas 6 huevos.");return}
+  S.t-=v8Disc(o.price);st.b[i]=1;qEv("buy",1);
   if(o.k==="mon"){const lv=clampL(Math.max(5,leadLevel()-2));giveMon(o.n,lv,o.sh);toast("🧳 ¡"+o.t+" se une a tu equipo!");if(o.sh)diaryAdd("🧳","Has comprado un "+o.n+" variocolor al mercader misterioso.",o.n,1,"pk")}
   else if(o.k==="egg"){const sp=eggBase(o.n);S.eggs=S.eggs||[];S.eggs.push({s:sp,st:0,need:Math.max(2,eggNeed(sp)-2),at:Date.now(),sh:Math.random()<1/30?1:0,nt:Math.floor(Math.random()*NAT.length),mer:1});toast("🥚 ¡Huevo especial! Llévalo contigo en los combates para que eclosione.")}
   else{Object.keys(o.it).forEach(k=>{S.bag[k]=(S.bag[k]||0)+o.it[k]});toast("🧳 Has comprado: "+o.d)}
@@ -23054,7 +23076,7 @@ function resUI(){const b=$("resPB");if(!b)return;const s=resSt(),C=RES[s.c];
     st.tk.map((tk,i)=>{const[v,n]=pr[i],dn=v>=n;return '<div class="restk'+(dn?' ok':'')+'"><span>'+(dn?'✅':'⬜')+'</span><div><b>'+esc(resTxt(tk))+'</b><div class="bar"><i style="width:'+Math.min(100,v/n*100)+'%"></i></div><small>'+fmt(Math.min(v,n))+' / '+fmt(n)+'</small></div>'+(tk.k==="boss"&&!dn?'<button class="red" data-resb="'+i+'">⚔️ Enfrentarse</button>':'')+'</div>'}).join("")+
     '<div class="resrw">🎁 Recompensa de la etapa: <b>'+rwTxt(resRw(st))+'</b>'+(s.s===C.st.length-1?' + <b>'+(C.finSh?'✨ ':'')+C.fin+(C.finSh?' variocolor':'')+'</b>':'')+'</div>'+(ok?'<button class="red big" id="resDone">🎉 Entregar a la Profesora</button>':'')+'</div>';
   const d=$("resDone");if(d)d.onclick=resClaim}
-const resRw=st=>({t:v8Tk(st.rw.h,500000),it:Object.assign({},st.rw.it)});
+const resRw=st=>({t:Math.round(v8Tk(st.rw.h,500000)*(1+.15*specRank("R"))),it:Object.assign({},st.rw.it)});
 async function resClaim(){const s=resSt(),C=RES[s.c];if(!C||!s.b)return;const st=C.st[s.s];if(!st.tk.every(tk=>{const p=resProg(tk,s.b);return p[0]>=p[1]}))return;
   const rw=resRw(st);grant(rw);let extra="";
   if(s.s===C.st.length-1){if(PM[C.fin]){giveMon(C.fin,clampL(Math.max(20,leadLevel())),!!C.finSh);extra=" ¡Y "+(C.finSh?"un "+C.fin+" variocolor":C.fin)+" se une a ti!"}
@@ -23200,7 +23222,7 @@ function treClues(w){const sp=treSpot(w);if(!sp)return[];const M=EXM[sp.m],ns=sp
     "Desde hoy, el Zahorí también reacciona al tesoro: úsalo en «"+M.n+"» y te dirá hacia dónde ir.","¡Hoy el tesoro brilla en el suelo! Mira bien por «"+M.n+"» y pulsa A sobre la casilla que reluce."]}
 const treDay=()=>{const d=v8Mad().wd;return d<0?0:d};
 const treSt=()=>{const w=tourWeek();S.tre=S.tre&&S.tre.w===w?S.tre:{w,f:0};return S.tre};
-function treFind(sp){const s=treSt();if(s.f)return;s.f=Date.now();let rw={t:v8Tk(3,2e6),it:{cand:2,ub:5}};
+function treFind(sp){const s=treSt();if(s.f)return;s.f=Date.now();let rw={t:Math.round(v8Tk(3,2e6)*(1+.25*specRank("X"))),it:{cand:2,ub:5}};
   v8Main(()=>{grant(rw);S.treN=(S.treN|0)+1});save();snd("lvl");setTimeout(()=>snd("win"),400);
   try{exSay(["¡Has encontrado el tesoro de la semana!","Dentro hay: "+rwTxt(rw)+".","¡Mira el cuadro de honor en Retos → Tesoro semanal!"])}catch(e){toast("🗺️ ¡Tesoro encontrado! "+rwTxt(rw))}
   diaryAdd("🗺️","¡Has encontrado el tesoro semanal en «"+EXM[sp.m].n+"»!",null,0,"lg");
@@ -23295,8 +23317,8 @@ Object.assign(BS_F,{
   diploma:{n:"Diploma de la Liga",ic:"📜",free:1,wall:1,req:()=>Object.values(S.lgDone||{}).reduce((a,b)=>a+(b|0),0)>=1,why:"Gana la Liga Pokémon",mk:()=>G3B.merge([[G3B.box(.6,.45,.05,"#d8b45a"),BT3([0,0,.03])],[G3B.box(.52,.37,.02,"#fff8e0"),BT3([0,0,.06])],[G3B.box(.3,.03,.01,"#333"),BT3([0,.1,.075])],[G3B.box(.36,.02,.01,"#666"),BT3([0,.02,.075])],[G3B.cyl(.05,.05,.02,10,"#e2573b"),BT3([.16,-.1,.075],[1.57,0,0])]])},
 });
 BS_PAINT.forEach(n=>{BS_F["pa_"+n]={n:"Cuadro de "+n,ic:"🖼️",paint:n,h:.3,wall:1,mk:()=>G3B.merge([[G3B.box(.74,.74,.05,"#8a5a3a"),BT3([0,0,.03])],[G3B.box(.64,.64,.02,"#fff8e8"),BT3([0,0,.06])]])}});
-Object.keys(BS_F).forEach(k=>{if(!BS_F[k].free)BS_F[k].price=()=>Math.max(1e6*(1+BS_F[k].h*5),prodH(BS_F[k].h))});
-BS_PLUSH.forEach(n=>{BS_F["pl_"+n]={n:"Peluche de "+n,ic:"🧸",plush:n,h:.25,mk:()=>G3B.merge([[G3B.cyl(.32,.34,.12,14,"#ffb0c8"),BT3([0,.06,0])],[G3B.cyl(.28,.3,.04,14,"#ffd0e0"),BT3([0,.13,0])]])};BS_F["pl_"+n].price=()=>Math.max(2e6,prodH(.25))});
+Object.keys(BS_F).forEach(k=>{if(!BS_F[k].free)BS_F[k].price=()=>v8Disc(Math.max(1e6*(1+BS_F[k].h*5),prodH(BS_F[k].h)))});
+BS_PLUSH.forEach(n=>{BS_F["pl_"+n]={n:"Peluche de "+n,ic:"🧸",plush:n,h:.25,mk:()=>G3B.merge([[G3B.cyl(.32,.34,.12,14,"#ffb0c8"),BT3([0,.06,0])],[G3B.cyl(.28,.3,.04,14,"#ffd0e0"),BT3([0,.13,0])]])};BS_F["pl_"+n].price=()=>v8Disc(Math.max(2e6,prodH(.25)))});
 // Datos de cada objeto colocado: suelo [k, i, j, giro, encima] (encima = 1 si está sobre una mesa, mesita…) ·
 // pared [k, -1 = pared del fondo | -2 = pared izquierda, hueco 0..7, altura 0 abajo | 1 arriba]
 function hbSt(){S.base=S.base&&typeof S.base==="object"?S.base:{w:"cr",f:"wd",it:[],inv:{}};S.base.it=Array.isArray(S.base.it)?S.base.it:[];S.base.inv=S.base.inv||{};return S.base}
@@ -23440,7 +23462,7 @@ document.addEventListener("click",async e=>{const t=e.target.closest&&e.target.c
   if(t.dataset.bsw){s.w=t.dataset.bsw;save();if(SBASE3)SBASE3.build();bsBody();return}
   if(t.dataset.bsf){s.f=t.dataset.bsf;save();if(SBASE3)SBASE3.build();bsBody();return}
   if(t.dataset.bsput){if(!SBASE3)return;SBASE3.sel=-1;SBASE3.hand={k:t.dataset.bsput,r:0};SBASE3.dirty=true;bsTools();try{$("bsCv").scrollIntoView({behavior:"smooth",block:"center"})}catch(x){}return}
-  if(t.dataset.bsbuy){const k=t.dataset.bsbuy,F=BS_F[k];if(!F||F.free)return;const p=F.price();if(S.t<p){toast("No tienes tickets suficientes.");return}S.t-=p;s.inv[k]=(s.inv[k]|0)+1;save();render();snd("lvl");toast("🏠 ¡Has comprado: "+F.n+"!");bsBody();return}
+  if(t.dataset.bsbuy){const k=t.dataset.bsbuy,F=BS_F[k];if(!F||F.free)return;const p=F.price();if(S.t<p){toast("No tienes tickets suficientes.");return}S.t-=p;s.inv[k]=(s.inv[k]|0)+1;qEv("buy",1);save();render();snd("lvl");toast("🏠 ¡Has comprado: "+F.n+"!");bsBody();return}
   if(t.dataset.bsvis){bsVisit(t.dataset.bsvis);return}
   const a=t.dataset.bsa;if(!a)return;
   if(a==="pub"){if(!(window.FB&&window.FB.baseSet&&v8Uid())){toast("Para publicar tu base necesitas una cuenta.");return}
@@ -23981,7 +24003,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

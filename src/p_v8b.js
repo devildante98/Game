@@ -36,12 +36,12 @@ function merUI(){const b=$("merPB");if(!b)return;const w=merNow();
     '<small class="mut">Visitas de hoy: '+today.map(s=>merHM(s.a)).join(" · ")+'. Cada visita dura 30 minutos.</small></div>';return}
   const st=merSt(w),L=merOffers(w),left=w.b-Date.now();
   b.innerHTML='<div class="merhd"><span class="merbig">🧳</span><div><b>¡El mercader está en el pueblo!</b><small>Se va en <b id="merLeft">'+H2(left/1000)+'</b>. Cada oferta se puede comprar una vez.</small></div></div>'+
-    '<div class="mergrid">'+L.map((o,i)=>{const got=st.b[i],can=S.t>=o.price&&!got&&!(o.k==="egg"&&(S.eggs||[]).length>=6);
+    '<div class="mergrid">'+L.map((o,i)=>{const got=st.b[i],can=S.t>=v8Disc(o.price)&&!got&&!(o.k==="egg"&&(S.eggs||[]).length>=6);
       return '<div class="merc'+(got?' got':'')+'"><span class="meric">'+(o.n&&PM[o.n]?icoHD(PM[o.n],72,false,!!o.sh):'<span class="merem">'+o.ic+'</span>')+'</span><b>'+esc(o.t)+'</b><small>'+esc(o.d)+'</small>'+
-        (got?'<span class="skon">✓ Comprado</span>':'<button class="red" data-merb="'+i+'"'+(can?'':' disabled')+'>'+fmt(o.price)+' 🎟️</button>')+(o.k==="egg"&&(S.eggs||[]).length>=6&&!got?'<small class="mut">Ya llevas 6 huevos.</small>':'')+'</div>'}).join("")+'</div>'}
+        (got?'<span class="skon">✓ Comprado</span>':'<button class="red" data-merb="'+i+'"'+(can?'':' disabled')+'>'+(v8Disc(o.price)<o.price?'<s>'+fmt(o.price)+'</s> ':'')+fmt(v8Disc(o.price))+' 🎟️</button>')+(o.k==="egg"&&(S.eggs||[]).length>=6&&!got?'<small class="mut">Ya llevas 6 huevos.</small>':'')+'</div>'}).join("")+'</div>'}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#merPB [data-merb]");if(!t)return;const w=merNow();if(!w){merUI();return}
-  const st=merSt(w),i=+t.dataset.merb,o=merOffers(w)[i];if(!o||st.b[i]||S.t<o.price)return;if(o.k==="egg"&&(S.eggs||[]).length>=6){toast("Ya llevas 6 huevos.");return}
-  S.t-=o.price;st.b[i]=1;
+  const st=merSt(w),i=+t.dataset.merb,o=merOffers(w)[i];if(!o||st.b[i]||S.t<v8Disc(o.price))return;if(o.k==="egg"&&(S.eggs||[]).length>=6){toast("Ya llevas 6 huevos.");return}
+  S.t-=v8Disc(o.price);st.b[i]=1;qEv("buy",1);
   if(o.k==="mon"){const lv=clampL(Math.max(5,leadLevel()-2));giveMon(o.n,lv,o.sh);toast("🧳 ¡"+o.t+" se une a tu equipo!");if(o.sh)diaryAdd("🧳","Has comprado un "+o.n+" variocolor al mercader misterioso.",o.n,1,"pk")}
   else if(o.k==="egg"){const sp=eggBase(o.n);S.eggs=S.eggs||[];S.eggs.push({s:sp,st:0,need:Math.max(2,eggNeed(sp)-2),at:Date.now(),sh:Math.random()<1/30?1:0,nt:Math.floor(Math.random()*NAT.length),mer:1});toast("🥚 ¡Huevo especial! Llévalo contigo en los combates para que eclosione.")}
   else{Object.keys(o.it).forEach(k=>{S.bag[k]=(S.bag[k]||0)+o.it[k]});toast("🧳 Has comprado: "+o.d)}
@@ -169,7 +169,7 @@ function resUI(){const b=$("resPB");if(!b)return;const s=resSt(),C=RES[s.c];
     st.tk.map((tk,i)=>{const[v,n]=pr[i],dn=v>=n;return '<div class="restk'+(dn?' ok':'')+'"><span>'+(dn?'✅':'⬜')+'</span><div><b>'+esc(resTxt(tk))+'</b><div class="bar"><i style="width:'+Math.min(100,v/n*100)+'%"></i></div><small>'+fmt(Math.min(v,n))+' / '+fmt(n)+'</small></div>'+(tk.k==="boss"&&!dn?'<button class="red" data-resb="'+i+'">⚔️ Enfrentarse</button>':'')+'</div>'}).join("")+
     '<div class="resrw">🎁 Recompensa de la etapa: <b>'+rwTxt(resRw(st))+'</b>'+(s.s===C.st.length-1?' + <b>'+(C.finSh?'✨ ':'')+C.fin+(C.finSh?' variocolor':'')+'</b>':'')+'</div>'+(ok?'<button class="red big" id="resDone">🎉 Entregar a la Profesora</button>':'')+'</div>';
   const d=$("resDone");if(d)d.onclick=resClaim}
-const resRw=st=>({t:v8Tk(st.rw.h,500000),it:Object.assign({},st.rw.it)});
+const resRw=st=>({t:Math.round(v8Tk(st.rw.h,500000)*(1+.15*specRank("R"))),it:Object.assign({},st.rw.it)});
 async function resClaim(){const s=resSt(),C=RES[s.c];if(!C||!s.b)return;const st=C.st[s.s];if(!st.tk.every(tk=>{const p=resProg(tk,s.b);return p[0]>=p[1]}))return;
   const rw=resRw(st);grant(rw);let extra="";
   if(s.s===C.st.length-1){if(PM[C.fin]){giveMon(C.fin,clampL(Math.max(20,leadLevel())),!!C.finSh);extra=" ¡Y "+(C.finSh?"un "+C.fin+" variocolor":C.fin)+" se une a ti!"}

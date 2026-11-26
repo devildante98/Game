@@ -270,7 +270,7 @@ function bngUI(force){const b=$("bngPB");if(!b)return;if(!v8Uid()){b.innerHTML='
   b.innerHTML=tabs+'<div class="bngstage">'+host+'<div class="bngnow">'+stage+'</div>'+results+'</div>'+
     ((ph.k==="lob"||ph.k==="juego"||ph.k==="fin")?bngCards(id,s,R,ph):'')+
     '<div class="bngside">'+nextPz+nextBox+nextMine+'</div>'+players+((ph.k==="juego"||ph.k==="fin")?bngBoard(s,R,ph):'')+
-    '<div class="bngopts"><label><input type="checkbox" id="bngAuto"'+(o.auto?' checked':'')+'> 🤖 Marcar y cantar solo</label><label><input type="checkbox" id="bngVoz"'+(o.voz?' checked':'')+'> 🔊 Voz de la presentadora</label></div>'+
+    '<div class="bngopts"><button class="alt mini" id="bngInv">✉️ Invitar por el chat</button><label><input type="checkbox" id="bngAuto"'+(o.auto?' checked':'')+'> 🤖 Marcar y cantar solo</label><label><input type="checkbox" id="bngVoz"'+(o.voz?' checked':'')+'> 🔊 Voz de la presentadora</label></div>'+
     '<details class="bnghow"'+(BG.how?' open':'')+'><summary>❓ Cómo se juega</summary><p>Cada 6 minutos empieza una partida en cada sala. Durante el minuto y medio antes de empezar puedes comprar hasta '+BNG.MAXC+' cartones (y hasta '+BNG.DIA+' al día). Después, '+BNG_HOST+' va sacando Pokémon del bombo, uno cada pocos segundos.</p><p>Cada cartón tiene 15 Pokémon en 3 filas. Si completas una fila, canta <b>¡LÍNEA!</b>; si completas el cartón entero, canta <b>¡BINGO!</b>. ¡Hay que cantar a tiempo! Si varios lo completáis con la misma bola, os repartís el premio.</p><p>El bote es el 90 % de lo que se vende: un 30 % para la línea y un 70 % para el bingo, y crece con cada cartón. ¡Además hay objetos de premio, y quien canta bingo se lleva un Pokémon sorpresa al azar (hasta Épico) que puede salir variocolor!</p></details>'}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#bngPB button");if(!b||b.disabled)return;const o=bngSt();
   if(b.dataset.bngsala){o.s=b.dataset.bngsala;BG.sig="";BG.say="";save();snd("ui");bngWatch();bngUI(true);return}
@@ -322,3 +322,31 @@ function dexHow(p){try{const n=p[0],r=p[2];
   if(!DEXPRE){DEXPRE={};try{P.forEach(q=>EVO(q[0]).forEach(e=>{if(e&&e[0]&&!DEXPRE[e[0]])DEXPRE[e[0]]=q[0]}))}catch(e){}}
   const pre=DEXPRE[n],ev=pre?" · o haz evolucionar a "+pre:"";const tl=typeof TLR_COST!=="undefined"&&TLR_COST[r]&&v8Base(p)?" · o fabrícalo en el Taller de repetidos":"";
   return (r==="L"?"legendario: sale en el gacha":"sale en el gacha y en la Exploración")+ev+tl}catch(e){return ""}}
+
+// ================= INVITAR AL BINGO POR EL CHAT (8.4.7) =================
+// En el chat (✉️): «🎱 Invitar al Bingo» invita a la próxima partida de la sala que tienes elegida. La invitación caduca
+// cuando se cierra la venta de cartones de esa partida; al aceptarla se abre esa sala del Bingo.
+const bngInvRound=()=>{const now=bngNow(),R=Math.floor(now/BNG.PER);return now-R*BNG.PER<BNG.LOB?R:R+1};
+const bngHora=t=>new Date(t).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
+{const _p=chInvPanel;chInvPanel=function(){const r=_p.apply(this,arguments);try{const p=$("chInv");if(p&&!p.hidden&&!p.querySelector('[data-civ="bingo"]')){const o=bngSt(),S2=BNG_S[o.s],R=bngInvRound();
+  p.insertAdjacentHTML("beforeend",'<button type="button" data-civ="bingo">🎱 Invitar al Bingo <small>'+S2.ic+' '+S2.n+' · partida de las '+bngHora(R*BNG.PER+BNG.LOB)+'</small></button>')}}catch(e){}return r}}
+{const _s=chSendInv;chSendInv=async function(k){if(k!=="bingo")return _s.apply(this,arguments);
+  const me=chMe();if(!me||!window.FB||!window.FB.chSend)return;const key=chKey();if(!key)return;
+  if(Date.now()-CH.last<CH_WAIT){chFlash("Espera un momento antes de enviar otra invitación.");return}
+  const o=bngSt(),R=bngInvRound(),inv={k:"bingo",s:o.s,r:R,exp:R*BNG.PER+BNG.LOB};CH.last=Date.now();
+  const d={u:me,n:pvClean(pvNick()).slice(0,30),cr:typeof myCrown==="function"?myCrown():0,tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",t:"",inv:inv,at:Date.now()};
+  const [tp,id]=key==="global"?["global","global"]:key.split(":");
+  try{await window.FB.chSend(tp,id,d);snd("pop");toast("🎱 ¡Invitación al Bingo enviada! La partida empieza a las "+bngHora(inv.exp)+".")}catch(e){chFlash("No se ha podido enviar la invitación.")}}}
+{const _h=chInvHTML;chInvHTML=function(m,mine){const v=m.inv||{};if(v.k!=="bingo")return _h.apply(this,arguments);
+  const S2=BNG_S[v.s]||BNG_S.b,left=(v.exp||0)-bngNow(),no=S.invNo&&S.invNo[m.id],ok=S.invOk&&S.invOk[m.id];let st="";
+  if(mine)st='<small class="chinvst">Tu invitación'+(left>0?' · la venta se cierra en '+Math.max(1,Math.ceil(left/6e4))+' min':' · caducada')+'</small>';
+  else if(left<=0)st='<small class="chinvst">⌛ Esa partida ya ha empezado</small>';
+  else if(no)st='<small class="chinvst">❌ La has rechazado</small>';
+  else if(ok)st='<small class="chinvst">✅ Aceptada</small>';
+  else st='<div class="chinvb"><button class="red mini" data-cia="'+esc(m.id)+'">¡Voy!</button><button class="alt mini" data-cin="'+esc(m.id)+'">No, gracias</button></div>';
+  return '<div class="chinv chinv-bingo"><span class="chinvi">🎱</span><div><div>Invitación al <b>Bingo</b> · '+S2.ic+' '+esc(S2.n)+'</div><small>Partida de las '+bngHora(v.exp||0)+' · cartón a '+fmt(S2.p)+' 🎟️</small>'+st+'</div></div>'}}
+{const _a=chInvAccept;chInvAccept=async function(id){const m=chFindMsg(id);if(!m||!m.inv||m.inv.k!=="bingo")return _a.apply(this,arguments);
+  const v=m.inv;if((v.exp||0)<bngNow()){toast("Esa partida ya ha empezado. ¡Puedes apuntarte a la siguiente!")}
+  S.invOk=S.invOk||{};S.invOk[id]=1;if(BNG_S[v.s])bngSt().s=v.s;save();chRender(true);try{chToggle(false)}catch(e){}BG.sig="";hubOpen("onl","bngP");snd("ui")}}
+// botón en el Bingo para abrir las invitaciones del chat
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#bngInv");if(!b)return;try{chToggle(true);CH.inv=true;CH.emo=false;CH.pick=false;chPanels()}catch(x){toast("Abre el chat para invitar a tus amigos.")}});

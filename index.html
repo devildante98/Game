@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.6"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.5"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795731294">
+<meta name="game-build" content="1795731755">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3624,7 +3624,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.4.6</small>
+    <small class="pcver">Versión 8.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8380,8 +8380,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.4.6";
+const GAME_VER="8.5";
 const NEWS=[
+{v:"2026-11-26-8.5",ver:"8.5",at:"2026-11-26T23:22",t:"🎱 Novedad",tt:"¡Invita a tus amigos al Bingo por el chat!",l:["En el chat, pulsa ✉️ y elige «🎱 Invitar al Bingo»: invitas a la próxima partida de la sala que tengas elegida (Bosque, Ciudad o Liga). Funciona en el chat global, en el del gremio y por privado", "La invitación dice la sala, a qué hora empieza la partida y cuánto cuesta el cartón. Quien la acepte con «¡Voy!» entra directamente en esa sala para comprar sus cartones", "También tienes el botón «✉️ Invitar por el chat» dentro del Bingo. La invitación caduca cuando se cierra la venta de cartones de esa partida"]},
 {v:"2026-11-26-8.4.6",ver:"8.4.6",at:"2026-11-26T23:14",t:"🔧 Arreglos/Mejoras",tt:"Bingo sin animaciones en bucle",l:["Bingo: la presentadora y la bola de espera ya no se mueven sin parar; se quedan fijas", "Solo se anima la bola cuando sale un Pokémon nuevo y el botón ¡LÍNEA!/¡BINGO! cuando ya puedes cantar"]},
 {v:"2026-11-26-8.4.5",ver:"8.4.5",at:"2026-11-26T21:58",t:"🔧 Arreglos/Mejoras",tt:"¡Golpea al Diglett!: puntuación máxima de 136",l:["¡Golpea al Diglett!: ahora salen 2 Dugtrio (+3) por cada 7 topos, así que la puntuación perfecta sube a 136 en todas las partidas", "Así las puntuaciones que ya se hicieron esta semana se pueden superar, y todo el mundo sigue teniendo las mismas oportunidades en cualquier partida", "Arreglado: si el móvil o el ordenador se atascaba un momento, después salían varios topos de golpe casi a la vez. Ahora siempre hay al menos 0,28 s entre uno y otro, y un topo no vuelve a salir en el mismo hueco justo después de irse otro"]},
 {v:"2026-11-26-8.4.4",ver:"8.4.4",at:"2026-11-26T21:52",t:"🔧 Arreglos/Mejoras",tt:"¡Golpea al Diglett! igual de justo en todas las partidas",l:["¡Golpea al Diglett!: ahora todas las partidas tienen las mismas oportunidades. Salen siempre el mismo número de Dugtrio (+3) y de Voltorb, bien repartidos a lo largo de la partida, y la puntuación perfecta es 136 en cualquier partida. Antes, por pura suerte, en unas salían muchos más Dugtrio que en otras y la puntuación máxima posible cambiaba más de 20 puntos", "Lo que cambia en cada partida es dónde y en qué orden salen, así que sigue haciendo falta reflejos", "En dispositivos lentos, la partida ya no se corta antes de que salgan los últimos topos"]},
@@ -8833,7 +8834,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795731294";
+const GAME_B="1795731755";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24102,7 +24103,7 @@ function bngUI(force){const b=$("bngPB");if(!b)return;if(!v8Uid()){b.innerHTML='
   b.innerHTML=tabs+'<div class="bngstage">'+host+'<div class="bngnow">'+stage+'</div>'+results+'</div>'+
     ((ph.k==="lob"||ph.k==="juego"||ph.k==="fin")?bngCards(id,s,R,ph):'')+
     '<div class="bngside">'+nextPz+nextBox+nextMine+'</div>'+players+((ph.k==="juego"||ph.k==="fin")?bngBoard(s,R,ph):'')+
-    '<div class="bngopts"><label><input type="checkbox" id="bngAuto"'+(o.auto?' checked':'')+'> 🤖 Marcar y cantar solo</label><label><input type="checkbox" id="bngVoz"'+(o.voz?' checked':'')+'> 🔊 Voz de la presentadora</label></div>'+
+    '<div class="bngopts"><button class="alt mini" id="bngInv">✉️ Invitar por el chat</button><label><input type="checkbox" id="bngAuto"'+(o.auto?' checked':'')+'> 🤖 Marcar y cantar solo</label><label><input type="checkbox" id="bngVoz"'+(o.voz?' checked':'')+'> 🔊 Voz de la presentadora</label></div>'+
     '<details class="bnghow"'+(BG.how?' open':'')+'><summary>❓ Cómo se juega</summary><p>Cada 6 minutos empieza una partida en cada sala. Durante el minuto y medio antes de empezar puedes comprar hasta '+BNG.MAXC+' cartones (y hasta '+BNG.DIA+' al día). Después, '+BNG_HOST+' va sacando Pokémon del bombo, uno cada pocos segundos.</p><p>Cada cartón tiene 15 Pokémon en 3 filas. Si completas una fila, canta <b>¡LÍNEA!</b>; si completas el cartón entero, canta <b>¡BINGO!</b>. ¡Hay que cantar a tiempo! Si varios lo completáis con la misma bola, os repartís el premio.</p><p>El bote es el 90 % de lo que se vende: un 30 % para la línea y un 70 % para el bingo, y crece con cada cartón. ¡Además hay objetos de premio, y quien canta bingo se lleva un Pokémon sorpresa al azar (hasta Épico) que puede salir variocolor!</p></details>'}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#bngPB button");if(!b||b.disabled)return;const o=bngSt();
   if(b.dataset.bngsala){o.s=b.dataset.bngsala;BG.sig="";BG.say="";save();snd("ui");bngWatch();bngUI(true);return}
@@ -24154,6 +24155,34 @@ function dexHow(p){try{const n=p[0],r=p[2];
   if(!DEXPRE){DEXPRE={};try{P.forEach(q=>EVO(q[0]).forEach(e=>{if(e&&e[0]&&!DEXPRE[e[0]])DEXPRE[e[0]]=q[0]}))}catch(e){}}
   const pre=DEXPRE[n],ev=pre?" · o haz evolucionar a "+pre:"";const tl=typeof TLR_COST!=="undefined"&&TLR_COST[r]&&v8Base(p)?" · o fabrícalo en el Taller de repetidos":"";
   return (r==="L"?"legendario: sale en el gacha":"sale en el gacha y en la Exploración")+ev+tl}catch(e){return ""}}
+
+// ================= INVITAR AL BINGO POR EL CHAT (8.4.7) =================
+// En el chat (✉️): «🎱 Invitar al Bingo» invita a la próxima partida de la sala que tienes elegida. La invitación caduca
+// cuando se cierra la venta de cartones de esa partida; al aceptarla se abre esa sala del Bingo.
+const bngInvRound=()=>{const now=bngNow(),R=Math.floor(now/BNG.PER);return now-R*BNG.PER<BNG.LOB?R:R+1};
+const bngHora=t=>new Date(t).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"2-digit"});
+{const _p=chInvPanel;chInvPanel=function(){const r=_p.apply(this,arguments);try{const p=$("chInv");if(p&&!p.hidden&&!p.querySelector('[data-civ="bingo"]')){const o=bngSt(),S2=BNG_S[o.s],R=bngInvRound();
+  p.insertAdjacentHTML("beforeend",'<button type="button" data-civ="bingo">🎱 Invitar al Bingo <small>'+S2.ic+' '+S2.n+' · partida de las '+bngHora(R*BNG.PER+BNG.LOB)+'</small></button>')}}catch(e){}return r}}
+{const _s=chSendInv;chSendInv=async function(k){if(k!=="bingo")return _s.apply(this,arguments);
+  const me=chMe();if(!me||!window.FB||!window.FB.chSend)return;const key=chKey();if(!key)return;
+  if(Date.now()-CH.last<CH_WAIT){chFlash("Espera un momento antes de enviar otra invitación.");return}
+  const o=bngSt(),R=bngInvRound(),inv={k:"bingo",s:o.s,r:R,exp:R*BNG.PER+BNG.LOB};CH.last=Date.now();
+  const d={u:me,n:pvClean(pvNick()).slice(0,30),cr:typeof myCrown==="function"?myCrown():0,tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",t:"",inv:inv,at:Date.now()};
+  const [tp,id]=key==="global"?["global","global"]:key.split(":");
+  try{await window.FB.chSend(tp,id,d);snd("pop");toast("🎱 ¡Invitación al Bingo enviada! La partida empieza a las "+bngHora(inv.exp)+".")}catch(e){chFlash("No se ha podido enviar la invitación.")}}}
+{const _h=chInvHTML;chInvHTML=function(m,mine){const v=m.inv||{};if(v.k!=="bingo")return _h.apply(this,arguments);
+  const S2=BNG_S[v.s]||BNG_S.b,left=(v.exp||0)-bngNow(),no=S.invNo&&S.invNo[m.id],ok=S.invOk&&S.invOk[m.id];let st="";
+  if(mine)st='<small class="chinvst">Tu invitación'+(left>0?' · la venta se cierra en '+Math.max(1,Math.ceil(left/6e4))+' min':' · caducada')+'</small>';
+  else if(left<=0)st='<small class="chinvst">⌛ Esa partida ya ha empezado</small>';
+  else if(no)st='<small class="chinvst">❌ La has rechazado</small>';
+  else if(ok)st='<small class="chinvst">✅ Aceptada</small>';
+  else st='<div class="chinvb"><button class="red mini" data-cia="'+esc(m.id)+'">¡Voy!</button><button class="alt mini" data-cin="'+esc(m.id)+'">No, gracias</button></div>';
+  return '<div class="chinv chinv-bingo"><span class="chinvi">🎱</span><div><div>Invitación al <b>Bingo</b> · '+S2.ic+' '+esc(S2.n)+'</div><small>Partida de las '+bngHora(v.exp||0)+' · cartón a '+fmt(S2.p)+' 🎟️</small>'+st+'</div></div>'}}
+{const _a=chInvAccept;chInvAccept=async function(id){const m=chFindMsg(id);if(!m||!m.inv||m.inv.k!=="bingo")return _a.apply(this,arguments);
+  const v=m.inv;if((v.exp||0)<bngNow()){toast("Esa partida ya ha empezado. ¡Puedes apuntarte a la siguiente!")}
+  S.invOk=S.invOk||{};S.invOk[id]=1;if(BNG_S[v.s])bngSt().s=v.s;save();chRender(true);try{chToggle(false)}catch(e){}BG.sig="";hubOpen("onl","bngP");snd("ui")}}
+// botón en el Bingo para abrir las invitaciones del chat
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#bngInv");if(!b)return;try{chToggle(true);CH.inv=true;CH.emo=false;CH.pick=false;chPanels()}catch(x){toast("Abre el chat para invitar a tus amigos.")}});
 
 </script>
 <script>
@@ -24476,7 +24505,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.4.6";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.5";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

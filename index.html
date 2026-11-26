@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795715832">
+<meta name="game-build" content="1795716166">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3622,7 +3622,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.4</small>
+    <small class="pcver">Versión 8.4.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8378,8 +8378,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.4";
+const GAME_VER="8.4.1";
 const NEWS=[
+{v:"2026-11-26-8.4.1",ver:"8.4.1",at:"2026-11-26T19:02",t:"🔧 Arreglos/Mejoras",tt:"Las megas, también en «Todas» del Taller",l:["Taller de repetidos: las megaevoluciones ya salen también con el filtro «Todas», no solo con «🧬 Megas»", "La lista de Fabricar enseña primero lo que puedes fabricar ya (con las megas disponibles arriba del todo) y luego el resto"]},
 {v:"2026-11-26-8.4",ver:"8.4",at:"2026-11-26T18:57",t:"🧬 Novedad",tt:"¡Fabrica megaevoluciones en el Taller de repetidos!",l:["♻️ Taller de repetidos (Pokédex): ahora también puedes fabricar megaevoluciones con polvo de estrellas ✨. Elige «🧬 Megas» en la lista de Fabricar", "Cada mega cuesta 1200 ✨ (las legendarias, como Mega-Darkrai o Mega-Zygarde, 2500 ✨) y puedes fabricar una por semana", "Necesitas tener ya su Pokémon base (por ejemplo, Dragonite para Mega-Dragonite), así siempre la puedes usar: llévalo en tu equipo y pulsa «🧬 Megaevolucionar» en combate", "Las megas siguen saliendo también en el gacha, en las tiradas épicas (y las legendarias, en las de legendario)"]},
 {v:"2026-11-26-8.3.2",ver:"8.3.2",at:"2026-11-26T18:40",t:"🔧 Arreglos/Mejoras",tt:"Pistas de megas y Gigamax en la Pokédex",l:["Pokédex: la pista de las megaevoluciones y las formas Gigamax que te faltan ahora explica bien dónde salen: en el gacha, en las tiradas épicas (★★★), y con más probabilidad en las súper tiradas", "Al conseguirla, pon a su Pokémon en tu equipo y pulsa «🔴 Gigamax» o «🧬 Megaevolucionar» en combate"]},
 {v:"2026-11-26-8.3.1",ver:"8.3.1",at:"2026-11-26T18:30",t:"🔧 Arreglos/Mejoras",tt:"Pokédex más fácil de completar",l:["Pokédex: los Pokémon que te faltan ya no salen como «???»: ves su silueta y su nombre, para saber cuál buscar", "Al pasar el ratón (o mantener pulsado) sobre uno que te falta, te dice cómo conseguirlo: en el gacha, en la Exploración, evolucionando a su forma anterior o fabricándolo en el Taller de repetidos"]},
@@ -8825,7 +8826,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795715832";
+const GAME_B="1795716166";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -23853,7 +23854,7 @@ function tlrBuy(i){const it=TLR_SHOP[i];if(!it||tlrDust()<it[1])return;S.dust=tl
 function tlrUI(){const b=$("tlrPB");if(!b)return;const t=tlrSt(),L=tlrList(),R=["C","R","E","M","L"],by={};R.forEach(r=>by[r]={c:0,d:0});
   L.forEach(x=>{const r=by[x.p[2]];if(r){r.c+=x.c;r.d+=x.c*(TLR_DUST[x.p[2]]||1)}});
   const sel=R.filter(r=>t.r[r]),selC=sel.reduce((a,r)=>a+by[r].c,0),selD=sel.reduce((a,r)=>a+by[r].d,0);
-  const q=nrm(TLR.q||""),C=tlrCraftable().filter(p=>(TLR.f==="MG"?tlrIsMega(p):!TLR.f?!tlrIsMega(p):p[2]===TLR.f&&!tlrIsMega(p))&&(!TLR.nw||!hasP(p[0]))&&(!q||nrm(p[0]).includes(q))).sort((a,c)=>(TLR.f==="MG"?((S.owned[megaBase(c[0])]>0)-(S.owned[megaBase(a[0])]>0)):0)||(hasP(a[0])-hasP(c[0]))||(tlrCost(a)-tlrCost(c))).slice(0,TLR.f==="MG"?120:48);
+  const q=nrm(TLR.q||""),C=tlrCraftable().filter(p=>(TLR.f==="MG"?tlrIsMega(p):!TLR.f?true:p[2]===TLR.f&&!tlrIsMega(p))&&(!TLR.nw||!hasP(p[0]))&&(!q||nrm(p[0]).includes(q))).map(p=>[p,tlrWhy(p)?1:0]).sort((a,c)=>(a[1]-c[1])||(tlrIsMega(c[0])-tlrIsMega(a[0]))||(tlrIsMega(a[0])&&tlrIsMega(c[0])?((S.owned[megaBase(c[0][0])]>0)-(S.owned[megaBase(a[0][0])]>0)):0)||(hasP(a[0][0])-hasP(c[0][0]))||(tlrCost(a[0])-tlrCost(c[0]))).map(x=>x[0]).slice(0,!TLR.f?200:120);
   const D=tlrDust();
   b.innerHTML='<div class="tlrtop"><div class="tlrdust"><span>✨</span><b>'+fmt(D)+'</b><small>polvo de estrellas</small></div><div class="tlrrate">'+R.map(r=>'<span>'+STAR[r]+' → <b>'+TLR_DUST[r]+'</b> ✨</span>').join("")+'</div></div>'+
     '<div class="tlrsec"><h3>♻️ Convertir repetidos</h3><small class="mut">Tu copia principal y tus repetidos variocolores no se tocan nunca. La pegatina brillante del Álbum (5 copias) se queda aunque conviertas.</small>'+
@@ -24454,7 +24455,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.4";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.4.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

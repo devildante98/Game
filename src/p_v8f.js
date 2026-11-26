@@ -41,7 +41,7 @@ function tlrBuy(i){const it=TLR_SHOP[i];if(!it||tlrDust()<it[1])return;S.dust=tl
 function tlrUI(){const b=$("tlrPB");if(!b)return;const t=tlrSt(),L=tlrList(),R=["C","R","E","M","L"],by={};R.forEach(r=>by[r]={c:0,d:0});
   L.forEach(x=>{const r=by[x.p[2]];if(r){r.c+=x.c;r.d+=x.c*(TLR_DUST[x.p[2]]||1)}});
   const sel=R.filter(r=>t.r[r]),selC=sel.reduce((a,r)=>a+by[r].c,0),selD=sel.reduce((a,r)=>a+by[r].d,0);
-  const q=nrm(TLR.q||""),C=tlrCraftable().filter(p=>(TLR.f==="MG"?tlrIsMega(p):!TLR.f?!tlrIsMega(p):p[2]===TLR.f&&!tlrIsMega(p))&&(!TLR.nw||!hasP(p[0]))&&(!q||nrm(p[0]).includes(q))).sort((a,c)=>(TLR.f==="MG"?((S.owned[megaBase(c[0])]>0)-(S.owned[megaBase(a[0])]>0)):0)||(hasP(a[0])-hasP(c[0]))||(tlrCost(a)-tlrCost(c))).slice(0,TLR.f==="MG"?120:48);
+  const q=nrm(TLR.q||""),C=tlrCraftable().filter(p=>(TLR.f==="MG"?tlrIsMega(p):!TLR.f?true:p[2]===TLR.f&&!tlrIsMega(p))&&(!TLR.nw||!hasP(p[0]))&&(!q||nrm(p[0]).includes(q))).map(p=>[p,tlrWhy(p)?1:0]).sort((a,c)=>(a[1]-c[1])||(tlrIsMega(c[0])-tlrIsMega(a[0]))||(tlrIsMega(a[0])&&tlrIsMega(c[0])?((S.owned[megaBase(c[0][0])]>0)-(S.owned[megaBase(a[0][0])]>0)):0)||(hasP(a[0][0])-hasP(c[0][0]))||(tlrCost(a[0])-tlrCost(c[0]))).map(x=>x[0]).slice(0,!TLR.f?200:120);
   const D=tlrDust();
   b.innerHTML='<div class="tlrtop"><div class="tlrdust"><span>✨</span><b>'+fmt(D)+'</b><small>polvo de estrellas</small></div><div class="tlrrate">'+R.map(r=>'<span>'+STAR[r]+' → <b>'+TLR_DUST[r]+'</b> ✨</span>').join("")+'</div></div>'+
     '<div class="tlrsec"><h3>♻️ Convertir repetidos</h3><small class="mut">Tu copia principal y tus repetidos variocolores no se tocan nunca. La pegatina brillante del Álbum (5 copias) se queda aunque conviertas.</small>'+

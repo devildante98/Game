@@ -928,3 +928,8 @@ rep('#welc,#newsM,#privM{','.rescn{margin:8px auto 0;max-width:420px;padding:8px
 
 # ===== buscadores: título descriptivo y dirección principal =====
 rep('<title>Poke Gacha Online · Gacha</title>','<title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>\n<link rel="canonical" href="https://pokegachaonline.es/">')
+
+# ===== (8.3) Pokédex: los que te faltan se ven en silueta y con su nombre (y cómo conseguirlo al pasar el ratón) =====
+rep(':"Sin conseguir"}"><span class="dexn">', ':"Te falta: "+p[0]+(typeof dexHow==="function"?" · "+dexHow(p):"")}"><span class="dexn">')
+rep('!!(S.shiny&&S.shiny[p[0]])):"❔"}</div>', '!!(S.shiny&&S.shiny[p[0]])):\'<span class="dexsil">\'+ico(p,36)+\'</span>\'}</div>')
+rep('esc(nk(p[0])):"???"}</b>', 'esc(nk(p[0])):\'<span class="dexmn">\'+esc(p[0])+\'</span>\'}</b>')

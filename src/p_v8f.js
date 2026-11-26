@@ -301,3 +301,13 @@ setInterval(()=>{try{if(typeof S==="undefined"||!S||!S.owned)return;const k=seaN
 // la estación junto al clima en Ajustes
 setInterval(()=>{try{const l=$("wxOpt");if(!l)return;let e=$("seaTxt");const k=seaNow(),si=SEA_I[k],h=si.ic+" Estación: <b>"+si.n+"</b> · en la Exploración salen más Pokémon de tipo "+seaTyTxt(k);
   if(!e){e=document.createElement("small");e.id="seaTxt";e.className="mut";e.style.display="block";l.after(e)}if(e._h!==h){e._h=h;e.innerHTML=h}}catch(e){}},3000);
+
+// ================= POKÉDEX: CÓMO CONSEGUIR LOS QUE FALTAN (8.3) =================
+// Las casillas de los que te faltan muestran su silueta y su nombre; al pasar el ratón, una pista de dónde conseguirlo.
+let DEXPRE=null;
+function dexHow(p){try{const n=p[0],r=p[2];
+  if(/^Mega-/.test(n))return "consigue a su forma normal y su megapiedra";if(/Gigamax/.test(n))return "consigue a su forma normal y desbloquea su forma Gigamax";
+  if(r==="M")return "Pokémon singular: búscalo en eventos y en el gacha";
+  if(!DEXPRE){DEXPRE={};try{P.forEach(q=>EVO(q[0]).forEach(e=>{if(e&&e[0]&&!DEXPRE[e[0]])DEXPRE[e[0]]=q[0]}))}catch(e){}}
+  const pre=DEXPRE[n],ev=pre?" · o haz evolucionar a "+pre:"";const tl=typeof TLR_COST!=="undefined"&&TLR_COST[r]&&v8Base(p)?" · o fabrícalo en el Taller de repetidos":"";
+  return (r==="L"?"legendario: sale en el gacha":"sale en el gacha y en la Exploración")+ev+tl}catch(e){return ""}}

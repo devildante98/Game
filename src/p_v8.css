@@ -256,3 +256,7 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bngmonw{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px 26px;border-radius:22px;background:#fff;color:#2a2340;text-align:center;max-width:320px;width:100%;animation:bngPop .7s cubic-bezier(.2,1.6,.4,1)}
 .bngmonw.sh{background:linear-gradient(160deg,#fff,#fff3c4 60%,#ffd9f0);box-shadow:0 0 30px rgba(255,215,90,.8)}.bngmonw b{font-size:1.3rem}
 .bngmonp{width:150px;height:150px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,#fff,#efe9ff)}
+/* Pokédex (8.3): silueta y nombre de los que faltan */
+.card.lock .dexsil{display:inline-block;filter:brightness(0) opacity(.42)}.card.lock .dexsil img{image-rendering:auto}
+.dex .card.lock{filter:grayscale(1);opacity:.8}.card.lock .dexmn{color:#5c6278;font-weight:700}.card.lock .dexsil{filter:brightness(0) opacity(.5)}
+body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}

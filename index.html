@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795716166">
+<meta name="game-build" content="1795717276">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3531,9 +3531,9 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bngcg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:4px 0 0}
 .bngcl{position:relative;aspect-ratio:1;padding:0;border-radius:10px;background:#fff;border:2px solid rgba(74,50,16,.15);display:grid;place-items:center;overflow:hidden;min-width:0;color:inherit}
 .bngcl img{max-width:100%;height:auto}.bngcl i{position:absolute;top:1px;left:3px;font-style:normal;font-size:.62rem;font-weight:900;opacity:.7}
-.bngcl.row{border-color:#2fae5a}.bngcl.hint{box-shadow:inset 0 0 0 2px rgba(226,87,59,.35)}.bngcl.last{animation:bngLast 1s ease-in-out 2}
+.bngcl.row{border-color:#2fae5a}.bngcl.hint{box-shadow:inset 0 0 0 2px rgba(226,87,59,.35)}.bngcl.last{animation:bngLast .8s ease-in-out 1}
 @keyframes bngLast{50%{transform:scale(1.1)}}
-.bngcl em{position:absolute;inset:12%;border-radius:50%;background:rgba(226,59,90,.45);border:3px solid rgba(200,30,70,.75);animation:bngStamp .25s ease-out}
+.bngcl em{position:absolute;inset:12%;border-radius:50%;background:rgba(226,59,90,.45);border:3px solid rgba(200,30,70,.75)}.bngcl em.nw{animation:bngStamp .25s ease-out}
 @keyframes bngStamp{0%{transform:scale(1.8);opacity:0}100%{transform:none;opacity:1}}
 .bngside{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:0 0 12px}
 .bngprize,.bngbuy{padding:10px 12px;border-radius:14px;background:var(--bg,#f5f3ff);display:flex;flex-direction:column;gap:6px}
@@ -3622,7 +3622,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.4.1</small>
+    <small class="pcver">Versión 8.4.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8378,8 +8378,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.4.1";
+const GAME_VER="8.4.2";
 const NEWS=[
+{v:"2026-11-26-8.4.2",ver:"8.4.2",at:"2026-11-26T19:21",t:"🔧 Arreglos/Mejoras",tt:"Bingo más tranquilo",l:["Bingo: el círculo rojo de los Pokémon que ya has marcado se queda fijo. Antes se volvía a animar con cada bola nueva y parecía que parpadeaba", "El sello solo se anima una vez, al marcar la casilla, y el salto de la última bola también"]},
 {v:"2026-11-26-8.4.1",ver:"8.4.1",at:"2026-11-26T19:02",t:"🔧 Arreglos/Mejoras",tt:"Las megas, también en «Todas» del Taller",l:["Taller de repetidos: las megaevoluciones ya salen también con el filtro «Todas», no solo con «🧬 Megas»", "La lista de Fabricar enseña primero lo que puedes fabricar ya (con las megas disponibles arriba del todo) y luego el resto"]},
 {v:"2026-11-26-8.4",ver:"8.4",at:"2026-11-26T18:57",t:"🧬 Novedad",tt:"¡Fabrica megaevoluciones en el Taller de repetidos!",l:["♻️ Taller de repetidos (Pokédex): ahora también puedes fabricar megaevoluciones con polvo de estrellas ✨. Elige «🧬 Megas» en la lista de Fabricar", "Cada mega cuesta 1200 ✨ (las legendarias, como Mega-Darkrai o Mega-Zygarde, 2500 ✨) y puedes fabricar una por semana", "Necesitas tener ya su Pokémon base (por ejemplo, Dragonite para Mega-Dragonite), así siempre la puedes usar: llévalo en tu equipo y pulsa «🧬 Megaevolucionar» en combate", "Las megas siguen saliendo también en el gacha, en las tiradas épicas (y las legendarias, en las de legendario)"]},
 {v:"2026-11-26-8.3.2",ver:"8.3.2",at:"2026-11-26T18:40",t:"🔧 Arreglos/Mejoras",tt:"Pistas de megas y Gigamax en la Pokédex",l:["Pokédex: la pista de las megaevoluciones y las formas Gigamax que te faltan ahora explica bien dónde salen: en el gacha, en las tiradas épicas (★★★), y con más probabilidad en las súper tiradas", "Al conseguirla, pon a su Pokémon en tu equipo y pulsa «🔴 Gigamax» o «🧬 Megaevolucionar» en combate"]},
@@ -8826,7 +8827,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795716166";
+const GAME_B="1795717276";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24037,6 +24038,8 @@ function bngAnnounce(s,r,ph){const ord=bngBolas(s,r,ph.d.x),v=ord[ph.cur-1],pool
 function bngMonShow(n,sh){const p=PM[n];if(!p)return;const old=$("bngMonM");if(old)old.remove();const m=document.createElement("div");m.id="bngMonM";m.className="bngmon";m.setAttribute("role","dialog");
   m.innerHTML='<div class="bngmonw'+(sh?' sh':'')+'"><small>🎱 Pokémon sorpresa del Bingo</small><div class="bngmonp">'+ico(p,110,false,sh)+'</div><b>'+(sh?'✨ ':'')+esc(n)+'</b><small>'+STAR[p[2]]+(sh?' · ¡VARIOCOLOR!':'')+'</small><button class="red">¡Genial!</button></div>';
   document.body.appendChild(m);m.querySelector("button").onclick=()=>m.remove();m.onclick=e=>{if(e.target===m)m.remove()};if(sh)snd("capok")}
+// (la animación del sello y de la última bola solo la primera vez que se pinta cada casilla; después, fija)
+const BNG_ANI=new Set();function bngOnce(k){if(BNG_ANI.has(k))return false;BNG_ANI.add(k);if(BNG_ANI.size>3000)BNG_ANI.clear();return true}
 const bngMS=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
 function bngPrizeBox(s,d,title){const B=bngBote(s,d),S2=BNG_S[s];
   return '<div class="bngprize"><b>'+title+'</b><div class="bngpz"><div><span>🙋 Línea</span><b>'+fmt(B.l)+' 🎟️</b><small>+ '+bngItTxt(B.il)+'</small></div><div class="bngbig"><span>🎉 Bingo</span><b>'+fmt(B.b)+' 🎟️</b><small>+ '+bngItTxt(B.ib)+'</small><small class="bngpk">+ 🎁 Pokémon sorpresa (hasta ★★★ Épico, ¡puede ser variocolor!)</small></div></div>'+
@@ -24051,7 +24054,7 @@ function bngCards(id,s,r,ph){const L=BG.mine[id]||[];if(!L.length)return "";cons
   let anyL=false,anyB=false;
   const html=L.map((c,ci)=>{const mk=bngMarks(id,ci,called),st=bngCardState(c,new Set([...mk].filter(x=>called.has(x))));if(st.line)anyL=true;if(st.full)anyB=true;
     return '<div class="bngcard'+(st.full?' full':'')+'"><small>Cartón '+(ci+1)+'</small><div class="bngcg">'+st.v.map((v,i)=>{const on=mk.has(v)&&called.has(v),hint=!on&&called.has(v),row=st.rows[Math.floor(i/5)];const p=PM[pool[v]];
-      return '<button class="bngcl'+(on?' on':'')+(hint?' hint':'')+(row?' row':'')+(v===last?' last':'')+'" data-bngm="'+id+'|'+ci+'|'+v+'" title="'+esc(pool[v]||"")+'">'+(p?ico(p,30):'')+'<i>'+(v+1)+'</i>'+(on?'<em></em>':'')+'</button>'}).join("")+'</div></div>'}).join("");
+      return '<button class="bngcl'+(on?' on':'')+(hint?' hint':'')+(row?' row':'')+(v===last&&bngOnce("l|"+id+"|"+ci+"|"+v)?' last':'')+'" data-bngm="'+id+'|'+ci+'|'+v+'" title="'+esc(pool[v]||"")+'">'+(p?ico(p,30):'')+'<i>'+(v+1)+'</i>'+(on?'<em'+(bngOnce("s|"+id+"|"+ci+"|"+v)?' class="nw"':'')+'></em>':'')+'</button>'}).join("")+'</div></div>'}).join("");
   const o=bngSt(),lnW=d.ln&&(d.ln.w||[]).includes(uid),bnW=d.bn&&(d.bn.w||[]).includes(uid);
   const sing=ph.k==="juego"?'<div class="bngsing"><button class="'+(anyL&&!ph.lnC&&!lnW?'red pulse':'alt')+'" data-bngs="'+id+'|l"'+(anyL&&!ph.lnC&&!lnW&&!BG.sang[id+"l"]?'':' disabled')+'>🙋 ¡LÍNEA!</button><button class="'+(anyB&&!ph.bnC&&!bnW?'red pulse':'alt')+'" data-bngs="'+id+'|b"'+(anyB&&!ph.bnC&&!bnW&&!BG.sang[id+"b"]?'':' disabled')+'>🎉 ¡BINGO!</button>'+(o.auto?'<small class="mut">🤖 Marcas y cantas solo</small>':'<small class="mut">Toca los Pokémon que salgan y canta en cuanto completes (¡tienes '+BNG.GR+' bolas de margen!)</small>')+'</div>':'';
   return '<h3>🎫 Tus cartones</h3>'+sing+'<div class="bngcards">'+html+'</div>'}
@@ -24455,7 +24458,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.4.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.4.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

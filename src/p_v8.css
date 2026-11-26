@@ -235,9 +235,9 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bngcg{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin:4px 0 0}
 .bngcl{position:relative;aspect-ratio:1;padding:0;border-radius:10px;background:#fff;border:2px solid rgba(74,50,16,.15);display:grid;place-items:center;overflow:hidden;min-width:0;color:inherit}
 .bngcl img{max-width:100%;height:auto}.bngcl i{position:absolute;top:1px;left:3px;font-style:normal;font-size:.62rem;font-weight:900;opacity:.7}
-.bngcl.row{border-color:#2fae5a}.bngcl.hint{box-shadow:inset 0 0 0 2px rgba(226,87,59,.35)}.bngcl.last{animation:bngLast 1s ease-in-out 2}
+.bngcl.row{border-color:#2fae5a}.bngcl.hint{box-shadow:inset 0 0 0 2px rgba(226,87,59,.35)}.bngcl.last{animation:bngLast .8s ease-in-out 1}
 @keyframes bngLast{50%{transform:scale(1.1)}}
-.bngcl em{position:absolute;inset:12%;border-radius:50%;background:rgba(226,59,90,.45);border:3px solid rgba(200,30,70,.75);animation:bngStamp .25s ease-out}
+.bngcl em{position:absolute;inset:12%;border-radius:50%;background:rgba(226,59,90,.45);border:3px solid rgba(200,30,70,.75)}.bngcl em.nw{animation:bngStamp .25s ease-out}
 @keyframes bngStamp{0%{transform:scale(1.8);opacity:0}100%{transform:none;opacity:1}}
 .bngside{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:0 0 12px}
 .bngprize,.bngbuy{padding:10px 12px;border-radius:14px;background:var(--bg,#f5f3ff);display:flex;flex-direction:column;gap:6px}

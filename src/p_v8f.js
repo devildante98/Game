@@ -224,6 +224,8 @@ function bngAnnounce(s,r,ph){const ord=bngBolas(s,r,ph.d.x),v=ord[ph.cur-1],pool
 function bngMonShow(n,sh){const p=PM[n];if(!p)return;const old=$("bngMonM");if(old)old.remove();const m=document.createElement("div");m.id="bngMonM";m.className="bngmon";m.setAttribute("role","dialog");
   m.innerHTML='<div class="bngmonw'+(sh?' sh':'')+'"><small>🎱 Pokémon sorpresa del Bingo</small><div class="bngmonp">'+ico(p,110,false,sh)+'</div><b>'+(sh?'✨ ':'')+esc(n)+'</b><small>'+STAR[p[2]]+(sh?' · ¡VARIOCOLOR!':'')+'</small><button class="red">¡Genial!</button></div>';
   document.body.appendChild(m);m.querySelector("button").onclick=()=>m.remove();m.onclick=e=>{if(e.target===m)m.remove()};if(sh)snd("capok")}
+// (la animación del sello y de la última bola solo la primera vez que se pinta cada casilla; después, fija)
+const BNG_ANI=new Set();function bngOnce(k){if(BNG_ANI.has(k))return false;BNG_ANI.add(k);if(BNG_ANI.size>3000)BNG_ANI.clear();return true}
 const bngMS=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
 function bngPrizeBox(s,d,title){const B=bngBote(s,d),S2=BNG_S[s];
   return '<div class="bngprize"><b>'+title+'</b><div class="bngpz"><div><span>🙋 Línea</span><b>'+fmt(B.l)+' 🎟️</b><small>+ '+bngItTxt(B.il)+'</small></div><div class="bngbig"><span>🎉 Bingo</span><b>'+fmt(B.b)+' 🎟️</b><small>+ '+bngItTxt(B.ib)+'</small><small class="bngpk">+ 🎁 Pokémon sorpresa (hasta ★★★ Épico, ¡puede ser variocolor!)</small></div></div>'+
@@ -238,7 +240,7 @@ function bngCards(id,s,r,ph){const L=BG.mine[id]||[];if(!L.length)return "";cons
   let anyL=false,anyB=false;
   const html=L.map((c,ci)=>{const mk=bngMarks(id,ci,called),st=bngCardState(c,new Set([...mk].filter(x=>called.has(x))));if(st.line)anyL=true;if(st.full)anyB=true;
     return '<div class="bngcard'+(st.full?' full':'')+'"><small>Cartón '+(ci+1)+'</small><div class="bngcg">'+st.v.map((v,i)=>{const on=mk.has(v)&&called.has(v),hint=!on&&called.has(v),row=st.rows[Math.floor(i/5)];const p=PM[pool[v]];
-      return '<button class="bngcl'+(on?' on':'')+(hint?' hint':'')+(row?' row':'')+(v===last?' last':'')+'" data-bngm="'+id+'|'+ci+'|'+v+'" title="'+esc(pool[v]||"")+'">'+(p?ico(p,30):'')+'<i>'+(v+1)+'</i>'+(on?'<em></em>':'')+'</button>'}).join("")+'</div></div>'}).join("");
+      return '<button class="bngcl'+(on?' on':'')+(hint?' hint':'')+(row?' row':'')+(v===last&&bngOnce("l|"+id+"|"+ci+"|"+v)?' last':'')+'" data-bngm="'+id+'|'+ci+'|'+v+'" title="'+esc(pool[v]||"")+'">'+(p?ico(p,30):'')+'<i>'+(v+1)+'</i>'+(on?'<em'+(bngOnce("s|"+id+"|"+ci+"|"+v)?' class="nw"':'')+'></em>':'')+'</button>'}).join("")+'</div></div>'}).join("");
   const o=bngSt(),lnW=d.ln&&(d.ln.w||[]).includes(uid),bnW=d.bn&&(d.bn.w||[]).includes(uid);
   const sing=ph.k==="juego"?'<div class="bngsing"><button class="'+(anyL&&!ph.lnC&&!lnW?'red pulse':'alt')+'" data-bngs="'+id+'|l"'+(anyL&&!ph.lnC&&!lnW&&!BG.sang[id+"l"]?'':' disabled')+'>🙋 ¡LÍNEA!</button><button class="'+(anyB&&!ph.bnC&&!bnW?'red pulse':'alt')+'" data-bngs="'+id+'|b"'+(anyB&&!ph.bnC&&!bnW&&!BG.sang[id+"b"]?'':' disabled')+'>🎉 ¡BINGO!</button>'+(o.auto?'<small class="mut">🤖 Marcas y cantas solo</small>':'<small class="mut">Toca los Pokémon que salgan y canta en cuanto completes (¡tienes '+BNG.GR+' bolas de margen!)</small>')+'</div>':'';
   return '<h3>🎫 Tus cartones</h3>'+sing+'<div class="bngcards">'+html+'</div>'}

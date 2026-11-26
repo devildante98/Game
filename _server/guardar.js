@@ -21,6 +21,7 @@ const diario = require("./diario");
 const minijuego = require("./minijuego");
 const codigo = require("./codigo");
 const sorteo = require("./sorteo");
+const bingo = require("./bingo");
 
 const MAX = 1000000;
 const VMIN = [7, 2];
@@ -67,7 +68,7 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
   const q = p && typeof p.q === "number" && isFinite(p.q) ? p.q : 0;
   if (typeof data !== "string" || data.length > MAX) return {ok: false, why: "formato"};
   if (!leer(data)) return {ok: false, why: "formato"};
-  if (ac && !["tirar", "mejorar", "semana", "diario", "minijuego", "codigo", "sorteo"].includes(ac.k)) return {ok: false, why: "accion"};
+  if (ac && !["tirar", "mejorar", "semana", "diario", "minijuego", "codigo", "sorteo", "bingo"].includes(ac.k)) return {ok: false, why: "accion"};
 
   let flags = [];
   const out = await db.runTransaction(async (tx) => {
@@ -128,6 +129,13 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
       if (k.error) return {ok: false, why: k.error};
       Object.assign(extra, {sorteo: k.out});
       dataOut = firmar(next, uid);
+    } else if (ac && ac.k === "bingo") {
+      // bingo: comprar cartones, cantar línea o bingo y cobrar el premio (bingo.js)
+      const k = await bingo.bingo(tx, db, uid, next, ac, ahora, cur && cur.bgd, diaMadrid(ahora), rnd || rndCripto);
+      if (k.error) return {ok: false, why: k.error, coste: k.coste};
+      Object.assign(extra, {bingo: k.out});
+      if (k.dia) extra.bgd = k.dia;
+      dataOut = firmar(next, uid);
     } else if (ac && ac.k === "minijuego") {
       // premio de una partida de minijuego: puntuación comprobada y 3 partidas con premio al día, contadas aquí
       const m = await minijuego.premioMinijuego(db, uid, next, cur && cur.mgd, prev, ac, ahora, rnd || rndCripto);
@@ -152,12 +160,23 @@ async function guardar(db, uid, p, ahora, cuentaSeg, rnd) {
     const mgd = extra.mgd || (cur && cur.mgd);
     if (mgd) doc.mgd = mgd; // partidas de minijuego con premio de hoy
     delete extra.mgd;
+    const bgd = extra.bgd || (cur && cur.bgd);
+    if (bgd) doc.bgd = bgd; // cartones de bingo comprados hoy
+    delete extra.bgd;
     tx.set(ref, doc);
     if (r.estado !== "ok") apunta(r.estado === "imposible" ? "primera subida rara" : "sospechoso");
     // at: la hora exacta del guardado, para que el juego sepa al volver a entrar si su copia es la continuación de esta
     return Object.assign({ok: true, estado: r.estado, at: ahora}, extra);
   });
   for (const f of flags) await db.collection("flags").add(f).catch(() => {});
+  // meta de la comunidad (8.3): cada tirada hecha en el servidor suma en el contador de la semana (y en el tuyo)
+  if (out && out.ok && ac && ac.k === "tirar" && out.tirada && [1, 10, 100].includes(ac.n)) {
+    const wk = semana.semanaISO(ahora), nk = String((leer(data) || {}).nick || "").replace(/[<>]/g, "").slice(0, 20);
+    await Promise.all([
+      db.doc("comunidad/" + wk).set({n: FieldValue.increment(ac.n)}, {merge: true}),
+      db.doc("comunidad/" + wk + "/u/" + uid).set({n: FieldValue.increment(ac.n), nk: nk || "Entrenador"}, {merge: true}),
+    ]).catch(() => {});
+  }
   return out;
 }
 

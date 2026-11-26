@@ -151,8 +151,8 @@ const albPages=()=>{const L=P.slice().sort((a,b)=>(a[4]||0)-(b[4]||0)),o=[];for(
 let _albP=null;const ALB=()=>_albP||(_albP=albPages());
 // las formas supremas solo se consiguen una vez: su pegatina brillante/holográfica sigue a la de su forma base
 const stk=n=>{const c=S.owned[n]|0,g=c>0||hasP(n),sb=typeof SUP!=="undefined"&&SUP&&SUP[n];
-  if(sb){const cb=S.owned[sb]|0;return{n:g,b:g&&Math.max(c,cb)>=5,h:g&&!!(S.shiny&&(S.shiny[n]>0||S.shiny[sb]>0))}}
-  const sh=S.shiny&&S.shiny[n]>0;return{n:g,b:c>=5,h:!!sh}};
+  if(sb){const cb=S.owned[sb]|0;return{n:g,b:g&&(Math.max(c,cb)>=5||!!(S.stkB&&S.stkB[sb])),h:g&&!!(S.shiny&&(S.shiny[n]>0||S.shiny[sb]>0))}}
+  const sh=S.shiny&&S.shiny[n]>0;return{n:g,b:c>=5||!!(g&&S.stkB&&S.stkB[n]),h:!!sh}};
 const ALB_RW={n:{t:250000,lab:"Página normal"},b:{t:1500000,it:{ub:3},lab:"Página brillante"},h:{t:5000000,it:{mb:1},lab:"Página holográfica"}};
 nxPanel("albP","📔 Álbum de pegatinas","Cada Pokémon tiene tres pegatinas: normal (al conseguirlo), brillante (con 5 copias) y holográfica (si es variocolor). ¡Completa páginas para ganar premios!");
 {const g=HUB.find(x=>x.k==="dex");if(g&&!g.tabs.some(t=>t[0]==="albP"))g.tabs.push(["albP","Álbum de pegatinas"]);HUBP.albP="dex";HUBR.albP=()=>albUI()}

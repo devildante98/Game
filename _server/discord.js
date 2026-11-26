@@ -7,7 +7,7 @@
 // DISCORD_ROL_AVISOS con el ID del rol que se menciona). Si falta alguno, ese aviso simplemente no se envía.
 // Cada aviso se apunta en discordLog/ para no publicarlo dos veces.
 // =====================================================================================
-const {semanaAnterior, claveTorneo, juegoTorneo} = require("./semana");
+const {semanaAnterior, claveTorneo, juegoTorneo, semanaISO} = require("./semana");
 
 const WEB = "https://pokegachaonline.es";
 const HOOK = () => ({
@@ -196,6 +196,19 @@ async function eventosV8(db, ahora) {
         footer: {text: "Poke Gacha Online · pokegachaonline.es"}}]}));
     }
   }
+  // meta de la comunidad (8.3): aviso al llegar a la mitad y al completarla (la meta, como en el juego: un 10 % más que
+  // lo que se tiró la semana anterior, como mínimo 20 000)
+  try {
+    const wk = semanaISO(ahora), pw = semanaISO(ahora - 7 * 864e5);
+    const [a, b] = await Promise.all([db.doc("comunidad/" + wk).get(), db.doc("comunidad/" + pw).get()]);
+    const tot = a.exists ? n(a.data().n) : 0, prev = b.exists ? n(b.data().n) : 0;
+    const nice = (x) => { if (x <= 0) return 0; const e = Math.pow(10, Math.max(0, Math.floor(Math.log10(x)) - 1)); return Math.ceil(x / e) * e; };
+    const meta = Math.max(20000, nice(prev * 1.1));
+    for (const [pct, tt, txt] of [[100, "🌍 ¡META DE LA COMUNIDAD CONSEGUIDA!", "¡Entre todos hemos llegado a las **" + fmt(meta) + "** tiradas de la semana! Pasa por **Retos › 🌍 Meta de la comunidad** a por tu premio. Y si llegamos al 150 %, ¡hay otro más!"],
+      [50, "🌍 ¡Vamos por la mitad de la meta de la comunidad!", "Ya llevamos **" + fmt(tot) + "** de **" + fmt(meta) + "** tiradas esta semana. Cada tirada del gacha suma: ¡a por el 75 %!"]]) {
+      if (tot >= meta * pct / 100) { await unaVez(db, "comunidad_" + wk + "_" + pct, () => enviar("eventos", {embeds: [{color: 0x38c1d8, title: tt, url: WEB, description: txt, footer: {text: "Poke Gacha Online · pokegachaonline.es"}}]})); break; }
+    }
+  } catch (e) { /* sin aviso */ }
 }
 
 module.exports = {avisar, torneoSemanal, eventosV8, merSlots, enviar, premio, limpio};

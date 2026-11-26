@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER.
-const GAME_VER="8.2";
+const GAME_VER="8.3";
 const NEWS=[
+{v:"2026-11-26-8.3",ver:"8.3",at:"2026-11-26T14:26",t:"🎱 Novedad",l:["🎱 Bingo Pokémon online (Online › 🎱 Bingo): compra cartones con tickets y juega en directo con otros entrenadores. Bea, la presentadora, va sacando Pokémon del bombo (¡y te los dice en voz alta!) y tú los vas marcando", "Tres salas con su precio de cartón (Bosque, Ciudad y Liga) y una partida nueva cada 6 minutos. Antes de comprar ves el bote: el 90 % de lo vendido, un 30 % para la línea y un 70 % para el bingo, y objetos de premio que mejoran si sois 3 o más", "¡Canta LÍNEA o BINGO a tiempo! Si varios lo completáis con la misma bola, os repartís el premio. Puedes marcar a mano o dejar que el juego marque y cante por ti", "🌍 Meta de la comunidad (Retos): cada tirada del gacha de cualquier entrenador suma en una meta semanal para todos, con la barra en directo. Al llegar al 25, 50, 75, 100 y 150 %, todos los que hayan tirado al menos 10 veces cobran su premio", "♻️ Taller de repetidos (Pokédex): convierte tus repetidos en polvo de estrellas ✨ y fabrica con él los Pokémon que te faltan (¡con un 1 % de que salgan variocolores!). Tu copia principal y tus variocolores no se tocan, y la pegatina brillante del Álbum se queda"]},
 {v:"2026-11-26-8.2",ver:"8.2",at:"2026-11-26T13:04",t:"🎓 Novedad",l:["🎓 4 especialidades de entrenador nuevas, cada una con 3 rangos y su propio título:", "🧭 Explorador: los objetos ocultos de la Exploración a veces traen tickets de más y el tesoro semanal da más premio", "🎮 Jugón: los premios de los minijuegos te dan hasta un 30 % más de tickets", "💰 Comerciante: hasta un 24 % de descuento en el Mercader misterioso, en los muebles de la Base secreta y en los aspectos de la Poké Ball", "🔬 Investigador: tickets extra por cada Pokémon nuevo en tu Pokédex, y más premio en las investigaciones de la Profesora y en el Pokémon del día"]},
 {v:"2026-11-25-8.1",ver:"8.1",at:"2026-11-25T17:13",t:"🔥 Novedad",l:["🔥 Rachas de regalos: si tu amigo y tú os enviáis un regalo el mismo día, vuestra racha sube. Si un día alguno no lo envía, vuelve a empezar", "Premios para los dos a los 3, 7, 14, 30, 60 y 100 días seguidos (hasta Master Balls y Cristales Supremos), y el título «🔥 Amistad inquebrantable» a los 30 días", "En Social › Amigos verás la racha 🔥 junto a cada amigo, un aviso ⚠️ si se va a perder y, al abrir un regalo, un botón para devolvérselo al momento"]},
 {v:"2026-11-25-8.0.3",ver:"8.0.3",at:"2026-11-25T17:06",t:"🔧 Arreglos/Mejoras",l:["Minijuegos: el pueblo del fondo vuelve a verse detrás de la ventana del minijuego (se queda quieto mientras juegas, así el juego sigue igual de fluido)"]},
@@ -877,6 +878,14 @@ FB_API = '''
         if(v[ot]===day&&v.d!==day){const n=v.d===day-1?(v.n|0)+1:1;u.n=n;u.d=day;u.best=Math.max(v.best|0,n)}
         tx.update(ref,u);return Object.assign({},v,u)})},
     async gsMine(){const q=f=>S.getDocs(S.query(S.collection(db,"gstreak"),S.where(f,"==",uid)));const[x,y]=await Promise.all([q("a"),q("b")]);return x.docs.concat(y.docs).map(d=>Object.assign({id:d.id},d.data()))},
+    // 8.3: bingo (partida en directo y tus cartones) y meta de la comunidad (total de la semana y quién más ha tirado)
+    bingoWatch:(id,cb)=>S.onSnapshot(S.doc(db,"bingo",id),s=>cb(s.exists()?s.data():null),()=>cb(undefined)),
+    async bingoGet(id){const s=await S.getDoc(S.doc(db,"bingo",id));return s.exists()?s.data():null},
+    async bingoMine(id){const s=await S.getDoc(S.doc(db,"bingo",id,"p",uid));return s.exists()?s.data():null},
+    cmWatch:(w,cb)=>S.onSnapshot(S.doc(db,"comunidad",w),s=>cb(s.exists()?(+s.data().n||0):0),()=>cb(null)),
+    async cmGet(w){const s=await S.getDoc(S.doc(db,"comunidad",w));return s.exists()?(+s.data().n||0):0},
+    async cmMe(w){const s=await S.getDoc(S.doc(db,"comunidad",w,"u",uid));return s.exists()?(+s.data().n||0):0},
+    async cmTop(w){const sn=await S.getDocs(S.query(S.collection(db,"comunidad",w,"u"),S.orderBy("n","desc"),S.limit(10)));return sn.docs.map(d=>Object.assign({u:d.id},d.data()))},
     async creadorGet(){const s=await S.getDoc(S.doc(db,"config","creador"));return s.exists()?s.data():null},
     async creadorSet(){await S.setDoc(S.doc(db,"config","creador"),{uid:uid,at:Date.now()})},
     async codePubList(){const sn=await S.getDocs(S.query(S.collection(db,"codesPub"),S.orderBy("at","desc"),S.limit(60)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},

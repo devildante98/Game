@@ -88,30 +88,33 @@ const G_DIG={id:"dig",n:"¡Golpea al Diglett!",ic:"🔨",c:"#c0782a",d:"Toca a l
     B.innerHTML='<div class="whohd"><span>⏱️ <b id="digT">30</b> s</span><span id="digC"></span></div><div class="digg">'+[...Array(9)].map((_,i)=>'<div class="digh" data-h="'+i+'"><div class="digback"></div><div class="digclip"><div class="digm"></div></div><div class="diglip"></div></div>').join("")+'</div>';
     mgSet(0);const holes=[...B.querySelectorAll(".digh")];
     // (8.4.4) mismas oportunidades en todas las partidas: los topos salen siempre en los mismos momentos y, en cada
-    // bloque de 7, hay exactamente 1 Dugtrio y 1 Voltorb (este, pasados 4 s) en posiciones al azar. Así la puntuación
-    // perfecta es igual en cualquier partida; lo que cambia es dónde y en qué orden salen.
+    // bloque de 7, hay exactamente 2 Dugtrio y 1 Voltorb (este, pasados 4 s) en posiciones al azar. Así la puntuación
+    // perfecta es 136 en cualquier partida; lo que cambia es dónde y en qué orden salen.
     const DT=[];{let t=0;while(t<dur){DT.push(t);t+=Math.max(330,780-t/60)}}
     const KS=DT.map(()=>"d");for(let b=0;b<DT.length;b+=7){const idx=[];for(let i=b;i<Math.min(b+7,DT.length);i++)idx.push(i);
       const ev=idx.filter(i=>DT[i]>4000);if(ev.length){const iv=ev[Math.floor(mgR()*ev.length)];KS[iv]="v";idx.splice(idx.indexOf(iv),1)}
-      const et=idx.filter(i=>DT[i]<dur-1500),pool=et.length?et:idx;KS[pool[Math.floor(mgR()*pool.length)]]="t"}
+      for(let q=0;q<2&&idx.length;q++){const et=idx.filter(i=>DT[i]<dur-1500),pool=et.length?et:idx,it=pool[Math.floor(mgR()*pool.length)];KS[it]="t";idx.splice(idx.indexOf(it),1)}}
     let si=0;
     const finish=()=>{if(over)return;over=true;const e=$("digT");if(e)e.textContent="0";holes.forEach(h=>h.querySelector(".digm").classList.remove("up"));mgT(()=>end(MG.score),600)};
     // termina a los 30 s… pero si el dispositivo va con retraso, espera a que hayan salido todos los topos (como mucho 3 s más)
     mgI(()=>{if(over)return;const el=now()-t0,e=$("digT");if(e)e.textContent=Math.max(0,Math.ceil((dur-el)/1000));if(el>=dur&&(si>=DT.length||el>=dur+3000))finish()},200);
     const spawn=()=>{
       if(over)return;const el=now()-t0;if(si>=DT.length||el>=dur+3000){if(el>=dur)finish();return}
-      try{const free=holes.filter(h=>!h.querySelector(".digm").classList.contains("up"));
+      try{const nw=now(),free0=holes.filter(h=>!h.querySelector(".digm").classList.contains("up")),
+        // (un topo no sale en el hueco del que acaba de irse otro: así no parece que parpadee)
+        fr=free0.filter(h=>nw-(+h.querySelector(".digm").dataset.off||0)>300),free=fr.length?fr:free0;
       if(free.length&&si<DT.length){const h=free[Math.floor(mgR()*free.length)],m=h.querySelector(".digm"),tt=DT[si],k=KS[si++],p=k==="t"?T:k==="v"?V:D;
         const sid=(+m.dataset.sid||0)+1;m.dataset.sid=sid;m.innerHTML=ico(p,88);m.dataset.k=k;m.classList.remove("hit");m.classList.add("up");const up=Math.max(520,1050-tt/45);
-        mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
-      if(si<DT.length)mgT(spawn,Math.max(40,DT[si]-(now()-t0)));
+        mgT(()=>{if(+m.dataset.sid===sid&&m.classList.contains("up")&&!m.classList.contains("hit")){m.classList.remove("up");m.dataset.off=now();if(k!=="v")combo=0;const c=$("digC");if(c)c.textContent=""}},up)}}catch(e){}
+      // si el dispositivo se ha atascado, los topos atrasados salen poco a poco (al menos 0,28 s entre uno y otro), nunca de golpe
+      if(si<DT.length)mgT(spawn,Math.max(280,DT[si]-(now()-t0)));
     };
     // golpe en un hueco: con el ratón/dedo o con el teclado numérico (7 8 9 / 4 5 6 / 1 2 3, como la cuadrícula)
     const hitHole=(h,cx,cy)=>{const m=h.querySelector(".digm");if(over||!m.classList.contains("up")||m.classList.contains("hit"))return;m.classList.add("hit");
       const k=m.dataset.k;let pts=k==="t"?3:k==="v"?-3:1;
       if(k==="v"){combo=0;snd("hit",1);h.animate([{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"none"}],{duration:180,iterations:2})}else{combo++;hits++;snd("pop");if(combo>=5)pts+=1}
       mgSet(MG.score+pts);mgPop(cx,cy,(pts>0?"+":"")+pts+(k==="v"?" 💥":""),pts>0?"#ffd35c":"#ff5a5a");$("digC").textContent=combo>=5?"🔥 Combo ×"+combo:"";
-      mgT(()=>{m.classList.remove("up");mgT(()=>{if(!m.classList.contains("up"))m.classList.remove("hit")},200)},180)};
+      mgT(()=>{m.classList.remove("up");m.dataset.off=now();mgT(()=>{if(!m.classList.contains("up"))m.classList.remove("hit")},200)},180)};
     holes.forEach(h=>h.addEventListener("pointerdown",e=>hitHole(h,e.clientX,e.clientY)));
     const KMAP={7:0,8:1,9:2,4:3,5:4,6:5,1:6,2:7,3:8};
     holes.forEach((h,i)=>{const n=Object.keys(KMAP).find(k=>KMAP[k]===i);const s=document.createElement("span");s.className="digk";s.textContent=n;h.appendChild(s)});

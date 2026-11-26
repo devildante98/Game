@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795734617">
+<meta name="game-build" content="1795734750">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3632,7 +3632,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.6</small>
+    <small class="pcver">Versión 8.6.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8388,8 +8388,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.6";
+const GAME_VER="8.6.1";
 const NEWS=[
+{v:"2026-11-26-8.6.1",ver:"8.6.1",at:"2026-11-27T00:12",t:"🔧 Arreglos/Mejoras",tt:"Solicitudes de pareja más claras",l:["Pareja: si le pides ser pareja a alguien que ya tiene una, ahora te sale una ventana en pantalla avisándote («ya tiene pareja») y la solicitud no se envía: a esa persona no le llega nada"]},
 {v:"2026-11-26-8.6",ver:"8.6",at:"2026-11-27T00:10",t:"💞 Novedad",tt:"¡Gestos y parejas en la Exploración!",l:["En la Exploración, ponte delante de otro jugador y pulsa A: ahora puedes darle un 👉 toque, 🙌 chocar los cinco, 🫂 darle un abrazo o 💃 bailar con él. ¡Le sale en pantalla! Y si los dos chocáis los cinco a la vez, choque perfecto", "💞 Pareja de exploración: desde ese mismo menú puedes pedirle a otro jugador que sea tu pareja. Le saldrá una ventana para aceptar o rechazar. Cada uno solo puede tener una pareja", "Ventajas de la pareja: un ❤️ encima de tu pareja en el mapa, +20 % de experiencia en los combates de la Exploración cuando estáis en el mismo mapa y un regalo para cada uno (tickets, 1 Caramelo Raro y 3 Ultra Balls) la primera vez que os veis cada día", "Contad los días juntos: a los 7, el título «💞 Inseparables». Mira tu pareja (o termínala) en Social › 💞 Pareja"]},
 {v:"2026-11-26-8.5",ver:"8.5",at:"2026-11-26T23:22",t:"🎱 Novedad",tt:"¡Invita a tus amigos al Bingo por el chat!",l:["En el chat, pulsa ✉️ y elige «🎱 Invitar al Bingo»: invitas a la próxima partida de la sala que tengas elegida (Bosque, Ciudad o Liga). Funciona en el chat global, en el del gremio y por privado", "La invitación dice la sala, a qué hora empieza la partida y cuánto cuesta el cartón. Quien la acepte con «¡Voy!» entra directamente en esa sala para comprar sus cartones", "También tienes el botón «✉️ Invitar por el chat» dentro del Bingo. La invitación caduca cuando se cierra la venta de cartones de esa partida"]},
 {v:"2026-11-26-8.4.6",ver:"8.4.6",at:"2026-11-26T23:14",t:"🔧 Arreglos/Mejoras",tt:"Bingo sin animaciones en bucle",l:["Bingo: la presentadora y la bola de espera ya no se mueven sin parar; se quedan fijas", "Solo se anima la bola cuando sale un Pokémon nuevo y el botón ¡LÍNEA!/¡BINGO! cuando ya puedes cantar"]},
@@ -8843,7 +8844,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795734617";
+const GAME_B="1795734750";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24222,9 +24223,16 @@ function xoHigh5(o){XOX.hiTo=null;XOX.hiFrom=null;snd("win");toast("🙌 ¡Choqu
     if(fresh(q.pa,"a")){XOSEEN[key+"a"]=+q.pa.at;parAnswer(key,nm,!!q.pa.ok,q.pa.why||"")}});
   parTogether()}catch(e){}return r}}
 // ---- pareja: pedir, responder, confirmar ----
-function parAskSend(o){const s=parSt();if(s.p){toast(s.p===o.id?"💞 "+o.n+" ya es tu pareja.":"Ya tienes pareja ("+(s.n||"")+"). Termínala antes en Social › 💞 Pareja.");return}
+// ventana en pantalla para quien pide (si la otra persona ya tiene pareja no se le envía nada)
+function parInfo(ic,tt,txt){let m=$("parM");if(m)m.remove();m=document.createElement("div");m.id="parM";m.className="bngmon";m.setAttribute("role","dialog");
+  m.innerHTML='<div class="bngmonw parw"><div class="parhe">'+ic+'</div><b>'+tt+'</b><small>'+txt+'</small><div class="parbt"><button class="red" data-pok="1">Entendido</button></div></div>';
+  document.body.appendChild(m);m.onclick=e=>{if(e.target===m||e.target.closest("[data-pok]"))m.remove()};snd("miss")}
+const parBusyInfo=nm=>parInfo("💔",esc(nm)+" ya tiene pareja","No se ha enviado la solicitud: cada jugador solo puede tener una pareja. Si algún día se queda sin pareja, podrás pedírselo.");
+async function parAskSend(o){const s=parSt();if(s.p){toast(s.p===o.id?"💞 "+o.n+" ya es tu pareja.":"Ya tienes pareja ("+(s.n||"")+"). Termínala antes en Social › 💞 Pareja.");return}
   if(!window.FB||!window.FB.parSet){toast("Inicia sesión con tu cuenta para tener pareja.");return}
   if(s.req&&s.req.u===o.id&&Date.now()-s.req.at<30000){toast("Ya le has enviado la solicitud. Espera su respuesta.");return}
+  // ¿ya tiene pareja? (de verdad: las dos partes apuntadas la una a la otra). Si es así, no se le envía nada
+  try{const d=await window.FB.parGet(o.id);if(d&&d.p&&d.p!==xoUid()){const e=await window.FB.parGet(d.p);if(e&&e.p===o.id){parBusyInfo(o.n);return}}}catch(e){}
   s.req={u:o.id,n:o.n,at:Date.now()};save();xoxSend("pq",{to:o.id,at:Date.now()});snd("ui");toast("💞 Solicitud de pareja enviada a "+o.n+". ¡Espera su respuesta!")}
 function parAsk(from,nm){const s=parSt();if(s.p){xoxSend("pa",{to:from,at:Date.now(),ok:0,why:"ocupado"});return}
   let m=$("parM");if(m)m.remove();m=document.createElement("div");m.id="parM";m.className="bngmon";m.setAttribute("role","dialog");
@@ -24238,7 +24246,7 @@ function parAsk(from,nm){const s=parSt();if(s.p){xoxSend("pa",{to:from,at:Date.n
     Object.assign(parSt(),{p:from,n:nm,since:Date.now(),days:0,gd:"",dm:""});delete parSt().req;save();xoxSend("pa",{to:from,at:Date.now(),ok:1});
     snd("win");toast("💞 ¡Ahora "+nm+" y tú sois pareja!");diaryAdd("💞","¡"+nm+" y tú sois pareja de exploración!",null,0,"o")})}
 async function parAnswer(from,nm,ok,why){const s=parSt();if(!s.req||s.req.u!==from)return;
-  if(!ok){delete s.req;save();toast(why==="ocupado"?"💔 "+nm+" ya tiene pareja.":why==="tiempo"?"⌛ "+nm+" no ha respondido a tiempo.":"💔 "+nm+" ha rechazado la solicitud.");return}
+  if(!ok){delete s.req;save();if(why==="ocupado")parBusyInfo(nm);else toast(why==="tiempo"?"⌛ "+nm+" no ha respondido a tiempo.":"💔 "+nm+" ha rechazado la solicitud.");return}
   await parFinish(from,nm)}
 async function parFinish(from,nm){const s=parSt();try{await window.FB.parSet(from,nm)}catch(e){toast("No se ha podido guardar la pareja.");return}
   Object.assign(s,{p:from,n:nm,since:Date.now(),days:0,gd:"",dm:"",conf:1});delete s.req;save();snd("win");toast("💞 ¡"+nm+" ha aceptado! Ahora sois pareja.");
@@ -24607,7 +24615,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.6";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.6.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

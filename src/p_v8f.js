@@ -380,9 +380,16 @@ function xoHigh5(o){XOX.hiTo=null;XOX.hiFrom=null;snd("win");toast("🙌 ¡Choqu
     if(fresh(q.pa,"a")){XOSEEN[key+"a"]=+q.pa.at;parAnswer(key,nm,!!q.pa.ok,q.pa.why||"")}});
   parTogether()}catch(e){}return r}}
 // ---- pareja: pedir, responder, confirmar ----
-function parAskSend(o){const s=parSt();if(s.p){toast(s.p===o.id?"💞 "+o.n+" ya es tu pareja.":"Ya tienes pareja ("+(s.n||"")+"). Termínala antes en Social › 💞 Pareja.");return}
+// ventana en pantalla para quien pide (si la otra persona ya tiene pareja no se le envía nada)
+function parInfo(ic,tt,txt){let m=$("parM");if(m)m.remove();m=document.createElement("div");m.id="parM";m.className="bngmon";m.setAttribute("role","dialog");
+  m.innerHTML='<div class="bngmonw parw"><div class="parhe">'+ic+'</div><b>'+tt+'</b><small>'+txt+'</small><div class="parbt"><button class="red" data-pok="1">Entendido</button></div></div>';
+  document.body.appendChild(m);m.onclick=e=>{if(e.target===m||e.target.closest("[data-pok]"))m.remove()};snd("miss")}
+const parBusyInfo=nm=>parInfo("💔",esc(nm)+" ya tiene pareja","No se ha enviado la solicitud: cada jugador solo puede tener una pareja. Si algún día se queda sin pareja, podrás pedírselo.");
+async function parAskSend(o){const s=parSt();if(s.p){toast(s.p===o.id?"💞 "+o.n+" ya es tu pareja.":"Ya tienes pareja ("+(s.n||"")+"). Termínala antes en Social › 💞 Pareja.");return}
   if(!window.FB||!window.FB.parSet){toast("Inicia sesión con tu cuenta para tener pareja.");return}
   if(s.req&&s.req.u===o.id&&Date.now()-s.req.at<30000){toast("Ya le has enviado la solicitud. Espera su respuesta.");return}
+  // ¿ya tiene pareja? (de verdad: las dos partes apuntadas la una a la otra). Si es así, no se le envía nada
+  try{const d=await window.FB.parGet(o.id);if(d&&d.p&&d.p!==xoUid()){const e=await window.FB.parGet(d.p);if(e&&e.p===o.id){parBusyInfo(o.n);return}}}catch(e){}
   s.req={u:o.id,n:o.n,at:Date.now()};save();xoxSend("pq",{to:o.id,at:Date.now()});snd("ui");toast("💞 Solicitud de pareja enviada a "+o.n+". ¡Espera su respuesta!")}
 function parAsk(from,nm){const s=parSt();if(s.p){xoxSend("pa",{to:from,at:Date.now(),ok:0,why:"ocupado"});return}
   let m=$("parM");if(m)m.remove();m=document.createElement("div");m.id="parM";m.className="bngmon";m.setAttribute("role","dialog");
@@ -396,7 +403,7 @@ function parAsk(from,nm){const s=parSt();if(s.p){xoxSend("pa",{to:from,at:Date.n
     Object.assign(parSt(),{p:from,n:nm,since:Date.now(),days:0,gd:"",dm:""});delete parSt().req;save();xoxSend("pa",{to:from,at:Date.now(),ok:1});
     snd("win");toast("💞 ¡Ahora "+nm+" y tú sois pareja!");diaryAdd("💞","¡"+nm+" y tú sois pareja de exploración!",null,0,"o")})}
 async function parAnswer(from,nm,ok,why){const s=parSt();if(!s.req||s.req.u!==from)return;
-  if(!ok){delete s.req;save();toast(why==="ocupado"?"💔 "+nm+" ya tiene pareja.":why==="tiempo"?"⌛ "+nm+" no ha respondido a tiempo.":"💔 "+nm+" ha rechazado la solicitud.");return}
+  if(!ok){delete s.req;save();if(why==="ocupado")parBusyInfo(nm);else toast(why==="tiempo"?"⌛ "+nm+" no ha respondido a tiempo.":"💔 "+nm+" ha rechazado la solicitud.");return}
   await parFinish(from,nm)}
 async function parFinish(from,nm){const s=parSt();try{await window.FB.parSet(from,nm)}catch(e){toast("No se ha podido guardar la pareja.");return}
   Object.assign(s,{p:from,n:nm,since:Date.now(),days:0,gd:"",dm:"",conf:1});delete s.req;save();snd("win");toast("💞 ¡"+nm+" ha aceptado! Ahora sois pareja.");

@@ -890,6 +890,10 @@ FB_API = '''
     async gsMine(){const q=f=>S.getDocs(S.query(S.collection(db,"gstreak"),S.where(f,"==",uid)));const[x,y]=await Promise.all([q("a"),q("b")]);return x.docs.concat(y.docs).map(d=>Object.assign({id:d.id},d.data()))},
     // 8.3: bingo (partida en directo y tus cartones) y meta de la comunidad (total de la semana y quién más ha tirado)
     bingoWatch:(id,cb)=>S.onSnapshot(S.doc(db,"bingo",id),s=>cb(s.exists()?s.data():null),()=>cb(undefined)),
+    // 8.6: pareja de exploración. Cada uno apunta en pareja/{uid} con quién está; la pareja vale si los dos se apuntan mutuamente
+    async parGet(u){const s=await S.getDoc(S.doc(db,"pareja",u));return s.exists()?s.data():null},
+    parSet:(p,pn)=>S.setDoc(S.doc(db,"pareja",uid),{p:p,pn:String(pn||"").slice(0,30),at:S.serverTimestamp()}),
+    parDel:()=>S.deleteDoc(S.doc(db,"pareja",uid)),
     async bingoGet(id){const s=await S.getDoc(S.doc(db,"bingo",id));return s.exists()?s.data():null},
     async bingoMine(id){const s=await S.getDoc(S.doc(db,"bingo",id,"p",uid));return s.exists()?s.data():null},
     cmWatch:(w,cb)=>S.onSnapshot(S.doc(db,"comunidad",w),s=>cb(s.exists()?(+s.data().n||0):0),()=>cb(null)),

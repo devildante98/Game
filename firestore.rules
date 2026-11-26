@@ -471,6 +471,15 @@ match /wonder/{id} {
     && monOk(request.resource.data.b) && optStr('bn', 30);
   allow delete: if request.auth != null && resource.data.u == request.auth.uid;
 }
+// 8.6 · Pareja de exploración: cada jugador apunta solo su parte (con quién está); vale si las dos partes coinciden
+match /pareja/{u} {
+  allow read: if request.auth != null;
+  allow create, update: if request.auth != null && request.auth.uid == u && !banned()
+    && request.resource.data.keys().hasOnly(['p', 'pn', 'at']) && request.resource.data.p is string
+    && request.resource.data.p.size() > 0 && request.resource.data.p.size() <= 128 && request.resource.data.p != u
+    && optStr('pn', 30) && request.resource.data.at == request.time;
+  allow delete: if request.auth != null && request.auth.uid == u;
+}
 // 8.3 · Bingo Pokémon: partidas y cartones, solo los escribe el servidor (_server/bingo.js)
 match /bingo/{id} {
   allow read: if request.auth != null;

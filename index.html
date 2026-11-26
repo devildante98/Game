@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795731755">
+<meta name="game-build" content="1795734595">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3559,6 +3559,14 @@ body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}
 .tlrc.mg{box-shadow:inset 0 0 0 2px #e0479e}.tlrneed{color:#c0392b;font-weight:700;font-size:.7rem}
 /* X para cerrar las secciones (Gacha, Combate, Tickets gratis…), como en el resto de paneles */
 #gScr .gscx{color:#fff;font-size:1.2rem;font-weight:900;line-height:1}
+/* 8.6 · gestos y pareja en la Exploración */
+.xogs{display:flex;flex-direction:column;gap:6px;margin:6px 0}.xogr{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.xogr button{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:1.3rem;padding:6px 2px;border-radius:12px}.xogr small{font-size:.58rem;line-height:1.1}
+.xopar{background:linear-gradient(135deg,#ff6fae,#e0479e)!important;color:#fff!important;font-weight:800;border-radius:12px;padding:8px}.xopar.on{text-align:center;font-size:.85rem}
+.parbad{position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:6;padding:4px 12px;border-radius:999px;background:rgba(224,71,158,.9);color:#fff;font-weight:800;font-size:.8rem;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.parw .parhe,.parcard .parhe{font-size:2.6rem}.parben{text-align:left;margin:6px 0;padding-left:18px;font-size:.85rem;display:flex;flex-direction:column;gap:3px}
+.parbt{display:flex;gap:8px;justify-content:center;margin-top:6px}
+.parcard{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:linear-gradient(135deg,rgba(255,111,174,.15),rgba(224,71,158,.08));margin:0 0 12px}.parcard>div:nth-child(2){flex:1;display:flex;flex-direction:column;gap:2px}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -8834,7 +8842,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795731755";
+const GAME_B="1795734595";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24184,6 +24192,95 @@ const bngHora=t=>new Date(t).toLocaleTimeString("es-ES",{hour:"2-digit",minute:"
 // botón en el Bingo para abrir las invitaciones del chat
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("#bngInv");if(!b)return;try{chToggle(true);CH.inv=true;CH.emo=false;CH.pick=false;chPanels()}catch(x){toast("Abre el chat para invitar a tus amigos.")}});
 
+// ================= EXPLORACIÓN: GESTOS ENTRE JUGADORES Y PAREJA (8.6) =================
+// Pulsando A delante de otro jugador (menú de p_coop.js) se le puede dar un toque, chocar los cinco, abrazar o bailar
+// (le sale en pantalla) y pedirle ser tu pareja. Cada uno solo puede tener una pareja. Juntos en el mismo mapa: ❤️ encima,
+// +20 % de experiencia en los combates de la Exploración y un regalo al día la primera vez que os veis.
+// Los avisos viajan por la sala del mapa (presencia de XO); la pareja se guarda en Firestore: pareja/{uid} = {p: su pareja}.
+const XG_GS=[["tk","👉","Dar un toque","te ha dado un toque"],["hi","🙌","Chocar los cinco","quiere chocar los cinco contigo"],["hug","🫂","Abrazo","te ha dado un abrazo"],["dn","💃","Bailar","se ha puesto a bailar contigo"]];
+const XOX={g:null,pq:null,pa:null},XOSEEN={};
+function parSt(){S.par=S.par&&typeof S.par==="object"?S.par:{};return S.par}
+const parOf=()=>{const s=parSt();return s.p||""};
+const parWith=()=>{const p=parOf();return p&&XO.peers&&XO.peers[p]?XO.peers[p]:null};
+// los campos extra van junto a la posición que ya publica p_coop.js
+function xoxSend(k,v){XOX[k]=v;XO.lastJ="";setTimeout(()=>{if(XOX[k]===v){XOX[k]=null;XO.lastJ=""}},60000)}
+setInterval(()=>{try{const r=XO.room;if(!r||r.__px)return;const f=r.presence.bind(r);r.presence=p=>f(p&&p.gone?p:Object.assign({},p,{xg:XOX.g,pq:XOX.pq,pa:XOX.pa}));r.__px=1;XO.lastJ=""}catch(e){}},300);
+// gestos
+function xoGesture(o,k){const g=XG_GS.find(x=>x[0]===k);if(!g)return;const now=Date.now();if(now-(XOX.gT||0)<2500){toast("Espera un momento.");return}XOX.gT=now;
+  xoxSend("g",{to:o.id,k,at:now});xoEmote(g[1]);
+  if(k==="hi"){XOX.hiTo=o.id;XOX.hiAt=now;if(XOX.hiFrom===o.id&&now-(XOX.hiFromAt||0)<6000)xoHigh5(o)}
+  toast(g[1]+" "+(k==="tk"?"Le has dado un toque a ":k==="hi"?"Le ofreces chocar los cinco a ":k==="hug"?"Le has dado un abrazo a ":"Bailas con ")+o.n)}
+function xoHigh5(o){XOX.hiTo=null;XOX.hiFrom=null;snd("win");toast("🙌 ¡Choque de cinco perfecto con "+o.n+"!");try{burst("✨",{x:innerWidth/2,y:innerHeight/2},14,120,22)}catch(e){}}
+// lo que nos llega de los demás jugadores del mapa
+{const _xp=xoPeers;xoPeers=function(peers){const r=_xp.apply(this,arguments);try{const me=xoUid();if(!me)return r;
+  (peers||[]).forEach(p=>{if(p.isMe||!p.presence)return;const q=p.presence,nm=pvClean(q.n||"Jugador"),key=p.peer;
+    const fresh=(v,t)=>v&&v.to===me&&+v.at>Date.now()-60000&&XOSEEN[key+t]!==+v.at;
+    if(fresh(q.xg,"g")){XOSEEN[key+"g"]=+q.xg.at;const g=XG_GS.find(x=>x[0]===q.xg.k);if(g){snd("pop");toast(g[1]+" "+nm+" "+g[3]);
+      if(g[0]==="hi"){XOX.hiFrom=key;XOX.hiFromAt=Date.now();if(XOX.hiTo===key&&Date.now()-(XOX.hiAt||0)<6000)xoHigh5({id:key,n:nm})}}}
+    if(fresh(q.pq,"q")){XOSEEN[key+"q"]=+q.pq.at;parAsk(key,nm)}
+    if(fresh(q.pa,"a")){XOSEEN[key+"a"]=+q.pa.at;parAnswer(key,nm,!!q.pa.ok,q.pa.why||"")}});
+  parTogether()}catch(e){}return r}}
+// ---- pareja: pedir, responder, confirmar ----
+function parAskSend(o){const s=parSt();if(s.p){toast(s.p===o.id?"💞 "+o.n+" ya es tu pareja.":"Ya tienes pareja ("+(s.n||"")+"). Termínala antes en Social › 💞 Pareja.");return}
+  if(!window.FB||!window.FB.parSet){toast("Inicia sesión con tu cuenta para tener pareja.");return}
+  if(s.req&&s.req.u===o.id&&Date.now()-s.req.at<30000){toast("Ya le has enviado la solicitud. Espera su respuesta.");return}
+  s.req={u:o.id,n:o.n,at:Date.now()};save();xoxSend("pq",{to:o.id,at:Date.now()});snd("ui");toast("💞 Solicitud de pareja enviada a "+o.n+". ¡Espera su respuesta!")}
+function parAsk(from,nm){const s=parSt();if(s.p){xoxSend("pa",{to:from,at:Date.now(),ok:0,why:"ocupado"});return}
+  let m=$("parM");if(m)m.remove();m=document.createElement("div");m.id="parM";m.className="bngmon";m.setAttribute("role","dialog");
+  m.innerHTML='<div class="bngmonw parw"><div class="parhe">💞</div><b>¡'+esc(nm)+' quiere ser tu pareja!</b><small>Solo se puede tener una pareja a la vez.</small>'+
+    '<ul class="parben"><li>❤️ Os veréis con un corazón en la Exploración</li><li>⭐ +20 % de experiencia en los combates cuando estéis en el mismo mapa</li><li>🎁 Un regalo para cada uno la primera vez que os veáis cada día</li><li>📅 Contaréis los días juntos (a los 7: título «💞 Inseparables»)</li></ul>'+
+    '<div class="parbt"><button class="red" data-par="1">💞 Aceptar</button><button class="alt" data-par="0">No, gracias</button></div></div>';
+  document.body.appendChild(m);snd("lvl");const tm=setTimeout(()=>{if(m.isConnected){m.remove();xoxSend("pa",{to:from,at:Date.now(),ok:0,why:"tiempo"})}},60000);
+  m.addEventListener("click",async e=>{const b=e.target.closest("[data-par]");if(!b)return;clearTimeout(tm);m.remove();
+    if(b.dataset.par!=="1"){xoxSend("pa",{to:from,at:Date.now(),ok:0});return}
+    try{await window.FB.parSet(from,nm)}catch(x){toast("No se ha podido guardar la pareja. Inténtalo de nuevo.");return}
+    Object.assign(parSt(),{p:from,n:nm,since:Date.now(),days:0,gd:"",dm:""});delete parSt().req;save();xoxSend("pa",{to:from,at:Date.now(),ok:1});
+    snd("win");toast("💞 ¡Ahora "+nm+" y tú sois pareja!");diaryAdd("💞","¡"+nm+" y tú sois pareja de exploración!",null,0,"o")})}
+async function parAnswer(from,nm,ok,why){const s=parSt();if(!s.req||s.req.u!==from)return;
+  if(!ok){delete s.req;save();toast(why==="ocupado"?"💔 "+nm+" ya tiene pareja.":why==="tiempo"?"⌛ "+nm+" no ha respondido a tiempo.":"💔 "+nm+" ha rechazado la solicitud.");return}
+  await parFinish(from,nm)}
+async function parFinish(from,nm){const s=parSt();try{await window.FB.parSet(from,nm)}catch(e){toast("No se ha podido guardar la pareja.");return}
+  Object.assign(s,{p:from,n:nm,since:Date.now(),days:0,gd:"",dm:"",conf:1});delete s.req;save();snd("win");toast("💞 ¡"+nm+" ha aceptado! Ahora sois pareja.");
+  diaryAdd("💞","¡"+nm+" y tú sois pareja de exploración!",null,0,"o");try{if(nxOpen("parP"))parUI()}catch(e){}}
+async function parBreak(){const s=parSt();if(!s.p)return;if(!await askOk("¿Seguro que quieres terminar la pareja con "+(s.n||"tu pareja")+"?"))return;
+  try{await window.FB.parDel()}catch(e){}S.par={};save();toast("💔 Habéis dejado de ser pareja.");parUI()}
+// comprobar al entrar (y cada 10 min) que la pareja sigue en pie, y terminar una solicitud que se aceptó sin estar conectados
+async function parCheck(){try{const F=window.FB;if(!F||!F.parGet||!xoUid())return;const s=parSt(),me=xoUid();
+  if(s.p){const d=await F.parGet(s.p);if(d&&d.p===me&&!s.conf){s.conf=1;save()}
+    // (quien acepta espera hasta 24 h a que quien lo pidió confirme; una vez confirmada, si una parte se borra, se acabó)
+    if(!d||d.p!==me){const mine=await F.parGet(me);if(!s.conf&&mine&&mine.p===s.p&&d==null&&Date.now()-(s.since||0)<864e5)return;
+      if(mine&&mine.p===s.p)await F.parDel().catch(()=>{});const nm=s.n||"Tu pareja";S.par={};save();toast("💔 "+nm+" ha terminado la pareja.")}}
+  else if(s.req&&Date.now()-s.req.at<864e5){const d=await F.parGet(s.req.u);if(d&&d.p===me)await parFinish(s.req.u,s.req.n)}}catch(e){}}
+setTimeout(parCheck,20000);setInterval(parCheck,600000);
+// juntos en el mismo mapa: regalo diario y días juntos
+function parTogether(){const o=parWith();if(!o)return;const s=parSt(),d=v8Day();if(s.dm===d)return;s.dm=d;s.days=(s.days|0)+1;
+  const rw={t:v8Tk(1,300000),it:{cand:1,ub:3}};v8Main(()=>grant(rw));save();snd("lvl");toast("💞 ¡Te has encontrado con "+o.n+"! Regalo de pareja: "+rwTxt(rw)+" · "+s.days+(s.days===1?" día":" días")+" juntos");
+  if(s.days===7)diaryAdd("💞","¡7 días juntos con "+(s.n||o.n)+"! Título «💞 Inseparables»",null,0,"o")}
+TITLES.push(["par7","💞 Inseparables",()=>((S.par&&S.par.days)|0)>=7||((S.parBest|0)>=7)]);
+// +20 % de experiencia en la Exploración con la pareja en el mismo mapa
+{const _gx=gainXp;gainXp=function(p,amt){try{if(typeof XGSW!=="undefined"&&XGSW&&parWith())amt=Math.round(amt*1.2)}catch(e){}return _gx.call(this,p,amt)}}
+// el menú al pulsar A delante de otro jugador: gestos y pareja
+{const _xpan=xoPanel;xoPanel=function(o){const r=_xpan.apply(this,arguments);try{if(!o||!XO.panel)return r;const d=XO.panel,isP=parOf()===o.id;
+  const box=document.createElement("div");box.className="xogs";box.innerHTML='<div class="xogr">'+XG_GS.map(g=>'<button type="button" data-xog2="'+g[0]+'" title="'+g[2]+'">'+g[1]+'<small>'+g[2]+'</small></button>').join("")+'</div>'+
+    (isP?'<div class="xopar on">💞 Es tu pareja · '+((parSt().days|0))+' días juntos</div>':'<button type="button" class="xopar" data-xopq="1">💞 Pedir ser pareja</button>');
+  const ref=d.querySelector(".xoemo");ref?ref.after(box):d.prepend(box);
+  box.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;e.stopPropagation();if(b.dataset.xog2)xoGesture(o,b.dataset.xog2);else if(b.dataset.xopq)parAskSend(o);xoClose()})}catch(e){}return r}}
+// ❤️ encima de tu pareja y aviso de la ventaja
+{const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{const o=parWith();if(!o||EX.title||!EX.cv||!EX.cam)return r;const g=EX.cv.getContext("2d");g.setTransform(EXS,0,0,EXS,0,0);
+  const cx=Math.round(EX.cam[0]*2)/2,cy=Math.round(EX.cam[1]*2)/2,x=(o.dx!=null?o.dx:o.x)*EXTL-cx+16,y=(o.dy!=null?o.dy:o.y)*EXTL-cy-14+Math.sin(ts/300)*1.2;
+  g.font="9px serif";g.textAlign="center";g.textBaseline="middle";g.fillText("❤️",x,y)}catch(e){}return r}}
+setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr")||document.querySelector(".exwrap .exscr");if(!sc)return;let b=sc.querySelector(".parbad");const o=parWith();
+  if(!o||EX.title){if(b)b.remove();return}if(!b){b=document.createElement("div");b.className="parbad";sc.appendChild(b)}const t="💞 Con "+o.n+": +20 % EXP";if(b.textContent!==t)b.textContent=t}catch(e){}},1000);
+// panel en Social
+function parUI(){const b=$("parPB");if(!b)return;const s=parSt();
+  if(!xoUid()){b.innerHTML='<p class="mut">Inicia sesión con tu cuenta para tener pareja.</p>';return}
+  b.innerHTML=(s.p?'<div class="parcard"><div class="parhe">💞</div><div><b>Tu pareja: '+esc(s.n||"")+'</b><small>Desde el '+new Date(s.since||Date.now()).toLocaleDateString("es-ES",{day:"numeric",month:"long"})+' · <b>'+(s.days|0)+'</b> '+((s.days|0)===1?"día":"días")+' juntos'+(parWith()?' · 🟢 ¡en tu mismo mapa ahora!':'')+'</small></div><button class="alt mini" id="parBrk">Terminar pareja</button></div>'
+      :'<div class="parcard"><div class="parhe">🤍</div><div><b>Aún no tienes pareja</b><small>En la Exploración, ponte delante de otro jugador, pulsa A y elige «💞 Pedir ser pareja».'+(s.req&&Date.now()-s.req.at<864e5?' Esperando la respuesta de '+esc(s.req.n||"")+'…':'')+'</small></div></div>')+
+    '<h3>Ventajas de tener pareja</h3><ul class="parben"><li>❤️ Os veis con un corazón encima en la Exploración</li><li>⭐ +20 % de experiencia en los combates de la Exploración cuando estáis en el mismo mapa</li><li>🎁 Un regalo para cada uno (tickets, 1 Caramelo Raro y 3 Ultra Balls) la primera vez que os veis cada día</li><li>📅 Días juntos: a los 7, el título «💞 Inseparables»</li></ul>'+
+    '<h3>Gestos</h3><p class="mut">Con cualquier jugador de la Exploración: ponte delante, pulsa A y elige 👉 Dar un toque, 🙌 Chocar los cinco, 🫂 Abrazo o 💃 Bailar. ¡Si los dos chocáis los cinco a la vez, choque perfecto!</p>';
+  const x=$("parBrk");if(x)x.onclick=parBreak}
+v8Tab("soc","parP","💞 Pareja","💞 Pareja de exploración","Forma pareja con otro jugador de la Exploración: juntos ganáis más experiencia, os hacéis un regalo al día y contáis los días juntos.",()=>{parUI();parCheck()});
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -24309,6 +24406,10 @@ async function main(){
     async gsMine(){const q=f=>S.getDocs(S.query(S.collection(db,"gstreak"),S.where(f,"==",uid)));const[x,y]=await Promise.all([q("a"),q("b")]);return x.docs.concat(y.docs).map(d=>Object.assign({id:d.id},d.data()))},
     // 8.3: bingo (partida en directo y tus cartones) y meta de la comunidad (total de la semana y quién más ha tirado)
     bingoWatch:(id,cb)=>S.onSnapshot(S.doc(db,"bingo",id),s=>cb(s.exists()?s.data():null),()=>cb(undefined)),
+    // 8.6: pareja de exploración. Cada uno apunta en pareja/{uid} con quién está; la pareja vale si los dos se apuntan mutuamente
+    async parGet(u){const s=await S.getDoc(S.doc(db,"pareja",u));return s.exists()?s.data():null},
+    parSet:(p,pn)=>S.setDoc(S.doc(db,"pareja",uid),{p:p,pn:String(pn||"").slice(0,30),at:S.serverTimestamp()}),
+    parDel:()=>S.deleteDoc(S.doc(db,"pareja",uid)),
     async bingoGet(id){const s=await S.getDoc(S.doc(db,"bingo",id));return s.exists()?s.data():null},
     async bingoMine(id){const s=await S.getDoc(S.doc(db,"bingo",id,"p",uid));return s.exists()?s.data():null},
     cmWatch:(w,cb)=>S.onSnapshot(S.doc(db,"comunidad",w),s=>cb(s.exists()?(+s.data().n||0):0),()=>cb(null)),

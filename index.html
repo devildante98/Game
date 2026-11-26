@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795717276">
+<meta name="game-build" content="1795717742">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3557,6 +3557,8 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .dex .card.lock{filter:grayscale(1);opacity:.8}.card.lock .dexmn{color:#5c6278;font-weight:700}.card.lock .dexsil{filter:brightness(0) opacity(.5)}
 body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}
 .tlrc.mg{box-shadow:inset 0 0 0 2px #e0479e}.tlrneed{color:#c0392b;font-weight:700;font-size:.7rem}
+/* X para cerrar las secciones (Gacha, Combate, Tickets gratis…), como en el resto de paneles */
+#gScr .gscx{color:#fff;font-size:1.2rem;font-weight:900;line-height:1}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3622,7 +3624,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.4.2</small>
+    <small class="pcver">Versión 8.4.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8378,8 +8380,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.4.2";
+const GAME_VER="8.4.3";
 const NEWS=[
+{v:"2026-11-26-8.4.3",ver:"8.4.3",at:"2026-11-26T19:29",t:"🔧 Arreglos/Mejoras",tt:"La X para cerrar, en todas las secciones",l:["Combate, Gacha, Premios (Tickets gratis) y el resto de secciones de la barra de abajo ya tienen la ✕ para cerrar arriba a la derecha, como los demás paneles"]},
 {v:"2026-11-26-8.4.2",ver:"8.4.2",at:"2026-11-26T19:21",t:"🔧 Arreglos/Mejoras",tt:"Bingo más tranquilo",l:["Bingo: el círculo rojo de los Pokémon que ya has marcado se queda fijo. Antes se volvía a animar con cada bola nueva y parecía que parpadeaba", "El sello solo se anima una vez, al marcar la casilla, y el salto de la última bola también"]},
 {v:"2026-11-26-8.4.1",ver:"8.4.1",at:"2026-11-26T19:02",t:"🔧 Arreglos/Mejoras",tt:"Las megas, también en «Todas» del Taller",l:["Taller de repetidos: las megaevoluciones ya salen también con el filtro «Todas», no solo con «🧬 Megas»", "La lista de Fabricar enseña primero lo que puedes fabricar ya (con las megas disponibles arriba del todo) y luego el resto"]},
 {v:"2026-11-26-8.4",ver:"8.4",at:"2026-11-26T18:57",t:"🧬 Novedad",tt:"¡Fabrica megaevoluciones en el Taller de repetidos!",l:["♻️ Taller de repetidos (Pokédex): ahora también puedes fabricar megaevoluciones con polvo de estrellas ✨. Elige «🧬 Megas» en la lista de Fabricar", "Cada mega cuesta 1200 ✨ (las legendarias, como Mega-Darkrai o Mega-Zygarde, 2500 ✨) y puedes fabricar una por semana", "Necesitas tener ya su Pokémon base (por ejemplo, Dragonite para Mega-Dragonite), así siempre la puedes usar: llévalo en tu equipo y pulsa «🧬 Megaevolucionar» en combate", "Las megas siguen saliendo también en el gacha, en las tiradas épicas (y las legendarias, en las de legendario)"]},
@@ -8827,7 +8830,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795717276";
+const GAME_B="1795717742";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -15568,7 +15571,7 @@ function gmInit(){
   const NAV=[["dex","dex","Pokédex"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","build","Mejoras"],["soc","soc","Social"],["menu","menu","Menú"]];
   gmEl("nav","gNav","",NAV.map(n=>'<button data-gn="'+n[0]+'"'+(n[0]==="menu"?' id="gnavb"':'')+' class="'+(n[0]==="gacha"?"gbig":"")+'"><span class="gni">'+gI(n[1],n[0]==="gacha"?44:30)+'</span><b>'+n[2]+'</b><i class="gbd" hidden></i></button>').join(""));
   // pantallas de sección (mismo aspecto que las ventanas del menú)
-  const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");
+  const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button><button class="ghq gscx" id="gScrX" aria-label="Cerrar">✕</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");
   // escenario: botones laterales, entrenador y compañero, y el pueblo
   const farm=$("farm");
   const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["bag","Mochila","bagU","#f0a020"],["news","Novedades","news","#e0447a"]];
@@ -15590,7 +15593,7 @@ function gmInit(){
     const sync=()=>{const ac=$("acct");$("gAcc").hidden=!ac||ac.hidden;$("gAccN").textContent=(($("aname")||{}).textContent||"").trim()||"Tu cuenta"};sync();const ac=$("acct");if(ac)new MutationObserver(sync).observe(ac,{attributes:true,attributeFilter:["hidden"],subtree:true,childList:true,characterData:true})}
   // eventos
   document.addEventListener("click",gmClick,true);
-  $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT("scr");
+  $("gBack").onclick=()=>{snd("ui");gmClose()};$("gScrX").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT("scr");
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GM.scr&&gmOn()&&!document.querySelector("#gacM:not([hidden]),#uiDlg:not([hidden]),#pkv:not([hidden])")){gmClose()}});
   $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const Q=window._gsq||(window._gsq={x:0,y:0,on:0});Q.x=e.clientX||0;Q.y=e.clientY||0;if(Q.on)return;const nw=performance.now();if(nw-(Q.last||0)<110)return;Q.on=1;Q.last=nw;
     // chispas y salto del entrenador: como mucho ~9 veces por segundo aunque toques muchas veces a la vez (varias teclas, autoclicker)
@@ -24458,7 +24461,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.4.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.4.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

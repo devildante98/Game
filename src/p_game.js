@@ -178,7 +178,7 @@ function gmInit(){
   const NAV=[["dex","dex","Pokédex"],["bat","vs","Combate"],["exp","map","Explorar"],["gacha","ball","Gacha"],["shop","build","Mejoras"],["soc","soc","Social"],["menu","menu","Menú"]];
   gmEl("nav","gNav","",NAV.map(n=>'<button data-gn="'+n[0]+'"'+(n[0]==="menu"?' id="gnavb"':'')+' class="'+(n[0]==="gacha"?"gbig":"")+'"><span class="gni">'+gI(n[1],n[0]==="gacha"?44:30)+'</span><b>'+n[2]+'</b><i class="gbd" hidden></i></button>').join(""));
   // pantallas de sección (mismo aspecto que las ventanas del menú)
-  const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");
+  const sc=gmEl("div","gScr","",'<div class="hubw"><div class="hubh"><button class="gback" id="gBack" aria-label="Volver">'+gI("back",26)+'</button><span class="hubi" id="gScrI"></span><div class="hubtt"><b id="gScrT"></b><small id="gScrD"></small></div><button class="ghq" id="gHelp" aria-label="Ayuda">'+gI("help",24)+'</button><button class="ghq gscx" id="gScrX" aria-label="Cerrar">✕</button></div><div class="hubb" id="gScrB"></div></div>');sc.hidden=true;sc.setAttribute("role","dialog");
   // escenario: botones laterales, entrenador y compañero, y el pueblo
   const farm=$("farm");
   const SL=[["gift","Premios","earnP","#ff8a1e"],["game","Minijuegos","mg","#8a5cff"],["pass","Pase","pass","#3a8cff"],["party","Evento","hh","#ff4f8a"]],SR=[["quest","Misiones","qP","#14b886"],["bag","Mochila","bagU","#f0a020"],["news","Novedades","news","#e0447a"]];
@@ -200,7 +200,7 @@ function gmInit(){
     const sync=()=>{const ac=$("acct");$("gAcc").hidden=!ac||ac.hidden;$("gAccN").textContent=(($("aname")||{}).textContent||"").trim()||"Tu cuenta"};sync();const ac=$("acct");if(ac)new MutationObserver(sync).observe(ac,{attributes:true,attributeFilter:["hidden"],subtree:true,childList:true,characterData:true})}
   // eventos
   document.addEventListener("click",gmClick,true);
-  $("gBack").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT("scr");
+  $("gBack").onclick=()=>{snd("ui");gmClose()};$("gScrX").onclick=()=>{snd("ui");gmClose()};$("gHelp").onclick=()=>gmHelpT("scr");
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GM.scr&&gmOn()&&!document.querySelector("#gacM:not([hidden]),#uiDlg:not([hidden]),#pkv:not([hidden])")){gmClose()}});
   $("train").addEventListener("click",e=>{if(!gmOn())return;gmVib(6);const Q=window._gsq||(window._gsq={x:0,y:0,on:0});Q.x=e.clientX||0;Q.y=e.clientY||0;if(Q.on)return;const nw=performance.now();if(nw-(Q.last||0)<110)return;Q.on=1;Q.last=nw;
     // chispas y salto del entrenador: como mucho ~9 veces por segundo aunque toques muchas veces a la vez (varias teclas, autoclicker)

@@ -261,3 +261,5 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .dex .card.lock{filter:grayscale(1);opacity:.8}.card.lock .dexmn{color:#5c6278;font-weight:700}.card.lock .dexsil{filter:brightness(0) opacity(.5)}
 body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}
 .tlrc.mg{box-shadow:inset 0 0 0 2px #e0479e}.tlrneed{color:#c0392b;font-weight:700;font-size:.7rem}
+/* X para cerrar las secciones (Gacha, Combate, Tickets gratis…), como en el resto de paneles */
+#gScr .gscx{color:#fff;font-size:1.2rem;font-weight:900;line-height:1}

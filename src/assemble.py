@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.4.2";
+const GAME_VER="8.4.3";
 const NEWS=[
+{v:"2026-11-26-8.4.3",ver:"8.4.3",at:"2026-11-26T19:29",t:"🔧 Arreglos/Mejoras",tt:"La X para cerrar, en todas las secciones",l:["Combate, Gacha, Premios (Tickets gratis) y el resto de secciones de la barra de abajo ya tienen la ✕ para cerrar arriba a la derecha, como los demás paneles"]},
 {v:"2026-11-26-8.4.2",ver:"8.4.2",at:"2026-11-26T19:21",t:"🔧 Arreglos/Mejoras",tt:"Bingo más tranquilo",l:["Bingo: el círculo rojo de los Pokémon que ya has marcado se queda fijo. Antes se volvía a animar con cada bola nueva y parecía que parpadeaba", "El sello solo se anima una vez, al marcar la casilla, y el salto de la última bola también"]},
 {v:"2026-11-26-8.4.1",ver:"8.4.1",at:"2026-11-26T19:02",t:"🔧 Arreglos/Mejoras",tt:"Las megas, también en «Todas» del Taller",l:["Taller de repetidos: las megaevoluciones ya salen también con el filtro «Todas», no solo con «🧬 Megas»", "La lista de Fabricar enseña primero lo que puedes fabricar ya (con las megas disponibles arriba del todo) y luego el resto"]},
 {v:"2026-11-26-8.4",ver:"8.4",at:"2026-11-26T18:57",t:"🧬 Novedad",tt:"¡Fabrica megaevoluciones en el Taller de repetidos!",l:["♻️ Taller de repetidos (Pokédex): ahora también puedes fabricar megaevoluciones con polvo de estrellas ✨. Elige «🧬 Megas» en la lista de Fabricar", "Cada mega cuesta 1200 ✨ (las legendarias, como Mega-Darkrai o Mega-Zygarde, 2500 ✨) y puedes fabricar una por semana", "Necesitas tener ya su Pokémon base (por ejemplo, Dragonite para Mega-Dragonite), así siempre la puedes usar: llévalo en tu equipo y pulsa «🧬 Megaevolucionar» en combate", "Las megas siguen saliendo también en el gacha, en las tiradas épicas (y las legendarias, en las de legendario)"]},

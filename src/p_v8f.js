@@ -7,9 +7,13 @@
 // Nunca se toca la copia principal ni los repetidos variocolores. La pegatina brillante del Álbum (5 copias) se queda
 // para siempre aunque conviertas las copias (S.stkB).
 const TLR_DUST={C:1,R:3,E:10,M:25,L:40},TLR_COST={C:20,R:60,E:200,L:800},TLR_DAY=10;
+// megaevoluciones (8.4): 1.200 ✨ (2.500 las legendarias), una por semana y solo si tienes su Pokémon base (para poder usarla)
+const TLR_MEGA={M:1200,E:1200,L:2500};
+const tlrIsMega=p=>!!p&&/^Mega-/.test(p[0])&&!(typeof isSup==="function"&&isSup(p[0]))&&!!PM[megaBase(p[0])];
+const tlrCost=p=>tlrIsMega(p)?TLR_MEGA[p[2]]||1200:TLR_COST[p[2]];
 const TLR_SHOP=[["cand",40,1,"Caramelo Raro"],["ub",15,5,"Ultra Ball ×5"],["ppmax",60,1,"PP máximos"],["tshard",80,1,"Teralito"]];
 const TLR={q:"",f:"",nw:true,open:false};
-function tlrSt(){const d=v8Day(),w=cmuWeek();S.tlr=S.tlr&&typeof S.tlr==="object"?S.tlr:{};const t=S.tlr;if(t.d!==d){t.d=d;t.n=0}if(t.w!==w){t.w=w;t.l=0}
+function tlrSt(){const d=v8Day(),w=cmuWeek();S.tlr=S.tlr&&typeof S.tlr==="object"?S.tlr:{};const t=S.tlr;if(t.d!==d){t.d=d;t.n=0}if(t.w!==w){t.w=w;t.l=0;t.m=0}
   if(t.keep==null)t.keep=0;if(t.fav==null)t.fav=1;if(!t.r)t.r={C:1,R:1,E:1,M:0,L:0};return t}
 const tlrDust=()=>Math.max(0,Math.floor(S.dust||0));
 // copias que se pueden convertir de cada especie (solo repetidos normales, guardando los que elijas)
@@ -19,20 +23,25 @@ function tlrConvert(L){let k=0,d=0;S.stkB=S.stkB&&typeof S.stkB==="object"?S.stk
   L.forEach(x=>{const c=Math.min(x.c,tlrCan(x.n));if(c<=0)return;if((S.owned[x.n]|0)>=5)S.stkB[x.n]=1;S.owned[x.n]-=c;k+=c;d+=c*(TLR_DUST[x.p[2]]||1)});
   if(!k)return;S.dust=tlrDust()+d;S.tlrN=(S.tlrN|0)+k;save();snd("lvl");toast("✨ "+k+" repetido"+(k>1?"s":"")+" convertido"+(k>1?"s":"")+" en "+fmt(d)+" de polvo de estrellas.");render();tlrUI()}
 // Pokémon que se pueden fabricar: los que no tienes ahora (sin megas, formas ni singulares)
-const tlrCraftable=()=>P.filter(p=>v8Base(p)&&TLR_COST[p[2]]&&!(S.owned[p[0]]>0)&&window._spr&&window._spr[p[0]]);
-async function tlrCraft(n){const p=PM[n],t=tlrSt();if(!p||S.owned[n]>0||!TLR_COST[p[2]])return;const c=TLR_COST[p[2]];
+const tlrCraftable=()=>P.filter(p=>!(S.owned[p[0]]>0)&&(tlrIsMega(p)||(v8Base(p)&&TLR_COST[p[2]]&&window._spr&&window._spr[p[0]])));
+// por qué no se puede fabricar ahora (o "" si se puede)
+function tlrWhy(p){const t=tlrSt(),c=tlrCost(p);if(tlrIsMega(p)){const b=megaBase(p[0]);if(!(S.owned[b]>0))return "Necesitas a "+b;if((t.m|0)>=1)return "Ya fabricaste una mega esta semana"}
+  else if(p[2]==="L"&&t.l>=1)return "Ya fabricaste un legendario esta semana";if(t.n>=TLR_DAY)return "Hoy ya has fabricado "+TLR_DAY;if(tlrDust()<c)return "Te falta polvo";return ""}
+async function tlrCraft(n){const p=PM[n],t=tlrSt();if(!p||S.owned[n]>0||!tlrCost(p))return;const c=tlrCost(p),mg=tlrIsMega(p);
+  if(mg){const why=tlrWhy(p);if(why){toast(why+".");return}}
   if(tlrDust()<c){toast("Te falta polvo de estrellas.");return}if(t.n>=TLR_DAY){toast("Hoy ya has fabricado "+TLR_DAY+" Pokémon. ¡Vuelve mañana!");return}
-  if(p[2]==="L"&&t.l>=1){toast("Solo se puede fabricar un legendario por semana.");return}
+  if(!mg&&p[2]==="L"&&t.l>=1){toast("Solo se puede fabricar un legendario por semana.");return}
   if(!await askOk("¿Fabricar a "+n+" por "+fmt(c)+" ✨ de polvo de estrellas?"))return;if(tlrDust()<c||S.owned[n]>0)return;
-  S.dust=tlrDust()-c;t.n++;if(p[2]==="L")t.l++;const sh=Math.random()<.01;
+  S.dust=tlrDust()-c;t.n++;if(mg)t.m=(t.m|0)+1;else if(p[2]==="L")t.l++;const sh=Math.random()<.01;
   const lv=typeof clampL==="function"?clampL(Math.max(5,Math.min(typeof lvCap==="function"?lvCap():50,typeof leadLevel==="function"?leadLevel():5))):5;
   const isNew=giveMon(n,lv,sh);save();snd("win");toast("🔨 ¡Has fabricado a "+(sh?"✨ ":"")+n+"!"+(isNew?" ¡Nuevo en tu Pokédex!":"")+(sh?" ¡Y ha salido variocolor!":""));
-  if(p[2]==="L"||sh)diaryAdd("🔨","Fabricado en el Taller de repetidos: "+(sh?"✨ ":"")+n,n,sh?1:0,"pk");render();tlrUI()}
+  if(p[2]==="L"||mg||sh)diaryAdd("🔨","Fabricado en el Taller de repetidos: "+(sh?"✨ ":"")+n,n,sh?1:0,"pk");
+  if(mg)setTimeout(()=>toast("🧬 Lleva a "+megaBase(n)+" en tu equipo y pulsa «"+(/Gigamax/.test(n)?"🔴 Gigamax":"🧬 Megaevolucionar")+"» en combate."),2500);render();tlrUI()}
 function tlrBuy(i){const it=TLR_SHOP[i];if(!it||tlrDust()<it[1])return;S.dust=tlrDust()-it[1];S.bag=S.bag||{};S.bag[it[0]]=(S.bag[it[0]]||0)+it[2];save();snd("lvl");toast("🛒 "+it[3]+" por "+it[1]+" ✨");tlrUI()}
 function tlrUI(){const b=$("tlrPB");if(!b)return;const t=tlrSt(),L=tlrList(),R=["C","R","E","M","L"],by={};R.forEach(r=>by[r]={c:0,d:0});
   L.forEach(x=>{const r=by[x.p[2]];if(r){r.c+=x.c;r.d+=x.c*(TLR_DUST[x.p[2]]||1)}});
   const sel=R.filter(r=>t.r[r]),selC=sel.reduce((a,r)=>a+by[r].c,0),selD=sel.reduce((a,r)=>a+by[r].d,0);
-  const q=nrm(TLR.q||""),C=tlrCraftable().filter(p=>(!TLR.f||p[2]===TLR.f)&&(!TLR.nw||!hasP(p[0]))&&(!q||nrm(p[0]).includes(q))).sort((a,c)=>(hasP(a[0])-hasP(c[0]))||(TLR_COST[a[2]]-TLR_COST[c[2]])).slice(0,48);
+  const q=nrm(TLR.q||""),C=tlrCraftable().filter(p=>(TLR.f==="MG"?tlrIsMega(p):!TLR.f?!tlrIsMega(p):p[2]===TLR.f&&!tlrIsMega(p))&&(!TLR.nw||!hasP(p[0]))&&(!q||nrm(p[0]).includes(q))).sort((a,c)=>(TLR.f==="MG"?((S.owned[megaBase(c[0])]>0)-(S.owned[megaBase(a[0])]>0)):0)||(hasP(a[0])-hasP(c[0]))||(tlrCost(a)-tlrCost(c))).slice(0,TLR.f==="MG"?120:48);
   const D=tlrDust();
   b.innerHTML='<div class="tlrtop"><div class="tlrdust"><span>✨</span><b>'+fmt(D)+'</b><small>polvo de estrellas</small></div><div class="tlrrate">'+R.map(r=>'<span>'+STAR[r]+' → <b>'+TLR_DUST[r]+'</b> ✨</span>').join("")+'</div></div>'+
     '<div class="tlrsec"><h3>♻️ Convertir repetidos</h3><small class="mut">Tu copia principal y tus repetidos variocolores no se tocan nunca. La pegatina brillante del Álbum (5 copias) se queda aunque conviertas.</small>'+
@@ -40,9 +49,9 @@ function tlrUI(){const b=$("tlrPB");if(!b)return;const t=tlrSt(),L=tlrList(),R=[
     '<div class="tlrrar">'+R.map(r=>'<label class="tlrchip'+(t.r[r]?' on':'')+(by[r].c?'':' off')+'"><input type="checkbox" data-tlrr="'+r+'"'+(t.r[r]?' checked':'')+'><b>'+STAR[r]+'</b><small>'+by[r].c+' copia'+(by[r].c===1?'':'s')+'</small><small>+'+fmt(by[r].d)+' ✨</small></label>').join("")+'</div>'+
     '<button class="red" id="tlrGo"'+(selC?'':' disabled')+'>♻️ Convertir '+selC+' repetido'+(selC===1?'':'s')+' → +'+fmt(selD)+' ✨</button>'+
     (L.length?'<details class="tlrdet"'+(TLR.open?' open':'')+'><summary>Ver uno a uno ('+L.length+' especies)</summary><div class="tlrgrid">'+L.sort((a,c)=>c.c-a.c||(TLR_DUST[c.p[2]]-TLR_DUST[a.p[2]])).slice(0,120).map(x=>'<div class="tlrc '+x.p[2]+'">'+ico(x.p,40)+'<b>'+esc(nk(x.n))+'</b><small>×'+x.c+' · '+TLR_DUST[x.p[2]]+' ✨ c/u</small><div><button class="alt mini" data-tlr1="'+esc(x.n)+'">−1</button><button class="alt mini" data-tlra="'+esc(x.n)+'">Todos</button></div></div>').join("")+'</div></details>':'<p class="mut">No tienes repetidos que convertir con estas opciones.</p>')+'</div>'+
-    '<div class="tlrsec"><h3>🔨 Fabricar Pokémon</h3><small class="mut">Fabrica los Pokémon que no tienes. Hoy: <b>'+t.n+'/'+TLR_DAY+'</b> · Legendarios esta semana: <b>'+t.l+'/1</b> · ¡Cada uno tiene un 1 % de salir variocolor!</small>'+
-    '<div class="tlropts"><input id="tlrQ" placeholder="Buscar Pokémon…" value="'+esc(TLR.q||"")+'"><select id="tlrF"><option value="">Todas</option>'+["C","R","E","L"].map(r=>'<option value="'+r+'"'+(TLR.f===r?' selected':'')+'>'+STAR[r]+' · '+TLR_COST[r]+' ✨</option>').join("")+'</select><label><input type="checkbox" id="tlrNw"'+(TLR.nw?' checked':'')+'> Solo los que nunca he tenido</label></div>'+
-    '<div class="tlrgrid">'+(C.length?C.map(p=>{const c=TLR_COST[p[2]],ok=D>=c&&t.n<TLR_DAY&&!(p[2]==="L"&&t.l>=1);return '<div class="tlrc '+p[2]+(ok?'':' no')+'">'+ico(p,40)+'<b>'+esc(p[0])+'</b><small>'+STAR[p[2]]+(hasP(p[0])?'':' · 🆕')+'</small><button class="'+(ok?'red':'alt')+' mini" data-tlrc="'+esc(p[0])+'"'+(ok?'':' disabled')+'>🔨 '+fmt(c)+' ✨</button></div>'}).join(""):'<small class="mut">No hay Pokémon con ese filtro. ¡Quizá ya los tienes todos!</small>')+'</div></div>'+
+    '<div class="tlrsec"><h3>🔨 Fabricar Pokémon</h3><small class="mut">Fabrica los Pokémon que no tienes. Hoy: <b>'+t.n+'/'+TLR_DAY+'</b> · Legendarios esta semana: <b>'+t.l+'/1</b> · Megas esta semana: <b>'+(t.m|0)+'/1</b> · ¡Cada uno tiene un 1 % de salir variocolor!</small>'+
+    '<div class="tlropts"><input id="tlrQ" placeholder="Buscar Pokémon…" value="'+esc(TLR.q||"")+'"><select id="tlrF"><option value="">Todas</option>'+["C","R","E","L"].map(r=>'<option value="'+r+'"'+(TLR.f===r?' selected':'')+'>'+STAR[r]+' · '+TLR_COST[r]+' ✨</option>').join("")+'<option value="MG"'+(TLR.f==="MG"?' selected':'')+'>🧬 Megas · '+fmt(TLR_MEGA.M)+' ✨ (legendarias '+fmt(TLR_MEGA.L)+')</option></select><label><input type="checkbox" id="tlrNw"'+(TLR.nw?' checked':'')+'> Solo los que nunca he tenido</label></div>'+
+    '<div class="tlrgrid">'+(C.length?C.map(p=>{const c=tlrCost(p),why=tlrWhy(p),ok=!why,mg=tlrIsMega(p);return '<div class="tlrc '+p[2]+(ok?'':' no')+(mg?' mg':'')+'"'+(why?' title="'+esc(why)+'"':'')+'>'+ico(p,40)+'<b>'+esc(p[0])+'</b><small>'+STAR[p[2]]+(mg?' · 🧬':'')+(hasP(p[0])?'':' · 🆕')+'</small>'+(mg&&!(S.owned[megaBase(p[0])]>0)?'<small class="tlrneed">Necesitas a '+esc(megaBase(p[0]))+'</small>':'')+'<button class="'+(ok?'red':'alt')+' mini" data-tlrc="'+esc(p[0])+'"'+(ok?'':' disabled')+'>🔨 '+fmt(c)+' ✨</button></div>'}).join(""):'<small class="mut">No hay Pokémon con ese filtro. ¡Quizá ya los tienes todos!</small>')+'</div></div>'+
     '<div class="tlrsec"><h3>🛒 Tienda del taller</h3><div class="tlrshop">'+TLR_SHOP.map((it,i)=>'<button class="alt" data-tlrs="'+i+'"'+(D>=it[1]?'':' disabled')+'><b>'+it[3]+'</b><small>'+it[1]+' ✨</small></button>').join("")+'</div></div>';
   const det=b.querySelector(".tlrdet");if(det)det.addEventListener("toggle",()=>{TLR.open=det.open});
   const qi=$("tlrQ");if(qi&&TLR._f){qi.focus();try{qi.setSelectionRange(qi.value.length,qi.value.length)}catch(e){}TLR._f=0}}
@@ -306,7 +315,7 @@ setInterval(()=>{try{const l=$("wxOpt");if(!l)return;let e=$("seaTxt");const k=s
 // Las casillas de los que te faltan muestran su silueta y su nombre; al pasar el ratón, una pista de dónde conseguirlo.
 let DEXPRE=null;
 function dexHow(p){try{const n=p[0],r=p[2];
-  if(/^Mega-|Gigamax/.test(n))return "sale en el gacha, en las tiradas "+(r==="L"?"de legendario (★★★★★":"épicas (★★★")+"; las súper tiradas dan más). Después, pon a "+megaBase(n)+" en tu equipo y "+(/Gigamax/.test(n)?"pulsa «🔴 Gigamax»":"pulsa «🧬 Megaevolucionar»")+" en combate";
+  if(/^Mega-|Gigamax/.test(n))return "sale en el gacha, en las tiradas "+(r==="L"?"de legendario (★★★★★":"épicas (★★★")+"; las súper tiradas dan más). "+(/^Mega-/.test(n)&&tlrIsMega(p)?"También puedes fabricarla en el Taller de repetidos (si tienes a "+megaBase(n)+"). ":"")+"Después, pon a "+megaBase(n)+" en tu equipo y "+(/Gigamax/.test(n)?"pulsa «🔴 Gigamax»":"pulsa «🧬 Megaevolucionar»")+" en combate";
   if(r==="M")return "Pokémon singular: búscalo en eventos y en el gacha";
   if(!DEXPRE){DEXPRE={};try{P.forEach(q=>EVO(q[0]).forEach(e=>{if(e&&e[0]&&!DEXPRE[e[0]])DEXPRE[e[0]]=q[0]}))}catch(e){}}
   const pre=DEXPRE[n],ev=pre?" · o haz evolucionar a "+pre:"";const tl=typeof TLR_COST!=="undefined"&&TLR_COST[r]&&v8Base(p)?" · o fabrícalo en el Taller de repetidos":"";

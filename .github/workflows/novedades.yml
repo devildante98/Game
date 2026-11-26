@@ -1,6 +1,7 @@
 # Anuncia en Discord las novedades de cada versión nueva del juego (src/tools/discord/novedades.js) al publicar en main.
 # Usa el secreto FIREBASE_SA (para apuntar qué versión se ha anunciado ya y no repetirla) y el webhook del canal:
-# DISCORD_WEBHOOK_NOVEDADES si existe; si no, el del canal de Avisos (DISCORD_WEBHOOK_AVISOS). Nunca el de sorteos.
+# DISCORD_WEBHOOK_NOVEDADES (el canal #novedades) y el rol que se menciona: DISCORD_ROL_NOVEDADES («Avisos de novedades»;
+# si no existe, DISCORD_ROL_AVISOS). Sin el webhook no se envía nada.
 name: Anunciar novedades en Discord
 on:
   push:
@@ -37,11 +38,11 @@ jobs:
         env:
           SA: ${{ secrets.FIREBASE_SA }}
           WN: ${{ secrets.DISCORD_WEBHOOK_NOVEDADES }}
-          WA: ${{ secrets.DISCORD_WEBHOOK_AVISOS }}
+          RN: ${{ secrets.DISCORD_ROL_NOVEDADES }}
           RA: ${{ secrets.DISCORD_ROL_AVISOS }}
         run: |
           printf '%s' "$SA" > "$RUNNER_TEMP/sa.json"
-          printf 'DISCORD_WEBHOOK_NOVEDADES=%s\nDISCORD_WEBHOOK_AVISOS=%s\nDISCORD_ROL_AVISOS=%s\n' "$WN" "$WA" "$RA" > _server/.env
+          printf 'DISCORD_WEBHOOK_NOVEDADES=%s\nDISCORD_ROL_NOVEDADES=%s\nDISCORD_ROL_AVISOS=%s\n' "$WN" "$RN" "$RA" > _server/.env
       # se espera un poco a que la web (GitHub Pages) ya tenga la versión nueva
       - name: Esperar a que la web se publique
         if: env.HAS_SA == 'true'

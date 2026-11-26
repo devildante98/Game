@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.5"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.4.6"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795727027">
+<meta name="game-build" content="1795731294">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3509,14 +3509,14 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bngtabs button.on{border-color:#e2573b;background:rgba(226,87,59,.1)}.bngtabs small{opacity:.75;font-size:.72rem}
 .bngstage{border-radius:18px;padding:12px;margin:0 0 12px;color:#fff;background:radial-gradient(circle at 30% 0%,#4b2a8a,#1e1440 70%);box-shadow:0 6px 20px rgba(30,20,64,.35)}
 .bnghost{display:flex;align-items:flex-start;gap:10px;margin:0 0 10px}
-.bngav{flex-shrink:0;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:2rem;background:linear-gradient(135deg,#ff8ac2,#ffb36b);box-shadow:0 0 0 3px rgba(255,255,255,.3);animation:bngBob 2.2s ease-in-out infinite}
+.bngav{flex-shrink:0;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:2rem;background:linear-gradient(135deg,#ff8ac2,#ffb36b);box-shadow:0 0 0 3px rgba(255,255,255,.3)}
 @keyframes bngBob{50%{transform:translateY(-3px) rotate(-4deg)}}
 .bngsay{position:relative;flex:1;min-width:0;background:#fff;color:#2a2340;padding:8px 12px;border-radius:14px}.bngsay:before{content:"";position:absolute;left:-7px;top:16px;border:7px solid transparent;border-left:0;border-right-color:#fff}
 .bngsay b{font-size:.75rem;color:#b0489a}.bngsay p{margin:2px 0 0;font-weight:700}
 .bngnow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .bngball{position:relative;width:110px;height:110px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;font-size:3rem;background:radial-gradient(circle at 35% 30%,#fff,#ffe9a8 45%,#f4b73a);box-shadow:inset -8px -10px 18px rgba(0,0,0,.18),0 6px 18px rgba(0,0,0,.35)}
 .bngball{overflow:hidden}.bngball img{position:relative;z-index:1;max-width:96%;height:auto}.bngball i{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-style:normal;font-weight:900;font-size:.95rem;background:#e2573b;color:#fff;border-radius:999px;padding:1px 9px}
-.bngball.wait{animation:bngSpin 3s linear infinite}@keyframes bngSpin{to{transform:rotate(360deg)}}
+
 .bngball.bnew{animation:bngPop .8s cubic-bezier(.2,1.6,.4,1)}@keyframes bngPop{0%{transform:scale(.2) rotate(-200deg);opacity:0}100%{transform:none;opacity:1}}
 .bngst{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}.bngst>b{font-size:1.25rem}.bngst small{opacity:.85}
 .bngprev{display:flex;gap:4px;flex-wrap:wrap}.bngprev span{position:relative;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.85);display:grid;place-items:center;overflow:hidden}
@@ -3624,7 +3624,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.4.5</small>
+    <small class="pcver">Versión 8.4.6</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8380,8 +8380,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.4.5";
+const GAME_VER="8.4.6";
 const NEWS=[
+{v:"2026-11-26-8.4.6",ver:"8.4.6",at:"2026-11-26T23:14",t:"🔧 Arreglos/Mejoras",tt:"Bingo sin animaciones en bucle",l:["Bingo: la presentadora y la bola de espera ya no se mueven sin parar; se quedan fijas", "Solo se anima la bola cuando sale un Pokémon nuevo y el botón ¡LÍNEA!/¡BINGO! cuando ya puedes cantar"]},
 {v:"2026-11-26-8.4.5",ver:"8.4.5",at:"2026-11-26T21:58",t:"🔧 Arreglos/Mejoras",tt:"¡Golpea al Diglett!: puntuación máxima de 136",l:["¡Golpea al Diglett!: ahora salen 2 Dugtrio (+3) por cada 7 topos, así que la puntuación perfecta sube a 136 en todas las partidas", "Así las puntuaciones que ya se hicieron esta semana se pueden superar, y todo el mundo sigue teniendo las mismas oportunidades en cualquier partida", "Arreglado: si el móvil o el ordenador se atascaba un momento, después salían varios topos de golpe casi a la vez. Ahora siempre hay al menos 0,28 s entre uno y otro, y un topo no vuelve a salir en el mismo hueco justo después de irse otro"]},
 {v:"2026-11-26-8.4.4",ver:"8.4.4",at:"2026-11-26T21:52",t:"🔧 Arreglos/Mejoras",tt:"¡Golpea al Diglett! igual de justo en todas las partidas",l:["¡Golpea al Diglett!: ahora todas las partidas tienen las mismas oportunidades. Salen siempre el mismo número de Dugtrio (+3) y de Voltorb, bien repartidos a lo largo de la partida, y la puntuación perfecta es 136 en cualquier partida. Antes, por pura suerte, en unas salían muchos más Dugtrio que en otras y la puntuación máxima posible cambiaba más de 20 puntos", "Lo que cambia en cada partida es dónde y en qué orden salen, así que sigue haciendo falta reflejos", "En dispositivos lentos, la partida ya no se corta antes de que salgan los últimos topos"]},
 {v:"2026-11-26-8.4.3",ver:"8.4.3",at:"2026-11-26T19:29",t:"🔧 Arreglos/Mejoras",tt:"La X para cerrar, en todas las secciones",l:["Combate, Gacha, Premios (Tickets gratis) y el resto de secciones de la barra de abajo ya tienen la ✕ para cerrar arriba a la derecha, como los demás paneles"]},
@@ -8832,7 +8833,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795727027";
+const GAME_B="1795731294";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24475,7 +24476,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.4.5";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.4.6";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

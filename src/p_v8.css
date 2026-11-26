@@ -213,14 +213,14 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 .bngtabs button.on{border-color:#e2573b;background:rgba(226,87,59,.1)}.bngtabs small{opacity:.75;font-size:.72rem}
 .bngstage{border-radius:18px;padding:12px;margin:0 0 12px;color:#fff;background:radial-gradient(circle at 30% 0%,#4b2a8a,#1e1440 70%);box-shadow:0 6px 20px rgba(30,20,64,.35)}
 .bnghost{display:flex;align-items:flex-start;gap:10px;margin:0 0 10px}
-.bngav{flex-shrink:0;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:2rem;background:linear-gradient(135deg,#ff8ac2,#ffb36b);box-shadow:0 0 0 3px rgba(255,255,255,.3);animation:bngBob 2.2s ease-in-out infinite}
+.bngav{flex-shrink:0;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-size:2rem;background:linear-gradient(135deg,#ff8ac2,#ffb36b);box-shadow:0 0 0 3px rgba(255,255,255,.3)}
 @keyframes bngBob{50%{transform:translateY(-3px) rotate(-4deg)}}
 .bngsay{position:relative;flex:1;min-width:0;background:#fff;color:#2a2340;padding:8px 12px;border-radius:14px}.bngsay:before{content:"";position:absolute;left:-7px;top:16px;border:7px solid transparent;border-left:0;border-right-color:#fff}
 .bngsay b{font-size:.75rem;color:#b0489a}.bngsay p{margin:2px 0 0;font-weight:700}
 .bngnow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .bngball{position:relative;width:110px;height:110px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;font-size:3rem;background:radial-gradient(circle at 35% 30%,#fff,#ffe9a8 45%,#f4b73a);box-shadow:inset -8px -10px 18px rgba(0,0,0,.18),0 6px 18px rgba(0,0,0,.35)}
 .bngball{overflow:hidden}.bngball img{position:relative;z-index:1;max-width:96%;height:auto}.bngball i{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-style:normal;font-weight:900;font-size:.95rem;background:#e2573b;color:#fff;border-radius:999px;padding:1px 9px}
-.bngball.wait{animation:bngSpin 3s linear infinite}@keyframes bngSpin{to{transform:rotate(360deg)}}
+
 .bngball.bnew{animation:bngPop .8s cubic-bezier(.2,1.6,.4,1)}@keyframes bngPop{0%{transform:scale(.2) rotate(-200deg);opacity:0}100%{transform:none;opacity:1}}
 .bngst{display:flex;flex-direction:column;gap:4px;min-width:0;flex:1}.bngst>b{font-size:1.25rem}.bngst small{opacity:.85}
 .bngprev{display:flex;gap:4px;flex-wrap:wrap}.bngprev span{position:relative;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.85);display:grid;place-items:center;overflow:hidden}

@@ -252,7 +252,7 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 @media (max-width:560px){.bngball{width:88px;height:88px}.bngcards{grid-template-columns:1fr}.bngtabs button{font-size:.75rem}.bngpz{grid-template-columns:1fr}.cmums{grid-template-columns:44px 1fr;}.cmums em,.cmums button{grid-column:1/-1;justify-self:end}}
 @media (prefers-reduced-motion:reduce){.bngball.wait,.bngav,.cmuglobe,.tlrdust span,.bngsing button.pulse,.cmulive{animation:none}}
 .bngpk{color:#b0489a;font-weight:800}.bngpkp{font-size:.74rem;opacity:.8}
-.bngmon{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:rgba(20,12,40,.6);padding:16px}
+.bngmon{position:fixed;inset:0;z-index:2147482500;display:grid;place-items:center;background:rgba(20,12,40,.6);padding:16px}
 .bngmonw{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px 26px;border-radius:22px;background:#fff;color:#2a2340;text-align:center;max-width:320px;width:100%;animation:bngPop .7s cubic-bezier(.2,1.6,.4,1)}
 .bngmonw.sh{background:linear-gradient(160deg,#fff,#fff3c4 60%,#ffd9f0);box-shadow:0 0 30px rgba(255,215,90,.8)}.bngmonw b{font-size:1.3rem}
 .bngmonp{width:150px;height:150px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,#fff,#efe9ff)}
@@ -286,3 +286,6 @@ body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}
 .pcons{box-shadow:0 0 0 3px #ff6fae,0 0 24px rgba(255,111,174,.55),0 0 46px rgba(255,210,63,.25)!important;border-radius:16px}
 .chcons{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;vertical-align:middle;color:#fff;background:linear-gradient(135deg,#ff6fae,#e0479e 60%,#ffb01f);box-shadow:0 0 8px rgba(255,111,174,.6)}
 @media (prefers-reduced-motion:reduce){.titcons,.titcons .tktx,.titcons .tkh,.titcons .tks{animation:none}}
+
+/* en la Exploración a pantalla completa (capa con z-index 2147480000) los avisos también tienen que verse por encima */
+body.exfsOn #toast{z-index:2147482000}

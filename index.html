@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795734864">
+<meta name="game-build" content="1795736176">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3548,7 +3548,7 @@ body.mgon #gScr *,body.mgon #gScr *:before,body.mgon #gScr *:after,body.mgon #gT
 @media (max-width:560px){.bngball{width:88px;height:88px}.bngcards{grid-template-columns:1fr}.bngtabs button{font-size:.75rem}.bngpz{grid-template-columns:1fr}.cmums{grid-template-columns:44px 1fr;}.cmums em,.cmums button{grid-column:1/-1;justify-self:end}}
 @media (prefers-reduced-motion:reduce){.bngball.wait,.bngav,.cmuglobe,.tlrdust span,.bngsing button.pulse,.cmulive{animation:none}}
 .bngpk{color:#b0489a;font-weight:800}.bngpkp{font-size:.74rem;opacity:.8}
-.bngmon{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:rgba(20,12,40,.6);padding:16px}
+.bngmon{position:fixed;inset:0;z-index:2147482500;display:grid;place-items:center;background:rgba(20,12,40,.6);padding:16px}
 .bngmonw{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px 26px;border-radius:22px;background:#fff;color:#2a2340;text-align:center;max-width:320px;width:100%;animation:bngPop .7s cubic-bezier(.2,1.6,.4,1)}
 .bngmonw.sh{background:linear-gradient(160deg,#fff,#fff3c4 60%,#ffd9f0);box-shadow:0 0 30px rgba(255,215,90,.8)}.bngmonw b{font-size:1.3rem}
 .bngmonp{width:150px;height:150px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,#fff,#efe9ff)}
@@ -3582,6 +3582,9 @@ body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}
 .pcons{box-shadow:0 0 0 3px #ff6fae,0 0 24px rgba(255,111,174,.55),0 0 46px rgba(255,210,63,.25)!important;border-radius:16px}
 .chcons{display:inline-block;margin-left:4px;padding:1px 7px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.3px;text-transform:uppercase;vertical-align:middle;color:#fff;background:linear-gradient(135deg,#ff6fae,#e0479e 60%,#ffb01f);box-shadow:0 0 8px rgba(255,111,174,.6)}
 @media (prefers-reduced-motion:reduce){.titcons,.titcons .tktx,.titcons .tkh,.titcons .tks{animation:none}}
+
+/* en la Exploración a pantalla completa (capa con z-index 2147480000) los avisos también tienen que verse por encima */
+body.exfsOn #toast{z-index:2147482000}
 
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
@@ -3647,7 +3650,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.6.1</small>
+    <small class="pcver">Versión 8.6.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8403,8 +8406,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.6.1";
+const GAME_VER="8.6.2";
 const NEWS=[
+{v:"2026-11-27-8.6.2",ver:"8.6.2",at:"2026-11-27T00:36",t:"🔧 Arreglos/Mejoras",tt:"Avisos visibles en pantalla completa",l:["Exploración a pantalla completa: la ventana de solicitud de pareja y el aviso de «ya tiene pareja» ya salen por encima del mapa (antes se quedaban escondidos detrás)", "Los avisos de abajo (toques, abrazos, regalo de pareja…) también se ven ahora con el mapa a pantalla completa"]},
 {v:"2026-11-26-8.6.1",ver:"8.6.1",at:"2026-11-27T00:12",t:"🔧 Arreglos/Mejoras",tt:"Solicitudes de pareja más claras",l:["Pareja: si le pides ser pareja a alguien que ya tiene una, ahora te sale una ventana en pantalla avisándote («ya tiene pareja») y la solicitud no se envía: a esa persona no le llega nada"]},
 {v:"2026-11-26-8.6",ver:"8.6",at:"2026-11-27T00:10",t:"💞 Novedad",tt:"¡Gestos y parejas en la Exploración!",l:["En la Exploración, ponte delante de otro jugador y pulsa A: ahora puedes darle un 👉 toque, 🙌 chocar los cinco, 🫂 darle un abrazo o 💃 bailar con él. ¡Le sale en pantalla! Y si los dos chocáis los cinco a la vez, choque perfecto", "💞 Pareja de exploración: desde ese mismo menú puedes pedirle a otro jugador que sea tu pareja. Le saldrá una ventana para aceptar o rechazar. Cada uno solo puede tener una pareja", "Ventajas de la pareja: un ❤️ encima de tu pareja en el mapa, +20 % de experiencia en los combates de la Exploración cuando estáis en el mismo mapa y un regalo para cada uno (tickets, 1 Caramelo Raro y 3 Ultra Balls) la primera vez que os veis cada día", "Contad los días juntos: a los 7, el título «💞 Inseparables». Mira tu pareja (o termínala) en Social › 💞 Pareja"]},
 {v:"2026-11-26-8.5",ver:"8.5",at:"2026-11-26T23:22",t:"🎱 Novedad",tt:"¡Invita a tus amigos al Bingo por el chat!",l:["En el chat, pulsa ✉️ y elige «🎱 Invitar al Bingo»: invitas a la próxima partida de la sala que tengas elegida (Bosque, Ciudad o Liga). Funciona en el chat global, en el del gremio y por privado", "La invitación dice la sala, a qué hora empieza la partida y cuánto cuesta el cartón. Quien la acepte con «¡Voy!» entra directamente en esa sala para comprar sus cartones", "También tienes el botón «✉️ Invitar por el chat» dentro del Bingo. La invitación caduca cuando se cierra la venta de cartones de esa partida"]},
@@ -8859,7 +8863,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795734864";
+const GAME_B="1795736176";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24668,7 +24672,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.6.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.6.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

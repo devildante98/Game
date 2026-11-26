@@ -52,7 +52,10 @@ function rwEnv(){const d=new Date(rwNow()),mo=d.getMonth()+1,day=d.getDate(),dec
   if(!rwOff()){if(RW.code!=null){const k=rwKind(RW.code,RW.cloud);w=Object.assign(w,k);name=k.n;w.wind=Math.min(3,RW.wind/12)}
     // en diciembre, siempre nieva (si de verdad nieva, con la fuerza real; si no, una nevada tranquila)
     if(dec){w={cloud:Math.max(.45,Math.min(.8,w.cloud)),rain:0,snow:Math.max(.6,w.snow||0),fog:Math.min(.3,w.fog||0),storm:0,wind:Math.min(1.2,w.wind)};name="❄️ Nieve (¡es diciembre!)"}}
-  return{wx:w,cover:dec||(!rwOff()&&w.snow>.55)?1:0,xmas,fw:rwFw(),name,city:RW.city}}
+  return{wx:w,cover:dec||(!rwOff()&&w.snow>.55)?1:0,xmas,fw:rwFw(),name,city:RW.city,sea:rwSeason(d)}}
+// (8.3) estación del año en el pueblo: primavera (marzo-mayo), verano (junio-agosto), otoño (septiembre-noviembre) e invierno
+// (diciembre-febrero; en diciembre, además, la nieve). window.SEA_FORCE la fija a mano (para probar).
+function rwSeason(d){const f=window.SEA_FORCE;if(f&&/^(pri|ver|oto|inv)$/.test(f))return f;const mo=(d||new Date(rwNow())).getMonth()+1;return mo>=3&&mo<=5?"pri":mo>=6&&mo<=8?"ver":mo>=9&&mo<=11?"oto":"inv"}
 setInterval(()=>{if(!RW.t||Date.now()-RW.t>30*6e4)rwFetch();window.WXENV=rwEnv()},2000);setTimeout(()=>{rwFetch();window.WXENV=rwEnv()},800);
 
 // ================= NOCHEVIEJA Y AÑO NUEVO =================

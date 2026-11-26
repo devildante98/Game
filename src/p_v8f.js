@@ -281,3 +281,23 @@ setTimeout(async()=>{try{const F=window.FB;if(!F||!F.bingoGet||!v8Uid())return;c
 {let bngLastStart="";setInterval(()=>{try{const o=bngSt(),now=bngNow(),R=Math.floor(now/BNG.PER),t=now-R*BNG.PER;const x=o.my.find(y=>y.r===R);
   if(x&&t>=BNG.LOB&&t<BNG.LOB+8000&&bngLastStart!==x.id&&!nxOpen("bngP")){bngLastStart=x.id;toast("🎱 ¡Empieza tu partida de Bingo en la "+BNG_S[x.s].n+"! Ve a Online › 🎱 Bingo.")}}catch(e){}},2000)}
 {const _hb=hubBadges;hubBadges=function(){const o=_hb();try{const b=bngSt(),R=Math.floor(bngNow()/BNG.PER);if(b.my.some(y=>y.r===R&&(BG.mine[y.id]||[]).length))o.onl=(o.onl|0)+1}catch(e){}return o}}
+
+// ================= ESTACIONES DEL AÑO (8.3) =================
+// El pueblo cambia con la estación (p_land3d.js: hierba, árboles, flores, hojas que caen, luciérnagas…) y cada estación
+// hace más fáciles de encontrar algunos tipos de Pokémon en la Exploración.
+const SEA_I={pri:{n:"Primavera",ic:"🌸",ty:["grass","fairy","bug"],txt:"¡Ha llegado la primavera! Flores en el prado y pétalos de cerezo por el aire."},
+  ver:{n:"Verano",ic:"☀️",ty:["water","fire","electric"],txt:"¡Ha llegado el verano! Sol fuerte de día y luciérnagas por la noche."},
+  oto:{n:"Otoño",ic:"🍂",ty:["ghost","dark","ground"],txt:"¡Ha llegado el otoño! Árboles de colores y hojas secas volando."},
+  inv:{n:"Invierno",ic:"❄️",ty:["ice","steel","psychic"],txt:"¡Ha llegado el invierno! Escarcha en el prado (y en diciembre, nieve)."}};
+const seaNow=()=>{try{return(window.WXENV&&window.WXENV.sea)||rwSeason()}catch(e){return "pri"}};
+const SEA_TYN={grass:"Planta",fairy:"Hada",bug:"Bicho",water:"Agua",fire:"Fuego",electric:"Eléctrico",ghost:"Fantasma",dark:"Siniestro",ground:"Tierra",ice:"Hielo",steel:"Acero",psychic:"Psíquico"};
+const seaTyTxt=k=>SEA_I[k].ty.map(t=>SEA_TYN[t]||t).join(", ");
+// Exploración: con un 30 % de probabilidad, el Pokémon salvaje es de un tipo de la estación (misma rareza)
+{const _w=wildPick;wildPick=function(r){const p=_w.apply(this,arguments);try{if(!(typeof XGSW!=="undefined"&&XGSW)||!EX.M||EX.M.base==="c")return p;const si=SEA_I[seaNow()];
+  if(si&&p&&!si.ty.includes(p[1])&&Math.random()<.3){const pool=P.filter(q=>q&&q[2]===r&&si.ty.includes(q[1])&&v8Base(q));if(pool.length)return pool[Math.floor(Math.random()*pool.length)]}}catch(e){}return p}}
+// aviso al empezar cada estación (una vez), y la estación en el diario
+setInterval(()=>{try{if(typeof S==="undefined"||!S||!S.owned)return;const k=seaNow(),y=v8Mad().y,id=k+(k==="inv"&&v8Mad().m<=2?y-1:y);if(S.seaSeen===id)return;const first=!S.seaSeen;S.seaSeen=id;save();
+  const si=SEA_I[k];toast(si.ic+" "+si.txt+" En la Exploración salen más Pokémon de tipo "+seaTyTxt(k)+".");if(!first)diaryAdd(si.ic,"Empieza "+(k==="pri"?"la ":"el ")+si.n.toLowerCase()+" en el pueblo",null,0,"o")}catch(e){}},5000);
+// la estación junto al clima en Ajustes
+setInterval(()=>{try{const l=$("wxOpt");if(!l)return;let e=$("seaTxt");const k=seaNow(),si=SEA_I[k],h=si.ic+" Estación: <b>"+si.n+"</b> · en la Exploración salen más Pokémon de tipo "+seaTyTxt(k);
+  if(!e){e=document.createElement("small");e.id="seaTxt";e.className="mut";e.style.display="block";l.after(e)}if(e._h!==h){e._h=h;e.innerHTML=h}}catch(e){}},3000);

@@ -1,9 +1,9 @@
 // =====================================================================================
 // Anuncia en Discord las novedades de cada versión nueva del juego (la lista NEWS de src/assemble.py, la misma que se
 // ve en el juego en «Novedades»). Lo ejecuta GitHub Actions (.github/workflows/novedades.yml) al publicar en main.
-//  · Cada versión se anuncia una sola vez: la última anunciada se apunta en Firestore (discordLog/novedades_ultima).
+//  · Cada versión se anuncia una sola vez: la última anunciada se apunta en Firestore (discordLog/novedades_avisos).
 //  · La primera vez solo se anuncia la versión más reciente, para no llenar el canal con las antiguas.
-//  · Canal: DISCORD_WEBHOOK_NOVEDADES; si no existe, el de eventos; y si tampoco, el de sorteos.
+//  · Canal: DISCORD_WEBHOOK_NOVEDADES; si no existe, el de Avisos (DISCORD_WEBHOOK_AVISOS). Nunca el de sorteos.
 // Uso: node src/tools/discord/novedades.js [--probar]   (--probar: enseña lo que enviaría, sin enviar ni apuntar nada)
 // =====================================================================================
 const fs = require("fs"), path = require("path");
@@ -45,7 +45,7 @@ function embed(o) {
   const {initializeApp} = R("firebase-admin/app"), {getFirestore} = R("firebase-admin/firestore");
   initializeApp({projectId: "pokegacha-fdef9"});
   const db = getFirestore(), D = require(path.join(RAIZ, "_server/discord.js"));
-  const ref = db.doc("discordLog/novedades_ultima"), s = await ref.get();
+  const ref = db.doc("discordLog/novedades_avisos"), s = await ref.get();
   const ult = s.exists ? String(s.data().v || "") : "";
   // nuevas: las que van antes de la última anunciada (como mucho 4); la primera vez, solo la más reciente
   let nuevas = ult ? N.slice(0, Math.max(0, N.findIndex((o) => o.v === ult))) : N.slice(0, 1);
@@ -54,7 +54,7 @@ function embed(o) {
   if (!nuevas.length) { console.log("Nada nuevo que anunciar (última: " + ult + ")"); return; }
   for (const o of nuevas) {
     const ok = await D.enviar("novedades", embed(o));
-    if (!ok) { console.log("::warning::No se ha podido enviar a Discord la versión " + o.ver + " (¿falta el webhook?)"); process.exitCode = 0; return; }
+    if (!ok) { console.log("::warning::No se ha podido enviar a Discord la versión " + o.ver + " (falta el secreto DISCORD_WEBHOOK_AVISOS con el webhook del canal de Avisos)"); process.exitCode = 0; return; }
     await ref.set({v: o.v, at: Date.now()});
     console.log("Anunciada la versión " + o.ver);
     await new Promise((r) => setTimeout(r, 1500));

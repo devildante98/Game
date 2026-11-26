@@ -63,7 +63,7 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
   const H=(x,z)=>{const h=H0(x,z);if(z>70||z<0||x<-60||x>60)return h;const[w,y]=padW(x,z),rd=roadD(x,z),hr=rd<2.4?(1-rd/2.4)*.25:0;return h+(y-h)*w-hr};
   const EYE=[0,15,-28];
   // entorno (p_weather.js): SNW = suelo nevado, XMAS = adornos de Navidad; XM = bombillas de los árboles
-  let SNW=0,XMAS=0;const XM=[],XTREE=[-16.8,36];/* el árbol de Navidad: detrás de la calle, entre la Liga y el Estadio (no tapa ningún edificio ni cartel) */
+  let SNW=0,XMAS=0,SEA="";const XM=[],XTREE=[-16.8,36];/* el árbol de Navidad: detrás de la calle, entre la Liga y el Estadio (no tapa ningún edificio ni cartel) */
   // ---------- paletas de la hora del día ----------
   const PAL={day:{top:"#3f86dc",hor:"#cfe6fb",low:"#f2f6ee",sun:[1,.97,.86],sunCol:"#fff6d8",amb:[.55,.6,.7],gnd:[.42,.4,.32],lit:[.62,.6,.52],sunDir:[-.35,.62,.7],water:"#3a7fbf",waterHi:"#a9d4f2",fog:[120,520],star:0,mtTint:[1,1,1]},
     dawn:{top:"#4d6fb8",hor:"#ffc8a0",low:"#ffe6cc",sun:[1,.8,.6],sunCol:"#ffd9a8",amb:[.5,.48,.58],gnd:[.42,.34,.32],lit:[.78,.58,.44],sunDir:[.75,.18,.62],water:"#5a6fa8",waterHi:"#ffc8a6",fog:[100,460],star:.15,mtTint:[1,.9,.9]},
@@ -72,8 +72,15 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
   // (los colores pueden venir como "#rrggbb" o ya como [r,g,b]: durante el paso de una hora del día a otra se mezclan los dos)
   const lerpP=(a,b,k)=>{const o={},cv=v=>typeof v==="string"?hex(v):v;for(const key in a){const va=cv(a[key]),vb=cv(b[key]);o[key]=Array.isArray(va)?va.map((v,i)=>v+(vb[i]-v)*k):va+(vb-va)*k}return o};
   // ---------- lo fijo: relieve y árboles ----------
-  const terrainCol=(x,y,z,ny)=>{const n=fbm(x*.08,z*.08,3),g1=[.36,.62,.27],g2=[.5,.7,.32],dry=[.66,.66,.38],rock=[.48,.46,.44],rock2=[.38,.37,.38],snow=[.96,.97,1],sand=[.84,.78,.58];
-    let c=mix(g1,g2,n);if(z<34)c=mix(c,dry,fbm(x*.03,z*.03,3)*.5);if(y<1.4&&y>-1)c=mix(c,sand,Math.min(1,(1.4-y)/1.4));
+  // (8.3) colores de la hierba en cada estación: primavera muy verde con manchas de flores, verano dorado, otoño ocre con
+  // hojas caídas e invierno (sin nieve) escarchado
+  const SEA_G={pri:[[.32,.66,.3],[.5,.78,.34],[.56,.7,.36]],ver:[[.46,.6,.2],[.7,.7,.28],[.84,.72,.34]],oto:[[.5,.5,.22],[.66,.5,.2],[.72,.56,.3]],inv:[[.42,.5,.38],[.56,.6,.5],[.62,.62,.52]]};
+  const SEA_FL=[[.98,.62,.8],[1,.9,.35],[.98,.98,.95],[.72,.6,.98]],SEA_LF=[[.82,.4,.12],[.72,.22,.1],[.9,.66,.2]],SEA_SF=[[1,.84,.12],[.98,.7,.1],[1,.9,.3]];
+  const terrainCol=(x,y,z,ny)=>{const n=fbm(x*.08,z*.08,3),sg=SEA_G[SEA]||null,g1=sg?sg[0]:[.36,.62,.27],g2=sg?sg[1]:[.5,.7,.32],dry=sg?sg[2]:[.66,.66,.38],rock=[.48,.46,.44],rock2=[.38,.37,.38],snow=[.96,.97,1],sand=[.84,.78,.58];
+    let c=mix(g1,g2,n);if(z<34)c=mix(c,dry,fbm(x*.03,z*.03,3)*.5);
+    // manchas de flores (primavera) o de hojas caídas (otoño) en el prado llano
+    if(SEA&&SEA!=="inv"&&ny>.86&&y>.5){const f=fbm(x*.22+7,z*.22+3,2),th=SEA==="ver"?.6:.52;if(f>th){const L=SEA==="pri"?SEA_FL:SEA==="ver"?SEA_SF:SEA_LF,k=Math.floor(hsh(Math.round(x*3),Math.round(z*3))*L.length)%L.length;c=mix(c,L[k],Math.min(.8,(f-th)*5))}}
+    if(y<1.4&&y>-1)c=mix(c,sand,Math.min(1,(1.4-y)/1.4));
     const steep=1-ny;if(steep>.25)c=mix(c,mix(rock,rock2,n),Math.min(1,(steep-.25)*3.5));
     if(z>0&&z<70&&Math.abs(x)<60){const rd=roadD(x,z),pw=padW(x,z)[0],dirt=mix([.66,.54,.38],[.74,.62,.44],fbm(x*.3,z*.3,2));if(rd<2.2)c=mix(c,dirt,Math.min(1,(2.2-rd)/1.2));else if(pw>.55)c=mix(c,mix(dirt,c,.45),(pw-.55)/.45)}
     const sl=58+fbm(x*.05,z*.05,3)*16;if(y>sl)c=mix(c,snow,Math.min(1,(y-sl)/6)*(steep>.55?.55:1));
@@ -103,7 +110,10 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
       if(pine){const g=mix([.12,.36,.2],[.2,.46,.24],tone);let g2=mix(g,[1,1,1],.1);if(SNW)g2=mix(g2,[.95,.97,1],.82);
         if(XMAS&&XM.length<520&&z<110&&Math.abs(x)<110&&hsh(k,29)<.5)for(let q=0;q<6;q++){const f=.12+q/6*.8,ang=q*2.399+k,rr=(1.7-1.1*f)*s*.92;XM.push({p:[x+Math.cos(ang)*rr,y+.9*s+f*4.6*s,z+Math.sin(ang)*rr],c:q%4,r:.32*s,ph:hsh(k,q)*6})}
         trunk(x,y-.2,z,.22*s,1.2*s,[.36,.24,.16]);cone(x,y+.9*s,z,1.7*s,2.6*s,g,g2);cone(x,y+2.2*s,z,1.3*s,2.3*s,g,g2);cone(x,y+3.4*s,z,.9*s,2*s,g2,mix(g2,[1,1,1],.08))}
-      else{const g=mix([.24,.5,.2],[.42,.62,.26],tone);let g2=mix(g,[1,.95,.6],.18);if(SNW)g2=mix(g2,[.95,.97,1],.85);trunk(x,y-.2,z,.25*s,1.8*s,[.4,.28,.18]);blob(x,y+2.8*s,z,1.9*s,1.6*s,g,g2)}}
+      else{let g=mix([.24,.5,.2],[.42,.62,.26],tone);
+        if(!SNW){if(SEA==="oto"){const L=[[.86,.42,.1],[.76,.2,.1],[.92,.7,.18],[.6,.5,.16]];g=L[Math.floor(hsh(k,47)*L.length)%L.length]}
+          else if(SEA==="pri"&&hsh(k,47)<.35)g=mix([.98,.72,.84],[.96,.86,.92],tone);else if(SEA==="ver")g=mix([.16,.44,.14],[.3,.56,.18],tone);else if(SEA==="inv")g=mix([.46,.42,.34],[.56,.54,.48],tone)}
+        let g2=mix(g,[1,.95,.6],.18);if(SNW)g2=mix(g2,[.95,.97,1],.85);trunk(x,y-.2,z,.25*s,1.8*s,[.4,.28,.18]);blob(x,y+2.8*s,z,(SEA==="inv"&&!SNW?1.5:1.9)*s,(SEA==="inv"&&!SNW?1.25:1.6)*s,g,g2)}}
     // rocas sueltas en el prado y en la orilla
     for(let k=0;k<70;k++){const x=(hsh(k,31)-.5)*200,z=4+hsh(k,37)*120,y=H(x,z);if(y<.2)continue;if(z<62&&Math.abs(x)<62&&(TOWN.some(b=>Math.hypot(x-b.x,z-b.z)<b.r+2)||roadD(x,z)<2.5))continue;const r=.5+hsh(k,41)*1.4,c=mix([.5,.5,.5],[.62,.6,.56],hsh(k,43));blob(x,y,z,r,r*.6,c,SNW?[.94,.96,1]:mix(c,[1,1,1],.1))}
     // el gran árbol de Navidad del pueblo (entre la Liga y el Estadio)
@@ -407,7 +417,20 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
     if(W.rain>.02){const n=Math.round(1500*W.rain*lite),c=night?[.55,.62,.8]:[.78,.82,.9],tilt=.18+W.wind*.06;for(let i=0;i<n;i++){const h1=hsh(i,4),h2=hsh(i,5),h3=hsh(i,6),z=-12+h3*h3*110,Hh=24+z*.3,v=26+h1*10,
         y=Hh-((t*v+h2*Hh)%Hh),x=cx+((h1*170+t*W.wind*3)%170)-85,L=1.3+z*.012,w=.022+z*.0009,a=(night?.28:.38)*(1-z/130);if(y<H(x,z)-.3)continue;
         V4(x-w,y,z,c,0);V4(x+w,y,z,c,0);V4(x+w+tilt*L,y-L,z,c,a);V4(x-w,y,z,c,0);V4(x+w+tilt*L,y-L,z,c,a);V4(x-w+tilt*L,y-L,z,c,a)}}
+    // (8.3) estación: pétalos de cerezo en primavera y hojas secas en otoño, que caen dando vueltas (no con lluvia fuerte ni nevando)
+    const SE=(R.env&&R.env.sea)||"";
+    if((SE==="pri"||SE==="oto")&&W.rain<.3&&W.snow<.05){const n=Math.round((SE==="pri"?260:200)*lite),PC=SE==="pri"?[[1,.74,.86],[1,.84,.92],[.98,.66,.8]]:[[.9,.46,.12],[.8,.26,.1],[.95,.72,.22]];
+      for(let i=0;i<n;i++){const h1=hsh(i,51),h2=hsh(i,52),h3=hsh(i,53),z=-10+h3*h3*95,v=.7+h1*.9,Hh=22+z*.28,y=Hh-((t*v+h2*Hh)%Hh),
+        x=cx+((h1*170+Math.sin(t*.9+i)*2.4+t*(1.2+W.wind))%170)-85,sp=t*(2+h2*3)+i,r=(.09+h2*.07+z*.0014)*(SE==="oto"?1.3:1);if(y<H(x,z)-.1)continue;
+        const c=PC[i%3],cw=Math.abs(Math.cos(sp)),a=(night?.55:.92)*(1-z/120);
+        V4(x-r*cw,y,z,c,a);V4(x,y+r*.8,z,c,a);V4(x+r*cw,y,z,c,a);V4(x-r*cw,y,z,c,a);V4(x+r*cw,y,z,c,a);V4(x,y-r*.8,z,c,a)}}
     const nN=WB.n;
+    // destellos del sol en el agua (verano, de día)
+    if(SE==="ver"&&!night&&W.cloud<.6&&W.rain<.1){for(let i=0;i<Math.round(160*lite);i++){const h1=hsh(i,71),h2=hsh(i,72),z=40+h2*80,x=Math.max(-74,Math.min(74,cx+(h1*150-75)));if(H(x,z)>-.3)continue;const b=Math.pow(Math.max(0,Math.sin(t*(2+h1*3)+i*1.3)),6);if(b<.05)continue;
+        quad(x,.22,z,1+h2*.9,.22,[1,.97,.82],.95*b*(1-(z-40)/120))}}
+    // luciérnagas en las noches de verano (con brillo, por eso van después de nN)
+    if(SE==="ver"&&night&&W.rain<.2){const n=Math.round(150*lite);for(let i=0;i<n;i++){const h1=hsh(i,61),h2=hsh(i,62),h3=hsh(i,63),z=4+h3*70,x=cx+(h1*150-75)+Math.sin(t*.4+i)*2.5,gy=H(x,z),
+        y=gy+.6+h2*3.5+Math.sin(t*.7+i*1.7)*.6,b=Math.max(0,Math.sin(t*(1.5+h1*2)+i*2.1));if(b<.05)continue;quad(x,y,z,.22,.22,[.75,1,.35],.85*b*(1-z/90));quad(x,y,z,.6,.6,[.6,.9,.2],.22*b*(1-z/90))}}
     // rayo (tormenta): una línea quebrada en el cielo, lejos
     if(R.bolt&&t-R.bolt.t0<.35){const b=R.bolt,a=Math.max(0,1-(t-b.t0)/.35)*(Math.sin((t-b.t0)*90)>-.2?1:.3),c=[.85,.9,1];let px=b.x,py=180;for(let k=0;k<9;k++){const nx=px+(hsh(b.s,k)-.5)*26,ny=py-17;const w=1.6;V4(px-w,py,b.z,c,a);V4(px+w,py,b.z,c,a);V4(nx+w,ny,b.z,c,a);V4(px-w,py,b.z,c,a);V4(nx+w,ny,b.z,c,a);V4(nx-w,ny,b.z,c,a);px=nx;py=ny}}
     // fuegos artificiales: un cohete sube, estalla en una esfera de chispas de colores que se abre, cae y se apaga
@@ -452,13 +475,15 @@ function LAND3(cv){let gl=null;try{gl=cv.getContext("webgl",{antialias:true,alph
   let vw=1,vh=1,built=false,cur=null,curK="";
   const R={ok:true,
     resize(w,h,scale){vw=w;vh=h;cv.width=Math.max(1,Math.round(w*scale));cv.height=Math.max(1,Math.round(h*scale));gl.viewport(0,0,cv.width,cv.height)},
-    draw(t,tod){const EV=R.env||{},sn=EV.cover?1:0,xm=EV.xmas?1:0;if(sn!==SNW||xm!==XMAS){SNW=sn;XMAS=xm;built=false;townKey=""}if(!built){buildStatic();built=true}
+    draw(t,tod){const EV=R.env||{},sn=EV.cover?1:0,xm=EV.xmas?1:0,se=EV.sea||"";if(sn!==SNW||xm!==XMAS||se!==SEA){SNW=sn;XMAS=xm;SEA=se;built=false;townKey=""}if(!built){buildStatic();built=true}
       // la luz cambia poco a poco al pasar de una hora del día a otra
       const tgt=PAL[tod]||PAL.day;if(!cur){cur=JSON.parse(JSON.stringify(tgt));curK=tod}
       if(curK!==tod){R.from=R.from||{p:lerpP(PAL[curK]||PAL.day,PAL[curK]||PAL.day,0),t:t};const k=Math.min(1,(t-R.from.t)/4);cur=lerpP(R.from.p,tgt,k);if(k>=1){curK=tod;R.from=null}}
       const P=lerpP(PAL[curK]||PAL.day,PAL[curK]||PAL.day,0);if(R.from)Object.assign(P,cur);
       // el tiempo cambia poco a poco (unos segundos) hacia el que toca
       {const tw=EV.wx||{},W=R.W=R.W||{cloud:0,rain:0,snow:0,fog:0,storm:0,wind:0,fw:0},dt=Math.min(1,Math.max(0,t-(R._wt||t)));R._wt=t;for(const k in W){const v=+(k==="fw"?EV.fw:tw[k])||0;W[k]+=(v-W[k])*Math.min(1,dt*.6+(R._wf?0:1))}R._wf=1;wxPal(P,W,t)}
+      // (8.3) verano: luz de sol un poco más cálida y fuerte de día
+      if(SEA==="ver"&&tod!=="night"){P.lit=[P.lit[0]*1.1,P.lit[1]*1.05,P.lit[2]*.95];if(tod==="day"&&(R.W?R.W.cloud:0)<.5){const tc=typeof P.top==="string"?hex(P.top):P.top;P.top=mix(tc,[.1,.42,.92],.45)}}
       // cámara: un balanceo muy lento
       R.pan+=(R.panT-R.pan)*.18;const asp=vw/vh,cam=R.cam||{E:EYE[1],p:Math.atan2(1.5,168)},sw=0,ex=EYE[0]+R.pan+sw,eye=[ex,cam.E,EYE[2]],tg=[R.pan+sw*.5,cam.E+Math.tan(cam.p)*168,140],VP=mul(persp((R.fov||(asp<1?62:44))*Math.PI/180,asp,1,1400),look(eye,tg));
       buildDyn(t,P);

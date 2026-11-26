@@ -306,7 +306,7 @@ setInterval(()=>{try{const l=$("wxOpt");if(!l)return;let e=$("seaTxt");const k=s
 // Las casillas de los que te faltan muestran su silueta y su nombre; al pasar el ratón, una pista de dónde conseguirlo.
 let DEXPRE=null;
 function dexHow(p){try{const n=p[0],r=p[2];
-  if(/^Mega-|Gigamax/.test(n))return "sale en el gacha, en las tiradas épicas (★★★; las súper tiradas dan más). Después, pon a "+megaBase(n)+" en tu equipo y "+(/Gigamax/.test(n)?"pulsa «🔴 Gigamax»":"pulsa «🧬 Megaevolucionar»")+" en combate";
+  if(/^Mega-|Gigamax/.test(n))return "sale en el gacha, en las tiradas "+(r==="L"?"de legendario (★★★★★":"épicas (★★★")+"; las súper tiradas dan más). Después, pon a "+megaBase(n)+" en tu equipo y "+(/Gigamax/.test(n)?"pulsa «🔴 Gigamax»":"pulsa «🧬 Megaevolucionar»")+" en combate";
   if(r==="M")return "Pokémon singular: búscalo en eventos y en el gacha";
   if(!DEXPRE){DEXPRE={};try{P.forEach(q=>EVO(q[0]).forEach(e=>{if(e&&e[0]&&!DEXPRE[e[0]])DEXPRE[e[0]]=q[0]}))}catch(e){}}
   const pre=DEXPRE[n],ev=pre?" · o haz evolucionar a "+pre:"";const tl=typeof TLR_COST!=="undefined"&&TLR_COST[r]&&v8Base(p)?" · o fabrícalo en el Taller de repetidos":"";

@@ -63,7 +63,7 @@ async function enviar(url, rol, content) {
   const {initializeApp} = R("firebase-admin/app"), {getFirestore} = R("firebase-admin/firestore");
   initializeApp({projectId: "pokegacha-fdef9"});
   const db = getFirestore();
-  const url = process.env.DISCORD_WEBHOOK_NOVEDADES || "", rol = String(process.env.DISCORD_ROL_NOVEDADES || process.env.DISCORD_ROL_AVISOS || "").replace(/\D/g, "");
+  const url = process.env.DISCORD_WEBHOOK_NOVEDADES || process.env.DISCORD_WEBHOOK_AVISOS || "", rol = String(process.env.DISCORD_ROL_NOVEDADES || process.env.DISCORD_ROL_AVISOS || "").replace(/\D/g, "");
   if (!okURL(url)) { console.log("::warning::Falta el secreto DISCORD_WEBHOOK_NOVEDADES (el webhook del canal #novedades): no se anuncia nada."); return; }
   const ref = db.doc("discordLog/novedades_canal"), s = await ref.get();
   const ult = s.exists ? String(s.data().v || "") : "";

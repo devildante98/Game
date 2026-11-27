@@ -21,12 +21,24 @@ function merSlots0(day){const[y,m,d]=day.split("-").map(Number),r=v8Rng("mer|"+d
   return out.sort((a,b)=>a-b).map((mi,i)=>{const a=v8MadTs(y,m,d,Math.floor(mi/60),mi%60);return{id:day+"_"+i,a,b:a+MER_D}})}
 function merNow(t){t=t||Date.now();for(const off of [0,-864e5]){const s=merSlots(v8Day(t+off)).find(x=>t>=x.a&&t<x.b);if(s)return s}return null}
 function merNext(t){t=t||Date.now();for(const off of [0,864e5,2*864e5]){const s=merSlots(v8Day(t+off)).find(x=>x.a>t);if(s)return s}return null}
-function merOffers(w){const r=v8Rng("merof|"+w.id),out=[];
-  const pk=v8Pool("E",r)||v8Pool("R",r),sh=r()<.12;out.push({k:"mon",n:pk,sh,price:sh?Math.max(2e8,prodH(10)):Math.max(3e7,prodH(3)),ic:"🌟",t:(sh?"✨ ":"")+pk+(sh?" variocolor":""),d:"Un Pokémon poco común"+(sh?", ¡y brillante!":"")+" a tu nivel."});
-  const bundles=[{cand:5,ub:10},{mb:1,ub:5},{ppmax:3,cand:3},{crys:2,ub:8},{sb:20,ub:10,cand:2}],bd=v8Pick(r,bundles);out.push({k:"it",it:bd,price:Math.max(1.5e7,prodH(1.5)),ic:"🎁",t:"Lote de objetos",d:Object.keys(bd).map(k=>bd[k]+" "+IN2(k)).join(" + ")});
-  const eg=v8Pool("E",r,[pk])||v8Pool("R",r);out.push({k:"egg",n:eg,price:Math.max(4e7,prodH(4)),ic:"🥚",t:"Huevo especial",d:"¿Qué saldrá? Un Pokémon poco común (y 1 de cada 30, variocolor). Eclosiona con unos combates."});
-  if(r()<.25)out.push({k:"it",it:{mb:1},price:Math.max(8e7,prodH(8)),ic:"🟣",t:"Master Ball",d:"La Poké Ball definitiva: nunca falla."});
-  else{const h=v8Pick(r,HOLD)[0];out.push({k:"it",it:{[h]:1},price:Math.max(2.5e7,prodH(2.5)),ic:"💼",t:IN2(h),d:"Objeto equipable difícil de encontrar."})}
+// (8.6.5) precios de verdad: los objetos, con descuento sobre el precio de la tienda; los Pokémon y el huevo, con descuento
+// sobre lo que costaría sacarlos en el gacha con tus tiradas de ahora (un Épico sale de media 1 de cada 25 tiradas).
+// ref = precio normal (se ve tachado) · price = precio del mercader
+const merShopP=id=>{const a=(typeof ITEMS!=="undefined"&&ITEMS.find(i=>i[0]===id))||(typeof HOLD!=="undefined"&&HOLD.find(i=>i[0]===id));return a&&+a[2]>0?+a[2]:id==="crys"?5e6:2e6};
+const merItRef=it=>Object.keys(it).reduce((a,k)=>a+merShopP(k)*it[k],0);
+const merPull=()=>{try{return Math.max(1,cost(1,false))}catch(e){return 1000}};
+function merOffers(w){const r=v8Rng("merof|"+w.id),out=[],pc=merPull(),off=(ref,d)=>({ref:Math.round(ref),price:Math.max(1,Math.round(ref*(1-d))),pct:Math.round(d*100)});
+  // 1) Pokémon: a veces legendario (1 de cada 10 visitas), y variocolor 1 de cada 5 · 75 % menos que en el gacha
+  const leg=r()<.1,pk=(leg&&v8Pool("L",r))||v8Pool("E",r)||v8Pool("R",r),rar=PM[pk]?PM[pk][2]:"E",sh=r()<.2,pref=pc*(rar==="L"?100:rar==="E"?25:5)*(sh?8:1);
+  out.push(Object.assign({k:"mon",n:pk,sh,ic:"🌟",t:(sh?"✨ ":"")+pk+(sh?" variocolor":""),d:(rar==="L"?"¡Un Pokémon legendario":"Un Pokémon poco común")+(sh?" y brillante":"")+" a tu nivel! En el gacha te costaría unas "+fmt(Math.round(pref/pc))+" tiradas."},off(pref,.75)));
+  // 2) lote de objetos, grande · 65 % menos que en la tienda
+  const bundles=[{cand:10,ub:20},{mb:2,ub:10},{ppmax:5,cand:5},{crys:3,ub:15},{sb:40,ub:20,cand:4},{mb:1,cand:5,crys:1}],bd=v8Pick(r,bundles);
+  out.push(Object.assign({k:"it",it:bd,ic:"🎁",t:"Lote de objetos",d:Object.keys(bd).map(k=>bd[k]+" "+IN2(k)).join(" + ")},off(merItRef(bd),.65)));
+  // 3) huevo especial (variocolor 1 de cada 20) · 75 % menos
+  const eg=v8Pool("E",r,[pk])||v8Pool("R",r);out.push(Object.assign({k:"egg",n:eg,ic:"🥚",t:"Huevo especial",d:"¿Qué saldrá? Un Pokémon poco común (y 1 de cada 20, variocolor). Eclosiona con unos combates."},off(pc*15,.75)));
+  // 4) Master Ball (en la mitad de las visitas; a veces 2) o un objeto equipable · 70 % menos que en la tienda
+  if(r()<.5){const n=r()<.3?2:1;out.push(Object.assign({k:"it",it:{mb:n},ic:"🟣",t:n>1?"2 Master Ball":"Master Ball",d:"La Poké Ball definitiva: nunca falla. ¡A precio de ganga!"},off(merItRef({mb:n}),.7)))}
+  else{const h=v8Pick(r,HOLD)[0];out.push(Object.assign({k:"it",it:{[h]:1},ic:"💼",t:IN2(h),d:"Objeto equipable difícil de encontrar."},off(merItRef({[h]:1}),.7)))}
   return out}
 const merSt=w=>{S.mer=S.mer&&S.mer.w===w.id?S.mer:{w:w.id,b:{}};return S.mer};
 v8Tab("act","merP","🧳 Mercader","🧳 Mercader misterioso","Llega al pueblo 3 veces al día y se queda solo 30 minutos con ofertas que no verás en ninguna tienda. ¡Te avisamos en el juego y en Discord!",()=>merUI(),0);
@@ -38,12 +50,12 @@ function merUI(){const b=$("merPB");if(!b)return;const w=merNow();
   b.innerHTML='<div class="merhd"><span class="merbig">🧳</span><div><b>¡El mercader está en el pueblo!</b><small>Se va en <b id="merLeft">'+H2(left/1000)+'</b>. Cada oferta se puede comprar una vez.</small></div></div>'+
     '<div class="mergrid">'+L.map((o,i)=>{const got=st.b[i],can=S.t>=v8Disc(o.price)&&!got&&!(o.k==="egg"&&(S.eggs||[]).length>=6);
       return '<div class="merc'+(got?' got':'')+'"><span class="meric">'+(o.n&&PM[o.n]?icoHD(PM[o.n],72,false,!!o.sh):'<span class="merem">'+o.ic+'</span>')+'</span><b>'+esc(o.t)+'</b><small>'+esc(o.d)+'</small>'+
-        (got?'<span class="skon">✓ Comprado</span>':'<button class="red" data-merb="'+i+'"'+(can?'':' disabled')+'>'+(v8Disc(o.price)<o.price?'<s>'+fmt(o.price)+'</s> ':'')+fmt(v8Disc(o.price))+' 🎟️</button>')+(o.k==="egg"&&(S.eggs||[]).length>=6&&!got?'<small class="mut">Ya llevas 6 huevos.</small>':'')+'</div>'}).join("")+'</div>'}
+        (got?'<span class="skon">✓ Comprado</span>':'<span class="merpct">−'+Math.round((1-v8Disc(o.price)/o.ref)*100)+' %</span><small class="merref">Precio normal: <s>'+fmt(o.ref)+' 🎟️</s></small><button class="red" data-merb="'+i+'"'+(can?'':' disabled')+'>'+fmt(v8Disc(o.price))+' 🎟️</button>')+(o.k==="egg"&&(S.eggs||[]).length>=6&&!got?'<small class="mut">Ya llevas 6 huevos.</small>':'')+'</div>'}).join("")+'</div>'}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#merPB [data-merb]");if(!t)return;const w=merNow();if(!w){merUI();return}
   const st=merSt(w),i=+t.dataset.merb,o=merOffers(w)[i];if(!o||st.b[i]||S.t<v8Disc(o.price))return;if(o.k==="egg"&&(S.eggs||[]).length>=6){toast("Ya llevas 6 huevos.");return}
   S.t-=v8Disc(o.price);st.b[i]=1;qEv("buy",1);
   if(o.k==="mon"){const lv=clampL(Math.max(5,leadLevel()-2));giveMon(o.n,lv,o.sh);toast("🧳 ¡"+o.t+" se une a tu equipo!");if(o.sh)diaryAdd("🧳","Has comprado un "+o.n+" variocolor al mercader misterioso.",o.n,1,"pk")}
-  else if(o.k==="egg"){const sp=eggBase(o.n);S.eggs=S.eggs||[];S.eggs.push({s:sp,st:0,need:Math.max(2,eggNeed(sp)-2),at:Date.now(),sh:Math.random()<1/30?1:0,nt:Math.floor(Math.random()*NAT.length),mer:1});toast("🥚 ¡Huevo especial! Llévalo contigo en los combates para que eclosione.")}
+  else if(o.k==="egg"){const sp=eggBase(o.n);S.eggs=S.eggs||[];S.eggs.push({s:sp,st:0,need:Math.max(2,eggNeed(sp)-2),at:Date.now(),sh:Math.random()<1/20?1:0,nt:Math.floor(Math.random()*NAT.length),mer:1});toast("🥚 ¡Huevo especial! Llévalo contigo en los combates para que eclosione.")}
   else{Object.keys(o.it).forEach(k=>{S.bag[k]=(S.bag[k]||0)+o.it[k]});toast("🧳 Has comprado: "+o.d)}
   snd("lvl");save();render();merUI()});
 // aviso al llegar (una vez por visita) y botón en la pantalla principal mientras está

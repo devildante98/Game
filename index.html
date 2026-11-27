@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.4"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.5"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795737587">
+<meta name="game-build" content="1795774596">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3586,6 +3586,10 @@ body.dark .card.lock .dexsil{filter:brightness(0) invert(.75) opacity(.45)}
 /* en la Exploración a pantalla completa (capa con z-index 2147480000) los avisos también tienen que verse por encima */
 body.exfsOn #toast{z-index:2147482000}
 
+/* mercader (8.6.5): descuento y precio normal tachado */
+.merc .merpct{display:inline-block;margin:2px auto;padding:2px 10px;border-radius:999px;background:#2fae5a;color:#fff;font-weight:900;font-size:.8rem}
+.merc .merref{opacity:.75;font-size:.72rem}
+
 html.gmpre body:not(.gm):has(#auth[hidden])::before{content:"";position:fixed;inset:0;z-index:2147481000;background:radial-gradient(circle at 50% 45%,#4a6ae0,#18235e 70%)}
 html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:hidden}
 .nver{display:inline-block;margin-right:6px;padding:1px 8px;border-radius:999px;background:#2f6fd8;color:#fff;font-style:normal;font-size:.72rem;font-weight:800;vertical-align:middle}
@@ -3650,7 +3654,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.6.4</small>
+    <small class="pcver">Versión 8.6.5</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8406,8 +8410,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.6.4";
+const GAME_VER="8.6.5";
 const NEWS=[
+{v:"2026-11-27-8.6.5",ver:"8.6.5",at:"2026-11-27T11:16",t:"🔧 Arreglos/Mejoras",tt:"Mercader con ofertas de verdad",l:["Mercader misterioso: ahora sus ofertas son gangas de verdad. Los objetos cuestan entre un 65 y un 70 % menos que en la tienda (la Master Ball, 1.500.000 🎟️ en vez de 5.000.000) y los Pokémon y el huevo especial, un 75 % menos que sacarlos en el gacha", "Cada oferta muestra el descuento y su precio normal tachado", "Lotes de objetos más grandes, Master Ball en la mitad de las visitas (a veces 2), más variocolores y, de vez en cuando, ¡un Pokémon legendario!"]},
 {v:"2026-11-27-8.6.4",ver:"8.6.4",at:"2026-11-27T00:59",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos sin interrupciones",l:["Mientras juegas una partida de un minijuego ya no te salta ninguna ventana: ni la de versión nueva, ni invitaciones o solicitudes (retos, amistad, gremio…), ni avisos de eventos o novedades, ni el Pokémon sorpresa del Bingo", "Todas esperan y te salen al terminar la partida, después de ver tu puntuación"]},
 {v:"2026-11-27-8.6.3",ver:"8.6.3",at:"2026-11-27T00:53",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos con partidas siempre nuevas",l:["Minijuegos: cada partida empieza ahora con un orden totalmente nuevo e imprevisible. Antes, en algunos casos (por ejemplo, al cambiar del ordenador al móvil o al recargar), podía repetirse la misma partida, con los mismos Pokémon en el mismo sitio", "¡Golpea al Diglett! sigue dando a todos las mismas oportunidades: 2 Dugtrio y 1 Voltorb por cada 7 topos en cualquier partida"]},
 {v:"2026-11-27-8.6.2",ver:"8.6.2",at:"2026-11-27T00:36",t:"🔧 Arreglos/Mejoras",tt:"Avisos visibles en pantalla completa",l:["Exploración a pantalla completa: la ventana de solicitud de pareja y el aviso de «ya tiene pareja» ya salen por encima del mapa (antes se quedaban escondidos detrás)", "Los avisos de abajo (toques, abrazos, regalo de pareja…) también se ven ahora con el mapa a pantalla completa"]},
@@ -8865,7 +8870,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795737587";
+const GAME_B="1795774596";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -23135,12 +23140,24 @@ function merSlots0(day){const[y,m,d]=day.split("-").map(Number),r=v8Rng("mer|"+d
   return out.sort((a,b)=>a-b).map((mi,i)=>{const a=v8MadTs(y,m,d,Math.floor(mi/60),mi%60);return{id:day+"_"+i,a,b:a+MER_D}})}
 function merNow(t){t=t||Date.now();for(const off of [0,-864e5]){const s=merSlots(v8Day(t+off)).find(x=>t>=x.a&&t<x.b);if(s)return s}return null}
 function merNext(t){t=t||Date.now();for(const off of [0,864e5,2*864e5]){const s=merSlots(v8Day(t+off)).find(x=>x.a>t);if(s)return s}return null}
-function merOffers(w){const r=v8Rng("merof|"+w.id),out=[];
-  const pk=v8Pool("E",r)||v8Pool("R",r),sh=r()<.12;out.push({k:"mon",n:pk,sh,price:sh?Math.max(2e8,prodH(10)):Math.max(3e7,prodH(3)),ic:"🌟",t:(sh?"✨ ":"")+pk+(sh?" variocolor":""),d:"Un Pokémon poco común"+(sh?", ¡y brillante!":"")+" a tu nivel."});
-  const bundles=[{cand:5,ub:10},{mb:1,ub:5},{ppmax:3,cand:3},{crys:2,ub:8},{sb:20,ub:10,cand:2}],bd=v8Pick(r,bundles);out.push({k:"it",it:bd,price:Math.max(1.5e7,prodH(1.5)),ic:"🎁",t:"Lote de objetos",d:Object.keys(bd).map(k=>bd[k]+" "+IN2(k)).join(" + ")});
-  const eg=v8Pool("E",r,[pk])||v8Pool("R",r);out.push({k:"egg",n:eg,price:Math.max(4e7,prodH(4)),ic:"🥚",t:"Huevo especial",d:"¿Qué saldrá? Un Pokémon poco común (y 1 de cada 30, variocolor). Eclosiona con unos combates."});
-  if(r()<.25)out.push({k:"it",it:{mb:1},price:Math.max(8e7,prodH(8)),ic:"🟣",t:"Master Ball",d:"La Poké Ball definitiva: nunca falla."});
-  else{const h=v8Pick(r,HOLD)[0];out.push({k:"it",it:{[h]:1},price:Math.max(2.5e7,prodH(2.5)),ic:"💼",t:IN2(h),d:"Objeto equipable difícil de encontrar."})}
+// (8.6.5) precios de verdad: los objetos, con descuento sobre el precio de la tienda; los Pokémon y el huevo, con descuento
+// sobre lo que costaría sacarlos en el gacha con tus tiradas de ahora (un Épico sale de media 1 de cada 25 tiradas).
+// ref = precio normal (se ve tachado) · price = precio del mercader
+const merShopP=id=>{const a=(typeof ITEMS!=="undefined"&&ITEMS.find(i=>i[0]===id))||(typeof HOLD!=="undefined"&&HOLD.find(i=>i[0]===id));return a&&+a[2]>0?+a[2]:id==="crys"?5e6:2e6};
+const merItRef=it=>Object.keys(it).reduce((a,k)=>a+merShopP(k)*it[k],0);
+const merPull=()=>{try{return Math.max(1,cost(1,false))}catch(e){return 1000}};
+function merOffers(w){const r=v8Rng("merof|"+w.id),out=[],pc=merPull(),off=(ref,d)=>({ref:Math.round(ref),price:Math.max(1,Math.round(ref*(1-d))),pct:Math.round(d*100)});
+  // 1) Pokémon: a veces legendario (1 de cada 10 visitas), y variocolor 1 de cada 5 · 75 % menos que en el gacha
+  const leg=r()<.1,pk=(leg&&v8Pool("L",r))||v8Pool("E",r)||v8Pool("R",r),rar=PM[pk]?PM[pk][2]:"E",sh=r()<.2,pref=pc*(rar==="L"?100:rar==="E"?25:5)*(sh?8:1);
+  out.push(Object.assign({k:"mon",n:pk,sh,ic:"🌟",t:(sh?"✨ ":"")+pk+(sh?" variocolor":""),d:(rar==="L"?"¡Un Pokémon legendario":"Un Pokémon poco común")+(sh?" y brillante":"")+" a tu nivel! En el gacha te costaría unas "+fmt(Math.round(pref/pc))+" tiradas."},off(pref,.75)));
+  // 2) lote de objetos, grande · 65 % menos que en la tienda
+  const bundles=[{cand:10,ub:20},{mb:2,ub:10},{ppmax:5,cand:5},{crys:3,ub:15},{sb:40,ub:20,cand:4},{mb:1,cand:5,crys:1}],bd=v8Pick(r,bundles);
+  out.push(Object.assign({k:"it",it:bd,ic:"🎁",t:"Lote de objetos",d:Object.keys(bd).map(k=>bd[k]+" "+IN2(k)).join(" + ")},off(merItRef(bd),.65)));
+  // 3) huevo especial (variocolor 1 de cada 20) · 75 % menos
+  const eg=v8Pool("E",r,[pk])||v8Pool("R",r);out.push(Object.assign({k:"egg",n:eg,ic:"🥚",t:"Huevo especial",d:"¿Qué saldrá? Un Pokémon poco común (y 1 de cada 20, variocolor). Eclosiona con unos combates."},off(pc*15,.75)));
+  // 4) Master Ball (en la mitad de las visitas; a veces 2) o un objeto equipable · 70 % menos que en la tienda
+  if(r()<.5){const n=r()<.3?2:1;out.push(Object.assign({k:"it",it:{mb:n},ic:"🟣",t:n>1?"2 Master Ball":"Master Ball",d:"La Poké Ball definitiva: nunca falla. ¡A precio de ganga!"},off(merItRef({mb:n}),.7)))}
+  else{const h=v8Pick(r,HOLD)[0];out.push(Object.assign({k:"it",it:{[h]:1},ic:"💼",t:IN2(h),d:"Objeto equipable difícil de encontrar."},off(merItRef({[h]:1}),.7)))}
   return out}
 const merSt=w=>{S.mer=S.mer&&S.mer.w===w.id?S.mer:{w:w.id,b:{}};return S.mer};
 v8Tab("act","merP","🧳 Mercader","🧳 Mercader misterioso","Llega al pueblo 3 veces al día y se queda solo 30 minutos con ofertas que no verás en ninguna tienda. ¡Te avisamos en el juego y en Discord!",()=>merUI(),0);
@@ -23152,12 +23169,12 @@ function merUI(){const b=$("merPB");if(!b)return;const w=merNow();
   b.innerHTML='<div class="merhd"><span class="merbig">🧳</span><div><b>¡El mercader está en el pueblo!</b><small>Se va en <b id="merLeft">'+H2(left/1000)+'</b>. Cada oferta se puede comprar una vez.</small></div></div>'+
     '<div class="mergrid">'+L.map((o,i)=>{const got=st.b[i],can=S.t>=v8Disc(o.price)&&!got&&!(o.k==="egg"&&(S.eggs||[]).length>=6);
       return '<div class="merc'+(got?' got':'')+'"><span class="meric">'+(o.n&&PM[o.n]?icoHD(PM[o.n],72,false,!!o.sh):'<span class="merem">'+o.ic+'</span>')+'</span><b>'+esc(o.t)+'</b><small>'+esc(o.d)+'</small>'+
-        (got?'<span class="skon">✓ Comprado</span>':'<button class="red" data-merb="'+i+'"'+(can?'':' disabled')+'>'+(v8Disc(o.price)<o.price?'<s>'+fmt(o.price)+'</s> ':'')+fmt(v8Disc(o.price))+' 🎟️</button>')+(o.k==="egg"&&(S.eggs||[]).length>=6&&!got?'<small class="mut">Ya llevas 6 huevos.</small>':'')+'</div>'}).join("")+'</div>'}
+        (got?'<span class="skon">✓ Comprado</span>':'<span class="merpct">−'+Math.round((1-v8Disc(o.price)/o.ref)*100)+' %</span><small class="merref">Precio normal: <s>'+fmt(o.ref)+' 🎟️</s></small><button class="red" data-merb="'+i+'"'+(can?'':' disabled')+'>'+fmt(v8Disc(o.price))+' 🎟️</button>')+(o.k==="egg"&&(S.eggs||[]).length>=6&&!got?'<small class="mut">Ya llevas 6 huevos.</small>':'')+'</div>'}).join("")+'</div>'}
 document.addEventListener("click",e=>{const t=e.target.closest&&e.target.closest("#merPB [data-merb]");if(!t)return;const w=merNow();if(!w){merUI();return}
   const st=merSt(w),i=+t.dataset.merb,o=merOffers(w)[i];if(!o||st.b[i]||S.t<v8Disc(o.price))return;if(o.k==="egg"&&(S.eggs||[]).length>=6){toast("Ya llevas 6 huevos.");return}
   S.t-=v8Disc(o.price);st.b[i]=1;qEv("buy",1);
   if(o.k==="mon"){const lv=clampL(Math.max(5,leadLevel()-2));giveMon(o.n,lv,o.sh);toast("🧳 ¡"+o.t+" se une a tu equipo!");if(o.sh)diaryAdd("🧳","Has comprado un "+o.n+" variocolor al mercader misterioso.",o.n,1,"pk")}
-  else if(o.k==="egg"){const sp=eggBase(o.n);S.eggs=S.eggs||[];S.eggs.push({s:sp,st:0,need:Math.max(2,eggNeed(sp)-2),at:Date.now(),sh:Math.random()<1/30?1:0,nt:Math.floor(Math.random()*NAT.length),mer:1});toast("🥚 ¡Huevo especial! Llévalo contigo en los combates para que eclosione.")}
+  else if(o.k==="egg"){const sp=eggBase(o.n);S.eggs=S.eggs||[];S.eggs.push({s:sp,st:0,need:Math.max(2,eggNeed(sp)-2),at:Date.now(),sh:Math.random()<1/20?1:0,nt:Math.floor(Math.random()*NAT.length),mer:1});toast("🥚 ¡Huevo especial! Llévalo contigo en los combates para que eclosione.")}
   else{Object.keys(o.it).forEach(k=>{S.bag[k]=(S.bag[k]||0)+o.it[k]});toast("🧳 Has comprado: "+o.d)}
   snd("lvl");save();render();merUI()});
 // aviso al llegar (una vez por visita) y botón en la pantalla principal mientras está
@@ -24692,7 +24709,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.6.4";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.6.5";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

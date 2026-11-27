@@ -82,10 +82,23 @@ function aplicar(S, rw) {
   for (const k in rw.it || {}) S.bag[k] = (S.bag[k] || 0) + rw.it[k];
 }
 
-// puesto en una clasificación (como el juego: los 25 primeros por puntuación; -1 si no está entre ellos)
+// los n primeros de una clasificación: más puntos primero y, con los mismos puntos, quien llegó antes (at, la hora
+// del servidor al subir la marca; las marcas antiguas guardaban la hora en milisegundos)
+const msAt = (a) => (a && typeof a.toMillis === "function" ? a.toMillis() : Number.isFinite(+a) && +a > 0 ? +a : 9e15);
+async function topTorneo(db, key, n) {
+  const C = db.collection("tours").doc(key).collection("s");
+  const mp = (d) => ({id: d.id, sc: E.num(d.get("sc")), at: msAt(d.get("at")), d});
+  let L = (await C.orderBy("sc", "desc").limit(n).get()).docs.map(mp);
+  // el último puesto puede estar empatado con otros que la consulta ha dejado fuera
+  if (L.length === n) {
+    const v = L[n - 1].sc, T = (await C.where("sc", "==", v).limit(300).get()).docs.map(mp);
+    L = L.filter((x) => x.sc !== v).concat(T);
+  }
+  return L.sort((a, b) => b.sc - a.sc || a.at - b.at || (a.id < b.id ? -1 : 1)).slice(0, n);
+}
+// puesto en una clasificación (como el juego: los 25 primeros; -1 si no está entre ellos)
 async function puesto(db, key, uid) {
-  const sn = await db.collection("tours").doc(key).collection("s").orderBy("sc", "desc").limit(25).get();
-  return sn.docs.findIndex((d) => d.id === uid);
+  return (await topTorneo(db, key, 25)).findIndex((x) => x.id === uid);
 }
 
 // S: la partida (se modifica) · ya: semana que ya cobró según el servidor. Devuelve lo cobrado o {ya:1}
@@ -125,4 +138,4 @@ async function cobrarSemana(db, uid, S, ahora, ya, rnd) {
   return out;
 }
 
-module.exports = {cobrarSemana, semanaISO, semanaAnterior, juegoTorneo, claveTorneo, pokemonSemana};
+module.exports = {topTorneo, cobrarSemana, semanaISO, semanaAnterior, juegoTorneo, claveTorneo, pokemonSemana};

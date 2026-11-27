@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.5"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.6.6"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795774596">
+<meta name="game-build" content="1795783813">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3654,7 +3654,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.6.5</small>
+    <small class="pcver">Versión 8.6.6</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8410,8 +8410,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.6.5";
+const GAME_VER="8.6.6";
 const NEWS=[
+{v:"2026-11-27-8.6.6",ver:"8.6.6",at:"2026-11-27T13:50",t:"🔧 Arreglos/Mejoras",tt:"Empates justos en las clasificaciones",l:["Clasificaciones de los minijuegos y Torneo semanal: si dos jugadores empatan a puntos, ahora va delante quien consiguió esa puntuación antes (antes el orden de los empates era al azar). Los premios del lunes y el aviso de Discord siguen este mismo orden", "La hora de cada marca la pone el servidor, así que nadie puede adelantarla para colarse delante", "Lanzamiento perfecto: ya no se pueden subir puntuaciones imposibles (más de 1360, el máximo real) ni marcas sin haber jugado la partida entera"]},
 {v:"2026-11-27-8.6.5",ver:"8.6.5",at:"2026-11-27T11:16",t:"🔧 Arreglos/Mejoras",tt:"Mercader con ofertas de verdad",l:["Mercader misterioso: ahora sus ofertas son gangas de verdad. Los objetos cuestan entre un 65 y un 70 % menos que en la tienda (la Master Ball, 1.500.000 🎟️ en vez de 5.000.000) y los Pokémon y el huevo especial, un 75 % menos que sacarlos en el gacha", "Cada oferta muestra el descuento y su precio normal tachado", "Lotes de objetos más grandes, Master Ball en la mitad de las visitas (a veces 2), más variocolores y, de vez en cuando, ¡un Pokémon legendario!"]},
 {v:"2026-11-27-8.6.4",ver:"8.6.4",at:"2026-11-27T00:59",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos sin interrupciones",l:["Mientras juegas una partida de un minijuego ya no te salta ninguna ventana: ni la de versión nueva, ni invitaciones o solicitudes (retos, amistad, gremio…), ni avisos de eventos o novedades, ni el Pokémon sorpresa del Bingo", "Todas esperan y te salen al terminar la partida, después de ver tu puntuación"]},
 {v:"2026-11-27-8.6.3",ver:"8.6.3",at:"2026-11-27T00:53",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos con partidas siempre nuevas",l:["Minijuegos: cada partida empieza ahora con un orden totalmente nuevo e imprevisible. Antes, en algunos casos (por ejemplo, al cambiar del ordenador al móvil o al recargar), podía repetirse la misma partida, con los mismos Pokémon en el mismo sitio", "¡Golpea al Diglett! sigue dando a todos las mismas oportunidades: 2 Dugtrio y 1 Voltorb por cada 7 topos en cualquier partida"]},
@@ -8870,7 +8871,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795774596";
+const GAME_B="1795783813";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24645,8 +24646,12 @@ async function main(){
     duWatch:(id,cb)=>S.onSnapshot(S.doc(db,"sdu",id),sn=>cb(sn.exists()?Object.assign({id:sn.id},sn.data()):null),()=>{}),
     duInbox(cb){return S.onSnapshot(S.query(S.collection(db,"sdu"),S.where("b","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
     // solo sube la marca si es mejor que la guardada (si no, una partida de otro dispositivo podía bajarla)
-    tourSet:(w,d)=>{const r=S.doc(db,"tours",w,"s",uid);return S.runTransaction(db,async tx=>{const o=await tx.get(r);if(o.exists()&&(+o.data().sc||0)>=(+d.sc||0))return +o.data().sc||0;tx.set(r,d);return +d.sc||0})},
-    async tourTop(w,n){const sn=await S.getDocs(S.query(S.collection(db,"tours",w,"s"),S.orderBy("sc","desc"),S.limit(n)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    tourSet:(w,d)=>{const r=S.doc(db,"tours",w,"s",uid);return S.runTransaction(db,async tx=>{const o=await tx.get(r);if(o.exists()&&(+o.data().sc||0)>=(+d.sc||0))return +o.data().sc||0;tx.set(r,Object.assign({},d,{at:S.serverTimestamp()}));return +d.sc||0})},
+    // con los mismos puntos va delante quien llegó antes (at = hora del servidor al subir la marca)
+    async tourTop(w,n){const C=S.collection(db,"tours",w,"s"),mp=d=>{const x=d.data(),a=x.at&&x.at.toMillis?x.at.toMillis():+x.at>0?+x.at:9e15;return Object.assign({id:d.id},x,{sc:+x.sc||0,at:a})};
+      let L=(await S.getDocs(S.query(C,S.orderBy("sc","desc"),S.limit(n)))).docs.map(mp);
+      if(L.length===n){const v=L[n-1].sc,T=(await S.getDocs(S.query(C,S.where("sc","==",v),S.limit(300)))).docs.map(mp);L=L.filter(x=>x.sc!==v).concat(T)}
+      return L.sort((a,b)=>(b.sc-a.sc)||(a.at-b.at)||(a.id<b.id?-1:1)).slice(0,n)},
     chDel(tp,id,m){return S.deleteDoc(tp==="global"?S.doc(db,"chats","global","msgs",m):tp==="g"?S.doc(db,"gchats",id,"msgs",m):S.doc(db,"dms",id,"msgs",m))},
     async rankSave(d){if(!d||!uid)return;const j=JSON.stringify(d);if(j===lastRank)return;await S.setDoc(S.doc(db,"ranks",uid),Object.assign({},d,{at:Date.now()}));lastRank=j},
     async rankTop(f,lim){const sn=await S.getDocs(S.query(S.collection(db,"ranks"),S.orderBy(f,"desc"),S.limit(lim)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
@@ -24709,7 +24714,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.6.5";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.6.6";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

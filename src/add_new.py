@@ -49,8 +49,12 @@ rep('trDel:id=>S.deleteDoc(S.doc(db,"trades",id)),','''trDel:id=>S.deleteDoc(S.d
     duWatch:(id,cb)=>S.onSnapshot(S.doc(db,"sdu",id),sn=>cb(sn.exists()?Object.assign({id:sn.id},sn.data()):null),()=>{}),
     duInbox(cb){return S.onSnapshot(S.query(S.collection(db,"sdu"),S.where("b","==",uid)),sn=>cb(sn.docs.map(d=>Object.assign({id:d.id},d.data()))),()=>{})},
     // solo sube la marca si es mejor que la guardada (si no, una partida de otro dispositivo podía bajarla)
-    tourSet:(w,d)=>{const r=S.doc(db,"tours",w,"s",uid);return S.runTransaction(db,async tx=>{const o=await tx.get(r);if(o.exists()&&(+o.data().sc||0)>=(+d.sc||0))return +o.data().sc||0;tx.set(r,d);return +d.sc||0})},
-    async tourTop(w,n){const sn=await S.getDocs(S.query(S.collection(db,"tours",w,"s"),S.orderBy("sc","desc"),S.limit(n)));return sn.docs.map(d=>Object.assign({id:d.id},d.data()))},
+    tourSet:(w,d)=>{const r=S.doc(db,"tours",w,"s",uid);return S.runTransaction(db,async tx=>{const o=await tx.get(r);if(o.exists()&&(+o.data().sc||0)>=(+d.sc||0))return +o.data().sc||0;tx.set(r,Object.assign({},d,{at:S.serverTimestamp()}));return +d.sc||0})},
+    // con los mismos puntos va delante quien llegó antes (at = hora del servidor al subir la marca)
+    async tourTop(w,n){const C=S.collection(db,"tours",w,"s"),mp=d=>{const x=d.data(),a=x.at&&x.at.toMillis?x.at.toMillis():+x.at>0?+x.at:9e15;return Object.assign({id:d.id},x,{sc:+x.sc||0,at:a})};
+      let L=(await S.getDocs(S.query(C,S.orderBy("sc","desc"),S.limit(n)))).docs.map(mp);
+      if(L.length===n){const v=L[n-1].sc,T=(await S.getDocs(S.query(C,S.where("sc","==",v),S.limit(300)))).docs.map(mp);L=L.filter(x=>x.sc!==v).concat(T)}
+      return L.sort((a,b)=>(b.sc-a.sc)||(a.at-b.at)||(a.id<b.id?-1:1)).slice(0,n)},
     chDel(tp,id,m){return S.deleteDoc(tp==="global"?S.doc(db,"chats","global","msgs",m):tp==="g"?S.doc(db,"gchats",id,"msgs",m):S.doc(db,"dms",id,"msgs",m))},''')
 rep('const k=GD.EI[id]?id:ITEM_IMG[id];','const k=GD.EI[id]?id:ITEM_IMG[id]||HIMG[id];')
 rep('const SHINY_G=1/500,SHINY_S=1/250,SHINY_W=1/400,shinyTotal=','var SHINY_G=1/500,SHINY_S=1/250,SHINY_W=1/400;const shinyTotal=')

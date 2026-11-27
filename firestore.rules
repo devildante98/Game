@@ -24,7 +24,7 @@ function optNow(f) { return !(f in request.resource.data) || nowOk(request.resou
 // NUEVO: puntuación máxima posible de cada minijuego («2026-W45_who» → who); el torneo semanal usa el máximo general
 function maxScore(w) {
   // run, wgt y hl no tienen final (hasta que chocas o fallas): el juego comprueba la puntuación con el tiempo jugado
-  return {'who': 6000, 'mem': 1700, 'dig': 400, 'fish': 3000, 'thr': 2500, 'run': 5000000,
+  return {'who': 6000, 'mem': 1700, 'dig': 400, 'fish': 3000, 'thr': 1360, 'run': 5000000,
           'exc': 2500, 'wgt': 5000000, 'fos': 2500, 'puz': 50000, 'hl': 5000000,
           'ekn': 10500, 'bay': 40000, 'pdg': 21000, 'cue': 2400}
          .get(w.split('_').size() > 1 ? w.split('_')[1] : 'x', 50000);
@@ -108,9 +108,20 @@ function playSecs(u, g) {
 }
 function timeOk(w, u, sc) {
   let g = gameOf(w);
-  let t = (g in ['run', 'wgt', 'hl']) ? playSecs(u, g) : 0;
+  let t = (g in ['run', 'wgt', 'hl', 'thr']) ? playSecs(u, g) : 0;
   let n = t / 0.45 + 3;
-  return !(g in ['run', 'wgt', 'hl']) || (t >= 0 && sc <= (g == 'run' ? 350 * t + 5000 : 175 * n + 5 * n * n));
+  // thr (Lanzamiento perfecto): 10 lanzamientos; jugar la partida entera lleva al menos 13 s, y pasar de 1000
+  // puntos, unos 18 s (se deja margen por si la conexión va lenta)
+  return !(g in ['run', 'wgt', 'hl', 'thr'])
+    || (g == 'thr' && t >= 10 && (sc <= 1000 || t >= 15))
+    || (g in ['run', 'wgt', 'hl'] && t >= 0 && sc <= (g == 'run' ? 350 * t + 5000 : 175 * n + 5 * n * n));
+}
+// at = cuándo se consiguió la marca (sirve para desempatar): la pone el servidor. Las versiones antiguas del juego
+// mandaban la hora del dispositivo en milisegundos: se acepta solo si se parece a la hora real
+function tourAtOk() {
+  let a = request.resource.data.at;
+  return !('at' in request.resource.data) || a == request.time
+    || (a is number && a > request.time.toMillis() - 120000 && a < request.time.toMillis() + 120000);
 }
 match /tours/{week}/s/{u} {
   allow read: if request.auth != null;
@@ -118,7 +129,7 @@ match /tours/{week}/s/{u} {
     && request.resource.data.keys().hasOnly(['sc', 'cr', 'n', 'tr', 'g', 'at'])
     && request.resource.data.sc is number && request.resource.data.sc > 0 && request.resource.data.sc <= maxScore(week)
     && optStr('n', 30) && optStr('tr', 80) && optStr('g', 4) && optNum('cr', 0, 3)
-    && timeOk(week, u, request.resource.data.sc);
+    && timeOk(week, u, request.resource.data.sc) && tourAtOk();
   allow delete: if isAdmin();
 }
 // inicio de cada partida de minijuego: la hora la pone el servidor

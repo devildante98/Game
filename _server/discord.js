@@ -7,7 +7,7 @@
 // DISCORD_ROL_AVISOS con el ID del rol que se menciona). Si falta alguno, ese aviso simplemente no se envía.
 // Cada aviso se apunta en discordLog/ para no publicarlo dos veces.
 // =====================================================================================
-const {semanaAnterior, claveTorneo, juegoTorneo, semanaISO} = require("./semana");
+const {semanaAnterior, claveTorneo, juegoTorneo, semanaISO, topTorneo} = require("./semana");
 
 const WEB = "https://pokegachaonline.es";
 const HOOK = () => ({
@@ -130,10 +130,10 @@ async function torneoSemanal(db, ahora) {
   if (dia !== "Mon" && dia !== "Tue") return;
   TORNEO_VISTO = pw;
   const key = claveTorneo(pw);
-  const sn = await db.collection("tours").doc(key).collection("s").orderBy("sc", "desc").limit(3).get();
-  if (sn.empty) return;
+  const L = await topTorneo(db, key, 3);
+  if (!L.length) return;
   const med = ["🥇", "🥈", "🥉"];
-  const top = sn.docs.map((x, i) => med[i] + " **" + limpio(x.get("n") || "Entrenador", 30) + "** · " + fmt(x.get("sc")) + " puntos");
+  const top = L.map((x, i) => med[i] + " **" + limpio(x.d.get("n") || "Entrenador", 30) + "** · " + fmt(x.sc) + " puntos");
   const juego = MG[juegoTorneo(pw)] || "";
   await unaVez(db, "torneo_" + pw, () => enviar("torneo", {embeds: [{color: 0xffcc33,
     title: "🏆 Torneo semanal · resultados (" + pw.replace("-W", " · semana ") + ")", url: WEB,

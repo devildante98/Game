@@ -97,10 +97,10 @@ function pddUI(){const b=$("pddPB");if(!b)return;const s=pddSt(),a=pddAns(s.d);i
   for(let i=s.g.length;i<PDD_N;i++)h+='<div class="pddr empty"><span class="pddn">'+(i+1)+'</span><span></span><span></span><span></span><span></span><span></span></div>';
   h+='</div>';
   if(!fin)h+='<div class="pddin"><input id="pddQ" list="pddL" placeholder="Escribe un Pokémon…" autocomplete="off" aria-label="Escribe un Pokémon"><button class="red" id="pddGo">Probar</button></div><datalist id="pddL"></datalist><small class="mut">Intento '+(s.g.length+1)+' de '+PDD_N+'. ✅ = igual · 🟨 = es su otro tipo · ⬆️⬇️ = el de hoy es mayor o menor.</small>';
-  else h+='<div class="pddres '+(s.ok?'ok':'no')+'"><b>'+(s.ok?'¡Era '+esc(a[0])+'! Lo has adivinado en '+s.g.length+(s.g.length===1?' intento':' intentos')+'.':'Era <b>'+esc(a[0])+'</b>. ¡Mañana más!')+'</b>'+(s.rw?'<small>Premio: '+rwTxt(s.rw)+'</small>':'')+'<div class="pddbtns"><button class="alt" id="pddSh">📋 Compartir (sin destripar)</button></div><small class="mut">Nuevo Pokémon del día en '+pddLeft()+'.</small></div>';
+  else h+='<div class="pddres '+(s.ok?'ok':'no')+'"><b>'+(s.ok?'¡Era '+esc(a[0])+'! Lo has adivinado en '+s.g.length+(s.g.length===1?' intento':' intentos')+'.':'Era <b>'+esc(a[0])+'</b>. ¡Mañana más!')+'</b>'+(s.rw?'<small>Premio: '+rwTxt(s.rw)+'</small>':'')+'<div class="pddbtns"><button id="pddCh">💬 Compartir en el chat</button><button class="alt" id="pddSh">📋 Copiar (sin destripar)</button></div><small class="mut">Nuevo Pokémon del día en '+pddLeft()+'.</small></div>';
   b.innerHTML=h;const q=$("pddQ");if(q){const dl=$("pddL");q.oninput=()=>{const v=nrm(q.value);if(v.length<2){dl.innerHTML="";return}dl.innerHTML=pddPool().filter(p=>nrm(p[0]).startsWith(v)).slice(0,12).map(p=>'<option value="'+esc(p[0])+'">').join("")};
     q.onkeydown=e=>{if(e.key==="Enter")pddTry()};$("pddGo").onclick=pddTry}
-  const sh=$("pddSh");if(sh)sh.onclick=()=>v8Copy(pddShare())}
+  const sh=$("pddSh");if(sh)sh.onclick=()=>v8Copy(pddShare());const cb=$("pddCh");if(cb)cb.onclick=()=>pddChat()}
 const pddLeft=()=>{const m=v8Mad(),left=(24-m.h)*60-m.mi;return Math.floor(left/60)+" h "+(left%60)+" min"};
 function pddTry(){const q=$("pddQ");if(!q)return;const s=pddSt(),a=pddAns(s.d),v=nrm(q.value.trim()),p=pddPool().find(x=>nrm(x[0])===v);
   if(!p){toast("No encuentro ese Pokémon. Elige uno de la lista.");return}if(s.g.includes(p[0])){toast("Ya lo has probado.");return}if(s.ok||s.g.length>=PDD_N)return;
@@ -113,6 +113,22 @@ function pddTry(){const q=$("pddQ");if(!q)return;const s=pddSt(),a=pddAns(s.d),v
   save();render();pddUI()}
 function pddShare(){const s=pddSt(),a=pddAns(s.d);const em={ok:"🟩",mid:"🟨",no:"⬛"};const rows=s.g.map(n=>pddClue(PM[n],a).map(c=>em[c.k]).join("")).join("\n");
   return "🔎 Pokémon del día n.º "+pddNum(s.d)+" — "+(s.ok?s.g.length:"X")+"/"+PDD_N+(s.st>1?" · 🔥"+s.st:"")+"\n"+rows+"\nhttps://pokegachaonline.es"}
+// compartir en el chat global: el resultado sale como en Discord, con la cuadrícula de colores (sin destripar)
+async function pddChat(){
+  const me=typeof chMe==="function"?chMe():null;if(!window.FB||!window.FB.chSend||!me){toast("Inicia sesión para compartirlo en el chat.");return}
+  if(Date.now()-CH.last<CH_WAIT){toast("Espera un momento antes de enviar otro mensaje.");return}CH.last=Date.now();
+  const t=pddShare().split("\n").filter(l=>!/^https?:/.test(l)).join(" ").slice(0,CH_MAX);
+  const d={u:me,n:pvClean(pvNick()).slice(0,30),cr:typeof myCrown==="function"?myCrown():0,tr:trEnc(myLook()),g:GS.doc&&GS.doc.tag?String(GS.doc.tag).slice(0,4):"",t:t,at:Date.now()};
+  try{await window.FB.chSend("global","global",d);snd("click");toast("💬 ¡Compartido en el chat global!")}catch(e){toast("No se ha podido compartir en el chat.")}}
+// un mensaje con el resultado (enviado con el botón o pegado a mano, aunque se hayan perdido los saltos de línea)
+// se ve como una tarjeta: cabecera y la cuadrícula de 5 casillas por intento, igual que en Discord
+function pddChatCard(t){
+  const m=String(t||"").match(/^🔎 Pokémon del día n\.º (\d+) — (\d+|X)\/(\d+)(?: · 🔥(\d+))?\s*((?:[🟩🟨⬛\uFE0F]\s*)+)(.*)$/u);if(!m)return null;
+  const sq=[...m[5].replace(/[\s\uFE0F]+/g,"")];if(!sq.length||sq.length%5||sq.length>5*PDD_N)return null;
+  const rows=[];for(let i=0;i<sq.length;i+=5)rows.push('<span>'+sq.slice(i,i+5).map(c=>'<i class="'+(c==="🟩"?"ok":c==="🟨"?"mid":"no")+'">'+c+'</i>').join("")+'</span>');
+  const rest=m[6].replace(/https?:\/\/(www\.)?pokegachaonline\.es\/?/g,"").trim();
+  return '<span class="chpdd noi18n"><b>🔎 Pokémon del día n.º '+esc(m[1])+' — '+esc(m[2])+'/'+esc(m[3])+(m[4]?' · 🔥'+esc(m[4]):'')+'</b><span class="chpddg">'+rows.join("")+'</span></span>'+(rest?_chTxtPdd(rest):'')}
+const _chTxtPdd=chTxt;chTxt=function(t){try{const c=pddChatCard(t);if(c)return c}catch(e){}return _chTxtPdd(t)};
 {const _hb=hubBadges;hubBadges=function(){const o=_hb();try{const s=pddSt();if(!s.ok&&s.g.length<PDD_N)o.ret=(o.ret|0)+1}catch(e){}return o}}
 
 // ================= ASPECTOS PARA LA POKÉ BALL =================

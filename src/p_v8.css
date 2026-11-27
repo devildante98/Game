@@ -293,3 +293,10 @@ body.exfsOn #toast{z-index:2147482000}
 /* mercader (8.6.5): descuento y precio normal tachado */
 .merc .merpct{display:inline-block;margin:2px auto;padding:2px 10px;border-radius:999px;background:#2fae5a;color:#fff;font-weight:900;font-size:.8rem}
 .merc .merref{opacity:.75;font-size:.72rem}
+
+/* Pokémon del día compartido en el chat: cuadrícula como en Discord */
+.chpdd{display:block;padding:2px 0}
+.chpdd>b{display:block;font-size:.86rem;margin-bottom:4px}
+.chpddg{display:flex;flex-direction:column;gap:2px}
+.chpddg>span{display:flex;gap:2px}
+.chpddg i{font-style:normal;font-size:1.15rem;line-height:1.15;width:1.3em;text-align:center}

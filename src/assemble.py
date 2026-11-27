@@ -297,8 +297,9 @@ NEWS = '''// ================= novedades =================
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.6.8";
+const GAME_VER="8.7";
 const NEWS=[
+{v:"2026-11-27-8.7",ver:"8.7",at:"2026-11-27T19:21",t:"🎉 Sorteos con premio mejorado",tt:"Sorteos con premio mejorado",l:["Los sorteos abiertos pueden mejorar su premio antes de sortearse. Cuando pase, el sorteo lucirá la etiqueta «✨ ¡Premio mejorado!» y se anunciará en Discord", "Si ya estás apuntado no tienes que hacer nada: si ganas, te llevas el premio nuevo", "Si todavía no te has apuntado, te saldrá un aviso con el premio nuevo para que no te lo pierdas"]},
 {v:"2026-11-27-8.6.8",ver:"8.6.8",at:"2026-11-27T17:20",t:"🔧 Arreglos/Mejoras",tt:"Info de ¡Golpea al Diglett! corregida",l:["¡Golpea al Diglett!: la información del juego ya indica la puntuación máxima real, 136, que es la misma en todas las partidas (antes decía que una partida muy buena rondaba los 110–130)"]},
 {v:"2026-11-27-8.6.7",ver:"8.6.7",at:"2026-11-27T17:03",t:"🔧 Arreglos/Mejoras",tt:"Pokémon del día: compártelo en el chat",l:["Pokémon del día: nuevo botón «💬 Compartir en el chat». Tu resultado sale en el chat global como en Discord: con la cuadrícula de colores, una fila por intento, y sin destripar el Pokémon", "Si lo copias y lo pegas a mano en el chat, también se ve con la cuadrícula (antes salían todos los cuadros seguidos en una sola línea)"]},
 {v:"2026-11-27-8.6.6",ver:"8.6.6",at:"2026-11-27T13:50",t:"🔧 Arreglos/Mejoras",tt:"Empates justos en las clasificaciones",l:["Clasificaciones de los minijuegos y Torneo semanal: si dos jugadores empatan a puntos, ahora va delante quien consiguió esa puntuación antes (antes el orden de los empates era al azar). Los premios del lunes y el aviso de Discord siguen este mismo orden", "La hora de cada marca la pone el servidor, así que nadie puede adelantarla para colarse delante", "Lanzamiento perfecto: ya no se pueden subir puntuaciones imposibles (más de 1360, el máximo real) ni marcas sin haber jugado la partida entera"]},
@@ -934,6 +935,7 @@ FB_API = '''
     async rfClaimed(id){try{const s=await S.getDoc(S.doc(db,"raffles",id,"c",uid));return s.exists()}catch(e){return false}},
     async rfEntries(id){const sn=await S.getDocs(S.collection(db,"raffles",id,"e"));return sn.docs.map(d=>Object.assign({u:d.id},d.data()))},
     rfSave:(id,d)=>id?S.setDoc(S.doc(db,"raffles",id),d,{merge:true}):S.addDoc(S.collection(db,"raffles"),d),
+    rfUpd:(id,d)=>S.updateDoc(S.doc(db,"raffles",id),d),
     rfDel:id=>S.deleteDoc(S.doc(db,"raffles",id)),
     // hora del servidor para los campos que la necesitan, e inicio de cada partida de minijuego (las reglas comprueban
     // con ella que una puntuación de un juego sin final sea posible en el tiempo jugado)

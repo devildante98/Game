@@ -86,6 +86,16 @@ const embedSorteo = (d) => ({embeds: [{color: 0xb06cf0, title: "🎉 ¡Nuevo sor
   ],
   image: {url: WEB + "/discord/evento_sorteo.png"}, footer: {text: "Poke Gacha Online · pokegachaonline.es"}}]});
 
+// el administrador ha cambiado el premio de un sorteo abierto
+const embedSorteoUp = (d) => ({embeds: [{color: 0xff7ad9, title: "✨ ¡Premio mejorado! · " + limpio(d.tt || "Sorteo", 80), url: WEB,
+  description: "El sorteo tiene un premio nuevo. Si ya estás apuntado, no tienes que hacer nada; si no, apúntate en **Más › 🎉 Sorteos**.",
+  fields: [
+    {name: "Premio", value: premio(d), inline: true},
+    {name: "Ganadores", value: String(Math.max(1, n(d.nw))), inline: true},
+    {name: "Cierra", value: n(d.end) ? ts(d.end, "f") + " (" + ts(d.end, "R") + ")" : "—", inline: true},
+  ],
+  image: {url: WEB + "/discord/evento_sorteo.png"}, footer: {text: "Poke Gacha Online · pokegachaonline.es"}}]});
+
 const embedGanadores = (d) => {
   const wn = Array.isArray(d.wn) ? d.wn.slice(0, 25).map((x) => "🏆 **" + limpio(x, 30) + "**") : [];
   return {embeds: [{color: 0xffcc33, title: "🏆 ¡Ya hay ganadores! · " + limpio(d.tt || "Sorteo", 80), url: WEB,
@@ -115,6 +125,10 @@ async function avisar(db, uid, data) {
     if (!s.exists) return {ok: false, why: "no-existe"};
     const d = s.data() || {};
     if (d.st === "done") return unaVez(db, "sorteo_" + id + "_hecho", () => enviar("sorteo", embedGanadores(d)));
+    // premio cambiado (up = cuándo): se avisa una vez por cambio, si el sorteo ya se había anunciado
+    if (n(d.up) && (await db.doc("discordLog/" + ("sorteo_" + id + "_abierto").replace(/[^\w-]/g, "_")).get()).exists) {
+      return unaVez(db, "sorteo_" + id + "_up_" + n(d.up), () => enviar("sorteo", embedSorteoUp(d)));
+    }
     return unaVez(db, "sorteo_" + id + "_abierto", () => enviar("sorteo", embedSorteo(d)));
   }
   return {ok: false, why: "tipo"};

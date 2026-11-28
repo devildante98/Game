@@ -324,3 +324,7 @@ body.exfsOn #toast{z-index:2147482000}
 .exobj b{font-size:.72rem!important}
 .exobj small{font-size:.58rem!important}
 .exscr:has(#exDlg:not([hidden])) .exobj{opacity:0}
+/* créditos de los gráficos (Ajustes › Juego) */
+.setcred{margin-top:12px;padding:8px 10px;border-radius:12px;background:rgba(120,110,200,.08)}
+.setcred summary{cursor:pointer;font-weight:800}
+.setcred small{display:block;margin-top:6px;line-height:1.5}

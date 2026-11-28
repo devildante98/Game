@@ -29,7 +29,7 @@ const txzCave=()=>TXZ.ok&&TX.on&&EX.M&&EX.M.base==="c"&&!EX.M.pal;
 {const _l=exLoad;exLoad=function(){const r=_l.apply(this,arguments);try{const u=(txzSnow()?"s":"")+(txzCave()?"c":"");if(TXZ.last!==u){TXZ.last=u;Object.keys(XG).forEach(k=>delete XG[k])}TXN.m=null}catch(e){}return r}}
 // ---------- personajes ----------
 const TXN_KW=[[/Cient[ií]fic|Ingenier|Inventor|Ge[oó]log/i,["scientist","scientist_black","scientist_brown","scientist_fiery"]],[/Profesor/i,["professor","professor_brown"]],
-  [/Pescador|Marinero|Marinera|Farer/i,["fisher","fisher_fiery"]],[/Nadador|Bañista/i,["swimmer","swimmer_blue","swimmer_green","swimmer_orange","swimmer_red"]],
+  [/Pescador|Marinero|Marinera|Farer/i,["fisher","fisher_fiery"]],[/Nadador|Bañista/i,["beachcomber","beachcomber_gray","postboy","cooldude_blue"]],
   [/Montañer|Explorador|Excursionista|Guía|Herrero/i,["miner","miner_blue","miner_green","miner_red","miner_yellow"]],[/Karateka|Cinturón|Sabio|Psíquic|Médium/i,["monk","monk_black","monk_blue","monk_green","monk_orange","monk_red"]],
   [/Florista|Jardiner|Ornit/i,["florist","florist_black","florist_blue","florist_brown","florist_rose"]],[/Señora|Abuela|Tejedora|Paseante/i,["homemaker","homemaker_black","homemaker_blonde","homemaker_brown","homemaker_fiery"]],
   [/Niña|Gemela|Chica|Patinadora|Esquiadora/i,["catgirl","catgirl_blonde","catgirl_blue","catgirl_green","childactor","tennisplayer","tennisplayer_green","tennisplayer_lapi"]],
@@ -38,8 +38,13 @@ const TXN_KW=[[/Cient[ií]fic|Ingenier|Inventor|Ge[oó]log/i,["scientist","scien
   [/Bomber/i,["firefighter"]],[/Vendedor|Dependient|Tender/i,["shopassistant","shopassistant_black","shopassistant_grey","shopassistant_red"]],[/Guardia|Soldad/i,["soldier"]],
   [/Recluta/i,["rogue","rogue_blue","rogue_copper","rogue_green","rogue_red"]],[/Señor|Abuelo|Anciano/i,["ceo","postboy_olive","beachcomber_gray"]]];
 const TXN_KEEP=/^(Líder|Alto Mando|Campe|Mamá|Mama|Enfermera)/i;
-function txnFor(n){const nm=String(n.pn||n.n||"");if(TXN_KEEP.test(nm))return null;let L=null;for(const[re,l]of TXN_KW)if(re.test(nm)){L=l;break}
-  L=(L||TXN.list).filter(s=>TXN.list.includes(s));if(!L.length)return null;return L[(pvHash(nm+"|"+(EX.map||"")+"|"+n.x+","+n.y)>>>0)%L.length]}
+// al azar, solo personas corrientes (ni robots, ni criaturas, ni los sprites de nadar, que solo asoman la cabeza)
+const TXN_POOL=s=>!/^(swimmer|robot|woodnymph|knightlord|dragonrider|monk|rogue|soldier|firefighter|professor)/.test(s);
+function txnFor(n){const nm=String(n.pn||n.n||"");if(TXN_KEEP.test(nm))return null;
+  // en el agua: nadador (el sprite de Tuxemon es la cabeza asomando)
+  if(exAt(n.px!=null?n.px:n.x,n.py!=null?n.py:n.y)==="~")return ["swimmer","swimmer_blue","swimmer_green","swimmer_orange","swimmer_red"][(pvHash(nm)>>>0)%5];
+  let L=null;for(const[re,l]of TXN_KW)if(re.test(nm)){L=l;break}
+  L=(L||TXN.list.filter(TXN_POOL)).filter(s=>TXN.list.includes(s));if(!L.length)return null;return L[(pvHash(nm+"|"+(EX.map||"")+"|"+n.x+","+n.y)>>>0)%L.length]}
 function txnMap(){if(TXN.m)return TXN.m;const m={};(EX.npcs||[]).forEach(n=>{if(n&&n.look&&!(n.look in m))m[n.look]=txnFor(n)});return TXN.m=m}
 // filas de la hoja: abajo, izquierda, derecha, arriba · columnas: paso, quieto, paso
 const TXN_ROW={d:0,l:1,r:2,u:3};

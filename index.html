@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=9.3.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=9.3.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795880754">
+<meta name="game-build" content="1795881112">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3689,7 +3689,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 9.3.1</small>
+    <small class="pcver">Versión 9.3.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8445,8 +8445,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="9.3.1";
+const GAME_VER="9.3.2";
 const NEWS=[
+{v:"2026-11-28-9.3.2",ver:"9.3.2",at:"2026-11-28T16:51",t:"🔧 Arreglos/Mejoras",tt:"NPC de la playa arreglados",l:["Exploración: los bañistas y nadadores que están en la arena ya se ven de cuerpo entero (antes solo se les veía la cabeza, como si estuvieran nadando). El sprite de nadador solo se usa para los que están en el agua", "Los vecinos sin un tipo concreto reciben siempre un aspecto de persona corriente"]},
 {v:"2026-11-28-9.3.1",ver:"9.3.1",at:"2026-11-28T16:45",t:"🔧 Arreglos/Mejoras",tt:"Tu entrenador, más redondo",l:["Exploración: tu entrenador tiene ahora las mismas proporciones que el resto de personajes: cabeza grande y redonda, cuerpo pequeño y contorno del color de cada parte, sin el aspecto recto y cortado", "Al caminar se mueve de forma más sutil: el cuerpo baja un poco con cada paso y, de lado, ya no abre las piernas"]},
 {v:"2026-11-28-9.3",ver:"9.3",at:"2026-11-28T16:40",t:"🧢 Tu entrenador, renovado",tt:"Tu entrenador, renovado",l:["Exploración: tu entrenador estrena sprite al mismo estilo que el resto de personajes: píxel más grande, contorno oscuro, cabeza redondeada y sombreado, para que se vea mejor", "Mantiene toda tu personalización: chico o chica, piel, ojos, peinado y color de pelo, gorro, gafas, ropa de arriba y de abajo (pantalón, pantalón corto, falda o vestido), colores y mochila", "También se ve así en el modo cooperativo y en la pantalla de inicio de la Exploración"]},
 {v:"2026-11-28-9.2.1",ver:"9.2.1",at:"2026-11-28T16:33",t:"🔧 Arreglos/Mejoras",tt:"Lagos y caminos mejorados",l:["Exploración: los lagos y estanques vuelven a tener orilla de tierra y hierba con esquinas redondeadas, ahora con la hierba del mismo verde que el césped", "Los caminos de tierra vuelven a su aspecto anterior, mejor integrado (los de una casilla de ancho se veían como tiras finas)", "El mar de la playa vuelve a su aspecto anterior"]},
@@ -8921,7 +8922,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795880754";
+const GAME_B="1795881112";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24769,7 +24770,7 @@ const txzCave=()=>TXZ.ok&&TX.on&&EX.M&&EX.M.base==="c"&&!EX.M.pal;
 {const _l=exLoad;exLoad=function(){const r=_l.apply(this,arguments);try{const u=(txzSnow()?"s":"")+(txzCave()?"c":"");if(TXZ.last!==u){TXZ.last=u;Object.keys(XG).forEach(k=>delete XG[k])}TXN.m=null}catch(e){}return r}}
 // ---------- personajes ----------
 const TXN_KW=[[/Cient[ií]fic|Ingenier|Inventor|Ge[oó]log/i,["scientist","scientist_black","scientist_brown","scientist_fiery"]],[/Profesor/i,["professor","professor_brown"]],
-  [/Pescador|Marinero|Marinera|Farer/i,["fisher","fisher_fiery"]],[/Nadador|Bañista/i,["swimmer","swimmer_blue","swimmer_green","swimmer_orange","swimmer_red"]],
+  [/Pescador|Marinero|Marinera|Farer/i,["fisher","fisher_fiery"]],[/Nadador|Bañista/i,["beachcomber","beachcomber_gray","postboy","cooldude_blue"]],
   [/Montañer|Explorador|Excursionista|Guía|Herrero/i,["miner","miner_blue","miner_green","miner_red","miner_yellow"]],[/Karateka|Cinturón|Sabio|Psíquic|Médium/i,["monk","monk_black","monk_blue","monk_green","monk_orange","monk_red"]],
   [/Florista|Jardiner|Ornit/i,["florist","florist_black","florist_blue","florist_brown","florist_rose"]],[/Señora|Abuela|Tejedora|Paseante/i,["homemaker","homemaker_black","homemaker_blonde","homemaker_brown","homemaker_fiery"]],
   [/Niña|Gemela|Chica|Patinadora|Esquiadora/i,["catgirl","catgirl_blonde","catgirl_blue","catgirl_green","childactor","tennisplayer","tennisplayer_green","tennisplayer_lapi"]],
@@ -24778,8 +24779,13 @@ const TXN_KW=[[/Cient[ií]fic|Ingenier|Inventor|Ge[oó]log/i,["scientist","scien
   [/Bomber/i,["firefighter"]],[/Vendedor|Dependient|Tender/i,["shopassistant","shopassistant_black","shopassistant_grey","shopassistant_red"]],[/Guardia|Soldad/i,["soldier"]],
   [/Recluta/i,["rogue","rogue_blue","rogue_copper","rogue_green","rogue_red"]],[/Señor|Abuelo|Anciano/i,["ceo","postboy_olive","beachcomber_gray"]]];
 const TXN_KEEP=/^(Líder|Alto Mando|Campe|Mamá|Mama|Enfermera)/i;
-function txnFor(n){const nm=String(n.pn||n.n||"");if(TXN_KEEP.test(nm))return null;let L=null;for(const[re,l]of TXN_KW)if(re.test(nm)){L=l;break}
-  L=(L||TXN.list).filter(s=>TXN.list.includes(s));if(!L.length)return null;return L[(pvHash(nm+"|"+(EX.map||"")+"|"+n.x+","+n.y)>>>0)%L.length]}
+// al azar, solo personas corrientes (ni robots, ni criaturas, ni los sprites de nadar, que solo asoman la cabeza)
+const TXN_POOL=s=>!/^(swimmer|robot|woodnymph|knightlord|dragonrider|monk|rogue|soldier|firefighter|professor)/.test(s);
+function txnFor(n){const nm=String(n.pn||n.n||"");if(TXN_KEEP.test(nm))return null;
+  // en el agua: nadador (el sprite de Tuxemon es la cabeza asomando)
+  if(exAt(n.px!=null?n.px:n.x,n.py!=null?n.py:n.y)==="~")return ["swimmer","swimmer_blue","swimmer_green","swimmer_orange","swimmer_red"][(pvHash(nm)>>>0)%5];
+  let L=null;for(const[re,l]of TXN_KW)if(re.test(nm)){L=l;break}
+  L=(L||TXN.list.filter(TXN_POOL)).filter(s=>TXN.list.includes(s));if(!L.length)return null;return L[(pvHash(nm+"|"+(EX.map||"")+"|"+n.x+","+n.y)>>>0)%L.length]}
 function txnMap(){if(TXN.m)return TXN.m;const m={};(EX.npcs||[]).forEach(n=>{if(n&&n.look&&!(n.look in m))m[n.look]=txnFor(n)});return TXN.m=m}
 // filas de la hoja: abajo, izquierda, derecha, arriba · columnas: paso, quieto, paso
 const TXN_ROW={d:0,l:1,r:2,u:3};
@@ -25204,7 +25210,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="9.3.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="9.3.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

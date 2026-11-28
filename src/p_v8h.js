@@ -32,3 +32,7 @@ const NJ_PATH={0:[3,3],4:[3,0],5:[3,1],1:[3,2],2:[0,3],10:[1,3],8:[2,3],6:[0,0],
   return _o.apply(this,arguments)}}
 // al pasar entre zonas con y sin el tileset (por ejemplo, a la nieve), la caché de casillas se rehace
 {const _l=exLoad;exLoad=function(){const r=_l.apply(this,arguments);try{const u=njUse();if(NJ.last!==u){NJ.last=u;Object.keys(XG).forEach(k=>delete XG[k]);Object.keys(EXTILE).forEach(k=>delete EXTILE[k])}}catch(e){}return r}}
+// cada fotograma empieza con el texto alineado a la izquierda: algunos dibujos (nombres del modo cooperativo, carteles…)
+// dejaban la alineación centrada y el cartel con el nombre del lugar salía desplazado fuera de su recuadro
+{const _d=exDraw;exDraw=function(){try{const g=EX.cv&&EX.cv.getContext("2d");if(g){g.textAlign="left";g.textBaseline="alphabetic"}}catch(e){}
+  const r=_d.apply(this,arguments);try{const g=EX.cv&&EX.cv.getContext("2d");if(g){g.textAlign="left";g.textBaseline="alphabetic"}}catch(e){}return r}}

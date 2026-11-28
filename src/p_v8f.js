@@ -434,7 +434,7 @@ TITLES.push(["par7","💞 Inseparables",()=>((S.par&&S.par.days)|0)>=7||((S.parB
 // ❤️ encima de tu pareja y aviso de la ventaja
 {const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{const o=parWith();if(!o||EX.title||!EX.cv||!EX.cam)return r;const g=EX.cv.getContext("2d");g.setTransform(EXS,0,0,EXS,0,0);
   const cx=Math.round(EX.cam[0]*2)/2,cy=Math.round(EX.cam[1]*2)/2,x=(o.dx!=null?o.dx:o.x)*EXTL-cx+16,y=(o.dy!=null?o.dy:o.y)*EXTL-cy-14+Math.sin(ts/300)*1.2;
-  g.font="9px serif";g.textAlign="center";g.textBaseline="middle";g.fillText("❤️",x,y)}catch(e){}return r}}
+  g.save();g.font="9px serif";g.textAlign="center";g.textBaseline="middle";g.fillText("❤️",x,y);g.restore()}catch(e){}return r}}
 setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr")||document.querySelector(".exwrap .exscr");if(!sc)return;let b=sc.querySelector(".parbad");const o=parWith();
   if(!o||EX.title){if(b)b.remove();return}if(!b){b=document.createElement("div");b.className="parbad";sc.appendChild(b)}const t="💞 Con "+o.n+": +20 % EXP";if(b.textContent!==t)b.textContent=t}catch(e){}},1000);
 // panel en Social

@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.9"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.9.1"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795871619">
+<meta name="game-build" content="1795871881">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3685,7 +3685,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.9</small>
+    <small class="pcver">Versión 8.9.1</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8441,8 +8441,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.9";
+const GAME_VER="8.9.1";
 const NEWS=[
+{v:"2026-11-28-8.9.1",ver:"8.9.1",at:"2026-11-28T14:18",t:"🔧 Arreglos/Mejoras",tt:"Carteles de lugar bien centrados",l:["Exploración: el cartel con el nombre del lugar (por ejemplo «Centro Pokémon») ya no se sale de su recuadro. Pasaba al estar cerca de tu pareja o de otros jugadores en el modo cooperativo"]},
 {v:"2026-11-28-8.9",ver:"8.9",at:"2026-11-28T14:13",t:"🗺️ Exploración: nuevo césped y caminos",tt:"Nuevo césped y caminos en la Exploración",l:["Exploración: las praderas, rutas y bosques estrenan césped verde con detalles, caminos de tierra con bordes de hierba y nuevos arbustos, al estilo de los RPG de 16 bits", "Gráficos del «Ninja Adventure Asset Pack» de Pixel-Boy, de dominio público (CC0). ¡Gracias, Pixel-Boy!", "Las zonas nevadas, de ceniza y las cuevas, las calles de los pueblos y los interiores siguen como estaban"]},
 {v:"2026-11-28-8.8",ver:"8.8",at:"2026-11-28T13:37",t:"🗺️ Exploración con aspecto más clásico",tt:"Exploración con aspecto más clásico",l:["Bosques compactos: las copas de los árboles vecinos se unen y forman setos y bosques continuos, sin huecos de césped entre árbol y árbol", "Escenario más vivo: hojas que cruzan la pantalla con el viento (de colores en otoño, nieve en las zonas heladas), huellas en la arena de la playa y salpicaduras al caminar bajo la lluvia", "La hierba alta también tapa los pies de los entrenadores y de tu compañero", "Nueva caja de diálogo al estilo clásico, con letra pixel más grande y un «bip» suave mientras se escribe", "Nuevas transiciones al combate: un remolino con los Pokémon salvajes y un círculo que se cierra sobre ti con los entrenadores", "Césped con más textura, sombra al pie de las paredes en los interiores y pantalla más limpia: el minimapa empieza oculto (se vuelve a mostrar con 🧭) y el objetivo es más discreto y se esconde durante los diálogos"]},
 {v:"2026-11-28-8.7.2",ver:"8.7.2",at:"2026-11-28T12:36",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos: tus teclas ya no tocan la Poké Ball",l:["Minijuegos: mientras tienes un minijuego abierto, las teclas (o botones del ratón) que usas para la Poké Ball y las teclas 1-6 de las mejoras del pueblo ya no hacen nada. Antes, si coincidían con las del minijuego (por ejemplo, las flechas o WASD en Ekans hambriento), se tocaba la Poké Ball o se compraban mejoras sin querer", "El minijuego sigue recibiendo todas tus teclas como siempre"]},
@@ -8909,7 +8910,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795871619";
+const GAME_B="1795871881";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24431,7 +24432,7 @@ TITLES.push(["par7","💞 Inseparables",()=>((S.par&&S.par.days)|0)>=7||((S.parB
 // ❤️ encima de tu pareja y aviso de la ventaja
 {const _d=exDraw;exDraw=function(ts){const r=_d.apply(this,arguments);try{const o=parWith();if(!o||EX.title||!EX.cv||!EX.cam)return r;const g=EX.cv.getContext("2d");g.setTransform(EXS,0,0,EXS,0,0);
   const cx=Math.round(EX.cam[0]*2)/2,cy=Math.round(EX.cam[1]*2)/2,x=(o.dx!=null?o.dx:o.x)*EXTL-cx+16,y=(o.dy!=null?o.dy:o.y)*EXTL-cy-14+Math.sin(ts/300)*1.2;
-  g.font="9px serif";g.textAlign="center";g.textBaseline="middle";g.fillText("❤️",x,y)}catch(e){}return r}}
+  g.save();g.font="9px serif";g.textAlign="center";g.textBaseline="middle";g.fillText("❤️",x,y);g.restore()}catch(e){}return r}}
 setInterval(()=>{try{const sc=document.querySelector("#explPB .exscr")||document.querySelector(".exwrap .exscr");if(!sc)return;let b=sc.querySelector(".parbad");const o=parWith();
   if(!o||EX.title){if(b)b.remove();return}if(!b){b=document.createElement("div");b.className="parbad";sc.appendChild(b)}const t="💞 Con "+o.n+": +20 % EXP";if(b.textContent!==t)b.textContent=t}catch(e){}},1000);
 // panel en Social
@@ -24611,6 +24612,10 @@ const NJ_PATH={0:[3,3],4:[3,0],5:[3,1],1:[3,2],2:[0,3],10:[1,3],8:[2,3],6:[0,0],
   return _o.apply(this,arguments)}}
 // al pasar entre zonas con y sin el tileset (por ejemplo, a la nieve), la caché de casillas se rehace
 {const _l=exLoad;exLoad=function(){const r=_l.apply(this,arguments);try{const u=njUse();if(NJ.last!==u){NJ.last=u;Object.keys(XG).forEach(k=>delete XG[k]);Object.keys(EXTILE).forEach(k=>delete EXTILE[k])}}catch(e){}return r}}
+// cada fotograma empieza con el texto alineado a la izquierda: algunos dibujos (nombres del modo cooperativo, carteles…)
+// dejaban la alineación centrada y el cartel con el nombre del lugar salía desplazado fuera de su recuadro
+{const _d=exDraw;exDraw=function(){try{const g=EX.cv&&EX.cv.getContext("2d");if(g){g.textAlign="left";g.textBaseline="alphabetic"}}catch(e){}
+  const r=_d.apply(this,arguments);try{const g=EX.cv&&EX.cv.getContext("2d");if(g){g.textAlign="left";g.textBaseline="alphabetic"}}catch(e){}return r}}
 
 </script>
 <script>
@@ -24947,7 +24952,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.9";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.9.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

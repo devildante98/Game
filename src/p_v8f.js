@@ -462,3 +462,24 @@ function mgPlaying(){if(MGPLAY.on){const m=document.getElementById("mgM");if(!m|
 {const _ms=bngMonShow;bngMonShow=function(n,sh){if(mgPlaying()){MGPLAY.mon.push([n,sh]);return}return _ms.apply(this,arguments)}}
 setInterval(()=>{try{if(mgPlaying())return;if(MGPLAY.verH!=null){const h=MGPLAY.verH;MGPLAY.verH=null;verAsk(h)}
   if(MGPLAY.mon.length){const x=MGPLAY.mon.shift();bngMonShow(x[0],x[1])}}catch(e){}},1000);
+
+// ================= MINIJUEGOS: PUNTUACIÓN MÁXIMA EN LA INFORMACIÓN DE CADA JUEGO =================
+// (calculada con las reglas de cada juego; si cambia la puntuación de un juego, cambia también aquí)
+const MGMAX={
+ who:'Puntuación máxima: <b>2.900</b>, igual en todas las partidas: acertar las 10 al instante y con la racha completa.',
+ mem:'Puntuación máxima: <b>1.280</b>, menos 8 por cada segundo que tardes. Es encontrar cada pareja al primer intento, así que hace falta algo de suerte. Lo mínimo que se gana es 100.',
+ dig:'Puntuación máxima: <b>136</b>, igual en todas las partidas: todas traen 2 Dugtrio y 1 Voltorb por cada 7 topos. Para llegar, acierta todos sin tocar ningún Voltorb.',
+ fish:'Puntuación máxima: <b>1.080</b>, pero depende de la suerte: sería que picaran 8 Lapras o Gyarados y reaccionar al instante (135 cada uno). Lo normal es que piquen sobre todo comunes, que dan como mucho 15.',
+ thr:'Puntuación máxima: <b>1.360</b>, igual en todas las partidas: 10 Excelentes seguidos.',
+ run:'<b>Sin límite</b>: la carrera sigue hasta que chocas, así que cuanto más aguantes, más puntos.',
+ exc:'<b>Sin máximo fijo</b>: depende de los tesoros que te toquen (hasta 4 por pared). El mejor caso, 4 fósiles, da <b>1.200</b>, más el bonus de estabilidad si lo desentierras todo: 3 puntos por cada % de estabilidad que te quede.',
+ wgt:'<b>Sin límite</b>: se juega hasta el primer fallo, así que cuantas más aciertes seguidas, más puntos.',
+ fos:'<b>Sin máximo fijo</b>: cada pared trae 1 fósil y 2 tesoros pequeños, y depende de cuáles te toquen. El mejor caso (Ámbar Viejo y 2 Huesos Raros) da <b>740</b>, más el bonus de estabilidad si lo desentierras todo: 3 puntos por cada % de estabilidad que te quede.',
+ puz:'Puntuación máxima: <b>40 por pieza</b> (con 100 piezas, <b>4.000</b>), terminando rápido y con el mínimo de cambios.',
+ jig:'Puntuación máxima: <b>50 por pieza</b> terminando rápido (con 100 piezas, 5.000; con 1.024, 51.200), y un 50 % más sin fondo de ayuda: hasta <b>76.800</b>.',
+ hl:'<b>Sin límite</b>: se juega hasta el primer fallo, así que cuantas más aciertes seguidas, más puntos.',
+ ekn:'<b>Sin máximo fijo</b>: tienes 2 minutos; cada baya da 10 y cada dorada 40 (sale una cada 6 bayas y desaparece a los 7 segundos). Cuanto más rápido comas sin chocar, más puntos.',
+ bay:'<b>Sin máximo fijo</b>: depende de las bayas que caigan en el minuto de partida (de 10 a 20 puntos, la dorada 50) y de tu multiplicador (hasta ×5). Si pierdes las 3 vidas, se acaba antes.',
+ pdg:'<b>Sin máximo fijo</b>: tienes 90 segundos y depende de cuántos aros dorados salgan. Lo máximo por aro son 105 (dorado, por el centro y con ×3), y cada vida que te quede al final suma 50 (hasta 150).',
+ cue:'Puntuación máxima: <b>2.400</b>: encontrar los 8 Pokémon al instante (300 cada uno). Cada segundo que tardes resta 10, y cada error, 2 segundos.'};
+{const _mh=mgHow;mgHow=function(id){const h=_mh(id),m=MGMAX[id];if(!m)return h;const li='<li class="mgmax">🏆 '+m+'</li>';return h?h.replace(/<\/ul><\/details>$/,li+'</ul></details>'):'<details class="mghow" open><summary>🏆 Cómo conseguir más puntos</summary><ul>'+li+'</ul></details>'}}

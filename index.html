@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=9.3.2"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=9.3.3"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795881112">
+<meta name="game-build" content="1795883290">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3689,7 +3689,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 9.3.2</small>
+    <small class="pcver">Versión 9.3.3</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8445,8 +8445,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="9.3.2";
+const GAME_VER="9.3.3";
 const NEWS=[
+{v:"2026-11-28-9.3.3",ver:"9.3.3",at:"2026-11-28T17:28",t:"🔧 Arreglos/Mejoras",tt:"Árboles de bayas a juego",l:["Exploración: los árboles de bayas tienen ahora el mismo estilo que el resto de árboles. Cuando están maduros se ven las bayas en la copa, del color de su tipo (Aranja azul, Zidra amarilla, Meloc rosa, Zreza roja…); sin fruto, son un árbol más"]},
 {v:"2026-11-28-9.3.2",ver:"9.3.2",at:"2026-11-28T16:51",t:"🔧 Arreglos/Mejoras",tt:"NPC de la playa arreglados",l:["Exploración: los bañistas y nadadores que están en la arena ya se ven de cuerpo entero (antes solo se les veía la cabeza, como si estuvieran nadando). El sprite de nadador solo se usa para los que están en el agua", "Los vecinos sin un tipo concreto reciben siempre un aspecto de persona corriente"]},
 {v:"2026-11-28-9.3.1",ver:"9.3.1",at:"2026-11-28T16:45",t:"🔧 Arreglos/Mejoras",tt:"Tu entrenador, más redondo",l:["Exploración: tu entrenador tiene ahora las mismas proporciones que el resto de personajes: cabeza grande y redonda, cuerpo pequeño y contorno del color de cada parte, sin el aspecto recto y cortado", "Al caminar se mueve de forma más sutil: el cuerpo baja un poco con cada paso y, de lado, ya no abre las piernas"]},
 {v:"2026-11-28-9.3",ver:"9.3",at:"2026-11-28T16:40",t:"🧢 Tu entrenador, renovado",tt:"Tu entrenador, renovado",l:["Exploración: tu entrenador estrena sprite al mismo estilo que el resto de personajes: píxel más grande, contorno oscuro, cabeza redondeada y sombreado, para que se vea mejor", "Mantiene toda tu personalización: chico o chica, piel, ojos, peinado y color de pelo, gorro, gafas, ropa de arriba y de abajo (pantalón, pantalón corto, falda o vestido), colores y mochila", "También se ve así en el modo cooperativo y en la pantalla de inicio de la Exploración"]},
@@ -8922,7 +8923,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795881112";
+const GAME_B="1795883290";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24738,6 +24739,12 @@ const TX_BLANK=xc(1,1);
   try{if(on&&EX.M.bld){const hr=new Date().getHours(),night=hr>=20||hr<7;
     EX.M.bld.forEach(b=>{if(!/^house2?$/.test(b.k))return;const H=txHouse(b),X=b.x*32-cx+H.ox,Y=(b.y+b.h)*32-cy-H.c.height;
       ents.push({y:b.y+b.h-1+.45,d:()=>g.drawImage(night&&H.c._n?H.c._n:H.c,X,Y)})})}}catch(e){}return r}}
+// ---------- árboles de bayas con el mismo estilo que los demás árboles (arbolito redondo de George_) ----------
+// maduros: bayas del color de su tipo sobre la copa; sin fruto: solo el árbol
+{const _o=xObj;xObj=function(c,x,y){try{if(c===";"&&txUse()&&typeof brRipe==="function"){const ripe=brRipe(EX.map,x,y),col=ripe?(BR_C[brType(EX.map,x,y)]||"#e84848"):"",k="TXBR"+col;
+    if(XG[k])return XG[k];const o=xc(32,48),g=o.getContext("2d");xdisc(g,16,44,12,3,"rgba(0,0,0,.22)");txT(g,1,10,0,16);
+    if(ripe){const D=tone(col,3),Lc=tone(col,0);[[4,3],[9,2],[11,6],[6,7],[2,7],[8,5]].forEach(([a,b])=>{const X=a*2,Y=16+b*2;g.fillStyle=D;g.fillRect(X-1,Y-1,6,6);g.fillStyle=col;g.fillRect(X,Y,4,4);g.fillStyle=Lc;g.fillRect(X,Y,2,2)})}
+    return XG[k]=o}}catch(e){}return _o.apply(this,arguments)}}
 
 // =====================================================================================
 // EXPLORACIÓN · ZONAS ESPECIALES Y PERSONAJES DE TUXEMON (9.2)
@@ -25210,7 +25217,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="9.3.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="9.3.3";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

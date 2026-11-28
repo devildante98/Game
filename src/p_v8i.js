@@ -95,3 +95,9 @@ const TX_BLANK=xc(1,1);
   try{if(on&&EX.M.bld){const hr=new Date().getHours(),night=hr>=20||hr<7;
     EX.M.bld.forEach(b=>{if(!/^house2?$/.test(b.k))return;const H=txHouse(b),X=b.x*32-cx+H.ox,Y=(b.y+b.h)*32-cy-H.c.height;
       ents.push({y:b.y+b.h-1+.45,d:()=>g.drawImage(night&&H.c._n?H.c._n:H.c,X,Y)})})}}catch(e){}return r}}
+// ---------- árboles de bayas con el mismo estilo que los demás árboles (arbolito redondo de George_) ----------
+// maduros: bayas del color de su tipo sobre la copa; sin fruto: solo el árbol
+{const _o=xObj;xObj=function(c,x,y){try{if(c===";"&&txUse()&&typeof brRipe==="function"){const ripe=brRipe(EX.map,x,y),col=ripe?(BR_C[brType(EX.map,x,y)]||"#e84848"):"",k="TXBR"+col;
+    if(XG[k])return XG[k];const o=xc(32,48),g=o.getContext("2d");xdisc(g,16,44,12,3,"rgba(0,0,0,.22)");txT(g,1,10,0,16);
+    if(ripe){const D=tone(col,3),Lc=tone(col,0);[[4,3],[9,2],[11,6],[6,7],[2,7],[8,5]].forEach(([a,b])=>{const X=a*2,Y=16+b*2;g.fillStyle=D;g.fillRect(X-1,Y-1,6,6);g.fillStyle=col;g.fillRect(X,Y,4,4);g.fillStyle=Lc;g.fillRect(X,Y,2,2)})}
+    return XG[k]=o}}catch(e){}return _o.apply(this,arguments)}}

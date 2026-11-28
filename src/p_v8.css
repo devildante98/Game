@@ -310,3 +310,17 @@ body.exfsOn #toast{z-index:2147482000}
 
 /* información de los minijuegos: puntuación máxima destacada */
 .mghow li.mgmax{list-style:none;margin:6px 0 2px -14px;padding:6px 10px;border-radius:10px;background:rgba(255,204,51,.16);border:1px solid rgba(255,204,51,.45)}
+
+/* ===== 8.8 · Exploración con aspecto más clásico ===== */
+/* 4) caja de diálogo clásica: blanca, marco grueso oscuro con filete de color, letra pixel grande */
+.exdlg{font-family:"Pixelify Sans","Fredoka",system-ui,sans-serif!important;font-weight:500!important;font-size:1.15rem!important;line-height:1.55!important;letter-spacing:.4px;
+  background:#fdfdfd!important;color:#383840!important;border:4px solid #3a4258!important;border-radius:10px!important;
+  box-shadow:inset 0 0 0 3px #fdfdfd,inset 0 0 0 6px #e8664e,0 4px 0 rgba(0,0,0,.35)!important;padding:15px 48px 15px 22px!important;text-shadow:2px 2px 0 #dcdce4}
+.exdlg .exnx{color:#e8664e!important;font-size:.95em;text-shadow:none}
+.exdlg .exnm{font-family:"Pixelify Sans","Fredoka",system-ui,sans-serif;font-weight:700;text-shadow:none}
+@media (max-width:700px){.exdlg{font-size:.98rem!important;padding:11px 38px 11px 15px!important}}
+/* 8) objetivo más discreto y sin tapar el diálogo */
+.exobj{background:rgba(20,22,48,.5)!important;border-width:1px!important;border-color:rgba(255,255,255,.25)!important;padding:4px 9px 5px!important;max-width:min(250px,42%)!important;transition:opacity .25s}
+.exobj b{font-size:.72rem!important}
+.exobj small{font-size:.58rem!important}
+.exscr:has(#exDlg:not([hidden])) .exobj{opacity:0}

@@ -483,3 +483,11 @@ const MGMAX={
  pdg:'<b>Sin máximo fijo</b>: tienes 90 segundos y depende de cuántos aros dorados salgan. Lo máximo por aro son 105 (dorado, por el centro y con ×3), y cada vida que te quede al final suma 50 (hasta 150).',
  cue:'Puntuación máxima: <b>2.400</b>: encontrar los 8 Pokémon al instante (300 cada uno). Cada segundo que tardes resta 10, y cada error, 2 segundos.'};
 {const _mh=mgHow;mgHow=function(id){const h=_mh(id),m=MGMAX[id];if(!m)return h;const li='<li class="mgmax">🏆 '+m+'</li>';return h?h.replace(/<\/ul><\/details>$/,li+'</ul></details>'):'<details class="mghow" open><summary>🏆 Cómo conseguir más puntos</summary><ul>'+li+'</ul></details>'}}
+
+// ================= MINIJUEGOS: LAS TECLAS DEL JUEGO BASE NO HACEN NADA CON UN MINIJUEGO ABIERTO =================
+// Las teclas (o botones del ratón) de la Poké Ball y las teclas 1-6 de las mejoras del pueblo seguían funcionando
+// detrás del minijuego: si coincidían con las del juego (flechas, WASD…), se tocaba la Poké Ball o se compraban
+// mejoras sin querer. Con la ventana del minijuego abierta, esos clics no llegan; el minijuego recibe las teclas igual.
+const mgWinOpen=()=>{const m=document.getElementById("mgM");return !!(m&&!m.hidden)};
+window.addEventListener("click",e=>{if(!mgWinOpen())return;const t=e.target;
+  if(t&&t.closest&&t.closest("#train,#bcl,#shop [id^='bg']")){e.preventDefault();e.stopImmediatePropagation()}},true);

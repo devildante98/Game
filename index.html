@@ -58,7 +58,7 @@
 // ===== idioma: carga el traductor antes de que se pinte nada y, la primera vez, deja elegir =====
 (function(){var L=null;try{L=localStorage.getItem("pgc-lang")}catch(e){}
   window.PGC_LANG=L||"es";
-  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.7.1"><\/script>')}
+  if(L==="en"){document.documentElement.lang="en";document.write('<script src="i18n/en.js?v=8.7.2"><\/script>')}
   window.pgcSetLang=function(l){try{localStorage.setItem("pgc-lang",l)}catch(e){}if(l!==(L||"es"))location.reload()};
   var isNew=function(){try{for(var i=0;i<localStorage.length;i++){if(/^gacha-pkmn-v3/.test(localStorage.key(i)||""))return false}}catch(e){return false}return true};
   document.addEventListener("DOMContentLoaded",function(){
@@ -93,7 +93,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="game-build" content="1795864366">
+<meta name="game-build" content="1795865808">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Poke Gacha Online · Juego gacha de Pokémon gratis en el navegador</title>
 <link rel="canonical" href="https://pokegachaonline.es/">
@@ -3671,7 +3671,7 @@ html.gmpre body:not(.gm):has(#auth[hidden])>*:not(#gLoad):not(#auth){visibility:
       <button type="button" class="pclink" id="alocal">Jugar sin cuenta (solo en este navegador)</button>
     </div>
     <p id="amsg" role="alert">Comprobando sesión…</p>
-    <small class="pcver">Versión 8.7.1</small>
+    <small class="pcver">Versión 8.7.2</small>
     <small class="afan">Fangame gratuito y sin ánimo de lucro. Pokémon y sus personajes son marcas de Nintendo, Game Freak y The Pokémon Company; este juego no es oficial ni tiene relación con ellas.</small>
   </form>
 </div>
@@ -8427,8 +8427,9 @@ $("prsGo").onclick=()=>$("reset").click();
 // ===== VERSIÓN DEL JUEGO =====
 // X.0 → actualización enorme (un modo o una experiencia nueva) · X.Y → novedades normales · X.Y.Z → arreglos pequeños (no se anuncian)
 // Al publicar novedades, pon "ver" en la entrada y actualiza GAME_VER. «tt» (opcional): el titular del aviso en Discord.
-const GAME_VER="8.7.1";
+const GAME_VER="8.7.2";
 const NEWS=[
+{v:"2026-11-28-8.7.2",ver:"8.7.2",at:"2026-11-28T12:36",t:"🔧 Arreglos/Mejoras",tt:"Minijuegos: tus teclas ya no tocan la Poké Ball",l:["Minijuegos: mientras tienes un minijuego abierto, las teclas (o botones del ratón) que usas para la Poké Ball y las teclas 1-6 de las mejoras del pueblo ya no hacen nada. Antes, si coincidían con las del minijuego (por ejemplo, las flechas o WASD en Ekans hambriento), se tocaba la Poké Ball o se compraban mejoras sin querer", "El minijuego sigue recibiendo todas tus teclas como siempre"]},
 {v:"2026-11-28-8.7.1",ver:"8.7.1",at:"2026-11-28T12:12",t:"🔧 Arreglos/Mejoras",tt:"Puntuación máxima de cada minijuego",l:["Minijuegos: la información de cada juego («Cómo conseguir más puntos») indica ahora, destacada, su puntuación máxima posible, o si no tiene límite o depende de la suerte", "Puzle de piezas: las partidas de 1.024 piezas con mucha puntuación ya entran en la clasificación (antes no se aceptaban por encima de 50.000)"]},
 {v:"2026-11-27-8.7",ver:"8.7",at:"2026-11-27T19:21",t:"🎉 Sorteos con premio mejorado",tt:"Sorteos con premio mejorado",l:["Los sorteos abiertos pueden mejorar su premio antes de sortearse. Cuando pase, el sorteo lucirá la etiqueta «✨ ¡Premio mejorado!» y se anunciará en Discord", "Si ya estás apuntado no tienes que hacer nada: si ganas, te llevas el premio nuevo", "Si todavía no te has apuntado, te saldrá un aviso con el premio nuevo para que no te lo pierdas"]},
 {v:"2026-11-27-8.6.8",ver:"8.6.8",at:"2026-11-27T17:20",t:"🔧 Arreglos/Mejoras",tt:"Info de ¡Golpea al Diglett! corregida",l:["¡Golpea al Diglett!: la información del juego ya indica la puntuación máxima real, 136, que es la misma en todas las partidas (antes decía que una partida muy buena rondaba los 110–130)"]},
@@ -8892,7 +8893,7 @@ $("newsOk").onclick=newsClose;$("newsX").onclick=newsClose;
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("newsM").hidden){e.preventDefault();newsClose()}});
 function newsInit(){if(S.newsV!==GAME_V&&$("welc").hidden)newsShow(false);else if($("welc").hidden===false){S.newsV=GAME_V;save()}}
 // si el juego se actualiza mientras lo tienes abierto, avisa para recargar
-const GAME_B="1795864366";
+const GAME_B="1795865808";
 function verURL(){const u=new URL(location.href);u.hash="";u.searchParams.set("_v",Date.now());return u.toString()}
 function verCheck(auto){
   if(!/^https?:/.test(location.protocol))return;
@@ -24464,6 +24465,14 @@ const MGMAX={
  cue:'Puntuación máxima: <b>2.400</b>: encontrar los 8 Pokémon al instante (300 cada uno). Cada segundo que tardes resta 10, y cada error, 2 segundos.'};
 {const _mh=mgHow;mgHow=function(id){const h=_mh(id),m=MGMAX[id];if(!m)return h;const li='<li class="mgmax">🏆 '+m+'</li>';return h?h.replace(/<\/ul><\/details>$/,li+'</ul></details>'):'<details class="mghow" open><summary>🏆 Cómo conseguir más puntos</summary><ul>'+li+'</ul></details>'}}
 
+// ================= MINIJUEGOS: LAS TECLAS DEL JUEGO BASE NO HACEN NADA CON UN MINIJUEGO ABIERTO =================
+// Las teclas (o botones del ratón) de la Poké Ball y las teclas 1-6 de las mejoras del pueblo seguían funcionando
+// detrás del minijuego: si coincidían con las del juego (flechas, WASD…), se tocaba la Poké Ball o se compraban
+// mejoras sin querer. Con la ventana del minijuego abierta, esos clics no llegan; el minijuego recibe las teclas igual.
+const mgWinOpen=()=>{const m=document.getElementById("mgM");return !!(m&&!m.hidden)};
+window.addEventListener("click",e=>{if(!mgWinOpen())return;const t=e.target;
+  if(t&&t.closest&&t.closest("#train,#bcl,#shop [id^='bg']")){e.preventDefault();e.stopImmediatePropagation()}},true);
+
 </script>
 <script>
 window.startGameOnce=function(){if(window.__gs)return;window.__gs=1;var sc=document.createElement("script"),code=document.getElementById("game").textContent,dev=/^(localhost|127\.0\.0\.1)$/.test(location.hostname)&&!/[?&]wrap=1/.test(location.search);/* el juego va dentro de una función: los datos de la partida no se pueden tocar desde la consola (en localhost se deja abierto para probar) */sc.textContent=dev?code:"(function(){"+code+"\n}).call(window);";document.body.appendChild(sc)};
@@ -24799,7 +24808,7 @@ async function main(){
   // Todo lo que se envía al servidor (guardar, tirar, mejorar) va en fila: cada petición se prepara justo cuando le
   // toca, con la partida ya al día, y la siguiente no sale hasta que la anterior se ha aplicado. Así nunca llega al
   // servidor una partida sin la tirada o la mejora que él mismo acaba de hacer. q: número creciente de cada petición.
-  const CV="8.7.1";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
+  const CV="8.7.2";let SQ=Promise.resolve(),seq=0;const nq=()=>(seq=Math.max(seq+1,Date.now()));
   const srvRun=job=>{const p=SQ.then(job);SQ=p.catch(()=>{});return p};
   // la partida está abierta en otro dispositivo → aquí se pausa; progreso imposible → se vuelve a la última partida buena
   const srvBad=r=>{if(r.why==="sesion"){sessLock({d:r.d});return true}if(r.why==="rechazado"){saveBack(r);return true}return false};

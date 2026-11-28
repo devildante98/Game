@@ -48,3 +48,77 @@ const TXN_ROW={d:0,l:1,r:2,u:3};
         xdisc(g,Math.round(x+16),Math.round(y+30),8,2.5,"rgba(0,0,0,.24)");g.imageSmoothingEnabled=false;
         g.drawImage(TXN.img,(i%10)*48+col*16,Math.floor(i/10)*128+row*32,16,32,Math.round(x),Math.round(y-30),32,64);return}}}}catch(e){}
   return _t.apply(this,arguments)}}
+
+// =====================================================================================
+// TU ENTRENADOR AL ESTILO DE LOS SPRITES DE TUXEMON (9.3)
+// Dibujado aquí desde cero a 16×24 píxeles (ampliado al doble, como los NPC): contorno oscuro, cabeza redondeada y
+// sombreado a 3 tonos. Mantiene la personalización de cada jugador: cuerpo, piel, ojos, peinado y color de pelo, gorro,
+// gafas, parte de arriba y de abajo (pantalón, corto, falda o vestido), colores y mochila.
+// Devuelve lo mismo que antes ({d,u,l,r}: 8 fotogramas de 32×48 por dirección), así que vale en todo el juego.
+// =====================================================================================
+{const OL="#26202e";
+  ovSprite=function(code){if(OVS[code])return OVS[code];const L=trDec(code),P=(k,i)=>TRP[k][i]!=null?TRP[k][i]:TRP[k][0];
+  const C={sk:P("skin",L.sk),hc:P("hair",L.hc),tc:P("cl",L.tc),ac:P("cl",L.ac),bc:P("cl",L.bc),sh:P("cl",L.sh),ht:P("cl",L.hac),bp:P("cl",L.bpc),ey:P("eye",L.ec)};
+  const hair=ovHair(L.hs),hat=ovHat(L.hat),girl=L.b===1,dress=[4,23,26].includes(L.top),skirt=[2,4,9,12,13].includes(L.bot)||dress,shorts=[1,7,15].includes(L.bot),bag=L.bp>0,
+    longSl=[1,2,5,8,9,11,12,15,16,17,18,19,20,25,27,28].includes(L.top);
+  const D=t=>tone(t,2),DD=t=>tone(t,3),Lt=t=>tone(t,0);
+  const mk=(dir,fr)=>{const s=xc(16,24),g=s.getContext("2d");
+    const run=fr>=4,rf=run?fr-4:0,step=run?(rf===0?1:rf===2?-1:0):fr===1?1:fr===3?-1:0,bob=run&&rf%2?-1:0,side=dir==="l",back=dir==="u";
+    const p=(x,y,w,h,col)=>{if(w<=0||h<=0)return;g.fillStyle=col;g.fillRect(x,y+bob,w,h)};
+    const H=C.hc,HD=D(C.hc),HL=Lt(C.hc),SK=C.sk,SD=D(C.sk),T=C.tc,TD=D(C.tc),TL=Lt(C.tc),B=C.bc,BD=D(C.bc);
+    const legC=skirt||shorts?SK:B,legD=skirt||shorts?SD:BD;
+    // ---- pelo por detrás (melena, coletas, trenza) ----
+    if(!side){if(hair==="long"){p(2,4,1,10,HD);p(13,4,1,10,HD);if(back)p(3,10,10,4,H)}
+      if(hair==="twin"){p(0,6,2,7,H);p(14,6,2,7,H);p(0,11,2,2,HD);p(14,11,2,2,HD)}
+      if(back&&hair==="pony"){p(6,10,4,5,H);p(7,13,2,2,HD)}
+      if(back&&hair==="braid"){for(let i=0;i<4;i++)p(7,10+i*2,2,2,i%2?HD:H)}}
+    else{if(hair==="long")p(9,5,4,9,HD);if(hair==="pony"){p(12,6,3,6,H);p(13,10,2,2,HD)}if(hair==="twin")p(11,7,3,7,H);if(hair==="braid")p(11,9,2,7,H)}
+    // ---- piernas y calzado ----
+    if(!side){const lh=step===1?1:0,rh=step===-1?1:0;
+      p(5,18,3,4-lh,legC);p(8,18,3,4-rh,legC);p(7,18,1,4-lh,legD);p(10,18,1,4-rh,legD);
+      p(5,22-lh,3,2,C.sh);p(8,22-rh,3,2,C.sh);p(5,22-lh,3,1,Lt(C.sh));p(8,22-rh,3,1,Lt(C.sh))}
+    else{if(step){p(3,18,3,4,legC);p(9,18,3,4,legD);p(2,22,4,2,C.sh);p(9,22,3,2,D(C.sh))}
+      else{p(6,18,4,4,legC);p(9,18,1,4,legD);p(5,22,5,2,C.sh);p(5,22,5,1,Lt(C.sh))}}
+    if(shorts){side?p(5,17,6,3,B):p(5,17,6,3,B);p(side?10:7,17,1,3,BD)}
+    if(!skirt&&!shorts){side?p(5,17,6,2,B):p(4,17,8,2,B)}
+    // ---- cuerpo ----
+    const bx=side?5:4,bw=side?6:8;p(bx,11,bw,7,T);p(bx+bw-1,11,1,7,TD);p(bx,11,bw,1,TL);
+    if(skirt){const sc=dress?T:B,sd=D(sc);side?(p(4,16,8,3,sc),p(4,18,8,1,sd)):(p(3,16,10,3,sc),p(3,18,10,1,sd),p(12,16,1,3,sd))}
+    if(!back&&!side){p(7,11,2,1,C.ac);p(7,12,2,4,C.ac);p(7,12,1,4,Lt(C.ac))}else if(side&&!back)p(5,11,2,2,C.ac);
+    if(bag){if(back){p(5,12,6,5,C.bp);p(5,12,6,1,Lt(C.bp));p(10,12,1,5,D(C.bp));p(7,14,2,1,"#f2d27a")}else if(side){p(11,12,2,5,C.bp);p(12,12,1,5,D(C.bp))}else{p(5,11,1,5,D(C.bp));p(10,11,1,5,D(C.bp))}}
+    // ---- brazos ----
+    const sl=longSl?T:SK,sld=longSl?TD:SD;
+    if(!side){const la=step===1?-1:step===-1?1:0;p(3,12+la,1,4,sl);p(3,12+la,1,1,T);p(3,16+la,1,1,SK);p(12,12-la,1,4,sld);p(12,12-la,1,1,TD);p(12,16-la,1,1,SK)}
+    else{const ax=7+step;p(ax,12,2,4,sl);p(ax,12,2,1,T);p(ax+1,12,1,4,sld);p(ax,16,2,1,SK)}
+    // ---- cabeza ----
+    p(4,2,8,10,SK);p(3,3,10,8,SK);p(11,3,1,8,SD);p(4,11,8,1,SD);
+    // ---- pelo de arriba ----
+    if(hair==="afro"){p(2,0,12,7,H);p(1,2,14,4,H);p(3,0,4,1,HL);if(!back){p(4,5,8,2,SK)}else p(2,6,12,4,H)}
+    else if(hair!=="bald"){const top=hair==="shaved"?SD:H,topD=hair==="shaved"?D(SD):HD;
+      if(back){p(3,1,10,10,top);p(4,0,8,1,top);p(12,2,1,9,topD);p(5,1,4,1,Lt(top))}
+      else if(side){p(3,1,10,4,top);p(4,0,7,1,top);p(7,4,6,5,top);p(12,4,1,5,topD);p(3,5,2,1,top);p(5,1,4,1,Lt(top))}
+      else{p(3,1,10,4,top);p(4,0,8,1,top);p(3,4,1,4,top);p(12,4,1,4,topD);[4,6,8,10].forEach((x,i)=>p(x,5,i%2?1:2,1,top));p(5,1,4,1,Lt(top))}
+      if(hair==="spiky"&&hat===""){[[3,0],[6,-1],[9,-1],[12,0]].forEach(([x,y])=>p(x,y+1,1,1,top));p(2,2,1,2,top);p(13,2,1,2,topD)}
+      if(hair==="bun"&&hat==="")p(6,-1+1,4,2,H)}
+    else p(5,2,3,1,Lt(SK));
+    // ---- cara ----
+    if(!back){const E="#1c1424";
+      if(side){p(4,6,1,2,E);p(4,7,1,1,C.ey);p(3,9,1,1,SD);if(girl)p(5,8,1,1,"#ff9ab0");if(L.gl)p(3,6,3,1,E)}
+      else{p(5,6,1,2,E);p(10,6,1,2,E);p(5,7,1,1,C.ey);p(10,7,1,1,C.ey);p(7,9,2,1,DD(SK));if(girl){p(4,8,1,1,"#ff9ab0");p(11,8,1,1,"#ff9ab0")}
+        if(L.gl){p(4,5,3,1,E);p(9,5,3,1,E);p(7,6,2,1,E)}}}
+    // ---- gorro ----
+    const HT=C.ht,HTD=D(C.ht),HTL=Lt(C.ht);
+    if(hat==="cap"){p(3,0,10,4,HT);p(4,0,4,1,HTL);if(side)p(1,3,4,1,HTD);else if(!back){p(3,4,10,1,HTD);p(7,1,2,2,C.ac)}else p(5,3,6,1,HTD)}
+    else if(hat==="beanie"){p(3,0,10,4,HT);p(4,0,3,1,HTL);p(3,3,10,2,C.ac);p(7,-1+1,2,1,C.ac)}
+    else if(hat==="wide"){p(0,4,16,1,HTD);p(1,3,14,1,HT);p(4,0,8,3,HT);p(4,2,8,1,C.ac);p(5,0,2,1,HTL)}
+    else if(hat==="band"){p(3,3,10,1,HT);if(L.hat===16||L.hat===41||L.hat===44){p(3,0,2,3,HT);p(11,0,2,3,HT)}}
+    else if(hat==="crown"){p(4,1,8,2,"#f2c84a");[4,7,10].forEach(x=>p(x,0,2,1,"#f2c84a"));p(7,2,2,1,"#e83a50")}
+    else if(hat==="top"){p(2,4,12,1,"#1c1c22");p(5,0,6,4,"#2b2b34");p(5,3,6,1,C.ac)}
+    // ---- contorno oscuro ----
+    const id=g.getImageData(0,0,16,24),d=id.data,o=new Uint8ClampedArray(d),a=(x,y)=>x>=0&&y>=0&&x<16&&y<24&&d[(y*16+x)*4+3]>0;
+    const oc=[0x26,0x20,0x2e];for(let y=0;y<24;y++)for(let x=0;x<16;x++){if(a(x,y))continue;if(a(x+1,y)||a(x-1,y)||a(x,y+1)||a(x,y-1)){const i=(y*16+x)*4;o[i]=oc[0];o[i+1]=oc[1];o[i+2]=oc[2];o[i+3]=255}}
+    id.data.set(o);g.putImageData(id,0,0);
+    const c=xc(32,48),q=c.getContext("2d");q.imageSmoothingEnabled=false;q.drawImage(s,0,0,16,24,0,0,32,48);return c};
+  const out={};["d","u","l"].forEach(dr=>{out[dr]=[0,1,2,3,4,5,6,7].map(f=>mk(dr,f))});out.r=out.l.map(c=>{const m=xc(32,48),q=m.getContext("2d");q.translate(32,0);q.scale(-1,1);q.drawImage(c,0,0);return m});
+  return OVS[code]=out};
+  Object.keys(OVS).forEach(k=>delete OVS[k])}

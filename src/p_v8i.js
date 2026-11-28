@@ -59,6 +59,8 @@ function txCredUI(){const host=document.querySelector('#optp .setpane[data-st="g
     '<br>· «Basic Buch Tiles Compiled» de <b>Buch</b>, encargo de luke83, con cambios de luke83 y Past the Future · <a href="https://creativecommons.org/licenses/by/3.0/deed.es" target="_blank" rel="noopener">CC BY 3.0</a>'+
     '<br>· «Vegetation and Outdoor Fittings» de <b>George_</b> · <a href="https://creativecommons.org/licenses/by/3.0/deed.es" target="_blank" rel="noopener">CC BY 3.0</a>'+
     '<br>· Casas de los pueblos: «Inspired 16x16 Tiles», basadas en «Pokémon-inspired 16x16 tiles» de <b>RedVoxel</b>, tejados adaptados por <b>Jaskrendix</b> · <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" target="_blank" rel="noopener">CC BY-SA 4.0</a>'+
+    '<br>· Cuevas: «Cave Tiles» de <b>ArMM1998</b> · dominio público'+
+    '<br>· Personajes: sprites de Tuxemon de <b>Catch Challenger</b> (dirección de arte de Jordan Brule) · <a href="https://creativecommons.org/licenses/by/4.0/deed.es" target="_blank" rel="noopener">CC BY</a>, adaptados por <b>Sanglorian</b> · CC BY-SA 4.0; profesor de <b>Kurt Stine</b> · CC BY-SA 4.0; niños y tenistas de <b>pboop</b> · CC BY-SA'+
     '<br>· Algunos detalles: «Ninja Adventure Asset Pack» de <b>Pixel-Boy</b> · CC0 (dominio público)'+
     '<br>Gracias a todos ellos por compartir su trabajo. Pokémon y sus personajes son propiedad de sus respectivos dueños.</small>';
   host.appendChild(d)}
